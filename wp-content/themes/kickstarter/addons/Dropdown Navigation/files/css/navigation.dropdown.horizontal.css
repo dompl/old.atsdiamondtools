@@ -1,0 +1,57 @@
+
+/****************************************
+*****************************************
+HORIZONTAL DROPDOWN EXTENSION
+This extension provides the use of 
+horizontal dropdowns in navigation.
+*****************************************
+****************************************/
+
+/*=== HORIZONTAL DROPDOWN =============*/
+.nav-dropdown-horizontal{
+	width: 100%;
+	left: 0;
+	background-color: #fdfdfd;
+	border-top: solid 1px #f0f0f0;
+}
+.nav-dropdown-horizontal .nav-dropdown-horizontal{
+	width: 100%;
+	top: 100%;
+	left: 0;
+}
+.navigation-portrait .nav-dropdown-horizontal .nav-dropdown-horizontal{
+	border-top: none;
+}
+
+/* Dropdown itens */
+.nav-dropdown-horizontal > li{
+	width: auto;
+	clear: none;
+	position: static;
+}
+.navigation-portrait .nav-dropdown-horizontal > li{
+	width: 100%;
+}
+.nav-dropdown-horizontal > li > a{
+	position: relative;
+}
+
+/*=== SUBMENU INDICATORS ==============*/
+.nav-dropdown-horizontal .submenu-indicator{
+	height: 18px;
+	top: 11px;
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.navigation-portrait .nav-dropdown-horizontal .submenu-indicator{
+	height: 42px;
+	top: 0;
+	-ms-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+
+/* Indicator to up */
+.navigation-portrait .nav-dropdown-horizontal .submenu-indicator.submenu-indicator-up{
+	-ms-transform: rotate(-180deg);
+	transform: rotate(-180deg);
+}

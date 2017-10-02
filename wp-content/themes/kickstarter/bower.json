@@ -1,0 +1,31 @@
+{
+  "name": "wordpress-gulp-starter-kit",
+  "homepage": "https://redfrogstudio@bitbucket.org/redfrogstudio/kickstarter.git",
+  "authors": [
+    {
+      "name": "Dom Kapelewski",
+      "email": "dom@redfrogstudio.co.uk",
+      "homepage": "https://www.redfrogstudio.co.uk"
+    }
+  ],
+  "keywords": [
+    "wordpress",
+    "wordpress-theme",
+    "starter-kit",
+    "gulp",
+    "bower",
+    "sass",
+    "browsersync",
+    "livereload"
+  ],
+  "license": "GPL-3.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    ".sass-cache",
+    "build"
+  ]
+}

@@ -1,0 +1,341 @@
+
+/* GENERAL
+==============================================*/
+*{
+	outline: none;
+	box-sizing: border-box;
+}
+body{
+	margin: 0;
+	position: relative; 
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	color: #555;
+	background-color: #eaeff4;
+}
+a{
+	text-decoration: none;
+	transition: all .3s;
+}
+a:hover{
+	text-decoration: underline;
+}
+
+/* GO TO TOP
+==============================================*/
+.go-to-top{
+	width: 50px;
+	height: 50px;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	line-height: 45px;
+	text-align: center;
+	font-size: 24px;
+	color: #fff;
+	opacity: 0;
+	background-color: #A0D468;
+	transition: all .3s;
+}
+.go-to-top:hover{
+	background-color: #8CC152;
+	text-decoration: none;
+	color: #fff;
+}
+
+/* HEADER
+==============================================*/
+header{
+	width: 100%;
+	padding: 30px 0;
+	color: #fff;
+	background-color: #8CC152;
+}
+header h1{
+	margin: 0;
+	font-size: 32px;
+	font-weight: 400;
+}
+header h2{
+	margin: 0 0 10px 2px;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 300;
+}
+
+/* MAIN
+==============================================*/
+.main{
+	min-height: 2000px;
+	padding-top: 30px;
+}
+
+/* SIDEBAR
+==============================================*/
+.sidebar{
+	width: 20%;
+	height: 100%;
+	padding-top: 10px;
+	position: relative;
+	float: left;
+	top: auto;
+}
+.sidebar-fixed{
+	position: fixed;
+	top: 30px;
+}
+
+/* CONTENT
+==============================================*/
+.content{
+	width: 80%;
+	margin-top: 30px;
+	padding-bottom: 600px;
+	float: right;
+	position: relative;
+}
+
+/* SECTION
+==============================================*/
+.section{
+	margin-bottom: 100px;
+}
+.section h2,
+.section h3,
+.section h4{
+	margin: 0 0 30px;
+	padding: 0;
+	line-height: .8;
+	color: #777;
+	font-weight: 300;
+}	
+/* Section h2 */
+.section h2{
+	font-size: 2rem;
+}
+
+/* Section h3 */
+.section h3{
+	font-size: 1.5rem;
+}
+
+/* Section h4 */
+.section h4{
+	font-size: 1.2rem;
+}
+
+/* Section text */
+.section p{
+	margin: 0 0 30px;
+	padding: 0;
+	color: #777;
+}
+
+/* Marked text */
+mark{
+	padding: 0 3px;
+	color: #8CC152;
+	font-size: 14px;
+	background-color: #ffffff;
+}
+mark code{
+	font-size: .9rem;
+}
+
+
+/* SNIPPET
+==============================================*/
+.snippet{
+	margin: 0 0 30px;
+	border: solid 1px #f0f0f0;
+}
+.example{
+	padding: 30px;
+	position: relative;
+	background-color: #f4f7f9;
+}
+.example pre{
+	padding: 0;
+}
+.code{
+	padding: 15px 30px;
+	position: relative;
+	background-color: #fbfcfd;
+}
+.code pre{
+	background-color: transparent !important;
+	font-size: .875rem;
+	overflow-x: auto;
+}
+.snippet-btn{
+	margin-left: -18px;
+	padding: 4px;
+	top: 10px;
+	right: 10px;
+	position: absolute;
+	font-size: .8rem;
+	color: #fff;
+	cursor: pointer;
+	border: none;
+	background-color: #8CC152;
+	z-index: 99;
+	opacity: 0.8;
+	transition: all .3s;
+}
+.snippet-btn:hover{
+	opacity: 1;
+}
+
+/* Copy confirmation */
+.copy-confirmation{
+	width: 100px;
+	height: 50px;
+	margin-left: -50px;
+	line-height: 50px;
+	position: fixed;
+	display: none;
+	text-align: center;
+	top: 15px;
+	left: 50%;
+	color: #fff;
+	background-color: rgba(150, 122, 220, 0.9);
+}
+
+/* BUTTON
+==============================================*/
+.button{
+	padding: 8px 24px;
+	display: inline-block;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: 14px;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	color: #fff;
+	text-decoration: none;
+	opacity: 1;
+	background: #8CC152;
+	transition: opacity .3s, border .3s;
+}
+.button::-moz-focus-inner{
+    border: 0;
+    padding: 0;
+}
+.button:hover,
+.button:focus,
+.button:active{
+	opacity: 0.9;
+	text-decoration: none
+}
+
+/* Block button */
+.button-block{
+	width: 100%;
+}
+
+/* TABLE
+===================================*/
+.table{
+	width: 100%;
+	font-size: 13px;
+	text-align: left;
+	border-collapse: collapse;
+	background: #fff;
+}
+.table tr{
+	border-bottom: 1px solid #f0f0f0;
+} 
+.table tr:last-child{
+	border-bottom: none;
+}
+.table thead tr:first-child{
+	border-bottom: 1px solid #f0f0f0;
+}
+.table tr th,
+.table tr td {
+	padding: 10px 15px;
+	text-align: left;
+	transition: background .2s linear;
+}
+.table tr.bg-primary  th,
+.table tr.bg-info  th,
+.table tr.bg-success  th,
+.table tr.bg-warning  th,
+.table tr.bg-danger  th,
+.table tr.bg-primary  td,
+.table tr.bg-info  td,
+.table tr.bg-success  td,
+.table tr.bg-warning  td,
+.table tr.bg-danger  td,
+.table td.bg-primary,
+.table td.bg-info,
+.table td.bg-success,
+.table td.bg-warning,
+.table td.bg-danger{
+	color: #fff;
+}
+
+/* Bordered table */
+.table-bordered tr th,
+.table-bordered tr td {
+	border: 1px solid #f0f0f0;
+}
+
+/* Striped rows */
+.table-striped-rows tbody tr:nth-of-type(odd){
+	background: #f9f9f9;
+}
+
+/* Striped columns */
+.table-striped-cols tbody td:nth-of-type(odd),
+.table-striped-cols thead th:nth-of-type(odd){
+	background: #fbfcfd;
+}
+
+/* Hover rows */
+.table-hover tr:hover th,
+.table-hover tr:hover td{
+	background-color: #fbfcfd;
+}
+.table-hover tr:first-child:hover th{
+	background-color: transparent;
+}
+
+/* MESSAGES
+===================================*/
+.doc-message{
+	width: 100%;
+	margin-bottom: 15px;
+	padding: 15px;
+}
+.doc-message.info-message{
+	background-color: #add6f1;
+}
+.doc-message.warning-message{
+	background-color: #faecb8;
+}
+.doc-message.danger-message{
+	background-color: #edb9bd;
+}
+
+/* Custom */
+.navigation + .navigation{
+	margin-top: 15px;
+}
+.table tbody tr th:last-child{
+	width: 50%;
+}
+
+
+
+
+
+
+
+
+
+
+
+

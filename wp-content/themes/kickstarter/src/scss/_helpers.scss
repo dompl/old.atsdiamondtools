@@ -1,0 +1,35 @@
+// ==== HELPERS ==== //
+%center {
+  @include scut-center-block;
+}
+
+%clx {
+  @include scut-clearfix;
+}
+
+%hide {
+  @include scut-hide-visually;
+}
+
+%transition {
+  @include transition(all, 300ms);
+}
+
+%container {
+  @include container($xl);
+}
+
+.container {
+  @extend %container;
+  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+  @include breakpoint(max-width $xl) {
+    @include container(90%);
+  }
+}
+
+%init-slick {
+  visibility: hidden;
+  &.slick-initialized {
+    visibility:visible;
+  }
+}

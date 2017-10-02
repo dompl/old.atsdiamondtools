@@ -1,0 +1,91 @@
+/*  ********************************************************
+ *   Responsive heights
+ *  ********************************************************
+ */
+
+ .height_on_1200,
+ .height_on_1024,
+ .height_on_992,
+ .height_on_576,
+ .height_on_768,
+ .height_on_0 {
+  display: none;
+}
+
+@include breakpoint(min-width $xxl) {
+  .height_on_1200 {
+   display: block;
+ }
+ .height_on_1024,
+ .height_on_992,
+ .height_on_576,
+ .height_on_768,
+ .height_on_0 {
+   display: none;
+ }
+}
+
+@include breakpoint(max-width $xxl) {
+ .height_on_1024 {
+  display: block;
+}
+.height_on_1200,
+.height_on_992,
+.height_on_576,
+.height_on_768,
+.height_on_0 {
+  display: none;
+}
+}
+
+@include breakpoint(max-width $xl) {
+ .height_on_992 {
+  display: block;
+}
+.height_on_1200,
+.height_on_1024,
+.height_on_576,
+.height_on_768,
+.height_on_0 {
+  display: none;
+}
+}
+
+@include breakpoint(max-width $lg) {
+ .height_on_576 {
+  display: block;
+}
+.height_on_1200,
+.height_on_1024,
+.height_on_992,
+.height_on_768,
+.height_on_0 {
+  display: none;
+}
+}
+
+@include breakpoint(max-width $md) {
+ .height_on_768 {
+  display: block;
+}
+.height_on_1200,
+.height_on_1024,
+.height_on_992,
+.height_on_576,
+.height_on_0 {
+  display: none;
+}
+}
+
+@include breakpoint(max-width $sm) {
+ .height_on_0 {
+  display: block;
+}
+.height_on_1200,
+.height_on_1024,
+.height_on_992,
+.height_on_576,
+.height_on_768 {
+  display: none;
+}
+}

@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600");
+
+$login-font: "Source Sans Pro",
+sans-serif;
+$form-width: 335px;
+$border-radius: 5px;
+$header-color: $brand-primary;
+$button-color: $brand-primary;
+$link-color: $brand-primary;
+$label-color: lighten(#666666,20%);
+$input-color: #666666;
+$input-border-color: lighten(#ccc,10%);
+
+html {
+  height: 100%;
+  font-family: $login-font;
+  color: #666666;
+}
+
+.login {
+  position: relative;
+  background-image: url(img/admin/photography.png);
+  height: 100%;
+  width: 100%;
+  #login {
+    background: white;
+    margin-top: spacer();
+    @include box-shadow(#ccc,
+      0,
+      0,
+      50px);
+    @include border-radius(5px);
+    @include container($form-width);
+    @include breakpoint(max-width $md) {
+      @include container(95%);
+    }
+    @include breakpoint(min-width $sm) {
+      margin-top: spacer(5);
+    }
+    #login_error {
+      @include em("font-size",
+        13px);
+      margin: 15px;
+      margin-bottom: -(15px);
+      background-color: #b53f3f;
+      color: white;
+      padding: 10px;
+      margin-bottom: 0px;
+      a {
+        color: #b53f3f;
+        font-weight: 600;
+      }
+    } // Header
+    h1 {
+      @include em("font-size",
+        16px);
+      @include border-radius-separate($border-radius,
+        $border-radius,
+        0,
+        0);
+      background-color: $header-color;
+      text-transform: uppercase;
+      padding: 15px;
+      text-align: center;
+      margin: 0;
+      position: relative;
+      font-weight: 300;
+      &:before {
+        @include em("font-size",
+          20px);
+        @include scut-center-transform(y);
+        @extend .icon-admin-lock;
+        position: absolute;
+        left: 15px;
+        color: white;
+      }
+      a {
+        color: color(body-background);
+        text-decoration: none;
+        @include em("font-size",
+          24px);
+      }
+    } // Form
+    #lostpasswordform {
+      padding: 15px 15px 0;
+    }
+    #loginform {
+      padding: 15px 15px 0;
+    }
+    #loginform,
+    #lostpasswordform {
+      // captcha
+      .g-recaptcha {
+        margin: 0 auto 10px;
+        width: 304px;
+      }
+      input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px white inset;
+      }
+      br {
+        display: none;
+      }
+      p {
+        margin: 0 0 10px 0;
+        &.forgetmenot {
+          input {
+            display: none;
+            background: transparent;
+          }
+          label {
+            @extend .icon-admin-unchecked;
+            cursor: pointer;
+            &:before {
+              @extend %transition;
+              float: left;
+              display: block;
+              margin-top: 5px;
+              margin-right: 10px;
+            }
+            &.checked {
+              @extend .icon-admin-checked;
+              &:before {
+                color: green;
+              }
+            }
+          }
+        }
+        &.submit {
+          #wp-submit {
+            border: none;
+            background-color: $button-color;
+            color: white;
+            text-transform: uppercase;
+            @include em("font-size",
+              14px);
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            @extend %transition;
+            &:hover {
+              background-color: darken($button-color, 20%);
+            }
+            @include breakpoint(min-width $md) {}
+            @include border-radius($border-radius);
+          }
+        }
+      }
+      @include border-radius-separate(0,
+        $border-radius);
+      label {
+        @include em("font-size",
+          14px);
+        font-weight: 600;
+        color: $label-color;
+        input {
+          &[type="password"],
+          &[type="text"] {
+            border: none;
+            background: transparent !important;
+            width: 100%;
+            padding: 8px 0 5px;
+            color: $input-color;
+            outline: none;
+            border-bottom: 1px solid $input-border-color;
+            margin-bottom: 10px;
+            @include em("font-size",
+              20px);
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
+  #nav,
+  #backtoblog {
+    @include em("font-size",
+      12px);
+    margin-bottom: 15px;
+    a {
+      color: $link-color;
+      text-decoration: none;
+      text-transform: uppercase;
+      &:hover {
+        color: darken($link-color, 20%);
+      }
+    }
+  }
+  #nav {
+    float: left;
+    margin-left: 15px;
+  }
+  #backtoblog {
+    float: right;
+    margin-right: 15px;
+  }
+  #redfrog {
+    text-align: center;
+    margin-top: 10px;
+    @include em("font-size",
+      11px);
+    text-transform: uppercase;
+    font-weight: 600;
+    .image {
+      width: 32px;
+      height: 32px;
+      margin: 10px auto;
+      background: url(img/admin/logo.png);
+    }
+    a {
+        //color:color(text);
+        color: #ccc;
+        text-decoration: none;
+      }
+    } // Email Recovery
+    p.message {
+      margin-right: 15px;
+      margin-left: 15px;
+      @include em("font-size",
+        14px);
+    }
+  }

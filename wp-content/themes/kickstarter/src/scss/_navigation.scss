@@ -1,0 +1,80 @@
+/*  ********************************************************
+ *   Main Navigation settings
+ *  ********************************************************
+ */
+
+ $_nav_color: (
+  background :color(gray-lightest), // Main nav background colour
+  brand-text : color(link),
+  brand-text-hover : color(link-hover),
+  toggle-button: #8c8c8c,
+  link-top-color: color(link),
+  link-top-color-hover: white,
+  link-top-color-active: white,
+  link-top-background-color-hover: color(link),
+  link-top-background-color-active: color(link),
+  chevron-top-color: color(link),
+  chevron-top-color-hover: white,
+
+  link-dd-color: color(link),
+  link-dd-background-color: #fbfbfb,
+  link-dd-color-hover: white,
+  link-dd-color-active: white,
+  link-dd-background-color-hover: color(link),
+  link-dd-background-color-active: color(link),
+  close-button-color:color(link),
+  ) !default;
+
+// Nav container sizes
+$nav-top-font-size: $font-size-base;
+$nav-top-height: 30px;
+$nat-top-transition-speed : 200ms;
+
+
+// Top nav settingds
+$nav-top-a-padding-top: 5px;
+$nav-top-a-padding-bottom: 5px;
+$nav-top-a-padding-right: 10px;
+$nav-top-a-padding-left: 10px;
+$nav-top-a-remove-padding-from-first-child : false;
+$nav-top-a-remove-padding-from-last-child : false;
+// Top nav indicator ( chevron )
+$nav-top-chevron-margin-top: 11px;
+$nav-top-chevron-margin-left: 10px;
+$nav-top-chevron-size: 5px;
+
+// Toggle button
+$toggle-button-spacing : 12px;
+$toggle-button-width : 20px;
+$toggle-button-bar-height : 2px;
+$toggle-button-border-radius : 10px;
+$toggle-button-right-space : 10px;
+
+
+$toggle-button-center-verticaly : true;
+// Below settings will take effect only it the above is set to false
+$toggle-button-top-space : 0;
+
+// Nav Brand
+$nav-brand-line-height: $nav-top-height + $nav-top-a-padding-top + $nav-top-a-padding-bottom;
+$nav-brand-font-size: 20px;
+
+// DROPDOWN
+$nav-dd-font-size: $nav-top-font-size;
+$nat-dd-transition-speed : 200ms;
+
+// drop down nav indicator ( chevron )
+$nav-dd-chevron-margin-top: 4px;
+$nav-dd-chevron-margin-right: 20px;
+
+$nav-dd-min-width:180px;
+$nav-dd-a-padding-top: 10px;
+$nav-dd-a-padding-right: 10px;
+$nav-dd-a-padding-bottom: 10px;
+$nav-dd-a-padding-left: 10px;
+
+// SLIDE PORTRAIT
+$close-buton-size : 20px;
+$close-buton-margin : 10px;
+
+$navigation-portrait-padding :5px 15px 5px 26px;

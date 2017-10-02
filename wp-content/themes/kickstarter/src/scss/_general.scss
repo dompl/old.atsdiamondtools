@@ -1,0 +1,62 @@
+// ==== GENERAL ==== //
+html {
+  font-size: $font-size-base;
+}
+
+body {
+  @include font-feature-settings(kern);
+  background: color(body-background);
+  color: color(text);
+  font-family: $font-family-sans-serif;
+  line-height: $line-height-base;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: $font-size-h1;
+}
+
+h2 {
+  font-size: $font-size-h2;
+}
+
+h3 {
+  font-size: $font-size-h3;
+}
+
+h4 {
+  font-size: $font-size-h4;
+}
+
+h5 {
+  font-size: $font-size-h5;
+}
+
+h5 {
+  font-size: $font-size-h5;
+}
+
+a {
+  border: 0;
+  color: color(link);
+  text-decoration: none;
+  @extend %transition;
+  &:hover, &:active, &:focus {
+    color:color(link-hover);
+  }
+}
+
+figure {
+  margin: 0;
+}
+img {
+  height: auto;
+  max-width: 100%;
+}

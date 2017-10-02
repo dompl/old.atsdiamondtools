@@ -1,0 +1,26 @@
+{
+  "name": "redfrog/wordpress-gulp-starter-kit",
+  "description": "A WordPress/Gulp/Bower/Sass starter kit",
+  "keywords": [
+    "wordpress",
+    "wordpress-theme",
+    "wordpress-starter-theme",
+    "theme",
+    "gulp",
+    "bower",
+    "composer",
+    "sass",
+    "browsersync",
+    "livereload"
+  ],
+  "homepage": "https://redfrogstudio@bitbucket.org/redfrogstudio/kickstarter.git",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Dom Kapelewski",
+      "email": "dom@redfrogstudio.co.uk",
+      "homepage": "https://www.redfrogstudio.co.uk"
+    }
+  ],
+  "type": "library"
+}

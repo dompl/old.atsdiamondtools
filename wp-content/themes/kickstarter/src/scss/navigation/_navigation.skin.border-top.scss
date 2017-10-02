@@ -1,0 +1,12 @@
+.navigation-landscape .nav-menu > li > a{
+	height: 66;
+	padding: 22px 15px 26px;
+	border-top: solid 4px transparent;
+	transition: color .3s, background .3s, border .3s;
+}
+.navigation-landscape .nav-menu > li:hover > a,
+.navigation-landscape .nav-menu > .active > a,
+.navigation-landscape .nav-menu > .focus > a{
+    border-top-color: #a0d468;
+}
+

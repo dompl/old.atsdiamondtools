@@ -1,0 +1,113 @@
+// ==== CONFIGURATION ==== //
+
+$theme-name:"THEME_NAME"; // Change this to what your theme name
+
+/* Font Sizes */
+
+$font-family-sans-serif: "Lato", Arial, sans-serif !default;
+$font-family-serif:      Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:  Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-base:       $font-family-sans-serif !default;
+
+/* Use Visual Composer */
+$use_visual_composer : false;
+
+$font-size-base:  16px !default; // Assumes the browser default, typically `16px`
+$font-size-lg:    1.25rem !default;
+$font-size-sm:   .875rem !default;
+$font-size-xs:   .75rem !default;
+
+$f-16 : $font-size-base;
+$f-18 : 1.125rem;
+
+$f-lg : $font-size-lg;
+$f-sm : $font-size-sm;
+$f-xs : $font-size-xs;
+
+$line-height-base: 1.444 !default;
+
+$border-radius-base: 3px !default;
+
+$font-size-h1: 2rem !default;
+$font-size-h2: 1.75rem !default;
+$font-size-h3: 1.5rem !default;
+$font-size-h4: 1.25rem !default;
+$font-size-h5: 1rem !default;
+$font-size-h6: 1rem !default;
+
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+
+// Breakpoints
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1024px;
+$xxl: 1200px;
+
+$slicer-breakpoints: $xs $sm $md $lg $xl $xxl;
+
+// Breakpoint Slicer offers four handy mixins that let you set breakpoint ranges easily: at, from, to and between:
+// Styles under at(3) are applied when browser window width is inside the 3rd slice.
+// Styles under from(3) are applied when browser window width is inside the 3rd slice or larger.
+// Styles under to(3) are applied when browser window width is inside the 3rd slice or smaller.
+// Styles under between(2,4) are applied when browser window width is inside the 2nd, 4rd slice or any slice between the two (if any).
+
+// A standard margin
+$spacer:        30px;
+
+$susy: (
+  columns: 12,
+  gutters: 1/10,
+  math: fluid,
+  output: float,
+  gutter-position: split,
+  );
+// debug: (image: show-columns)
+
+// A modest palette; see `_library.scss` for the color() function
+$brand-primary : #3a5266;
+$_color: (
+  brand:            $brand-primary,
+  text:             #636c72,
+  link:             $brand-primary,
+  link-hover:       darken($brand-primary, 20%),
+  link-muted:       desaturate($brand-primary, 10%),
+  body-background:  white,
+  gray-dark:        #292b2c,
+  gray:             #464a4c,
+  gray-light:       #636c72,
+  gray-lighter:     #636c72,
+  danger:           #c53232,
+  success:          #528c49,
+  warning:          #cfa535,
+  )!default;
+
+// Available social colours
+$_social: (
+  facebook:     #365397,
+  twitter:      #00a9f1,
+  linkedin:     #006db3,
+  apple:        #737373,
+  google:       #4285f4,
+  google-plus:  #e0452c,
+  youtube:      #ff3333,
+  vimeo:        #48b6ed,
+  pinterest:    #ce1a19,
+  yelp:         #c30f00,
+  dribbble:     #ed4584,
+  amazon:       #ff9700,
+  ebay:         #083790,
+  skype:        #00acf4,
+  instagram:    #396d9a,
+  dropbox:      #0d84de,
+  flickr:       #ea0066,
+  github:       #2f2f2f,
+  basecamp:     #6bbd6d,
+  tumblr:       #304c68,
+  foursquare:   #207dc5,
+  box:          #1277bc,
+  )!default;
+
+

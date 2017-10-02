@@ -1,0 +1,98 @@
+@font-face {
+    font-family: "redfrog";
+    src: url('icons/redfrog.eot');
+    src: url('icons/redfrog.eot?#iefix') format('eot'),
+        url('icons/redfrog.woff2') format('woff2'),
+        url('icons/redfrog.woff') format('woff'),
+        url('icons/redfrog.ttf') format('truetype'),
+        url('icons/redfrog.svg#redfrog') format('svg');
+}
+
+@mixin icon-styles {
+    font-family: "redfrog";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    // speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+    text-decoration: none;
+    text-transform: none;
+}
+
+%icon {
+    @include icon-styles;
+}
+
+@function icon-char($filename) {
+    $char: "";
+
+    @if $filename == Artboard {
+        $char: "\E001";
+    }
+    @if $filename == admin-checked {
+        $char: "\E002";
+    }
+    @if $filename == admin-lock {
+        $char: "\E003";
+    }
+    @if $filename == admin-unchecked {
+        $char: "\E004";
+    }
+    @if $filename == alarm-clock {
+        $char: "\E005";
+    }
+    @if $filename == anchor {
+        $char: "\E006";
+    }
+    @if $filename == arrow-thin-left {
+        $char: "\E007";
+    }
+    @if $filename == arrow-thin-right {
+        $char: "\E008";
+    }
+    @if $filename == lock {
+        $char: "\E009";
+    }
+
+    @return $char;
+}
+
+@mixin icon($filename, $insert: before, $extend: true) {
+    &:#{$insert} {
+        @if $extend {
+            @extend %icon;
+        } @else {
+            @include icon-styles;
+        }
+        content: icon-char($filename);
+    }
+}
+
+.icon-Artboard {
+    @include icon(Artboard);
+}
+.icon-admin-checked {
+    @include icon(admin-checked);
+}
+.icon-admin-lock {
+    @include icon(admin-lock);
+}
+.icon-admin-unchecked {
+    @include icon(admin-unchecked);
+}
+.icon-alarm-clock {
+    @include icon(alarm-clock);
+}
+.icon-anchor {
+    @include icon(anchor);
+}
+.icon-arrow-thin-left {
+    @include icon(arrow-thin-left);
+}
+.icon-arrow-thin-right {
+    @include icon(arrow-thin-right);
+}
+.icon-lock {
+    @include icon(lock);
+}

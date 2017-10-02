@@ -1,0 +1,84 @@
+// ==== STYLES ==== //
+
+// Do not declare anything before the metadata block; this first section is solely for variable, function, and mixin definitions
+// Note: `bower_components` is already in Sass's path
+
+// Scut, a Sass utilities library: https://davidtheclark.github.io/scut/
+// https://davidtheclark.github.io/scut/
+@import "scut";
+
+// Configuration variables and settings
+@import "config";
+
+// Library: mixins, functions, etc. specific to this theme
+@import "library";
+
+// Template Metadata
+@import "metadata";
+/*!
+Theme Name: #{metadata(theme-name)}
+Author: #{metadata(theme-author)}
+Author URI: #{metadata(theme-author-uri)}
+Description: #{metadata(theme-description)}
+Version: #{metadata(theme-version)}
+License: #{metadata(theme-license)}
+License URI: #{metadata(theme-license-uri)}
+Text Domain: #{metadata(theme-text-domain)}
+Domain Path: #{metadata(theme-text-domain-path)}
+*/
+
+// import Susy
+// http://susydocs.oddbird.net/en/latest/
+@import "susy";
+
+// Import breakpoint
+// http://breakpoint-sass.com/
+@import "breakpoint";
+
+//https://github.com/dompl/breakpoint-slicer
+@import "breakpoint-slicer";
+
+// Reset: eliminate default browser styling (optional; commented out by default)
+//@import "reset";
+
+// Normalize: make browsers render things more consistently
+@import "lib/normalize";
+
+// Normalize: make browsers render things more consistently
+@import "lib/cookie-bar";
+
+// Import fronts ( optionaly is there are any images in img/fonts/*.svg)
+@import "icons";
+
+// Import google fonts. Add fonts in src/fonts/google/fonts.list
+@import "google-fonts";
+
+@import "mixins/global/**/*.scss";
+@import "mixins/theme/**/*.scss";
+
+/* Navigation CSS */
+// config
+@import "navigation";
+// Core
+@import "navigation/navigation";
+// Themes ( reffer to documentation included in docs main theme folder )
+@import "navigation/navigation.dropdown";
+// @import "navigation/navigation.dropdown.horizontal";
+// @import "navigation/navigation.skin.border-bottom";
+// @import "navigation/navigation.skin.border-top";
+// @import "navigation/navigation.skin.boxed";
+// @import "navigation/navigation.skin.rounded-boxed";
+// @import "navigation/navigation.skin.striped";
+
+/* Slick Carousel */
+@import "lib/slick/slick";
+@import "lib/slick/slick-theme"; // This is where all the css settigs are. JS settings are in foorer.js
+
+// Everything else
+@import "helpers";
+@import "general";
+
+// theme styles
+@import "theme/**/*.scss";
+
+@import "visual_composer/**/*.scss";

@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Documentation</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Dropdown Responsive Navigation">
+		<meta name="author" content="marcoarib">
+		
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+		
+		<!-- Grid -->
+		<link rel="stylesheet" href="css/grid-system.css">
+		
+		<!-- Sidenav -->
+		<link rel="stylesheet" href="css/bootstrap-nav.css">
+		
+		<!-- Doc CSS -->
+		<link rel="stylesheet" href="css/docs.css">
+		
+		<!-- Icons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		
+		<!-- Navigation -->
+		<link rel="stylesheet" href="../files/css/navigation.css">
+		<link rel="stylesheet" href="../files/css/navigation.dropdown.css">
+		<link rel="stylesheet" href="../files/css/navigation.dropdown.horizontal.css">
+	</head>
+	
+	<body id="body" data-spy="scroll" data-target="#sidebar" data-offset="65">
+	
+		<!-- Go to top button -->
+		<a data-scroll href="#header" class="go-to-top">&#8593;</a>
+		
+		<!-- Header -->
+		<header id="header">
+			<div class="container">
+				<h1>DROP - Dropdown Responsive Navigation</h1>
+				<h2>Documentation</h2>
+			</div>
+		</header>
+		
+		<!-- Main -->
+		<div class="main container">
+			
+			<div id="sidebar" class="sidebar">
+				<ul class="nav nav-pills nav-stacked sidebar-nav">
+					<li class="active"><a data-scroll href="#intro">1. Introduction</a></li>
+					<li><a data-scroll href="#install">2. Installation</a></li>
+					<li><a data-scroll href="#menus">3. Menus</a></li>
+					<li><a data-scroll href="#icons">4. Menu with icons</a></li>
+					<li><a data-scroll href="#social">5. Social menu</a></li>
+					<li><a data-scroll href="#brand-logo">6. Brand text and logotype</a></li>
+					<li><a data-scroll href="#text-button">7. Text and button</a></li>
+					<li><a data-scroll href="#drop">8. Dropdowns</a></li>
+					<li><a data-scroll href="#h-drop">9. Horizontal dropdown</a></li>
+					<li><a data-scroll href="#search">10. Search panel</a></li>
+					<li><a data-scroll href="#skins">11. Skins</a></li>
+					<li><a data-scroll href="#options">12. Plugin options</a></li>
+					<li><a data-scroll href="#callbacks">13. Callbacks</a></li>
+					<li><a data-scroll href="#methods">14. Methods</a></li>
+					<li><a data-scroll href="#main-classes">15. Main CSS classes</a></li>
+					<li><a data-scroll href="#additional">16. Additional info</a></li>
+				</ul>
+			</div>
+			
+			<!-- Content -->
+			<div class="content">
+			
+				<!-- Section -->
+				<div id="intro" class="section">
+					<h2>1. Introduction</h2>
+					<p>
+						Using this documentation guide you can build your navigation "step by step". Please read this carefully to avoid misleads and errors
+						and feel free to contact the author for bugs or problems with the installation.
+					</p>
+				</div>
+				
+				<!-- Section -->
+				<div id="install" class="section">
+					<h2>2. Installation</h2>
+					<p>
+						To start building your navigation element you need to include the core CSS file to your <mark><code>&#60;head&#62;</code></mark> section.
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">link</span> <span style="color:#963dff">href</span>=<span style="color:#666">"css/navigation.css"</span> <span style="color:#963dff">rel</span>=<span style="color:#666">"stylesheet"</span>></span>
+</pre>
+						</div>
+					</div>
+					<p>
+						The JS files can be placed inside the <mark><code>&#60;head&#62;</code></mark> or before the tag <mark><code>&#60;/body&#62;</code></mark>.
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">script</span> <span style="color:#963dff">type</span>=<span style="color:#666">"text/javascript"</span> <span style="color:#963dff">src</span>=<span style="color:#666">"js/jquery.js"</span>>&lt;/<span style="color:#016cff">script</span>></span>
+<span style="color:#7a7a7a">&lt;<span style="color:#016cff">script</span> <span style="color:#963dff">type</span>=<span style="color:#666">"text/javascript"</span> <span style="color:#963dff">src</span>=<span style="color:#666">"js/navigation.js"</span>>&lt;/<span style="color:#016cff">script</span>></span>
+</pre>
+						</div>
+					</div>
+					<div class="doc-message info-message">
+						All navigation files can be found in the <b>"files"</b> folder.
+					</div>
+					<div class="doc-message warning-message">
+						Be careful with your folders. Here we are using a folder named <b>css</b> for the stylesheets and a folder named <b>js</b> for the javascript files.
+					</div>
+					<div class="doc-message warning-message">
+						The navigation works with <b>jQuery 1.9</b> up to <b>jQuery 3</b>.
+					</div>
+					<br>
+					<p>
+						Let's start with a very basic markup:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+    
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-toggle"</span>>&lt;/<span style="color:#016cff">div</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+	
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+	
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<p>
+						We have three main elements:
+					</p>
+					<ul>
+						<li>
+							<mark>.navigation</mark>: it's the main wrapper of the navigation. It must has an ID to identify the navigation in the DOM.
+						</li>
+						<li>
+							<mark>.nav-header</mark>: It's the header of the navigation. It holds the <mark>.nav-brand</mark> or the <mark>.nav-logo</mark> 
+							and <mark>.nav-toggle</mark>.
+						</li>
+						<li>
+							<mark>.nav-menus-wrapper</mark>: It's the wrapper of the menu items and the "offcanvas" panel on mobile devices.
+						</li>
+					</ul>
+					<br>
+					<p>
+						Now you can initialize the navigation:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>(<span style="color:#a535ae">document</span>)<span style="color:#45ae34;font-weight:700">.ready</span>(<span style="color:#ff5600">function</span>(){
+    <span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation();
+});
+</pre>
+						</div>
+					</div>
+					<p>
+						The result:
+					</p>
+					<nav id="navigation" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+					</nav>
+					<br>
+					<p>
+						The class <mark>active</mark> on the menu item indicates the active page.
+					</p>
+				</div>
+				
+				<!-- Section -->
+				<div id="menus" class="section">
+					<h2>3. Menus</h2>
+					<p>
+						The first level menus can be aligned to left, right or placed in the center. The default alignment is to left. 
+						To align the menu to right or center just use the respectively classes <mark>align-to-right</mark> and <mark>nav-menu-centered</mark>:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#af82d4">&lt;!-- Aligned to left --></span>
+<span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+
+<span style="color:#af82d4">&lt;!-- Aligned to right --></span>
+<span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu align-to-right"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+
+<span style="color:#af82d4">&lt;!-- Placed in the center --></span>
+<span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu nav-menu-centered"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<p>
+						The three alignments:
+					</p>
+					<nav id="navigation2" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+					</nav>
+					<nav id="navigation3" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu align-to-right">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+					</nav>
+					<nav id="navigation4" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu nav-menu-centered">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+					</nav>
+					<br>
+					<br>
+					<div class="doc-message warning-message">
+						<b>Centered menus can't be conjugated with other menus</b>. You can use only one centered menu per navigation.
+					</div>
+					<div class="doc-message warning-message">
+						The centered menu considers the width of the other elements inside the navigation bar (buttons, text, brand text, logo) 
+						to calculate the distance of the left and right borders.
+					</div>
+					<div class="doc-message info-message">
+						Menus with left or right alignment <b>can be placed in the same navigation bar</b>. You can use as many as you want.
+					</div>
+					<br>
+					<p>
+						Using menus aligned to left and right at same time:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-toggle"</span>>&lt;/<span style="color:#016cff">div</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu align-to-right"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Team<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Portfolio<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation5" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a>
+								</li><li><a href="#">Blog</a></li>
+							</ul>
+							<ul class="nav-menu align-to-right">
+								<li><a href="#">Team</a></li>
+								<li><a href="#">Portfolio</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="icons" class="section">
+					<h2>4. Menu with icons</h2>
+					<p>
+						It is possible to use icons on menu items. The navigation is compatible with <a target="_blank" href="http://fontawesome.io/">Font Awesome</a> 
+						and <a target="_blank" href="http://ionicons.com/">Ionicons</a>.
+					</p>
+					<p>
+						<b>Font Awesome</b>
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"fa fa-home"</span> <span style="color:#963dff">aria-hidden</span>=<span style="color:#666">"true"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Home
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"fa fa-cog"</span> <span style="color:#963dff">aria-hidden</span>=<span style="color:#666">"true"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Services
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"fa fa-bullhorn"</span> <span style="color:#963dff">aria-hidden</span>=<span style="color:#666">"true"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Blog
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation6" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active">
+									<a href="#">
+										<i class="fa fa-home" aria-hidden="true"></i>
+										Home
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="fa fa-cog" aria-hidden="true"></i>
+										Services
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="fa fa-bullhorn" aria-hidden="true"></i>
+										Blog
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+					<br>
+					<br>
+					<br>
+					<p>
+						<b>Ionicons</b>
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-ios-home-outline"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Home
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-wrench"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Services
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-ios-home-outline"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+            Blog
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation7" class="navigation">
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active">
+									<a href="#">
+										<i class="ion-home"></i>
+										Home
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="ion-gear-b"></i>
+										Services
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="ion-speakerphone"></i>
+										Blog
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="social" class="section">
+					<h2>5. Social menu</h2>
+					<p>
+						A menu with items as icons to represent your social links. The class <mark>nav-menu-social</mark> must be present 
+						on the menu and you need to use an icon and no text on the menu item.
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu nav-menu-social"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-social-facebook"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-social-twitter"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"ion-social-instagram"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation8" class="navigation">
+
+						<div class="nav-header">
+							<div class="nav-toggle"></div>
+						</div>
+
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu nav-menu-social">
+								<li>
+									<a href="#">
+										<i class="ion-social-facebook"></i>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="ion-social-twitter"></i>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="ion-social-instagram"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="brand-logo" class="section">
+					<h2>6. Brand text and logotype</h2>
+					<p>
+						Put the class <mark>nav-brand</mark> in a link inside the navigation header to use a brand text:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+    
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-brand"</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Navigation<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-toggle"</span>>&lt;/<span style="color:#016cff">div</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+    
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu align-to-right"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+    
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation9" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu align-to-right">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						To use a logotype, add a link with the class <mark>nav-logo</mark> inside the navigation header. Then put the image logo into it:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+    
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-logo"</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">img</span> <span style="color:#963dff">src</span>=<span style="color:#666">"logo.png"</span> <span style="color:#963dff">alt</span>=<span style="color:#666">"logo"</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-toggle"</span>>&lt;/<span style="color:#016cff">div</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+    
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu align-to-right"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+    
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation10" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-logo" href="#">
+								<img src="img/logo.png" alt="logo">
+							</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu align-to-right">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="text-button" class="section">
+					<h2>7. Text and button</h2>
+					<p>
+						Using a simple text:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">span</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-text"</span>></span>Navigation text<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">span</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation11" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<span class="nav-text align-to-right">Navigation text</span>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						Using a button:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-button"</span>></span>Button<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation12" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<a href="#" class="nav-button align-to-right">Button</a>
+						</div>
+						
+					</nav>
+					<br>
+					<div class="doc-message info-message">
+						Texts and buttons can be aligned to right with the class <mark>align-to-right</mark>.
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="drop" class="section">
+					<h2>8. Dropdowns</h2>
+					<p>
+						First of all, include the file <mark>navigation.dropdown.css</mark> in the <mark><code>&#60;head&#62;</code></mark> section:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">link</span> <span style="color:#963dff">href</span>=<span style="color:#666">"css/navigation.dropdown.css"</span> <span style="color:#963dff">rel</span>=<span style="color:#666">"stylesheet"</span>></span>
+</pre>
+						</div>
+					</div>
+					<p>
+						Now you can use dropdown lists inside your menu items. The class <mark>nav-dropdown</mark> is necessary 
+						on the dropdown list. See the markup:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-brand"</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Navigation<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-toggle"</span>>&lt;/<span style="color:#016cff">div</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown"</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Web desing<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Programming<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Consulting<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+            <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation13" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a>
+									<ul class="nav-dropdown">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a></li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						Two levels of dropdowns:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span> <span style="color:#963dff">class</span>=<span style="color:#666">"active"</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Home<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Services<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Web desing<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Programming<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown"</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Wordpress<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>.NET<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Ruby<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+            <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Consulting<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Blog<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Contact<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation14" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a>
+									<ul class="nav-dropdown">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						Use the class <mark>nav-dropdown-left</mark> on a dropdown to give a RTL orientation to it: 
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown nav-dropdown-left"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Web desing<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Programming<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown nav-dropdown-left"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Wordpress<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>.NET<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Ruby<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Consulting<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation15" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu align-to-right">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a>
+									<ul class="nav-dropdown nav-dropdown-left">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown nav-dropdown-left">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						
+					</nav>
+					
+				</div>
+				
+				
+				<!-- Section -->
+				<div id="h-drop" class="section">
+					<h2>9. Horizontal dropdown</h2>
+					<p>
+						Include the file <mark>navigation.dropdown.horizontal.css</mark> in <mark>head</mark> section:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">link</span> <span style="color:#963dff">href</span>=<span style="color:#666">"css/navigation.dropdown.horizontal.css"</span> <span style="color:#963dff">rel</span>=<span style="color:#666">"stylesheet"</span>></span>
+</pre>
+						</div>
+					</div>
+					<p>
+						So just use the class <mark>nav-dropdown-horizontal</mark> on your dropdowns:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menu"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Horizontal dropdowns<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown nav-dropdown-horizontal"</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Web desing<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Programming<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span>
+                    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">ul</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-dropdown nav-dropdown-horizontal"</span>></span>
+                        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Wordpress<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>.NET<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Ruby<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+                <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">li</span>></span><span style="color:#7a7a7a">&lt;<span style="color:#016cff">a</span> <span style="color:#963dff">href</span>=<span style="color:#666">"#"</span>></span>Consulting<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">a</span>></span><span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+            <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">li</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">ul</span>></span>
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation24" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li><a href="#">Horizontal dropdowns</a>
+									<ul class="nav-dropdown nav-dropdown-horizontal">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown nav-dropdown-horizontal">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<div class="doc-message warning-message">
+						<b>Do not</b> use a horizontal dropdown as a parent of a vertical dropdown and vice-versa.
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="search" class="section">
+					<h2>10. Search panel</h2>
+					<p>
+						It is available a search panel for the navigation bar. Use the following markup inside your navigation:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#7a7a7a">&lt;<span style="color:#016cff">nav</span> <span style="color:#963dff">id</span>=<span style="color:#666">"navigation"</span> <span style="color:#963dff">class</span>=<span style="color:#666">"navigation"</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-header"</span>></span>
+        ...
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+    <span style="color:#af82d4">&lt;!-- Search panel --></span>
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-search"</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-search-button"</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">i</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-search-icon"</span>>&lt;/<span style="color:#016cff">i</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+        <span style="color:#7a7a7a">&lt;<span style="color:#016cff">form</span>></span>
+            <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-search-inner"</span>></span>
+                <span style="color:#7a7a7a">&lt;<span style="color:#016cff">input</span> <span style="color:#963dff">type</span>=<span style="color:#666">"search"</span> <span style="color:#963dff">name</span>=<span style="color:#666">"search"</span> <span style="color:#963dff">placeholder</span>=<span style="color:#666">"Type and hit ENTER"</span>/></span>
+            <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+        <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">form</span>></span>
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+    <span style="color:#7a7a7a">&lt;<span style="color:#016cff">div</span> <span style="color:#963dff">class</span>=<span style="color:#666">"nav-menus-wrapper"</span>></span>
+        ...
+    <span style="color:#7a7a7a">&lt;/<span style="color:#016cff">div</span>></span>
+
+<span style="color:#7a7a7a">&lt;/<span style="color:#016cff">nav</span>></span>
+</pre>
+						</div>
+					</div>
+					<nav id="navigation26" class="navigation">
+
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+
+						<!-- Search panel -->
+						<div class="nav-search">
+							<div class="nav-search-button">
+								<i class="nav-search-icon"></i>
+							</div>
+							<form>
+								<div class="nav-search-inner">
+									<input type="search" name="search" placeholder="Type and hit ENTER"/>
+								</div>
+							</form>
+						</div>
+
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu align-to-right">
+								<li class="active"><a href="#">Home</a></li>
+								<li><a href="#">Services</a></li>
+								<li><a href="#">Blog</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="skins" class="section">
+					<h2>11. Skins</h2>
+					<p>
+						Some skins are available in the package. See it live on the "examples".
+					</p>
+					<table class="table table-striped-rows">
+						<tr>
+							<th>Skin</th>
+							<th>File</th>
+						</tr>
+						<tr>
+							<td>border-bottom</td>
+							<td>navigation.skin.border-bottom.css</td>
+						</tr>
+						<tr>
+							<td>border-top</td>
+							<td>navigation.skin.border-top.css</td>
+						</tr>
+						<tr>
+							<td>boxed</td>
+							<td>navigation.skin.boxed.css</td>
+						</tr>
+						<tr>
+							<td>rounded-boxed</td>
+							<td>navigation.skin.dark.css</td>
+						</tr>
+						<tr>
+							<td>dark</td>
+							<td>navigation.skin.rounded-boxed.css</td>
+						</tr>
+						<tr>
+							<td>striped</td>
+							<td>navigation.skin.striped.css</td>
+						</tr>
+					</table>
+					<br>
+					<div class="doc-message info-message">
+						All skin files can be found in the <b>"files"</b> folder.
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="options" class="section">
+					<h2>12. Plugin options</h2>
+					<p>
+						In the table below you can see all the available options:
+					</p>
+					<table class="table table-striped-rows">
+						<tr>
+							<th>Option</th>
+							<th>Default value</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+						<tr>
+							<td>responsive</td>
+							<td>true</td>
+							<td>Boolean</td>
+							<td>Makes the navigation responsive or not</td>
+						</tr>
+						<tr>
+							<td>mobileBreakpoint</td>
+							<td>767</td>
+							<td>Integer</td>
+							<td>The screen width when the navigation goes to the portrait mode</td>
+						</tr>
+						<tr>
+							<td>showDuration</td>
+							<td>300</td>
+							<td>Integer (ms)<br></td>
+							<td>The time to show a dropdown</td>
+						</tr>
+						<tr>
+							<td>hideDuration</td>
+							<td>300</td>
+							<td>Integer (ms)</td>
+							<td>The time to hide a dropdown</td>
+						</tr>
+						<tr>
+							<td>showDelayDuration</td>
+							<td>0</td>
+							<td>Integer (ms)</td>
+							<td>The delay before starting to show a dropdown</td>
+						</tr>
+						<tr>
+							<td>hideDelayDuration</td>
+							<td>0</td>
+							<td>Integer (ms)</td>
+							<td>The delay before starting to hide a dropdown</td>
+						</tr>
+						<tr>
+							<td>submenuTrigger</td>
+							<td>"hover"</td>
+							<td>String</td>
+							<td>The event that starts showing or hiding a dropdown. You can use <b>hover</b> or <b>click</b></td>
+						</tr>
+						<tr>
+							<td>effect</td>
+							<td>"fade"</td>
+							<td>String</td>
+							<td>The effect on dropdowns. You can use <b>fade</b> or <b>slide</b></td>
+						</tr>
+						<tr>
+							<td>submenuIndicator</td>
+							<td>true<br></td>
+							<td>Boolean</td>
+							<td>Arrows that indicates a dropdown</td>
+						</tr>
+						<tr>
+							<td>hideSubWhenGoOut</td>
+							<td>true</td>
+							<td>Boolean</td>
+							<td>If <b>true</b>, dropdowns will be hidden when you click or touch outside the navigation</td>
+						</tr>
+						<tr>
+							<td>visibleSubmenusOnMobile</td>
+							<td>false</td>
+							<td>Boolean</td>
+							<td>If <b>true</b>, all dropdowns will be shown when you open the offcanvas panel</td>
+						</tr>
+						<tr>
+							<td>fixed</td>
+							<td>false</td>
+							<td>Boolean</td>
+							<td>Makes the navigation fixed on the top</td>
+						</tr>
+						<tr>
+							<td>overlay</td>
+							<td>true</td>
+							<td>Boolean</td>
+							<td>Shows an overlay panel when the offcanvas is visible</td>
+						</tr>
+						<tr>
+							<td>overlayColor</td>
+							<td>"rgba(0, 0, 0, 0.5)"</td>
+							<td>String</td>
+							<td>The color of the overlay. You can use HEX, RGB and RGBA colors</td>
+						</tr>
+						<tr>
+							<td>hidden</td>
+							<td>false</td>
+							<td>Boolean</td>
+							<td>Hides the navigation bar and keeps the offcanvas panel functional</td>
+						</tr>
+						<tr>
+							<td>hiddenOnMobile</td>
+							<td>false</td>
+							<td>Boolean</td>
+							<td>Hides the navigation bar on mobile view and keeps the offcanvas panel functional</td>
+						</tr>
+						<tr>
+							<td>offCanvasSide</td>
+							<td>"left"</td>
+							<td>String</td>
+							<td>Shows the offcanvas panel on the <b>left</b> or <b>right</b> side</td>
+						</tr>
+						<tr>
+							<td>offCanvasCloseButton</td>
+							<td>true</td>
+							<td>Boolean</td>
+							<td>Shows the offcanvas close button</td>
+						</tr>
+						<tr>
+							<td>animationOnShow</td>
+							<td>''</td>
+							<td>String</td>
+							<td>Use a CSS animation when showing dropdowns</td>
+						</tr>
+						<tr>
+							<td>animationOnHide</td>
+							<td>''</td>
+							<td>String</td>
+							<td>Use a CSS animation when hiding dropdowns</td>
+						</tr>
+						<tr>
+							<td>onInit</td>
+							<td>''</td>
+							<td>Custom code<br></td>
+							<td>Executes your custom code when the navigation is initialized</td>
+						</tr>
+						<tr>
+							<td>onLandscape</td>
+							<td>''</td>
+							<td>Custom code<br></td>
+							<td>Executes your custom code when the navigation goes to landscape mode</td>
+						</tr>
+						<tr>
+							<td>onPortrait</td>
+							<td>''</td>
+							<td>Custom code<br></td>
+							<td>Executes your custom code when the navigation goes to portrait mode</td>
+						</tr>
+						<tr>
+							<td>onShowOffCanvas</td>
+							<td>''</td>
+							<td>Custom code</td>
+							<td>Executes your custom code when the offcanvas panel is shown</td>
+						</tr>
+						<tr>
+							<td>onHideOffCanvas</td>
+							<td>''</td>
+							<td>Custom code</td>
+							<td>Executes your custom code when the offcanvas panel is hidden</td>
+						</tr>
+					</table>
+					<br>
+					<p>
+						Example 1:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    showDuration: <span style="color:#a8017e">1000</span>,
+    effect: <span style="color:#666">"slide"</span>
+});
+</pre>
+						</div>
+					</div>
+					<nav id="navigation21" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="nav-menu align-to-right">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown nav-dropdown-left">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown nav-dropdown-left">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						Example 2:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    mobileBreakpoint: <span style="color:#a8017e">99999</span>, <span style="color:#af82d4">//always in portrait mode</span>
+    overlayColor: <span style="color:#666">"rgba(150, 122, 220, 0.5)"</span> <span style="color:#af82d4">//purple</span>
+});
+</pre>
+						</div>
+					</div>
+					<nav id="navigation22" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="nav-menu align-to-right">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown nav-dropdown-left">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown nav-dropdown-left">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						
+					</nav>
+					<br>
+					<br>
+					<p>
+						Example 3:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    hidden: <span style="color:#a8017e">true</span> <span style="color:#af82d4">//the navigation bar is hidden</span>
+});
+</pre>
+						</div>
+					</div>
+					<a id="show-nav23" class="button">Show offcanvas</a>
+					<nav id="navigation23" class="navigation">
+    
+						<div class="nav-header">
+							<a class="nav-brand" href="#">Navigation</a>
+							<div class="nav-toggle"></div>
+						</div>
+						
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="nav-menu align-to-right">
+								<li><a href="#">Dropdown</a>
+									<ul class="nav-dropdown nav-dropdown-left">
+										<li><a href="#">Web desing</a></li>
+										<li><a href="#">Programming</a>
+											<ul class="nav-dropdown nav-dropdown-left">
+												<li><a href="#">Wordpress</a></li>
+												<li><a href="#">.NET</a></li>
+												<li><a href="#">Ruby</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Consulting</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						
+					</nav>
+				</div>
+				
+				<!-- Section -->
+				<div id="callbacks" class="section">
+					<h2>13. Callbacks</h2>
+					<p>
+						See how to use the 3 callback functions available:
+					</p>
+					<p>
+						<i><b>onInit</b></i><br>
+						Executes a code when the navigation is initialized.
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    <span style="color:#21439c">onInit</span>: <span style="color:#ff5600">function</span>() {
+        <span style="color:#af82d4">// your code</span>
+    }
+});
+</pre>
+						</div>
+					</div>
+					<p>
+						<i><b>onShowOffCanvas</b></i><br>
+						Executes a code when the offcanvas panel is shown.
+					</p>
+										<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    <span style="color:#21439c">onShowOffCanvas</span>: <span style="color:#ff5600">function</span>() {
+        <span style="color:#af82d4">// your code</span>
+    }
+});
+</pre>
+						</div>
+					</div>
+					<p>
+						<i><b>onHideOffCanvas</b></i><br>
+						Executes a code after the offcanvas panel is hidden.
+					</p>
+										<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").navigation({
+    <span style="color:#21439c">onHideOffCanvas</span>: <span style="color:#ff5600">function</span>() {
+        <span style="color:#af82d4">// your code</span>
+    }
+});
+</pre>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="methods" class="section">
+					<h2>14. Methods</h2>
+					<p>
+						See the available methods to interact with the navigation:
+					</p>
+					<p>
+						<i><b>toggleOffcanvas()</b></i><br>
+						Show or hide the offcanvas panel.
+					</p>
+										<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").<span style="color:#b7734c">data</span>(<span style="color:#666">"navigation"</span>).toggleOffcanvas();
+</pre>
+						</div>
+					</div>
+					<p>
+						<i><b>toggleSearch()</b></i><br>
+						Show or hide the search panel.
+					</p>
+										<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b"><span style="color:#a535ae">$</span>("<span style="color:#963dff">#navigation</span>").<span style="color:#b7734c">data</span>(<span style="color:#666">"navigation"</span>).toggleSearch();
+</pre>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="main-classes" class="section">
+					<h2>15. Main CSS classes</h2>
+					<p>
+						The navigation works with two main CSS classes according to the variable "<b>mobileBreakpoint</b>". 
+						These classes indicate the navigation mode. The CSS classes are:
+						<ul>
+							<li>
+								<mark>navigation-portrait</mark>: this class will be applied to indicate that navigation is in the portrait mode. 
+								It happens when the device screen width has a size minor/equal than value of "<b>mobileBreakpoint</b>".
+							</li>
+							<br>
+							<li>
+								<mark>navigation-landscape</mark>: this class will be applied to indicate that navigation is in the landscape mode. 
+								It happens when the device screen width has a size greater than value of "<b>mobileBreakpoint</b>".
+							</li>
+						</ul>
+					</p>
+					<p>
+						The navigation uses these classes to apply specifics styles and behaviors depending of your device screen size. 
+						You can use these CSS classes to apply different styles to different devices. Take a look on the examples:
+					</p>
+					<p>
+						Changing the background color of the navigation on large devices:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b">
+<span style="color:#963dff">.navigation-landscape</span> <span style="color:#963dff">.navigation</span>{
+    <span style="color:#a535ae">background-color</span>: <span style="color:#b7734c">black</span>;
+}
+</pre>
+						</div>
+					</div>
+					<p>
+						Changing the menu item font on small devices:
+					</p>
+					<div class="snippet">
+						<div class="code">
+							<button class="snippet-btn">Copy</button>
+<pre style="background:#fff;color:#3b3b3b">
+<span style="color:#963dff">.navigation-portrait</span> <span style="color:#963dff">.nav-menu</span> > <span style="color:#016cff">li</span> > <span style="color:#016cff">a</span>{
+    <span style="color:#a535ae">font-weight</span>: <span style="color:#b7734c">bold</span>;
+}
+</pre>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Section -->
+				<div id="additional" class="section">
+					<h2>16. Additional info</h2>
+					<p>
+						See the table below with some important informations:
+					</p>
+					<table class="table table-striped-rows">
+						<tr>
+							<td><b>Browser compatibility</b></th>
+							<td>Chrome, Firefox, Safari, Opera, IE9+, Edge</th>
+						</tr>
+						<tr>
+							<td><b>jQuery compatibility</b></td>
+							<td>1.9+ (up to 3.x)</td>
+						</tr>
+						<tr>
+							<td><b>Framework compatibility</b></td>
+							<td>Tested with <a target="blank" href="http://getbootstrap.com/">Bootstrap framework</a></td>
+						</tr>
+						<tr>
+							<td><b>Real links on parent items</b></td>
+							<td>
+								We do not recommend the use of real links on items that have dropdowns.<br>
+								If you want this, in landscape mode the submenus will appear after the second click/tap.
+							</td>
+						</tr>
+						<tr>
+							<td><b>Keyboard acessibility</b></td>
+							<td>
+								The navigation works via keyboard. Just use the TAB key to navigate. <br>
+								In some cases can be necessary the use of the ENTER key to open the dropdowns. <br>
+								You can use the attribute "tabindex" to define the navigation order over the elements. <br>
+								More info <b><a target="blank" href="http://www.w3schools.com/TAgs/att_global_tabindex.asp">HERE</a></b>.
+							</td>
+						</tr>
+						<tr>
+							<td><b>Support</b></td>
+							<td>
+								We will give support <b>ONLY</b> in following cases:
+								<ol>
+									<li>The support includes help with bugs or installation</li>
+									<li>The support <b>NOT</b> include help for customisations</li>
+									<li>If you have a problem, a live preview to reproduce the issue is <b>VERY IMPORTANT</b></li>
+								<ol>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+			</div>
+			
+		</div>
+		
+		<!-- Footer -->
+		<footer>
+			
+		</footer>
+		
+		<!-- Javascript -->
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/bootstrap-scrollspy.js"></script>
+		<script src="js/clipboard.js"></script>
+		<script src="js/smooth-scroll.min.js"></script>
+		<script src="js/functions.js"></script>
+		<script src="../files/js/navigation.js"></script>
+		<script>
+			$(document).ready(function(){
+				$("#navigation").navigation();
+				$("#navigation2").navigation();
+				$("#navigation3").navigation();
+				$("#navigation4").navigation();
+				$("#navigation5").navigation();
+				$("#navigation6").navigation();
+				$("#navigation7").navigation();
+				$("#navigation8").navigation();
+				$("#navigation9").navigation();
+				$("#navigation10").navigation();
+				$("#navigation11").navigation();
+				$("#navigation12").navigation();
+				$("#navigation13").navigation();
+				$("#navigation14").navigation();
+				$("#navigation15").navigation();
+				$("#navigation16").navigation();
+				$("#navigation17").navigation();
+				$("#navigation18").navigation();
+				$("#navigation19").navigation();
+				$("#navigation20").navigation();
+				$("#navigation21").navigation({
+					showDuration: 1000,
+					effect: "slide"
+				});
+				$("#navigation22").navigation({
+					mobileBreakpoint: 99999,
+					overlayColor: "rgba(150, 122, 220, 0.5)"
+				});
+				$("#navigation23").navigation({
+					hidden: true
+				});
+				$("#show-nav23").click(function(){
+					$("#navigation23").data("navigation").toggleOffcanvas();
+				});
+				$("#navigation24").navigation();
+				$("#navigation25").navigation();
+				$("#navigation26").navigation();
+			});
+		</script>
+		
+	</body>
+</html>

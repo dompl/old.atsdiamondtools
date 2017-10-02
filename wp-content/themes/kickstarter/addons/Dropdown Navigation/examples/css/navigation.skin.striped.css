@@ -1,0 +1,20 @@
+.nav-menu > li:hover > a,
+.nav-menu > .active > a,
+.nav-menu > .focus > a{
+    color: #ffffff;
+	background-color: #a0d468;
+}
+.nav-menu > li:hover > a .submenu-indicator-chevron,
+.nav-menu > .active > a .submenu-indicator-chevron,
+.nav-menu > .focus > a .submenu-indicator-chevron{
+    border-color: transparent #ffffff #ffffff transparent;
+}
+.nav-dropdown > li:hover > a,
+.nav-dropdown > .focus > a{
+    color: #ffffff;
+	background-color: #a0d468;
+}
+.nav-dropdown > li:hover > a .submenu-indicator-chevron,
+.nav-dropdown > .focus > a .submenu-indicator-chevron{
+    border-color: transparent #ffffff #ffffff transparent;
+}
