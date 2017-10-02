@@ -133,7 +133,7 @@ $atts['class'] = str_replace('_', '-', $atts['class']);
 				acf_render_field_wrap(array(
 					'label'			=> __('Wrapper Attributes','acf'),
 					'instructions'	=> '',
-					'type'			=> 'number',
+					'type'			=> 'text',
 					'name'			=> 'width',
 					'prefix'		=> $field['prefix'] . '[wrapper]',
 					'value'			=> $field['wrapper']['width'],

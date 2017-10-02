@@ -2,11 +2,9 @@
 var __gf_timeout_handle;
 
 gform.addAction( 'gform_input_change', function( elem, formId, fieldId ) {
-	if( window.gf_form_conditional_logic ) {
-		var dependentFieldIds = rgars( gf_form_conditional_logic, [ formId, 'fields', gformExtractFieldId( fieldId ) ].join( '/' ) );
-		if( dependentFieldIds ) {
-			gf_apply_rules( formId, dependentFieldIds );
-		}
+	var dependentFieldIds = rgars( gf_form_conditional_logic, [ formId, 'fields', gformExtractFieldId( fieldId ) ].join( '/' ) );
+	if( dependentFieldIds ) {
+		gf_apply_rules( formId, dependentFieldIds );
 	}
 }, 10 );
 

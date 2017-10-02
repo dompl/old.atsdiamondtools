@@ -301,7 +301,6 @@ class acf_form_front {
 		}
 		
 		
-		// save
 		if( $save['ID'] ) {
 			
 			wp_update_post( $save );

@@ -26,8 +26,8 @@
 			
 			// vars
 			this.$el = this.$field.find('.acf-repeater:first');
-			this.$input = this.$el.children('input');
-			this.$table = this.$el.children('table');
+			this.$input = this.$field.find('input:first');
+			this.$table = this.$field.find('table:first');
 			this.$tbody = this.$table.children('tbody');
 			this.$clone = this.$tbody.children('tr.acf-clone');
 			
@@ -74,10 +74,6 @@
 		
 		render: function(){
 			
-			// vars
-			var $button = this.$el.find('> .acf-actions .button');
-			
-			
 			// update order numbers
 			this.$tbody.children().each(function(i){
 				
@@ -101,11 +97,11 @@
 			// row limit reached
 			if( this.o.max > 0 && this.count() >= this.o.max ) {
 				
-				$button.addClass('disabled');
+				this.$el.find('> .acf-actions .button').addClass('disabled');
 				
 			} else {
 				
-				$button.removeClass('disabled');
+				this.$el.find('> .acf-actions .button').removeClass('disabled');
 				
 			}
 			
@@ -450,7 +446,6 @@
 			
 			// vars
 			var self = this;
-			var $button = this.$el.find('> .acf-actions .button');
 			
 			
 			// update order numbers
@@ -476,11 +471,11 @@
 			// row limit reached
 			if( this.o.max > 0 && this.count() >= this.o.max ) {
 				
-				$button.addClass('disabled');
+				this.$el.find('> .acf-actions .button').addClass('disabled');
 				
 			} else {
 				
-				$button.removeClass('disabled');
+				this.$el.find('> .acf-actions .button').removeClass('disabled');
 				
 			}
 			
@@ -1920,11 +1915,11 @@
 		fetch: function( id ){
 			
 			// vars
-			var ajaxdata = {
+			var data = acf.prepare_for_ajax({
 				action		: 'acf/fields/gallery/get_attachment',
 				field_key	: this.$field.data('key'),
 				id			: id
-			};
+			});
 			
 			
 			// abort XHR if this field is already loading AJAX data
@@ -1947,7 +1942,7 @@
 				
 				
 				// append
-				ajaxdata.attachment = val;
+				data.attachment = val;
 				
 			}
 			
@@ -1958,7 +1953,7 @@
 				dataType	: 'html',
 				type		: 'post',
 				cache		: false,
-				data		: acf.prepare_for_ajax(ajaxdata),
+				data		: data,
 				context		: this,
 				success		: this.fetch_success
 			});
@@ -2029,12 +2024,12 @@
 			
 			
 			// vars
-			var ajaxdata = {
+			var data = acf.prepare_for_ajax({
 				action		: 'acf/fields/gallery/get_sort_order',
 				field_key	: this.$field.data('key'),
 				ids			: [],
 				sort		: sort
-			};
+			});
 			
 			
 			// find and add attachment ids
@@ -2049,7 +2044,7 @@
 				
 				
 				// append
-				ajaxdata.ids.push(id);
+				data.ids.push(id);
 				
 			});
 			
@@ -2060,7 +2055,7 @@
 				dataType:	'json',
 				type:		'post',
 				cache:		false,
-				data:		acf.prepare_for_ajax(ajaxdata),
+				data:		data,
 				context:	this,
 				success:	this._sort_success
 			});
@@ -2110,7 +2105,7 @@
 				$edit = this.$side.find('.acf-gallery-edit'),
 				$form = this.$side.find('.acf-gallery-side-data'),
 				id = $edit.data('id'),
-				ajaxdata = acf.serialize( $form );
+				data = acf.serialize( $form );
 			
 			
 			// validate
@@ -2123,13 +2118,13 @@
 			
 			
 			// append AJAX action		
-			ajaxdata.action = 'acf/fields/gallery/update_attachment';
+			data.action = 'acf/fields/gallery/update_attachment';
 			
 			
 			// ajax
 			$.ajax({
 				url			: acf.get('ajaxurl'),
-				data		: acf.prepare_for_ajax(ajaxdata),
+				data		: acf.prepare_for_ajax(data),
 				type		: 'post',
 				dataType	: 'json',
 				complete	: function( json ){

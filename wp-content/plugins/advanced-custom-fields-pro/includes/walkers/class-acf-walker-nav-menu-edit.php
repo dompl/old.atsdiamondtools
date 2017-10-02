@@ -111,7 +111,7 @@ class ACF_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 				
 				
 				// change prefix
-				acf_prefix_fields( $fields, $prefix );
+				foreach( $fields as &$field ) $field['prefix'] = $prefix;
 				
 				
 				// render

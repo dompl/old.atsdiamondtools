@@ -1295,9 +1295,8 @@ function renderRecaptcha() {
 
         var $elem      = jQuery( this ),
             parameters = {
-                'sitekey':  $elem.data( 'sitekey' ),
-                'theme':    $elem.data( 'theme' ),
-	            'tabindex': $elem.data( 'tabindex' )
+                'sitekey': $elem.data( 'sitekey' ),
+                'theme':   $elem.data( 'theme' )
             };
 
         if( ! $elem.is( ':empty' ) ) {
@@ -1310,10 +1309,6 @@ function renderRecaptcha() {
 
         grecaptcha.render( this.id, parameters );
 
-	    if( parameters.tabindex ) {
-		    $elem.find( 'iframe' ).attr( 'tabindex', parameters.tabindex );
-	    }
-
         gform.doAction( 'gform_post_recaptcha_render', $elem );
 
     } );
@@ -1325,13 +1320,12 @@ function renderRecaptcha() {
 //----------------------------------------
 
 function gformValidateFileSize( field, max_file_size ) {
-	var validation_element;
-
+	
 	// Get validation message element.
 	if ( jQuery( field ).closest( 'div' ).siblings( '.validation_message' ).length > 0 ) {
-		validation_element = jQuery( field ).closest( 'div' ).siblings( '.validation_message' );
+		var validation_element = jQuery( field ).closest( 'div' ).siblings( '.validation_message' );
 	} else {
-		validation_element = jQuery( field ).siblings( '.validation_message' );
+		var validation_element = jQuery( field ).siblings( '.validation_message' );
 	}
 	
 	
@@ -1344,7 +1338,7 @@ function gformValidateFileSize( field, max_file_size ) {
 	var file = field.files[0];
 	
 	// If selected file is larger than maximum file size, set validation message and unset file selection.
-	if ( file && file.size > max_file_size ) {
+	if ( file.size > max_file_size ) {
 		
 		// Set validation message.
 		validation_element.html( file.name + " - " + gform_gravityforms.strings.file_exceeds_limit );

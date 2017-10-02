@@ -137,7 +137,8 @@ class GF_Field_MultiSelect extends GF_Field {
 	 */
 	public function get_choices( $value ) {
 
-		$value = $this->to_array( $value );
+		// If we are in the entry editor, convert value to an array.
+		$value = $this->is_entry_detail() ? $this->to_array( $value ) : $value;
 
 		return GFCommon::get_select_choices( $this, $value, false );
 
@@ -321,17 +322,16 @@ class GF_Field_MultiSelect extends GF_Field {
 	/**
 	 * Converts an array to a string.
 	 *
-	 * @since 2.2.3.7 Changed access to public.
 	 * @since 2.2
-	 * @access public
+	 * @access private
 	 *
 	 * @uses \GF_Field_MultiSelect::$storageType
 	 *
-	 * @param array $value The array to convert to a string.
+	 * @param array The array to convert to a string.
 	 *
 	 * @return string The converted string.
 	 */
-	public function to_string( $value ) {
+	private function to_string( $value ) {
 		if ( $this->storageType === 'json' ) {
 			return json_encode( $value );
 		} else {
@@ -342,27 +342,21 @@ class GF_Field_MultiSelect extends GF_Field {
 	/**
 	 * Converts a string to an array.
 	 *
-	 * @since 2.2.3.7 Changed access to public.
 	 * @since 2.2
-	 * @access public
+	 * @access private
 	 *
 	 * @uses \GF_Field_MultiSelect::$storageType
 	 *
-	 * @param string $value A comma-separated or JSON string to convert.
+	 * @param string A comma-separated or JSON string to convert.
 	 *
 	 * @return array The converted array.
 	 */
-	public function to_array( $value ) {
-		if ( empty( $value ) ) {
-			return array();
-		} elseif ( is_array( $value ) ) {
-			return $value;
-		} elseif ( $this->storageType !== 'json' || $value[0] !== '[' ) {
-			return array_map( 'trim', explode( ',', $value ) );
-		} else {
+	private function to_array( $value ) {
+		if ( $this->storageType === 'json' ) {
 			$json = json_decode( $value, true );
-
 			return $json == null ? array() : $json;
+		} else {
+			return explode( ',', $value );
 		}
 	}
 

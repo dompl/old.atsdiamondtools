@@ -178,7 +178,7 @@ class acf_form_widget {
 				
 				
 				// change prefix
-				acf_prefix_fields( $fields, $prefix );
+				foreach( $fields as &$field ) $field['prefix'] = $prefix;
 				
 				
 				// render
