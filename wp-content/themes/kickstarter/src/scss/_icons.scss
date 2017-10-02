@@ -1,15 +1,15 @@
 @font-face {
-    font-family: "redfrog";
-    src: url('icons/redfrog.eot');
-    src: url('icons/redfrog.eot?#iefix') format('eot'),
-        url('icons/redfrog.woff2') format('woff2'),
-        url('icons/redfrog.woff') format('woff'),
-        url('icons/redfrog.ttf') format('truetype'),
-        url('icons/redfrog.svg#redfrog') format('svg');
+    font-family: "atsdiamondtools";
+    src: url('icons/atsdiamondtools.eot');
+    src: url('icons/atsdiamondtools.eot?#iefix') format('eot'),
+        url('icons/atsdiamondtools.woff2') format('woff2'),
+        url('icons/atsdiamondtools.woff') format('woff'),
+        url('icons/atsdiamondtools.ttf') format('truetype'),
+        url('icons/atsdiamondtools.svg#atsdiamondtools') format('svg');
 }
 
 @mixin icon-styles {
-    font-family: "redfrog";
+    font-family: "atsdiamondtools";
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     font-style: normal;

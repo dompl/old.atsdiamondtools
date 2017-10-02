@@ -12,6 +12,15 @@
   <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
+  <!-- Global Site Tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107368637-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)};
+    gtag('js', new Date());
+
+    gtag('config', 'UA-107368637-1');
+  </script>
   <header id="masthead">
     <?php echo !is_front_page() ? '<a href="'. esc_url( home_url( '/' ) ) . '" rel="home">' : ''?>
       <?php bloginfo( 'name' ); ?>
