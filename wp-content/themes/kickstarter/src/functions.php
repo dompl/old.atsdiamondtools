@@ -47,6 +47,7 @@ if (class_exists('WooCommerce'))
 {
   $woocommerces = array(
     'global-settings.php',  // Woocommerce global settings
+    'cart.php',  // PHP for cart.php
   );
 
   foreach ($woocommerces as $woocommerce)
