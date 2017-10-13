@@ -1,0 +1,313 @@
+/*  ********************************************************
+  *   Checkout - Cart
+  *  ********************************************************
+  */
+
+
+/* Table heading borders */
+
+$use--headers-top-border: true; // Display top border in product table headers
+$use--headers-vertical-borders: true; // Display vartival borders in product table headers
+$use--headers-bottom-border: true; // Display bottom border in product table headers
+$use--headers-top-border: true; // Display borders in product table headers
+$use--heding-border-colour: lighten(#cccccc, 10%); // Table borders colour ( headers )
+
+/* Table body borders */
+
+$use--body-vertical-borders: true; // Display borders in product table headers
+$use--body-hortizontal-borders: true; // Display border in product table
+$use--body-border-colour: $use--heding-border-colour; // Table borders colour
+
+/* Table spacing and padding */
+
+$table--cells-pagging: 9px 10px 10px; // Table header paddings - accepts 4 values;
+
+/* Table heading topography */
+
+$heading--th-font-size: 13px; // Table heading front sizes
+$heading--th-font-color: #666666; // Table heading front sizes
+$heading--th-font-webight: $font-weight-normal; // Table heading front sizes
+$heading--th-text-alight: left; // Table heading front sizes
+$heading--th-text-case: inherit; // Set headings text case ( upperscase )
+$heading--th-line-height: $heading--th-font-size; // Table heading front sizes
+$heading--th-background-color: #CCCCCC; // Table heading background
+
+/* Table body topography */
+
+$body--product-font-size: 14px; // Font size for product title - use false or inherit to show default font size
+$body--product-font-size-mobile: 12px; // Font size for product title on responsive - use false or inherit to show default font size
+$body--product-link-color: color(brand); // Font size for product title on responsive - use false or inherit to show default font size
+// Responsive labels
+$body--product-label-font-weight-mobile: false; // Responsive product lable weight - use false or inherit to show default font size
+$body--product-label-font-color-mobile: false; // Responsive product lable weight - use false or inherit to show default font size
+
+/* Table body  */
+
+// Delete product - cross icon
+$cross---icon-color:white; // Cross colour
+$cross---icon-size:18px; // Cross size
+$cross---icon-weight:600; // Cross font weight
+$cross---icon-background:color(danger); // Cross bakground colour
+$cross---icon-square:true; // make the icon circle
+$cross---icon-padding:4px; // Padding
+// Product image
+$product--image-max-height: 100px; // Maximum height for product image on responsive
+$product--image-max-height-mobile: 100px; // Maximum height for product image on responsive
+$product--image-alignment: center; // Image alignment for responsive
+// Product input - add your styles inside the mixin as it is already included in the styles below
+@mixin product-input() {
+  @include border-radius(0); /// remove border radius on i devices
+  width: 50px;
+}
+
+
+/* Product row background colour ( set to false if not background is required ) */
+
+$body-product-odd-background:false;
+$body-product-even-background:false;
+$body-product-odd-background-mobile:false;
+$body-product-even-background-mobile:lighten(#CCCCCC, 17%);
+
+$body-product-margin-bottom-mobile: 10px; // Set bottom margin for products on mobile
+
+/*  *************************** DO NT EDIT BELOW THIS LINE *****************************  */
+
+table.shop_table {
+  border-spacing: 0;
+  width: 100%;
+  border-collapse: separate;
+  /* Table heading */
+  >thead {
+    text-indent: 0;
+    font-size: $heading--th-font-size;
+    tr {
+      box-sizing: border-box;
+      th {
+        font-size: $heading--th-font-size;
+        color: $heading--th-font-color;
+        background-color: $heading--th-background-color;
+        font-weight: $heading--th-font-webight;
+        text-align: $heading--th-text-alight;
+        line-height: $heading--th-font-size;
+        padding: $table--cells-pagging;
+        text-transform: $heading--th-text-case;
+        @include to($responsive--checkout-breakpoint) {
+          display: none;
+        }
+        @if $use--headers-top-border==true {
+          border-top: 1px solid $use--heding-border-colour;
+        }
+
+        @if $use--headers-bottom-border==true {
+          border-top: 1px solid $use--heding-border-colour;
+          border-bottom: 1px solid $use--heding-border-colour;
+        }
+
+        @if $use--headers-vertical-borders==true {
+          border-bottom: 1px solid $use--heding-border-colour;
+          border-right: 1px solid $use--heding-border-colour;
+          &.product-remove {
+            border-right: none;
+            border-left: 1px solid $use--heding-border-colour;
+          }
+        }
+      }
+      border-left: 1px solid $use--heding-border-colour;
+    }
+  }
+  /* Table body */
+  tbody {
+    // Topography
+    tr.cart_item {
+      @if $body-product-odd-background !=false {
+        @include _odd() {
+          background-color: $body-product-odd-background
+        }
+      }
+      @if $body-product-even-background !=false {
+        @include _even() {
+          background-color: $body-product-even-background
+        }
+      }
+      @if $use--body-hortizontal-borders==true {
+        @include _last(2) {
+          td {
+            border-bottom: 1px solid $use--body-border-colour!important;
+          }
+        }
+      }
+      td {
+        padding: $table--cells-pagging; // Product Delete
+        @if $body--product-font-size !=true or $body--product-font-size !=inherit {
+          font-size: $body--product-font-size;
+        }
+        @include from($responsive--checkout-breakpoint + 1) {
+          @if $use--body-vertical-borders==true {
+            border-bottom: 1px solid $use--body-border-colour;
+          }
+        }
+        @if $use--body-hortizontal-borders==true {
+          border-right: 1px solid $use--body-border-colour;
+        }
+        &.product-remove {
+          border-right: none;
+          @if $use--body-hortizontal-borders==true {
+            border-left: 1px solid $use--body-border-colour;
+          }
+          a {
+            color: $cross---icon-color;
+            font-size: $cross---icon-size;
+            font-weight: $cross---icon-weight;
+            background-color: $cross---icon-background;
+            display: block;
+            text-align: center;
+            border-right: none;
+            @if $cross---icon-square==true {
+              border-radius: 50%;
+              width: $cross---icon-size + 2;
+              line-height: $cross---icon-size;
+              box-sizing: border-box;
+              padding-bottom: 1px;
+            }
+            @else {
+              padding: $cross---icon-padding;
+            }
+            &:hover {
+              cursor: pointer;
+              background-color: transparent;
+              color: $cross---icon-background;
+            }
+          }
+        }
+        &.product-thumbnail {
+          a {
+            display: block;
+            img {
+              max-height: $product--image-max-height;
+            }
+          }
+        }
+        &.product-name {
+          a {
+            color: $body--product-link-color;
+            &:hover {
+              color: darken($body--product-link-color, 10%);
+            }
+          }
+        }
+        &.product-quantity {
+          input[type="number"] {
+            @include product-input();
+          }
+        }
+      }
+    }
+    @include to($responsive--checkout-breakpoint) {
+      tr.cart_item {
+        display: block;
+        @if $body-product-margin-bottom-mobile !=false {
+          margin-bottom: $body-product-margin-bottom-mobile;
+          @include _last(2) {
+            margin-bottom: 0!important;
+          }
+        }
+        @if $body-product-odd-background-mobile !=false {
+          @include _odd() {
+            background-color: $body-product-odd-background-mobile;
+          }
+        }
+        @if $body-product-even-background-mobile !=false {
+          @include _even() {
+            background-color: $body-product-even-background-mobile;
+          }
+        }
+
+        @if $use--body-hortizontal-borders==true {
+          @include _last(2) {
+            td {
+              border-bottom: none!important;
+            }
+          }
+        }
+        td {
+          @if $body--product-font-size-mobile !=true or $body--product-font-size-mobile !=inherit {
+            font-size: $body--product-font-size-mobile;
+          }
+          display: block;
+          text-align: right;
+          clear: both;
+          padding: $table--cells-pagging;
+          &[class^="product-"] {
+            border-left: 1px solid $use--body-border-colour;
+            border-right: 1px solid $use--body-border-colour;
+            @include _last-child() {
+              border-bottom: 1px solid $use--body-border-colour!important;
+            }
+          }
+          @if $use--body-hortizontal-borders==true {
+            border-top: 1px solid $use--body-border-colour!important;
+          }
+          &.product-remove {
+            border-left: none!important;
+            border-top: none!important;
+            border-right: none!important;
+            text-align: center;
+            a {
+              display: inline-block!important;
+            }
+          }
+          &:before {
+            content: attr(data-title);
+            font-weight: $heading--th-font-webight;
+            float: left;
+            @if $body--product-label-font-color-mobile !=false or $body--product-label-font-color-mobile !=inherit {
+              color: $body--product-label-font-color-mobile;
+            }
+            @if $body--product-label-font-weight-mobile !=false or $body--product-label-font-weight-mobile !=inherit {
+              font-weight: $body--product-label-font-weight-mobile;
+            }
+          } // Product image
+          &.product-thumbnail {
+            @include scut-clearfix;
+            &:before {
+              display: none;
+            }
+            a {
+              display: block;
+              text-align: $product--image-alignment;
+              width: 100%;
+              float: left;
+              img {
+                display: block;
+                width: auto;
+                margin-left: auto;
+                margin-right: auto;
+                max-height: $product--image-max-height-mobile;
+              }
+            }
+          }
+          &.product-name {
+            clear: both;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Layout */
+
+@include from(5) {
+  $sidebar-lg: 4;
+  .cart-container {
+    @include span(12 - $sidebar-lg);
+  }
+  .collaterals-container {
+    @include span($sidebar-lg);
+  }
+}
+
+@include to(3) {
+  .cart-container {}
+  .collaterals-container {}
+}

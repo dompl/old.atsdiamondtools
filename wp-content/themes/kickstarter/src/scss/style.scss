@@ -53,8 +53,7 @@ Domain Path: #{metadata(theme-text-domain-path)}
 // Import google fonts. Add fonts in src/fonts/google/fonts.list
 @import "google-fonts";
 
-@import "mixins/global/**/*.scss";
-@import "mixins/theme/**/*.scss";
+@import "mixins/**/*.scss";
 
 /* Navigation CSS */
 // config

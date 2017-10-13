@@ -44,7 +44,7 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1024px;
-$xxl: 1200px;
+$xxl: 1140px;
 
 $slicer-breakpoints: $xs $sm $md $lg $xl $xxl;
 
@@ -65,6 +65,9 @@ $susy: (
   gutter-position: split,
   );
 // debug: (image: show-columns)
+/* Woocommerce */
+// Responsive checkout
+$responsive--checkout-breakpoint: 1; // Select value from breakpoint
 
 // A modest palette; see `_library.scss` for the color() function
 $brand-primary : #3a5266;
