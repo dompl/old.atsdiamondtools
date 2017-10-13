@@ -3,10 +3,12 @@
   *  ********************************************************
   */
 
+
 /* General Settings */
 
 $use-borders: true;
 $responsive--checkout-setup: 2; // Select value from breakpoint
+$table--cells-pagging: 9px 10px 10px; // Table header paddings - accepts 4 values;
 /* Topography - Product list - shopping list table */
 
 // Table Heading
@@ -18,7 +20,7 @@ $heading--th-text-case: inherit; // Set headings text casing ( upperscase )
 $heading--th-line-height: $heading--th-font-size; // Table heading front sizes
 $heading--th-background-color: #CCCCCC; // Table heading background
 $heading--th-border-color: darken($heading--th-background-color, 10%); // Table borders colour
-$heading--th-padding: 9px 10px 10px; // Table header paddings - accepts 4 values;
+
 // Table body
 // Product image
 $product--image-max-height: 50px; // Maximum height for product image on responsive
@@ -28,7 +30,6 @@ table.shop_table {
   width: 100%;
   border-collapse: separate;
   /* Table heading */
-
   >thead {
     text-indent: 0;
     font-size: $heading--th-font-size;
@@ -41,59 +42,67 @@ table.shop_table {
         font-weight: $heading--th-font-webight;
         text-align: $heading--th-text-alight;
         line-height: $heading--th-font-size;
-        padding: $heading--th-padding;
+        padding: $table--cells-pagging;
         text-transform: $heading--th-text-case;
         @include to($responsive--checkout-setup) {
           display: none;
         }
 
         @if $use-borders==true {
-         border-bottom: 1px solid $heading--th-border-color;
-         border-top: 1px solid $heading--th-border-color;
-         border-right: 1px solid $heading--th-border-color;
-         &.product-remove {
-           border-right: none;
-           border-left: 1px solid $heading--th-border-color;
-         }
-       }
-     }
-   }
- }
-
-/* Table body */
-
-tbody {
-  // Topography
-  @include to($responsive--checkout-setup) {
+          border-bottom: 1px solid $heading--th-border-color;
+          border-top: 1px solid $heading--th-border-color;
+          border-right: 1px solid $heading--th-border-color;
+          &.product-remove {
+            border-right: none;
+            border-left: 1px solid $heading--th-border-color;
+          }
+        }
+      }
+    }
+  }
+  /* Table body */
+  tbody {
+    // Topography
     tr {
       td {
-        display: block;
-        text-align: right;
-        clear: both;
+        padding:$table--cells-pagging;
+      }
+    }
+    @include to($responsive--checkout-setup) {
+      tr {
+        td {
+          display: block;
+          text-align: right;
+          clear: both;
+          padding:$table--cells-pagging;
+          &:before {
+            content: attr(data-title);
+            font-weight: $heading--th-font-webight;
+            float: left;
+          }
+
         // Product image
         &.product-thumbnail {
           a {
             display: block;
             text-align: $product--image-alignment;
-            &:before {
-              content: attr(data-title)": ";
-              font-weight: $heading--th-font-webight;
-              float: left;
-            }
+
 
             img {
-             max-height: $product--image-max-height;
-           }
-         }
-       }
-     }
-   }
- }
+              max-height: $product--image-max-height;
+            }
+          }
+        }
+      }
+    }
+  }
 }
+
+
 }
+
 
 /* Layout */
-
 .cart-container {
   @include from(2) {
     @include span(12);
@@ -102,12 +111,12 @@ tbody {
   }
 
   @include from(3) {
-   @include span(8);
- }
+    @include span(8);
+  }
 
- @include from(4) {
-  @include span(9);
-}
+  @include from(4) {
+    @include span(9);
+  }
 }
 
 .collaterals-container {
@@ -117,11 +126,10 @@ tbody {
   }
 
   @include from(3) {
-   @include span(4);
- }
+    @include span(4);
+  }
 
- @include from(4) {
-  @include span(3);
+  @include from(4) {
+    @include span(3);
+  }
 }
-}
-
