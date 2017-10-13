@@ -248,9 +248,13 @@ table.shop_table {
             border-top: 1px solid $use--body-border-colour!important;
           }
           &.product-remove {
-            border-left: none!important;
-            border-top: none!important;
-            border-right: none!important;
+            @if $use--body-hortizontal-borders==true {
+              border-top: 1px solid $use--body-border-colour!important;
+            }
+            @if $use--body-vertical-borders==true {
+              border-left:1px solid $use--body-border-colour;
+              border-right:1px solid $use--body-border-colour;
+            }
             text-align: center;
             a {
               display: inline-block!important;

@@ -3,3 +3,110 @@
   *  ********************************************************
   */
 
+  $coupn-container-span-width : 8;
+/* Main Wrapper */
+@mixin coupon-wrapper() {
+  margin-top: spacer();
+}
+@mixin coupon-wrapper-mobile() {
+  @include coupon-wrapper();
+  margin-bottom: spacer();
+  // Styles for main container ( remove the line above if not in use )
+}
+
+/* Coupon container */
+@mixin coupon-container() {
+  // Your styles for coupon container here
+}
+@mixin coupon-container-mobile() {
+  @include coupon-container();
+  // Your styles for mobile coupon container here ( remove the line above if not in use )
+}
+
+/* Update cart container */
+@mixin update-cart-container() {
+  // Your styles for update cart container here
+}
+@mixin update-cart-container-mobile() {
+  @include update-cart-container();
+  // Your styles for mobile update cart container here ( remove the line above if not in use )
+}
+
+
+/* Input */
+@mixin coupon-input() {
+  // Your styles for input here
+}
+
+@mixin coupon-input-mobile() {
+  @include coupon-input();
+  // Your styles for mobile input here ( remove the line above if not in use )
+}
+
+/* Buttons */
+@mixin coupon-buttons() {
+  background-color: transparent;
+  border: 1px solid #CCC;
+  @include transition(all, 100ms);
+  &[name="update_cart"] {
+    opacity: 1;
+    &:disabled {
+      opacity: 0;
+    }
+  }
+}
+
+@mixin coupon-buttons-mobile() {
+  @include coupon-buttons();
+}
+
+
+/* Topography and styles- DO NOT EDIT BELOW HERE */
+.coupon-wrapper {
+  @include coupon-wrapper();
+  @include to($responsive--checkout-breakpoint + 1) {
+    @include coupon-wrapper-mobile();
+  }
+  @include container(100%);
+  .coupon {
+    @include span(12);
+    @include coupon-container();
+    input[type="text"] {
+      @include coupon-input();
+      @include to($responsive--checkout-breakpoint + 1) {
+        @include coupon-input-mobile();
+      }
+    }
+  }
+  .update-cart {
+    @include update-cart-container();
+  }
+  .update-cart,
+  .coupon {
+    input[type="submit"] {
+      @include coupon-buttons();
+      @include to($responsive--checkout-breakpoint + 1) {
+        @include coupon-buttons-mobile();
+      }
+    }
+  }
+  &.coupon-enabled {
+    .coupon {
+      @include span($coupn-container-span-width );
+    }
+    .update-cart {
+      @include span(12 - $coupn-container-span-width );
+    }
+    /* Mobile */
+    @include to($responsive--checkout-breakpoint) {
+      .coupon {
+        @include span(12);
+        @include update-cart-container-mobile();
+      }
+      .update-cart {
+        @include span(12);
+        @include update-cart-container-mobile();
+      }
+    }
+  }
+}
