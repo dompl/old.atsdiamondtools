@@ -1,0 +1,37 @@
+/*  ********************************************************
+  *   Checkout - Basket
+  *  ********************************************************
+  */
+ $borders : 1px solid #ccc!important;
+  .woocommerce-checkout {
+    .shop_table {
+      thead {
+        tr {
+          th {
+            background-color: #fcfcfc;
+            border-right: $borders;
+            border-top: $borders;
+            border-bottom: $borders;
+            &.product-name {
+              border-left: $borders;
+            }
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            border:none!important;
+            border-bottom: $borders;
+            &.product-name {
+              border-right: $borders;
+              border-left: $borders;
+            }
+            &.product-total {
+              border-right: $borders;
+            }
+          }
+        }
+      }
+    }
+  }
