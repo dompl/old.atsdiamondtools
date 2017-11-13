@@ -17,6 +17,7 @@
   <?php wp_head();?>
 </head>
 <body <?php body_class()?>>
+  <?php do_action('top') ?>
   <header id="masthead">
     <?php do_action('logo', true) // action_hooks/header-logo.php ?>
     <?php do_action('navigation', 768, true) // action_hooks/header-navigation.php ?>

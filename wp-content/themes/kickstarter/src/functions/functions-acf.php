@@ -107,3 +107,11 @@ if (class_exists('acf'))
     ));
   }
 }
+
+function acf_fb( $value, $fallback ) {
+  if (!$value || !$fallback) {
+    return;
+  }
+  $result = $value ? $value : $fallback;
+  return $result;
+}

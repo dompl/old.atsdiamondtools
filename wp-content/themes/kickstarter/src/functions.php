@@ -4,70 +4,49 @@ if (!defined('ABSPATH'))
 {
   exit; // Exit if accessed directly
 }
-$functions = array(
-  'function-wp-admin.php',            // Admin Settings for WP
-  'functions-recaptcha-wplogin.php',  // Ad re-captach on Login form
-  'functions-config-defaults.php',    // Load configuration defaults for this theme; anything not set in the custom configuration (above) will be set here
-  'functions-config.php',             // Load the configuration file for this installation; all options are set here
-  'functions-navigation.php',         // Additionals setting for navigation
-  'functions-custom-image-sizes.php', // Set your WP Image sizes
-  'functions-acf.php',                // Set your WP Image sizes
-  'functions-tinymc-classes.php',     // Added TinyMC
-);
 
-foreach ($functions as $file)
+/*  ********************************************************
+ *   Load functions files
+ *  ********************************************************
+ */
+function load_files($folder)
 {
-  if (is_readable(trailingslashit(get_stylesheet_directory()) . 'functions/' . $file))
+  if (!$folder)
   {
-    require_once trailingslashit(get_stylesheet_directory()) . 'functions/' . $file;
+    return;
   }
-
+  $directory = get_stylesheet_directory() . '/' . $folder . '/*.php';
+  foreach (glob($directory) as $element)
+  {
+    require_once $element;
+  }
 }
+
+/* Load Functions */
+load_files('functions');
+
+/* Load all files from visual composer */
+if (defined('WPB_VC_VERSION'))
+{
+  load_files('functions/visual_composer');
+}
+
+/* Load all other assets */
+load_files('inc');
+
+/* Load action hooks */
+load_files('action_hooks');
 
 /* Check if Visual Composer is installed */
 if (defined('WPB_VC_VERSION'))
 {
-  $visual_coposers = array(
-    'disable-components.php', // Responsive spacer
-    'resposive-spacer.php',   // Responsive spacer
-    'custom-heading.php',     // Custom Heading
-    'global-params.php',      // Global aparameters
-  );
-
-  foreach ($visual_coposers as $vc)
-  {
-    if (is_readable(trailingslashit(get_stylesheet_directory()) . 'functions/visual_composer/' . $vc))
-    {
-      require_once trailingslashit(get_stylesheet_directory()) . 'functions/visual_composer/' . $vc;
-    }
-
-  }
+  load_files('functions/visual_composer');
 }
+
+/* Insall all woocmmerce files */
 if (class_exists('WooCommerce'))
 {
-  $woocommerces = array(
-    'global-settings.php',  // Woocommerce global settings
-    'cart.php',  // PHP for cart.php
-  );
-
-  foreach ($woocommerces as $woocommerce)
-  {
-    if (is_readable(trailingslashit(get_stylesheet_directory()) . 'functions/woocommerce/' . $woocommerce))
-    {
-      require_once trailingslashit(get_stylesheet_directory()) . 'functions/woocommerce/' . $woocommerce;
-    }
-
-  }
-}
-
-$requireds = array(
-  'assets.php',          // An example of how to manage loading front-end assets (scripts, styles, and fonts)
-  'page-navigation.php', // Required to demonstrate WP AJAX Page Loader (as WordPress doesn't ship with even simple post navigation functions)
-);
-
-foreach ($requireds as $file)
-{
-  require_once trailingslashit(get_stylesheet_directory()) . 'inc/' . $file;
+  load_files('functions/woocommerce');
 }
 
 // Only the bare minimum to get the theme up and running
@@ -83,11 +62,12 @@ function voidx_setup()
   // $content_width limits the size of the largest image size available via the media uploader
   // It should be set once and left alone apart from that; don't do anything fancy with it; it is part of WordPress core
   global $content_width;
-  $content_width = 960;
+  $content_width = 1140;
 
   // Register header and footer menus
-  register_nav_menu('header', esc_html__('Header menu', TEXT_DOMAIN));
-  register_nav_menu('footer', esc_html__('Footer menu', TEXT_DOMAIN));
+  register_nav_menu('header', esc_html__('Top menu', 'TEXT_DOMAIN'));
+  register_nav_menu('main', esc_html__('Main menu', 'TEXT_DOMAIN'));
+  register_nav_menu('footer', esc_html__('Footer menu', 'TEXT_DOMAIN'));
 
 }
 add_action('after_setup_theme', 'voidx_setup', 11);
@@ -96,9 +76,9 @@ add_action('after_setup_theme', 'voidx_setup', 11);
 function voidx_widgets_init()
 {
   register_sidebar(array(
-    'name'          => esc_html__('Main sidebar', TEXT_DOMAIN),
+    'name'          => esc_html__('Main sidebar', 'TEXT_DOMAIN'),
     'id'            => 'sidebar-main',
-    'description'   => esc_html__('Appears to the right side of most posts and pages.', TEXT_DOMAIN),
+    'description'   => esc_html__('Appears to the right side of most posts and pages.', 'TEXT_DOMAIN'),
     'before_widget' => '<aside id="%1$s" class="widget %2$s">',
     'after_widget'  => '</aside>',
     'before_title'  => '<h2>',
