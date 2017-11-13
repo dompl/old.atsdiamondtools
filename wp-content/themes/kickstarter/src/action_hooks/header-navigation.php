@@ -47,15 +47,15 @@ function top_navigation()
     echo '<div class="right">';
 
   // If tel number is present
-    if ($email):
-      echo '<div class="email clx"><a href="mailto:' . antispambot($email) . '">' . antispambot($email) . '</a></div>';
-    endif;
+    if ($email) {
+      echo '<div class="email clx"><a href="mailto:' . antispambot($email) . '"><span><i class="icon-envelope"></i></span>' . antispambot($email) . '</a></div>';
+    }
 
-    if ($telephone) :
+    if ($telephone) {
       echo '<div class="tel-number">';
-      echo '<span class="desktop clx"></span>';
-      echo '<span class="mobile clx"><a href="tel:'.$telephone.'"></a></span>';
+      echo '<span class="desktop clx"><span><i class="icon-phone"></i></span>'.esc_html($telephone).'</span>';
+      echo '<span class="mobile clx"><a href="tel:'.str_replace(' ', '', $telephone) .'"><span><i class="icon-phone"></i></span></a></span>';
       echo '</div>';
-    endif;
+   }
     echo '</div>';
   }

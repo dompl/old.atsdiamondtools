@@ -11,8 +11,8 @@ function main_logo($container)
   if (function_exists('image_figure'))
   {
 
-    $height   = 100;   // Logo height
-    $width    = 103 ;   // Logo Width
+    $width   = 55;   // Logo height
+    $height    = 312 ;   // Logo Width
     $crop     = false; // Logo crop
     $quality  = 100;   // Image quality
     $retina   = true;  // Display retina size

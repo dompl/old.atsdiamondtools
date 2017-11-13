@@ -51,8 +51,14 @@
     @if $filename == arrow-thin-right {
         $char: "\E008";
     }
-    @if $filename == lock {
+    @if $filename == envelope {
         $char: "\E009";
+    }
+    @if $filename == lock {
+        $char: "\E00A";
+    }
+    @if $filename == phone {
+        $char: "\E00B";
     }
 
     @return $char;
@@ -93,6 +99,12 @@
 .icon-arrow-thin-right {
     @include icon(arrow-thin-right);
 }
+.icon-envelope {
+    @include icon(envelope);
+}
 .icon-lock {
     @include icon(lock);
+}
+.icon-phone {
+    @include icon(phone);
 }
