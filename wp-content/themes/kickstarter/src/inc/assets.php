@@ -36,7 +36,7 @@ function voidx_assets_footer() {
 
     // Script filenames are designed to be additive (meaning you can append more script names to the end in other conditional blocks using `.= '-anotherscript'` etc.) to allow for multiple feature toggles in the theme configuration
     // Have a look at `gulpconfig.js` to see where these script names are defined
-    $file .= '-home';
+    $file .= '-footer';
 
     // This chunk of code provisions the script with vital info: What page are we on? And what is the page limit?
     // global $wp_query;
@@ -50,7 +50,7 @@ function voidx_assets_footer() {
     //   'nextLink'    => next_posts( $max, false )
     // );
   } elseif( is_single() ) {
-    $file .= '-single';
+    $file .= '-footer';
 
   // Load if is loggin page
   } elseif ( $GLOBALS['pagenow'] === 'wp-login.php' ) {

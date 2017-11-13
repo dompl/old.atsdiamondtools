@@ -39,7 +39,7 @@ defined( 'VOIDX_MOVE_JQUERY_TO_FOOTER' ) || define( 'VOIDX_MOVE_JQUERY_TO_FOOTER
 defined( 'VOIDX_REMOVE_WP_EMBED' ) || define( 'VOIDX_REMOVE_WP_EMBED', true );
 
 // Text domain
-defined( 'TEXT_DOMAIN' ) || define( 'TEXT_DOMAIN', 'atsdiamondtools' );
+defined( 'TEXT_DOMAIN' ) || define( 'TEXT_DOMAIN', 'THEME_TEXT_DOMAIN' );
 
 
 /*  ********************************************************
