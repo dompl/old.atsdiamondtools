@@ -37,6 +37,10 @@ load_files('inc');
 /* Load action hooks */
 load_files('action_hooks');
 
+/* Shortcodes */
+load_files('functions/shortcodes');
+
+
 /* Check if Visual Composer is installed */
 if (defined('WPB_VC_VERSION'))
 {
