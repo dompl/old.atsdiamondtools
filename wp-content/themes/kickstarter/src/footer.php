@@ -1,7 +1,5 @@
 <footer>
-  <nav>
-    <?php wp_nav_menu( array( 'theme_location' => 'footer', 'menu_id' => 'menu-footer', 'menu_class' => 'menu-inline' ) ); ?>
-  </nav>
+ <?php if ( ! function_exists( 'dynamic_sidebar' ) || ! dynamic_sidebar( 'sidebar-footer' ) ) ?>
 </footer>
 <?php wp_footer(); ?>
 </body>

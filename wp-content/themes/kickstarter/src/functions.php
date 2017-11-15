@@ -75,15 +75,16 @@ add_action('after_setup_theme', 'voidx_setup', 11);
 // Sidebar declaration
 function voidx_widgets_init()
 {
-  register_sidebar(array(
-    'name'          => esc_html__('Main sidebar', 'TEXT_DOMAIN'),
-    'id'            => 'sidebar-main',
-    'description'   => esc_html__('Appears to the right side of most posts and pages.', 'TEXT_DOMAIN'),
-    'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</aside>',
-    'before_title'  => '<h2>',
-    'after_title'   => '</h2>',
-  ));
+  register_sidebar(
+    array(
+      'name'          => esc_html__('Footer', 'TEXT_DOMAIN'),
+      'id'            => 'sidebar-footer',
+      'description'   => esc_html__('Appear at the bottom of each page', 'TEXT_DOMAIN'),
+      'before_widget' => '<div class="footer-item">',
+      'after_widget'  => '</div>',
+      'before_title'  => '<h3>',
+      'after_title'   => '</h3>',
+    ));
 }
 add_action('widgets_init', 'voidx_widgets_init');
 
