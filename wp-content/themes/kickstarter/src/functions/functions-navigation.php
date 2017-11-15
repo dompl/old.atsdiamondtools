@@ -19,16 +19,22 @@ function change_submenu_class($menu) {
 add_filter('wp_nav_menu','change_submenu_class');
 
 /*  ********************************************************
- *   Add additional classes to the navigation
+ *   Add Extra Item to top navigation
  *  ********************************************************
  */
-
-// function my_secondary_menu_classes( $classes, $item, $args ) {
-//     // Only affect the menu placed in the 'secondary' wp_nav_bar() theme location
-//     if ( 'header' === $args->theme_location ) {
-//         // Make these items 3-columns wide in Bootstrap
-//         $classes[] = 'col-md-3';
-//     }
-//     return $classes;
-// }
-// add_filter( 'nav_menu_css_class', 'my_secondary_menu_classes', 10, 3 );
+add_filter( 'wp_nav_menu_items', 'add_login_url', 10, 2 );
+function add_login_url( $items, $args ) {
+    /**
+     * If menu primary menu is set & user is logged in.
+     */
+    if ( is_user_logged_in() && $args->theme_location == 'header' ) {
+      $items .= '<li><i class="icon-user"></i><a href="'. wp_logout_url() .'">Log Out</a></li>';
+    }
+    /**
+     * Else display login menu item.
+     */
+    elseif ( !is_user_logged_in() && $args->theme_location == 'header' ) {
+      $items .= '<li><i class="icon-user"></i><a href="'. site_url('wp-login.php') .'">Log In</a></li>';
+    }
+    return $items;
+  }

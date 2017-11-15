@@ -1,0 +1,37 @@
+/*  ********************************************************
+ *   Top
+ *  ********************************************************
+ */
+
+ #header-top {
+  /* Navigation */
+  ul {
+    @include scut-list-inline();
+    li {
+      line-height: 1;
+    }
+  }
+  /* Topography */
+  .left {
+    @include span(6);
+  }
+  .right {
+    @include span(6);
+    .clx >div {
+      float: right;
+      line-height: 1;
+      span {
+        float: left;
+        display: block;
+        margin-left: 10px;
+        @include to(3) {
+          display: none;
+        }
+      }
+      i {
+        float: left;
+        margin-left: 15px;
+      }
+    }
+  }
+}

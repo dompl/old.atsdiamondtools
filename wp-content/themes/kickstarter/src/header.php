@@ -3,11 +3,11 @@
 <head>
   <title><?php wp_title('');?></title>
   <?php
-if (file_exists(dirname(__FILE__) . '/../../../../../env_staging'))
-{
-  echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
-}
-?>
+  if (file_exists(dirname(__FILE__) . '/../../../../../env_staging'))
+  {
+    echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
+  }
+  ?>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta charset="<?php bloginfo('charset');?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,18 +17,7 @@ if (file_exists(dirname(__FILE__) . '/../../../../../env_staging'))
   <?php wp_head();?>
 </head>
 <body <?php body_class()?>>
-  <div class="container">
-    <div class="susy-reset">
-  <?php do_action('top')?>
-  </div>
-  </div>
   <header id="masthead" class="clx">
-    <div class="container">
-      <div class="susy-reset">
-      <div class="logo"><?php do_action('logo', true); ?></div>
-      <div class="search"><?php do_action('search') ?></div>
-      <div class="cart-colleterals"><?php do_action('cart')?></div>
-      </div>
-    </div>
+    <?php get_template_part( 'modules/header/top'); ?>
+    <?php get_template_part( 'modules/header/navigation'); ?>
   </header>
-  <?php do_action('navigation', 768, true) ?>
