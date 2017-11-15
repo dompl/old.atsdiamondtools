@@ -60,8 +60,11 @@
     @if $filename == phone {
         $char: "\E00B";
     }
-    @if $filename == user {
+    @if $filename == search {
         $char: "\E00C";
+    }
+    @if $filename == user {
+        $char: "\E00D";
     }
 
     @return $char;
@@ -110,6 +113,9 @@
 }
 .icon-phone {
     @include icon(phone);
+}
+.icon-search {
+    @include icon(search);
 }
 .icon-user {
     @include icon(user);
