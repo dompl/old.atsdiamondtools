@@ -63,8 +63,11 @@
     @if $filename == search {
         $char: "\E00C";
     }
-    @if $filename == user {
+    @if $filename == shopping-cart {
         $char: "\E00D";
+    }
+    @if $filename == user {
+        $char: "\E00E";
     }
 
     @return $char;
@@ -116,6 +119,9 @@
 }
 .icon-search {
     @include icon(search);
+}
+.icon-shopping-cart {
+    @include icon(shopping-cart);
 }
 .icon-user {
     @include icon(user);

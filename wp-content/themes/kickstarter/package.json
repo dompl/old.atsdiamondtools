@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "del": "^3.0.0",
-    "fittextjs": "^1.2.0"
+    "fittextjs": "^1.2.0",
+    "jquery-match-height": "^0.7.2"
   }
 }

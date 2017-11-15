@@ -66,3 +66,33 @@
   /* Portrait */
   &.navigation-portrait {}
 }
+
+
+/* Sticky Nav */
+
+.sticky-main-nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: .5;
+  @extend %transition;
+  &:hover {
+    opacity: .9;
+  }
+  .navigation {
+    height: 36px;
+    @extend %transition;
+  }
+  #menu-header {
+    >li {
+      a {
+       @extend %transition;
+       height: 36px;
+       line-height: 36px;
+       @include em('font-size', 14px);
+     }
+   }
+ }
+}

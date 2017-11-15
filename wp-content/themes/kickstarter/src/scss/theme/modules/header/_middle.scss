@@ -1,0 +1,19 @@
+/*  ********************************************************
+ *   Middle section
+ *  ********************************************************
+ */
+ #header-middle {
+  .search-section, .cart-section {
+    text-align: right;
+  }
+  /* Topography */
+  .logo-section {
+    @include span(4);
+  }
+  .search-section {
+    @include span(5);
+  }
+  .cart-section {
+    @include span(3)
+  }
+}

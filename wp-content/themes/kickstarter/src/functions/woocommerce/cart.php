@@ -1,10 +1,20 @@
 <?php
+
+/*  ********************************************************
+ *   Mini cart
+ *  ********************************************************
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'woocommerce_header_add_to_cart_fragment' );
+function woocommerce_header_add_to_cart_fragment( $fragments ) {
+  ob_start();
+  do_action('cart');
+  $fragments['#the-cart'] = ob_get_clean();
+  return $fragments;
+}
 /*  ********************************************************
  *   Checkout cart styling
  *  ********************************************************
  */
-
-
 
 add_action('template_redirect', 'change_cart_layout');
 function change_cart_layout() {

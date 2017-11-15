@@ -2,19 +2,41 @@
 ;(function($) {
     $(function() {
 
+    	/*  ********************************************************
+    	 *   Match height general class
+    	 *  ********************************************************
+    	 */
+    		$('.mh').matchHeight();
+        /*  ********************************************************
+         *   Sticky Navigation
+         *  ********************************************************
+         */
+        var stickyNavTop = $('#main-nav-container').offset().top;
+        var stickyNavheight = $('#main-nav-container').outerHeight();
+        var stickyNav = function() {
+            var scrollTop = $(window).scrollTop();
+            if (scrollTop > stickyNavTop) {
+                $('#main-nav-container').addClass('sticky-main-nav');
+                $('#header-middle').css('margin-bottom', stickyNavheight);
+            } else {
+                $('#main-nav-container').removeClass('sticky-main-nav');
+                $('#header-middle').css('margin-bottom', 0);
+            }
+        };
+        stickyNav();
+        $(window).scroll(function() {
+            stickyNav();
+        });
         /*  ********************************************************
          *   Cookie Bar
          *   https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
          *  ********************************************************
          */
-
         $.cookieBar({});
-
         /*  ********************************************************
          *   Slick Carousel settings
          *  ********************************************************
          */
-
         $('#carousel').slick({
             dots: true,
             infinite: false,
