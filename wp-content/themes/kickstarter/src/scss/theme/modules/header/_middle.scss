@@ -6,6 +6,8 @@
   .search-section, .cart-section {
     text-align: right;
   }
+
+
   /* Topography */
   .logo-section {
     @include span(4);
@@ -15,5 +17,14 @@
   }
   .cart-section {
     @include span(3)
+  }
+  /* When navigation breaks */
+  @include nav-break() {
+    .logo-section {
+      display: none;
+    }
+    .search-section, .cart-section {
+      @include span(6);
+    }
   }
 }

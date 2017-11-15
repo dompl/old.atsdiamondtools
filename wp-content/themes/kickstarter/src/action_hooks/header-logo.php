@@ -6,13 +6,13 @@
 
 add_action('logo', 'main_logo', 10, 1);
 
-function main_logo($container)
+function main_logo($container, $width='', $height='')
 {
   if (function_exists('image_figure'))
   {
 
-    $width   = 55;   // Logo height
-    $height    = 312 ;   // Logo Width
+    $width    = $width ? $width : 55;   // Logo height
+    $height    = $height ? $height : 312;   // Logo height
     $crop     = false; // Logo crop
     $quality  = 100;   // Image quality
     $retina   = true;  // Display retina size

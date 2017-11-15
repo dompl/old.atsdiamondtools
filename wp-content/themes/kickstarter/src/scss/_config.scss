@@ -48,6 +48,14 @@ $xxl: 1140px;
 
 $slicer-breakpoints: $xs $sm $md $lg $xl $xxl;
 
+/* Navigation breakpoint */
+$nav-breakpoint: $md;
+@mixin nav-break( $breakpoint : $nav-breakpoint ) {
+  @include breakpoint(max-width $breakpoint ) {
+    @content;
+  }
+}
+
 // Breakpoint Slicer offers four handy mixins that let you set breakpoint ranges easily: at, from, to and between:
 // Styles under at(3) are applied when browser window width is inside the 3rd slice.
 // Styles under from(3) are applied when browser window width is inside the 3rd slice or larger.

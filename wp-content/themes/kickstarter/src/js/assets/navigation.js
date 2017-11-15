@@ -6,7 +6,7 @@
     $(function() {
         $("#navigation").navigation({
             responsive: true,
-            mobileBreakpoint: 700,
+            mobileBreakpoint: $('#navigation').data('breakpoint'),
             showDuration: 100,
             hideDuration: 300,
             showDelayDuration: 0,

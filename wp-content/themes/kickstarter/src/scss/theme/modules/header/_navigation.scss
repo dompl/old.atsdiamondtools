@@ -6,9 +6,23 @@
  $total-menu-items: 7;
  #main-nav-container {
   background: nav_color(background);
+  @include nav-break() {
+    background: transparent;
+  }
 }
 
 #navigation {
+  img {
+    display: none;
+  }
+  @include nav-break() {
+    background: transparent;
+    position: relative;
+    img {
+      display: block;
+      float: left;
+    }
+  }
   /* Landscape */
   &.navigation-landscape {
     #menu-header {
@@ -64,8 +78,13 @@
     }
   }
   /* Portrait */
-  &.navigation-portrait {}
+  &.navigation-portrait {
+    @include nav-break() {
+      height: 30px;
+    }
+  }
 }
+
 
 
 /* Sticky Nav */
@@ -88,11 +107,11 @@
   #menu-header {
     >li {
       a {
-       @extend %transition;
-       height: 36px;
-       line-height: 36px;
-       @include em('font-size', 14px);
-     }
-   }
- }
+        @extend %transition;
+        height: 36px;
+        line-height: 36px;
+        @include em('font-size', 14px);
+      }
+    }
+  }
 }
