@@ -548,12 +548,14 @@ class WC_Gateway_PPEC_Client {
 		// if they do not match, check to see what the merchant would like to do.
 		// Options are to remove line items or add a line item to adjust for
 		// the difference.
+		$diff = 0;
+
 		if ( $details['total_item_amount'] != $rounded_total ) {
 			if ( 'add' === $settings->get_subtotal_mismatch_behavior() ) {
 				// Add line item to make up different between WooCommerce
 				// calculations and PayPal calculations.
 				$diff = round( $details['total_item_amount'] - $rounded_total, $decimals );
-				if ( abs( $diff ) > 0.000001 ) {
+				if ( abs( $diff ) > 0.000001 && 0.0 !== (float) $diff ) {
 					$extra_line_item = $this->_get_extra_offset_line_item( $diff );
 
 					$details['items'][]            = $extra_line_item;
@@ -611,7 +613,7 @@ class WC_Gateway_PPEC_Client {
 			}
 		}
 
-		if ( abs( $lisum ) > 0.000001 ) {
+		if ( abs( $lisum ) > 0.000001 && 0.0 !== (float) $diff ) {
 			$details['items'][] = $this->_get_extra_offset_line_item( $details['total_item_amount'] - $lisum );
 		}
 
