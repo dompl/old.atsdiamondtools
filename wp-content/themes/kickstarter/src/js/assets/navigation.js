@@ -10,7 +10,7 @@
             showDuration: 100,
             hideDuration: 300,
             showDelayDuration: 0,
-            hideDelayDuration: 0,
+            hideDelayDuration: 100,
             submenuTrigger: "hover",
             effect: "fade",
             submenuIndicator: true,

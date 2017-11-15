@@ -1,0 +1,68 @@
+/*  ********************************************************
+ *   Main Navigation
+ *  ********************************************************
+ */
+
+ $total-menu-items: 7;
+ #main-nav-container {
+  background: nav_color(background);
+}
+
+#navigation {
+  /* Landscape */
+  &.navigation-landscape {
+    #menu-header {
+      >li {
+        width: (100% / $total-menu-items);
+        text-align: center;
+        position: relative;
+        &:after {
+          content: "";
+          width: 1px;
+          height: 100%;
+          background: lighten(color(gray), 5%);
+          position: absolute;
+          right: -1px;
+          top: 0;
+          display: block;
+        }
+        @include _last-child() {
+          &:after {
+            display: none;
+          }
+        }
+        a {
+          width: 100%;
+        }
+        .submenu-indicator {
+          position: absolute;
+          right: 20px;
+        }
+        /* Lower tier */
+        li {
+          position: relative;
+          &:after {
+            content: "";
+            height: 1px;
+            width: 100%;
+            background: lighten(color(gray), 5%);
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            display: block;
+          }
+          a {
+            @include em('font-size', 14px);
+          }
+          .submenu-indicator {
+            @include scut-center-transform(y);
+            right: 20px;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+  /* Portrait */
+  &.navigation-portrait {}
+}

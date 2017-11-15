@@ -4,43 +4,43 @@
  */
 
  $_nav_color: (
-  background :color(gray-lightest), // Main nav background colour
-  brand-text : color(link),
+  background :color(gray), // Main nav background colour
+  brand-text : white,
   brand-text-hover : color(link-hover),
   toggle-button: #8c8c8c,
-  link-top-color: color(link),
+  link-top-color: white,
   link-top-color-hover: white,
   link-top-color-active: white,
-  link-top-background-color-hover: color(link),
-  link-top-background-color-active: color(link),
-  chevron-top-color: color(link),
+  link-top-background-color-hover: darken(color(gray),10%),
+  link-top-background-color-active: darken(color(gray),10%),
+  chevron-top-color: white,
   chevron-top-color-hover: white,
 
-  link-dd-color: color(link),
-  link-dd-background-color: #fbfbfb,
+  link-dd-color: white,
+  link-dd-background-color: color(gray),
   link-dd-color-hover: white,
   link-dd-color-active: white,
-  link-dd-background-color-hover: color(link),
-  link-dd-background-color-active: color(link),
-  close-button-color:color(link),
+  link-dd-background-color-hover: darken(color(gray),10%),
+  link-dd-background-color-active: darken(color(gray),10%),
+  close-button-color:white,
   ) !default;
 
 // Nav container sizes
 $nav-top-font-size: $font-size-base;
-$nav-top-height: 30px;
+$nav-top-height: 53px;
 $nat-top-transition-speed : 200ms;
 
 
 // Top nav settingds
-$nav-top-a-padding-top: 5px;
-$nav-top-a-padding-bottom: 5px;
-$nav-top-a-padding-right: 10px;
-$nav-top-a-padding-left: 10px;
+$nav-top-a-padding-top: 0;
+$nav-top-a-padding-bottom: 2px;
+$nav-top-a-padding-right: 0;
+$nav-top-a-padding-left: 0;
 $nav-top-a-remove-padding-from-first-child : false;
 $nav-top-a-remove-padding-from-last-child : false;
 // Top nav indicator ( chevron )
-$nav-top-chevron-margin-top: 11px;
-$nav-top-chevron-margin-left: 10px;
+$nav-top-chevron-margin-top: 23px;
+$nav-top-chevron-margin-left: 0;
 $nav-top-chevron-size: 5px;
 
 // Toggle button
@@ -61,17 +61,17 @@ $nav-brand-font-size: 20px;
 
 // DROPDOWN
 $nav-dd-font-size: $nav-top-font-size;
-$nat-dd-transition-speed : 200ms;
+$nat-dd-transition-speed : 150ms;
 
 // drop down nav indicator ( chevron )
 $nav-dd-chevron-margin-top: 4px;
 $nav-dd-chevron-margin-right: 20px;
 
-$nav-dd-min-width:180px;
-$nav-dd-a-padding-top: 10px;
-$nav-dd-a-padding-right: 10px;
+$nav-dd-min-width:163px;
+$nav-dd-a-padding-top: 7px;
+$nav-dd-a-padding-right: 8px;
 $nav-dd-a-padding-bottom: 10px;
-$nav-dd-a-padding-left: 10px;
+$nav-dd-a-padding-left: 8px;
 
 // SLIDE PORTRAIT
 $close-buton-size : 20px;
