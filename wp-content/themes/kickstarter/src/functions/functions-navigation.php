@@ -38,3 +38,11 @@ function add_login_url( $items, $args ) {
     }
     return $items;
   }
+
+  add_filter('nav_menu_css_class', 'special_nav_class', 10, 2);
+  function special_nav_class($classes, $item){
+    if(($key = array_search('fa', $classes)) !== false) {
+      unset($classes[$key]);
+    }
+    return $classes;
+  }

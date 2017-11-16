@@ -68,7 +68,7 @@ function voidx_setup()
   global $content_width;
   $content_width = 1140;
 
-  // Register header and footer menus
+  // Register header, main and footer menus
   register_nav_menu('header', esc_html__('Top menu', 'TEXT_DOMAIN'));
   register_nav_menu('main', esc_html__('Main menu', 'TEXT_DOMAIN'));
   register_nav_menu('footer', esc_html__('Footer menu', 'TEXT_DOMAIN'));
