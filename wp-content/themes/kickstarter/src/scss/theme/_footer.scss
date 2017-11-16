@@ -1,0 +1,21 @@
+/*  ********************************************************
+ *   Footer styles
+ *  ********************************************************
+ */
+
+/* Topography */
+
+#footer {
+  .footer-item {
+    @include span(3);
+    // We are moveing the list item to last so its on the bottom on responsive state
+    @include from(2) {
+      @include _first(1) {
+        @include push(3);
+      }
+      @include _last-child() {
+        @include pull(12);
+      }
+    }
+  }
+}
