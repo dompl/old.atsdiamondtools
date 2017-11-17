@@ -66,8 +66,17 @@
     @if $filename == shopping-cart {
         $char: "\E00D";
     }
-    @if $filename == user {
+    @if $filename == th-large {
         $char: "\E00E";
+    }
+    @if $filename == th-list {
+        $char: "\E00F";
+    }
+    @if $filename == th {
+        $char: "\E010";
+    }
+    @if $filename == user {
+        $char: "\E011";
     }
 
     @return $char;
@@ -122,6 +131,15 @@
 }
 .icon-shopping-cart {
     @include icon(shopping-cart);
+}
+.icon-th-large {
+    @include icon(th-large);
+}
+.icon-th-list {
+    @include icon(th-list);
+}
+.icon-th {
+    @include icon(th);
 }
 .icon-user {
     @include icon(user);
