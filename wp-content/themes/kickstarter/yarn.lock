@@ -1677,12 +1677,6 @@ first-chunk-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/first-chunk-stream/-/first-chunk-stream-1.0.0.tgz#59bfb50cd905f60d7c394cd3d9acaab4e6ad934e"
 
-fittextjs@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/fittextjs/-/fittextjs-1.2.0.tgz#66b6851164eb5ab4d0cf53569ae7576302561509"
-  dependencies:
-    jquery ">=1.6.2"
-
 flagged-respawn@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/flagged-respawn/-/flagged-respawn-0.3.2.tgz#ff191eddcd7088a675b2610fffc976be9b8074b5"
@@ -3007,11 +3001,17 @@ jpegtran-bin@^3.0.0:
     bin-wrapper "^3.0.0"
     logalot "^2.0.0"
 
+jquery-backstretch@^2.1.16:
+  version "2.1.16"
+  resolved "https://registry.yarnpkg.com/jquery-backstretch/-/jquery-backstretch-2.1.16.tgz#4ee7547dcb85cf69eed2639cac0c9131651dc5e7"
+  dependencies:
+    jquery "^3.1.1"
+
 jquery-match-height@^0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/jquery-match-height/-/jquery-match-height-0.7.2.tgz#f8d9f3ba5314daab109cf07408674be204be5f0e"
 
-jquery@>=1.6.2:
+jquery@^3.1.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
