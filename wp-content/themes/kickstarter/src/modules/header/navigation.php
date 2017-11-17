@@ -1,6 +1,6 @@
 <div id="main-nav-container">
   <div class="container">
-    <nav id="navigation" class="navigation" data-breakpoint="768">
+    <nav id="navigation" class="navigation navigation-landscape" data-breakpoint="768">
      <div class="nav-header">
       <?php echo main_logo(false, 30, 170); ?>
       <div class="nav-toggle"></div>
