@@ -57,8 +57,7 @@
     "susy": "^2.2.12"
   },
   "dependencies": {
-    "del": "^3.0.0",
-    "fittextjs": "^1.2.0",
+    "jquery-backstretch": "^2.1.16",
     "jquery-match-height": "^0.7.2"
   }
 }

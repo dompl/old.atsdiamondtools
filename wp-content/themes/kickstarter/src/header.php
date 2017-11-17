@@ -22,3 +22,4 @@
     <?php get_template_part( 'modules/header/middle'); ?>
     <?php get_template_part( 'modules/header/navigation'); ?>
   </header>
+  <?php do_action('page_header') ?>
