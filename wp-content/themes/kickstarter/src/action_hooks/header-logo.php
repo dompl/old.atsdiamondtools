@@ -20,7 +20,7 @@ function main_logo($container, $width='', $height='')
     $lazy     = false; // Displat lazy load
     $logo_url = get_template_directory_uri() . '/img/theme/logo.png';
 
-    $img = is_front_page() ? '<a href="' . esc_url(home_url('/')) . '" rel="home">' : '';
+    $img = !is_front_page() ? '<a href="' . esc_url(home_url('/')) . '" rel="home">' : '';
 
     /**
      * Image
@@ -30,7 +30,7 @@ function main_logo($container, $width='', $height='')
 
     $img .= image_figure('', $logo_url, $height, $width, $crop, $quality, $retina, $figure, $lazy);
 
-    $img .= is_front_page() ? '</a>' : '';
+    $img .= !is_front_page() ? '</a>' : '';
 
     /* HTML FROM HERE */
     echo $container ? '<div class="container">' : '';
