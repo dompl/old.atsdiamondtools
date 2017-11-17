@@ -35,7 +35,7 @@
     "gulp-iconfont": "^9.0.2",
     "gulp-iconfont-css": "^2.1.0",
     "gulp-if-else": "^1.0.3",
-    "gulp-imagemin": "^3.4.0",
+    "gulp-imagemin": "^4.0.0",
     "gulp-jshint": "^2.0.1",
     "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.2.4",
