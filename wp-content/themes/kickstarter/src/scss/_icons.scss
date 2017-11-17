@@ -51,32 +51,35 @@
     @if $filename == arrow-thin-right {
         $char: "\E008";
     }
-    @if $filename == envelope {
+    @if $filename == caret-down {
         $char: "\E009";
     }
-    @if $filename == lock {
+    @if $filename == envelope {
         $char: "\E00A";
     }
-    @if $filename == phone {
+    @if $filename == lock {
         $char: "\E00B";
     }
-    @if $filename == search {
+    @if $filename == phone {
         $char: "\E00C";
     }
-    @if $filename == shopping-cart {
+    @if $filename == search {
         $char: "\E00D";
     }
-    @if $filename == th-large {
+    @if $filename == shopping-cart {
         $char: "\E00E";
     }
-    @if $filename == th-list {
+    @if $filename == th-large {
         $char: "\E00F";
     }
-    @if $filename == th {
+    @if $filename == th-list {
         $char: "\E010";
     }
-    @if $filename == user {
+    @if $filename == th {
         $char: "\E011";
+    }
+    @if $filename == user {
+        $char: "\E012";
     }
 
     @return $char;
@@ -90,6 +93,7 @@
             @include icon-styles;
         }
         content: icon-char($filename);
+        @content;
     }
 }
 
@@ -116,6 +120,9 @@
 }
 .icon-arrow-thin-right {
     @include icon(arrow-thin-right);
+}
+.icon-caret-down {
+    @include icon(caret-down);
 }
 .icon-envelope {
     @include icon(envelope);

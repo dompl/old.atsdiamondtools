@@ -11,22 +11,23 @@ function ats_change_ordering_structure_()
 
   $cookie_name = 'sort';
 
-  if (isset($_COOKIE[$cookie_name]) && !empty($_COOKIE[$cookie_name]))
-  {
-    $selector_class = true;
-  }
-  else
-  {
-    $selector_class = false;
-  }
+  $cookie = isset($_COOKIE[$cookie_name]) && !empty($_COOKIE[$cookie_name]) ?  $_COOKIE[$cookie_name] : '';
+
+
 
   $selector = '<div id="product-sort"><div class="container"><div class="susy-reset">';
+  $grid_class ='';
+  $list_class ='';
+  if ($cookie != '' ) {
+    $grid_class = $cookie == 'grid' ? ' active' : '';
+    $list_class = $cookie == 'list' ? ' active' : '';
+  }
 
   $selector .= '
   <div class="left">
   <ul>
-  <li><span class="selector grid' . ($selector_class == false ? ' active' : '') . '" data-sort="grid"><i class="icon-th"></i></span></li>
-  <li><span class="selector list' . ($selector_class == true ? ' active' : '') . '" data-sort="list"><i class="icon-th-list"></i></span></li>
+  <li><span class="selector grid' . $grid_class . ( $cookie == '' ? ' active':'').'" data-sort="grid"><i class="icon-th"></i></span></li>
+  <li><span class="selector list' . $list_class . '" data-sort="list"><i class="icon-th-list"></i></span></li>
   </ul>
   </div>';
 
@@ -80,5 +81,6 @@ function ats_loop_start_()
   {
     $sort_class = 'grid';
   }
-  echo '<ul id="products-list" class="products ' . $sort_class . '">';
+  echo '<div class="container"><div class="susy-reset">';
+  echo '<ul id="products-list" class="clx products ' . $sort_class . '">';
 }

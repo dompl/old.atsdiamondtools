@@ -11,7 +11,7 @@
 
 $labels-display: true !default; // Show or hide labels
 $labels-font-size: $font-size-sm !default; // Labels font size
-$labels-font-color: color( text) !default; // Labels font color
+$labels-font-color: color( text ) !default; // Labels font color
 $labels-font-weight: $font-weight-bold !default; // Labels font weight
 $labels-margin: 0 0 5px 0 !default; // Margin around labels
 // Required asterix
@@ -25,12 +25,12 @@ $labels-asterix-font-size: $font-size-sm !default; // Font size for required ast
  */
 
 $input-border-radius:0; // Border radious
-$input-border-width:1px; // Border width
-$input-border-color: color( text); // Border color
+$input-border-width:0; // Border width
+$input-border-color: transparent; // Border color
 $input-border-style: solid; // none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset, initial, inherit
-$input-bacground-color: color( text); // Input bacground color
+$input-bacground-color: color( gray-lightest ); // Input bacground color
 $input-font-size: $font-size-base;
-$input-text-color: red;
+$input-text-color: color(text);
 // Paddings
 $input-padding-top: 10px;
 $input-padding-bottom: $input-padding-top;
@@ -77,11 +77,11 @@ $textarea-resize: none;
  * ---
  */
 
-$f-description-color: color( text) !default;
-$f-description-font-weight: $font-weight-normal !default;
-$f-description-font-size: $font-size-xs !default;
-$f-description-font-style: inherit !default;
-$f-description-margins: 5px 0 0 0 !default;
+ $f-description-color: color( text) !default;
+ $f-description-font-weight: $font-weight-normal !default;
+ $f-description-font-size: $font-size-xs !default;
+ $f-description-font-style: inherit !default;
+ $f-description-margins: 5px 0 0 0 !default;
 
 /**
  * Characters counter ( inhernits from description)
@@ -89,11 +89,11 @@ $f-description-margins: 5px 0 0 0 !default;
  * ---
  */
 
-$f-counter-color: $f-description-color !default;
-$f-counter-font-weight: $f-description-font-weight !default;
-$f-counter-font-size: $f-description-font-size !default;
-$f-counter-font-style: $f-description-font-style !default;
-$f-counter-margins: $f-description-margins !default;
+ $f-counter-color: $f-description-color !default;
+ $f-counter-font-weight: $f-description-font-weight !default;
+ $f-counter-font-size: $f-description-font-size !default;
+ $f-counter-font-style: $f-description-font-style !default;
+ $f-counter-margins: $f-description-margins !default;
 
 /**
  * Select // Per default styles are infernited from input
@@ -127,42 +127,42 @@ $select-resize: none;
  *  ********************************************************
  */
 
-.gform_wrapper *,
-.gform_wrapper:after,
-.gform_wrapper:before {
-    box-sizing: border-box!important;
+ .gform_wrapper *,
+ .gform_wrapper:after,
+ .gform_wrapper:before {
+  box-sizing: border-box!important;
 }
 
 .gform_wrapper {
-    .gform_body {
-        ul {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            text-indent: 0;
-        }
+  .gform_body {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      text-indent: 0;
     }
-    label {
-        @include gf-labels() {}
-        ;
-    }
-    input {
-        @include gf-inputs() {}
-        ;
-    }
-    textarea {
-        @include gf-textarea() {}
-    }
-    select {
-        @include gf-select();
-    }
+  }
+  label {
+    @include gf-labels() {}
+    ;
+  }
+  input {
+    @include gf-inputs() {}
+    ;
+  }
+  textarea {
+    @include gf-textarea() {}
+  }
+  select {
+    @include gf-select();
+  }
     /* Fields descriptions */
     .gfield_description {
-        @include gf-description();
+      @include gf-description();
     }
     /* Caracter counter */
     .ginput_counter {
-        @include gf-counter();
+      @include gf-counter();
     }
     /* Checkboxes */
     @include gf-checkboxes() {}
@@ -171,6 +171,6 @@ $select-resize: none;
     input:focus,
     select:focus,
     textarea:focus {
-        outline: 0!important;
+      outline: 0!important;
     }
-}
+  }

@@ -1,0 +1,22 @@
+/*  ********************************************************
+ *   Sibgle product loop
+ *  ********************************************************
+ */
+ #products-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  &.grid {
+    .product-list-short {
+      display: none;
+    }
+  }
+  li {
+    @include span(3);
+  }
+  &.list {
+    li {
+      @include span(12);
+    }
+  }
+}

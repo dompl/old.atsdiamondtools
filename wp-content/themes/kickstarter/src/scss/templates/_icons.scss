@@ -42,6 +42,7 @@
             @include <%= cssClass%>-styles;
         }
         content: <%= cssClass%>-char($filename);
+        @content;
     }
 }
 
