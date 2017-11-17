@@ -7,11 +7,12 @@
 						var sort = $(this).data('sort');
 						$.cookie('sort', sort);
 
-						if ($('#products-list').hasClass('list')) {
-								$('#products-list').removeClass('list').addClass('grid');
-						} else {
-								$('#products-list').removeClass('grid').addClass('list');
-						}
+						$('#product-sort span').removeClass('active');
+						$(this).addClass('active');
+
+						var activeLayout = $('#product-sort span.active').data('sort');
+
+						$('#products-list').removeClass('list').removeClass('grid').addClass(activeLayout);
 				});
 
 		});
