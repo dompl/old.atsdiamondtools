@@ -47,6 +47,9 @@ Domain Path: #{metadata(theme-text-domain-path)}
 // Normalize: make browsers render things more consistently
 @import "lib/cookie-bar";
 
+// Lightbox 2
+@import "lib/lightbox";
+
 // Import fronts ( optionaly is there are any images in img/fonts/*.svg)
 @import "icons";
 

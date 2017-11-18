@@ -1,7 +1,16 @@
 // ==== FOOTER ==== //
 ;(function($) {
 		$(function() {
-
+				/*  ********************************************************
+				 *   Search Show : Hide
+				 *  ********************************************************
+				 */
+				function searach_toggle() {
+						$('.search-toggle').click(function() {
+								$(".search-section").stop().slideToggle("fast");
+						});
+				}
+				searach_toggle();
 				/*  ********************************************************
 				 *   Match height general class
 				 *  ********************************************************
