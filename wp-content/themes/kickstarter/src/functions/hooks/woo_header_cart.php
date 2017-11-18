@@ -28,7 +28,7 @@ function header_cart()
     </div>
   </div>
   <?php }
-  add_action('cart_mobile', 'header_cart_mobile');
+
   function header_cart_mobile()
   {
     global $woocommerce;
