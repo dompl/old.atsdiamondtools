@@ -3,143 +3,169 @@
  *  ********************************************************
  */
 
-
-/* Topography */
-
-#footer {
-  padding: 30px 10px;
+ #footer {
+  margin-top: spacer();
+  padding: spacer() 0 0;
+  @include em('font-size', 14px);
   background: color(gray-lightest);
-
-  @include from(3) {
-    padding: 30px 0;
-  }
   .footer-item {
-    @include from(3) {
-      @include span(6);
+    h3 {
+      @include em('font-size', 14px);
+      text-transform: uppercase;
+      font-weight: bold;
+      color: darken(color(brand), 15%);
     }
-
-    @include from(4) {
-      @include span(3); // We are moveing the list item to last so its on the bottom on responsive state
-      @include _first(1) {
-        @include span(2);
-        @include push(4);
+    ul {
+      @extend %scut-list-unstyled;
+      li {
+        &.active {
+          font-weight: bold;
+        }
+        a {
+          padding: 13px 0;
+          display: block;
+          color: color(text);
+          &:hover {
+            color: color(brand);
+            padding-left: 5px;
+          }
+        }
+      }
+    }
+    /* Shop categoties */
+    &:nth-child(2) {
+      ul {
+        @extend %clx;
+        li {
+          width: 50%;
+          float: left;
+        }
+      }
+    }
+    /* Social Medias */
+    &:nth-child(3) {
+      ul {
+        @extend %clx;
+        li {
+          float: left;
+          width: (100% / 3);
+          text-align: left;
+          @include em('font-size', 20px);
+        }
+      }
+    }
+  }
+  /* Topography */
+  .footer-item {
+    @include to(3) {
+      ul li a {
+        padding: 4px 0;
+      }
+      &:nth-child(3) {
+        margin: spacer(.5) 0 spacer(.5);
+        padding: spacer(.5) 0 10px;
+        text-align: center;
+        border: 1px solid darken(color(gray-lightest), 10%);
+        border-right: none;
+        border-left: none;
+        @include span(12);
+        ul {
+          @include container(50%);
+          li {
+            text-align: center;
+          }
+        }
+      }
+      @include _first-child() {
+        @include span(5);
+      }
+      &:nth-child(2) {
+        @include span(7);
       }
       @include _last-child() {
-        @include span(4);
-        @include pull(12);
-      }
-    }
-
-    h3 {
-      background: darken(color(gray-lightest), 7%);
-      font-size: 16px;
-      margin-top: -3px;
-      padding: 10px;
-      cursor: pointer;
-      @include icon(caret-down, 'after');
-      &:after {
-        float: right;
-      }
-
-      @include from(3) {
-        background: transparent;
-        font-size: 14px;
-        font-weight: $font-weight-bold;
-        cursor: auto;
-        color: color(brand);
-        padding: 0;
-        &:after {
+        @include span(12);
+        img {
+          max-width: 200px;
+          margin: auto;
+          display: block;
+          width: auto!important;
+        }
+        p {
+          text-align: center;
+          margin: 10px 0;
+          @include em('font-size', 12px);
+        }
+        br {
           display: none;
         }
-      }
-    }
-
-    ul {
-      @include scut-list-unstyled;
-      margin-bottom: 20px;
-    }
-
-    #menu-main-navigation {
-      @extend %clx;
-      @include from(3) {
-        li {
-          @include span(6);
-          margin: 0;
-        }
-      }
-    }
-
-    img {
-      display: block;
-      width: 250px;
-
-      @include from(2) {
-        width: auto;
-      }
-    }
-
-    a {
-      display: block;
-      border-bottom: 1px solid darken(color(gray-lightest), 5%);
-      padding: 5px 10px;
-      color: color(text);
-      line-height: 33px;
-
-      @include from(3) {
-        font-size: 14px;
-        border: none;
-        padding: 5px 0;
-      }
-    }
-
-    li:last-child a {
-      border-bottom: none;
-    }
-
-    p,
-    small {
-      line-height: 33px;
-      font-size: 16px;
-
-      @include from(3) {
-        font-size: 14px;
-      }
-    }
-
-    &:nth-child(3) {
-      h3 {
-        display: none;
-
-        @include from(3) {
+        small {
           display: block;
         }
       }
-      ul {
-        display: block !important;
+    }
+    /* Topography */
+    @include from(4) {
+      @include span(2);
+      @include _even() {
+        @include span(4);
+      }
+      @include _last-child() {
+        @include pull(12);
+      }
+      @include _first-child() {
+        @include push(4)
       }
     }
   }
+}
 
-  #menu-footer-socials {
-    span {
-      display: none;
-    }
-    li,
-    a {
-      display: inline-block;
-      margin-right: 20px;
-      font-size: 20px;
-      border: none;
-    }
-  }
 
-  .twitter a {
-    @include icon(twitter);
+/**
+ * Copyright
+ * ---
+ */
+
+ .copyright {
+  .container {
+    padding: spacer(1) 0;
+    margin-top: spacer(.5);
+    border-top: darken(color(gray-lightest), 10%) 2px solid;
   }
-  .facebook a {
-    @include icon(facebook);
+  @include em('font-size', 14px);
+  .left,
+  .right {
+    @include span(6)
   }
-  .linkedin a {
-    @include icon(linkedin);
+  .bottom-nav-container {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  p {
+    margin: 0;
+    text-align: right;
+  }
+  a {
+    color: color(text);
+    &:hover {
+      color: color(brand);
+    }
+  }
+  ul {
+    @include scut-list-inline(15px);
+  }
+  @include to(3) {
+
+    .left,
+    .right {
+      text-align: center;
+      .bottom-nav-container {
+        display: block;
+        margin: spacer(.25) auto;
+      }
+      * {
+        text-align: center;
+      }
+      @include span(12);
+    }
   }
 }

@@ -33,27 +33,26 @@
 				 *   LIttle function which will add class 'responsive to the footer'
 				 *  ********************************************************
 				 */
-				var footerHider = function() {
-						var windowWidth = $(window).width();
-						var ResponsiveState = $('#footer').data('responsive');
-						$('#footer .footer-item').each(function() {
-								if (windowWidth < ResponsiveState) {
-										$(this).addClass('responsive');
-										$('#footer .footer-item').find('ul').hide();
-										$(this).find('h3').on('click', function() {
-												$('#footer .footer-item').find('ul').stop().slideUp();
-												$(this).next('ul').stop().slideToggle();
-										});
-								} else {
-										$(this).removeClass('responsive');
-										$('#footer .footer-item').find('ul').show();
-								}
-						});
-				};
-				footerHider();
-				$(window).resize(function() {
-						footerHider();
-				});
+				// var footerHider = function() {
+				// 		var windowWidth = $(window).width();
+				// 		var ResponsiveState = $('#footer').data('responsive');
+				// 		$('#footer .footer-item').not(':nth-child(3)').each(function() {
+				// 				if (windowWidth < ResponsiveState) {
+				// 						$(this).addClass('responsive');
+				// 						$(this).find('h3').on('click', function() {
+				// 								$('#footer .footer-item').find('ul').stop().slideUp();
+				// 								$(this).next('ul').stop().slideToggle();
+				// 						});
+				// 				} else {
+				// 						$(this).removeClass('responsive');
+				// 						$('#footer .footer-item').find('ul').show();
+				// 				}
+				// 		});
+				// };
+				// footerHider();
+				// $(window).resize(function() {
+				// 		footerHider();
+				// });
 
 
 				/*  ********************************************************

@@ -1,0 +1,13 @@
+/*  ********************************************************
+ *   Split list items into columns
+ *  ********************************************************
+ */
+
+ @mixin li-columns( $columns:2, $space: 20px) {
+  -moz-column-count: $columns;
+  -moz-column-gap: $space;
+  -webkit-column-count: $columns;
+  -webkit-column-gap: $space;
+  column-count: $columns;
+  column-gap: $space;
+}
