@@ -8,22 +8,42 @@ add_action('cart', 'header_cart');
 function header_cart()
 {
   global $woocommerce;
-  $items = sprintf(_n('%d item', '%d items', WC()->cart->get_cart_contents_count()), WC()->cart->get_cart_contents_count());
-  $count = WC()->cart->get_cart_contents_count();
-  $total = WC()->cart->get_cart_total();
+  $items    = sprintf(_n('%d item', '%d items', WC()->cart->get_cart_contents_count()), WC()->cart->get_cart_contents_count());
+  $count    = WC()->cart->get_cart_contents_count();
+  $total    = WC()->cart->get_cart_total();
   $cart_url = wc_get_cart_url();
-  $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
+  $shop_url = get_permalink(wc_get_page_id('shop'));
   ?>
   <div id="the-cart">
     <div class="clx">
-      <i class="icon-shopping-cart"></i>
-      <?php if ( $count > 0 ): ?>
+      <?php if ($count > 0): ?>
+        <a href="<?php echo $cart_url; ?>"><i class="icon-shopping-cart"></i></a>
         <span class="total-items"><?php echo $items ?></span><span class="colon">:</span>
         <span class="total-total"><a href="<?php echo $cart_url; ?>"><?php echo $total ?> <?php esc_html_e('View Basket', 'TEXT_DOMAIN')?></a></span>
       <?php else: ?>
+        <a href="<?php echo $shop_url; ?>"><i class="icon-shopping-cart"></i></a>
         <span class="total-items empty"><?php esc_html_e('Cart is empty', 'TEXT_DOMAIN')?></span><span class="colon">:</span>
-        <span class="total-total"><a href="<?php echo $shop_url; ?>"><?php esc_html_e('Start Shopping', 'TEXT_DOMAIN' ) ; ?></a></span>
-      <?php endif ?>
+        <span class="total-total"><a href="<?php echo $shop_url; ?>"><?php esc_html_e('Start Shopping', 'TEXT_DOMAIN');?></a></span>
+      <?php endif?>
     </div>
   </div>
   <?php }
+  add_action('cart_mobile', 'header_cart_mobile');
+  function header_cart_mobile()
+  {
+    global $woocommerce;
+    $items    = WC()->cart->get_cart_contents_count();
+    $count    = WC()->cart->get_cart_contents_count();
+    $cart_url = wc_get_cart_url();
+    $shop_url = get_permalink(wc_get_page_id('shop'));
+    ?>
+    <div id="the-cart-mobile">
+      <div class="clx">
+        <?php if ($count > 0): ?>
+          <a href="<?php echo $cart_url; ?>"><i class="icon-shopping-cart"></i> <span><?php echo $items ?></span></a>
+        <?php else: ?>
+          <a href="<?php echo $shop_url; ?>"><i class="icon-shopping-cart"></i> <span>0</span></a>
+        <?php endif?>
+      </div>
+    </div>
+    <?php }
