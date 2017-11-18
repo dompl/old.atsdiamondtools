@@ -13,7 +13,6 @@ function top_colleterals()
 
   echo $email || $telephone ? '<div class="clx">' : '';
   // If tel number is present
-
   if ($telephone)
   {
     echo '<div class="tel-number">
@@ -24,5 +23,8 @@ function top_colleterals()
   {
     echo '<div class="email clx"><a href="mailto:' . antispambot($email) . '"><i class="icon-envelope"></i><span>' . antispambot($email) . '</span></a></div>';
   }
+  echo '<div class="search-toggle">
+  <div class="mobile clx"><a href="#"><i class="icon-search"></i></a></div>
+  </div>';
   echo $email || $telephone ?  '</div>' : '';
 }

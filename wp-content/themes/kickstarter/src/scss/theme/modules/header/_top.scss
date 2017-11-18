@@ -97,6 +97,11 @@
         color: color(text);
         padding: 11px 12px 14px 12px;
       }
+      &.search-toggle {
+       @include from(3) {
+          display: none;
+        }
+      }
       &.email {
         border-left: 1px solid darken(color(gray-lightest), 5%);
         @include from(4) {

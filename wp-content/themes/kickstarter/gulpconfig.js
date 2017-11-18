@@ -77,6 +77,7 @@ module.exports = {
                 src + 'js/lib/cookie-bar.js', // https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
                 src + 'js/woo.js',
                 src + 'js/footer.js',
+                src + 'js/header.js',
             ],
             admin: [ // Header Scripts
                 src + 'js/admin.js'

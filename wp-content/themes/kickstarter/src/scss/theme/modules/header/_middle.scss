@@ -17,6 +17,7 @@
     @include from(3) {
       @include span(5);
       transform: translateY(8px);
+      display: inline-block;
     }
     form {
       position: relative;
