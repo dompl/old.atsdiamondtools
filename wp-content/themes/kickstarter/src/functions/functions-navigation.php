@@ -42,13 +42,13 @@ function add_login_url( $items, $args ) {
      * If menu primary menu is set & user is logged in.
      */
     if ( is_user_logged_in() && $args->theme_location == 'header' ) {
-      $items .= '<li><i class="icon-user"></i><a href="'. wp_logout_url() .'">'. esc_html( 'Log Out', 'TEXT_DOMAIN').'</a></li>';
+      $items .= '<li><a href="'. wp_logout_url() .'"><i class="icon-user"></i>'. esc_html( 'Log Out', 'TEXT_DOMAIN').'</a></li>';
     }
     /**
      * Else display login menu item.
      */
     elseif ( !is_user_logged_in() && $args->theme_location == 'header' ) {
-      $items .= '<li><i class="icon-user"></i><a href="'. site_url('wp-login.php') .'">'.esc_html( 'Log In', 'TEXT_DOMAIN').'</a></li>';
+      $items .= '<li><a href="'. site_url('wp-login.php') .'"><i class="icon-user"></i><span>'. esc_html( 'Log In', 'TEXT_DOMAIN').'</span></a></li>';
     }
     return $items;
   }

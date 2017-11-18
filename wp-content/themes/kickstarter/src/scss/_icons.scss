@@ -60,29 +60,38 @@
     @if $filename == envelope {
         $char: "\E00B";
     }
-    @if $filename == lock {
+    @if $filename == facebook {
         $char: "\E00C";
     }
-    @if $filename == phone {
+    @if $filename == linkedin {
         $char: "\E00D";
     }
-    @if $filename == search {
+    @if $filename == lock {
         $char: "\E00E";
     }
-    @if $filename == shopping-cart {
+    @if $filename == phone {
         $char: "\E00F";
     }
-    @if $filename == th-large {
+    @if $filename == search {
         $char: "\E010";
     }
-    @if $filename == th-list {
+    @if $filename == shopping-cart {
         $char: "\E011";
     }
-    @if $filename == th {
+    @if $filename == th-large {
         $char: "\E012";
     }
-    @if $filename == user {
+    @if $filename == th-list {
         $char: "\E013";
+    }
+    @if $filename == th {
+        $char: "\E014";
+    }
+    @if $filename == twitter {
+        $char: "\E015";
+    }
+    @if $filename == user {
+        $char: "\E016";
     }
 
     @return $char;
@@ -133,6 +142,12 @@
 .icon-envelope {
     @include icon(envelope);
 }
+.icon-facebook {
+    @include icon(facebook);
+}
+.icon-linkedin {
+    @include icon(linkedin);
+}
 .icon-lock {
     @include icon(lock);
 }
@@ -153,6 +168,9 @@
 }
 .icon-th {
     @include icon(th);
+}
+.icon-twitter {
+    @include icon(twitter);
 }
 .icon-user {
     @include icon(user);

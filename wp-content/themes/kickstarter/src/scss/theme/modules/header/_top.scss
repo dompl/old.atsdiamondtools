@@ -3,7 +3,24 @@
  *  ********************************************************
  */
 
- #header-top {
+#masthead {
+  overflow: hidden;
+  margin-bottom: 50px;
+}
+
+#header-top {
+  margin-bottom: 14px;
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -1000px;
+    width: 9999px;
+    height: 1px;
+    background: darken(color(gray-lightest), 5%);
+  }
+
   /* Navigation */
   ul {
     @include scut-list-inline();
@@ -13,24 +30,95 @@
   }
   /* Topography */
   .left {
-    @include span(6);
+    @include span(8);
+    @include from(4) {
+      @include span(6);
+    }
+    li {
+      border-right: 1px solid darken(color(gray-lightest), 5%);
+      border-left: 1px solid darken(color(gray-lightest), 5%);
+      &.menu-item,
+      span {
+        display: none;
+      }
+      @include from(2) {
+        border-left: none;
+        &.menu-item {
+          display: inline-block;
+        }
+      }
+    }
+
+    .icon-user {
+      transform: translateY(2px);
+      display: inline-block;
+    }
+
+    a {
+      display: inline-block;
+      padding: 11px 10px 14px 10px;
+      color: color(text);
+    }
+
+    li:first-child a {
+      @include from(2) {
+        padding-left: 0;
+      }
+    }
+
+    li:last-child {
+      @include from(2) {
+        border-right: none;
+      }
+    }
   }
   .right {
-    @include span(6);
-    .clx >div {
+    @include span(4);
+    @include from(4) {
+      @include span(6);
+    }
+    .clx>div {
       float: right;
       line-height: 1;
       span {
         float: left;
-        display: block;
+        display: none;
         margin-left: 10px;
-        @include to(3) {
-          display: none;
+        @include from(4) {
+          display: inline-block;
         }
       }
       i {
-        float: left;
-        margin-left: 15px;
+        float: left; // margin-left: 15px;
+      }
+      a {
+        display: inline-block;
+        transform: translateY(3px);
+        color: color(text);
+        padding: 11px 12px 14px 12px;
+      }
+      &.search-toggle {
+        @include from(3) {
+          display: none;
+        }
+      }
+      &.email {
+        border-left: 1px solid darken(color(gray-lightest), 5%);
+        @include from(4) {
+          border-left: none;
+        }
+      }
+      &.tel-number {
+        border-left: 1px solid darken(color(gray-lightest), 5%);
+        border-right: 1px solid darken(color(gray-lightest), 5%);
+        @include from(4) {
+          font-weight: $font-weight-bold;
+          border-right: none;
+
+          a {
+            padding-right: 0;
+          }
+        }
       }
     }
   }

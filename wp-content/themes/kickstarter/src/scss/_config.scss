@@ -35,6 +35,7 @@ $font-size-h4: 1.25rem !default;
 $font-size-h5: 1rem !default;
 $font-size-h6: 1rem !default;
 
+$font-weight-light: 300 !default;
 $font-weight-normal: 400 !default;
 $font-weight-bold: 700 !default;
 
@@ -44,7 +45,7 @@ $sm: 576px;
 $md: 768px;
 $lg: 992px;
 $xl: 1024px;
-$xxl: 1140px;
+$xxl: 1240px;
 
 $slicer-breakpoints: $xs $sm $md $lg $xl $xxl;
 
@@ -78,19 +79,19 @@ $susy: (
 $responsive--checkout-breakpoint: 1; // Select value from breakpoint
 
 // A modest palette; see `_library.scss` for the color() function
-$brand-primary : #3a5266;
+$brand-primary : #7c42ad;
 $_color: (
   brand:            $brand-primary,
-  text:             #636c72,
+  text:             #515151,
   link:             $brand-primary,
-  link-hover:       darken($brand-primary, 20%),
+  link-hover:       lighten($brand-primary, 10%),
   link-muted:       desaturate($brand-primary, 10%),
   body-background:  white,
   gray-dark:        #292b2c,
   gray:             #323636,
-  gray-light:       #636c72,
+  gray-light:       #8a8a8a,
   gray-lighter:     #636c72,
-  gray-lightest:     #D8D8D8,
+  gray-lightest:    #f9f9f9,
   danger:           #c53232,
   success:          #528c49,
   warning:          #cfa535,

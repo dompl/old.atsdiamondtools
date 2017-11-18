@@ -2,29 +2,114 @@
  *   Middle section
  *  ********************************************************
  */
- #header-middle {
-  .search-section, .cart-section {
-    text-align: right;
+
+#header-middle {
+  @include from(3) {
+    padding-top: 35px;
+    padding-bottom: 44px;
   }
-
-
   /* Topography */
   .logo-section {
     @include span(4);
   }
   .search-section {
-    @include span(5);
+    display: none;
+    @include from(3) {
+      @include span(5);
+      transform: translateY(8px);
+      display: inline-block;
+    }
+    form {
+      position: relative;
+    }
+    input {
+      width: 100%;
+      padding: 10px 60px 10px 10px;
+      box-sizing: border-box;
+      outline: none;
+      border: 1px solid darken(color(gray-lightest), 5%);
+      font-size: 15px;
+      font-weight: $font-weight-light;
+      outline: none;
+    }
+    button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 11px 11px 7px 12px;
+      background: color(brand);
+      border: none;
+      border-radius: 0;
+      color: white;
+      cursor: pointer;
+      @extend %transition;
+
+      &:hover {
+        background: lighten(color(brand), 10%);
+        &:before {
+          border-right: 8px solid lighten(color(brand), 10%);
+        }
+      }
+
+      &:before {
+        content: "";
+        @include scut-center-transform(y);
+        right: 100%;
+        width: 0;
+        height: 0;
+        border-top: 7px solid transparent;
+        border-right: 8px solid color(brand);
+        border-bottom: 7px solid transparent;
+        @extend %transition;
+      }
+    }
   }
   .cart-section {
-    @include span(3)
+    margin-top: 10px;
+    text-align: center;
+    @include from(3) {
+      @include span(3) margin-top: 0;
+      text-align: left;
+      transform: translateY(13px);
+    }
+
+    @include breakpoint(min-width 1150px) {
+      text-align: right;
+    }
+
+    i {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    span {
+      display: inline-block;
+      transform: translateY(-3px);
+      @include from(3) {
+        transform: translateY(-16px);
+        &.total-total {
+          padding-left: 36px;
+        }
+      }
+
+      @include breakpoint(min-width 1150px) {
+        transform: translateY(-3px);
+        &.total-total {
+          padding-left: 0;
+        }
+      }
+    }
   }
   /* When navigation breaks */
   @include nav-break() {
     .logo-section {
       display: none;
     }
-    .search-section, .cart-section {
-      @include span(6);
+    .search-section,
+    .cart-section {
+      @include from(3) {
+        @include span(6);
+      }
     }
   }
 }
