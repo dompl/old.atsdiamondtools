@@ -3,8 +3,8 @@
  *  ********************************************************
  */
 
- $total-menu-items: 7;
- #main-nav-container {
+$total-menu-items: 7;
+#main-nav-container {
   background: nav_color(background);
   @include nav-break() {
     background: transparent;
@@ -87,6 +87,7 @@
 
 
 
+
 /* Sticky Nav */
 
 .sticky-main-nav {
@@ -113,5 +114,11 @@
         @include em('font-size', 14px);
       }
     }
+  }
+}
+
+.main-nav-hide-desktop {
+  @include from(2) {
+    display: none !important;
   }
 }
