@@ -13,8 +13,6 @@ function top_colleterals()
   $telephone =  get_field('header_phone', 'options');
 
   echo '<div class="clx">';
-  echo header_cart_mobile();
-  // If tel number is present
 
   if ($telephone)
   {
@@ -26,5 +24,10 @@ function top_colleterals()
   {
     echo '<div class="email clx"><a href="mailto:' . antispambot($email) . '"><i class="icon-envelope"></i><span>' . antispambot($email) . '</span></a></div>';
   }
+  echo '<div class="search-toggle">
+  <div class="mobile clx"><a href="#"><i class="icon-search"></i></a></div>
+  </div>';
+  echo header_cart_mobile();
+  // If tel number is present
   echo '</div>';
 }
