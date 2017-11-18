@@ -49,7 +49,7 @@ a {
   text-decoration: none;
   @extend %transition;
   &:hover, &:active, &:focus {
-    color:color(link-hover);
+    color:color(link-hover) !important;
   }
 }
 
