@@ -98,7 +98,7 @@
         padding: 11px 12px 14px 12px;
       }
       &.search-toggle {
-       @include from(3) {
+        @include from(3) {
           display: none;
         }
       }
