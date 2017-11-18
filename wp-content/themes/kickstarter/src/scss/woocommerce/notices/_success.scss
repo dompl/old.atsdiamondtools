@@ -1,0 +1,31 @@
+/*  ********************************************************
+ *   Woocommerce Messages - Add to cart Success
+ *  ********************************************************
+ */
+ .woocommerce-message {
+  line-height: 26px;
+  line-height: 26px;
+  padding: 5px 10px;
+  @include em('font-size', 14px);
+  background: lighten(color(gray-lightest), 10%);
+  border-bottom: 2px solid color(success);
+  @extend %clx;
+  .product-image {
+    float: left;
+    margin-right:10px;
+    margin-left: -5px;
+    img {
+      float: left;
+    }
+  }
+  .product-name {
+    float: left;
+    i {
+      float: left;
+      margin-right: 10px;
+    }
+  }
+  .product-link {
+    float: right;
+  }
+}

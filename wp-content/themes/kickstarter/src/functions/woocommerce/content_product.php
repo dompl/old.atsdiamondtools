@@ -5,7 +5,7 @@
  */
 
 // if (is_shop()) {
-add_action('woocommerce_before_shop_loop_item', 'ats_create_product_listing_layout_');
+add_action('woocommerce_before_shop_loop_item', 'ats_create_product_listing_layout_', 20);
 
 function ats_create_product_listing_layout_()
 {
@@ -108,9 +108,8 @@ function ats_create_product_listing_layout_()
   echo $prod;
 }
 
-add_action('template_redirect', 'ats_destroy_product_listing_layout_');
-
 // With this one we are going to remove all actions from woocommerce. Sorry woo!
+add_action('template_redirect', 'ats_destroy_product_listing_layout_');
 function ats_destroy_product_listing_layout_()
 {
   remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open');

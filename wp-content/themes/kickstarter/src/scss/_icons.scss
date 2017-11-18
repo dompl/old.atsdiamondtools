@@ -54,32 +54,35 @@
     @if $filename == caret-down {
         $char: "\E009";
     }
-    @if $filename == envelope {
+    @if $filename == cart-plus {
         $char: "\E00A";
     }
-    @if $filename == lock {
+    @if $filename == envelope {
         $char: "\E00B";
     }
-    @if $filename == phone {
+    @if $filename == lock {
         $char: "\E00C";
     }
-    @if $filename == search {
+    @if $filename == phone {
         $char: "\E00D";
     }
-    @if $filename == shopping-cart {
+    @if $filename == search {
         $char: "\E00E";
     }
-    @if $filename == th-large {
+    @if $filename == shopping-cart {
         $char: "\E00F";
     }
-    @if $filename == th-list {
+    @if $filename == th-large {
         $char: "\E010";
     }
-    @if $filename == th {
+    @if $filename == th-list {
         $char: "\E011";
     }
-    @if $filename == user {
+    @if $filename == th {
         $char: "\E012";
+    }
+    @if $filename == user {
+        $char: "\E013";
     }
 
     @return $char;
@@ -123,6 +126,9 @@
 }
 .icon-caret-down {
     @include icon(caret-down);
+}
+.icon-cart-plus {
+    @include icon(cart-plus);
 }
 .icon-envelope {
     @include icon(envelope);

@@ -155,6 +155,7 @@ function page_header_($thumnail_id)
 
 };
 
+
 /**
  * Header changes for woocommerce
  * ---
