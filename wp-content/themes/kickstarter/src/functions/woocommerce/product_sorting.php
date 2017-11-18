@@ -61,13 +61,15 @@ function ats_change_orderings_structure_()
   remove_action('woocommerce_before_shop_loop', 'wc_print_notices', 10);
   remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
   remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
+
+  add_action('ats_loop_start', 'ats_loop_start_', 10);
 }
 
 /**
  * Open product loop ( includes cookies)
  * ---
  */
-add_action('ats_loop_start', 'ats_loop_start_');
+
 function ats_loop_start_()
 {
 

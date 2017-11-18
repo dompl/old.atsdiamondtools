@@ -5,7 +5,7 @@
  */
 
 // if (is_shop()) {
-add_action('woocommerce_before_shop_loop_item', 'ats_create_product_listing_layout_');
+add_action('woocommerce_before_shop_loop_item', 'ats_create_product_listing_layout_', 20);
 
 function ats_create_product_listing_layout_()
 {
@@ -41,10 +41,10 @@ function ats_create_product_listing_layout_()
 
   // Product image
   $prod .= sprintf('
-  <div class="product-list-image">
+    <div class="product-list-image">
     <a href="%s" title="%s">%s</a>
-  </div>
-  ',
+    </div>
+    ',
     $prod_url, // Product URL
     esc_html($prod_title),
     $prod_image
@@ -55,7 +55,7 @@ function ats_create_product_listing_layout_()
   // Product
   $prod .= sprintf('
     <div class="product-list-title">
-      <a href="%s" title="%s">%s</a>
+    <a href="%s" title="%s">%s</a>
     </div>
     <div class="product-list-short">
     %s
@@ -72,7 +72,7 @@ function ats_create_product_listing_layout_()
   $prod .= '</div>'; // End content container
 
   // Add to cart
-  $add_to_cart = sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s ajax_add_to_cart add_to_cart_button">%s</a>',
+  $add_to_cart = sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s">%s</a>',
     esc_url($product->add_to_cart_url()),
     esc_attr($id),
     esc_attr($product->get_sku()),
@@ -91,11 +91,11 @@ function ats_create_product_listing_layout_()
   }
   $cat_list .= '</ul>';
 
-   $prod .= sprintf('
+  $prod .= sprintf('
     <div class="product-content-colleterals clx">
-      <div class="product-list-cats">%s</div>
-      <div class="product-list-price">%s</div>
-      <div class="product-list-add-cart">%s</div>
+    <div class="product-list-cats">%s</div>
+    <div class="product-list-price">%s</div>
+    <div class="product-list-add-cart">%s</div>
     </div>
     ',
     $cat_list,
@@ -108,9 +108,8 @@ function ats_create_product_listing_layout_()
   echo $prod;
 }
 
-add_action('template_redirect', 'ats_destroy_product_listing_layout_');
-
 // With this one we are going to remove all actions from woocommerce. Sorry woo!
+add_action('template_redirect', 'ats_destroy_product_listing_layout_');
 function ats_destroy_product_listing_layout_()
 {
   remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open');

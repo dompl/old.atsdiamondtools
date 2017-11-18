@@ -6,4 +6,3 @@ vendor
 build
 dist
 assets/icons
-gulpconfig.js
