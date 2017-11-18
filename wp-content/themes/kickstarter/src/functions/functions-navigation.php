@@ -4,6 +4,20 @@ if (!defined('ABSPATH'))
 {
   exit; // Exit if accessed directly
 }
+
+/*  ********************************************************
+ *   Create website navigations
+ *  ********************************************************
+ */
+
+function ats_generate_navigation() {
+  // Register header, main and footer menus
+  register_nav_menu('header', esc_html__('Top menu', 'TEXT_DOMAIN'));
+  register_nav_menu('main', esc_html__('Main menu', 'TEXT_DOMAIN'));
+  register_nav_menu('footer', esc_html__('Footer menu', 'TEXT_DOMAIN'));
+}
+
+add_action('after_setup_theme', 'ats_generate_navigation', 12);
 /*  ********************************************************
  *   Replace classes required for dropdown navigation
  *  ********************************************************
@@ -28,13 +42,13 @@ function add_login_url( $items, $args ) {
      * If menu primary menu is set & user is logged in.
      */
     if ( is_user_logged_in() && $args->theme_location == 'header' ) {
-      $items .= '<li><i class="icon-user"></i><a href="'. wp_logout_url() .'">Log Out</a></li>';
+      $items .= '<li><i class="icon-user"></i><a href="'. wp_logout_url() .'">'. esc_html( 'Log Out', 'TEXT_DOMAIN').'</a></li>';
     }
     /**
      * Else display login menu item.
      */
     elseif ( !is_user_logged_in() && $args->theme_location == 'header' ) {
-      $items .= '<li><i class="icon-user"></i><a href="'. site_url('wp-login.php') .'">Log In</a></li>';
+      $items .= '<li><i class="icon-user"></i><a href="'. site_url('wp-login.php') .'">'.esc_html( 'Log In', 'TEXT_DOMAIN').'</a></li>';
     }
     return $items;
   }

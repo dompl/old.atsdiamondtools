@@ -35,10 +35,13 @@ if (defined('WPB_VC_VERSION'))
 load_files('inc');
 
 /* Load action hooks */
-load_files('action_hooks');
+load_files('functions/hooks');
 
 /* Shortcodes */
 load_files('functions/shortcodes');
+
+/* AACF */
+load_files('functions/acf');
 
 
 /* Check if Visual Composer is installed */
@@ -67,11 +70,6 @@ function voidx_setup()
   // It should be set once and left alone apart from that; don't do anything fancy with it; it is part of WordPress core
   global $content_width;
   $content_width = 1140;
-
-  // Register header, main and footer menus
-  register_nav_menu('header', esc_html__('Top menu', 'TEXT_DOMAIN'));
-  register_nav_menu('main', esc_html__('Main menu', 'TEXT_DOMAIN'));
-  register_nav_menu('footer', esc_html__('Footer menu', 'TEXT_DOMAIN'));
 
 }
 add_action('after_setup_theme', 'voidx_setup', 11);

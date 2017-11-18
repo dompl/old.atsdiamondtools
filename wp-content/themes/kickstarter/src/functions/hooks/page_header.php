@@ -11,11 +11,13 @@ function page_header_($thumnail_id)
 
   global $wp_query;
 
-  $page_title       = '';
-  $page_breadcrumbs = '';
+
 
   $image_widht       = 800;
   $image_height      = 300;
+
+  $page_title       = '';
+  $page_breadcrumbs = '';
   $page_image        = '';
   $page_image_retina = '';
 
