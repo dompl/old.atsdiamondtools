@@ -1,0 +1,54 @@
+/*  ********************************************************
+ *   Copyright styles
+ *  ********************************************************
+ */
+
+.copyright {
+  .container {
+    border-top: 1px solid darken(color(gray-lightest), 5%);
+    padding: 15px 0 0;
+  }
+  span,
+  a {
+    line-height: 33px;
+    font-size: 14px;
+    color: color(text);
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  ul {
+    @include scut-list-unstyled;
+    display: inline;
+
+    li {
+      display: inline;
+    }
+  }
+
+  .bottom-nav-container {
+    @include from(3) {
+      display: inline;
+    }
+  }
+
+  .right {
+    margin-bottom: -20px;
+    @include from(3) {
+      text-align: right;
+    }
+  }
+
+  @include from(3) {
+    .left {
+      @include span(9);
+    }
+    .right {
+      @include span(3);
+      p,
+      a {
+        margin: 0;
+      }
+    }
+  }
+}
