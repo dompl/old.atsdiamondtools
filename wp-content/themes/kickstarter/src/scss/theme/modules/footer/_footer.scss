@@ -106,5 +106,41 @@
         font-size: 14px;
       }
     }
+
+    &:nth-child(3) {
+      h3 {
+        display: none;
+
+        @include from(3) {
+          display: block;
+        }
+      }
+      ul {
+        display: block !important;
+      }
+    }
+  }
+
+  #menu-footer-socials {
+    span {
+      display: none;
+    }
+    li,
+    a {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 20px;
+      border: none;
+    }
+  }
+
+  .twitter a {
+    @include icon(twitter);
+  }
+  .facebook a {
+    @include icon(facebook);
+  }
+  .linkedin a {
+    @include icon(linkedin);
   }
 }
