@@ -5,13 +5,14 @@
  */
 
 /* Top collereals ( telephone numer and email ) */
+add_action('top', 'header_cart_mobile', 5);
 add_action('top', 'top_colleterals', 10);
 function top_colleterals()
 {
   $email     =  get_field('header_email', 'options');
   $telephone =  get_field('header_phone', 'options');
 
-  echo $email || $telephone ? '<div class="clx">' : '';
+  echo '<div class="clx"><div id="header-cart"></div>';
   // If tel number is present
   if ($telephone)
   {
@@ -23,8 +24,11 @@ function top_colleterals()
   {
     echo '<div class="email clx"><a href="mailto:' . antispambot($email) . '"><i class="icon-envelope"></i><span>' . antispambot($email) . '</span></a></div>';
   }
+
   echo '<div class="search-toggle">
   <div class="mobile clx"><a href="#"><i class="icon-search"></i></a></div>
   </div>';
   echo $email || $telephone ?  '</div>' : '';
+  echo '</div>';
+
 }
