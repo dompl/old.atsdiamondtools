@@ -1,0 +1,110 @@
+/*  ********************************************************
+ *   Footer styles
+ *  ********************************************************
+ */
+
+
+/* Topography */
+
+#footer {
+  margin-top: 100px;
+  padding: 30px 10px;
+  background: color(gray-lightest);
+
+  @include from(3) {
+    padding: 30px 0;
+  }
+  .footer-item {
+    @include from(3) {
+      @include span(6);
+    }
+
+    @include from(4) {
+      @include span(3); // We are moveing the list item to last so its on the bottom on responsive state
+      @include _first(1) {
+        @include span(2);
+        @include push(4);
+      }
+      @include _last-child() {
+        @include span(4);
+        @include pull(12);
+      }
+    }
+
+    h3 {
+      background: darken(color(gray-lightest), 7%);
+      font-size: 16px;
+      margin-top: -3px;
+      padding: 10px;
+      cursor: pointer;
+      @include icon(caret-down, 'after');
+      &:after {
+        float: right;
+      }
+
+      @include from(3) {
+        background: transparent;
+        font-size: 14px;
+        font-weight: $font-weight-bold;
+        cursor: auto;
+        color: color(brand);
+        padding: 0;
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    ul {
+      @include scut-list-unstyled;
+      margin-bottom: 20px;
+    }
+
+    #menu-main-navigation {
+      @extend %clx;
+      @include from(3) {
+        li {
+          @include span(6);
+          margin: 0;
+        }
+      }
+    }
+
+    img {
+      display: block;
+      width: 250px;
+
+      @include from(2) {
+        width: auto;
+      }
+    }
+
+    a {
+      display: block;
+      border-bottom: 1px solid darken(color(gray-lightest), 5%);
+      padding: 5px 10px;
+      color: color(text);
+      line-height: 33px;
+
+      @include from(3) {
+        font-size: 14px;
+        border: none;
+        padding: 5px 0;
+      }
+    }
+
+    li:last-child a {
+      border-bottom: none;
+    }
+
+    p,
+    small {
+      line-height: 33px;
+      font-size: 16px;
+
+      @include from(3) {
+        font-size: 14px;
+      }
+    }
+  }
+}
