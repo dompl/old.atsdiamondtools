@@ -12,6 +12,12 @@ $total-menu-items: 7;
 }
 
 #navigation {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  @include from(3) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
   img {
     display: none;
   }

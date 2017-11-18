@@ -5,11 +5,9 @@
 
 #masthead {
   overflow: hidden;
-  margin-bottom: 50px;
 }
 
 #header-top {
-  margin-bottom: 14px;
   position: relative;
   &:after {
     content: "";
@@ -30,7 +28,10 @@
   }
   /* Topography */
   .left {
-    @include span(8);
+    @include span(2);
+    @include from(2) {
+      @include span(7);
+    }
     @include from(4) {
       @include span(6);
     }
@@ -42,9 +43,16 @@
         display: none;
       }
       @include from(2) {
+
         border-left: none;
         &.menu-item {
           display: inline-block;
+        }
+      }
+      @include from(3) {
+        span {
+          display: inline-block;
+          margin-left: 10px;
         }
       }
     }
@@ -56,8 +64,9 @@
 
     a {
       display: inline-block;
-      padding: 11px 10px 14px 10px;
+      padding: 13px 15px 14px 15px;
       color: color(text);
+      font-size: 14px;
     }
 
     li:first-child a {
@@ -73,13 +82,17 @@
     }
   }
   .right {
-    @include span(4);
+    @include span(10);
+    @include from(2) {
+      @include span(5);
+    }
     @include from(4) {
       @include span(6);
     }
     .clx>div {
       float: right;
       line-height: 1;
+      border-left: 1px solid darken(color(gray-lightest), 5%);
       span {
         float: left;
         display: none;
@@ -89,13 +102,14 @@
         }
       }
       i {
-        float: left; // margin-left: 15px;
+        float: left;
       }
       a {
         display: inline-block;
         transform: translateY(3px);
         color: color(text);
-        padding: 11px 12px 14px 12px;
+        padding: 11px 16px 14px 14px;
+        font-size: 14px;
       }
       &.search-toggle {
         @include from(3) {
@@ -103,13 +117,11 @@
         }
       }
       &.email {
-        border-left: 1px solid darken(color(gray-lightest), 5%);
         @include from(4) {
           border-left: none;
         }
       }
       &.tel-number {
-        border-left: 1px solid darken(color(gray-lightest), 5%);
         border-right: 1px solid darken(color(gray-lightest), 5%);
         @include from(4) {
           font-weight: $font-weight-bold;
@@ -118,6 +130,11 @@
           a {
             padding-right: 0;
           }
+        }
+      }
+      &#the-cart-mobile {
+        @include from(3) {
+          display: none;
         }
       }
     }

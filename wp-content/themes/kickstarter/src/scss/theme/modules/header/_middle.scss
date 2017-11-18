@@ -5,7 +5,7 @@
 
 #header-middle {
   @include from(3) {
-    padding-top: 35px;
+    padding-top: 49px;
     padding-bottom: 44px;
   }
   /* Topography */
@@ -14,9 +14,11 @@
   }
   .search-section {
     display: none;
+    margin-top: 10px;
     @include from(3) {
       @include span(5);
       transform: translateY(8px);
+      margin-top: 0;
       display: inline-block;
     }
     form {
@@ -65,9 +67,11 @@
     }
   }
   .cart-section {
+    display: none;
     margin-top: 10px;
     text-align: center;
     @include from(3) {
+      display: inline-block;
       @include span(3) margin-top: 0;
       text-align: left;
       transform: translateY(13px);
@@ -89,6 +93,12 @@
         transform: translateY(-16px);
         &.total-total {
           padding-left: 36px;
+        }
+        &.amount {
+          display: inline;
+          span {
+            display: inline;
+          }
         }
       }
 
