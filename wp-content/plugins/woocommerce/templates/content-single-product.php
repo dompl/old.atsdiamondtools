@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 *
 	 * @hooked wc_print_notices - 10
 	 */
-	 do_action( 'woocommerce_before_single_product' );
+	do_action( 'woocommerce_before_single_product' );
 
 	 if ( post_password_required() ) {
 	 	echo get_the_password_form();
