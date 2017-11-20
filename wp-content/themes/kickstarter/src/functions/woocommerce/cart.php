@@ -8,7 +8,7 @@ function woocommerce_header_add_to_cart_fragment( $fragments ) {
   ob_start();
   do_action('cart');
   $fragments['#the-cart'] = ob_get_clean();
-  ob_end_flush();
+
   return $fragments;
 }
 /* The same cart for mobile */
@@ -17,7 +17,7 @@ function woocommerce_header_add_to_cart_fragment_mobile( $fragments ) {
   ob_start();
   do_action('cart_mobile');
   $fragments['#the-cart-mobile'] = ob_get_clean();
-  ob_end_flush();
+
   return $fragments;
 }
 /*  ********************************************************
