@@ -6,6 +6,9 @@
 %clx {
   @include scut-clearfix;
 }
+.clx {
+  @extend %clx;
+}
 
 %hide {
   @include scut-hide-visually;

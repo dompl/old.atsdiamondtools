@@ -116,12 +116,12 @@ function page_header_($thumnail_id)
   }
 
 // Chack in classes to the header - for css use
-  $header_classes .= $thumnail_id ? ' has-image' : '';
+  $header_classes .= $thumnail_id ? ' has-image' : ' no-image';
   $header_classes .= $page_description ? ' has-description' : '';
   $header_classes .= $page_breadcrumbs ? ' has-breadcrumb' : '';
 
 // Start container
-  $page_header = '<header id="page-header" class="' . $header_classes . '"><div class="container">';
+  $page_header = '<header id="page-header" class="clx ' . $header_classes . '"><div class="container">';
 
 // Page Title
   if ($page_title != '')

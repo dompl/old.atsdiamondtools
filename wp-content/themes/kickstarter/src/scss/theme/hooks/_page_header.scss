@@ -1,0 +1,58 @@
+/*  ********************************************************
+ *   Page header
+ *  ********************************************************
+ */
+
+ header#page-header {
+  color:white;
+  padding: spacer() 0;
+  &.no-image {
+    color:color(text);
+    background: color(gray-lightest);
+    a {
+      color:lighten(color(text), 10%);
+    }
+  }
+  h1 {
+    width:50%;
+    margin-top: -12px;
+    float: left;
+    display: block;
+    margin-bottom: 0;
+
+  }
+  .header-description {
+    clear: both;
+    float: left;
+    width: 75%;
+    margin-top: spacer(.5);
+    p {
+      @include _only() {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+  a {
+    color:rgba(white, .6);
+  }
+  .page-breadcrumbs {
+    float: left;
+    margin-top: spacer(.5);
+    margin-bottom: -1px;
+    clear: both;
+    @include em('font-size', 12px);
+    font-style: italic;
+  }
+  @include to(4) {
+   .header-description, h1 {
+    width:100%;
+  }
+  h1 {
+    @include em('font-size', 24px);
+  }
+  .header-description {
+    @include em('font-size', 14px);
+  }
+}
+}
