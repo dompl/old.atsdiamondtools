@@ -13,7 +13,7 @@ function ats_create_product_listing_layout_()
   // Get product ID
   global $product, $post, $woocommerce;
 
-  $id   = $product->get_id();
+  $id = $product->get_id();
 
   // Product
   $prod_url   = get_the_permalink($id);
@@ -37,7 +37,7 @@ function ats_create_product_listing_layout_()
 
   $prod = '<div class="product" id="prod-id-' . $id . '">';
 
-  $prod .= '<div class="product-list-start">';
+  $prod .= '<div class="product-list-start clx">';
 
   // Product image
   $prod .= sprintf('
@@ -54,11 +54,13 @@ function ats_create_product_listing_layout_()
 
   // Product
   $prod .= sprintf('
-    <div class="product-list-title">
+    <div class="product-content-list">
+    <h2 class="product-list-title mh">
     <a href="%s" title="%s">%s</a>
     </div>
     <div class="product-list-short">
     %s
+    </h2>
     </div>
     ',
     $prod_url,
@@ -91,16 +93,52 @@ function ats_create_product_listing_layout_()
   }
   $cat_list .= '</ul>';
 
+  // Stock Status
+  $stock        = $product->get_stock_status();
+  $stock_status = '';
+  switch ($stock)
+  {
+    case 'instock':
+      $stock_status = __('In Stock', 'TEXT_DOMAIN');
+      break;
+    case 'outofstock':
+      $stock_status = __('Out of Stock', 'TEXT_DOMAIN');
+      break;
+    default:
+      $stock_status = '';
+      break;
+  }
+  // Stock quantity
+  $stock_quantity = $product->get_stock_quantity();
+  $stock_manage   = $product->get_manage_stock();
+  $stock_min      = 5;
+  $info_button = '<a class="gf info outline" href="'.get_the_permalink().'">'.__('Info', 'TEXT_DOMAIN').'</a>';
+
+  if ($stock_quantity > $stock_min && $stock == 'instock') {
+    $stock_info = __('+' . $stock_min);
+  } elseif($stock_quantity <= $stock_min && $stock == 'instock' ) {
+    $stock_info = __('Less then' . ' ' .$stock_min, 'TEXT_DOMAIN');
+  } else {
+    $stock_info = '';
+    $info_button = '';
+  }
+
+  $stock_info_html = $stock_manage == 1 ? '<span class="stock-count">' . $stock_info . '</span>' : '';
+
   $prod .= sprintf('
     <div class="product-content-colleterals clx">
-    <div class="product-list-cats">%s</div>
-    <div class="product-list-price">%s</div>
-    <div class="product-list-add-cart">%s</div>
+    <div class="product-list-price">%1$s</div>
+    %4$s
+    %5$s
+    <div class="product-list-cats">%2$s</div>
+    <div class="product-list-add-cart">%3$s</div>
     </div>
     ',
-    $cat_list,
-    $product->get_price_html(),
-    $add_to_cart
+    '<span class="gh ls">'.__('Price', 'TEXT_DOMAIN').': </span><strong>' . $product->get_price_html()  . '</strong>',
+    '<span class="gh ls">'.__('Category', 'TEXT_DOMAIN').': </span>' . $cat_list,
+    $info_button . $add_to_cart,
+    $stock_status ? '<div class="product-list-stock gh"><span class="ls">'.__('Stock', 'TEXT_DOMAIN').': </span><strong class="stock-status-' . $stock . '">' . $stock_info_html . ' ' . $stock_status . '</strong></div>' : '',
+    $product->get_sku() != '' ? '<div class="product-sku gh"><span class="ls">'.__('SKU', 'TEXT_DOMAIN').': </span><strong>' . $product->get_sku() . '</strong></div>' : ''
   );
 
   $prod .= '</div>';

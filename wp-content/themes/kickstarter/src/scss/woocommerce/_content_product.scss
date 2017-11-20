@@ -2,21 +2,224 @@
  *   Sibgle product loop
  *  ********************************************************
  */
+
  #products-list {
   padding: 0;
   margin: 0;
   list-style: none;
-  &.grid {
+
+  /**
+   * List
+   * ---
+   */
+   &.list {
+    // @extend %susy-reset;
+    li {
+      margin-top: spacer();
+      img {
+        min-width: 100%;
+        float: left;
+      }
+      .product {
+        padding: 10px 0 10px 10px;
+        @extend %clx;
+        border: 1px solid color(border);
+        @include from(4) {
+          display: flex;
+        }
+      }
+      h2 {
+        @include em('font-size', 22px);
+        a {
+          color: color(text);
+        }
+      }
+      .product-list-start {
+        .product-list-image {
+          @include span(3 after)
+        }
+        .product-content-container {
+          @include em('font-size', 14px);
+          @include span(9 after last)
+        }
+        @include from(4) {
+          @include span(9 after);
+          .product-list-image {
+            @include span(2.5 of 12 after)
+          }
+          .product-content-container {
+            @include span(9.5 of 12 after last);
+            font-weight: thin;
+            @include em('font-size', 14px);
+          }
+        }
+        @include to(1) {
+          .product-list-image {
+            @include span(1 of 1 0);
+            img {
+              min-width: auto;
+              margin: 0 auto 10px;
+              max-width: 280px!important;
+            }
+          }
+          .product-content-container {
+            @include span(1 of 1 0)
+          }
+        }
+      }
+      .product-content-colleterals {
+        @include from(4) {
+          @include span(12);
+          @include span(3 after last);
+          margin-top: -10px;
+          border-left: 1px solid color(border);
+          border-top: none;
+          display: flex;
+          flex-direction: column;
+          margin-right: 0;
+        }
+        margin-top: 10px;
+        clear:both;
+        margin-bottom: -10px;
+        margin-left: -10px;
+        border-top: 1px solid color(border);
+        width: auto;
+        background-color:color(gray-lightest);
+        padding: 10px;
+        >div {
+          border-bottom: 1px dashed lighten(color(gray-lighter), 45%);
+          @include em('font-size', 14px);
+          margin-bottom: 5px;
+          padding-bottom: 5px;
+          @include _last-child() {
+            border: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            margin-top: auto;
+          }
+          a {
+            margin-top: 10px;
+            @include button() {
+              @include from(4) {
+                padding-bottom: 0;
+                line-height: 26px;
+                height: 26px;
+                padding: 0;
+                width: calc(50% - 4px);
+                text-align: center;
+              }
+            }
+          }
+        }
+        .stock-status-instock {
+          color: color(success);
+        }
+        .stock-status-outofstock {
+          color: color(danger);
+        }
+
+        .product-list-cats ul {
+          display: inline-block;
+          margin: 0;
+          padding: 0;
+          list-style-type: none;
+          li {
+            float: none;
+            width: auto;
+            margin: 0;
+          }
+        }
+        span.ls {
+          float: left;
+          width: 80px;
+        }
+      }
+    }
+  }
+
+
+/**
+   * Grid Settings
+   * ---
+   */
+
+   &.grid {
+    .product-content-container {
+      clear: both;
+    }
+    .gh {
+      display: none;
+    }
     .product-list-short {
       display: none;
     }
+    img {
+      min-width: 100%;
+      float: left;
+    }
+    h2 {
+      @include em('font-size', 16px);
+      text-align: center;
+      margin-top: 0;
+      padding-top: 15px;
+      clear: both;
+      font-weight: bold;
+      a {
+        color: color(text);
+        @include hover() {
+          color: color(brand);
+        }
+      }
+    }
+  /* Price */
+  .product-list-price {
+    text-align: center;
+    display: block;
   }
-  li {
-    @include span(3);
-  }
-  &.list {
-    li {
-      @include span(12);
+  /* Categories */
+  .product-list-cats {
+    display: block;
+    clear: both;
+    @extend %clx;
+    text-align: center;
+    ul {
+      @include scut-list-unstyled();
+      padding-top: 10px;
+      @include em('font-size', 14px);
     }
   }
+  /* Add to cart */
+  .product-list-add-cart {
+    text-align: center;
+    margin-top: 10px;
+    a {
+      @include button() {
+        background-color: color(brand);
+        color: white;
+      }
+    }
+  }
+  li.product {
+    width: 300px;
+    margin: auto;
+    margin-top: spacer();
+    @include from(2) {
+      @include span(6);
+    }
+    @include from(3) {
+      @include span(4);
+    }
+    @include from(4) {
+      @include span(3);
+    }
+  }
+}
+
+&.list {
+  li {
+    @include span(12);
+  }
+}
+
+
 }

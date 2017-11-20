@@ -3,3 +3,28 @@
  *  ***************************************************************************
  */
 
+ @mixin button( $color: color(brand)) {
+  border: 1px solid $color;
+  line-height: 30px;
+  height: 30px;
+  display: inline-block;
+  padding: 0 10px;
+  padding-bottom: 1px;
+  text-transform: uppercase;
+  background-color: $color;
+  color: white;
+  @include em('font-size', 14px);
+  @include hover() {
+    color: white!important;
+    background-color: darken($color, 10%)
+  }
+  &.outline {
+    background-color: transparent;
+    color: $color;
+  }
+  &.product_type_variable {
+    background-color:lighten($color, 15%);
+    border-color: lighten($color, 15%);
+  }
+  @content;
+}
