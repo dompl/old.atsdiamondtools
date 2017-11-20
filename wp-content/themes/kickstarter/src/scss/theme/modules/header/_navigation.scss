@@ -3,8 +3,8 @@
  *  ********************************************************
  */
 
-$total-menu-items: 7;
-#main-nav-container {
+ $total-menu-items: 7;
+ #main-nav-container {
   background: nav_color(background);
   @include nav-break() {
     background: transparent;
@@ -12,8 +12,10 @@ $total-menu-items: 7;
 }
 
 #navigation {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  @include nav-break() {
+    margin-top: spacer(.5);
+    margin-bottom: spacer(.5);
+  }
   @include from(3) {
     margin-top: 0;
     margin-bottom: 0;

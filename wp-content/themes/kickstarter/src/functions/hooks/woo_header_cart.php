@@ -19,11 +19,11 @@ function header_cart()
       <?php if ($count > 0): ?>
         <a href="<?php echo $cart_url; ?>"><i class="icon-shopping-cart"></i></a>
         <span class="total-items"><?php echo $items ?></span><span class="colon">:</span>
-        <span class="total-total"><a href="<?php echo $cart_url; ?>"><?php echo $total ?> <?php esc_html_e('View Basket', 'TEXT_DOMAIN')?></a></span>
+        <span class="total-total"><a href="<?php echo $cart_url; ?>"><?php echo $total ?><span class="button"><?php esc_html_e('View Basket', 'TEXT_DOMAIN')?></span></a></span>
       <?php else: ?>
         <a href="<?php echo $shop_url; ?>"><i class="icon-shopping-cart"></i></a>
         <span class="total-items empty"><?php esc_html_e('Cart is empty', 'TEXT_DOMAIN')?></span><span class="colon">:</span>
-        <span class="total-total"><a href="<?php echo $shop_url; ?>"><?php esc_html_e('Start Shopping', 'TEXT_DOMAIN');?></a></span>
+        <span class="total-total"><a href="<?php echo $shop_url; ?>"><span class="button"><?php esc_html_e('Visit Shop', 'TEXT_DOMAIN');?></span></a></span>
       <?php endif?>
     </div>
   </div>
