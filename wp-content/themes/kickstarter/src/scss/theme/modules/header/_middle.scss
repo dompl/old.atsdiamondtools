@@ -79,7 +79,7 @@
     @include span(4);
   }
   .search-section {
-    @include span(5);
+    @include span(4.5);
     text-align: right;
     @include search-box();
     @include breakpoint(min-width $nav-breakpoint) {
@@ -87,7 +87,7 @@
     }
   }
   .cart-section {
-    @include span(3);
+    @include span(3.5);
     text-align: right;
     line-height: 30px;
     #the-cart {
@@ -118,7 +118,7 @@
         color:color(text);
         @include em('font-size', 20px);
         @include from(4) {
-          @include em('font-size', 30px);
+          @include em('font-size', 20px);
         }
       }
     }

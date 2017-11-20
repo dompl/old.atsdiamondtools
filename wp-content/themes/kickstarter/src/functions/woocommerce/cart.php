@@ -7,8 +7,8 @@ add_filter( 'woocommerce_add_to_cart_fragments', 'woocommerce_header_add_to_cart
 function woocommerce_header_add_to_cart_fragment( $fragments ) {
   ob_start();
   do_action('cart');
-  $fragments['#the-cart'] = ob_get_clean();
-
+  $fragments['#the-cart'] = ob_get_contents();
+  ob_end_clean();
   return $fragments;
 }
 /* The same cart for mobile */
@@ -16,9 +16,8 @@ add_filter( 'woocommerce_add_to_cart_fragments', 'woocommerce_header_add_to_cart
 function woocommerce_header_add_to_cart_fragment_mobile( $fragments ) {
   ob_start();
   do_action('cart_mobile');
-  $fragments['#the-cart-mobile'] = ob_get_clean();
-
-  return $fragments;
+  $fragments['#the-cart-mobile'] = ob_get_contents();
+  ob_end_clean();
 }
 /*  ********************************************************
  *   Checkout cart styling

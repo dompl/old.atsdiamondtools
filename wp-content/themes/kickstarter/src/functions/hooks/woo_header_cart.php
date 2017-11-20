@@ -38,12 +38,10 @@ function header_cart()
     $shop_url = get_permalink(wc_get_page_id('shop'));
     ?>
     <div id="the-cart-mobile">
-      <div class="clx">
-        <?php if ($count > 0): ?>
-          <a href="<?php echo $cart_url; ?>"><i class="icon-shopping-cart"></i> <span><?php echo $items ?></span></a>
-        <?php else: ?>
-          <a href="<?php echo $shop_url; ?>"><i class="icon-shopping-cart"></i> <span>0</span></a>
-        <?php endif?>
-      </div>
+      <?php if ($count > 0): ?>
+        <a href="<?php echo $cart_url; ?>"><i class="icon-shopping-cart"></i> <span><?php echo $items ?></span></a>
+      <?php else: ?>
+        <a href="<?php echo $shop_url; ?>"><i class="icon-shopping-cart"></i> <span>0</span></a>
+      <?php endif?>
     </div>
     <?php }
