@@ -162,5 +162,6 @@ function ats_setup_product_listing_layout_()
   remove_all_actions('woocommerce_shop_loop_item_title');
   remove_all_actions('woocommerce_after_shop_loop_item_title');
   remove_all_actions('woocommerce_after_shop_loop_item');
+  remove_action('woocommerce_after_shop_loop', 'woocommerce_pagination', 10);
 }
 //}

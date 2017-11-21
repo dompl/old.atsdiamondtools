@@ -31,10 +31,20 @@ function ats_change_ordering_structure_()
   </ul>
   </div>';
 
+
   $selector .= '<div class="right">';
 
   ob_start();
   woocommerce_catalog_ordering();
+  $selector .= ob_get_contents();
+  ob_end_clean();
+
+  $selector .= '</div>';
+
+  $selector .= '<div class="pagination">';
+
+  ob_start();
+  woocommerce_pagination();
   $selector .= ob_get_contents();
   ob_end_clean();
 
@@ -63,8 +73,16 @@ function ats_change_orderings_structure_()
   remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
 
   add_action('ats_loop_start', 'ats_loop_start_', 10);
+  // add_action('ats_woocommerce_pagination', 'woocommerce_pagination');
 }
 
+/* Cnage arraows in pagination */
+add_filter( 'woocommerce_pagination_args',  'ats_woo_pagination' );
+function ats_woo_pagination( $args ) {
+  $args['prev_text'] = '<i class="icon-chevron-left"></i>';
+  $args['next_text'] = '<i class="icon-chevron-right"></i>';
+  return $args;
+}
 /**
  * Open product loop ( includes cookies)
  * ---

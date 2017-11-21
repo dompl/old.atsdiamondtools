@@ -7,11 +7,11 @@
   $box-size: 30px;
   margin-top: - spacer(.5);
   .container {
-    border-bottom:1px solid color(border);
+    border-bottom: 1px solid color(border);
     margin-bottom: spacer(.5);
     padding-bottom: spacer(.5);
   }
-  & + .message-container {
+  &+.message-container {
     margin-bottom: spacer(.5);
   }
   /* View switcher */
@@ -32,7 +32,7 @@
         &.active {
           background: color(text);
           color: white;
-          border-color:color(text);
+          border-color: color(text);
         }
       }
 
@@ -42,18 +42,18 @@
     }
   }
   select {
-    background:white;
-    outline:none!important;
-    border:none;
+    background: white;
+    outline: none!important;
+    border: none;
     width: 100%;
-    height:$box-size + 2px;
+    height: $box-size + 2px;
     @include em('font-size', 14px);
-    border:1px solid color(border);
+    border: 1px solid color(border);
     -webkit-appearance: none;
     -webkit-border-radius: 0;
     border-radius: 0;
-    color:color(text);
-    padding:0 8px;
+    color: color(text);
+    padding: 0 8px;
   }
   .right {
     position: relative;
@@ -62,37 +62,81 @@
       @include scut-center-transform(y);
     }
   }
+  .pagination {
+    ul {
+      @include em('font-size', 14px);
+      li {
+        width: $box-size;
+        height: $box-size;
+        line-height: $box-size;
+        i {
+          line-height: $box-size;
+          @include em('font-size', 12px);
+          &.chevron-left {
+            float: left;
+          }
+          &.chevron-right {
+            float: right;
+          }
+        }
+        a,
+        span {
+          text-align: center;
+          font-size: 14px;
+          display: block;
+          float: left;
+          width: $box-size;
+          height: $box-size;
+          line-height: $box-size;
+          border: 1px solid transparent;
+        }
+        span {
+          border-color: color(border);
+          font-weight: bold;
+        }
+        a {
+          @include hover() {
+            background:color(text);
+            color:white!important;
+          }
+        }
+      }
+    }
+  }
   /* Topography */
-
-  .left {
-    @include span(12);
-  }
-  .right {
-    @include span(12);
-  }
   @include from(1) {
     .left {
-      @include span(4);
+      @include span(5);
     }
     .right {
-      @include span(8);
+      @include span(7);
+    }
+    .pagination {
+      display: none;
     }
   }
   @include from(2) {
     .left {
-      @include span(7);
+      @include span(2);
     }
     .right {
       @include span(5);
+      @include push(5);
+    }
+    .pagination {
+      @include span(5);
+      @include pull(10);
+      display: block;
+      margin-top: 0;
     }
   }
-  @include from(4) {
+  @include from(3) {
     .left {
-      @include span(9);
+      @include span(2);
     }
     .right {
       @include span(3);
+      @include push(7);
     }
   }
-
 }

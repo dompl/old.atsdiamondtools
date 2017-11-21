@@ -60,44 +60,50 @@
     @if $filename == cart-plus {
         $char: "\E00B";
     }
-    @if $filename == envelope {
+    @if $filename == chevron-left {
         $char: "\E00C";
     }
-    @if $filename == facebook {
+    @if $filename == chevron-right {
         $char: "\E00D";
     }
-    @if $filename == home {
+    @if $filename == envelope {
         $char: "\E00E";
     }
-    @if $filename == linkedin {
+    @if $filename == facebook {
         $char: "\E00F";
     }
-    @if $filename == lock {
+    @if $filename == home {
         $char: "\E010";
     }
-    @if $filename == phone {
+    @if $filename == linkedin {
         $char: "\E011";
     }
-    @if $filename == search {
+    @if $filename == lock {
         $char: "\E012";
     }
-    @if $filename == shopping-cart {
+    @if $filename == phone {
         $char: "\E013";
     }
-    @if $filename == th-large {
+    @if $filename == search {
         $char: "\E014";
     }
-    @if $filename == th-list {
+    @if $filename == shopping-cart {
         $char: "\E015";
     }
-    @if $filename == th {
+    @if $filename == th-large {
         $char: "\E016";
     }
-    @if $filename == twitter {
+    @if $filename == th-list {
         $char: "\E017";
     }
-    @if $filename == user {
+    @if $filename == th {
         $char: "\E018";
+    }
+    @if $filename == twitter {
+        $char: "\E019";
+    }
+    @if $filename == user {
+        $char: "\E01A";
     }
 
     @return $char;
@@ -147,6 +153,12 @@
 }
 .icon-cart-plus {
     @include icon(cart-plus);
+}
+.icon-chevron-left {
+    @include icon(chevron-left);
+}
+.icon-chevron-right {
+    @include icon(chevron-right);
 }
 .icon-envelope {
     @include icon(envelope);
