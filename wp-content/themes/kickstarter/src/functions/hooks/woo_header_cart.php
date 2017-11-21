@@ -5,9 +5,11 @@
  */
 
 add_action('cart', 'header_cart');
+add_action('cart_mobile', 'header_cart_mobile');
+
 function header_cart()
 {
-  global $woocommerce;
+
   $items    = sprintf(_n('%d item', '%d items', WC()->cart->get_cart_contents_count()), WC()->cart->get_cart_contents_count());
   $count    = WC()->cart->get_cart_contents_count();
   $total    = WC()->cart->get_cart_total();
@@ -31,7 +33,6 @@ function header_cart()
 
   function header_cart_mobile()
   {
-    global $woocommerce;
     $items    = WC()->cart->get_cart_contents_count();
     $count    = WC()->cart->get_cart_contents_count();
     $cart_url = wc_get_cart_url();
