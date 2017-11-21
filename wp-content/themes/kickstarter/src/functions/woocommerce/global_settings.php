@@ -21,3 +21,22 @@ function new_loop_shop_per_page( $cols ) {
   $cols = -1;
   return $cols;
 }
+
+/*Add to cart*/
+// add_filter( 'woocommerce_product_single_add_to_cart_text', 'sm_woo_custom_cart_button_text' );
+// add_filter( 'woocommerce_product_add_to_cart_text', 'sm_woo_custom_cart_button_text' );
+
+// function sm_woo_custom_cart_button_text() {
+//   return __( 'Add to cart', 'woocommerce' );
+// }
+
+/*View Cart*/
+function sm_text_view_cart_strings( $translated_text, $text, $domain ) {
+  switch ( $translated_text ) {
+    case 'View basket' :
+    $translated_text = __( '', 'woocommerce' );
+    break;
+  }
+  return $translated_text;
+}
+add_filter( 'gettext', 'sm_text_view_cart_strings', 20, 3 );

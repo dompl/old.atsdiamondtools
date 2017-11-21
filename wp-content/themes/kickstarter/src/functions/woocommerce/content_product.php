@@ -74,14 +74,20 @@ function ats_create_product_listing_layout_()
   $prod .= '</div>'; // End content container
 
   // Add to cart
-  $add_to_cart = sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s">%s</a>',
-    esc_url($product->add_to_cart_url()),
-    esc_attr($id),
-    esc_attr($product->get_sku()),
-    esc_attr(isset($quantity) ? $quantity : 1),
-    esc_attr($product->get_type()),
-    esc_html($product->add_to_cart_text())
-  );
+  $add_to_cart =
+  apply_filters( 'woocommerce_loop_add_to_cart_link',
+    sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s %s %s">%s</a>',
+      esc_url($product->add_to_cart_url()),
+      esc_attr($id),
+      esc_attr($product->get_sku()),
+      esc_attr(isset($quantity) ? $quantity : 1),
+      esc_attr($product->get_type()),
+      $product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button' : '',
+      $product->supports( 'ajax_add_to_cart' ) ? 'ajax_add_to_cart' : '',
+      esc_html($product->add_to_cart_text())
+    ),
+    $product );
+
 
   // Product categories
 
@@ -99,14 +105,14 @@ function ats_create_product_listing_layout_()
   switch ($stock)
   {
     case 'instock':
-      $stock_status = __('In Stock', 'TEXT_DOMAIN');
-      break;
+    $stock_status = __('In Stock', 'TEXT_DOMAIN');
+    break;
     case 'outofstock':
-      $stock_status = __('Out of Stock', 'TEXT_DOMAIN');
-      break;
+    $stock_status = __('Out of Stock', 'TEXT_DOMAIN');
+    break;
     default:
-      $stock_status = '';
-      break;
+    $stock_status = '';
+    break;
   }
   // Stock quantity
   $stock_quantity = $product->get_stock_quantity();

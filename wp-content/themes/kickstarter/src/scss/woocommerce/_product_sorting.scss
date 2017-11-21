@@ -4,9 +4,14 @@
  */
 
  #product-sort {
+  $box-size: 30px;
   margin-top: - spacer(.5);
+  .container {
+    border-bottom:1px solid color(border);
+    margin-bottom: spacer(.5);
+    padding-bottom: spacer(.5);
+  }
   & + .message-container {
-    margin-top: spacer(.5);
     margin-bottom: spacer(.5);
   }
   /* View switcher */
@@ -15,10 +20,9 @@
     li {
       margin-right: 10px;
       span {
-        $box-size: 30px;
         font-size: $box-size - 10px;
         display: block;
-        border: 1px solid color(gray-lightest);
+        border: 1px solid color(border);
         width: $box-size;
         height: $box-size;
         line-height: $box-size;
@@ -28,6 +32,7 @@
         &.active {
           background: color(text);
           color: white;
+          border-color:color(text);
         }
       }
 
@@ -36,10 +41,58 @@
       }
     }
   }
-  /* Topography */
-  .left,
+  select {
+    background:white;
+    outline:none!important;
+    border:none;
+    width: 100%;
+    height:$box-size + 2px;
+    @include em('font-size', 14px);
+    border:1px solid color(border);
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    color:color(text);
+    padding:0 8px;
+  }
   .right {
-    @include span(6)
+    position: relative;
+    @include icon(caret-down) {
+      right: 10px;
+      @include scut-center-transform(y);
+    }
+  }
+  /* Topography */
+
+  .left {
+    @include span(12);
+  }
+  .right {
+    @include span(12);
+  }
+  @include from(1) {
+    .left {
+      @include span(4);
+    }
+    .right {
+      @include span(8);
+    }
+  }
+  @include from(2) {
+    .left {
+      @include span(7);
+    }
+    .right {
+      @include span(5);
+    }
+  }
+  @include from(4) {
+    .left {
+      @include span(9);
+    }
+    .right {
+      @include span(3);
+    }
   }
 
 }
