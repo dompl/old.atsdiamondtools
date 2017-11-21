@@ -3,17 +3,25 @@
  *  ***************************************************************************
  */
 
- @mixin button( $color: color(brand)) {
+ @mixin button( $color: color(brand), $size: "medium") {
   border: 1px solid $color;
-  line-height: 30px;
-  height: 30px;
   display: inline-block;
-  padding: 0 10px;
   padding-bottom: 1px;
   text-transform: uppercase;
   background-color: $color;
   color: white;
-  @include em('font-size', 14px);
+  @if $size=="medium" {
+    line-height: 30px;
+    height: 30px;
+    padding: 0 10px;
+    @include em('font-size', 14px);
+  }
+  @elseif $size=="batch" {
+    line-height: 20px;
+    height: 20px;
+    padding: 0 5px;
+    @include em('font-size', 12px);
+  }
   @include hover() {
     color: white!important;
     background-color: darken($color, 10%)
@@ -23,7 +31,7 @@
     color: $color;
   }
   &.product_type_variable {
-    background-color:lighten($color, 15%);
+    background-color: lighten($color, 15%);
     border-color: lighten($color, 15%);
   }
   @content;

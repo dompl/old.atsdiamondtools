@@ -22,7 +22,7 @@ function ats_add_to_cart_message( $message, $products ) {
   $message    = sprintf('
     %6$s
     <div class="product-name clx"><i class="icon-cart-plus"></i><strong><a href="%1$s">%2$s</a></strong> %5$s</div>
-    <div class="product-link"><a href="%3$s" class="button wc-forwards">%4$s</a></div>
+    <div class="product-link"><a class="button batch" href="%3$s" class="button wc-forwards">%4$s</a></div>
     ',
     esc_attr($product->get_permalink()),
     esc_attr($product->get_title()),
@@ -34,4 +34,4 @@ function ats_add_to_cart_message( $message, $products ) {
   return $message;
 }
 
-add_action('woocommerce_before_shop_loop_item', 'wc_print_notices', 10);
+add_action('woocommerce_archive_description', 'wc_print_notices', 20);

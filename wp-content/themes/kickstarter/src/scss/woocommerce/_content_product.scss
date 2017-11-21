@@ -1,5 +1,5 @@
 /*  ********************************************************
- *   Sibgle product loop
+ *   Single product loop
  *  ********************************************************
  */
 
@@ -202,7 +202,7 @@
   li.product {
     width: 300px;
     margin: auto;
-    margin-top: spacer();
+    margin-bottom: spacer();
     @include from(2) {
       @include span(6);
     }

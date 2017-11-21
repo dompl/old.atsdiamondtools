@@ -13,6 +13,9 @@
 %hide {
   @include scut-hide-visually;
 }
+@mixin hide() {
+  @include scut-hide-visually;
+}
 
 %transition {
   @include transition(all, 300ms);

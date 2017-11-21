@@ -6,7 +6,7 @@
   line-height: 26px;
   line-height: 26px;
   padding: 5px 10px;
-  @include em('font-size', 14px);
+  @include em('font-size', 13px);
   background: lighten(color(gray-lightest), 10%);
   border-bottom: 2px solid color(success);
   @extend %clx;
@@ -18,8 +18,12 @@
       float: left;
     }
   }
+
   .product-name {
     float: left;
+    a {
+      color:color(success);
+    }
     i {
       float: left;
       margin-right: 10px;
@@ -27,5 +31,28 @@
   }
   .product-link {
     float: right;
+    a {
+      @include button(color(success), batch);
+    }
+  }
+  @include to(3) {
+    text-align: center;
+    line-height: 1.2;
+    i, .product-image {
+      @include hide();
+    }
+  }
+  @include to(1) {
+    @include em('font-size', 14px);
+    .product-name {
+      a {display: block};
+      width: 100%;
+    }
+    .product-link {
+      float: none;
+      clear: both;
+      padding-top: spacer(.25);
+      padding-bottom: spacer(.25) / 2;
+    }
   }
 }

@@ -4,7 +4,7 @@
  *  ********************************************************
  */
 
-add_action('woocommerce_before_shop_loop', 'ats_change_ordering_structure_', 10);
+add_action('woocommerce_archive_description', 'ats_change_ordering_structure_', 10);
 
 function ats_change_ordering_structure_()
 {

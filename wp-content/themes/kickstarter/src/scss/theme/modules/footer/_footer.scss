@@ -5,6 +5,9 @@
 
  #footer {
   margin-top: spacer();
+  .tax-product_cat & {
+    margin-top: 0;
+  }
   padding: spacer() 0 0;
   @include em('font-size', 14px);
   background: color(gray-lightest);

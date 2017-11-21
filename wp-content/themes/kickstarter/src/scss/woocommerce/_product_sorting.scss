@@ -4,6 +4,11 @@
  */
 
  #product-sort {
+  margin-top: - spacer(.5);
+  & + .message-container {
+    margin-top: spacer(.5);
+    margin-bottom: spacer(.5);
+  }
   /* View switcher */
   ul {
     @include scut-list-inline();
