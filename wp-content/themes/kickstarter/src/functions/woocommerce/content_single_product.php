@@ -54,6 +54,8 @@ function ats_single_product_image_gallery()
     $gallery .= '<div class="product__slider-thmb">';
     foreach ($image_ids as $image_id)
     {
+      $attachment      = get_post($image_id);
+      $full_size_image = $attachment->guid;
       $image = image_array($image_id, '', $image_width / 4.1, $image_height / 4.1, true);
 
       $gallery .= '<div class="slide">';
@@ -68,9 +70,13 @@ function ats_single_product_image_gallery()
     /* If is sinlge image */
   {
     $image = image_figure($single_image_id, '', $image_width, $image_height, $image_crop);
-
+    $attachment      = get_post($single_image_id);
+    $full_size_image = $attachment->guid;
+    $caption         = $attachment->post_excerpt;
     $gallery .= '<div class="single-image">';
+    $gallery .= '<a href="' . $full_size_image . '" data-lightbox="image-1" data-title="' . $caption . '">';
     $gallery .= $image;
+    $gallery .= '</a>';
     $gallery .= '</div>';
   }
 
