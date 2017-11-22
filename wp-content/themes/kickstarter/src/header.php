@@ -5,6 +5,7 @@
   <?php
   if (file_exists(dirname(__FILE__) . '/../../../../../env_staging'))
   {
+    echo '<script src="//cdn.trackduck.com/toolbar/prod/td.js" async data-trackduck-id="5a141e37bb01984a4aef967f"></script>';
     echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
   }
   ?>
