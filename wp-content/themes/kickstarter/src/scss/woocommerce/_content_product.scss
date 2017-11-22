@@ -36,6 +36,7 @@
       }
       .product-list-start {
         .product-list-image {
+          height: auto!important;
           @include span(3 after)
         }
         .product-content-container {
@@ -159,6 +160,8 @@
     .product-content-container {
       clear: both;
     }
+
+
     .gh {
       display: none;
     }

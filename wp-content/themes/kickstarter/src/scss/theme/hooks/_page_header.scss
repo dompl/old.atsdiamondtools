@@ -4,23 +4,40 @@
  */
 
  header#page-header {
-  color:white;
+  color: white;
   padding: spacer() 0;
-  margin:0 0 spacer() 0;
+  margin: 0 0 spacer() 0;
+  &.has-image {
+    position: relative;
+    .container {
+      z-index: 10;
+      position: relative;
+    }
+    &:after {
+      content: "";
+      background: rgba(black, .8);
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+    }
+  }
   &.no-image {
-    color:color(text);
+    color: color(text);
     background: color(gray-lightest);
     a {
-      color:lighten(color(text), 10%);
+      color: lighten(color(text), 10%);
     }
   }
   h1 {
-    width:50%;
+    width: 50%;
     margin-top: -12px;
     float: left;
     display: block;
     margin-bottom: 0;
-
   }
   .header-description {
     clear: both;
@@ -35,7 +52,7 @@
     }
   }
   a {
-    color:rgba(white, .6);
+    color: rgba(white, .6);
   }
   .page-breadcrumbs {
     float: left;
@@ -46,14 +63,15 @@
     font-style: italic;
   }
   @include to(4) {
-   .header-description, h1 {
-    width:100%;
+    .header-description,
+    h1 {
+      width: 100%;
+    }
+    h1 {
+      @include em('font-size', 24px);
+    }
+    .header-description {
+      @include em('font-size', 14px);
+    }
   }
-  h1 {
-    @include em('font-size', 24px);
-  }
-  .header-description {
-    @include em('font-size', 14px);
-  }
-}
 }

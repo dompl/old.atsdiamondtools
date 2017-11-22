@@ -6,18 +6,44 @@
 
 add_action('page_header', 'page_header_', 10, 1);
 
+function ats_acf_banner_helper($post_id)
+{
+
+  $class       = ' has-image';
+  $banner_id   = '';
+  $banner_type = get_field('banner_set_image', $post_id); // none :: custom :: featured
+
+  /* If banner is set to use no image */
+  if ($banner_type === 'none')
+  {
+    $class = ' no-image';
+  }
+  /* If banner is set to use custom image */
+
+  elseif ($banner_type === 'custom')
+  {
+    $banner_id = get_field('banner_set_image', $post_id);
+  }
+  /* If banner is set to use featured image */
+
+  elseif ($banner_type === 'featured')
+  {
+    $banner_id = get_post_thumbnail_id($shop_pid);
+  }
+
+  return $banner_id;
+}
+
 function page_header_($thumnail_id)
 {
 
   global $wp_query;
 
+  $image_widht  = 800;
+  $image_height = 300;
 
-
-  $image_widht       = 800;
-  $image_height      = 300;
-
-  $page_title       = '';
-  $page_breadcrumbs = '';
+  $page_title        = '';
+  $page_breadcrumbs  = '';
   $page_image        = '';
   $page_image_retina = '';
 
@@ -66,44 +92,37 @@ function page_header_($thumnail_id)
 
   }
   /**
-   * Header for Main shop page
-   * ---
-   */
-  elseif (is_shop())
-  {
-    // Page image
-    $shop_pid   = get_option('woocommerce_shop_page_id');
-    $page_title = get_the_title($shop_pid);
-    if (has_post_thumbnail($shop_pid))
-    {
-      $thumnail_id       = get_post_thumbnail_id($shop_pid);
-      $page_image        = image_array($thumnail_id, '', $image_widht, $image_height)['url'];
-      $page_image_retina = image_array($thumnail_id, '', $image_widht * 2, $image_height * 2)['url'];
-    }
-
-    // Breadcrumbs
-    ob_start();
-    woocommerce_breadcrumb();
-    $page_breadcrumbs = ob_get_contents();
-    ob_end_clean();
-  }
-  /**
    * Header for pages other then page categories
    * ---
    */
   else
   {
 
-    // Page Title
-    $page_title = get_the_title();
+    $pid         = is_shop() ? get_option('woocommerce_shop_page_id') : get_the_ID();
+    $page_title  = get_the_title($pid);
+    $banner_type = get_field('banner_background', $pid); // none :: custom :: featured
+    $thumnail_id = '';
 
-    // Page image
-    if (has_post_thumbnail())
+    if ((has_post_thumbnail($pid) && $banner_type === 'featured') || ($banner_type === 'custom' && get_field('banner_set_image', $pid)))
     {
-      $thumnail_id       = get_post_thumbnail_id();
+      if ($banner_type === 'featured')
+      {
+        $thumnail_id = get_post_thumbnail_id($pid);
+      }
+      else
+      {
+        $thumnail_id = get_field('banner_set_image', $pid);
+      }
+
       $page_image        = image_array($thumnail_id, '', $image_widht, $image_height)['url'];
       $page_image_retina = image_array($thumnail_id, '', $image_widht * 2, $image_height * 2)['url'];
     }
+
+    /* Breadcrumbs */
+    ob_start();
+    woocommerce_breadcrumb();
+    $page_breadcrumbs = ob_get_contents();
+    ob_end_clean();
   }
 
 // If is single product
@@ -154,7 +173,6 @@ function page_header_($thumnail_id)
   echo $page_header;
 
 };
-
 
 /**
  * Header changes for woocommerce

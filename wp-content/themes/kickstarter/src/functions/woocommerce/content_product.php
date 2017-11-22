@@ -41,7 +41,7 @@ function ats_create_product_listing_layout_()
 
   // Product image
   $prod .= sprintf('
-    <div class="product-list-image">
+    <div class="product-list-image clx" data-mh="prod-img">
     <a href="%s" title="%s">%s</a>
     </div>
     ',
