@@ -13,7 +13,8 @@ function ats_single_product_layout()
   <div class="main-right">
     <div class="product-header">
       <h2><?php echo esc_attr($product->get_name()) ?></h2>
-      <div class="product-price"><?php echo $product->get_price_html() ?></div>
+      <span id="product-option"></span>
+      <div class="product-price"><?php do_action('ats_single_product_price') ?></div>
     </div>
     <div class="product-top-colleterals">
       <div class="category">
@@ -26,7 +27,20 @@ function ats_single_product_layout()
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
     </div>
-  </div>
-  <div class="description"></div>
+    <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?><div>
+    </div>
+    <?php
+  }
+  add_action('template_redirect', 'ats_setup_single_single');
 
-  <?php }
+  function ats_setup_single_single()
+  {
+    add_action('ats_single_add_to_cart', 'woocommerce_template_single_add_to_cart');
+    add_action('ats_single_product_price', 'custom_wc_template_single_price');
+  }
+
+// removing the price of variable products
+  remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
+
+// Change location of
+
