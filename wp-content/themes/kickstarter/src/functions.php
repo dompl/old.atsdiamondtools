@@ -54,6 +54,7 @@ if (defined('WPB_VC_VERSION'))
 if (class_exists('WooCommerce'))
 {
   load_files('functions/woocommerce');
+  load_files('functions/woocommerce/single');
 }
 
 // Only the bare minimum to get the theme up and running

@@ -1,7 +1,12 @@
-#product-72 {
+/*  ********************************************************
+ *   Single product settings
+ *  ********************************************************
+ */
 
-  img {
-    max-width: 600px!important;
-    float: left;
+/* Layout */
+
+#single-product-container {
+  .main-left, .main-right {
+    @include span(6);
   }
 }
