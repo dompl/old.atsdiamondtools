@@ -61,7 +61,7 @@ module.exports = {
         bundles: { // Bundles are defined by a name and an array of chunks (below) to concatenate; warning: this method offers no dependency management!
             footer: ['footer'],
             admin: ['admin'],
-            single_product: ['single_product'],
+            singleproduct: ['singleproduct'],
         },
         chunks: { // Chunks are arrays of paths or globs matching a set of source files; this way you can organize a bunch of scripts that go together into pieces that can then be bundled (above)
             // The core footer chunk is loaded no matter what; put essential scripts that you want loaded by your theme in here
@@ -83,7 +83,7 @@ module.exports = {
             admin: [ // Header Scripts
                 src + 'js/admin.js'
             ],
-            single_product: [ // Header Scripts
+            singleproduct: [ // Single product scripts
                 modules + 'lightbox2/src/js/lightbox.js',
                 src + 'js/single-product.js'
             ],

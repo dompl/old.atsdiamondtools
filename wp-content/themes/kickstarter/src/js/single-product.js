@@ -3,21 +3,65 @@
 (function($) {
 		$(function() {
 				/* Prudyct Manipulation */
+				//  $('body').hide();
+				$('.variations select').blur(function() {
+						var VarioationID = $('input.variation_id').val();
+
+						if ('' != VarioationID) {
+
+								var variationName = $(this).find('option:selected').text();
+								var variationsArray = $("form.variations_form").data("product_variations");
 
 
-				$('.variations select').change(function(event) {
 
-						var newtext = $(this).find('option:selected').text();
+								$.each(variationsArray, function(n) {
+										if (variationsArray[n].variation_id == VarioationID) {
 
+												// console.log(variationsArray[n].availability_html);
+												/* Product SKU */
+												var atsSKU = variationsArray[n].sku;
+												var atsVarDescription = variationsArray[n].variation_description;
+												if ('' != atsSKU) {
+														$('#var_sku').text(atsSKU);
+												} else {
+														$('#var_sku').text('N/A');
+												}
+												/* Variation Desciption */
+												if ('' != atsVarDescription) {
+														var atsVarDescriptionHTML = '<div class="variation-title"><h3>' + variationName + '</h3><p class="variation-description">' + atsVarDescription + '</p></div>';
+														$('#variation_short').addClass('active').html(atsVarDescriptionHTML);
+												} else {
+														$('#variation_short').removeClass('active').html('');
+												}
 
+												var atsVarStock = variationsArray[n].is_in_stock;
+												var atsVarRegPrice = variationsArray[n].display_regular_price;
+												console.log(atsVarRegPrice);
+												if (false == atsVarStock || '' == atsVarRegPrice ) {
+														var OutOfStock = '<div class="not-in-stock">Sorry, ' + variationName + ' is currently out of stock</p>';
+														$('#variation_stock').addClass('out-of-stcok').html(OutOfStock);
+												} else {
+														$('#variation_stock').removeClass('out-of-stcok').html('');
+												}
 
-						if ($(this).val() != '') {
-								$('#product-option').text(newtext);
+										}
+								});
+
+								$('p.price').html($('div.woocommerce-variation-price > span.price').html());
+
+								/* Variation Name */
+								$('#product-option').text(variationName);
 
 						} else {
+								$('p.price').html($('div.hidden-variable-price').html());
+								$('#var_sku').text('Per Variation');
+								if ($('p.availability')) $('p.availability').remove();
+
+								/* Variation Name */
 								$('#product-option').text('');
 						}
 				});
+
 
 				/* lightbox */
 				lightbox.option({
@@ -61,15 +105,15 @@
 						});
 						// // init slider
 						// require( function(slider) {
-						// 		$('.product__slider-main').each(function() {
-						// 				me.slider = new slider($(this), options, sliderOptions, previewSliderOptions);
-						// 				// stop slider
-						// 				//me.slider.stop();
-						// 				// start slider
-						// 				//me.slider.start(index);
-						// 				// get reference to slick slider
-						// 				//me.slider.getSlick();
-						// 		});
+						//      $('.product__slider-main').each(function() {
+						//              me.slider = new slider($(this), options, sliderOptions, previewSliderOptions);
+						//              // stop slider
+						//              //me.slider.stop();
+						//              // start slider
+						//              //me.slider.start(index);
+						//              // get reference to slick slider
+						//              //me.slider.getSlick();
+						//      });
 						// });
 						var options = {
 								progressbarSelector: '.bJS_progressbar',

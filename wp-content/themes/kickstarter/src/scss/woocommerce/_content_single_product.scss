@@ -3,10 +3,25 @@
  *  ********************************************************
  */
 
+
+/* Hide Main price on variable product */
+div {
+  &.woocommerce-variation-price,
+  &.woocommerce-variation-availability,
+  &.woocommerce-variation-description,
+  &.woocommerce-variation-price,
+  &.woocommerce-variation,
+  &.woocommerce-variation-availability,
+  &.hidden-variable-price {
+    @extend %hide;
+  }
+}
+
 /* Layout */
 
 #single-product-container {
-  .main-left, .main-right {
+  .main-left,
+  .main-right {
     @include span(6);
   }
 }

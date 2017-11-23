@@ -24,34 +24,12 @@ function custom_wc_template_single_price(){
     }
 
     ?>
-    <style>
-    div.woocommerce-variation-price,
-    div.woocommerce-variation-availability,
-    div.hidden-variable-price {
-      height: 0px !important;
-      overflow:hidden;
-      position:relative;
-      line-height: 0px !important;
-      font-size: 0% !important;
-    }
-  </style>
-  <script>
-    jQuery(document).ready(function($) {
-      $('select').blur( function(){
-        if( '' != $('input.variation_id').val() ){
-            //$('p.price').html($('div.woocommerce-variation-price > span.price').html()).append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>');
-            $('p.price').html($('div.woocommerce-variation-price > span.price').html());
-            console.log($('input.variation_id').val());
-          } else {
-            $('p.price').html($('div.hidden-variable-price').html());
-            if($('p.availability'))
-              $('p.availability').remove();
-            console.log('NULL');
-          }
-        });
-    });
-  </script>
-  <?php
-  echo '<p class="price">'.$price.'</p><div class="hidden-variable-price" >'.$price.'</div>';
-endif;
+    <script>
+      jQuery(document).ready(function($) {
+
+      });
+    </script>
+    <?php
+    echo '<p class="price">'.$price.'</p><div class="hidden-variable-price" >'.$price.'</div>';
+  endif;
 }

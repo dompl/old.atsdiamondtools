@@ -10,7 +10,7 @@ function ats_single_sku( $product_id , $show_sku = true, $sku = '' ) {
     return;
   }
   if ( $product->is_type( 'variable' ) ) {
-    $sku = __('Per Variation', 'TEXT_DOMAIN');
+    $sku = '<span id="var_sku">'.__('Per Variation', 'TEXT_DOMAIN').'</span>';
   } else {
     if ($product->get_sku() != '') {
       $sku = $product->get_sku();
