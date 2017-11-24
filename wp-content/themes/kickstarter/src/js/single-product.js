@@ -12,32 +12,55 @@
 								var variationName = $(this).find('option:selected').text();
 								var variationsArray = $("form.variations_form").data("product_variations");
 
-
-
 								$.each(variationsArray, function(n) {
 										if (variationsArray[n].variation_id == VarioationID) {
 
-												// console.log(variationsArray[n].availability_html);
+												console.log(variationsArray[n]);
 												/* Product SKU */
 												var atsSKU = variationsArray[n].sku;
 												var atsVarDescription = variationsArray[n].variation_description;
 												if ('' != atsSKU) {
 														$('#var_sku').text(atsSKU);
+														var atsCaptionSku = ' (SKU: ' + atsSKU + ') '
 												} else {
 														$('#var_sku').text('N/A');
+														var atsCaptionSku = '';
+												}
+
+												/* Variation image */
+
+												var atsVarImage = variationsArray[n].image; // Returns array
+												console.log(atsVarImage);
+												if ('' != atsVarImage && variationsArray[n].image_id != $('.prod-main-image').data('image-id')) {
+														$('.variation-image').remove();
+														$('.variation-wrapper').addClass('has-variation');
+														atsVarImageHTML = '<div class="variation-image"><a href="' + atsVarImage.url + '" data-lightbox="variation-image-' + VarioationID + '" data-title="' + $('.product-header h2').text() + ' - ' + variationName + atsCaptionSku + atsVarImage.caption + '"><img src="' + atsVarImage.src + '"></a></div>';
+														$('#variation_short').before(atsVarImageHTML);
+
+														if ('' != atsVarDescription) {
+																$('.variation-image').addClass('has-description');
+														} else {
+																$('.variation-image').removeClass('has-description');
+
+														}
+														$('#variation_short').addClass('has-variation-image');
+												} else {
+														$('.variation-image').remove();
+														$('#variation_short').removeClass('has-variation-image');
 												}
 												/* Variation Desciption */
 												if ('' != atsVarDescription) {
+														$('.variation-wrapper').addClass('has-variation');
 														var atsVarDescriptionHTML = '<div class="variation-title"><h3>' + variationName + '</h3><p class="variation-description">' + atsVarDescription + '</p></div>';
-														$('#variation_short').addClass('active').html(atsVarDescriptionHTML);
+														$('#variation_short').addClass('has-variation-description').html(atsVarDescriptionHTML);
 												} else {
-														$('#variation_short').removeClass('active').html('');
+														$('#variation_short').removeClass('has-variation-description').html('');
 												}
 
 												var atsVarStock = variationsArray[n].is_in_stock;
 												var atsVarRegPrice = variationsArray[n].display_regular_price;
-												console.log(atsVarRegPrice);
-												if (false == atsVarStock || '' == atsVarRegPrice ) {
+												// console.log(atsVarRegPrice);
+												if (false == atsVarStock || '' == atsVarRegPrice) {
 														var OutOfStock = '<div class="not-in-stock">Sorry, ' + variationName + ' is currently out of stock</p>';
 														$('#variation_stock').addClass('out-of-stcok').html(OutOfStock);
 												} else {
@@ -59,6 +82,12 @@
 
 								/* Variation Name */
 								$('#product-option').text('');
+								/* Variation description */
+								$('#variation_short').empty();
+								/* Variation Image */
+								$('.variation-image').remove();
+								$('#variation_short').removeClass('has-variation-image');
+								$('.variation-wrapper').removeClass('has-variation');
 						}
 				});
 

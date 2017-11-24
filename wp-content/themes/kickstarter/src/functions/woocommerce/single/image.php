@@ -30,7 +30,26 @@ function ats_single_product_image_gallery()
     $gallery .= '<div id="product__slider">';
 
     /* Main gallery images */
-    $gallery = '<div class="product__slider-main">';
+    $gallery .= '<div class="product__slider-main">';
+    if (has_post_thumbnail())
+    {
+
+      $image_id        = get_post_thumbnail_id($id);
+      $attachment      = get_post($image_id);
+      $full_size_image = $attachment->guid;
+      $caption         = $attachment->post_excerpt;
+      $alt             = get_post_meta($attachment->ID, '_wp_attachment_image_alt', true);
+      $title           = $attachment->post_title;
+
+      $image = image_figure($image_id, '', $image_width, $image_height, $image_crop);
+
+      $gallery .= '<div class="slide">';
+      $gallery .= '<a href="' . $full_size_image . '" data-lightbox="product-image" data-title="' . $caption . '" alt="' . $alt . '" titlt="' . $title . '">';
+      $gallery .= '<div class="prod-main-image" data-image-id="' . $image_id . '">' . $image . '</div>';
+      $gallery .= '</a>';
+      $gallery .= '</div>';
+    }
+
     foreach ($image_ids as $image_id)
     {
       $image = image_figure($image_id, '', $image_width, $image_height, $image_crop);
@@ -43,8 +62,8 @@ function ats_single_product_image_gallery()
       $title           = $attachment->post_title;
 
       $gallery .= '<div class="slide">';
-      $gallery .= '<a href="' . $full_size_image . '" data-lightbox="image-1" data-title="' . $caption . '">';
-      $gallery .= $image;
+      $gallery .= '<a href="' . $full_size_image . '" data-lightbox="product-image" data-title="' . $caption . '">';
+      $gallery .= '<div class="prod-main-image" data-image-id="">' . $image . '</div>';
       $gallery .= '</a>';
       $gallery .= '</div>';
     }
@@ -52,11 +71,20 @@ function ats_single_product_image_gallery()
 
     /* Tbumbnails */
     $gallery .= '<div class="product__slider-thmb">';
+    if (has_post_thumbnail())
+    {
+      $image_id        = get_post_thumbnail_id($id);
+      $full_size_image = $attachment->guid;
+      $image           = image_array($image_id, '', $image_width / 4, $image_height / 4, true);
+      $gallery .= '<div class="slide">';
+      $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';
+      $gallery .= '</div>';
+    }
     foreach ($image_ids as $image_id)
     {
       $attachment      = get_post($image_id);
       $full_size_image = $attachment->guid;
-      $image           = image_array($image_id, '', $image_width / 4.1, $image_height / 4.1, true);
+      $image           = image_array($image_id, '', $image_width / 4, $image_height / 4, true);
 
       $gallery .= '<div class="slide">';
       $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';

@@ -40,7 +40,9 @@ function ats_single_product_layout()
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
     </div>
-    <div id="variation_short"></div>
+    <div class="variation-wrapper">
+      <div id="variation_short"></div>
+    </div>
     <div id="variation_stock"></div>
     <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?><div>
     </div>
