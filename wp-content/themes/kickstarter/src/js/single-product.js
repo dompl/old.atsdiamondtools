@@ -19,9 +19,10 @@
 												/* Product SKU */
 												var atsSKU = variationsArray[n].sku;
 												var atsVarDescription = variationsArray[n].variation_description;
+
 												if ('' != atsSKU) {
 														$('#var_sku').text(atsSKU);
-														var atsCaptionSku = ' (SKU: ' + atsSKU + ') '
+														var atsCaptionSku = ' (SKU: ' + atsSKU + ') ';
 												} else {
 														$('#var_sku').text('N/A');
 														var atsCaptionSku = '';
@@ -33,10 +34,12 @@
 												// console.log(atsVarImage);
 												if ('' != atsVarImage && variationsArray[n].image_id != $('.prod-main-image').data('image-id')) {
 														$('.variation-image').remove();
+														// $('.variation - wrapper
 														$('.variation-wrapper').addClass('has-variation');
 														atsVarImageHTML = '<div class="variation-image"><a href="' + atsVarImage.url + '" data-lightbox="variation-image-' + VarioationID + '" data-title="' + $('.product-header h2').text() + ' - ' + variationName + atsCaptionSku + atsVarImage.caption + '"><img src="' + atsVarImage.src + '"></a></div>';
 														$('#variation_short').before(atsVarImageHTML);
-
+														$('.variation-wrapper').addClass('has-variation');
+														$('.variation-image').addClass('has-description');
 														if ('' != atsVarDescription) {
 																$('.variation-image').addClass('has-description');
 														} else {
@@ -47,21 +50,23 @@
 												} else {
 														$('.variation-image').remove();
 														$('#variation_short').removeClass('has-variation-image');
+														$('.variation-image').removeClass('has-description');
 												}
 												/* Variation Desciption */
 												if ('' != atsVarDescription) {
 														$('.variation-wrapper').addClass('has-variation');
-														var atsVarDescriptionHTML = '<div class="variation-title"><h3>' + variationName + '</h3><p class="variation-description">' + atsVarDescription + '</p></div>';
+														var atsVarDescriptionHTML = '<div class="variation-title"><h3>' + variationName + '</h3><div class="variation-description">' + atsVarDescription + '</div></div>';
 														$('#variation_short').addClass('has-variation-description').html(atsVarDescriptionHTML);
 												} else {
 														$('#variation_short').removeClass('has-variation-description').html('');
+														$('.variation-wrapper').removeClass('has-variation');
 												}
 
 												var atsVarStock = variationsArray[n].is_in_stock;
 												var atsVarRegPrice = variationsArray[n].display_regular_price;
 												// console.log(atsVarRegPrice);
 												if (false == atsVarStock || '' == atsVarRegPrice) {
-														var OutOfStock = '<div class="not-in-stock">Sorry, ' + variationName + ' is currently out of stock</p>';
+														var OutOfStock = '<div class="not-in-stock">Sorry, ' + $('.product-header h2').text() + ' - <strong>(' + variationName + ')</strong> is currently out of stock</p>';
 														$('#variation_stock').addClass('out-of-stcok').html(OutOfStock);
 												} else {
 														$('#variation_stock').removeClass('out-of-stcok').html('');

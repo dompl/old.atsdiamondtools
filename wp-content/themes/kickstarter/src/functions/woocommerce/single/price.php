@@ -23,13 +23,6 @@ function custom_wc_template_single_price(){
       $price = '<del>' . $saleprice . $product->get_price_suffix() . '</del> <ins>' . $price . $product->get_price_suffix() . '</ins>';
     }
 
-    ?>
-    <script>
-      jQuery(document).ready(function($) {
-
-      });
-    </script>
-    <?php
     echo '<p class="price">'.$price.'</p><div class="hidden-variable-price" >'.$price.'</div>';
   endif;
 }

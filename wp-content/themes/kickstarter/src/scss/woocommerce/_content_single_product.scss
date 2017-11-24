@@ -3,23 +3,105 @@
  *  ********************************************************
  */
 
-
-/* Hide Main price on variable product */
-
-div {
-  &.woocommerce-variation-price,
-  &.woocommerce-variation-availability,
-  &.woocommerce-variation-description,
-  &.woocommerce-variation-price,
-  &.woocommerce-variation,
-  &.woocommerce-variation-availability,
-  &.hidden-variable-price {
-    @extend %hide;
+ #single-product-container {
+  /* Product Short Description */
+  // Product Title
+  h2 {
+    @include em('font-size', 24px);
+    line-height: 1.3;
+    position: relative;
+    font-weight: bold;
+    span {
+      position: absolute;
+      bottom: -24px;
+      font-size: 16px;
+      left: 0;
+    }
+  } // Product Price
+  .product-price {
+    @include em('font-size', 20px);
+    color: color(brand);
+    font-weight: bold;
+    margin-top: spacer();
+    margin-bottom: spacer();
   }
-}
+  /* Colleterals */
+  .product-top-colleterals {
+    border: 1px solid color(border);
+    border-left: none;
+    border-right: none;
+    @include em('font-size', 14px);
+    padding: spacer(.5) 0;
+    margin: spacer(.5) 0;
+    >div {
+      float: left;
+      width: 50%;
+      &.sku {
+        text-align: right;
+      }
+    }
+  }
+  /* Short description */
+  .product-short {
+    @include em('font-size', 14px); // margin-bottom: spacer(.5);
+    padding-bottom: spacer(.5);
+    border-bottom: 1px solid color(border);
+    p {
+      @include _last-child() {
+        margin-bottom: 0;
+      }
+    }
+  }
 
-
-#single-product-container {
+  /* Variations */
+  .variation-wrapper {
+    #variation_short {
+      p {
+        @include _last-child() {
+          margin-bottom: 0;
+        }
+      }
+    }
+    &.has-variation {
+      padding-top: spacer(.5);
+      padding-bottom: spacer(.5);
+      border-bottom: 1px solid color(border);
+    } // Variation Title
+    .variation-image {
+      width: 28%;
+      float: left;
+      margin-right: 5%;
+      margin-top: spacer(.5);
+      &.has-description {
+        margin-top: 0;
+        img {
+          margin-bottom: 10px;
+        }
+      }
+    }
+    @include em('font-size', 14px);
+    h3 {
+      @include em('font-size', 18px);
+    }
+    img {
+      float: left;
+      &.has-variation {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  #variation_stock {
+    .not-in-stock {
+      margin-top: spacer(.5);
+      background: color(danger);
+      padding: 10px;
+      @include em('font-size', 12px);
+      color: white;
+      p {
+        @extend %hide;
+      }
+    }
+  }
 
   /* Images */
   // Main Image in slider
@@ -73,8 +155,7 @@ div {
         }
       }
     }
-  }
-  // Thumbnails
+  } // Thumbnails
   .product__slider-thmb {
     & * {
       @extend %transition;
@@ -91,23 +172,23 @@ div {
     i {
       @include em('font-size', 14px);
       @include scut-center-transform(y);
-      background:black;
-      color:white;
+      background: black;
+      color: white;
       position: absolute;
-      cursor:pointer;
-      margin-top:5px;
+      cursor: pointer;
+      margin-top: 5px;
       z-index: 20;
-      padding:2px 2px 1px 0;
+      padding: 2px 2px 1px 0;
       @include opacity(.5);
       &.icon-arrow-thin-right {
-        padding:2px 0 1px 2px;
+        padding: 2px 0 1px 2px;
         right: 0;
       }
     }
     .slick-slide {
       margin-right: 5px;
       margin-left: 5px;
-      outline : none!important;
+      outline: none!important;
       @include opacity(.7);
       @include hover() {
         @include opacity(1);
@@ -116,13 +197,13 @@ div {
         @include opacity(1);
         position: relative;
         &:after {
-          content:"";
+          content: "";
           position: absolute;
           bottom: 0;
           width: 100%;
           height: 3px;
           display: block;
-          background:color(brand);
+          background: color(brand);
         }
       }
     }
@@ -133,5 +214,23 @@ div {
   }
   .main-right {
     @include span(7);
+  }
+}
+
+
+
+
+
+/* Hide Main price on variable product */
+
+div {
+  &.woocommerce-variation-price,
+  &.woocommerce-variation-availability,
+  &.woocommerce-variation-description,
+  &.woocommerce-variation-price,
+  &.woocommerce-variation,
+  &.woocommerce-variation-availability,
+  &.hidden-variable-price {
+    @extend %hide;
   }
 }

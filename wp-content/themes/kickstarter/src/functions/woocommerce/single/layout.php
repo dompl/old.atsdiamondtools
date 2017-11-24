@@ -25,11 +25,10 @@ function ats_single_product_layout()
   <div class="main-left"><?php echo ats_single_product_image_gallery() ?></div>
   <div class="main-right">
     <div class="product-header">
-      <h2><?php echo esc_attr($product->get_name()) ?></h2>
-      <span id="product-option"></span>
+      <h2><?php echo esc_attr($product->get_name()) ?><span id="product-option"></span></h2>
       <div class="product-price"><?php do_action('ats_single_product_price')?></div>
     </div>
-    <div class="product-top-colleterals">
+    <div class="product-top-colleterals clx">
       <div class="category">
         <?php echo wc_get_product_category_list($post->ID, ',', '<span class="category-in">' . _n('Category:', 'Categories:', sizeof(get_the_terms($post->ID, 'product_cat')), 'woocommerce') . ' ', '.</span>'); ?>
       </div>
@@ -40,7 +39,7 @@ function ats_single_product_layout()
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
     </div>
-    <div class="variation-wrapper">
+    <div class="variation-wrapper clx">
       <div id="variation_short"></div>
     </div>
     <div id="variation_stock"></div>
