@@ -15,7 +15,7 @@
 								$.each(variationsArray, function(n) {
 										if (variationsArray[n].variation_id == VarioationID) {
 
-												console.log(variationsArray[n]);
+												// console.log(variationsArray[n]);
 												/* Product SKU */
 												var atsSKU = variationsArray[n].sku;
 												var atsVarDescription = variationsArray[n].variation_description;
@@ -30,7 +30,7 @@
 												/* Variation image */
 
 												var atsVarImage = variationsArray[n].image; // Returns array
-												console.log(atsVarImage);
+												// console.log(atsVarImage);
 												if ('' != atsVarImage && variationsArray[n].image_id != $('.prod-main-image').data('image-id')) {
 														$('.variation-image').remove();
 														$('.variation-wrapper').addClass('has-variation');
@@ -109,18 +109,23 @@
 								fade: true,
 								lazyLoad: 'ondemand',
 								autoplaySpeed: 3000,
+								adaptiveHeight: true,
+								prevArrow: '<i class="icon-arrow-thin-left"></i>',
+								nextArrow: '<i class="icon-arrow-thin-right"></i>',
 								asNavFor: '.product__slider-thmb'
 						});
 						var $slider2 = $('.product__slider-thmb').on('init', function(slick) {
 								$('.product__slider-thmb').fadeIn(1000);
 						}).slick({
-								slidesToShow: 4,
+								slidesToShow: 5,
 								slidesToScroll: 1,
 								lazyLoad: 'ondemand',
 								asNavFor: '.product__slider-main',
 								dots: false,
-								centerMode: false,
-								focusOnSelect: true
+								centerMode: true,
+								focusOnSelect: true,
+								prevArrow: '<i class="icon-arrow-thin-left"></i>',
+								nextArrow: '<i class="icon-arrow-thin-right"></i>',
 						});
 						//remove active class from all thumbnail slides
 						$('.product__slider-thmb .slick-slide').removeClass('slick-active');

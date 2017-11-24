@@ -75,7 +75,7 @@ function ats_single_product_image_gallery()
     {
       $image_id        = get_post_thumbnail_id($id);
       $full_size_image = $attachment->guid;
-      $image           = image_array($image_id, '', $image_width / 4, $image_height / 4, true);
+      $image           = image_array($image_id, '', 70, 70, true);
       $gallery .= '<div class="slide">';
       $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';
       $gallery .= '</div>';
@@ -84,7 +84,7 @@ function ats_single_product_image_gallery()
     {
       $attachment      = get_post($image_id);
       $full_size_image = $attachment->guid;
-      $image           = image_array($image_id, '', $image_width / 4, $image_height / 4, true);
+      $image           = image_array($image_id, '', 70, 70 , true);
 
       $gallery .= '<div class="slide">';
       $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';
