@@ -10,6 +10,7 @@ var theme = 'atsdiamondtools', // The directory name for your theme; change this
     composer = 'vendor/', // Composer packages
     modules = 'node_modules/', // npm packages
     icons = 'icons/', // Fonts folder
+    woojs = 'src/js/woocommerce/', // Fonts folder
     useModernizr = false; // Use or not modernzr in your projectr
 // Project settings
 module.exports = {
@@ -75,6 +76,7 @@ module.exports = {
                 // src + 'js/lib/modernizr.js',
                 // src + 'js/lib/modernizr-fallbacks.js',
                 src + 'js/lib/slick.js', // https://github.com/kenwheeler/slick
+                src + 'js/helpers.js', // Simple heler functions
                 src + 'js/lib/cookie-bar.js', // https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
                 src + 'js/woo.js',
                 src + 'js/footer.js',
@@ -85,7 +87,9 @@ module.exports = {
             ],
             singleproduct: [ // Single product scripts
                 modules + 'lightbox2/src/js/lightbox.js',
-                src + 'js/single-product.js'
+                woojs + 'single/variations.js',
+                woojs + 'single/gallery.js',
+                woojs + 'single/lightbox.js',
             ],
         },
         dest: build + 'js/', // Where the scripts end up in your theme

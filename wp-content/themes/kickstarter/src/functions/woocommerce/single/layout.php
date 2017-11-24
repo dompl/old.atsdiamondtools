@@ -20,12 +20,14 @@ function ats_single_product_layout()
 {
   global $product, $post;
 
-  wp_enqueue_script('single-product', get_template_directory_uri() . '/js/x-singleproduct.js', array('jquery'), false, true);?>
+  wp_register_script('single-product', get_template_directory_uri() . '/js/x-singleproduct.js', array('jquery'), false, true);
+  wp_enqueue_script( 'single-product' );
+  ?>
 
   <div class="main-left"><?php echo ats_single_product_image_gallery() ?></div>
   <div class="main-right">
     <div class="product-header">
-      <h2><?php echo esc_attr($product->get_name()) ?><span id="product-option"></span></h2>
+      <h2><span class="prod_Name"><?php echo esc_attr($product->get_name()) ?></span><span id="product-option"></span></h2>
       <div class="product-price"><?php do_action('ats_single_product_price')?></div>
     </div>
     <div class="product-top-colleterals clx">
@@ -39,11 +41,9 @@ function ats_single_product_layout()
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
     </div>
-    <div class="variation-wrapper clx">
-      <div id="variation_short"></div>
-    </div>
+    <div id="variation-wrapper" class="clx"></div>
     <div id="variation_stock"></div>
     <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?><div>
     </div>
     <?php
-  }
+}
