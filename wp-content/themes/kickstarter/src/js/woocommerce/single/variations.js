@@ -81,18 +81,22 @@
 
 														var_wrapper.removeClass('off-stock');
 														$('#variation-stock').remove();
+
 														// sprintf is available in helpers.js. This is not a standard JS function!
 														var var_out_of_stoch_HTML = sprintf(
-															'<div id="variation-stock" class="not-in-stock">Sorry, %s - <strong>(%s)</strong> is currently out of stock.</div>',
+															'<div id="variation-stock" class="not-in-stock clx"><span class="float">Sorry, %s - <strong>(%s)</strong> is currently out of stock.</span></div>',
 															prod_Name,
 															var_Name
 														);
+														$('#product-option').append('<span id="oos"> (OUT OF STOCK)</span>');
 
 														var_wrapper.addClass('off-stock').append(var_out_of_stoch_HTML);
 
 												} else {
-													var_wrapper.addClass('off-stock');
+
+													var_wrapper.removeClass('off-stock');
 													$('#variation-stock').remove();
+													$('#oos').remove();
 
 												}
 
@@ -117,6 +121,7 @@
 
 								// Remove all elements if there is no variation selected
 								var  remove_var_el = [
+								'#oos',
 								'#variation-stock',
 								'.variation-title',
 								'.variation-image',

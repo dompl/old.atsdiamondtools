@@ -3,59 +3,77 @@
  *  ********************************************************
  */
 
- #single-product-container {
-  /* Product Short Description */
+ .woocommerce-variation-add-to-cart, .ats-add-to-cart {
+  &.woocommerce-variation-add-to-cart-disabled {
+    display: none;
+  }
+}
+
+#single-product-container {
+
   // Product Title
   h2 {
-    @include em('font-size', 24px);
-    line-height: 1.3;
+    @include em('font-size', 22px);
+    font-weight: bold;
     position: relative;
-    font-weight: bold;
-    span {
+    line-height: 1.2;
+    margin: 0;
+    #product-option {
       position: absolute;
-      bottom: -24px;
-      font-size: 16px;
+      bottom: -18px;
       left: 0;
+      font-size: 12px;
     }
-  } // Product Price
-  .product-price {
-    @include em('font-size', 20px);
-    color: color(brand);
-    font-weight: bold;
-    margin-top: spacer();
-    margin-bottom: spacer();
+    #oos {
+      color: color(danger);
+    }
   }
-  /* Colleterals */
+  // Price
+  .product-price {
+    margin: spacer() 0;
+    color: color(brand);
+    @include em('font-size', 20px);
+    font-weight: bold;
+    p {
+      margin: 0;
+    }
+  } // Colleterals
   .product-top-colleterals {
-    border: 1px solid color(border);
-    border-left: none;
-    border-right: none;
-    @include em('font-size', 14px);
-    padding: spacer(.5) 0;
-    margin: spacer(.5) 0;
-    >div {
+    border-top: 1px solid color(border);
+    border-bottom: 1px solid color(border);
+    @include em('font-size', 12px);
+    padding: spacer(.25) 0;
+    .category,
+    .sku {
       float: left;
       width: 50%;
-      &.sku {
-        text-align: right;
-      }
     }
-  }
-  /* Short description */
+    .sku {
+      text-align: right;
+    }
+  } // Short description
   .product-short {
-    @include em('font-size', 14px); // margin-bottom: spacer(.5);
-    padding-bottom: spacer(.5);
-    border-bottom: 1px solid color(border);
+    margin: spacer(1) 0;
+    @include em('font-size', 14px);
     p {
       @include _last-child() {
         margin-bottom: 0;
       }
     }
-  }
-
-  /* Variations */
-  .variation-wrapper {
-    #variation_short {
+  } // Variation vrapper
+  #variation-wrapper {
+    display: none;
+    &.has-variation,
+    &.off-stock {
+      display: block;
+      border-top: 1px solid color(border);
+      padding-top: spacer(.5);
+    }
+    .variation-title {
+      h3 {
+        @include em('font-size', 20px);
+        line-height: 1;
+      }
       p {
         @include _last-child() {
           margin-bottom: 0;
@@ -63,46 +81,49 @@
       }
     }
     &.has-variation {
-      padding-top: spacer(.5);
-      padding-bottom: spacer(.5);
-      border-bottom: 1px solid color(border);
-    } // Variation Title
-    .variation-image {
-      width: 28%;
-      float: left;
-      margin-right: 5%;
-      margin-top: spacer(.5);
-      &.has-description {
-        margin-top: 0;
+      @include em('font-size', 14px);
+    }
+    &.has-image {
+      .variation-image {
+        float: left;
+        width: 25%;
         img {
-          margin-bottom: 10px;
+          float: left;
         }
       }
     }
-    @include em('font-size', 14px);
-    h3 {
-      @include em('font-size', 18px);
-    }
-    img {
-      float: left;
-      &.has-variation {
-        margin-bottom: 10px;
+    &.has-description.has-image {
+      .variation-title {
+        float: right;
+        width: 72%;
       }
     }
-  }
-  #variation_stock {
     .not-in-stock {
-      margin-top: spacer(.5);
-      background: color(danger);
-      padding: 10px;
-      @include em('font-size', 12px);
       color: white;
-      p {
-        @extend %hide;
+      background: color(danger);
+      @include em('font-size', 12px);
+      font-weight: bold;
+      position: relative;
+      padding: 10px;
+      .float {
+        float: left;
+        display: block;
+        margin-top: -1px;
+      }
+      @include icon(info-circle) {
+        float: left;
+        margin-right: 10px;
       }
     }
+  } // Add to cart
+  .ats-add-to-cart {
+    border-top: 1px solid color(border);
+    padding-top: spacer(.5);
+    margin-top: spacer(.5);
+    ul {
+      @include scut-list-unstyled();
+    }
   }
-
   /* Images */
   // Main Image in slider
   .product__slider-main {
@@ -216,10 +237,6 @@
     @include span(7);
   }
 }
-
-
-
-
 
 /* Hide Main price on variable product */
 

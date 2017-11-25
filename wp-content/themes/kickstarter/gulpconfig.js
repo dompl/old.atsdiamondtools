@@ -78,7 +78,7 @@ module.exports = {
                 src + 'js/lib/slick.js', // https://github.com/kenwheeler/slick
                 src + 'js/helpers.js', // Simple heler functions
                 src + 'js/lib/cookie-bar.js', // https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
-                src + 'js/woo.js',
+                woojs + 'listing/sorting.js',
                 src + 'js/footer.js',
                 src + 'js/header.js',
             ],

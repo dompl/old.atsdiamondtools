@@ -3,7 +3,6 @@
  *   Single product image
  *  ********************************************************
  */
-
 function ats_single_product_image_gallery()
 {
 
