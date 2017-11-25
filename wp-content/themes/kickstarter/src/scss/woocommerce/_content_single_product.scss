@@ -3,13 +3,7 @@
  *  ********************************************************
  */
 
- .woocommerce-variation-add-to-cart, .ats-add-to-cart {
-  &.woocommerce-variation-add-to-cart-disabled {
-    display: none;
-  }
-}
-
-#single-product-container {
+ #single-product-container {
 
   // Product Title
   h2 {

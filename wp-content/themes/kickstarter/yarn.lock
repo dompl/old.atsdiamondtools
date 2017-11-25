@@ -4278,6 +4278,10 @@ plur@^2.1.2:
   dependencies:
     irregular-plurals "^1.0.0"
 
+polyfill-number@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/polyfill-number/-/polyfill-number-0.0.1.tgz#f63217dec5a6f240e06746fb15f2b13f19d6742f"
+
 portscanner@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/portscanner/-/portscanner-2.1.1.tgz#eabb409e4de24950f5a2a516d35ae769343fbb96"

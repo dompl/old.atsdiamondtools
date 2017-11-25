@@ -57,56 +57,59 @@
     @if $filename == caret-left {
         $char: "\E00A";
     }
-    @if $filename == cart-plus {
+    @if $filename == caret-right {
         $char: "\E00B";
     }
-    @if $filename == chevron-left {
+    @if $filename == cart-plus {
         $char: "\E00C";
     }
-    @if $filename == chevron-right {
+    @if $filename == chevron-left {
         $char: "\E00D";
     }
-    @if $filename == envelope {
+    @if $filename == chevron-right {
         $char: "\E00E";
     }
-    @if $filename == facebook {
+    @if $filename == envelope {
         $char: "\E00F";
     }
-    @if $filename == home {
+    @if $filename == facebook {
         $char: "\E010";
     }
-    @if $filename == info-circle {
+    @if $filename == home {
         $char: "\E011";
     }
-    @if $filename == linkedin {
+    @if $filename == info-circle {
         $char: "\E012";
     }
-    @if $filename == lock {
+    @if $filename == linkedin {
         $char: "\E013";
     }
-    @if $filename == phone {
+    @if $filename == lock {
         $char: "\E014";
     }
-    @if $filename == search {
+    @if $filename == phone {
         $char: "\E015";
     }
-    @if $filename == shopping-cart {
+    @if $filename == search {
         $char: "\E016";
     }
-    @if $filename == th-large {
+    @if $filename == shopping-cart {
         $char: "\E017";
     }
-    @if $filename == th-list {
+    @if $filename == th-large {
         $char: "\E018";
     }
-    @if $filename == th {
+    @if $filename == th-list {
         $char: "\E019";
     }
-    @if $filename == twitter {
+    @if $filename == th {
         $char: "\E01A";
     }
-    @if $filename == user {
+    @if $filename == twitter {
         $char: "\E01B";
+    }
+    @if $filename == user {
+        $char: "\E01C";
     }
 
     @return $char;
@@ -153,6 +156,9 @@
 }
 .icon-caret-left {
     @include icon(caret-left);
+}
+.icon-caret-right {
+    @include icon(caret-right);
 }
 .icon-cart-plus {
     @include icon(cart-plus);

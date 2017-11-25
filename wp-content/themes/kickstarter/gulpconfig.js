@@ -88,6 +88,8 @@ module.exports = {
             singleproduct: [ // Single product scripts
                 modules + 'lightbox2/src/js/lightbox.js',
                 woojs + 'single/variations.js',
+                modules + 'polyfill-number/lib/polyfill-number.js',
+                woojs + 'single/add-to-cart.js',
                 woojs + 'single/gallery.js',
                 woojs + 'single/lightbox.js',
             ],

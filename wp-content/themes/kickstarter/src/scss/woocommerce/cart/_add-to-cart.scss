@@ -1,0 +1,116 @@
+/*  ********************************************************
+ *   Add to cart
+ *  ********************************************************
+ */
+
+ $general-height: 50px;
+ $label-width: 100px;
+ @mixin buy-button() {
+  border: none;
+  background: color(gray);
+  color: white;
+  text-transform: uppercase;
+  display: block;
+  padding: ($general-height / 4 + 1px) 0 ($general-height / 4 - 1px);
+  width: 65%;
+  height: $general-height;
+  @extend %transition;
+  @include border-radius(0);
+  font-size: 16px;
+  float: right;
+  cursor: pointer!important;
+  font-weight: bold;
+  @include hover() {
+    background: color(brand);
+  }
+}
+
+
+
+/* Add to cart labes settings */
+
+@mixin q-label() {
+  @include em('font-size', 12px);
+  line-height: $general-height;
+  height: $general-height;
+  float: left;
+  width: $label-width;
+  outline: none!important;
+}
+
+@mixin q-input() {
+  border: 1px solid color(border);
+  line-height: $general-height - 2px;
+  float: right;
+  display: block;
+  width: calc(100% - #{$label-width + 22px });
+  padding: 0 10px;
+  margin: 0;
+  outline: none!important;
+}
+
+
+/* Variation reset */
+
+.reset_variations {
+  display: none;
+  visibility: hidden;
+}
+
+.woocommerce-variation-add-to-cart,
+.ats-add-to-cart {
+  @extend %clx;
+  &.woocommerce-variation-add-to-cart-disabled {
+    display: none;
+  }
+  .quantity {
+    float: left;
+    width: 30%;
+    @extend %clx;
+    position: relative;
+    span {
+      @include scut-center-transform(y);
+      @extend %transition;
+      position: absolute;
+      cursor: pointer!important;
+      color: color(brand);
+      height: $general-height - 2px;
+      line-height:$general-height - 2px;
+      border-top:1px solid transparent;
+      border-bottom:1px solid transparent;
+      width:20px;
+      text-align: center;
+      @include hover() {
+        background:color(border);
+        color:color(text);
+        border-color:color(border)
+      }
+      &.plus   {
+        right: 1px;
+      }
+      &.minus {
+        right: $label-width - 3px -6px;
+      }
+    }
+    label {
+      @include q-label();
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none;
+      margin: 0;
+      /* <-- Apparently some margin are still there even though it's hidden */
+    }
+    input {
+      @include q-input();
+      text-align: center;
+      color:color(text);
+      @include em('font-size', 14px);
+    }
+  }
+  button {
+    float: left;
+    @include buy-button();
+  }
+}

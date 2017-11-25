@@ -60,6 +60,7 @@
     "jquery-backstretch": "^2.1.16",
     "jquery-match-height": "^0.7.2",
     "jquery.cookie": "^1.4.1",
-    "lightbox2": "^2.9.0"
+    "lightbox2": "^2.9.0",
+    "polyfill-number": "^0.0.1"
   }
 }
