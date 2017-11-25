@@ -6,18 +6,59 @@
  #single-product-container {
 
   // Product Title
+  .product-top-colleterals, .product-header {
+    display: none;
+    @include from(3) {
+      &.top {
+        display: block;
+      }
+    }
+    @include to(3) {
+      &.bottom {
+        display: block;
+        clear: both;
+        margin-top: spacer(.5);
+        padding-top: spacer(.5);
+        border-top:1px solid color(border);
+        .product-price {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+  .product-header {
+    position: relative;
+  }
   h2 {
     @include em('font-size', 22px);
     font-weight: bold;
-    position: relative;
+    @include from(3) {
+      position: relative;
+    }
     line-height: 1.2;
     margin: 0;
+
     #product-option {
       position: absolute;
       bottom: -18px;
       left: 0;
       font-size: 12px;
     }
+    @include to(2) {
+      .prod_Name {
+        display: none;
+      }
+      #product-option {
+        position: absolute;
+        right: 0;
+        font-size:20px;
+        bottom:auto;
+        left:auto;
+        font-size:12px;
+        @include scut-center-transform(y);
+      }
+    }
+
     #oos {
       color: color(danger);
     }
@@ -25,6 +66,10 @@
   // Price
   .product-price {
     margin: spacer() 0;
+    @include to(2) {
+      margin-top: - spacer(.5);
+      margin-bottom: spacer(.5);
+    }
     color: color(brand);
     @include em('font-size', 20px);
     font-weight: bold;
@@ -48,6 +93,9 @@
   } // Short description
   .product-short {
     margin: spacer(1) 0;
+    @include to(2) {
+      margin-top: 0;
+    }
     @include em('font-size', 14px);
     p {
       @include _last-child() {
@@ -103,9 +151,11 @@
         float: left;
         display: block;
         margin-top: -1px;
+        width:calc(100% - 20px)
       }
       @include icon(info-circle) {
         float: left;
+        width:10px;
         margin-right: 10px;
       }
     }
@@ -225,10 +275,25 @@
   }
   /* Layout */
   .main-left {
-    @include span(5);
+    @include span(12);
+    @include from(3) {
+      @include span(7);
+      @include push(5);
+    }
   }
   .main-right {
-    @include span(7);
+    @include span(12);
+    @include to(2) {
+      #ats-product-images {
+        max-width: 496px;
+        margin-right:auto;
+        margin-left: auto;
+      }
+    }
+    @include from(3) {
+      @include span(5);
+      @include pull(12);
+    }
   }
 }
 

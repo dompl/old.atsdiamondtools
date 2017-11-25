@@ -20,23 +20,23 @@
 				 *   Sticky Navigation
 				 *  ********************************************************
 				 */
-				var stickyNavTop = $('#main-nav-container').offset().top;
-				var stickyNavheight = $('#main-nav-container').outerHeight();
-				var stickyNav = function() {
-						var scrollTop = $(window).scrollTop();
-						if (scrollTop > stickyNavTop) {
-								$('#main-nav-container').addClass('sticky-main-nav');
-								$('#header-middle').css('margin-bottom', stickyNavheight);
-						} else {
-								$('#main-nav-container').removeClass('sticky-main-nav');
-								$('#header-middle').css('margin-bottom', 0);
-						}
-				};
-				stickyNav();
+				// var stickyNavTop = $('#main-nav-container').offset().top;
+				// var stickyNavheight = $('#main-nav-container').outerHeight();
+				// var stickyNav = function() {
+				// 		var scrollTop = $(window).scrollTop();
+				// 		if (scrollTop > stickyNavTop) {
+				// 				$('#main-nav-container').addClass('sticky-main-nav');
+				// 				$('#header-middle').css('margin-bottom', stickyNavheight);
+				// 		} else {
+				// 				$('#main-nav-container').removeClass('sticky-main-nav');
+				// 				$('#header-middle').css('margin-bottom', 0);
+				// 		}
+				// };
+				// stickyNav();
 
-				$(window).scroll(function() {
-						stickyNav();
-				});
+				// $(window).scroll(function() {
+				// 		stickyNav();
+				// });
 
 				/*  ********************************************************
 				 *   LIttle function which will add class 'responsive to the footer'

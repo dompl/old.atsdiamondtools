@@ -105,11 +105,14 @@
     @if $filename == th {
         $char: "\E01A";
     }
-    @if $filename == twitter {
+    @if $filename == times-circle {
         $char: "\E01B";
     }
-    @if $filename == user {
+    @if $filename == twitter {
         $char: "\E01C";
+    }
+    @if $filename == user {
+        $char: "\E01D";
     }
 
     @return $char;
@@ -204,6 +207,9 @@
 }
 .icon-th {
     @include icon(th);
+}
+.icon-times-circle {
+    @include icon(times-circle);
 }
 .icon-twitter {
     @include icon(twitter);

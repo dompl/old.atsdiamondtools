@@ -1,5 +1,6 @@
 // ==== Single product JS ==== //
-;(function($) {
+;
+(function($) {
 		$(function() {
 				if ($('.product__slider-main').length) {
 						var $slider = $('.product__slider-main').on('init', function(slick) {
@@ -27,8 +28,28 @@
 								dots: false,
 								centerMode: true,
 								focusOnSelect: true,
+								infinite: true,
 								prevArrow: '<i class="icon-arrow-thin-left"></i>',
 								nextArrow: '<i class="icon-arrow-thin-right"></i>',
+								responsive: [{
+												breakpoint: 1024,
+												settings: {
+														slidesToShow: 4,
+												}
+										},
+										{
+												breakpoint: 769,
+												settings: {
+														slidesToShow: 5,
+												}
+										},
+										{
+												breakpoint: 480,
+												settings: {
+														slidesToShow: 3,
+												}
+										}
+								]
 						});
 						//remove active class from all thumbnail slides
 						$('.product__slider-thmb .slick-slide').removeClass('slick-active');

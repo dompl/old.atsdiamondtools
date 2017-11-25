@@ -16,7 +16,7 @@ function ats_add_to_cart_message( $message, $products ) {
   $image_id = $product->get_image_id();
   $image = '';
   if ($image_id != '' ) {
-    $image = '<div class="product-image"><a href="'.$product->get_permalink().'"><img src="' . image_array($image_id,'',26,26)['url'] . '" alt="'.esc_attr($product->get_title()).' ' . __('successfully added to your cart.', 'woocommerce').'"></a></div>';
+    $image = '<div class="product-image"><a href="'.$product->get_permalink().'"><img src="' . image_array($image_id,'',27,27, true)['url'] . '" alt="'.esc_attr($product->get_title()).' ' . __('successfully added to your cart.', 'woocommerce').'"></a></div>';
   }
 
   $message    = sprintf('

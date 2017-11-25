@@ -6,6 +6,7 @@
   line-height: 26px;
   line-height: 26px;
   padding: 5px 10px;
+  margin-bottom: spacer();
   @include em('font-size', 13px);
   background: lighten(color(gray-lightest), 10%);
   border-bottom: 2px solid color(success);

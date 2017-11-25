@@ -23,9 +23,14 @@
   @include hover() {
     background: color(brand);
   }
+  @include to(2) {
+    float: none;
+    display: block;
+    width: 100%;
+    margin-top: spacer(1);
+    margin-bottom: spacer();
+  }
 }
-
-
 
 /* Add to cart labes settings */
 
@@ -39,6 +44,9 @@
 }
 
 @mixin q-input() {
+  @include border-radius(0);
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border: 1px solid color(border);
   line-height: $general-height - 2px;
   float: right;
@@ -47,14 +55,64 @@
   padding: 0 10px;
   margin: 0;
   outline: none!important;
+  color: color(text);
+  @include em('font-size', 14px);
+  display: block;
+  background: white;
+  @content;
 }
 
 
-/* Variation reset */
 
-.reset_variations {
-  display: none;
-  visibility: hidden;
+
+/* Variations */
+
+ul.variations {
+  @include to(2) {
+    padding-bottom: 0;
+  }
+  padding-top: spacer(.5);
+  padding-bottom: spacer();
+  li {
+    @extend %clx;
+    margin-bottom: spacer(1);
+    span {
+      position: relative;
+      &.label {
+        @include q-label();
+      }
+      &.value {
+        height: $general-height;
+        float: right;
+        width: calc(100% - #{$label-width});
+        position: relative;
+        @include icon(caret-down) {
+          right: 10px;
+          @include scut-center-transform(y);
+          color:color(brand);
+        }
+        select {
+          @include q-input() {
+            float: right;
+            height: $general-height;
+            width: calc(100% - 0);
+          }
+        }
+      }
+    }
+  }
+
+  .reset_variations {
+    display: none;
+    visibility: hidden;
+    font-weight: bold;
+    @include scut-center-transform(y);
+    left: -23px;
+    color: lighten(color(text), 10%);
+    &:hover {
+      color: color(danger)!important;
+    }
+  }
 }
 
 .woocommerce-variation-add-to-cart,
@@ -66,6 +124,10 @@
   .quantity {
     float: left;
     width: 30%;
+    @include to(3) {
+      float: none;
+      width: 100%;
+    }
     @extend %clx;
     position: relative;
     span {
@@ -75,21 +137,21 @@
       cursor: pointer!important;
       color: color(brand);
       height: $general-height - 2px;
-      line-height:$general-height - 2px;
-      border-top:1px solid transparent;
-      border-bottom:1px solid transparent;
-      width:20px;
+      line-height: $general-height - 2px;
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      width: 20px;
       text-align: center;
       @include hover() {
-        background:color(border);
-        color:color(text);
-        border-color:color(border)
+        background: color(border);
+        color: color(text);
+        border-color: color(border)
       }
-      &.plus   {
+      &.plus {
         right: 1px;
       }
       &.minus {
-        right: $label-width - 3px -6px;
+        left: $label-width + 1px;
       }
     }
     label {
@@ -97,16 +159,12 @@
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
-      /* display: none; <- Crashes Chrome on hover */
       -webkit-appearance: none;
       margin: 0;
-      /* <-- Apparently some margin are still there even though it's hidden */
     }
     input {
       @include q-input();
       text-align: center;
-      color:color(text);
-      @include em('font-size', 14px);
     }
   }
   button {

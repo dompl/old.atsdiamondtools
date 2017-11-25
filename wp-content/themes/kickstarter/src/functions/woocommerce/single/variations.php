@@ -16,7 +16,7 @@ function ats_attribute_label( $label, $name, $product ) {
 
 /* Change variation reset link */
 function ats_change_clear_option() {
-  return '<a class="reset_variations" href="#">x</a>';
+  return '<a class="reset_variations clx" href="#"><i class="icon-times-circle"></i></a>';
 }
 
 /* Change "No variation selected" in variation dropdown */

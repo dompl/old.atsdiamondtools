@@ -24,13 +24,13 @@ function ats_single_product_layout()
   wp_enqueue_script( 'single-product' );
   ?>
 
-  <div class="main-left"><?php echo ats_single_product_image_gallery() ?></div>
-  <div class="main-right">
-    <div class="product-header">
+
+  <div class="main-left">
+    <div class="product-header top">
       <h2><span class="prod_Name"><?php echo esc_attr($product->get_name()) ?></span><span id="product-option"></span></h2>
       <div class="product-price"><?php do_action('ats_single_product_price')?></div>
     </div>
-    <div class="product-top-colleterals clx">
+    <div class="product-top-colleterals clx top">
       <div class="category">
         <?php echo wc_get_product_category_list($post->ID, ',', '<span class="category-in">' . _n('Category:', 'Categories:', sizeof(get_the_terms($post->ID, 'product_cat')), 'woocommerce') . ' ', '.</span>'); ?>
       </div>
@@ -42,8 +42,12 @@ function ats_single_product_layout()
       <?php echo $product->get_short_description() ?>
     </div>
     <div id="variation-wrapper" class="clx"></div>
-    <div id="variation_stock"></div>
-    <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?><div>
+    <div class="product-header bottom">
+      <div class="product-price"><?php do_action('ats_single_product_price')?></div>
     </div>
-    <?php
+    <div id="variation_stock"></div>
+    <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?></div>
+  </div>
+  <div class="main-right"><?php echo ats_single_product_image_gallery() ?></div>
+  <?php
 }
