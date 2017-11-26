@@ -40,6 +40,9 @@ function ats_single_product_layout()
     </div>
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
+      <?php if ($product->get_description() != '' ): ?>
+        <div class="mobile" id="mobile_full"></div>
+      <?php endif; ?>
     </div>
     <div id="variation-wrapper" class="clx"></div>
     <div class="product-header bottom">
@@ -52,5 +55,11 @@ function ats_single_product_layout()
   <div class="main-right">
     <?php echo ats_single_product_image_gallery() ?>
   </div>
+  <?php if ($product->get_description() != '' ): ?>
+  <div class="product-description clx">
+  <h3 class="title"><?php esc_html_e( 'Prodct Description', 'TEXT_DOMAIN') ?></h3>
+  <div class="product-description-content first-last"><?php echo $product->get_description()  ?></div>
+  </div>
+  <?php endif ?>
   <?php
 }

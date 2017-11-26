@@ -2,6 +2,9 @@
 ;(function($) {
 		$(function() {
 
+			var FullProd_Description = $('.product-description-content').html();
+			$('#mobile_full').html(FullProd_Description);
+
 				/* Prudyct Manipulation */
 				$('.variations select').blur(function() {
 

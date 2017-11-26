@@ -39,6 +39,35 @@
     visibility:visible;
   }
 }
+%last-element {
+  p,
+  li,
+  ul,
+  table,
+  tr,
+  td {
+    @include _last_child() {
+      margin-bottom: 0;
+    }
+  }
+}
+
+%first-element {
+  p,
+  li,
+  ul,
+  table,
+  tr,
+  td {
+    @include _first_child() {
+      margin-top: 0;
+    }
+  }
+}
+.first-last {
+  @extend %first-element;
+  @extend %last-element;
+}
 /*  ********************************************************
  *   Helpers
  *   @include scut-list-unstyled;
