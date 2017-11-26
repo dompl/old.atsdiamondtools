@@ -47,7 +47,10 @@ function ats_single_product_layout()
     </div>
     <div id="variation_stock"></div>
     <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?></div>
+     <div class="social-shares clx"><?php do_action('social_shares') ?></div>
   </div>
-  <div class="main-right"><?php echo ats_single_product_image_gallery() ?></div>
+  <div class="main-right">
+    <?php echo ats_single_product_image_gallery() ?>
+  </div>
   <?php
 }

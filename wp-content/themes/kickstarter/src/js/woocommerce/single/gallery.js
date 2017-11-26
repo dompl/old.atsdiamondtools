@@ -1,6 +1,5 @@
 // ==== Single product JS ==== //
-;
-(function($) {
+;(function($) {
 		$(function() {
 				if ($('.product__slider-main').length) {
 						var $slider = $('.product__slider-main').on('init', function(slick) {

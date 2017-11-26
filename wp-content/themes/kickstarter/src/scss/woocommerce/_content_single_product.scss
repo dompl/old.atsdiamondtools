@@ -105,6 +105,12 @@
   } // Variation vrapper
   #variation-wrapper {
     display: none;
+    &.has-variation {
+      padding-bottom: spacer(.5);
+    }
+    &.off-stock {
+      padding-top: spacer(.5)!important;
+    }
     &.has-variation,
     &.off-stock {
       display: block;
@@ -160,10 +166,16 @@
       }
     }
   } // Add to cart
+  .variations_button {
+    margin-top: spacer();
+  }
   .ats-add-to-cart {
     border-top: 1px solid color(border);
-    padding-top: spacer(.5);
-    margin-top: spacer(.5);
+    .single & {
+      padding-top: spacer();
+      padding-bottom: spacer()
+    }
+    // margin-bottom: spacer();
     ul {
       @include scut-list-unstyled();
     }
@@ -269,6 +281,48 @@
           height: 3px;
           display: block;
           background: color(brand);
+        }
+      }
+    }
+  }
+  .social-shares {
+    @include to(2) {
+      margin-bottom: spacer();
+    }
+    p {
+      float: left;
+      width: 100px;
+      @include em('font-size', 12px);
+      margin: 0;
+      line-height: 30px;
+    }
+    ul {
+      float: left;
+      width: calc(100% - 100px);
+      @include scut-list-inline(10px);
+      a {
+        display: block;
+        i {
+          float: left;
+          vertical-align: top;
+          background-color: social(facebook);
+          color:white;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          &.icon-twitter {
+            background-color:social(twitter);
+          }
+          &.icon-linkedin {
+            background-color:social(linkedin);
+          }
+          &.icon-google-plus-g {
+            background-color:social(google-plus);
+          }
+          &.icon-envelope {
+            background-color:color(text);
+          }
         }
       }
     }

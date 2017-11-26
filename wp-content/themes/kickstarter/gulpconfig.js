@@ -91,6 +91,7 @@ module.exports = {
                 modules + 'polyfill-number/lib/polyfill-number.js',
                 woojs + 'single/add-to-cart.js',
                 woojs + 'single/gallery.js',
+                woojs + 'single/socials.js',
                 woojs + 'single/lightbox.js',
             ],
         },

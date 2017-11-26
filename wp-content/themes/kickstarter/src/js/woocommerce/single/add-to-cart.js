@@ -8,7 +8,7 @@ jQuery( function( $ ) {
 				return 0;
 			}
 			return Math.max( 0, ( match[1] ? match[1].length : 0 ) - ( match[2] ? +match[2] : 0 ) );
-		}
+		};
 	}
 
 	function wcqi_refresh_quantity_increments(){

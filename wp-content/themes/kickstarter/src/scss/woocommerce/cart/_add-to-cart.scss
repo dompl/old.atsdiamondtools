@@ -71,11 +71,13 @@ ul.variations {
   @include to(2) {
     padding-bottom: 0;
   }
-  padding-top: spacer(.5);
-  padding-bottom: spacer();
+  padding-bottom: 0;
   li {
     @extend %clx;
     margin-bottom: spacer(1);
+    @include _last-child() {
+      margin-bottom: 0;
+    }
     span {
       position: relative;
       &.label {
@@ -121,6 +123,10 @@ ul.variations {
   &.woocommerce-variation-add-to-cart-disabled {
     display: none;
   }
+  .single_variation_wrap {
+
+  }
+
   .quantity {
     float: left;
     width: 30%;
