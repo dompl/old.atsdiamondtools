@@ -87,8 +87,8 @@ if (!class_exists('Image'))
       $file_info = pathinfo($file_path);
 
       /* Check if file exists */
-      $base_file = $file_info['dirname'] . '/' . $file_info['filename'] . '.' . $file_info['extension'];
-      if (!file_exists($base_file))
+      $base_file = array_key_exists('dirname', $file_info) ? $file_info['dirname'] . '/' . $file_info['filename'] . '.' . $file_info['extension'] : '';
+      if (!file_exists($base_file) || $base_file === '')
       {
         return;
       }

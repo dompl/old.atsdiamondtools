@@ -50,16 +50,16 @@ function ats_single_product_layout()
     </div>
     <div id="variation_stock"></div>
     <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?></div>
-     <div class="social-shares clx"><?php do_action('social_shares') ?></div>
+    <div class="social-shares clx"><?php do_action('social_shares') ?></div>
   </div>
   <div class="main-right">
     <?php echo ats_single_product_image_gallery() ?>
   </div>
   <?php if ($product->get_description() != '' ): ?>
-  <div class="product-description clx">
-  <h3 class="title"><?php esc_html_e( 'Prodct Description', 'TEXT_DOMAIN') ?></h3>
-  <div class="product-description-content first-last"><?php echo $product->get_description()  ?></div>
-  </div>
+    <div class="product-description clx">
+      <h3 class="title"><?php esc_html_e( 'Prodct Description', 'TEXT_DOMAIN') ?></h3>
+      <div class="product-description-content first-last"><?php the_content()  ?></div>
+    </div>
   <?php endif ?>
   <?php
 }
