@@ -40,3 +40,12 @@ function sm_text_view_cart_strings( $translated_text, $text, $domain ) {
   return $translated_text;
 }
 add_filter( 'gettext', 'sm_text_view_cart_strings', 20, 3 );
+
+function my_custom_wc_get_variations_args( $args ) {
+  $args['order'] = 'ASC';
+  $args['orderby'] = 'menu_order';
+
+  return $args;
+}
+
+add_filter( 'woocommerce_ajax_admin_get_variations_args', 'my_custom_wc_get_variations_args' );
