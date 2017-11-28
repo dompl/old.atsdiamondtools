@@ -1,20 +1,20 @@
 <?php
 /*  ********************************************************
- *   Product price
+ *   Product variable to From ...
  *  ********************************************************
  */
 
 function custom_wc_template_single_price(){
   global $product;
 
-    // Variable product only
+  // Variable product only
   if($product->is_type('variable')):
 
-        // Main Price
+    // Main Price
     $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
     $price = $prices[0] !== $prices[1] ? sprintf( __( 'From: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
 
-        // Sale Price
+    // Sale Price
     $prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
     sort( $prices );
     $saleprice = $prices[0] !== $prices[1] ? sprintf( __( 'From: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
@@ -24,5 +24,7 @@ function custom_wc_template_single_price(){
     }
 
     echo '<p class="price">'.$price.'</p><div class="hidden-variable-price" >'.$price.'</div>';
+  else :
+    echo $product->get_price_html();
   endif;
 }

@@ -3,8 +3,6 @@
 (function($) {
 		$(function() {
 
-
-
 				var FullProd_Description = $('.product-description-content').html();
 				$('#mobile_full').html(FullProd_Description);
 
@@ -57,114 +55,84 @@
 								// console.log(variation);
 								var_wrapper.addClass('has-variation');
 
-								if ('' != var_ID) {
 
-										// $('p.price').html($('div.woocommerce-variation-price > span.price').html());
-										$('p.price').html(variation.price_html);
 
-										/* Variation Name */
-										$('#product-option').text(var_Name);
+								// $('p.price').html($('div.woocommerce-variation-price > span.price').html());
+								$('p.price').html(variation.price_html);
 
-										/* Product image */
-										if (prod_image_ID != variation.image_id) {
+								/* Variation Name */
+								$('#product-option').text(var_Name);
 
-												var_wrapper.addClass('has-image');
-												$('.variation-image').remove();
+								/* Product image */
+								if (prod_image_ID != variation.image_id) {
 
-												var var_image_HTML =
-														'<div class="variation-image">' +
-														'<a href="' + variation.image.url + '" data-lightbox="variation-image-' + var_ID + '" data-title="' + $('.product-header h2').text() + ' - ' + var_Name + variation.sku + variation.image.caption + '">' +
-														'<img src="' + variation.image.src + '">' +
-														'</a>' +
-														'</div>';
+										var_wrapper.addClass('has-image');
+										$('.variation-image').remove();
 
-												// Add the html to the wrapper
-												var_wrapper.append(var_image_HTML);
+										var var_image_HTML =
+												'<div class="variation-image">' +
+												'<a href="' + variation.image.url + '" data-lightbox="variation-image-' + var_ID + '" data-title="' + $('.product-header h2').text() + ' - ' + var_Name + variation.sku + variation.image.caption + '">' +
+												'<img src="' + variation.image.src + '">' +
+												'</a>' +
+												'</div>';
 
-										} else {
-												$('.variation-image').remove();
-												// 1 var_wrapper.removeClass('has-image').removeClass('has-variation');
-										}
+										// Add the html to the wrapper
+										var_wrapper.append(var_image_HTML);
 
-										/* Productg description */
-										if (variation.variation_description != '') {
+								} else {
+										$('.variation-image').remove();
+										// 1 var_wrapper.removeClass('has-image').removeClass('has-variation');
+								}
 
-												var_wrapper.addClass('has-variation').addClass('has-description');
+								/* Productg description */
+								if (variation.variation_description != '') {
 
-												$('.variation-title').remove();
+										var_wrapper.addClass('has-variation').addClass('has-description');
 
-												var_description_HTML =
-														'<div class="variation-title">' +
-														'<h3>' + var_Name + '</h3>' +
-														'<div class="variation-description">' + variation.variation_description + '</div>' +
-														'</div>';
+										$('.variation-title').remove();
 
-												// Append description to the wrapper
-												var_wrapper.append(var_description_HTML);
+										var_description_HTML =
+												'<div class="variation-title">' +
+												'<h3>' + var_Name + '</h3>' +
+												'<div class="variation-description">' + variation.variation_description + '</div>' +
+												'</div>';
 
-										} else {
-
-												var_wrapper.removeClass('has-description').removeClass('has-variation');
-												$('.variation-title').remove();
-
-										}
-
-										/* Product SKU */
-										var_sku_text = variation.sku != '' ? variation.sku : 'N/A';
-										$('#var_sku').text(var_sku_text);
-
-										/* Product out of stock */
-										if (variation.is_in_stock == false || variation.display_regular_price == '') {
-
-												var_wrapper.removeClass('off-stock');
-												$('#variation-stock').remove();
-
-												// sprintf is available in helpers.js. This is not a standard JS function!
-												var var_out_of_stoch_HTML = sprintf(
-														'<div id="variation-stock" class="not-in-stock clx"><span class="float">Sorry, %s - <strong>(%s)</strong> is currently out of stock.</span></div>',
-														prod_Name,
-														var_Name
-												);
-												$('#product-option').append('<span id="oos"> (OUT OF STOCK)</span>');
-
-												var_wrapper.addClass('off-stock').append(var_out_of_stoch_HTML);
-
-										} else {
-
-												var_wrapper.removeClass('off-stock');
-												$('#variation-stock').remove();
-												$('#oos').remove();
-
-										}
+										// Append description to the wrapper
+										var_wrapper.append(var_description_HTML);
 
 								} else {
 
-										// Remove wrapper classes
-										// var var_wrapper_classes = [
-										// 		'has-variation',
-										// 		'has-description',
-										// 		'has-image',
-										// 		'off-stock'
-										// ];
+										var_wrapper.removeClass('has-description').removeClass('has-variation');
+										$('.variation-title').remove();
 
-										// // Remove Variation Name
-										// $.each(var_wrapper_classes, function(i, v) {
-										// 		var_wrapper.removeClass(v);
-										// });
+								}
 
+								/* Product SKU */
+								var_sku_text = variation.sku != '' ? variation.sku : 'N/A';
+								$('#var_sku').text(var_sku_text);
 
-										// Remove all elements if there is no variation selected
-										// var remove_var_el = [
-										// 		'#oos',
-										// 		'#variation-stock',
-										// 		'.variation-title',
-										// 		'.variation-image',
-										// 		'#variation-stock',
-										// 		'p.availability'
-										// ];
-										// $.each(remove_var_el, function(i, v) {
-										// 		if ($(v)) $(v).remove();
-										// });
+								/* Product out of stock */
+								if (variation.is_in_stock == false || variation.display_regular_price == '') {
+
+										var_wrapper.removeClass('off-stock');
+										$('#variation-stock').remove();
+
+										// sprintf is available in helpers.js. This is not a standard JS function!
+										var var_out_of_stoch_HTML = sprintf(
+												'<div id="variation-stock" class="not-in-stock clx"><span class="float">Sorry, %s - <strong>(%s)</strong> is currently out of stock.</span></div>',
+												prod_Name,
+												var_Name
+										);
+										$('#product-option').append('<span id="oos"> (OUT OF STOCK)</span>');
+
+										var_wrapper.addClass('off-stock').append(var_out_of_stoch_HTML);
+
+								} else {
+
+										var_wrapper.removeClass('off-stock');
+										$('#variation-stock').remove();
+										$('#oos').remove();
+
 								}
 						});
 				});
