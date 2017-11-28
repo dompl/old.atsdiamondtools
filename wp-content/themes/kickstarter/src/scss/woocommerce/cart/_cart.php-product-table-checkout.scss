@@ -6,11 +6,11 @@
 
 /* Table heading borders */
 
-$use--headers-top-border: true; // Display top border in product table headers
+$use--headers-top-border: false; // Display top border in product table headers
 $use--headers-vertical-borders: true; // Display vartival borders in product table headers
-$use--headers-bottom-border: true; // Display bottom border in product table headers
+$use--headers-bottom-border: false; // Display bottom border in product table headers
 $use--headers-top-border: true; // Display borders in product table headers
-$use--heding-border-colour: lighten(#cccccc, 10%); // Table borders colour ( headers )
+$use--heding-border-colour: color(border); // Table borders colour ( headers )
 
 /* Table body borders */
 
@@ -20,17 +20,17 @@ $use--body-border-colour: $use--heding-border-colour; // Table borders colour
 
 /* Table spacing and padding */
 
-$table--cells-pagging: 9px 10px 10px; // Table header paddings - accepts 4 values;
+$table--cells-pagging: 9px 10px 9px; // Table header paddings - accepts 4 values;
 
 /* Table heading topography */
 
 $heading--th-font-size: 13px; // Table heading front sizes
 $heading--th-font-color: #666666; // Table heading front sizes
-$heading--th-font-webight: $font-weight-normal; // Table heading front sizes
+$heading--th-font-webight: $font-weight-bold; // Table heading front sizes
 $heading--th-text-alight: left; // Table heading front sizes
-$heading--th-text-case: inherit; // Set headings text case ( upperscase )
+$heading--th-text-case: uppercase; // Set headings text case ( upperscase )
 $heading--th-line-height: $heading--th-font-size; // Table heading front sizes
-$heading--th-background-color: #CCCCCC; // Table heading background
+$heading--th-background-color: lighten(color(border),5%); // Table heading background
 
 /* Table body topography */
 
@@ -45,14 +45,14 @@ $body--product-label-font-color-mobile: false; // Responsive product lable weigh
 
 // Delete product - cross icon
 $cross---icon-color:white; // Cross colour
-$cross---icon-size:18px; // Cross size
+$cross---icon-size:12px; // Cross size
 $cross---icon-weight:600; // Cross font weight
 $cross---icon-background:color(danger); // Cross bakground colour
 $cross---icon-square:true; // make the icon circle
 $cross---icon-padding:4px; // Padding
 // Product image
-$product--image-max-height: 100px; // Maximum height for product image on responsive
-$product--image-max-height-mobile: 100px; // Maximum height for product image on responsive
+$product--image-max-height: 80px; // Maximum height for product image on responsive
+$product--image-max-height-mobile: 80px; // Maximum height for product image on responsive
 $product--image-alignment: center; // Image alignment for responsive
 // Product input - add your styles inside the mixin as it is already included in the styles below
 @mixin product-input() {
@@ -64,12 +64,12 @@ $product--image-alignment: center; // Image alignment for responsive
 
 /* Product row background colour ( set to false if not background is required ) */
 
-$body-product-odd-background:false;
+$body-product-odd-background:true;
 $body-product-even-background:false;
 $body-product-odd-background-mobile:false;
-$body-product-even-background-mobile:lighten(#CCCCCC, 17%);
+$body-product-even-background-mobile:lighten(color(border),10%);
 
-$body-product-margin-bottom-mobile: 10px; // Set bottom margin for products on mobile
+$body-product-margin-bottom-mobile: spacer(); // Set bottom margin for products on mobile
 
 /*  *************************** DO NT EDIT BELOW THIS LINE *****************************  */
 
@@ -102,7 +102,6 @@ table.shop_table {
       }
 
       @if $use--headers-bottom-border==true {
-        border-top: 1px solid $use--heding-border-colour;
         border-bottom: 1px solid $use--heding-border-colour;
       }
 

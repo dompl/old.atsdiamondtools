@@ -90,14 +90,16 @@ function ats_create_product_listing_layout_()
 
 
   // Product categories
-
-  $cat_list = '<ul>';
-  foreach (get_the_terms($id, 'product_cat') as $category)
-  {
-    $category_id = $category->term_id;
-    $cat_list .= '<li>' . esc_html($category->name) . '</li>';
+  $cat_list = '';
+  if (get_the_terms($id, 'product_cat') && !is_cart()) {
+    $cat_list = '<ul>';
+    foreach (get_the_terms($id, 'product_cat') as $category)
+    {
+      $category_id = $category->term_id;
+      $cat_list .= '<li>' . esc_html($category->name) . '</li>';
+    }
+    $cat_list .= '</ul>';
   }
-  $cat_list .= '</ul>';
 
   // Stock Status
   $stock        = $product->get_stock_status();

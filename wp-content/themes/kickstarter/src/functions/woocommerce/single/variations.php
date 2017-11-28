@@ -11,6 +11,9 @@ add_filter('woocommerce_dropdown_variation_attribute_options_html', 'ats_variati
 /* Change Variation label */
 function ats_attribute_label( $label, $name, $product ) {
   $name = __('Select Option', 'TEXT_DOMAIN');
+  if (is_cart() || is_checkout()) {
+    $name = __('Option', 'TEXT_DOMAIN');
+  }
   return ( $name );
 }
 

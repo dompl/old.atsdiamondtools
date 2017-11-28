@@ -55,6 +55,7 @@ if (class_exists('WooCommerce'))
 {
   load_files('functions/woocommerce');
   load_files('functions/woocommerce/single');
+  load_files('functions/woocommerce/checkout');
 }
 
 // Only the bare minimum to get the theme up and running

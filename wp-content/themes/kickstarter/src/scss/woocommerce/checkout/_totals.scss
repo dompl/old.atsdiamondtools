@@ -1,0 +1,223 @@
+/*  ********************************************************
+ *   Cart Totals
+ *  ********************************************************
+ */
+
+ @mixin total-h3() {
+  font-size: 16px;
+  margin: 0;
+  border-bottom: 1px solid $use--heding-border-colour;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  width: 100%;
+  @include em('font-size', 14px);
+  font-weight: bold;
+  text-transform: uppercase;
+  @content;
+}
+
+@mixin total-button() {
+  @include button() {
+    padding-top: 0;
+    font-size: 12px;
+    background: color(text);
+    border-color: color(text);
+    @include border-radius(0);
+
+    &:hover {
+      background-color: black;
+    }
+  }
+}
+
+@mixin total-input() {
+  padding: 5px 10px;
+  display: block;
+  width: 100%;
+  @include em('font-size', 14px);
+  @content;
+  border:1px solid $input-border-color;
+}
+
+.cart_totals {
+  h2 {
+    display: block;
+    border: 1px solid $use--heding-border-colour;
+    font-size: $heading--th-font-size;
+    padding: $table--cells-pagging;
+    line-height: 1;
+    font-weight: $heading--th-font-webight;
+    color: $heading--th-font-color;
+    background: $heading--th-background-color;
+    text-transform: $heading--th-text-case;
+    margin-bottom: 0;
+  }
+  .shipping-totals {
+    border: 1px solid $use--heding-border-colour;
+    border-top: none;
+    padding: 20px 15px;
+    h3 {
+      @include total-h3() {
+        margin-bottom: 20px;
+      }
+      ;
+    }
+  }
+  #shipping-method-list {
+    ul {
+      @include scut-list-unstyled();
+      li {
+        @extend %clx;
+        @include em('font-size', 14px);
+        line-height: 14px;
+        margin-bottom: 10px;
+        @include _last_child() {
+          margin-bottom: 0;
+        }
+        input {
+          display: none;
+          &:checked {
+            +label {
+              @include icon(check-circle);
+              color: color(success);
+            }
+          }
+        }
+        label {
+          @include icon(circle);
+          @include hover() {
+            cursor: pointer!important;
+          }
+          &:before {
+            float: left;
+            @include em('font-size', 14px);
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+  .shipping-calculator {
+    border: 1px solid $use--heding-border-colour;
+    border-top: none;
+    padding: 20px 15px;
+    form+p {
+      margin: 0;
+      @include total-h3() {
+        border: none;
+        margin-bottom: 0;
+        padding: 0;
+        a {
+          color: color(text)!important;
+          display: block;
+          position: relative;
+          @include hover() {
+            color: color(text)!important;
+          }
+          @include icon(caret-down) {
+            float: right;
+          }
+        }
+      }
+    }
+    .shipping-calculator-form {
+      p {
+        @include _last-child() {
+          margin-bottom: 0;
+        }
+      }
+      input {
+        @include total-input();
+      }
+      .button {
+        @include total-button();
+      }
+    }
+  }
+
+  table.shop_table {
+    border: 1px solid $use--heding-border-colour;
+    margin-top: spacer(.5);
+    tbody {
+      padding: 10px;
+      display: block;
+      tr {
+        display: block;
+        @extend %clx;
+        width: 100%;
+        border-bottom: 1px solid $use--heding-border-colour;
+        @include em('font-size', 14px);
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        &.order-total {
+          border: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+        small {
+          display: block;
+        }
+        td,
+        th {
+          display: block;
+          text-align: right;
+        }
+        th {
+          float: left;
+          width: 30%;
+        }
+        td {
+          float: right;
+          width: 55%;
+        }
+      }
+    }
+  }
+  /*  ********************************************************
+ *   When no Shipping is selected
+ *  ********************************************************
+ */
+ table.shop_table {
+  tr.shipping {
+    .woocommerce-shipping-calculator {
+      input {
+        @include total-input();
+      }
+      .button {
+        @include total-button();
+      }
+      >p {
+        margin: 0;
+        padding: 0;
+        display: block;
+        a {
+          color: color(text);
+          @include icon(caret-down) {
+            float: right;
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+}
+
+/*  ********************************************************
+ *   Proceed to checkout
+ *  ********************************************************
+ */
+ .wc-proceed-to-checkout {
+  .checkout-button {
+    @include button() {
+      display: block;
+      height: auto;
+      @include em('font-size', 16px);
+      text-align: center;
+      font-weight: bold;
+      margin-top: spacer(.5);
+      padding:6px 0;
+    };
+  }
+}

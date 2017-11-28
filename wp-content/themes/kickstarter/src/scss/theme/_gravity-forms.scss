@@ -26,7 +26,7 @@ $labels-asterix-font-size: $font-size-sm !default; // Font size for required ast
 
 $input-border-radius:0; // Border radious
 $input-border-width:0; // Border width
-$input-border-color: transparent; // Border color
+$input-border-color: color(border); // Border color
 $input-border-style: solid; // none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset, initial, inherit
 $input-bacground-color: color( gray-lightest ); // Input bacground color
 $input-font-size: $font-size-base;

@@ -1,0 +1,15 @@
+/*  ********************************************************
+ *   Cross Sales
+ *  ********************************************************
+ */
+
+ .cross-sells {
+  margin-top: spacer();
+  > h2 {
+    @include em('font-size', 16px);
+    text-transform: uppercase;
+    margin: spacer(.5) 0 spacer(.5);
+    padding-top: spacer(.5);
+    border-top:1px solid color(border);
+  }
+}

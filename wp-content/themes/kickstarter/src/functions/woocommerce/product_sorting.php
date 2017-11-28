@@ -102,5 +102,5 @@ function ats_loop_start_()
     $sort_class = 'grid';
   }
   echo '<div class="container"><div class="susy-reset">';
-  echo '<ul id="products-list" class="clx products ' . $sort_class . '">';
+  echo '<ul id="products-list" class="clx products ' . (is_cart() ? 'in-cart grid' : $sort_class) . '">';
 }
