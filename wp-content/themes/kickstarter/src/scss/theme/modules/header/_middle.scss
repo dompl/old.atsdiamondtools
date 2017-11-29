@@ -2,60 +2,62 @@
  *   Middle section
  *  ********************************************************
  */
+
  @mixin search-box() {
-  $search-height : 34px;
-  $search-padding : 15px;
+  $search-height: 34px;
+  $search-padding: 15px;
   position: relative;
-  input, button {
-    border:1px solid color(border);
+  input,
+  button {
+    border: 1px solid color(border);
     -webkit-appearance: none;
     -webkit-border-radius: 0;
     border-radius: 0;
     height: $search-height;
-    line-height:$search-height;
+    line-height: $search-height;
     display: block;
-    box-sizing:border-box;
+    box-sizing: border-box;
     float: left;
     padding: 0;
     margin: 0;
     position: relative;
-    outline:none!important;
-    outline:none!important;
+    outline: none!important;
+    outline: none!important;
     i {
       @include scut-center-transform();
       height: $search-height - 1px;
-      color:white;
+      color: white;
     }
   }
   button {
-    width:$search-height;
+    width: $search-height;
     text-align: center;
-    border-left:none;
-    background:color(brand);
-    border-color:color(brand);
+    border-left: none;
+    background: color(brand);
+    border-color: color(brand);
     @extend %transition;
     @include hover() {
-      background:darken(color(brand),10%);
+      background: darken(color(brand), 10%);
     }
   }
   input {
-    padding:0 $search-padding;
-    width:calc( 100% -   #{$search-height});
-    border-right:none;
+    padding: 0 $search-padding;
+    width:calc( 100% - #{$search-height});
+    border-right: none;
   }
   .icon-caret-left {
     @include em('font-size', 19px);
     @include scut-center-transform(y);
-    color:color(brand);
+    color: color(brand);
     position: absolute;
-    right:$search-height - 1px;
+    right: $search-height - 1px;
   }
   @content;
 }
 
 #header-middle {
   @include breakpoint(min-width $nav-breakpoint) {
-    padding:spacer(.75) 0;
+    padding: spacer(.75) 0;
   }
   border-top: 1px solid color(border);
   @include em('font-size', 14px);
@@ -72,7 +74,7 @@
     .search-section {
       float: none!important;
       width: 100%!important;
-      margin:spacer(.5) 0 0;
+      margin: spacer(.5) 0 0;
       display: none;
     }
   }
@@ -84,7 +86,7 @@
     text-align: right;
     @include search-box();
     @include breakpoint(min-width $nav-breakpoint) {
-      display:block!important;
+      display: block!important;
     }
   }
   .cart-section {
@@ -99,13 +101,13 @@
           margin-right: 5px;
         }
         &.button {
-          display:inline-block;
+          display: inline-block;
         }
       }
       @include from(4) {
         span {
           &.colon {
-            display:inline-block;
+            display: inline-block;
             padding: 0 5px;
           }
           &.button {
@@ -116,7 +118,7 @@
       i {
         float: left;
         margin-right: 10px;
-        color:color(text);
+        color: color(text);
         @include em('font-size', 20px);
         @include from(4) {
           @include em('font-size', 20px);
@@ -133,118 +135,3 @@
     }
   }
 }
-
-// #header-middle {
-  //   @include from(3) {
-    //     padding-top: 49px;
-    //     padding-bottom: 44px;
-    //   }
-    //   /* Topography */
-    //   .logo-section {
-      //     @include span(4);
-      //   }
-      //   .search-section {
-        //     display: none;
-        //     margin-top: 10px;
-        //     @include from(3) {
-          //       @include span(5);
-          //       transform: translateY(8px);
-          //       margin-top: 0;
-          //       display: inline-block;
-          //     }
-          //     form {
-            //       position: relative;
-            //     }
-            //     input {
-              //       width: 100%;
-              //       padding: 10px 60px 10px 10px;
-              //       box-sizing: border-box;
-              //       outline: none;
-              //       border: 1px solid darken(color(gray-lightest), 5%);
-              //       font-size: 15px;
-              //       font-weight: $font-weight-light;
-              //       outline: none;
-              //     }
-              //     button {
-                //       position: absolute;
-                //       top: 0;
-                //       right: 0;
-                //       padding: 11px 11px 7px 12px;
-                //       background: color(brand);
-                //       border: none;
-                //       border-radius: 0;
-                //       color: white;
-                //       cursor: pointer;
-                //       @extend %transition;
-                //       &:hover {
-                  //         background: lighten(color(brand), 10%);
-                  //         &:before {
-                    //           border-right: 8px solid lighten(color(brand), 10%);
-                    //         }
-                    //       }
-                    //       &:before {
-                      //         content: "";
-                      //         @include scut-center-transform(y);
-                      //         right: 100%;
-                      //         width: 0;
-                      //         height: 0;
-                      //         border-top: 7px solid transparent;
-                      //         border-right: 8px solid color(brand);
-                      //         border-bottom: 7px solid transparent;
-                      //         @extend %transition;
-                      //       }
-                      //     }
-                      //   }
-                      //   .cart-section {
-                        //     display: none;
-                        //     margin-top: 10px;
-                        //     text-align: center;
-                        //     @include from(3) {
-                          //       display: inline-block;
-                          //       @include span(3) margin-top: 0;
-                          //       text-align: left;
-                          //       transform: translateY(13px);
-                          //     }
-                          //     @include breakpoint(min-width 1150px) {
-                            //       text-align: right;
-                            //     }
-                            //     i {
-                              //       font-size: 20px;
-                              //       margin-right: 10px;
-                              //     }
-                              //     span {
-                                //       display: inline-block;
-                                //       transform: translateY(-3px);
-                                //       @include from(3) {
-                                  //         transform: translateY(-16px);
-                                  //         &.total-total {
-                                    //           padding-left: 36px;
-                                    //         }
-                                    //         &.amount {
-                                      //           display: inline;
-                                      //           span {
-                                        //             display: inline;
-                                        //           }
-                                        //         }
-                                        //       }
-                                        //       @include breakpoint(min-width 1150px) {
-                                          //         transform: translateY(-3px);
-                                          //         &.total-total {
-                                            //           padding-left: 0;
-                                            //         }
-                                            //       }
-                                            //     }
-                                            //   }
-                                            //   /* When navigation breaks */
-                                            //   @include nav-break() {
-                                              //     .logo-section {
-                                                //       display: none;
-                                                //     }
-                                                //     .search-section,
-                                                //     .cart-section {
-                                                  //       @include from(3) {
-                                                    //         @include span(6);
-                                                    //       }
-                                                    //     }
-                                                    //   }
-                                                    // }

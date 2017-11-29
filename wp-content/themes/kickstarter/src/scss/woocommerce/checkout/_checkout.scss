@@ -1,0 +1,39 @@
+/*  ********************************************************
+ *   Checkout pages
+ *  ********************************************************
+ */
+
+ @mixin checkout-input() {
+  border: 1px solid color(border);
+  display: block;
+  padding: 5px;
+  @content;
+
+}
+
+@mixin checkout-label() {
+  display: block;
+  @include em('font-size', 14px);
+  @content;
+}
+
+#ats-checkout {
+  input {
+    &[type="text"],
+    &[type="number"],
+    &[type="password"],
+    &[type="email"],
+    &[type="tel"] {
+      @include checkout-input();
+    }
+    label {
+      @include checkout-label() {}
+    }
+  }
+  .left {
+    @include span(7);
+  }
+  .right {
+    @include span(5);
+  }
+}
