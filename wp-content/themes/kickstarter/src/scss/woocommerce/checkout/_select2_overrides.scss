@@ -12,11 +12,11 @@
 }
 
 body {
-
   .select2-container--default .select2-selection--single {
     @include border-radius(0);
     padding: 0;
     margin: 0;
+    height: 30px;
     border-color: $use--heding-border-colour;
   }
   .select2-container {

@@ -1,0 +1,38 @@
+/*  ********************************************************
+ *   Checkout mixins
+ *  ********************************************************
+ */
+
+ @mixin checkout-input() {
+  border: 1px solid color(border);
+  display: block;
+  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  @include placeholder {
+    color:color(gray-light);
+    @include em('font-size', 13px);
+  }
+  @content;
+}
+
+@mixin checkout-label() {
+  display: block;
+  @include em('font-size', 13px);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 3px;
+  margin-left: 2px;
+  @content;
+}
+
+@mixin text-inputs() {
+  textarea,
+  &[type="text"],
+  &[type="number"],
+  &[type="password"],
+  &[type="email"],
+  &[type="tel"] {
+    @content;
+  }
+}
