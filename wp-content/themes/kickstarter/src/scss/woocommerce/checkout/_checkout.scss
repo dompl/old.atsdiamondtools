@@ -2,43 +2,293 @@
  *   Checkout pages
  *  ********************************************************
  */
+  /* Returning customer */
 
- #ats-checkout {
-  .woocommerce-billing-fields__field-wrapper {
-    @extend %clx;
-    @extend %susy-reset;
-  }
-  /* Billing & Shipping Fields */
-  .woocommerce-billing-fields,
-  .woocommerce-shipping-fields {
-    @include container(100%);
-    p {
-      @include span(6);
-      height: 55px;
-      margin-top: 0;
-      margin-bottom: spacer(.5);
+  .woocommerce-checkout {
+    $background-boxes: color(gray-lightest);
+    .woocommerce-info {
+      border-bottom: 0; // background: color(gray-lightest);
+      background: $background-boxes;
+      margin-bottom: spacer(.25);
+      a {
+        float: right;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+    form {
+      &.woocommerce-form-login,
+      &.checkout_coupon {
+        @extend %clx;
+        font-size: 14px;
+        padding: spacer(.5);
+        background: $background-boxes;
+        margin-top: - spacer(.25) + 1px;
+        margin-bottom: spacer(.25);
+        @include checkbox() {
+          line-height: 24px;
+          span {
+            margin-left: 10px;
+          }
+        }
+        p {
+          margin: 0 0 10px 0;
+          @include _last-child() {
+            margin-bottom: 0;
+          }
+          input {
+            @include text-inputs() {
+              @include checkout-input();
+              margin-top: auto;
+            }
+            &[type="submit"] {
+              @include button($size: "small");
+              float: left;
+            }
+          }
+          label {
+            @include checkout-label();
+          }
+        }
+      }
     }
   }
+
+  #ats-checkout {
+    padding-top: spacer(.5);
+    /* Headings */
+    h3:not(#ship-to-different-address) {
+      text-transform: uppercase;
+      font-size: 20px;
+      margin-bottom: spacer(.5);
+      padding-bottom: spacer(.25);
+      border-bottom: 1px solid color(border);
+      font-weight: bold;
+    }
+
+    /* Billing & Shipping Fields */
+    .woocommerce-billing-fields__field-wrapper,
+    .woocommerce-shipping-fields__field-wrapper {
+      @include from(2) {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        p {
+          display: flex;
+          width: 48%;
+          flex-direction: column;
+        }
+      }
+      p {
+        margin-bottom: - spacer(.5);
+        margin: 0 0 spacer(.5) 0;
+      }
+    }
+
   /* Billing Fields */
+
   .woocommerce-billing-fields {}
   /* Shipping Fields */
+
   .woocommerce-shipping-fields {}
+
   input {
     @include text-inputs() {
       @include checkout-input();
+      margin-top: auto;
     }
   }
+
   label {
     @include checkout-label();
-    & + input {
-      margin-top:21px;
+  }
+
+  textarea {
+    @include checkout-input();
+  }
+
+  @include checkbox();
+  .woocommerce-account-fields {
+    margin: spacer(.5) 0;
+    /* Create and account */
+    .create-account {
+      p {
+        margin: 0;
+        margin-top: -10px;
+        padding: 10px;
+        background: color(gray-lightest);
+        small {
+          margin-top: 5px;
+          font-size: 12px;
+          display: block;
+        }
+        .woocommerce-password-strength {
+          font-size: 14px;
+          margin-top: spacer(.5);
+          position: relative;
+          font-size: 12px;
+          text-transform: uppercase;
+          font-weight: bold;
+          &:before {
+            @extend %transition;
+            content: "";
+            height: 2px;
+            width: 100%;
+            background: color(success);
+            position: absolute;
+            top: -7px;
+          }
+          &.short:before {
+            background: color(danger);
+            width: 5%;
+          }
+          &.bad:before {
+            background: color(danger);
+            width: 15%;
+          }
+          &.good:before {
+            background: color(warning);
+            width: 50%;
+          }
+        }
+      }
+    }
+  }
+  /**
+   * Your Order
+   * ---
+   */
+
+   .woocommerce-checkout-review-order-table {
+
+    tfoot {
+      th,
+      td {
+        padding: $table--cells-pagging;
+        border: 1px solid #CCC;
+        border-top: none;
+        font-size: $heading--th-font-size;
+        color: $heading--th-font-color;
+        font-weight: $heading--th-font-webight;
+        text-align: $heading--th-text-alight;
+        text-transform: $heading--th-text-case;
+        line-height: $heading--th-line-height;
+      }
+      tr.order-total {
+        th,
+        td {
+          background: color(gray-lightest);
+        }
+      }
+      td {
+        border-left: none;
+      }
+    }
+  }
+  /* Payments */
+
+  ul.wc_payment_methods {
+    @include scut-list-unstyled();
+    margin-top: spacer();
+    li {
+      @include _last-child() {
+        margin-bottom: 0;
+      }
+      &.wc_payment_method {
+        p {
+          font-size: 14px;
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        >input {
+          display: none;
+          &:checked {
+            +label {
+              @include icon(check-circle) {
+                color: color(success);
+              }
+              ;
+            }
+          }
+        }
+        >label {
+          @extend %clx;
+          cursor: pointer!important;
+          padding: 10px;
+          line-height: 28px;
+          @include icon(circle) {
+            float: left;
+            margin-right: 10px;
+          }
+          img {
+            float: right;
+          }
+          background: color(gray-lightest);
+          border-bottom:1px solid #CCC;
+          margin-bottom: spacer(.25);
+          display: block;
+        }
+        fieldset {
+          border: none;
+          background: color(gray-lightest);
+          padding: 10px;
+          p {
+            margin-left: 0;
+            margin-right: 0;
+            @include _last-child() {
+              margin-bottom: 0;
+            }
+          }
+        }
+        .woocommerce_error {
+          @include scut-list-unstyled();
+          background: color(danger);
+          color: white;
+          @include em('font-size', 13px);
+          font-weight: bold;
+          padding: 5px;
+          margin-top: 5px;
+          li {
+            margin-bottom: 5px;
+            @include _last-child() {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  /* Place order */
+
+  .place-order {
+    margin-top: spacer(.5);
+    input[type="submit"] {
+      @include button() {
+        width: 100%;
+        box-sizing: border-box;
+        font-weight: bold;
+        padding: 10px 0;
+        height: auto;
+        font-size: 18px;
+      }
+      ;
     }
   }
   /* Topography */
+
   .left {
     @include span(7);
   }
+
   .right {
     @include span(5);
+  }
+
+  @include to(3) {
+    .right,
+    .left {
+      @include span(12)
+    }
   }
 }

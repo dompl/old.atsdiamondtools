@@ -10,9 +10,16 @@
   text-transform: uppercase;
   background-color: $color;
   color: white;
+  @include border-radius(0);
   @if $size=="medium" {
     line-height: 30px;
     height: 30px;
+    padding: 0 10px;
+    @include em('font-size', 14px);
+  }
+  @if $size=="small" {
+    line-height: 24px;
+    height: 24px;
     padding: 0 10px;
     @include em('font-size', 14px);
   }

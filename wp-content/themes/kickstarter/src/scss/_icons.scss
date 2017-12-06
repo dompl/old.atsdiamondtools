@@ -66,62 +66,68 @@
     @if $filename == check-circle {
         $char: "\E00D";
     }
-    @if $filename == chevron-left {
+    @if $filename == check-square {
         $char: "\E00E";
     }
-    @if $filename == chevron-right {
+    @if $filename == chevron-left {
         $char: "\E00F";
     }
-    @if $filename == circle {
+    @if $filename == chevron-right {
         $char: "\E010";
     }
-    @if $filename == envelope {
+    @if $filename == circle {
         $char: "\E011";
     }
-    @if $filename == facebook {
+    @if $filename == envelope {
         $char: "\E012";
     }
-    @if $filename == google-plus-g {
+    @if $filename == facebook {
         $char: "\E013";
     }
-    @if $filename == home {
+    @if $filename == google-plus-g {
         $char: "\E014";
     }
-    @if $filename == info-circle {
+    @if $filename == home {
         $char: "\E015";
     }
-    @if $filename == linkedin {
+    @if $filename == info-circle {
         $char: "\E016";
     }
-    @if $filename == lock {
+    @if $filename == linkedin {
         $char: "\E017";
     }
-    @if $filename == phone {
+    @if $filename == lock {
         $char: "\E018";
     }
-    @if $filename == search {
+    @if $filename == phone {
         $char: "\E019";
     }
-    @if $filename == shopping-cart {
+    @if $filename == search {
         $char: "\E01A";
     }
-    @if $filename == th-large {
+    @if $filename == shopping-cart {
         $char: "\E01B";
     }
-    @if $filename == th-list {
+    @if $filename == square {
         $char: "\E01C";
     }
-    @if $filename == th {
+    @if $filename == th-large {
         $char: "\E01D";
     }
-    @if $filename == times-circle {
+    @if $filename == th-list {
         $char: "\E01E";
     }
-    @if $filename == twitter {
+    @if $filename == th {
         $char: "\E01F";
     }
-    @if $filename == user {
+    @if $filename == times-circle {
         $char: "\E020";
+    }
+    @if $filename == twitter {
+        $char: "\E021";
+    }
+    @if $filename == user {
+        $char: "\E022";
     }
 
     @return $char;
@@ -178,6 +184,9 @@
 .icon-check-circle {
     @include icon(check-circle);
 }
+.icon-check-square {
+    @include icon(check-square);
+}
 .icon-chevron-left {
     @include icon(chevron-left);
 }
@@ -216,6 +225,9 @@
 }
 .icon-shopping-cart {
     @include icon(shopping-cart);
+}
+.icon-square {
+    @include icon(square);
 }
 .icon-th-large {
     @include icon(th-large);

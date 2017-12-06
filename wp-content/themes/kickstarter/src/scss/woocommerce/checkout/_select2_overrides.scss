@@ -6,8 +6,7 @@
  html,
  body {
   * {
-    outline: none!important;
-    // box-sizing: border-box;
+    outline: none!important; // box-sizing: border-box;
   }
 }
 
@@ -16,8 +15,11 @@ body {
     @include border-radius(0);
     padding: 0;
     margin: 0;
-    height: 30px;
+    height: 34px;
     border-color: $use--heding-border-colour;
+    .select2-selection__rendered {
+      line-height: 32px;
+    }
   }
   .select2-container {
     width: 100%!important;

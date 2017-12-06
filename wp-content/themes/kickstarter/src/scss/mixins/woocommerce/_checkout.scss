@@ -6,23 +6,29 @@
  @mixin checkout-input() {
   border: 1px solid color(border);
   display: block;
-  padding: 5px;
+  padding: 8px 5px;
   width: 100%;
   box-sizing: border-box;
   @include placeholder {
-    color:color(gray-light);
-    @include em('font-size', 13px);
+    color: color(gray-light);
+    font-size: 14px;
   }
   @content;
 }
 
 @mixin checkout-label() {
   display: block;
-  @include em('font-size', 13px);
+  font-size: 13px;
   font-weight: bold;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
   margin-left: 2px;
+  .required {
+    color: color(danger);
+    border-bottom: none !important;
+    cursor: inherit !important;
+    text-decoration: none !important;
+  }
   @content;
 }
 
@@ -33,6 +39,31 @@
   &[type="password"],
   &[type="email"],
   &[type="tel"] {
+    font-size: 14px;
+    color: color(gray);
+    @content;
+  }
+}
+
+@mixin checkbox($icon-off:square, $icon-on:check-square) {
+  label.woocommerce-form__label-for-checkbox {
+    input[type="checkbox"],
+    input[type="radio"] {
+      display: none;
+      +span {
+        display: inline-block;
+        @include icon($icon-off) {
+          float: left;
+          margin-right: 10px;
+        }
+      }
+      &:checked {
+        +span {
+          @include icon($icon-on);
+          color: color(success);
+        }
+      }
+    }
     @content;
   }
 }
