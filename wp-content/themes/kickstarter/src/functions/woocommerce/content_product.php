@@ -120,7 +120,7 @@ function ats_create_product_listing_layout_()
   $stock_quantity = $product->get_stock_quantity();
   $stock_manage   = $product->get_manage_stock();
   $stock_min      = 5;
-  $info_button = '<a class="gf info outline" href="'.get_the_permalink().'">'.__('Info', 'TEXT_DOMAIN').'</a>';
+  $info_button = $product->get_type() !== 'variable' ? '<a class="gf info outline" href="'.get_the_permalink().'">'.__('Info', 'TEXT_DOMAIN').'</a>' : '';
 
   if ($stock_quantity > $stock_min && $stock == 'instock') {
     $stock_info = __('+' . $stock_min);

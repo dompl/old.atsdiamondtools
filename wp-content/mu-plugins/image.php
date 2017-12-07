@@ -195,7 +195,7 @@ if (!class_exists('Image'))
       return $vt_image;
     }
 
-    public static function image($attach_id, $img_url = null, $width = 150, $height = 100, $crop = false, $quality = 100, $retina = true, $figure = true, $lazy = true)
+    public static function image($attach_id, $img_url = null, $width = 150, $height = 100, $crop = false, $quality = 100, $retina = true, $figure = true, $lazy = true, $sw = true)
     {
       if ($attach_id == '' && $img_url == '')
       {

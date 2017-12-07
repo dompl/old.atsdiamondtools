@@ -55,7 +55,7 @@ if (!function_exists('home_slider_function') && class_exists('acf'))
           ',
           $product_name,                                                                                                          // 1
           $product_short,                                                                                                         // 2
-          is_numeric($product_image) && function_exists('image_figure') ? image_figure($product_image, '', 491, 256, false) : '', // 3
+          is_numeric($product_image) && function_exists('image_figure') ? image_figure($product_image, '', 400, 250, false) : '', // 3
           $product_link ? get_the_permalink($product_link) : '',                                                                  // 4
           __('More &amp; buy', 'TEXT_DOMAIN'),                                                                                    // 5
           $product_subtitle ? '<span class="product-subtitle">' . $product_subtitle . '</span>' : '',                             //6
