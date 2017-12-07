@@ -59,6 +59,8 @@
   .dgwt-wcas-suggestions-wrapp {
     background-color:white!important;
     top: $search-height;
+    max-height:60vh!important;
+    overflow-y:auto;
     .dgwt-wcas-suggestion {
       padding: 10px 5px;
       clear: both;

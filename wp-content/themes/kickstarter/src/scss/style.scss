@@ -47,6 +47,8 @@ Domain Path: #{metadata(theme-text-domain-path)}
 // Normalize: make browsers render things more consistently
 @import "lib/cookie-bar";
 
+//@import "lib/jquery.mCustomScrollbar";
+
 // Lightbox 2
 @import "lib/lightbox";
 

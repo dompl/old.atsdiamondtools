@@ -5,9 +5,6 @@
 
  #footer {
   margin-top: spacer();
-  .tax-product_cat & {
-    margin-top: 0;
-  }
   padding: spacer() 0 0;
   @include em('font-size', 14px);
   background: color(gray-lightest);
@@ -183,6 +180,17 @@
   $height: 40px;
   margin-top: spacer();
   line-height: $height;
+  position: relative;
+  &:before {
+    content:"";
+    width: 20000px;
+    left:-10000px;
+    height: 1px;
+    display: block;
+    position: absolute;
+    background:color(border);
+    top:- spacer();
+  }
   p {
     margin: 0;
     line-height: $height;

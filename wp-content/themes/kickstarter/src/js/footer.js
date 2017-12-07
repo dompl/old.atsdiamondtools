@@ -1,6 +1,5 @@
 // ==== FOOTER ==== //
-;
-(function($) {
+;(function($) {
     $(function() {
         /*  ********************************************************
          *   Search Show : Hide
@@ -81,7 +80,7 @@
             prevArrow: '<i class="icon-arrow-thin-left"></i>',
             nextArrow: '<i class="icon-arrow-thin-right"></i>',
         });
-         $('#home-slider-ul').slick({
+        $('#home-slider-ul').slick({
             dots: false,
             infinite: true,
             speed: 300,
