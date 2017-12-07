@@ -8,53 +8,66 @@
   $search-height: 34px;
   $search-padding: 15px;
   position: relative;
-  label {
-    display: none;
-  }
-  input,
-  button {
-    border: 1px solid color(border);
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    height: $search-height;
-    line-height: $search-height;
-    display: block;
-    box-sizing: border-box;
-    float: left;
-    padding: 0;
-    margin: 0;
-    position: relative;
-    outline: none!important;
-    outline: none!important;
-  }
-  button {
-    width: $search-height;
-    text-align: center;
-    border-left: none;
-    background: color(brand);
-    border-color: color(brand);
+
+  .dgwt-wcas-preloader {
+    @include opacity(0);
     @extend %transition;
-    @include icon(search) {
-      color:white;
-    }
-    @include hover() {
-      background: darken(color(brand), 10%);
-    }
-  }
-  input {
-    padding: 0 $search-padding;
-    width:calc( 100% - #{$search-height});
-    border-right: none;
-  }
-  .icon-caret-left {
-    @include em('font-size', 19px);
-    @include scut-center-transform(y);
-    color: color(brand);
+    height: $search-height;
+    width: $search-height;
+    background:url(img/theme/preloader.svg) 50% 50% no-repeat;
     position: absolute;
-    right: $search-height - 1px;
+    display: block;
+    &.dgwt-wcas-inner-preloader {
+     @include opacity(1);
+   }
+ }
+ label {
+  display: none;
+}
+input,
+button {
+  border: 1px solid color(border);
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  height: $search-height;
+  line-height: $search-height;
+  display: block;
+  box-sizing: border-box;
+  float: left;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  outline: none!important;
+  outline: none!important;
+}
+button {
+  width: $search-height;
+  text-align: center;
+  border-left: none;
+  background: color(brand);
+  border-color: color(brand);
+  @extend %transition;
+  @include icon(search) {
+    color:white;
   }
-  @content;
+  @include hover() {
+    background: darken(color(brand), 10%);
+  }
+}
+input {
+  padding: 0 $search-padding;
+  width:calc( 100% - #{$search-height});
+  border-right: none;
+}
+.icon-caret-left {
+  @include em('font-size', 19px);
+  @include scut-center-transform(y);
+  color: color(brand);
+  position: absolute;
+  right: $search-height - 1px;
+}
+@content;
   /* Search Results */
   .dgwt-wcas-suggestions-wrapp {
     background-color:white!important;
@@ -74,6 +87,13 @@
         background:darken(color(gray-lightest),5%);
         cursor: pointer;
       }
+    }
+    .dgwt-wcas-nores {
+      margin-bottom: 0!important;
+      text-transform: uppercase;
+      margin-top: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
     .dgwt-wcas-si {
       display: block;

@@ -3,25 +3,25 @@
  *  ********************************************************
  */
 
-#cookie-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(#000000, 0.8);
-    z-index: 3;
-    padding: 0 10px;
-    font-size: 12px;
-    p {
-        text-align: center;
-        color: #FFFFFF;
+ #cookie-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(#000000, 0.8);
+  z-index: 100000000;
+  padding: 0 10px;
+  font-size: 12px;
+  p {
+    text-align: center;
+    color: #FFFFFF;
+  }
+  a {
+    color: color(brand);
+    padding-left: 20px;
+    @extend %transition;
+    &:hover {
+      color: lighten(color(brand), 20%);
     }
-    a {
-        color: color(brand);
-        padding-left: 20px;
-        @extend %transition;
-        &:hover {
-            color: lighten(color(brand), 20%);
-        }
-    }
+  }
 }

@@ -2,7 +2,9 @@
 html {
   font-size: $font-size-base;
 }
-
+html, body {
+  overflow-x: hidden!important;
+}
 body {
   @include font-feature-settings(kern);
   background: color(body-background);

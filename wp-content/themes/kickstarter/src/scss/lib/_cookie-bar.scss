@@ -3,15 +3,23 @@
  *  ********************************************************
  */
 
-#cookie-bar {
-    &.fixed {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        &.bottom {
-            bottom: 0;
-            top: auto;
-        }
+ #cookie-bar {
+  a {
+    color:white!important;
+    font-weight: bold;
+    &:hover {
+      color:color(success)!important;
     }
+  }
+  &.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+    &.bottom {
+      bottom: 0;
+      top: auto;
+    }
+  }
 }

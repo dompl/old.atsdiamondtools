@@ -1,0 +1,21 @@
+/*  ********************************************************
+ *   Error messages
+ *  ********************************************************
+ */
+ ul.woocommerce-error {
+
+  @include scut-list-unstyled();
+  li {
+    color:white;
+    background-color: color(danger);
+    @extend %clx;
+    padding: 5px 10px 6px;
+    margin-bottom: 1px;
+    font-size:13px;
+    @include icon(info-circle){
+      float: left;
+      margin-right: 10px;
+    }
+  }
+}
+
