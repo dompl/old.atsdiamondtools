@@ -71,6 +71,7 @@ module.exports = {
                 modules + 'jquery-match-height/jquery.matchHeight.js', // https://github.com/liabru/jquery-match-height
                 modules + 'jquery-backstretch/jquery.backstretch.js', // https://github.com/jquery-backstretch/jquery-backstretch
                 modules + 'jquery.cookie/jquery.cookie.js', // https://github.com/carhartl/jquery-cookie
+                modules + 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js', //https://github.com/malihu/malihu-custom-scrollbar-plugin
                 src + 'js/lib/navigation.js',
                 src + 'js/assets/navigation.js',
                 // src + 'js/lib/modernizr.js',
