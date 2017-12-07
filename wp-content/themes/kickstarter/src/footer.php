@@ -1,3 +1,6 @@
+<section class="container">
+  <?php echo do_shortcode('[gravityform id="1" title="false" description="false" ajax="true"]') ?>
+</section>
 <footer id="footer" data-responsive="769">
   <div class="container">
     <div class="susy-reset">
