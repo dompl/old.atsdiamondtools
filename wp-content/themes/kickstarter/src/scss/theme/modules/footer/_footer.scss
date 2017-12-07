@@ -123,6 +123,9 @@
 }
 
 
+
+
+
 /**
  * Copyright
  * ---
@@ -157,7 +160,6 @@
     @include scut-list-inline(15px);
   }
   @include to(3) {
-
     .left,
     .right {
       text-align: center;
@@ -169,6 +171,59 @@
         text-align: center;
       }
       @include span(12);
+    }
+  }
+}
+
+
+
+/* Footer signup */
+
+#footer-signup {
+  $height: 40px;
+  margin-top: spacer();
+  line-height: $height;
+  p {
+    margin: 0;
+    line-height: $height;
+    text-transform: uppercase;
+    font-weight: bold;
+    @include em('font-size', 14px);
+  }
+  label {
+    display: none;
+  }
+  input {
+    &[type="submit"] {
+      float: left;
+      height: $height;
+      width: $height;
+      line-height: $height;
+      border: none;
+      border-radius: 0;
+      font-weight: bold;
+      color: color(brand);
+      cursor: pointer;
+    }
+    &[type="email"],
+    &[type="text"] {
+      float: left;
+      width: calc(100% - 60px);
+    }
+  }
+  @include from(4) {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    >div {
+      float: left;
+      width: 48%;
+      @include _first-child() {
+        text-align: right;
+      }
+      @include _last-child() {
+        float: right;
+      }
     }
   }
 }

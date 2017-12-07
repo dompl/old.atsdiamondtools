@@ -169,8 +169,12 @@
       display: none;
     }
     img {
-      min-width: 100%;
-      float: left;
+      max-width: 80%;
+      width: 80%;
+      vertical-align: bottom;
+      float: none;
+      display: block;
+      margin:auto;
     }
     h2 {
       @include em('font-size', 16px);

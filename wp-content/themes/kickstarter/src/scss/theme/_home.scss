@@ -1,0 +1,268 @@
+/*  ********************************************************
+ *   HOME PAGE CSS
+ *  ********************************************************
+ */
+
+
+/* Slider */
+
+#home-slider {
+  @include scut-list-unstyled();
+  padding: spacer(.5) 0;
+  background: color(gray-lightest);
+  position: relative;
+  #home-slider-ul {
+    visibility: hidden;
+    &.slick-initialized {
+      visibility: visible;
+    }
+  }
+  /* Slick Slider settings */
+  i {
+    @include scut-center-transform(y);
+    font-size: 30px;
+    left: -50px;
+    cursor: pointer;
+    @include _last-child() {
+      right: -50px;
+      left: inherit;
+    }
+  }
+  .slick-track {
+    display: flex;
+    .slick-slide {
+      display: flex;
+      height: auto;
+      align-items: center; //optional
+      justify-content: center; //optional
+    }
+  }
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide-left {
+    max-width: 50%;
+  }
+  .slide-right {
+    margin-left: 50px;
+  }
+  h2 {
+    font-size: 46px;
+    font-weight: bold;
+    margin-bottom: 0;
+    line-height: 40px;
+    a {
+      color:desaturate(color(brand), 30%);
+    }
+    &.small {
+      font-size: 36px;
+    }
+  }
+  span {
+    font-size: 24px;
+    font-weight: thin;
+  }
+  .slide-short {
+    a {
+      color: color(text);
+    }
+    p {
+      margin: spacer() - 3px 0 0 0;
+    }
+  }
+  .product-call {
+    margin-top: spacer();
+    @include button(color(gray-dark)) {
+      font-weight: bold;
+      padding: 5px 25px;
+      @include hover() {
+        background: black;
+      }
+    }
+  }
+}
+
+/* Call for actions */
+
+#home-calls {
+  border: color(border) 1px solid;
+  border-left: none;
+  border-right: none;
+  ul {
+    @include scut-list-unstyled();
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  @mixin ba() {
+    position: relative;
+    &:before,
+    &:after {
+      content: "";
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      display: block;
+      position: absolute;
+      background: color(border);
+    }
+    @content;
+  }
+  li {
+    display: flex;
+    .left {
+      float: left;
+      width: 60px;
+    }
+    .right {
+      float: right;
+      width: calc(100% - 80px);
+    }
+    .call-title {
+      color: #33327b;
+      font-weight: bold;
+      @include em('font-size', 18px);
+      margin-top: -3px;
+    }
+    p {
+      @include em('font-size', 14px);
+      margin-top: 3px;
+      line-height: 14px;
+      margin-bottom: 0;
+    }
+    img {
+      max-height: 43px;
+      width: auto;
+      vertical-align: bottom;
+    }
+    &.col-3 {
+      display: block;
+      padding: 20px;
+      flex: 1;
+      @include _middle(3) {
+        @include ba() {
+          &:before {
+            left: 0;
+          }
+          &:after {
+            right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+/* Product Listing */
+
+.home-products {
+  margin-top: spacer(1.5);
+  position: relative;
+  overflow-x: hidden;
+  &:before {
+    content: "";
+    width: 9999px;
+    height: 1px;
+    position: absolute;
+    background: color(border);
+    display: block;
+  }
+  h3 {
+    text-align: center;
+    margin-bottom: spacer(1.5);
+    padding-top: spacer(1);
+  }
+  &.item-1 {
+    h3 {
+      padding-top: 0;
+    }
+    &:before {
+      display: none;
+    }
+  }
+  &.last {
+    padding-bottom: spacer(2);
+  }
+  #products-list {
+    &.grid li.product {
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 1px;
+    }
+    /* Slick Slider settings */
+    i {
+      @include scut-center-transform(y);
+      font-size: 30px;
+      left: -50px;
+      cursor: pointer;
+      @include _last-child() {
+        right: -50px;
+        left: inherit;
+      }
+    }
+  }
+}
+
+
+/* Banner */
+
+#home-banner {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color:white;
+  &:before {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    content:"";
+    display: block;
+    background:rgba(black, .70);
+    z-index: 1;
+  }
+  .container {
+    position: relative;
+    z-index: 2;
+    padding:spacer(2.5) 0;
+  }
+  h3 {
+    font-weight: bold;
+    font-size:36px;
+    margin-top: 0px;
+    margin-bottom: spacer();
+  }
+  p {
+    font-size:18px;
+    line-height: 1.4;
+    margin-bottom: spacer(.5);
+    @include from(3) {
+      width: 70%;
+    }
+    @include _last-child() {
+      margin-bottom: 0;
+    }
+  }
+  a {
+    @include button(white) {
+      background:transparent;
+      border:1px solid white;
+      margin-top: spacer(2) - 10px;
+      padding: 2px 15px 1px;
+      font-weight: bold;
+      &:hover {
+        color:black!important;
+      }
+    }
+  }
+}

@@ -26,7 +26,7 @@ if (!function_exists('home_slider_function') && class_exists('acf'))
     if (have_rows('home_banner_list') && is_front_page())
     {
 
-      $slider .= '<section id="home-slider"><div class="container"><ul id="home-slider">';
+      $slider .= '<section id="home-slider"><div class="container"><ul id="home-slider-ul">';
 
       while (have_rows('home_banner_list'))
       {
@@ -38,26 +38,33 @@ if (!function_exists('home_slider_function') && class_exists('acf'))
         $product_image    = get_sub_field('home_banner_image'); // ID
         $product_link     = get_sub_field('home_banner_link');  // ID
 
+        // Count lenght of the title
+        $chars = strlen($product_name);
+
+        $slider .= '<li>';
+
         $slider .= sprintf('
           <div class="slide-left">
-            <div class="slider-title"><a href="%4$s" title="%1$s">%1$s</a>%6$s</div>
+            <div class="slider-title"><h2 class="%7$s"><a href="%4$s" title="%1$s">%1$s</a></h2>%6$s</div>
             <div class="slide-short"><a href="%4$s" title="%1$s">%2$s</a></div>
-            <a href="%4$s" title="%1$s">%5$s</a>
+            <a href="%4$s" title="%1$s" class="product-call">%5$s</a>
           </div>
           <div class="slide-right">
             <div class="slide-image"><a href="%4$s" title="%1$s">%3$s</a></div>
           </div>
           ',
-          $product_name,                                                                                                         // 1
-          $product_short,                                                                                                        // 2
-          is_numeric($product_image) && function_exists('image_figure') ? image_figure($product_image, '', 490, 270, false) : '', // 3
-          $product_link ? get_the_permalink($product_link) : '',                                                                 // 4
-          __('More &amp; buy', 'TEXT_DOMAIN'),                                                                                   // 5
-          $product_subtitle ? '<span class="product-subtitle">' . $product_subtitle . '</span>' : ''                             //6
+          $product_name,                                                                                                          // 1
+          $product_short,                                                                                                         // 2
+          is_numeric($product_image) && function_exists('image_figure') ? image_figure($product_image, '', 491, 256, false) : '', // 3
+          $product_link ? get_the_permalink($product_link) : '',                                                                  // 4
+          __('More &amp; buy', 'TEXT_DOMAIN'),                                                                                    // 5
+          $product_subtitle ? '<span class="product-subtitle">' . $product_subtitle . '</span>' : '',                             //6
+          $chars > 24 ? 'small' : 'large'                                                                                         //7
         );
+        $slider .= '</li>';
       }
 
-      $slider .= '<ul></div></section>';
+      $slider .= '</ul></div></section>';
     }
 
     return $content . $slider;
@@ -79,7 +86,7 @@ if (!function_exists('home_call_for_actions_function') && class_exists('acf'))
       // Count items for css classes
       $count = count(get_field('add_home_calls'));
 
-      $calls .= '<section id="home-calls"><div class="container"><div class="susy-reset"></ul>';
+      $calls .= '<section id="home-calls"><div class="container"><ul class="susy-reset">';
 
       while (have_rows('add_home_calls'))
       {
@@ -90,7 +97,7 @@ if (!function_exists('home_call_for_actions_function') && class_exists('acf'))
         $home_call_content = get_sub_field('home_call_content');
 
         $calls .= sprintf('
-          <li class="col-%4$s">
+          <li class="col-%4$s clx">
             <div class="clx">
               <div class="left">
                %1$s
@@ -102,14 +109,14 @@ if (!function_exists('home_call_for_actions_function') && class_exists('acf'))
             </div>
           </li>
           ',
-          $home_call_icon && is_numeric($home_call_icon) && function_exists('image_figure') ? '<div class="call-image">' . image_figure($home_call_icon, '', 99, 99, true) . '<div>' : '',
+          $home_call_icon && is_numeric($home_call_icon) && function_exists('image_figure') ? '<div class="call-image">' . image_figure($home_call_icon, '', 60, 43, false) . '</div>' : '',
           $home_call_title,
           $home_call_content ? '<p class="call-content">' . $home_call_content . '</p>' : '',
           $count
         );
       }
 
-      $calls .= '</ul></div></div></section>';
+      $calls .= '</ul></div></section>';
 
     }
 
@@ -128,7 +135,8 @@ if (!function_exists('home_custom_products') && class_exists('acf'))
 
     if (have_rows('home_custom_products'))
     {
-
+      $i     = 1;
+      $count = count(get_field('home_custom_products'));
       while (have_rows('home_custom_products'))
       {
         the_row();
@@ -172,7 +180,7 @@ if (!function_exists('home_custom_products') && class_exists('acf'))
         }
 
         $products .= sprintf('
-        <section class="home-products %1$s">
+        <section class="home-products %1$s item-%4$s%5$s">
         <div class="container">
           %2$s
           <div class="home-products-container">
@@ -185,8 +193,11 @@ if (!function_exists('home_custom_products') && class_exists('acf'))
         ',
           $product_type,
           $sectoin_title ? '<h3>' . $sectoin_title . '</h3>' : '',
-          $product_list
+          $product_list,
+          $i,
+          $i === $count ? ' last' : ''
         );
+        $i++;
       }
 
     }
@@ -210,21 +221,20 @@ if (!function_exists('home_content_banner') && class_exists('acf'))
     $banner_link      = get_field('home_banner_link');
     $banner_link_text = get_field('home_banner_link_text');
 
-    if ($banner_cotnent == '' && $banner_image)
+    if ($banner_cotnent != '' && $banner_image != '')
     {
-      return $content;
-    }
 
-    $banner = sprintf('
+      $banner = sprintf('
       <section id="home-banner" style="background-image:url(\'%s\')">
         <div class="container">%s%s%s</div>
       </section>
       ',
-      $banner_image && function_exists('image_array') ? image_array($banner_image, '', 1999, 500, false)['url'] : '',
-      $banner_title ? '<h3 class="banner-title">' . $banner_title . '</h3>' : '',
-      $banner_cotnent,
-      $banner_link ? '<div class="banner-link"><a href="' . esc_url($banner_link) . '">' . ($banner_link_text ? $banner_link_text : __('DISCOVER MORE', 'TEXT_DOMAIN')) . '</a></div>' : ''
-    );
+        $banner_image && function_exists('image_array') ? image_array($banner_image, '', 1999, 500, false)['url'] : '',
+        $banner_title ? '<h3 class="banner-title">' . $banner_title . '</h3>' : '',
+        $banner_cotnent,
+        $banner_link ? '<div class="banner-link"><a href="' . esc_url($banner_link) . '">' . ($banner_link_text ? $banner_link_text : __('DISCOVER MORE', 'TEXT_DOMAIN')) . '</a></div>' : ''
+      );
+    }
 
     return $content . $banner;
   }
@@ -233,8 +243,8 @@ if (!function_exists('home_content_banner') && class_exists('acf'))
 if (!function_exists('content_container_wrapper'))
 {
 
-  function content_container_wrapper($content)
+  function content_container_wrapper($content, $wrapper = '')
   {
-    return !is_front_page() || !is_product_category() ? '<div class="container">' . $content . '</div>' : $content;
+    return !is_front_page() && !is_product_category() ? '<div class="container">' . $content . '</div>' : $content;
   }
 }
