@@ -24,4 +24,3 @@
     <?php get_template_part( 'modules/header/navigation'); ?>
   </header>
   <?php !is_front_page() ? do_action('page_header') : '' ?>
-  <?php echo do_shortcode('[product_category]') ?>

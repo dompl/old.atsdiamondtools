@@ -4,9 +4,13 @@
  */
 
  @mixin search-box() {
+
   $search-height: 34px;
   $search-padding: 15px;
   position: relative;
+  label {
+    display: none;
+  }
   input,
   button {
     border: 1px solid color(border);
@@ -23,11 +27,6 @@
     position: relative;
     outline: none!important;
     outline: none!important;
-    i {
-      @include scut-center-transform();
-      height: $search-height - 1px;
-      color: white;
-    }
   }
   button {
     width: $search-height;
@@ -36,6 +35,9 @@
     background: color(brand);
     border-color: color(brand);
     @extend %transition;
+    @include icon(search) {
+      color:white;
+    }
     @include hover() {
       background: darken(color(brand), 10%);
     }
@@ -53,6 +55,58 @@
     right: $search-height - 1px;
   }
   @content;
+  /* Search Results */
+  .dgwt-wcas-suggestions-wrapp {
+    background-color:white!important;
+    top: $search-height;
+    .dgwt-wcas-suggestion {
+      padding: 10px 5px;
+      clear: both;
+      text-align: left;
+      @extend %clx;
+      background-color:darken(color(gray-lightest),2%);
+      @include _odd() {
+        background-color:white;
+      }
+      &:hover {
+        background:darken(color(gray-lightest),5%);
+        cursor: pointer;
+      }
+    }
+    .dgwt-wcas-si {
+      display: block;
+      max-width: 50px;
+      float: left;
+      @extend %clx;
+      img {
+        max-width:100%;
+      }
+    }
+    .dgwt-wcas-content-wrapp {
+      font-size: 12px;
+      float: right;
+      width: calc(100% - 60px);
+    }
+    /* Title */
+    .dgwt-wcas-st {
+      display: block;
+      margin-top: -2px;
+      font-weight: bold;
+      @include em('font-size', 18px);
+      margin-bottom: 5px;
+      strong {
+        color:color(brand);
+      }
+    }
+    .dgwt-wcas-sp {
+      display: block;
+      margin-top: -5px;
+    }
+    .dgwt-wcas-sd {
+      @include em('font-size', 14px);
+      margin-top: 5px;
+    }
+  }
 }
 
 #header-middle {
