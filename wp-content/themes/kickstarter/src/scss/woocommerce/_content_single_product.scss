@@ -377,6 +377,7 @@ div {
  * ---
  */
  .product-description {
+  margin-bottom: spacer();
   @include to(2) {
     display: none;
   }
