@@ -31,7 +31,7 @@
   }
   @include hover() {
     color: white!important;
-    background-color: darken($color, 10%)
+    background-color: darken($color, 10%);
   }
   &.outline {
     background-color: transparent;

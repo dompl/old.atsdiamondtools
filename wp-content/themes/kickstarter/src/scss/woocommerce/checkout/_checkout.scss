@@ -123,35 +123,6 @@
           font-size: 12px;
           display: block;
         }
-        .woocommerce-password-strength {
-          font-size: 14px;
-          margin-top: spacer(.5);
-          position: relative;
-          font-size: 12px;
-          text-transform: uppercase;
-          font-weight: bold;
-          &:before {
-            @extend %transition;
-            content: "";
-            height: 2px;
-            width: 100%;
-            background: color(success);
-            position: absolute;
-            top: -7px;
-          }
-          &.short:before {
-            background: color(danger);
-            width: 5%;
-          }
-          &.bad:before {
-            background: color(danger);
-            width: 15%;
-          }
-          &.good:before {
-            background: color(warning);
-            width: 50%;
-          }
-        }
       }
     }
   }
@@ -211,73 +182,54 @@
       @include _last-child() {
         margin-bottom: 0;
       }
-      > label {
-       @extend %clx;
-       cursor: pointer!important;
-
-       @include icon(circle) {
-        float: left;
-        margin-right: 10px;
-      }
-    }
-    > input {
-      display: none;
-      &:checked {
-        +label {
-          @include icon(check-circle) {
-            color: color(success);
-          }
-          ;
-        }
-      }
-    }
-    &.wc_payment_method {
-      p {
-        font-size: 14px;
-        margin-left: 5px;
-        margin-right: 5px;
-      }
-      > label {
-        padding: 10px;
-        line-height: 28px;
-        img {
-          float: right;
-        }
-        background: color(gray-lightest);
-        border-bottom:1px solid #CCC;
-        margin-bottom: spacer(.25);
-        display: block;
-      }
-      fieldset {
-        border: none;
-        background: color(gray-lightest);
-        padding: 10px;
+      @include woo-radio();
+      &.wc_payment_method {
         p {
-          margin-left: 0;
-          margin-right: 0;
-          @include _last-child() {
-            margin-bottom: 0;
+          font-size: 14px;
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        > label {
+          padding: 10px;
+          line-height: 28px;
+          img {
+            float: right;
+          }
+          background: color(gray-lightest);
+          border-bottom:1px solid #CCC;
+          margin-bottom: spacer(.25);
+          display: block;
+        }
+        fieldset {
+          border: none;
+          background: color(gray-lightest);
+          padding: 10px;
+          p {
+            margin-left: 0;
+            margin-right: 0;
+            @include _last-child() {
+              margin-bottom: 0;
+            }
           }
         }
-      }
-      .woocommerce_error {
-        @include scut-list-unstyled();
-        background: color(danger);
-        color: white;
-        @include em('font-size', 13px);
-        font-weight: bold;
-        padding: 5px;
-        margin-top: 5px;
-        li {
-          margin-bottom: 5px;
-          @include _last-child() {
-            margin-bottom: 0;
+        .woocommerce_error {
+          @include scut-list-unstyled();
+          background: color(danger);
+          color: white;
+          @include em('font-size', 13px);
+          font-weight: bold;
+          padding: 5px;
+          margin-top: 5px;
+          li {
+            margin-bottom: 5px;
+            @include _last-child() {
+              margin-bottom: 0;
+            }
           }
         }
       }
     }
   }
-}
   /* Place order */
 
   .place-order {

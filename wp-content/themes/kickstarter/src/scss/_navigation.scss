@@ -26,14 +26,14 @@
   ) !default;
 
 // Nav container sizes
-$nav-top-font-size: $font-size-base;
-$nav-top-height: 53px;
+$nav-top-font-size: 14px;
+$nav-top-height: 50px;
 $nat-top-transition-speed : 200ms;
 
 
 // Top nav settingds
 $nav-top-a-padding-top: 0;
-$nav-top-a-padding-bottom: 1px;
+$nav-top-a-padding-bottom: 0;
 $nav-top-a-padding-right: 0;
 $nav-top-a-padding-left: 0;
 $nav-top-a-remove-padding-from-first-child : false;

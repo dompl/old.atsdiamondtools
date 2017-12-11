@@ -38,6 +38,7 @@
         width: (100% / $total-menu-items);
         text-align: center;
         position: relative;
+        text-transform: uppercase;
         &:after {
           content: "";
           width: 1px;

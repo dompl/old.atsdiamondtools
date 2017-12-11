@@ -1,0 +1,54 @@
+/*  ********************************************************
+ *   Login forms
+ *  ********************************************************
+ */
+
+ .woocommerce-account {
+  #customer_login {
+    @include container();
+    h2 {
+      text-transform: uppercase;
+      border-bottom: 1px solid color(border);
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: spacer(.5);
+      padding-bottom: spacer(.5);
+    }
+    form {
+      @include checkbox() {
+        margin-left: 10px;
+        float: left;
+        line-height: 26px;
+      }
+      p {
+        @extend %clx;
+      }
+      p.lost_password {
+        clear: both;
+        @include em('font-size', 12px);
+        margin: 0;
+      }
+      input {
+        @include text-inputs() {
+          @include checkout-input();
+          margin-top: auto;
+        }
+        &[type="submit"] {
+          @include button($size: "small");
+          float: left;
+        }
+      }
+      label {
+        @include checkout-label();
+      }
+    }
+    &.col2-set {
+      .col-1 {
+        @include span(1 of 2 after);
+      }
+      .col-2 {
+        @include span( 1 of 2 after last);
+      }
+    }
+  }
+}

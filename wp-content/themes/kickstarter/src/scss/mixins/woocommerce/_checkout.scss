@@ -67,3 +67,35 @@
     @content;
   }
 }
+
+@mixin woo-headings {
+ font-size:18px;
+ text-transform: uppercase;
+ margin-top: 0;
+ line-height: 1;
+ margin-bottom: spacer(.5);
+ @content;
+}
+
+@mixin woo-radio() {
+  > label {
+   @extend %clx;
+   cursor: pointer!important;
+   @include icon(circle) {
+    float: left;
+    margin-right: 10px;
+    @content;
+  }
+}
+> input {
+  display: none;
+  &:checked {
+    +label {
+      @include icon(check-circle) {
+        color: color(success);
+      }
+      ;
+    }
+  }
+}
+}

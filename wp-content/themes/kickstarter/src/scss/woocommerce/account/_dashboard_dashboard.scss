@@ -1,0 +1,227 @@
+/*  ********************************************************
+ *   Account - Dashboard Elements
+ *  ********************************************************
+ */
+
+ .col2-set {
+  @include container();
+  .col-1 {
+    @include span(6 after)
+  }
+  .col-2 {
+    @include span(6 after last)
+  }
+}
+
+.woocommerce-MyAccount-content {
+  a.button {
+    @include button();
+  }
+  p {
+    margin-top: 0;
+    @include _last-child() {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/*  ********************************************************
+ *   Addresses
+ *  ********************************************************
+ */
+
+ .woocommerce-Address {
+  margin-top: spacer(1);
+  header {
+    h3 {
+      @include woo-headings() {}
+      ;
+    }
+    a {
+      text-transform: uppercase;
+      margin-top: - spacer(.25);
+      display: block;
+      @include button() {
+        @include em('font-size', 11px);
+        padding: 1px 5px 0;
+        font-weight: bold;
+        height: 20px;
+        line-height: 20px;
+      }
+      ;
+    }
+  }
+  address {
+    margin-top: spacer();
+    background: color(gray-lightest);
+    padding: 10px;
+    @include em('font-size', 14px);
+    font-style: normal;
+  }
+}
+
+/*  ********************************************************
+ *   Add address
+ *  ********************************************************
+ */
+
+ .woocommerce-MyAccount-content {
+  h3 {
+    @include woo-headings() {}
+  }
+  .woocommerce-address-fields {
+    label {
+      @include checkout-label()
+    }
+    input {
+      @include text-inputs() {
+        @include checkout-input();
+      }
+      &[type="submit"] {
+        margin-top: spacer();
+        @include button();
+      }
+    }
+    .woocommerce-address-fields__field-wrapper {
+      @include container(60%);
+      margin-left: 0;
+      p {
+        margin: 0 0 10px 0;
+        @include span(6 after);
+        @include _even() {
+          @include span(6 after last);
+        }
+        @include _last-child() {
+          margin-bottom: 0;
+        }
+        &.address-field,
+        &#billing_company_field {
+          clear: both;
+          width: 100%!important;
+          float: none!important;
+        }
+      }
+    }
+  }
+}
+
+/*  ********************************************************
+ *   Messages
+ *  ********************************************************
+ */
+
+ .woocommerce-MyAccount-content {
+  .woocommerce-info {
+    border-bottom: none;
+    padding: 0;
+    background: color(border);
+    color: white;
+    padding: 5px 10px;
+    color: color(text);
+    a {
+      float: right;
+      margin-top: 3px;
+      @include button($color: black) {
+        @include em('font-size', 11px);
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+/*  ********************************************************
+ *   Payment Methods
+ *  ********************************************************
+ */
+
+ #add_payment_method {
+  input[type="submit"] {
+    @include button();
+    margin-top: spacer(.5);
+  }
+  ul {
+    @include scut-list-unstyled();
+    li {
+      background: color(gray-lightest);
+      margin-bottom: spacer(.25);
+      padding: 10px;
+      @include checkbox();
+      @include woo-radio() {
+        display: block;
+        padding: 4px;
+      }
+      ;
+      >label {
+        display: block;
+        padding-bottom: 10px;
+        @extend %clx;
+        @include em('font-size', 12px);
+        border-bottom: 2px solid white;
+        &:before {
+          float: left;
+          height: 10px;
+          margin-top: -5px;
+        }
+        img {
+          float: right;
+          max-height: 30px;
+        }
+      }
+      @include _last-child() {
+        margin-bottom: 0;
+      }
+    }
+    .woocommerce-PaymentBox {
+      clear: both;
+      p {
+        @include em('font-size', 12px);
+        margin: 10px 0;
+      }
+      fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+      }
+      input {
+        @include checkout-input()
+      }
+      label {
+        @include checkout-label();
+      }
+    }
+  }
+}
+
+/*  ********************************************************
+ *   Edit account details
+ *  ********************************************************
+ */
+
+ .woocommerce-MyAccount-content {
+  .button {
+    @include button() {
+      margin-top: spacer(.5);
+    };
+  }
+  .edit-account {
+    fieldset {
+      padding: 10px;
+      border:none;
+      background:color(gray-lightest);
+      legend {
+        @include woo-headings();
+      }
+    }
+    input {
+      @include text-inputs() {
+        @include checkout-input()
+      }
+    }
+    label {
+      @include checkout-label();
+    }
+  }
+}
