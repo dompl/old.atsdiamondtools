@@ -3,7 +3,7 @@
  *  ********************************************************
  */
 
-@mixin search-box() {
+ @mixin search-box() {
 
   $search-height: 34px;
   $search-padding: 15px;
@@ -153,7 +153,8 @@
     .aws_result_excerpt {
       @include em('font-size', 14px);
       color: color(text);
-      margin-top: -5px;
+      display:block;
+      line-height: 1.4;
     }
     .aws_result_price {
       display: block;
@@ -234,6 +235,22 @@
         @include em('font-size', 20px);
         @include from(4) {
           @include em('font-size', 20px);
+        }
+      }
+    }
+    .price-break {
+      font-size:12px;
+      margin-top:-2px;
+      color:lighten(color(text), 2%);
+      span {
+        line-height: 1;
+        &.total-tax, &.shipping {
+          display:block;
+          font-weight: 400;
+        }
+        &.shipping {
+          margin-top: 6px;
+          font-size:11px;
         }
       }
     }
