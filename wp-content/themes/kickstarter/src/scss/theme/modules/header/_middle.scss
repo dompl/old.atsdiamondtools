@@ -3,132 +3,168 @@
  *  ********************************************************
  */
 
- @mixin search-box() {
+@mixin search-box() {
 
   $search-height: 34px;
   $search-padding: 15px;
   position: relative;
 
-  .dgwt-wcas-preloader {
-    @include opacity(0);
-    @extend %transition;
-    height: $search-height;
-    width: $search-height;
-    background:url(img/theme/preloader.svg) 50% 50% no-repeat;
+  @include icon(search);
+  &:before {
     position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translatey(-50%);
+    background: color(brand);
+    color: white;
+    padding: 7px 10px;
+  }
+
+  .aws-search-form:after {
+    @include opacity(0);
+    content: "";
+    position: absolute;
+    right: 38px;
+    top: 50%;
+    transform: translatey(-50%);
+    background: url(img/theme/preloader.svg) 50% 50% no-repeat;
+    width: 30px;
+    height: 30px;
     display: block;
-    &.dgwt-wcas-inner-preloader {
-     @include opacity(1);
-   }
- }
- label {
-  display: none;
-}
-input,
-button {
-  border: 1px solid color(border);
-  -webkit-appearance: none;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-  height: $search-height;
-  line-height: $search-height;
-  display: block;
-  box-sizing: border-box;
-  float: left;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  outline: none!important;
-  outline: none!important;
-}
-button {
-  width: $search-height;
-  text-align: center;
-  border-left: none;
-  background: color(brand);
-  border-color: color(brand);
-  @extend %transition;
-  @include icon(search) {
-    color:white;
+    @extend %transition;
   }
-  @include hover() {
-    background: darken(color(brand), 10%);
+
+  .processing:after {
+    @include opacity(1);
   }
+
+  label {
+    display: none;
+  }
+  input,
+  button {
+    border: 1px solid color(border);
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    height: $search-height;
+    line-height: $search-height;
+    display: block;
+    box-sizing: border-box;
+    float: left;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    outline: none!important;
+    outline: none!important;
+  }
+  button {
+    width: $search-height;
+    text-align: center;
+    border-left: none;
+    background: color(brand);
+    border-color: color(brand);
+    @extend %transition;
+    @include icon(search) {
+      color: white;
+    }
+    @include hover() {
+      background: darken(color(brand), 10%);
+    }
+  }
+  input {
+    padding: 0 $search-padding;
+    width:calc( 100% - #{$search-height});
+    border-right: none;
+  }
+  .icon-caret-left {
+    @include em('font-size', 19px);
+    @include scut-center-transform(y);
+    color: color(brand);
+    position: absolute;
+    right: $search-height - 1px;
+  }
+  @content;
 }
-input {
-  padding: 0 $search-padding;
-  width:calc( 100% - #{$search-height});
-  border-right: none;
-}
-.icon-caret-left {
-  @include em('font-size', 19px);
-  @include scut-center-transform(y);
-  color: color(brand);
+
+
+
+/* Search Results */
+
+@mixin search-result() {
   position: absolute;
-  right: $search-height - 1px;
-}
-@content;
-  /* Search Results */
-  .aws-search-result {
-    background-color:white!important;
-    top: $search-height;
-    max-height:60vh!important;
-    overflow-y:auto;
-    .dgwt-wcas-suggestion {
-      padding: 10px 5px;
-      clear: both;
-      text-align: left;
-      @extend %clx;
-      background-color:darken(color(gray-lightest),2%);
-      @include _odd() {
-        background-color:white;
-      }
-      &:hover {
-        background:darken(color(gray-lightest),5%);
-        cursor: pointer;
-      }
+  overflow-x: hidden;
+  max-height: 60vh;
+
+  ul {
+    @include scut-list-unstyled;
+    margin-top: 35px;
+  }
+
+  .aws_no_result {
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  .aws_result_item {
+    max-height: 60vh!important;
+    overflow-y: auto;
+    padding: 10px 5px;
+    clear: both;
+    text-align: left;
+    @extend %clx;
+    @include _even() {
+      background-color: darken(color(gray-lightest), 2%);
     }
-    .dgwt-wcas-nores {
-      margin-bottom: 0!important;
-      text-transform: uppercase;
-      margin-top: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
+    @include _odd() {
+      background-color: white;
     }
-    .dgwt-wcas-si {
+    &:hover {
+      background: darken(color(gray-lightest), 5%);
+      cursor: pointer;
+    }
+
+    .aws_result_image {
       display: block;
       max-width: 50px;
       float: left;
       @extend %clx;
       img {
-        max-width:100%;
+        max-width: 100%;
       }
     }
-    .dgwt-wcas-content-wrapp {
+    .aws_result_content {
       font-size: 12px;
       float: right;
       width: calc(100% - 60px);
     }
     /* Title */
-    .dgwt-wcas-st {
+    .aws_result_title {
       display: block;
       margin-top: -2px;
       font-weight: bold;
       @include em('font-size', 18px);
       margin-bottom: 5px;
+      color: color(text);
       strong {
-        color:color(brand);
+        color: color(brand);
       }
     }
-    .dgwt-wcas-sp {
-      display: block;
+    .aws_result_excerpt {
+      @include em('font-size', 14px);
+      color: color(text);
       margin-top: -5px;
     }
-    .dgwt-wcas-sd {
-      @include em('font-size', 14px);
+    .aws_result_price {
+      display: block;
       margin-top: 5px;
+      color: color(text);
     }
   }
+}
+
+.aws-search-result {
+  @include search-result();
 }
 
 #header-middle {
