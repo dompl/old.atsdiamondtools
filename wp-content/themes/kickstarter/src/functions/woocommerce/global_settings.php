@@ -93,18 +93,20 @@ function custom_woocommerce_get_price_suffix( $price_display_suffix, $product ) 
   return $price_display_suffix;
 }
 
-add_filter( 'woocommerce_add_to_cart_redirect', 'wc_redirectfortaxonomy' );
-function wc_redirectfortaxonomy() {
-global $woocommerce;
-// Get product ID
-if ( isset( $_POST['add-to-cart'] ) ) {
-    $product_id = (int) apply_filters( 'woocommerce_add_to_cart_product_id', $_POST['add-to-cart'] );
-    // Check if product ID is in the taxonomy we want to redirect to checkout for
-    if ( has_term( 'payments', 'product_cat', $product_id ) )
-        // Set redirect URL
-        $checkout_url = $woocommerce->cart->get_checkout_url();
-        $redirect_url = $checkout_url;
-        // Return the new URL
-        return $redirect_url;
-    }
-}
+
+// add_filter( 'woocommerce_add_to_cart_redirect', 'wc_redirectfortaxonomy' );
+// function wc_redirectfortaxonomy() {
+// global $woocommerce;
+// // Get product ID
+// if ( isset( $_POST['add-to-cart'] ) ) {
+//     $product_id = (int) apply_filters( 'woocommerce_add_to_cart_product_id', $_POST['add-to-cart'] );
+//     // Check if product ID is in the taxonomy we want to redirect to checkout for
+//     if ( has_term( 'payments', 'product_cat', $product_id ) )
+//         // Set redirect URL
+//         $checkout_url = $woocommerce->cart->get_checkout_url();
+//         $redirect_url = $checkout_url;
+//         // Return the new URL
+//         return $redirect_url;
+//     }
+// }
+

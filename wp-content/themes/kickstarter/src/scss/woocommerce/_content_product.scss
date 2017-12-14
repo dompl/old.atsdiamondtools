@@ -37,7 +37,7 @@
       .product-list-start {
         .product-list-image {
           height: auto!important;
-          @include span(3 after)
+          @include span(3 after);
         }
         .product-content-container {
           @include em('font-size', 14px);
@@ -162,6 +162,15 @@
     }
 
 
+    .product-list-image {
+      position: relative;
+      height:210px!important;
+      a {
+        @include scut-center-transform();
+        display:block;
+        width: 100%;
+      }
+    }
     .gh {
       display: none;
     }

@@ -78,7 +78,7 @@ function ats_create_product_listing_layout_()
   apply_filters( 'woocommerce_loop_add_to_cart_link',
     sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s %s %s">%s</a>',
       // esc_url($product->add_to_cart_url()),
-      esc_url(get_permalink( $product->get_id() )),
+      is_product() ? esc_url($product->add_to_cart_url()) : esc_url(get_permalink( $product->get_id() )),
       esc_attr($id),
       esc_attr($product->get_sku()),
       esc_attr(isset($quantity) ? $quantity : 1),
