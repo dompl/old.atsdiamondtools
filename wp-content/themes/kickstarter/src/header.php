@@ -5,13 +5,6 @@
 <html <?php language_attributes();?> class="no-js">
 <head>
   <title><?php wp_title('');?></title>
-  <?php
-  if (file_exists(dirname(__FILE__) . '/../../../../../env_staging'))
-  {
-    echo '<script src="//cdn.trackduck.com/toolbar/prod/td.js" async data-trackduck-id="5a141e37bb01984a4aef967f"></script>';
-    echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
-  }
-  ?>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta charset="<?php bloginfo('charset');?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

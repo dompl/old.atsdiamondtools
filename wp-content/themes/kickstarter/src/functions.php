@@ -117,3 +117,38 @@ function wp_get_attachment($attachment_id = null, $attachment_size = null)
     'guid'        => $attachment->guid,
   );
 }
+
+add_filter( 'woocommerce_redirect_single_search_result', '__return_false' );
+function my_maybe_woocommerce_variation_permalink( $permalink ) {
+
+  // check to see if the search was for a product variation SKU
+  $sku = get_search_query();
+  $args = array(
+    'post_type'       => 'product_variation',
+    'posts_per_page'  => 1,
+    'fields'          => 'ids',
+    'meta_query'      => array(
+      array(
+        'key'     => '_sku',
+        'value'   => $sku,
+      ),
+    ),
+  );
+  $variation = get_posts( $args );
+  // make sure the permalink we're filtering is for the parent product
+  if ( get_permalink( wp_get_post_parent_id( $variation[0] ) ) !== $permalink ) {
+    return $permalink;
+  }
+  if ( ! empty( $variation ) && function_exists( 'wc_get_attribute_taxonomy_names' ) ) {
+    // this is a variation SKU, we need to prepopulate the filters
+    $variation_id = absint( $variation[0] );
+    $variation_obj = new WC_Product_Variation( $variation_id );
+    $attributes = $variation_obj->get_variation_attributes();
+    if ( empty( $attributes ) ) {
+      return $permalink;
+    }
+    $permalink = add_query_arg( $attributes, $permalink );
+  }
+  return $permalink;
+}
+add_filter( 'the_permalink', 'my_maybe_woocommerce_variation_permalink' );
