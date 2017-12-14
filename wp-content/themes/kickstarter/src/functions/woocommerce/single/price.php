@@ -10,10 +10,12 @@ function custom_wc_template_single_price(){
   // Variable product only
   if($product->is_type('variable')):
 
+
+    $suffix = $product->is_taxable() ? get_option('woocommerce_price_display_suffix') : '';
+
     // Main Price
     $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
-    $price = $prices[0] !== $prices[1] ? sprintf( __( 'From: %1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
-
+    $price = $prices[0] !== $prices[1] ? sprintf( __( 'From: %1$s%2$s', 'woocommerce' ), wc_price( $prices[0] ), $suffix ) : wc_price( $prices[0] );
     // Sale Price
     $prices = array( $product->get_variation_regular_price( 'min', true ), $product->get_variation_regular_price( 'max', true ) );
     sort( $prices );
