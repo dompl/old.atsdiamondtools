@@ -38,8 +38,8 @@
     color: $color;
   }
   &.product_type_variable {
-    background-color: lighten($color, 15%);
-    border-color: lighten($color, 15%);
+    // background-color: lighten($color, 15%);
+    // border-color: lighten($color, 15%);
   }
   @content;
 }

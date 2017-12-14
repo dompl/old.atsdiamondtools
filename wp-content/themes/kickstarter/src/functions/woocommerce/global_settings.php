@@ -68,20 +68,43 @@ function custom_woocommerce_product_add_to_cart_text()
 
   switch ($product_type) {
     case 'external':
-      return __('Buy product', 'woocommerce');
+      return __('More Info/Buy', 'woocommerce');
       break;
     case 'grouped':
-      return __('View products', 'woocommerce');
+      return __('More Info/Buy', 'woocommerce');
       break;
     case 'simple':
-      return __('Add to cart', 'woocommerce');
+      return __('More Info/Buy', 'woocommerce');
       break;
     case 'variable':
-      return __('Read more', 'woocommerce');
+      return __('More Info/Buy', 'woocommerce');
       break;
     default:
-      return __('Read more', 'woocommerce');
+      return __('More Info/Buy', 'woocommerce');
   }
 }
 
-// end function
+/* Remove sufix if product is not taxable */
+add_filter( 'woocommerce_get_price_suffix', 'custom_woocommerce_get_price_suffix', 10, 2 );
+function custom_woocommerce_get_price_suffix( $price_display_suffix, $product ) {
+  if ( ! $product->is_taxable() ) {
+    return '';
+  }
+  return $price_display_suffix;
+}
+
+add_filter( 'woocommerce_add_to_cart_redirect', 'wc_redirectfortaxonomy' );
+function wc_redirectfortaxonomy() {
+global $woocommerce;
+// Get product ID
+if ( isset( $_POST['add-to-cart'] ) ) {
+    $product_id = (int) apply_filters( 'woocommerce_add_to_cart_product_id', $_POST['add-to-cart'] );
+    // Check if product ID is in the taxonomy we want to redirect to checkout for
+    if ( has_term( 'payments', 'product_cat', $product_id ) )
+        // Set redirect URL
+        $checkout_url = $woocommerce->cart->get_checkout_url();
+        $redirect_url = $checkout_url;
+        // Return the new URL
+        return $redirect_url;
+    }
+}
