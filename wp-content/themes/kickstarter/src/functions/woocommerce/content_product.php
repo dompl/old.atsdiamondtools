@@ -77,13 +77,15 @@ function ats_create_product_listing_layout_()
   $add_to_cart =
   apply_filters( 'woocommerce_loop_add_to_cart_link',
     sprintf('<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" data-quantity="%s" class="button product_type_%s %s %s">%s</a>',
-      esc_url($product->add_to_cart_url()),
+      // esc_url($product->add_to_cart_url()),
+      is_product() ? esc_url($product->add_to_cart_url()) : esc_url(get_permalink( $product->get_id() )),
       esc_attr($id),
       esc_attr($product->get_sku()),
       esc_attr(isset($quantity) ? $quantity : 1),
       esc_attr($product->get_type()),
       $product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button' : '',
-      $product->supports( 'ajax_add_to_cart' ) ? 'ajax_add_to_cart' : '',
+      // $product->supports( 'ajax_add_to_cart' ) ? 'ajax_add_to_cart' : '',
+      '',
       esc_html($product->add_to_cart_text())
     ),
     $product );
@@ -120,8 +122,9 @@ function ats_create_product_listing_layout_()
   $stock_quantity = $product->get_stock_quantity();
   $stock_manage   = $product->get_manage_stock();
   $stock_min      = 5;
-  $info_button = $product->get_type() !== 'variable' ? '<a class="gf info outline" href="'.get_the_permalink().'">'.__('Info', 'TEXT_DOMAIN').'</a>' : '';
 
+  //$info_button = $product->get_type() !== 'variable' ? '<a class="gf info outline" href="'.get_the_permalink().'">'.__('Info', 'TEXT_DOMAIN').'</a>' : '';
+  $info_button ='';
   if ($stock_quantity > $stock_min && $stock == 'instock') {
     $stock_info = __('+' . $stock_min);
   } elseif($stock_quantity <= $stock_min && $stock == 'instock' ) {
