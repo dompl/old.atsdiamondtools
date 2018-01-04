@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 4.9
-Stable tag: 1.30
+Tested up to: 4.9.1
+Stable tag: 1.32
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,14 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 2. Plugin settings page
 
 == Changelog ==
+
+= 1.32 =
+* Fix shortcodes stripping from product content
+* Fix qTranslate plugin issue with product name 
+* Fix reindex issue
+
+= 1.31 =
+* Add WooCommerce version check
 
 = 1.30 =
 * Add qTranslate plugin support

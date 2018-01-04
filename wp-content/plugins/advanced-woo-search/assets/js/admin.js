@@ -33,7 +33,7 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             type: 'POST',
-            url: aws_vars.ajaxurl,
+            url: ajaxurl,
             data: {
                 action: 'aws-reindex'
             },
@@ -105,7 +105,7 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             type: 'POST',
-            url: aws_vars.ajaxurl,
+            url: ajaxurl,
             data: {
                 action: 'aws-clear-cache'
             },

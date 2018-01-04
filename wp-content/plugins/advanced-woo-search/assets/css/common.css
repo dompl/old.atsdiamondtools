@@ -153,6 +153,11 @@
     opacity: 1;
 }
 
+.aws-search-result .aws_result_price del {
+    opacity: 0.8;
+    text-decoration: line-through !important;
+}
+
 .aws-search-result .aws_result_cats {
     display: block;
     float: left;

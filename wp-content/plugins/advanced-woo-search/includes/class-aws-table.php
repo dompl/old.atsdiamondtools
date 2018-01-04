@@ -268,6 +268,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 $content = apply_filters( 'the_content', get_post_field( 'post_content', $data['id'] ) );
                 $excerpt = get_post_field( 'post_excerpt', $data['id'] );
 
+
                 $cat_names = $this->get_terms_names_list( $data['id'], 'product_cat' );
                 $tag_names = $this->get_terms_names_list( $data['id'], 'product_tag' );
 
@@ -308,8 +309,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                     $content = wp_encode_emoji( $content );
                 }
 
-                $content = strip_shortcodes( $content );
-
+                $content = $this->strip_shortcodes( $content );
+                $excerpt = $this->strip_shortcodes( $excerpt );
 
                 $data['terms']['title']    = $this->extract_terms( $title );
                 $data['terms']['content']  = $this->extract_terms( $content );
@@ -344,6 +345,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                     $translated_content = apply_filters( 'the_content', get_post_field( 'post_content', $translated_post->ID ) );
                                     $translated_excerpt = get_post_field( 'post_excerpt', $translated_post->ID );
 
+                                    $translated_content = $this->strip_shortcodes( $translated_content );
+                                    $translated_excerpt = $this->strip_shortcodes( $translated_excerpt );
 
                                     $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title );
                                     $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content );
@@ -370,6 +373,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                         foreach( $enabled_languages as $current_lang ) {
 
                             if ( $current_lang == $lang ) {
+                                $default_lang_title = qtranxf_use( $current_lang, $product->get_name(), true, true );
+                                $data['terms']['title'] = $this->extract_terms( $default_lang_title );
                                 continue;
                             }
 
@@ -387,6 +392,9 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                     $translated_title = qtranxf_use( $current_lang, $product->get_name(), true, true );
                                     $translated_content = qtranxf_use( $current_lang, $product->get_description(), true, true );
                                     $translated_excerpt = qtranxf_use( $current_lang, $product->get_short_description(), true, true );
+
+                                    $translated_content = $this->strip_shortcodes( $translated_content );
+                                    $translated_excerpt = $this->strip_shortcodes( $translated_excerpt );
 
                                     $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title );
                                     $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content );
@@ -551,6 +559,14 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             delete_option( 'aws_index_meta' );
 
             wp_send_json_success( 'Deleted!' );
+        }
+
+        /*
+         * Strip shortcodes
+         */
+        private function strip_shortcodes( $content ) {
+            $content = preg_replace( '#\[[^\]]+\]#', '', $content );
+            return $content;
         }
 
         /*
