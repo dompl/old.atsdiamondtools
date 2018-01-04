@@ -129,6 +129,7 @@
       }
       input {
         @include total-input();
+        box-sizing:border-box;
       }
       .button {
         @include total-button();

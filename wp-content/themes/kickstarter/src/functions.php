@@ -152,3 +152,33 @@ function my_maybe_woocommerce_variation_permalink( $permalink ) {
   return $permalink;
 }
 add_filter( 'the_permalink', 'my_maybe_woocommerce_variation_permalink' );
+
+
+/**
+ * Hide shipping rates when free shipping is available.
+ * Updated to support WooCommerce 2.6 Shipping Zones.
+ *
+ * @param array $rates Array of rates found for the package.
+ * @return array
+ */
+// Hide table rate shipping option when free shipping is available
+add_filter( 'woocommerce_available_shipping_methods', 'hide_table_rate_shipping_when_free_is_available' );
+
+/**
+ *  Hide Table Rate shipping option when free shipping is available
+ *
+ * @param array $available_methods
+ */
+
+add_filter( 'woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_when_free_is_available_in_zone', 10, 2 );
+
+function bbloomer_unset_shipping_when_free_is_available_in_zone( $rates, $package ) {
+
+    // Only unset rates if free_shipping is available
+
+    unset( $rates['shipping_method_0_table_rate313'] );
+
+
+return $rates;
+
+}

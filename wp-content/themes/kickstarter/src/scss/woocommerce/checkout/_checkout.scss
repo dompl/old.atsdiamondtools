@@ -136,6 +136,7 @@
     tfoot {
       th,
       td {
+        min-width:170px;
         padding: $table--cells-pagging;
         border: 1px solid #CCC;
         border-top: none;
@@ -144,7 +145,7 @@
         font-weight: $heading--th-font-webight;
         text-align: $heading--th-text-alight;
         text-transform: $heading--th-text-case;
-        line-height: $heading--th-line-height;
+        line-height: $heading--th-line-height + 5px;
       }
       tr.order-total {
         th,

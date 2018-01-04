@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             do_action( 'woocommerce_after_shipping_rate', $method, $index );
             ?>
             <?php echo is_cart() ? '<div class="shipping-info shipping-info-checkout">' : ''; ?>
-              <?php echo wpautop( __( 'Shipping costs will be calculated once you have provided your address.', 'woocommerce' ) ); ?>
+              <?php // echo wpautop( __( 'Shipping costs will be calculated once you have provided your address.', 'woocommerce' ) ); ?>
               <?php echo is_cart() ? '</div>' : '' ?>
             <?php else : ?>
               <?php echo is_cart() ? '<div class="shipping-info shipping-info-na">' : ''; ?>
