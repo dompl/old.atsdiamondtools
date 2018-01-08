@@ -78,3 +78,31 @@
     .woocommerce-table__product-name a:hover {
       color: lighten(color(brand), 20%) !important;
     }
+
+    .woocommerce-customer-details {
+      margin-top: 30px;
+      h2 {
+        font-size: 22px;
+      }
+      address {
+        font-size: 14px;
+      }
+      .woocommerce-column--billing-address {
+        width: 100%;
+        float: none;
+
+        @include from(2) {
+          width: 48%;
+          float: left;
+        }
+      }
+
+      .woocommerce-column--shipping-address {
+        width: 100%;
+        float: none;
+        @include from(2) {
+          width: 48%;
+          float: right;
+        }
+      }
+    }
