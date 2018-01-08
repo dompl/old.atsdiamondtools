@@ -11,14 +11,14 @@ function main_logo($container, $width='', $height='')
   if (function_exists('image_figure'))
   {
 
-    $width    = $width ? $width : 55;   // Logo height
-    $height    = $height ? $height : 312;   // Logo height
+    $width    = $width ? $width : 57;   // Logo height
+    $height    = $height ? $height : 329;   // Logo height
     $crop     = false; // Logo crop
     $quality  = 100;   // Image quality
     $retina   = true;  // Display retina size
     $figure   = true;  // Display figure wrapper
     $lazy     = false; // Displat lazy load
-    $logo_url = get_template_directory_uri() . '/img/theme/logo.png';
+    $logo_url = get_template_directory_uri() . '/img/theme/logo-new.png';
 
     $img = !is_front_page() ? '<a href="' . esc_url(home_url('/')) . '" rel="home">' : '';
 
