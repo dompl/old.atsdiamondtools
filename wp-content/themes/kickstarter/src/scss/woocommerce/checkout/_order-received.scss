@@ -1,0 +1,105 @@
+    /*  ********************************************************
+     *   Orders
+     *  ********************************************************
+     */
+
+    .woocommerce-order-overview {
+      margin: 0 0 spacer() 0;
+      padding: 0;
+      @extend %clx;
+      list-style: none;
+      li {
+        float: left;
+        margin-right: 2em;
+        text-transform: uppercase;
+        font-size: 11px;
+        line-height: 1;
+        padding: 0 0 2em 0;
+        margin-left: 0;
+        list-style: none;
+        @include _last(1) {
+          border: none;
+        }
+        @include breakpoint(min-width $md) {
+          border-right: 1px dashed darken(color(gray-lightest), 15%);
+          padding: 0 2em 0 0;
+        }
+        strong {
+          display: block;
+          font-size: 14px;
+          margin-top: 5px;
+          text-transform: none;
+          line-height: 1.5;
+          @include breakpoint(min-width $sm) {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .woocommerce-table__product-name {
+      padding: 15px 10px !important;
+    }
+
+    .woocommerce-order-details__title {
+      margin: 0 !important;
+      font-size: 22px;
+    }
+
+    .woocommerce-order-details {
+      margin-top: spacer();
+    }
+
+    .woocommerce-table--order-details {
+      margin-top: 15px;
+      // padding: 10px 30px 30px 30px;
+    }
+
+    .woocommerce-MyAccount-orders,
+    .woocommerce-table--order-details,
+    .woocommerce-MyAccount-paymentMethods {
+      width: 100%;
+      // background: color(gray-lightest) !important;
+
+      tbody,
+      tfoot {
+        tr {
+          text-align: left;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-light;
+        }
+        th,td {
+          border: 1px solid #ccc;
+          border-top: none;
+          padding: 10px;
+        }
+
+        td {
+          border-left: none;
+        }
+        .woocommerce-orders-table__cell-order-actions a {
+          @include button();
+          background: color(purple);
+          font-size: $font-size-sm;
+          font-weight: $font-weight-light;
+          margin: 0;
+          &:hover {
+            background: color(link-hover);
+          }
+        }
+      }
+      .order-again {
+        background: white;
+        a {
+          @include button();
+          display: inline-block !important;
+          margin: 20px 0 !important;
+          background: color(purple);
+          font-size: $font-size-sm;
+          font-weight: $font-weight-light;
+          &:hover {
+            background: color(link-hover);
+          }
+        }
+      }
+    }
