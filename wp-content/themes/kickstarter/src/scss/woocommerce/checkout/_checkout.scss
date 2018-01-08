@@ -136,7 +136,7 @@
     tfoot {
       th,
       td {
-        min-width:170px;
+        min-width:200px;
         padding: $table--cells-pagging;
         border: 1px solid #CCC;
         border-top: none;
@@ -162,7 +162,7 @@
   td ul#shipping_method {
     margin-top: 0;
     li {
-      margin-bottom: spacer(.5);
+      margin-bottom: 8px;
       line-height: 1.2;
       @include _last-child() {
         margin-bottom: -5px;
