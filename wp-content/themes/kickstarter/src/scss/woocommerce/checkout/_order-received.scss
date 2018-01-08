@@ -20,7 +20,7 @@
         @include _last(1) {
           border: none;
         }
-        @include breakpoint(min-width $md) {
+        @include from(2) {
           border-right: 1px dashed darken(color(gray-lightest), 15%);
           padding: 0 2em 0 0;
         }
@@ -30,7 +30,7 @@
           margin-top: 5px;
           text-transform: none;
           line-height: 1.5;
-          @include breakpoint(min-width $sm) {
+          @include from(2) {
             font-size: 16px;
           }
         }
@@ -46,20 +46,14 @@
       font-size: 22px;
     }
 
-    .woocommerce-order-details {
-      margin-top: spacer();
-    }
-
     .woocommerce-table--order-details {
       margin-top: 15px;
-      // padding: 10px 30px 30px 30px;
     }
 
     .woocommerce-MyAccount-orders,
     .woocommerce-table--order-details,
     .woocommerce-MyAccount-paymentMethods {
       width: 100%;
-      // background: color(gray-lightest) !important;
 
       tbody,
       tfoot {
@@ -68,7 +62,8 @@
           font-size: $font-size-sm;
           font-weight: $font-weight-light;
         }
-        th,td {
+        th,
+        td {
           border: 1px solid #ccc;
           border-top: none;
           padding: 10px;
@@ -77,29 +72,9 @@
         td {
           border-left: none;
         }
-        .woocommerce-orders-table__cell-order-actions a {
-          @include button();
-          background: color(purple);
-          font-size: $font-size-sm;
-          font-weight: $font-weight-light;
-          margin: 0;
-          &:hover {
-            background: color(link-hover);
-          }
-        }
       }
-      .order-again {
-        background: white;
-        a {
-          @include button();
-          display: inline-block !important;
-          margin: 20px 0 !important;
-          background: color(purple);
-          font-size: $font-size-sm;
-          font-weight: $font-weight-light;
-          &:hover {
-            background: color(link-hover);
-          }
-        }
-      }
+    }
+
+    .woocommerce-table__product-name a:hover {
+      color: lighten(color(brand), 20%) !important;
     }
