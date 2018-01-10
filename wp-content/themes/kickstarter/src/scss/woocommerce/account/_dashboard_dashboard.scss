@@ -16,12 +16,35 @@
 .woocommerce-MyAccount-content {
   a.button {
     @include button();
+    margin-right: 10px;
+    margin-top: 10px!important;
+    @include _last-child() {
+      margin-left: 0;
+    }
   }
   p {
     margin-top: 0;
     @include _last-child() {
       margin-bottom: 0;
     }
+  }
+}
+
+/* Vat */
+
+#vat_number {
+  padding: 10px;
+  width: 300px;
+  max-width: 90%;
+  display: block;
+  margin-bottom: -10px;
+  &:after {
+    content: "";
+    height: 1px;
+    width: 1px;
+    margin-bottom: -15px;
+    display: block;
+    position: relative;
   }
 }
 
@@ -204,13 +227,14 @@
   .button {
     @include button() {
       margin-top: spacer(.5);
-    };
+    }
+    ;
   }
   .edit-account {
     fieldset {
-      padding: 10px;
-      border:none;
-      background:color(gray-lightest);
+      padding: 10px 0 ;
+      border: none;
+      background: color(gray-lightest);
       legend {
         @include woo-headings();
       }
