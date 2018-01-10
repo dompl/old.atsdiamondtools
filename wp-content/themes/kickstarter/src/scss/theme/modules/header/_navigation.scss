@@ -34,8 +34,10 @@
   /* Landscape */
   &.navigation-landscape {
     #menu-header {
+      display: flex;
       >li {
-        width: (100% / $total-menu-items);
+        width: 100%;
+        // width: (100% / $total-menu-items);
         text-align: center;
         position: relative;
         text-transform: uppercase;
