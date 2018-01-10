@@ -148,7 +148,6 @@ $select-resize: none;
   }
   input {
     @include gf-inputs() {}
-    ;
   }
   textarea {
     @include gf-textarea() {}
