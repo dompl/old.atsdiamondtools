@@ -9,7 +9,7 @@ if (!defined('ABSPATH'))
   exit; // Exit if accessed directly
 }
 
-if (!in_array(get_current_user_id(), array(2)))
+if (!in_array(get_current_user_id(), array(1)))
 {
   add_filter('acf/settings/show_admin', '__return_false');
 }
@@ -19,7 +19,7 @@ add_action('admin_init', 'my_remove_menu_pages');
 function my_remove_menu_pages()
 {
 
-  if (!in_array(get_current_user_id(), array(2)))
+  if (!in_array(get_current_user_id(), array(1)))
   {
 
     /* Visual Composer */
@@ -34,13 +34,17 @@ function my_remove_menu_pages()
     /* Comments */
     remove_menu_page('edit-comments.php');
 
-    /* Toold */
+    /* Tools */
     remove_menu_page('tools.php');
     remove_menu_page('edit.php');
+
+    /* Plugins */
+    remove_menu_page('plugins.php');
 
     remove_submenu_page('themes.php', 'themes.php');
     remove_submenu_page('themes.php', 'customize.php');
     remove_submenu_page('themes.php', 'theme-editor.php');
+
 
     /* Plugins */
     remove_submenu_page('plugins.php', 'plugin-install.php');
