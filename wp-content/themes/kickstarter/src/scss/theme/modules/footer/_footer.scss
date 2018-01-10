@@ -123,6 +123,7 @@
 
 
 
+
 /**
  * Copyright
  * ---
@@ -174,6 +175,7 @@
 
 
 
+
 /* Footer signup */
 
 #footer-signup {
@@ -181,15 +183,20 @@
   margin-top: spacer();
   line-height: $height;
   position: relative;
+  text-align: center;
+
+  @include from(4) {
+    text-align: right;
+  }
   &:before {
-    content:"";
+    content: "";
     width: 20000px;
-    left:-10000px;
+    left: -10000px;
     height: 1px;
     display: block;
     position: absolute;
-    background:color(border);
-    top:- spacer();
+    background: color(border);
+    top: - spacer();
   }
   p {
     margin: 0;
