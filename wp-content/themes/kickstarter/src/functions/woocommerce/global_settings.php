@@ -93,7 +93,15 @@ function custom_woocommerce_get_price_suffix( $price_display_suffix, $product ) 
   return $price_display_suffix;
 }
 
+/* Disable deliver oto a different address checkbox */
+add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
 
+/* Disable downloads for on user menu */
+function CM_woocommerce_account_menu_items_callback($items) {
+    unset( $items['downloads'] );
+    return $items;
+}
+add_filter('woocommerce_account_menu_items', 'CM_woocommerce_account_menu_items_callback', 10, 1);
 // add_filter( 'woocommerce_add_to_cart_redirect', 'wc_redirectfortaxonomy' );
 // function wc_redirectfortaxonomy() {
 // global $woocommerce;
