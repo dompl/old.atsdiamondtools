@@ -1,0 +1,76 @@
+/*  ********************************************************
+ *   Left-Right template styles
+ *  ********************************************************
+ */
+
+ .left-right-template {
+  .left {
+    @include from(3) {
+      float: left;
+      width: 48%;
+    }
+
+    .shortcode-button {
+      @include button();
+      margin-bottom: 30px;
+      width: 100%;
+      padding: 10px 0;
+      text-align: center;
+      display: block;
+      max-width: 250px;
+      font-size: 16px;
+      background: color(gray-dark);
+    }
+  }
+  .right {
+    @include from(3) {
+      float: right;
+      width: 48%;
+    }
+
+    @include text-inputs();
+
+    li {
+      margin-bottom: 20px;
+    }
+
+    img {
+      display: none;
+      @include from(3) {
+        display: block;
+      }
+    }
+
+    input,
+    textarea {
+      @include checkout-input() {
+        background: white;
+        font-size: 14px;
+      }
+      ;
+    }
+
+    label {
+      display: none;
+    }
+
+    input[type="submit"] {
+      @include total-button();
+      height: 70px;
+      margin-bottom: 30px;
+    }
+
+    .validation_error,
+    .validation_message {
+      color: white;
+      background-color: color(danger);
+      padding: 5px 10px 6px;
+      margin-bottom: 5px;
+      font-size: 13px;
+      @include icon(info-circle) {
+        float: left;
+        margin-right: 10px;
+      }
+    }
+  }
+}
