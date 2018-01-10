@@ -412,7 +412,7 @@ function wc_query_string_form_fields( $values = null, $exclude = array(), $curre
 		if ( is_array( $value ) ) {
 			$html .= wc_query_string_form_fields( $value, $exclude, $key, true );
 		} else {
-			$html .= '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" />';
+			$html .= '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( wp_unslash( $value ) ) . '" />';
 		}
 	}
 
@@ -1998,7 +1998,7 @@ if ( ! function_exists( 'woocommerce_form_field' ) ) {
 
 		// Custom attribute handling.
 		$custom_attributes         = array();
-		$args['custom_attributes'] = array_filter( (array) $args['custom_attributes'] );
+		$args['custom_attributes'] = array_filter( (array) $args['custom_attributes'], 'strlen' );
 
 		if ( $args['maxlength'] ) {
 			$args['custom_attributes']['maxlength'] = absint( $args['maxlength'] );

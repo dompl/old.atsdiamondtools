@@ -211,7 +211,7 @@ class WC_Shortcode_Products {
 	 */
 	protected function set_skus_query_args( &$query_args ) {
 		if ( ! empty( $this->attributes['skus'] ) ) {
-			$skus = array_map( 'trim', explode( ',', $this->attributes['skus'] ) );
+			$skus                       = array_map( 'trim', explode( ',', $this->attributes['skus'] ) );
 			$query_args['meta_query'][] = array(
 				'key'     => '_sku',
 				'value'   => 1 === count( $skus ) ? $skus[0] : $skus,
@@ -263,12 +263,10 @@ class WC_Shortcode_Products {
 	 */
 	protected function set_categories_query_args( &$query_args ) {
 		if ( ! empty( $this->attributes['category'] ) ) {
-			$ordering_args = WC()->query->get_catalog_ordering_args( $query_args['orderby'], $query_args['order'] );
+			$ordering_args          = WC()->query->get_catalog_ordering_args( $query_args['orderby'], $query_args['order'] );
 			$query_args['orderby']  = $ordering_args['orderby'];
 			$query_args['order']    = $ordering_args['order'];
- 			// @codingStandardsIgnoreStart
-			$query_args['meta_key'] = $ordering_args['meta_key'];
-			// @codingStandardsIgnoreEnd
+			$query_args['meta_key'] = $ordering_args['meta_key']; // @codingStandardsIgnoreLine
 
 			$query_args['tax_query'][] = array(
 				'taxonomy' => 'product_cat',
@@ -296,9 +294,7 @@ class WC_Shortcode_Products {
 	 * @param array $query_args Query args.
 	 */
 	protected function set_best_selling_products_query_args( &$query_args ) {
-		// @codingStandardsIgnoreStart
-		$query_args['meta_key'] = 'total_sales';
-		// @codingStandardsIgnoreEnd
+		$query_args['meta_key'] = 'total_sales'; // @codingStandardsIgnoreLine
 		$query_args['order']    = 'DESC';
 		$query_args['orderby']  = 'meta_value_num';
 	}
@@ -310,7 +306,7 @@ class WC_Shortcode_Products {
 	 * @param array $query_args Query args.
 	 */
 	protected function set_visibility_hidden_query_args( &$query_args ) {
-		$this->custom_visibility = true;
+		$this->custom_visibility   = true;
 		$query_args['tax_query'][] = array(
 			'taxonomy'         => 'product_visibility',
 			'terms'            => array( 'exclude-from-catalog', 'exclude-from-search' ),
@@ -327,7 +323,7 @@ class WC_Shortcode_Products {
 	 * @param array $query_args Query args.
 	 */
 	protected function set_visibility_catalog_query_args( &$query_args ) {
-		$this->custom_visibility = true;
+		$this->custom_visibility   = true;
 		$query_args['tax_query'][] = array(
 			'taxonomy'         => 'product_visibility',
 			'terms'            => 'exclude-from-search',
@@ -351,7 +347,7 @@ class WC_Shortcode_Products {
 	 * @param array $query_args Query args.
 	 */
 	protected function set_visibility_search_query_args( &$query_args ) {
-		$this->custom_visibility = true;
+		$this->custom_visibility   = true;
 		$query_args['tax_query'][] = array(
 			'taxonomy'         => 'product_visibility',
 			'terms'            => 'exclude-from-catalog',
@@ -488,14 +484,15 @@ class WC_Shortcode_Products {
 			update_meta_cache( 'post', $products_ids );
 			update_object_term_cache( $products_ids, 'product' );
 
+			$original_post = $GLOBALS['post'];
+
 			do_action( "woocommerce_shortcode_before_{$this->type}_loop", $this->attributes );
 
 			woocommerce_product_loop_start();
 
 			foreach ( $products_ids as $product_id ) {
-				$post_object = get_post( $product_id );
-				$GLOBALS['post'] =& $post_object; // WPCS: override ok.
-				setup_postdata( $post_object );
+				$GLOBALS['post'] = get_post( $product_id ); // WPCS: override ok.
+				setup_postdata( $GLOBALS['post'] );
 
 				// Set custom product visibility when quering hidden products.
 				add_action( 'woocommerce_product_is_visible', array( $this, 'set_product_as_visible' ) );
@@ -507,15 +504,17 @@ class WC_Shortcode_Products {
 				remove_action( 'woocommerce_product_is_visible', array( $this, 'set_product_as_visible' ) );
 			}
 
+			$GLOBALS['post'] = $original_post; // WPCS: override ok.
 			woocommerce_product_loop_end();
 
 			do_action( "woocommerce_shortcode_after_{$this->type}_loop", $this->attributes );
+
+			wp_reset_postdata();
 		} else {
 			do_action( "woocommerce_shortcode_{$this->type}_loop_no_results", $this->attributes );
 		}
 
 		woocommerce_reset_loop();
-		wp_reset_postdata();
 
 		return '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">' . ob_get_clean() . '</div>';
 	}
@@ -530,8 +529,8 @@ class WC_Shortcode_Products {
 	public static function order_by_rating_post_clauses( $args ) {
 		global $wpdb;
 
-		$args['where']   .= " AND $wpdb->commentmeta.meta_key = 'rating' ";
-		$args['join']    .= "LEFT JOIN $wpdb->comments ON($wpdb->posts.ID = $wpdb->comments.comment_post_ID) LEFT JOIN $wpdb->commentmeta ON($wpdb->comments.comment_ID = $wpdb->commentmeta.comment_id)";
+		$args['where']  .= " AND $wpdb->commentmeta.meta_key = 'rating' ";
+		$args['join']   .= "LEFT JOIN $wpdb->comments ON($wpdb->posts.ID = $wpdb->comments.comment_post_ID) LEFT JOIN $wpdb->commentmeta ON($wpdb->comments.comment_ID = $wpdb->commentmeta.comment_id)";
 		$args['orderby'] = "$wpdb->commentmeta.meta_value DESC";
 		$args['groupby'] = "$wpdb->posts.ID";
 

@@ -28,16 +28,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 *
 	 * @hooked wc_print_notices - 10
 	 */
-	do_action( 'woocommerce_before_single_product' );
+	 do_action( 'woocommerce_before_single_product' );
 
-	if ( post_password_required() ) {
-		echo get_the_password_form();
-		return;
-	}
-	?>
-	<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
+	 if ( post_password_required() ) {
+	 	echo get_the_password_form();
+	 	return;
+	 }
+?>
 
-		<?php
+<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+	<?php
 		/**
 		 * woocommerce_before_single_product_summary hook.
 		 *
@@ -45,11 +46,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @hooked woocommerce_show_product_images - 20
 		 */
 		do_action( 'woocommerce_before_single_product_summary' );
-		?>
+	?>
 
-		<div class="summary entry-summary">
+	<div class="summary entry-summary">
 
-			<?php
+		<?php
 			/**
 			 * woocommerce_single_product_summary hook.
 			 *
@@ -63,11 +64,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * @hooked WC_Structured_Data::generate_product_data() - 60
 			 */
 			do_action( 'woocommerce_single_product_summary' );
-			?>
+		?>
 
-		</div><!-- .summary -->
+	</div><!-- .summary -->
 
-		<?php
+	<?php
 		/**
 		 * woocommerce_after_single_product_summary hook.
 		 *
@@ -76,8 +77,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @hooked woocommerce_output_related_products - 20
 		 */
 		do_action( 'woocommerce_after_single_product_summary' );
-		?>
+	?>
 
-	</div><!-- #product-<?php the_ID(); ?> -->
+</div><!-- #product-<?php the_ID(); ?> -->
 
-	<?php do_action( 'woocommerce_after_single_product' ); ?>
+<?php do_action( 'woocommerce_after_single_product' ); ?>

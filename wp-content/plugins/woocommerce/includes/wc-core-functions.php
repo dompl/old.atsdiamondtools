@@ -1479,15 +1479,17 @@ function wc_get_rounding_precision() {
 }
 
 /**
- * Add precision to a number and return an int.
+ * Add precision to a number and return a number.
  *
  * @since  3.2.0
  * @param  float $value Number to add precision to.
- * @return int
+ * @param  bool $round Should we round after adding precision?
+ * @return float
  */
-function wc_add_number_precision( $value ) {
-	$precision = pow( 10, wc_get_price_decimals() );
-	return intval( round( $value * $precision ) );
+function wc_add_number_precision( $value, $round = true ) {
+	$cent_precision = pow( 10, wc_get_price_decimals() );
+	$value          = $value * $cent_precision;
+	return $round ? round( $value, wc_get_rounding_precision() - wc_get_price_decimals() ) : $value;
 }
 
 /**
@@ -1498,8 +1500,8 @@ function wc_add_number_precision( $value ) {
  * @return float
  */
 function wc_remove_number_precision( $value ) {
-	$precision = pow( 10, wc_get_price_decimals() );
-	return $value / $precision;
+	$cent_precision = pow( 10, wc_get_price_decimals() );
+	return $value / $cent_precision;
 }
 
 /**
@@ -1507,15 +1509,16 @@ function wc_remove_number_precision( $value ) {
  *
  * @since  3.2.0
  * @param  array $value Number to add precision to.
+ * @param  bool $round Should we round after adding precision?
  * @return int
  */
-function wc_add_number_precision_deep( $value ) {
+function wc_add_number_precision_deep( $value, $round = true ) {
 	if ( is_array( $value ) ) {
 		foreach ( $value as $key => $subvalue ) {
-			$value[ $key ] = wc_add_number_precision_deep( $subvalue );
+			$value[ $key ] = wc_add_number_precision_deep( $subvalue, $round );
 		}
 	} else {
-		$value = wc_add_number_precision( $value );
+		$value = wc_add_number_precision( $value, $round );
 	}
 	return $value;
 }

@@ -31,4 +31,4 @@ echo apply_filters( 'woocommerce_loop_add_to_cart_link',
 		esc_attr( isset( $class ) ? $class : 'button' ),
 		esc_html( $product->add_to_cart_text() )
 	),
-    $product );
+$product );
