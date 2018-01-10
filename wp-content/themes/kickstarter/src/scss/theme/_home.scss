@@ -12,6 +12,9 @@
   background: color(gray-lightest);
   position: relative;
   #home-slider-ul {
+    @include to(2) {
+      padding: 0;
+    }
     visibility: hidden;
     &.slick-initialized {
       visibility: visible;
@@ -32,9 +35,13 @@
     display: flex;
     .slick-slide {
       display: flex;
+      flex-direction: column;
       height: auto;
       align-items: center; //optional
       justify-content: center; //optional
+      @include from(2) {
+        flex-direction: row;
+      }
     }
   }
   li {
@@ -43,59 +50,79 @@
     justify-content: center;
   }
   .slide-left {
-    max-width: 50%;
+    margin-bottom: 40px;
+    text-align: center;
+    @include from(2) {
+      max-width: 50%;
+      text-align: left;
+      margin-bottom: 0;
+    }
   }
   .slide-right {
-    margin-left: 50px;
+    width: 50%;
+    @include from(2) {
+     margin-left: 50px;
+     width: auto;
+   }
+ }
+ h2 {
+  font-size: 46px;
+  font-weight: bold;
+  margin-bottom: 0;
+  line-height: 40px;
+  a {
+    color: desaturate(color(brand), 30%);
   }
-  h2 {
-    font-size: 46px;
+  &.small {
+    font-size: 36px;
+  }
+}
+span {
+  font-size: 24px;
+  font-weight: thin;
+}
+.slide-short {
+  a {
+    color: color(text);
+  }
+  p {
+    margin: spacer() - 3px 0 0 0;
+  }
+}
+.product-call {
+  margin-top: spacer();
+  @include button(color(gray-dark)) {
     font-weight: bold;
-    margin-bottom: 0;
-    line-height: 40px;
-    a {
-      color:desaturate(color(brand), 30%);
-    }
-    &.small {
-      font-size: 36px;
-    }
-  }
-  span {
-    font-size: 24px;
-    font-weight: thin;
-  }
-  .slide-short {
-    a {
-      color: color(text);
-    }
-    p {
-      margin: spacer() - 3px 0 0 0;
-    }
-  }
-  .product-call {
-    margin-top: spacer();
-    @include button(color(gray-dark)) {
-      font-weight: bold;
-      padding: 5px 25px;
-      @include hover() {
-        background: black;
-      }
+    padding: 5px 25px;
+    @include hover() {
+      background: black;
     }
   }
 }
+}
+
+
 
 /* Call for actions */
 
 #home-calls {
-  border: color(border) 1px solid;
-  border-left: none;
-  border-right: none;
+  border-bottom: color(border) 1px solid;
+  @include from(3) {
+    border: color(border) 1px solid;
+    border-left: none;
+    border-right: none;
+  }
   ul {
     @include scut-list-unstyled();
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     margin-left: -20px;
     margin-right: -20px;
+
+    @include from(3) {
+      flex-direction: row;
+    }
   }
   @mixin ba() {
     position: relative;
@@ -112,14 +139,38 @@
     @content;
   }
   li {
-    display: flex;
-    .left {
-      float: left;
-      width: 60px;
+    border-top: color(border) 1px solid;
+
+    @include from(3) {
+      border: none;
     }
+
+    .clx {
+      text-align: center;
+      @include from(3) {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    .left {
+      display: none;
+
+      @include from(3) {
+        display: block;
+        float: left;
+        width: 60px;
+        margin-bottom: 0;
+      }
+    }
+
     .right {
-      float: right;
-      width: calc(100% - 80px);
+      width: 100%;
+      @include from(3) {
+        float: right;
+        width: calc(100% - 80px);
+      }
     }
     .call-title {
       color: #33327b;
@@ -155,6 +206,8 @@
     }
   }
 }
+
+
 
 
 
@@ -211,6 +264,8 @@
 }
 
 
+
+
 /* Banner */
 
 #home-banner {
@@ -221,29 +276,29 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  color:white;
+  color: white;
   &:before {
     position: absolute;
     width: 100%;
     height: 100%;
-    content:"";
+    content: "";
     display: block;
-    background:rgba(black, .70);
+    background: rgba(black, .70);
     z-index: 1;
   }
   .container {
     position: relative;
     z-index: 2;
-    padding:spacer(2.5) 0;
+    padding: spacer(2.5) 0;
   }
   h3 {
     font-weight: bold;
-    font-size:36px;
+    font-size: 36px;
     margin-top: 0px;
     margin-bottom: spacer();
   }
   p {
-    font-size:18px;
+    font-size: 18px;
     line-height: 1.4;
     margin-bottom: spacer(.5);
     @include from(3) {
@@ -255,13 +310,13 @@
   }
   a {
     @include button(white) {
-      background:transparent;
-      border:1px solid white;
+      background: transparent;
+      border: 1px solid white;
       margin-top: spacer(2) - 10px;
       padding: 2px 15px 1px;
       font-weight: bold;
       &:hover {
-        color:black!important;
+        color: black!important;
       }
     }
   }

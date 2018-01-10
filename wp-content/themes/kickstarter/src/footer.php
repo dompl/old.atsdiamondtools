@@ -15,7 +15,7 @@
    <div class="container">
      <div class="susy-reset">
        <div class="left clx">
-        <span><?php echo str_replace('%year%', get_the_date('Y'), get_field('copyright_notice', 'options')); ?></span>
+        <span><?php echo str_replace('%year%', date('Y'), get_field('copyright_notice', 'options')); ?></span>
         <?php do_action('footer_navigation')?>
       </div>
       <div class="right"><p><a href="https://www.redfrogstudio.co.uk" target="_blank"><?php esc_html_e('Website by Red Frog', 'TEXT_DOMAIN')?></a></p></div>

@@ -51,4 +51,29 @@
       }
     }
   }
+  .lost_reset_password {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+
+    @include from(3) {
+      text-align: left;
+      margin: 0;
+    }
+    p {
+      font-size: 12px;
+    }
+    label {
+      @include checkout-label();
+    }
+    input {
+      @include text-inputs() {
+        @include checkout-input();
+        margin-top: auto;
+      }
+      &[type="submit"] {
+        @include button($size: "small");
+      }
+    }
+  }
 }

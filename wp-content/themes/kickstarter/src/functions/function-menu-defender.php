@@ -9,7 +9,7 @@ if (!defined('ABSPATH'))
   exit; // Exit if accessed directly
 }
 
-if (!in_array(get_current_user_id(), array(1)))
+if (!in_array(get_current_user_id(), array(2)))
 {
   add_filter('acf/settings/show_admin', '__return_false');
 }
@@ -19,7 +19,7 @@ add_action('admin_init', 'my_remove_menu_pages');
 function my_remove_menu_pages()
 {
 
-  if (!in_array(get_current_user_id(), array(1)))
+  if (!in_array(get_current_user_id(), array(2)))
   {
 
     /* Visual Composer */
