@@ -3,16 +3,33 @@
  *  ********************************************************
  */
 
-#page_404 {
+ #page-404 {
+  text-align: center;
+  padding-bottom: spacer();
+  font-size: 14px;
+  .image_404 {
     text-align: center;
-    .image_404 {
-        text-align: center;
-        padding: 0 10px;
-        img {
-            display: inline-block;
-            max-width: 100%;
-        }
+    padding: 0 10px;
+    img {
+      display: inline-block;
+      max-width: 100%;
     }
-    p {}
-    a {}
+  }
+  p {
+    margin-bottom: 0;
+  }
+  a.button {
+    background: color(brand);
+    padding: 8px 10px 8px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin-top: spacer(.75);
+    color:white;
+    clear: both;
+    display:inline-block;
+    &:hover {
+      color:white!important;
+      background:darken(color(brand), 10%);
+    }
+  }
 }
