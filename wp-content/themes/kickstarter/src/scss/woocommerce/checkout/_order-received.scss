@@ -3,7 +3,7 @@
      *  ********************************************************
      */
 
-    .woocommerce-order-overview {
+     .woocommerce-order-overview {
       margin: 0 0 spacer() 0;
       padding: 0;
       @extend %clx;
@@ -21,7 +21,7 @@
           border: none;
         }
         @include from(2) {
-          border-right: 1px dashed darken(color(gray-lightest), 15%);
+          border-right: 1px dashed color(border);
           padding: 0 2em 0 0;
         }
         strong {
@@ -37,13 +37,14 @@
       }
     }
 
-    .woocommerce-table__product-name {
-      padding: 15px 10px !important;
+    .woocommerce-view-order {
+      h2 {
+        font-size: 22px;
+      }
     }
 
-    .woocommerce-order-details__title {
-      margin: 0 !important;
-      font-size: 22px;
+    .woocommerce-table__product-name {
+      padding: 15px 10px !important;
     }
 
     .woocommerce-table--order-details {
@@ -52,8 +53,10 @@
 
     .woocommerce-MyAccount-orders,
     .woocommerce-table--order-details,
-    .woocommerce-MyAccount-paymentMethods {
+    .woocommerce-MyAccount-paymentMethods,
+    .my_account_tracking {
       width: 100%;
+      border-left: 1px solid color(border);
 
       tbody,
       tfoot {
@@ -64,15 +67,20 @@
         }
         th,
         td {
-          border: 1px solid #ccc;
+          border: 1px solid color(border);
           border-top: none;
           padding: 10px;
-        }
-
-        td {
           border-left: none;
         }
       }
+    }
+
+    .my_account_tracking {
+      margin-bottom: 30px;
+    }
+
+    .tracking a.button {
+      margin: 0 !important;
     }
 
     .woocommerce-table__product-name a:hover {
