@@ -9,6 +9,19 @@
   @include nav-break() {
     background: transparent;
   }
+
+  .nav-toggle span {
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    font-size: 14px;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    color: color(gray-light);
+    margin-top: 1px;
+  }
 }
 
 #navigation {
