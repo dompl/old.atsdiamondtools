@@ -35,7 +35,8 @@ function new_loop_shop_per_page($cols)
 function sm_text_view_cart_strings($translated_text, $text, $domain)
 {
 
-  switch ($translated_text) {
+  switch ($translated_text)
+  {
     case 'View basket':
       $translated_text = __('', 'woocommerce');
       break;
@@ -66,7 +67,8 @@ function custom_woocommerce_product_add_to_cart_text()
   global $product;
   $product_type = $product->get_type();
 
-  switch ($product_type) {
+  switch ($product_type)
+  {
     case 'external':
       return __('More Info/Buy', 'woocommerce');
       break;
@@ -85,36 +87,33 @@ function custom_woocommerce_product_add_to_cart_text()
 }
 
 /* Remove sufix if product is not taxable */
-add_filter( 'woocommerce_get_price_suffix', 'custom_woocommerce_get_price_suffix', 10, 2 );
-function custom_woocommerce_get_price_suffix( $price_display_suffix, $product ) {
-  if ( ! $product->is_taxable() ) {
+add_filter('woocommerce_get_price_suffix', 'custom_woocommerce_get_price_suffix', 10, 2);
+function custom_woocommerce_get_price_suffix($price_display_suffix, $product)
+{
+  if (!$product->is_taxable())
+  {
     return '';
   }
   return $price_display_suffix;
 }
 
 /* Disable deliver oto a different address checkbox */
-add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
+add_filter('woocommerce_ship_to_different_address_checked', '__return_false');
 
 /* Disable downloads for on user menu */
-function CM_woocommerce_account_menu_items_callback($items) {
-    unset( $items['downloads'] );
-    return $items;
+function CM_woocommerce_account_menu_items_callback($items)
+{
+  unset($items['downloads']);
+  return $items;
 }
 add_filter('woocommerce_account_menu_items', 'CM_woocommerce_account_menu_items_callback', 10, 1);
-// add_filter( 'woocommerce_add_to_cart_redirect', 'wc_redirectfortaxonomy' );
-// function wc_redirectfortaxonomy() {
-// global $woocommerce;
-// // Get product ID
-// if ( isset( $_POST['add-to-cart'] ) ) {
-//     $product_id = (int) apply_filters( 'woocommerce_add_to_cart_product_id', $_POST['add-to-cart'] );
-//     // Check if product ID is in the taxonomy we want to redirect to checkout for
-//     if ( has_term( 'payments', 'product_cat', $product_id ) )
-//         // Set redirect URL
-//         $checkout_url = $woocommerce->cart->get_checkout_url();
-//         $redirect_url = $checkout_url;
-//         // Return the new URL
-//         return $redirect_url;
-//     }
-// }
 
+
+add_action('woocommerce_register_form', 'ats_add_week_password_confirmation', 10);
+
+function ats_add_week_password_confirmation()
+{
+
+  $password = sprintf('<div class="pw-weak"><label><input type="checkbox" name="pw_weak" class="pw-checkbox" />%s</label></div>', __('Confirm use of weak password', 'TEXT_DOMAIN'));
+  echo $password;
+}
