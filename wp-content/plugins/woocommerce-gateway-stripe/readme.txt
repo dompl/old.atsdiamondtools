@@ -1,10 +1,10 @@
 === WooCommerce Stripe Payment Gateway ===
-Contributors: automattic, royho, mikejolley, akeda, mattyza, bor0, woothemes
+Contributors: automattic, royho, akeda, mattyza, bor0, woothemes
 Tags: credit card, stripe, woocommerce
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Attributions: thorsten-stripe
@@ -101,7 +101,13 @@ If you get stuck, you can ask for help in the Plugin Forum.
 
 == Changelog ==
 
-= 4.0.0 - 2017-01-08 =
+= 4.0.1 - 2018-01-11 =
+* Fix - Add payment method conflict with terms and agreement page.
+* Fix - Checkout validation checkout field names/labels were not translated.
+* Fix - Card error translations.
+* Add - Deprecated Apple Pay Class to prevent errors.
+
+= 4.0.0 - 2018-01-08 =
 * Add - Stripe Elements Credit Card form for PCI compliance.
 * Add - Stripe Sources.
 * Add - SEPA Direct Debit.
@@ -228,14 +234,8 @@ If you get stuck, you can ask for help in the Plugin Forum.
 
 == Upgrade Notice ==
 
-= 4.0.0 =
-* Add - Stripe Elements Credit Card form for PCI compliance.
-* Add - Stripe Sources.
-* Add - SEPA Direct Debit.
-* Add - Bancontact.
-* Add - Giropay.
-* Add - Sofort.
-* Add - iDeal.
-* Add - Bitcoin.
-* Add - P24.
-* Add - Alipay.
+= 4.0.1 =
+* Fix - Add payment method conflict with terms and agreement page.
+* Fix - Checkout validation checkout field names/labels were not translated.
+* Fix - Card error translations.
+* Add - Deprecated Apple Pay Class to prevent errors.

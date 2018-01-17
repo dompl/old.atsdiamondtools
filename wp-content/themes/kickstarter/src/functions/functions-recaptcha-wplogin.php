@@ -55,7 +55,7 @@ function my_textbox_callback($args) {  // Textbox Callback
 
 // Deploy re-captacha
 
-if ( 'VOIDX_ADD_RECAPTCHA_ON_LOGIN' && get_option('sitekey_1') != '' && get_option('sitekey_2') != '' ) {
+if ( WP_DEBUG == false && 'VOIDX_ADD_RECAPTCHA_ON_LOGIN' && get_option('sitekey_1') != '' && get_option('sitekey_2') != '' ) {
 
   function login_recaptcha_script() {
     wp_register_script("recaptcha_login", "https://www.google.com/recaptcha/api.js");

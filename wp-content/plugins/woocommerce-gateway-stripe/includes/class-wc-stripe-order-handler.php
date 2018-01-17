@@ -140,7 +140,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 				$localized_messages = WC_Stripe_Helper::get_localized_messages();
 
-				$message = isset( $localized_messages[ $response->error->type ] ) ? $localized_messages[ $response->error->type ] : $response->error->message;
+				$message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
 
 				throw new Exception( $message );
 			}
@@ -278,32 +278,44 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 	}
 
 	/**
-	 * Normalize the error field name.
+	 * Normalize the error field name with appropriate locale.
 	 *
 	 * @since 4.0.0
-	 * @version 4.0.0
+	 * @since 4.0.1 Map localized checkout fields.
 	 * @param string $field
 	 * @return string $error_field
 	 */
 	public function normalize_field( $field ) {
-		$error_field = ucfirst( str_replace( '_', ' ', $field ) );
+		$checkout_fields = WC()->checkout->get_checkout_fields();
+		$org_str         = array();
+		$replace_str     = array();
 
-		$org_str     = array();
-		$replace_str = array();
+		if ( array_key_exists( $field, $checkout_fields['billing'] ) ) {
+			$error_field = $checkout_fields['billing'][ $field ]['label'];
+		} elseif ( array_key_exists( $field, $checkout_fields['shipping'] ) ) {
+			$error_field = $checkout_fields['shipping'][ $field ]['label'];
+		} else {
+			$error_field = str_replace( '_', ' ', $field );
 
-		$org_str[]     = 'Stripe';
-		$replace_str[] = '';
+			$org_str[]     = 'stripe';
+			$replace_str[] = '';
 
-		$org_str[]     = 'sepa';
-		$replace_str[] = 'SEPA';
+			$org_str[]     = 'sepa';
+			$replace_str[] = 'SEPA';
 
-		$org_str[]     = 'iban';
-		$replace_str[] = 'IBAN';
+			$org_str[]     = 'iban';
+			$replace_str[] = 'IBAN';
 
-		$org_str[]     = 'sofort';
-		$replace_str[] = 'SOFORT';
+			$org_str[]     = 'sofort';
+			$replace_str[] = 'SOFORT';
 
-		return str_replace( $org_str, $replace_str, $error_field );
+			$org_str[]     = 'owner';
+			$replace_str[] = __( 'Owner', 'woocommerce-gateway-stripe' );
+
+			$error_field   = str_replace( $org_str, $replace_str, $error_field );
+		}
+
+		return $error_field;
 	}
 
 	/**
@@ -408,8 +420,11 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 			}
 		}
 
-		if ( empty( $all_fields['woocommerce_checkout_update_totals'] ) && empty( $all_fields['terms'] ) && apply_filters( 'woocommerce_checkout_show_terms', wc_get_page_id( 'terms' ) > 0 ) ) {
-			$errors->add( 'terms', __( 'You must accept our Terms &amp; Conditions.', 'woocommerce-gateway-stripe' ) );
+		// Don't check this on add payment method page.
+		if ( ( isset( $_POST['is_add_payment_page'] ) && 'no' === $_POST['is_add_payment_page'] ) ) {
+			if ( empty( $all_fields['woocommerce_checkout_update_totals'] ) && empty( $all_fields['terms'] ) && apply_filters( 'woocommerce_checkout_show_terms', wc_get_page_id( 'terms' ) > 0 ) ) {
+				$errors->add( 'terms', __( 'You must accept our Terms &amp; Conditions.', 'woocommerce-gateway-stripe' ) );
+			}
 		}
 
 		if ( WC()->cart->needs_shipping() && $validate_shipping_fields ) {

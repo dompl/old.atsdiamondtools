@@ -369,6 +369,10 @@ jQuery( function( $ ) {
 				message = wc_stripe_params[ result.error.code ];
 			}
 
+			if ( 'validation_error' === result.error.type && wc_stripe_params.hasOwnProperty( result.error.code ) ) {
+				message = wc_stripe_params[ result.error.code ];
+			}
+
 			wc_stripe_form.reset();
 			console.log( result.error.message ); // Leave for troubleshooting.
 			$( errorContainer ).html( '<ul class="woocommerce_error woocommerce-error wc-stripe-error"><li>' + message + '</li></ul>' );
@@ -388,6 +392,18 @@ jQuery( function( $ ) {
 
 			extra_details.owner.email = $( '#billing_email' ).val();
 			extra_details.owner.phone = $( '#billing_phone' ).val();
+
+			/* Stripe does not like empty string values so
+			 * we need to remove the parameter if we're not
+			 * passing any value.
+			 */
+			if ( typeof extra_details.owner.phone !== 'undefined' && 0 >= extra_details.owner.phone.length ) {
+				delete extra_details.owner.phone;
+			}
+
+			if ( typeof extra_details.owner.email !== 'undefined' && 0 >= extra_details.owner.email.length ) {
+				delete extra_details.owner.email;
+			}
 
 			if ( $( '#billing_address_1' ).length > 0 ) {
 				extra_details.owner.address.line1       = $( '#billing_address_1' ).val();
@@ -723,7 +739,8 @@ jQuery( function( $ ) {
 				'nonce': wc_stripe_params.stripe_nonce,
 				'required_fields': wc_stripe_form.getRequiredFields().serialize(),
 				'all_fields': wc_stripe_form.form.serialize(),
-				'source_type': wc_stripe_form.getSelectedPaymentElement().val()
+				'source_type': wc_stripe_form.getSelectedPaymentElement().val(),
+				'is_add_payment_page': wc_stripe_params.is_add_payment_method_page
 			};
 
 			$.ajax({
