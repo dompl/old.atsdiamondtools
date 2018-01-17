@@ -100,7 +100,7 @@ function ats_single_product_image_gallery()
     $attachment      = get_post($single_image_id);
     $full_size_image = $attachment->guid;
     $caption         = $attachment->post_excerpt;
-    $gallery .= '<div class="single-image">';
+    $gallery .= '<div class="single-image" data-image-id="' . $single_image_id . '">';
     $gallery .= '<a href="' . $full_size_image . '" data-lightbox="image-1" data-title="' . $caption . '">';
     $gallery .= $image;
     $gallery .= '</a>';
