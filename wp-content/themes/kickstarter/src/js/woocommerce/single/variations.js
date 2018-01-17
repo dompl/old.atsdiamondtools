@@ -38,11 +38,78 @@
 						});
 				});
 
+				/*  ********************************************************
+				 *   comment
+				 *  ********************************************************
+				 */
+				$('.variations_form select').on('change', function(){
+					var val = $(this).val();
+
+					if (val === '') {
+						$('#ats-product-images .single-image').css('display', 'block');
+						$('#ats-product-images .additional-single-image').html('');
+						$('#product__slider').css('display', 'block');
+						$('#ats-product-images .additional-single-image').remove();
+
+						global_variation_image_id = starting_variation_image_id;
+					}
+				})
+
+				// change single gallery
+				function changeImage(variation, isSingle) {
+
+					if (isSingle === 'single') {
+						$('#ats-product-images .single-image').css('display', 'none');
+					} else {
+						$('#product__slider').css('display', 'none');
+						$('#ats-product-images .additional-single-image').remove();
+					}
+
+					var single_image_html =
+					'<div class="additional-single-image">' +
+					'<a href="' + variation.image.url + '" data-lightbox="image-1" data-title="' + variation.image.alt + '">' +
+					'<figure>' +
+					'<img src="' + variation.image.src + '" alt="' + variation.image.alt + '">' +
+					'</figure>' +
+					'</a>' +
+					'</div>';
+
+					$('#ats-product-images').append(single_image_html);
+				}
+
+				var starting_variation_image_id = String($('.prod-main-image').data('image-id'));
+				var global_variation_image_id = String($('.prod-main-image').data('image-id'));
+				var starting_single_variation = String($('#ats-product-images .single-image').data('image-id'));
+
 				$('.variations_form').each(function() {
 
 						$(this).on('found_variation', function(event, variation) {
+								var change;
+								if (global_variation_image_id === variation.image_id || starting_variation_image_id === 'undefined') {
+									change = false;
+								} else {
+									change = true;
+								}
 
-								console.log(variation);
+								// For single
+								if (starting_single_variation !== variation.image_id && starting_single_variation !== 'undefined') {
+									global_variation_image_id = variation.image_id;
+									changeImage(variation, 'single');
+								} else {
+									$('#ats-product-images .single-image').css('display', 'block');
+									$('#ats-product-images .additional-single-image').html('');
+								}
+
+								// For gallery
+								if (global_variation_image_id !== variation.image_id && starting_single_variation === 'undefined') {
+									global_variation_image_id = variation.image_id;
+									changeImage(variation, 'gallery');
+								}
+
+								if(starting_variation_image_id === variation.image_id && change) {
+									$('#product__slider').css('display', 'block');
+									$('#ats-product-images .additional-single-image').remove();
+								}
 
 								var var_ID = variation.variation_id,
 										var_Name = $(this).find('option:selected').text(), // Geet the variation name
@@ -52,10 +119,8 @@
 										var_wrapper = $('#variation-wrapper');
 
 
-								// console.log(variation);
+
 								var_wrapper.addClass('has-variation');
-
-
 
 								// $('p.price').html($('div.woocommerce-variation-price > span.price').html());
 								$('p.price').html(variation.price_html);
