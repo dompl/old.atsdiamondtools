@@ -1,11 +1,17 @@
 // ==== FOOTER ==== //
-;
-(function($) {
+;(function($) {
 		$(function() {
 				/*  ********************************************************
 				 *   Search Show : Hide
 				 *  ********************************************************
 				 */
+
+
+				$('#reg_password').on('keyup', function() {
+						console.log(pwsL10n);
+				});
+
+
 				function searach_toggle() {
 						$('.search-toggle').click(function() {
 								$(".search-section").stop().slideToggle("fast");
@@ -17,50 +23,6 @@
 				 *  ********************************************************
 				 */
 				$('.mh').matchHeight();
-				/*  ********************************************************
-				 *   Sticky Navigation
-				 *  ********************************************************
-				 */
-				// var stickyNavTop = $('#main-nav-container').offset().top;
-				// var stickyNavheight = $('#main-nav-container').outerHeight();
-				// var stickyNav = function() {
-				// 		var scrollTop = $(window).scrollTop();
-				// 		if (scrollTop > stickyNavTop) {
-				// 				$('#main-nav-container').addClass('sticky-main-nav');
-				// 				$('#header-middle').css('margin-bottom', stickyNavheight);
-				// 		} else {
-				// 				$('#main-nav-container').removeClass('sticky-main-nav');
-				// 				$('#header-middle').css('margin-bottom', 0);
-				// 		}
-				// };
-				// stickyNav();
-				// $(window).scroll(function() {
-				// 		stickyNav();
-				// });
-				/*  ********************************************************
-				 *   LIttle function which will add class 'responsive to the footer'
-				 *  ********************************************************
-				 */
-				// var footerHider = function() {
-				// 		var windowWidth = $(window).width();
-				// 		var ResponsiveState = $('#footer').data('responsive');
-				// 		$('#footer .footer-item').not(':nth-child(3)').each(function() {
-				// 				if (windowWidth < ResponsiveState) {
-				// 						$(this).addClass('responsive');
-				// 						$(this).find('h3').on('click', function() {
-				// 								$('#footer .footer-item').find('ul').stop().slideUp();
-				// 								$(this).next('ul').stop().slideToggle();
-				// 						});
-				// 				} else {
-				// 						$(this).removeClass('responsive');
-				// 						$('#footer .footer-item').find('ul').show();
-				// 				}
-				// 		});
-				// };
-				// footerHider();
-				// $(window).resize(function() {
-				// 		footerHider();
-				// });
 				/*  ********************************************************
 				 *   Cookie Bar
 				 *   https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
@@ -81,29 +43,26 @@
 						prevArrow: '<i class="icon-arrow-thin-left"></i>',
 						nextArrow: '<i class="icon-arrow-thin-right"></i>',
 						responsive: [{
-										breakpoint: 1024,
-										settings: {
-												slidesToShow: 3,
-												slidesToScroll: 3,
-												infinite: true,
-												dots: true
-										}
-								},
-								{
-										breakpoint: 600,
-										settings: {
-												slidesToShow: 2,
-												slidesToScroll: 2
-										}
-								},
-								{
-										breakpoint: 480,
-										settings: {
-												slidesToShow: 1,
-												slidesToScroll: 1
-										}
+								breakpoint: 1024,
+								settings: {
+										slidesToShow: 3,
+										slidesToScroll: 3,
+										infinite: true,
+										dots: true
 								}
-						]
+						}, {
+								breakpoint: 600,
+								settings: {
+										slidesToShow: 2,
+										slidesToScroll: 2
+								}
+						}, {
+								breakpoint: 480,
+								settings: {
+										slidesToShow: 1,
+										slidesToScroll: 1
+								}
+						}]
 				});
 				$('#home-slider-ul').slick({
 						dots: false,
@@ -125,30 +84,26 @@
 						prevArrow: '<i class="icon-arrow-thin-left"></i>',
 						nextArrow: '<i class="icon-arrow-thin-right"></i>',
 						responsive: [{
-										breakpoint: 1024,
-										settings: {
-												slidesToShow: 3,
-												slidesToScroll: 3,
-												infinite: true,
-												dots: true
-										}
-								}, {
-										breakpoint: 600,
-										settings: {
-												slidesToShow: 2,
-												slidesToScroll: 2
-										}
-								}, {
-										breakpoint: 480,
-										settings: {
-												slidesToShow: 1,
-												slidesToScroll: 1
-										}
+								breakpoint: 1024,
+								settings: {
+										slidesToShow: 3,
+										slidesToScroll: 3,
+										infinite: true,
+										dots: true
 								}
-								// You can unslick at a given breakpoint now by adding:
-								// settings: "unslick"
-								// instead of a settings object
-						]
+						}, {
+								breakpoint: 600,
+								settings: {
+										slidesToShow: 2,
+										slidesToScroll: 2
+								}
+						}, {
+								breakpoint: 480,
+								settings: {
+										slidesToShow: 1,
+										slidesToScroll: 1
+								}
+						}]
 				});
 		});
 }(jQuery));
