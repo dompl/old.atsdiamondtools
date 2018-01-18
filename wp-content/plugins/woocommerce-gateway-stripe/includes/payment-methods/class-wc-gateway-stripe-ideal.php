@@ -162,19 +162,6 @@ class WC_Gateway_Stripe_Ideal extends WC_Stripe_Payment_Gateway {
 	}
 
 	/**
-	 * All payment icons that work with Stripe.
-	 *
-	 * @since 4.0.0
-	 * @version 4.0.0
-	 * @return array
-	 */
-	public function payment_icons() {
-		return apply_filters( 'wc_stripe_payment_icons', array(
-			'ideal' => '<i class="stripe-pf stripe-pf-ideal stripe-pf-right" alt="iDeal" aria-hidden="true"></i>',
-		) );
-	}
-
-	/**
 	 * Get_icon function.
 	 *
 	 * @since 1.0.0
@@ -306,7 +293,7 @@ class WC_Gateway_Stripe_Ideal extends WC_Stripe_Payment_Gateway {
 			if ( ! empty( $response->error ) ) {
 				$order->add_order_note( $response->error->message );
 
-				throw new Exception( $response->error->message );
+				throw new WC_Stripe_Exception( print_r( $response, true ), $response->error->message );
 			}
 
 			if ( WC_Stripe_Helper::is_pre_30() ) {
@@ -322,8 +309,8 @@ class WC_Gateway_Stripe_Ideal extends WC_Stripe_Payment_Gateway {
 				'result'   => 'success',
 				'redirect' => esc_url_raw( $response->redirect->url ),
 			);
-		} catch ( Exception $e ) {
-			wc_add_notice( $e->getMessage(), 'error' );
+		} catch ( WC_Stripe_Exception $e ) {
+			wc_add_notice( $e->getLocalizedMessage(), 'error' );
 			WC_Stripe_Logger::log( 'Error: ' . $e->getMessage() );
 
 			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );

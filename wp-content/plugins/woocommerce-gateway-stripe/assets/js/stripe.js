@@ -302,22 +302,25 @@ jQuery( function( $ ) {
 		openModal: function() {
 			// Capture submittal and open stripecheckout
 			var $form = wc_stripe_form.form,
-				$data = $( '#stripe-payment-data' ),
-				token = $form.find( 'input.stripe_token' );
+				$data = $( '#stripe-payment-data' );
 
-			token.val( '' );
+			wc_stripe_form.reset();
 
 			var token_action = function( res ) {
-				$form.find( 'input.stripe_token' ).remove();
-				$form.append( '<input type="hidden" class="stripe_token" name="stripe_token" value="' + res.id + '"/>' );
-				$form.append( "<input type='hidden' class='stripe-checkout-object' name='stripe_checkout_object' value='" + wc_stripe_form.prepareSourceToServer( res ) + "'/>" );
-				wc_stripe_form.stripe_submit = true;
+				$form.find( 'input.stripe_source' ).remove();
 
-				if ( $( 'form#add_payment_method' ).length ) {
-					$( wc_stripe_form.form ).off( 'submit', wc_stripe_form.form.onSubmit );
+				/* Since source was introduced in 4.0. We need to
+				 * convert the token into a source.
+				 */
+				if ( 'token' === res.object ) {
+					stripe.createSource( {
+						type: 'card',
+						token: res.id,
+					} ).then( wc_stripe_form.sourceResponse );
+				} else if ( 'source' === res.object ) {
+					var response = { source: res };
+					wc_stripe_form.sourceResponse( response );
 				}
-
-				$form.submit();
 			};
 
 			StripeCheckout.open({
@@ -369,9 +372,17 @@ jQuery( function( $ ) {
 				message = wc_stripe_params[ result.error.code ];
 			}
 
+			if ( 'validation_error' === result.error.type && wc_stripe_params.hasOwnProperty( result.error.code ) ) {
+				message = wc_stripe_params[ result.error.code ];
+			}
+
 			wc_stripe_form.reset();
+			$( '.woocommerce-NoticeGroup-checkout' ).remove();
 			console.log( result.error.message ); // Leave for troubleshooting.
 			$( errorContainer ).html( '<ul class="woocommerce_error woocommerce-error wc-stripe-error"><li>' + message + '</li></ul>' );
+			$( 'html, body' ).animate({
+				scrollTop: ( $( '.wc-stripe-error' ).offset().top - 200 )
+			}, 200 );
 			wc_stripe_form.unblock();
 		},
 
@@ -388,6 +399,18 @@ jQuery( function( $ ) {
 
 			extra_details.owner.email = $( '#billing_email' ).val();
 			extra_details.owner.phone = $( '#billing_phone' ).val();
+
+			/* Stripe does not like empty string values so
+			 * we need to remove the parameter if we're not
+			 * passing any value.
+			 */
+			if ( typeof extra_details.owner.phone !== 'undefined' && 0 >= extra_details.owner.phone.length ) {
+				delete extra_details.owner.phone;
+			}
+
+			if ( typeof extra_details.owner.email !== 'undefined' && 0 >= extra_details.owner.email.length ) {
+				delete extra_details.owner.email;
+			}
 
 			if ( $( '#billing_address_1' ).length > 0 ) {
 				extra_details.owner.address.line1       = $( '#billing_address_1' ).val();
@@ -450,9 +473,9 @@ jQuery( function( $ ) {
 					case 'sofort':
 					case 'alipay':
 						// These redirect flow payment methods need this information to be set at source creation.
-						extra_details.amount               = $( '#stripe-' + source_type + '-payment-data' ).data( 'amount' );
-						extra_details.currency             = $( '#stripe-' + source_type + '-payment-data' ).data( 'currency' );
-						extra_details.redirect             = { return_url: wc_stripe_params.return_url };
+						extra_details.amount   = $( '#stripe-' + source_type + '-payment-data' ).data( 'amount' );
+						extra_details.currency = $( '#stripe-' + source_type + '-payment-data' ).data( 'currency' );
+						extra_details.redirect = { return_url: wc_stripe_params.return_url };
 
 						if ( wc_stripe_params.statement_descriptor ) {
 							extra_details.statement_descriptor = wc_stripe_params.statement_descriptor;
@@ -470,9 +493,6 @@ jQuery( function( $ ) {
 						break;
 					case 'ideal':
 						extra_details.ideal = { bank: $( '#stripe-ideal-bank' ).val() };
-						break;
-					case 'sofort':
-						extra_details.sofort = { country: $( '#stripe-sofort-country' ).val() };
 						break;
 					case 'bitcoin':
 					case 'alipay':
@@ -711,7 +731,7 @@ jQuery( function( $ ) {
 		},
 
 		getRequiredFields: function() {
-			return wc_stripe_form.form.find( '.form-row.validate-required > input, .form-row.validate-required > select' );
+			return wc_stripe_form.form.find( '.form-row.validate-required > input, .form-row.validate-required > select, .form-row.validate-required > textarea' );
 		},
 
 		validateCheckout: function( type ) {
@@ -723,7 +743,8 @@ jQuery( function( $ ) {
 				'nonce': wc_stripe_params.stripe_nonce,
 				'required_fields': wc_stripe_form.getRequiredFields().serialize(),
 				'all_fields': wc_stripe_form.form.serialize(),
-				'source_type': wc_stripe_form.getSelectedPaymentElement().val()
+				'source_type': wc_stripe_form.getSelectedPaymentElement().val(),
+				'is_add_payment_page': wc_stripe_params.is_add_payment_method_page
 			};
 
 			$.ajax({
@@ -769,7 +790,7 @@ jQuery( function( $ ) {
 			wc_stripe_form.form.find( '.input-text, select, input:checkbox' ).blur();
 			$( 'html, body' ).animate({
 				scrollTop: ( $( 'form.checkout' ).offset().top - 100 )
-			}, 1000 );
+			}, 500 );
 			$( document.body ).trigger( 'checkout_error' );
 			wc_stripe_form.unblock();
 		}

@@ -98,6 +98,11 @@ class WC_Stripe_Payment_Request {
 		add_action( 'woocommerce_proceed_to_checkout', array( $this, 'display_payment_request_button_html' ), 1 );
 		add_action( 'woocommerce_proceed_to_checkout', array( $this, 'display_payment_request_button_separator_html' ), 2 );
 
+		if ( apply_filters( 'wc_stripe_show_payment_request_on_checkout', false ) ) {
+			add_action( 'woocommerce_checkout_before_customer_details', array( $this, 'display_payment_request_button_html' ), 1 );
+			add_action( 'woocommerce_checkout_before_customer_details', array( $this, 'display_payment_request_button_separator_html' ), 2 );
+		}
+
 		add_action( 'wc_ajax_wc_stripe_get_cart_details', array( $this, 'ajax_get_cart_details' ) );
 		add_action( 'wc_ajax_wc_stripe_get_shipping_options', array( $this, 'ajax_get_shipping_options' ) );
 		add_action( 'wc_ajax_wc_stripe_update_shipping_method', array( $this, 'ajax_update_shipping_method' ) );
@@ -585,8 +590,6 @@ class WC_Stripe_Payment_Request {
 
 		$currency = get_woocommerce_currency();
 
-		$display_items = $this->build_display_items();
-
 		// Set mandatory payment details.
 		$data = array(
 			'shipping_required' => WC()->cart->needs_shipping(),
@@ -1068,7 +1071,7 @@ class WC_Stripe_Payment_Request {
 			'displayItems' => $items,
 			'total'      => array(
 				'label'   => $this->total_label,
-				'amount'  => max( 0, apply_filters( 'woocommerce_calculated_total', WC_Stripe_Helper::get_stripe_amount( $order_total ), $order_total, WC()->cart ) ),
+				'amount'  => max( 0, apply_filters( 'woocommerce_stripe_calculated_total', WC_Stripe_Helper::get_stripe_amount( $order_total ), $order_total, WC()->cart ) ),
 				'pending' => false,
 			),
 		);
