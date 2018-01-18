@@ -43,7 +43,6 @@ load_files('functions/shortcodes');
 /* AACF */
 load_files('functions/acf');
 
-
 /* Check if Visual Composer is installed */
 if (defined('WPB_VC_VERSION'))
 {
@@ -92,6 +91,53 @@ function voidx_widgets_init()
 }
 add_action('widgets_init', 'voidx_widgets_init');
 
+/* Unregister Standard Widgets */
+function micnav_unregister_default_widgets()
+{
+
+  $unregister_widgets = array(
+    'WP_Widget_Pages',           // PagesWidget;
+    'WP_Widget_Calendar',        // CalendarWidget;
+    'WP_Widget_Archives',        // ArchivesWidget;
+    'WP_Widget_Links',           // LinksWidget;
+    'WP_Widget_Media_Audio',     // AudioPlayerMediaWidget;
+    'WP_Widget_Media_Image',     // ImageMediaWidget;
+    'WP_Widget_Media_Video',     // VideoMediaWidget;
+    'WP_Widget_Meta',            // MetaWidget;
+    'WP_Widget_Search',          // SearchWidget;
+                                 // 'WP_Widget_Text',            // TextWidget;
+    'WP_Widget_Categories',      // CategoriesWidget;
+    'WP_Widget_Recent_Posts',    // RecentPostsWidget;
+    'WP_Widget_Recent_Comments', // RecentCommentsWidget;
+    'WP_Widget_RSS',             // RSSWidget;
+    'WP_Widget_Tag_Cloud',       // TagCloudWidget;
+    'WP_Widget_Custom_HTML',     // CustomHTMLWidget,
+    'WP_Widget_Media_Gallery',   // CustomHTMLWidget,
+    # 'WP_Nav_Menu_Widget',        // MenusWidget;
+    /* Woocomerce */
+    'WC_Widget_Recent_Products',
+    'WC_Widget_Featured_Products',
+    'WC_Widget_Product_Categories',
+    'WC_Widget_Product_Tag_Cloud',
+    'WC_Widget_Cart',
+    'WC_Widget_Layered_Nav',
+    'WC_Widget_Layered_Nav_Filters',
+    'WC_Widget_Price_Filter',
+    'WC_Widget_Product_Search',
+    'WC_Widget_Top_Rated_Products',
+    'WC_Widget_Recent_Reviews',
+    'WC_Widget_Recently_Viewed',
+    'WC_Widget_Best_Sellers',
+    'WC_Widget_Onsale',
+    'WC_Widget_Random_Products',
+  );
+
+  foreach ($unregister_widgets as $unregister_widget)
+  {
+    unregister_widget($unregister_widget);
+  }
+}
+add_action('widgets_init', 'micnav_unregister_default_widgets', 11);
 /*  ********************************************************
  *   Get attachement data
  *  ********************************************************
@@ -118,41 +164,44 @@ function wp_get_attachment($attachment_id = null, $attachment_size = null)
   );
 }
 
-add_filter( 'woocommerce_redirect_single_search_result', '__return_false' );
-function my_maybe_woocommerce_variation_permalink( $permalink ) {
+add_filter('woocommerce_redirect_single_search_result', '__return_false');
+function my_maybe_woocommerce_variation_permalink($permalink)
+{
 
   // check to see if the search was for a product variation SKU
-  $sku = get_search_query();
+  $sku  = get_search_query();
   $args = array(
-    'post_type'       => 'product_variation',
-    'posts_per_page'  => 1,
-    'fields'          => 'ids',
-    'meta_query'      => array(
+    'post_type'      => 'product_variation',
+    'posts_per_page' => 1,
+    'fields'         => 'ids',
+    'meta_query'     => array(
       array(
-        'key'     => '_sku',
-        'value'   => $sku,
+        'key'   => '_sku',
+        'value' => $sku,
       ),
     ),
   );
-  $variation = get_posts( $args );
+  $variation = get_posts($args);
   // make sure the permalink we're filtering is for the parent product
-  if ( get_permalink( wp_get_post_parent_id( $variation[0] ) ) !== $permalink ) {
+  if (get_permalink(wp_get_post_parent_id($variation[0])) !== $permalink)
+  {
     return $permalink;
   }
-  if ( ! empty( $variation ) && function_exists( 'wc_get_attribute_taxonomy_names' ) ) {
+  if (!empty($variation) && function_exists('wc_get_attribute_taxonomy_names'))
+  {
     // this is a variation SKU, we need to prepopulate the filters
-    $variation_id = absint( $variation[0] );
-    $variation_obj = new WC_Product_Variation( $variation_id );
-    $attributes = $variation_obj->get_variation_attributes();
-    if ( empty( $attributes ) ) {
+    $variation_id  = absint($variation[0]);
+    $variation_obj = new WC_Product_Variation($variation_id);
+    $attributes    = $variation_obj->get_variation_attributes();
+    if (empty($attributes))
+    {
       return $permalink;
     }
-    $permalink = add_query_arg( $attributes, $permalink );
+    $permalink = add_query_arg($attributes, $permalink);
   }
   return $permalink;
 }
-add_filter( 'the_permalink', 'my_maybe_woocommerce_variation_permalink' );
-
+add_filter('the_permalink', 'my_maybe_woocommerce_variation_permalink');
 
 /**
  * Hide shipping rates when free shipping is available.
@@ -162,7 +211,7 @@ add_filter( 'the_permalink', 'my_maybe_woocommerce_variation_permalink' );
  * @return array
  */
 // Hide table rate shipping option when free shipping is available
-add_filter( 'woocommerce_available_shipping_methods', 'hide_table_rate_shipping_when_free_is_available' );
+add_filter('woocommerce_available_shipping_methods', 'hide_table_rate_shipping_when_free_is_available');
 
 /**
  *  Hide Table Rate shipping option when free shipping is available
@@ -170,15 +219,15 @@ add_filter( 'woocommerce_available_shipping_methods', 'hide_table_rate_shipping_
  * @param array $available_methods
  */
 
-add_filter( 'woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_when_free_is_available_in_zone', 10, 2 );
+add_filter('woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_when_free_is_available_in_zone', 10, 2);
 
-function bbloomer_unset_shipping_when_free_is_available_in_zone( $rates, $package ) {
+function bbloomer_unset_shipping_when_free_is_available_in_zone($rates, $package)
+{
 
-    // Only unset rates if free_shipping is available
+  // Only unset rates if free_shipping is available
 
-    unset( $rates['shipping_method_0_table_rate313'] );
+  unset($rates['shipping_method_0_table_rate313']);
 
-
-return $rates;
+  return $rates;
 
 }
