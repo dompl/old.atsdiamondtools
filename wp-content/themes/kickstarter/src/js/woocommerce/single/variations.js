@@ -1,6 +1,5 @@
 // ==== Single product JS ==== //
-;
-(function($) {
+;(function($) {
 		$(function() {
 
 				var FullProd_Description = $('.product-description-content').html();
@@ -53,7 +52,7 @@
 
 						global_variation_image_id = starting_variation_image_id;
 					}
-				})
+				});
 
 				// change single gallery
 				function changeImage(variation, isSingle) {
