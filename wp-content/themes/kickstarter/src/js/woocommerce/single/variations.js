@@ -58,11 +58,12 @@
 				// change single gallery
 				function changeImage(variation, isSingle) {
 
+					$('#ats-product-images .additional-single-image').remove();
+
 					if (isSingle === 'single') {
 						$('#ats-product-images .single-image').css('display', 'none');
 					} else {
 						$('#product__slider').css('display', 'none');
-						$('#ats-product-images .additional-single-image').remove();
 					}
 
 					var single_image_html =
@@ -117,8 +118,6 @@
 										prod_image_ID = $('.prod-main-image').data('image-id'), // Get main image ID
 										prod_Name = $('.prod_Name').text(),
 										var_wrapper = $('#variation-wrapper');
-
-
 
 								var_wrapper.addClass('has-variation');
 
