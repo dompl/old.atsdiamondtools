@@ -108,7 +108,6 @@ function CM_woocommerce_account_menu_items_callback($items)
 }
 add_filter('woocommerce_account_menu_items', 'CM_woocommerce_account_menu_items_callback', 10, 1);
 
-
 add_action('woocommerce_register_form', 'ats_add_week_password_confirmation', 10);
 
 function ats_add_week_password_confirmation()
@@ -117,3 +116,4 @@ function ats_add_week_password_confirmation()
   $password = sprintf('<div class="pw-weak"><label><input type="checkbox" name="pw_weak" class="pw-checkbox" />%s</label></div>', __('Confirm use of weak password', 'TEXT_DOMAIN'));
   echo $password;
 }
+
