@@ -7,3 +7,4 @@ build
 dist
 assets/icons
 src/*.css
+../atsdiamondtools

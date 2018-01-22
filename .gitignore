@@ -1,7 +1,6 @@
 # ignore everything in the root except the "wp-content" directory.
 /*
 !wp-content/
-wp-content/plugins/query-monitor/
 
 # ignore all files starting with .
 .*
@@ -58,44 +57,79 @@ wp-content/*
 !wp-content/mu-plugins/
 !wp-content/plugins/
 !wp-content/themes/
-wp-content/themes/twenty*/
-wp-content/plugins/akismet/
-wp-content/plugins/js_composer/
 
 # ignore these plugins
 wp-content/plugins/hello.php
 
+# ignore specific themes
+wp-content/themes/twenty*/
+
 # ignore node/grunt dependency directories
 node_modules/
-bower_components/
+
+# Wordmove moefiles
+Movefile
+movefile
+movefile.yml
+movefile.yaml
+Movefile_sample
 
 #my files and folders
+shared/
+local-config.php
 .local/
 local/
-Movefile
-config.codekit
-SERVER_DATA.txt
+
 
 # Additional ignores from comments on Github
+wp-content/plugins/query-monitor
+wp-content/plugins/autoptimize
+wp-content/managewp
+wp-content/mu-plugins/0-worker.php
+wp-content/transients-manager
 
-## WordPress
-*.log
-wp-config.php
+
+##################################
+# W3 Total Cache untracked files #
+##################################
 wp-content/advanced-cache.php
-wp-content/backup-db/
-wp-content/backups/
-wp-content/blogs.dir/
+wp-content/db.php
+wp-content/object-cache.php
 wp-content/cache/
-wp-content/upgrade/
-wp-content/uploads/
-wp-content/wp-cache-config.php
-wp-content/plugins/hello.php
-wp-content/blogs.dir/
-wp-content/themes/atsdiamondtools
-SERVER_DATA.txt
+wp-content/plugins/w3-total-cache/
+wp-content/w3tc-config/
 
-/.htaccess
-/license.txt
-/readme.html
-/sitemap.xml
-/sitemap.xml.gz
+###############
+# Kickstarter #
+###############
+wp-content/themes/kickstarter/build
+wp-content/themes/kickstarter/.sass-cache
+wp-content/themes/kickstarter/bower_components
+wp-content/themes/kickstarter/node_modules
+wp-content/themes/kickstarter/vendor
+wp-content/themes/kickstarter/build
+wp-content/themes/kickstarter/dist
+############
+# Sitemaps #
+############
+sitemap.xml
+sitemap.xml.gz
+
+#################################
+# Web Master Verification files #
+#################################
+google<SomeHash>.html
+yandex_<SomeHash>.html
+
+
+#################################
+# WordPress debugging files & logs
+#################################
+gt-cache/
+ics-importer-cache/
+imagecache.*
+pclzip-*.gz
+wp-content/w3-.*
+wp-content/w3tc.*
+gallery/*
+album/*

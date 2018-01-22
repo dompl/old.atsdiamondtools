@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--[if IE 8 ]><html <?php language_attributes();?> class="ie8"><![endif]-->
+<!--[if IE 9 ]><html <?php language_attributes();?> class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html <?php language_attributes();?> class="no-js">
+<head>
+  <title><?php wp_title('');?></title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="<?php bloginfo('charset');?>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link href="//www.google-analytics.com" rel="dns-prefetch">
+  <link rel="profile" href="http://gmpg.org/xfn/11" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo get_template_directory_uri(); ?>/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo get_template_directory_uri(); ?>/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo get_template_directory_uri(); ?>/img/favicons/favicon-16x16.png">
+  <link rel="mask-icon" href="<?php echo get_template_directory_uri(); ?>/img/favicons/safari-pinned-tab.svg" color="#4c3948">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="pingback" href="<?php bloginfo('pingback_url');?>" />
+  <?php wp_head();?>
+</head>
+<body <?php body_class()?>>
+  <header id="masthead" class="clx">
+    <?php get_template_part( 'modules/header/top'); ?>
+    <?php get_template_part( 'modules/header/middle'); ?>
+    <?php get_template_part( 'modules/header/navigation'); ?>
+  </header>
+  <?php !is_front_page() ? do_action('page_header') : '' ?>

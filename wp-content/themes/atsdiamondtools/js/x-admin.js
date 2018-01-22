@@ -1,0 +1,2 @@
+!function(i){i(function(){i("input#rememberme").on("click",function(){i(this).parent().toggleClass("checked")}),i("#loginform").on("click",function(){i(".g-recaptcha").slideDown("fast")}),i("#login").after('<div id="redfrog"><div class="image"></div><div class="redfrog"><a href="https://www.redfrogstudio.co.uk" target="_blank">Website by Red Frog Studio</a></div></div>')})}(jQuery);
+//# sourceMappingURL=x-admin.js.map
