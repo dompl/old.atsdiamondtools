@@ -467,7 +467,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 			<?php } else { ?>
 				<div class="form-row form-row-wide">
-					<label><?php _e( 'Card Number', 'woocommerce-gateway-stripe' ); ?><span class="required">*</span></label>
+					<label><?php _e( 'Card Number', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
 
 					<div id="stripe-card-element" style="background:#fff;padding:0 1em;border:1px solid #ddd;margin:5px 0;padding:10px 5px;">
 					<!-- a Stripe Element will be inserted here. -->
@@ -475,7 +475,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-first">
-					<label><?php _e( 'Expiry Date', 'woocommerce-gateway-stripe' ); ?><span class="required">*</span></label>
+					<label><?php _e( 'Expiry Date', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
 
 					<div id="stripe-exp-element" style="background:#fff;padding:0 1em;border:1px solid #ddd;margin:5px 0;padding:10px 5px;">
 					<!-- a Stripe Element will be inserted here. -->
@@ -483,7 +483,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				</div>
 
 				<div class="form-row form-row-last">
-					<label><?php _e( 'Card Code (CVC)', 'woocommerce-gateway-stripe' ); ?><span class="required">*</span></label>
+					<label><?php _e( 'Card Code (CVC)', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span></label>
 				<div id="stripe-cvc-element" style="background:#fff;padding:0 1em;border:1px solid #ddd;margin:5px 0;padding:10px 5px;">
 				<!-- a Stripe Element will be inserted here. -->
 				</div>
@@ -633,8 +633,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function process_payment( $order_id, $retry = true, $force_save_source = false ) {
 		try {
-			$order          = wc_get_order( $order_id );
-			$source_object  = ! empty( $_POST['stripe_source'] ) ? json_decode( wc_clean( stripslashes( $_POST['stripe_source'] ) ) ) : false;
+			$order   = wc_get_order( $order_id );
 
 			// This comes from the create account checkbox in the checkout page.
 			$create_account = ! empty( $_POST['createaccount'] ) ? true : false;
@@ -645,15 +644,15 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				$new_stripe_customer->create_customer();
 			}
 
-			$prepared_source = $this->prepare_source( get_current_user_id(), $force_save_source );
+			$source_object = $this->create_source_object();
+
+			$prepared_source = $this->prepare_source( $source_object, get_current_user_id(), $force_save_source );
 
 			// Check if we don't allow prepaid credit cards.
 			if ( ! apply_filters( 'wc_stripe_allow_prepaid_card', true ) ) {
-				$stripe_checkout_object = ! empty( $_POST['stripe_checkout_object'] ) ? json_decode( wc_clean( stripslashes( $_POST['stripe_checkout_object'] ) ) ) : false;
-
-				if ( $stripe_checkout_object && 'token' === $stripe_checkout_object->object && 'prepaid' === $stripe_checkout_object->card->funding ) {
+				if ( $source_object && 'token' === $source_object->object && 'prepaid' === $source_object->card->funding ) {
 					$localized_message = __( 'Sorry, we\'re not accepting prepaid cards at this time. Your credit card has not been charge. Please try with alternative payment method.', 'woocommerce-gateway-stripe' );
-					throw new WC_Stripe_Exception( print_r( $stripe_checkout_object, true ), $localized_message );
+					throw new WC_Stripe_Exception( print_r( $source_object, true ), $localized_message );
 				}
 			}
 

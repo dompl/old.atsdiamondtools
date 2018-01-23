@@ -83,6 +83,7 @@ From your WordPress dashboard
 * Language: Updated Portuguese translation - thanks to Pedro Mendonça
 * Language: Updated Persian translation - thanks to Kamel Kimiaei
 * Language: Updated Swiss German translation - thanks to Raphael Hüni
+* Language: Updated Arabic translation - thanks to Karim Ramadan
 
 = 5.6.5 =
 * API: Added new 'kses' setting to the `acf_form()` function

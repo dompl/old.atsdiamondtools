@@ -31,6 +31,7 @@
 }
 
 .aws-container .aws-search-field {
+    height: 44px;
     width: 100%;
     color: #313131;
     padding: 6px;
@@ -54,6 +55,7 @@
 
 .aws-search-result {
     position: absolute;
+    text-align: left;
     z-index: 9999999999999;
     background: #fff;
     width: 100%;

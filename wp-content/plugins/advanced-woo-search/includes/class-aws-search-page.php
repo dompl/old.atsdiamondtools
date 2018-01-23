@@ -71,14 +71,10 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         private function aws_searchpage_enabled( $query ) {
             $enabled = true;
-            $s = $query->get( 's' );
-
-            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) || ! isset( $query->query_vars['s'] ) || empty( $s ) ) {
+            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) || ! isset( $query->query_vars['s'] ) || ! $query->query_vars['s'] ) {
                 $enabled = false;
             }
-
             return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
-
         }
 
         /**

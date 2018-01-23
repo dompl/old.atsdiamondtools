@@ -43,8 +43,6 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             add_action( 'aws_reindex_table', array( $this, 'reindex_table_job' ) );
 
-            add_action( 'wp_ajax_aws-cancel-index', array( $this, 'cancel_reindex' ) );
-
         }
 
         /*
@@ -54,11 +52,11 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             global $wpdb;
 
-            $index_meta = get_option( 'aws_index_meta', false );
+            $index_meta = $_POST['data'];
             $status = false;
 
             // No current index going on. Let's start over
-            if ( false === $index_meta ) {
+            if ( 'start' === $index_meta ) {
                 $status = 'start';
                 $index_meta = array(
                     'offset' => 0,
@@ -82,7 +80,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             $index_meta = apply_filters( 'aws_index_meta', $index_meta );
-            $posts_per_page = apply_filters( 'aws_index_posts_per_page', 30 );
+            $posts_per_page = apply_filters( 'aws_index_posts_per_page', 10 );
 
 
             $args = array(
@@ -119,24 +117,16 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                         $index_meta['offset'] = $index_meta['found_posts'];
                     }
 
-                    update_option( 'aws_index_meta', $index_meta );
-
                 } else {
                     // We are done (with this site)
 
                     $index_meta['offset'] = (int) count( $posts );
-
-                    delete_option( 'aws_index_meta' );
 
                     do_action('aws_cache_clear');
 
                     update_option( 'aws_reindex_version', AWS_VERSION );
 
                 }
-
-            } else {
-
-                update_option( 'aws_index_meta', $index_meta );
 
             }
 
@@ -549,16 +539,6 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             do_action('aws_cache_clear');
 
-        }
-
-        /*
-         * Cancel index
-         */
-        public function cancel_reindex() {
-
-            delete_option( 'aws_index_meta' );
-
-            wp_send_json_success( 'Deleted!' );
         }
 
         /*

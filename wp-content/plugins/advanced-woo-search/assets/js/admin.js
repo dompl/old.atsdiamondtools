@@ -24,18 +24,19 @@ jQuery(document).ready(function ($) {
         $reindexBlock.addClass('loading');
         $reindexProgress.html ( processed + '%' );
 
-        sync();
+        sync('start');
 
     });
 
 
-    function sync() {
+    function sync( data ) {
 
         $.ajax({
             type: 'POST',
             url: ajaxurl,
             data: {
-                action: 'aws-reindex'
+                action: 'aws-reindex',
+                data: data
             },
             dataType: "json",
             success: function (response) {
@@ -64,35 +65,23 @@ jQuery(document).ready(function ($) {
 
                     console.log( response.data );
 
-                    $reindexProgress.html ( processed + '%' );
+                    $reindexProgress.html( processed + '%' );
 
                     // We are starting a sync
                     syncStatus = 'sync';
 
-                    sync();
+                    sync( response.data );
                 }
 
             },
             error : function( jqXHR, textStatus ) {
                 console.log( "Request failed: " + textStatus );
-                cancelSync();
             },
             complete: function () {
             }
         });
 
     }
-
-    function cancelSync() {
-        $.ajax( {
-            method: 'post',
-            url: ajaxurl,
-            data: {
-                action: 'aws-cancel-index'
-            }
-        } );
-    }
-
 
     // Clear cache
     $clearCacheBtn.on( 'click', function(e) {
