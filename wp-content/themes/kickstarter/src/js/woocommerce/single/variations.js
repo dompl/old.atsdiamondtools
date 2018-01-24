@@ -140,7 +140,7 @@
 												'</div>';
 
 										// Add the html to the wrapper
-										var_wrapper.append(var_image_HTML);
+										// var_wrapper.append(var_image_HTML);
 
 								} else {
 										$('.variation-image').remove();
