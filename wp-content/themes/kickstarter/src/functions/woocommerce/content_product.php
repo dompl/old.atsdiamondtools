@@ -32,7 +32,12 @@ function ats_create_product_listing_layout_()
   }
   else
   {
-    // TODO - create product image if there is no product image ;)
+    $image_width     = get_option('shop_catalog_image_size')['width'];  // Image width
+    $image_height    = get_option('shop_catalog_image_size')['height']; // Image height
+    $image_crop      = get_option('shop_catalog_image_size')['crop'];   // Image crop
+    $parent_image_id = get_post_thumbnail_id($product->get_parent_id()); // Use parent image
+
+    $prod_image = image_figure($parent_image_id, '', $image_width, $image_height, $image_crop);
   }
 
   $prod = '<div class="product" id="prod-id-' . $id . '">';
@@ -101,7 +106,15 @@ function ats_create_product_listing_layout_()
       $cat_list .= '<li>' . esc_html($category->name) . '</li>';
     }
     $cat_list .= '</ul>';
-  }
+  } else if (get_the_terms($product->get_parent_id(), 'product_cat') && !is_cart()) {
+        $cat_list = '<ul>';
+    foreach (get_the_terms($product->get_parent_id(), 'product_cat') as $category)
+    {
+      $category_id = $category->term_id;
+      $cat_list .= '<li>' . esc_html($category->name) . '</li>';
+    }
+    $cat_list .= '</ul>';
+ }
 
   // Stock Status
   $stock        = $product->get_stock_status();
