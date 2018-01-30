@@ -134,6 +134,9 @@
     }
     &.off-stock {
       padding-top: spacer(.5)!important;
+      .variation-title {
+        display: none;
+      }
     }
     &.has-variation,
     &.off-stock {
@@ -164,12 +167,12 @@
         }
       }
     }
-    &.has-description.has-image {
-      .variation-title {
-        float: right;
-        width: 72%;
-      }
-    }
+    // &.has-description.has-image {
+    //   .variation-title {
+    //     float: right;
+    //     width: 72%;
+    //   }
+    // }
     .not-in-stock {
       color: white;
       background: color(danger);
