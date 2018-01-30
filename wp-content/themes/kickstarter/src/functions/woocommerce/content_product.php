@@ -152,14 +152,12 @@ function ats_create_product_listing_layout_()
   $prod .= sprintf('
     <div class="product-content-colleterals clx">
     <div class="product-list-price">%1$s</div>
+    %3$s
     %4$s
-    %5$s
-    <div class="product-list-cats">%2$s</div>
-    <div class="product-list-add-cart">%3$s</div>
+    <div class="product-list-add-cart">%2$s</div>
     </div>
     ',
     '<span class="gh ls">'.__('Price', 'TEXT_DOMAIN').': </span><strong>' . $product->get_price_html()  . '</strong>',
-    '<span class="gh ls">'.__('Category', 'TEXT_DOMAIN').': </span>' . $cat_list,
     $info_button . $add_to_cart,
     $stock_status ? '<div class="product-list-stock gh"><span class="ls">'.__('Stock', 'TEXT_DOMAIN').': </span><strong class="stock-status-' . $stock . '">' . $stock_info_html . ' ' . $stock_status . '</strong></div>' : '',
     $product->get_sku() != '' ? '<div class="product-sku gh"><span class="ls">'.__('SKU', 'TEXT_DOMAIN').': </span><strong>' . $product->get_sku() . '</strong></div>' : ''
