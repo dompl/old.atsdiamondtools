@@ -19,7 +19,7 @@ function new_loop_shop_per_page($cols)
 {
   // $cols contains the current number of products per page based on the value stored on Options -> Reading
   // Return the number of products you wanna show per page.
-  $cols = 32;
+  $cols = (int) get_option('posts_per_page');
   return $cols;
 }
 
