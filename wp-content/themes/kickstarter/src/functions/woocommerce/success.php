@@ -28,7 +28,7 @@ function ats_add_to_cart_message( $message, $products ) {
     esc_attr($product->get_title()),
     get_permalink(wc_get_page_id('cart')),
     __('View Cart', 'woocommerce'),
-    __('successfully added to your cart.', 'woocommerce'),
+    __('successfully added to your basket.', 'woocommerce'),
     $image
   );
   return $message;
