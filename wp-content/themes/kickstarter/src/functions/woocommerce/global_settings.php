@@ -113,7 +113,7 @@ add_action('woocommerce_register_form', 'ats_add_week_password_confirmation', 10
 function ats_add_week_password_confirmation()
 {
 
-  $password = sprintf('<div class="pw-weak"><label><input type="checkbox" name="pw_weak" class="pw-checkbox" />%s</label></div>', __('Confirm use of weak password', 'TEXT_DOMAIN'));
+  $password = sprintf('<div class="pw-weak" style="display: none;"><label><input type="checkbox" name="pw_weak" class="pw-checkbox" />%s</label></div>', __('Confirm use of weak password', 'TEXT_DOMAIN'));
   echo $password;
 }
 
