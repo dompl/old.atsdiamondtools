@@ -70,6 +70,10 @@
 						});
 				});
 
+				$('.pw-checkbox').on('click', function() {
+					$('.woocommerce-FormRow input[type="submit"]').removeAttr('disabled');
+				});
+
 				$('.pw-weak input').click(function() {
 						if (this.checked === true) {
 								$('.register input[type=submit]').removeAttr('disabled');
