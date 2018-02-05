@@ -50,7 +50,7 @@
 #header-top {
   font-size: 14px;
   height: $colums-height;
-  overflow-y: hidden;
+  // overflow-y: hidden;
   @include to(1) {
     span.visible {
       font-weight: bold;
