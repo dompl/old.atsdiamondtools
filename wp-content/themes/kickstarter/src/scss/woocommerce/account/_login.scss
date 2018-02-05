@@ -50,6 +50,11 @@
         @include span( 1 of 2 after last);
       }
     }
+    .pw-weak {
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+    }
   }
   .lost_reset_password {
     max-width: 500px;
