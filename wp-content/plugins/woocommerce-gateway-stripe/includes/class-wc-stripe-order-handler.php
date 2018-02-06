@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 	private static $_this;
+	public $retry_interval;
 
 	/**
 	 * Constructor.
@@ -19,6 +20,8 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 	 */
 	public function __construct() {
 		self::$_this = $this;
+
+		$this->retry_interval = 2;
 
 		add_action( 'wp', array( $this, 'maybe_process_redirect_order' ) );
 		add_action( 'woocommerce_order_status_on-hold_to_processing', array( $this, 'capture_payment' ) );
@@ -76,12 +79,6 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 			WC_Stripe_Logger::log( "Info: (Redirect) Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
-			// Prep source object.
-			$source_object           = new stdClass();
-			$source_object->token_id = '';
-			$source_object->customer = $this->get_stripe_customer_id( $order );
-			$source_object->source   = $source;
-
 			/**
 			 * First check if the source is chargeable at this time. If not,
 			 * webhook will take care of it later.
@@ -106,6 +103,12 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 				return;
 			}
 
+			// Prep source object.
+			$source_object           = new stdClass();
+			$source_object->token_id = '';
+			$source_object->customer = $this->get_stripe_customer_id( $order );
+			$source_object->source   = $source_info->id;
+
 			// Make the request.
 			$response = WC_Stripe_API::request( $this->generate_payment_request( $order, $source_object ) );
 
@@ -116,15 +119,41 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 						sleep( 5 );
 						return $this->process_redirect_payment( $order_id, false );
 					} else {
-						$message = 'API connection error and retries exhausted.';
-						$order->add_order_note( $message );
-						throw new WC_Stripe_Exception( print_r( $response, true ), $message );
+						$localized_message = __( 'API connection error and retries exhausted.', 'woocommerce-gateway-stripe' );
+						$order->add_order_note( $localized_message );
+						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+					}
+				}
+
+				// We want to retry.
+				if ( $this->is_retryable_error( $response->error ) ) {
+					if ( $retry ) {
+						// Don't do anymore retries after this.
+						if ( 5 <= $this->retry_interval ) {
+							return $this->process_redirect_payment( $order_id, false );
+						}
+
+						sleep( $this->retry_interval );
+
+						$this->retry_interval++;
+						return $this->process_redirect_payment( $order_id, true );
+					} else {
+						$localized_message = __( 'On going requests error and retries exhausted.', 'woocommerce-gateway-stripe' );
+						$order->add_order_note( $localized_message );
+						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
 					}
 				}
 
 				// Customer param wrong? The user may have been deleted on stripe's end. Remove customer_id. Can be retried without.
 				if ( preg_match( '/No such customer/i', $response->error->message ) && $retry ) {
-					delete_user_meta( WC_Stripe_Helper::is_pre_30() ? $order->customer_user : $order->get_customer_id(), '_stripe_customer_id' );
+					if ( WC_Stripe_Helper::is_pre_30() ) {
+						delete_user_meta( $order->customer_user, '_stripe_customer_id' );
+						delete_post_meta( $order_id, '_stripe_customer_id' );
+					} else {
+						delete_user_meta( $order->get_customer_id(), '_stripe_customer_id' );
+						$order->delete_meta_data( '_stripe_customer_id' );
+						$order->save();
+					}
 
 					return $this->process_redirect_payment( $order_id, false );
 
@@ -255,29 +284,10 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 		$order = wc_get_order( $order_id );
 
 		if ( 'stripe' === ( WC_Stripe_Helper::is_pre_30() ? $order->payment_method : $order->get_payment_method() ) ) {
-			$charge_id = WC_Stripe_Helper::is_pre_30() ? get_post_meta( $order_id, '_transaction_id', true ) : $order->get_transaction_id();
+			$this->process_refund( $order_id );
 
-			if ( $charge_id ) {
-				$result = WC_Stripe_API::request( array(
-					'amount' => WC_Stripe_Helper::get_stripe_amount( $order->get_total() ),
-				), 'charges/' . $charge_id . '/refund' );
-
-				if ( ! empty( $result->error ) ) {
-					$order->add_order_note( __( 'Unable to refund charge!', 'woocommerce-gateway-stripe' ) . ' ' . $result->error->message );
-				} else {
-					/* translators: transaction id */
-					$order->add_order_note( sprintf( __( 'Stripe charge refunded (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $result->id ) );
-					WC_Stripe_Helper::is_pre_30() ? delete_post_meta( $order_id, '_stripe_charge_captured' ) : $order->delete_meta_data( '_stripe_charge_captured' );
-					WC_Stripe_Helper::is_pre_30() ? delete_post_meta( $order_id, '_transaction_id' ) : $order->delete_meta_data( '_stripe_transaction_id' );
-
-					if ( is_callable( array( $order, 'save' ) ) ) {
-						$order->save();
-					}
-				}
-
-				// This hook fires when admin manually changes order status to cancel.
-				do_action( 'woocommerce_stripe_process_manual_cancel', $order, $result );
-			}
+			// This hook fires when admin manually changes order status to cancel.
+			do_action( 'woocommerce_stripe_process_manual_cancel', $order );
 		}
 	}
 
@@ -350,16 +360,6 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 		array_walk_recursive( $required_fields, 'wc_clean' );
 		array_walk_recursive( $all_fields, 'wc_clean' );
 
-		// Remove unneeded required fields depending on source type.
-		if ( 'stripe_sepa' !== $source_type ) {
-			unset( $required_fields['stripe_sepa_owner'] );
-			unset( $required_fields['stripe_sepa_iban'] );
-		}
-
-		if ( 'stripe_sofort' !== $source_type ) {
-			unset( $required_fields['stripe_sofort_bank_country'] );
-		}
-
 		/**
 		 * If ship to different address checkbox is checked then we need
 		 * to validate shipping fields too.
@@ -388,15 +388,6 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 			// Check create account password.
 			if ( 'account_password' === $field && ! $create_account ) {
 				continue;
-			}
-
-			// Check if is SEPA.
-			if ( 'stripe_sepa' !== $source_type && 'stripe_sepa_owner' === $field ) {
-				continue;
-			}
-
-			if ( 'stripe_sepa' !== $source_type && 'stripe_sepa_iban' === $field ) {
-				$continue;
 			}
 
 			if ( empty( $field_value ) || '-1' === $field_value ) {

@@ -201,11 +201,11 @@
             },
 
             showLoader: function() {
-                $searchForm.addClass('processing');
+                $searchForm.addClass('aws-processing');
             },
 
             hideLoader: function() {
-                $searchForm.removeClass('processing');
+                $searchForm.removeClass('aws-processing');
             },
 
             onFocus: function( event ) {
@@ -218,6 +218,14 @@
                 if ( ! $(event.target).closest( ".aws-container" ).length ) {
                     $(d.resultBlock).hide();
                 }
+            },
+
+            isResultsVisible:function() {
+                return $(d.resultBlock).is(":visible");
+            },
+
+            removeHovered: function() {
+                $( d.resultBlock ).find('.aws_result_item').removeClass('hovered');
             },
 
             resultLayout: function () {
@@ -293,7 +301,9 @@
 
 
         $searchField.on( 'keyup', function(e) {
-            methods.onKeyup(e);
+            if ( e.keyCode != 40 && e.keyCode != 38 ) {
+                methods.onKeyup(e);
+            }
         });
 
 
@@ -324,6 +334,66 @@
                 methods.resultLayout();
             }
         });
+
+
+        $( d.resultBlock ).on( 'mouseenter', '.aws_result_item', function() {
+            methods.removeHovered();
+            $(this).addClass('hovered');
+        });
+
+
+        $( d.resultBlock ).on( 'mouseleave', '.aws_result_item', function() {
+            methods.removeHovered();
+        });
+
+
+        $(window).on( 'keydown', function(e) {
+
+            if ( e.keyCode == 40 || e.keyCode == 38 ) {
+                if ( methods.isResultsVisible() ) {
+
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    var $item = $( d.resultBlock ).find('.aws_result_item');
+                    var $hoveredItem = $( d.resultBlock ).find('.aws_result_item.hovered');
+                    var $itemsList = $( d.resultBlock ).find('ul');
+
+                    if ( e.keyCode == 40 ) {
+
+                        if ( $hoveredItem.length > 0 ) {
+                            methods.removeHovered();
+                            $hoveredItem.next().addClass('hovered');
+                        } else {
+                            $item.first().addClass('hovered');
+                        }
+
+                    }
+
+                    if ( e.keyCode == 38 ) {
+
+                        if ( $hoveredItem.length > 0 ) {
+                            methods.removeHovered();
+                            $hoveredItem.prev().addClass('hovered');
+                        } else {
+                            $item.last().addClass('hovered');
+                        }
+
+                    }
+
+                    var scrolledTop = $itemsList.scrollTop();
+                    var position = $( d.resultBlock ).find('.aws_result_item.hovered').position();
+
+                    if ( position ) {
+                        $itemsList.scrollTop( position.top + scrolledTop )
+                    }
+
+
+                }
+            }
+
+        });
+
 
     };
 

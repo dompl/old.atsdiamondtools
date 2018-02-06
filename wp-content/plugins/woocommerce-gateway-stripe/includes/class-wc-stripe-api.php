@@ -14,7 +14,7 @@ class WC_Stripe_API {
 	 * Stripe API Endpoint
 	 */
 	const ENDPOINT = 'https://api.stripe.com/v1/';
-	const STRIPE_API_VERSION = '2017-12-14';
+	const STRIPE_API_VERSION = '2018-01-23';
 
 	/**
 	 * Secret API Key.
@@ -101,7 +101,10 @@ class WC_Stripe_API {
 		$headers = self::get_headers();
 
 		if ( 'charges' === $api && 'POST' === $method ) {
-			$headers['Idempotency-Key'] = uniqid( 'stripe_' );
+			$customer = ! empty( $request['customer'] ) ? $request['customer'] : '';
+			$source   = ! empty( $request['source'] ) ? $request['source'] : $customer;
+
+			$headers['Idempotency-Key'] = $request['metadata']['order_id'] . '-' . $source;
 		}
 
 		$response = wp_safe_remote_post(
@@ -131,8 +134,6 @@ class WC_Stripe_API {
 	 */
 	public static function retrieve( $api ) {
 		WC_Stripe_Logger::log( "{$api}" );
-
-		$ua = self::get_user_agent();
 
 		$response = wp_safe_remote_get(
 			self::ENDPOINT . $api,

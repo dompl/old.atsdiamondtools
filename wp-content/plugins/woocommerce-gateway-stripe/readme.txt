@@ -4,7 +4,7 @@ Tags: credit card, stripe, apple pay, payment request, google pay, sepa, sofort,
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
-Stable tag: 4.0.3
+Stable tag: 4.0.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Attributions: thorsten-stripe
@@ -101,9 +101,16 @@ If you get stuck, you can ask for help in the Plugin Forum.
 
 == Changelog ==
 
-= 4.0.3 - 2018-01-18 =
-* Fix - Pass Stripe source as id instead of object as some sites may conflict with objects being passed.
-* Fix - For Payment Request Button, if test keys are not filled, it can cause live mode not to function.
+= 4.0.5 - 2018-02-02 =
+* Fix - Illegal offset error on settings when non is defined or saved.
+* Fix - Wrong ID used for dispute webhook handler.
+* Fix - A WC 2.6 backwards compat issue while trying to get order id in subscriptions.
+* Fix - Processing SEPA can't find email when not logged in.
+* Add - Allow restricted secret keys to be used.
+* Add - Statement Descriptor to SEPA Direct Debit.
+* Add - Idempotency failure retry with easing to prevent multirequest issue.
+* Add - POT file.
+* Tweak - Make billing name optional on pay for order page.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woothemes/woocommerce-gateway-stripe/master/changelog.txt).
 

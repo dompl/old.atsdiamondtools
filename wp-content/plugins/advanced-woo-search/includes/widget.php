@@ -3,8 +3,11 @@
  * Initialized plugins widget
  */
 
-add_action( 'widgets_init', create_function( '', 'return register_widget("AWS_Widget");' ) );
-
+add_action( 'widgets_init', 'aws_register_widget' );
+ 
+function aws_register_widget() {
+    register_widget("AWS_Widget");
+}
 
 class AWS_Widget extends WP_Widget {
 

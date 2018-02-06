@@ -80,7 +80,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             $index_meta = apply_filters( 'aws_index_meta', $index_meta );
-            $posts_per_page = apply_filters( 'aws_index_posts_per_page', 10 );
+            $posts_per_page = apply_filters( 'aws_index_posts_per_page', 30 );
 
 
             $args = array(
