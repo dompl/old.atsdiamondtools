@@ -1,0 +1,39 @@
+Version 2.3.3 - May 23, 2017
+
+	Updated to display the actual coupon discount amount on the cart and checkout pages
+
+Version 2.3.2 - October 31, 2016
+
+	Updated calculate_shipping() method declaration to avoid PHP warning messages
+
+Version 2.3.1 - August 22, 2016
+
+	Updated processing for applying coupons
+
+Version 2.3 - October 1, 2015
+
+	Added Flat Fee Shipping subsystem - requires a coupon code and possibly a minimum order amount
+
+Version 2.2.2 - October 26, 2014
+
+	Updated saving shipping coupon settings
+
+Version 2.2.1 - October 24, 2014
+
+	Updated coupon validation checking
+
+Version 2.2 - October 23, 2014
+
+	Initial public release
+
+Version 2.0 
+
+	Tweaks to remove unnecessary coupon settings
+
+
+Version 1.0 
+
+	Initial proof of concept development
+
+	Private use
+	
