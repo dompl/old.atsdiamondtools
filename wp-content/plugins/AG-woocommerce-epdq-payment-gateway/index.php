@@ -4,22 +4,22 @@
 # @Email:  support@weareag.co.uk
 # @Filename: index.php
 # @Last modified by:   Aaron Bowie
-# @Last modified time: Tuesday, January 30th 2018, 9:38:30 pm
+# @Last modified time: Wednesday, February 7th 2018, 9:39:26 pm
 
 /*
 Plugin Name: AG WooCommerce Barclay ePDQ Payment Gateway
 Plugin URI: https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/
 Description: Add a Barclay ePDQ payment gateway to WooCommerce 3.0+.
-Version: 2.9.5
+Version: 2.9.6
 Author: Aaron @ We are AG
 Author URI: https://www.weareag.co.uk
 WC requires at least: 3.0.0
-WC tested up to: 3.3.0
+WC tested up to: 3.3.1
 */
 
 defined('ABSPATH') or die("No script kiddies please!");
 // Plugin repo bits
-$version = '2.9.5';
+$version = '2.9.6';
 $plugin_id = 'FEEffFecGNWZq5fx';
 $repo_url = 'http://weareag.co.uk/update/';
 //$pluginurl = plugin_dir_url( $file );

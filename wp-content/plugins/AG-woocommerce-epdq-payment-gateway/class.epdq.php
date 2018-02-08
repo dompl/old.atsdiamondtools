@@ -13,7 +13,6 @@ if ( ! function_exists( 'ag_plugin_licence' ) ) {
 	add_action('admin_menu', 'ag_plugin_licence');
 	function ag_plugin_licence() {
 	  add_menu_page('AG License Activation Menu', 'AG Plugins', 'manage_options', 'AG_licence', 'AG_plugins_page', 'dashicons-admin-network');
-		//plugins_url( 'AG-Woo-SagePay-Server/img/weareag.svg' )
 	}
 
 }
@@ -168,6 +167,10 @@ public function __construct() {
 			$this->init_settings();
 		}
 
+		$this->init_form_fields();
+
+		$this->init_settings();
+
 		$this->title 		= $this->get_option( 'title' );
 		$this->title 		= (isset($this->title) and $this->title !='') ? $this->title : 'EPDQ Checkout';
 		$this->access_key 	= $this->get_option( 'access_key' );
@@ -184,6 +187,8 @@ public function __construct() {
 		$this->showcase	 	= $this->get_option('showcase');
 		$this->logo	 		= $this->get_option('logo');
 		$this->prefix	 		= $this->get_option('prefix');
+		update_option( 'agprefix', $this->prefix );
+		$prefix =	$this->get_option('prefix');
 		$this->TITLE = $this->get_option('TITLE');
 		$this->sha_method 	= ($this->sha_method !='') ? $this->sha_method : 0;
 
@@ -220,7 +225,7 @@ public function __construct() {
 		global $woocommerce;
 		?>
 
-		<h3><?php _e( 'AG ePDQ Checkout Settings', 'woocommerce' );?></h3>
+		<h3><?php _e( 'AG ePDQ Checkout Settings', 'woocommerce' ); ?></h3>
 		<p><?php _e('Barclays ePDQ Payment gateway to accept payments directly into your Barclays account. <br /> This gateway will redirect the customers to the secured Barclay payment server and process the order there, Once payment is made Barclays will send them back to the provided links based on the status of their transaction.','woocommerce')?></p>
 
 	<?php
@@ -240,7 +245,7 @@ public function __construct() {
 				$headers = array('Content-Type: text/html; charset=UTF-8');
 				wp_mail( $to, $subject, $body, $headers );
 			}
-			add_option( 'weareag_prefix', $this->prefix, '', 'yes' );
+
 
 			// If the user has allowed us to track then collect the follwing so we have better information for debug
 
@@ -527,7 +532,7 @@ public function __construct() {
 	//	if ( ! WC_Subscriptions_Cart::cart_contains_subscription() ) {
 			$fields = array(
 					'PSPID'=>$this->access_key,
-					'ORDERID'=>$this->prefix . $order->id,
+					'ORDERID'=>$this->prefix .'-'. $order->id,
 					'AMOUNT'=>$order->order_total*100,
 					'CURRENCY'=>get_woocommerce_currency(),
 					'LANGUAGE'=>get_bloginfo('language'),
@@ -631,12 +636,13 @@ public function __construct() {
 
 	function successful_request() {	}
 
-	function thank_you() {
+	function thank_you($order_id) {
 		global $woocommerce;
 
-		if ( !$_REQUEST['orderID'] )
+
+		if ( !$order_id )
 			return;
-		$order = new WC_Order( $_REQUEST['orderID'] );
+		$order = new WC_Order( $order_id );
 
 
 				$accepted = array(4, 5, 9, 41, 51, 91);
@@ -785,13 +791,9 @@ public function __construct() {
 
 					$order 			   = new WC_Order( $order_id );
 
-					if( is_ssl()) {
-						$environment_url = ( "FALSE" == $environment )
-											 ? 'https://mdepayments.epdq.co.uk/ncol/prod/maintenancedirect.asp'
-											 : 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-					} else {
-						$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-					}
+
+					if($this->status=='test')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
+					if($this->status=='live')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
 
 
 					$data_post;
@@ -809,7 +811,7 @@ public function __construct() {
 					}
 					$actual_string = '';
 					$actual_string = implode ('&', $post_string);
-					$result = wp_remote_post($environment_urls, array(
+					$result = wp_remote_post($environment_url, array(
 					  'method' => 'POST',
 					  'timeout'     => 6,
 					  'redirection' => 5,
@@ -1443,7 +1445,6 @@ public function __construct() {
 
 add_filter( 'woocommerce_order_number', 'weareag_order_prefix', 1, 2 );
 function weareag_order_prefix( $oldnumber, $order ) {
-$prefix = get_option( 'weareag_prefix' );
-return $prefix . $order->id; // change weareag to your prefix
+$prefix = get_option( 'agprefix' );
+return $prefix . '-' . $order->id; // change weareag to your prefix
 }
- 
