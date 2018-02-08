@@ -359,7 +359,7 @@
     @include span(12);
     @include from(3) {
       @include span(7);
-      @include push(5);
+      //@include push(5);
     }
   }
   .main-right {
@@ -373,7 +373,7 @@
     }
     @include from(3) {
       @include span(5);
-      @include pull(12);
+      //@include pull(12);
     }
   }
 }
