@@ -47,6 +47,14 @@
   @content;
 }
 
+#top-banner {
+  background: color(gray);
+  color: white;
+  font-size: 11px;
+  text-align: center;
+  padding: 10px 0;
+}
+
 #header-top {
   font-size: 14px;
   height: $colums-height;
