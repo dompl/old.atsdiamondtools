@@ -1,6 +1,5 @@
 // ==== FOOTER ==== //
-;
-(function($) {
+;(function($) {
     $(function() {
         function checkPasswordStrength($pass1, $pass2, $strengthResult, $submitButton, blacklistArray) {
             var pass1 = $pass1.val();
@@ -9,7 +8,7 @@
             $submitButton.attr('disabled', 'disabled');
             $strengthResult.removeClass('short bad good strong');
             // Extend our blacklist array with those from the inputs & site data
-            blacklistArray = blacklistArray.concat(wp.passwordStrength.userInputBlacklist())
+            blacklistArray = blacklistArray.concat(wp.passwordStrength.userInputBlacklist());
             // Get the password strength
             var strength = wp.passwordStrength.meter(pass1, blacklistArray, pass2);
             // Add the strength meter results

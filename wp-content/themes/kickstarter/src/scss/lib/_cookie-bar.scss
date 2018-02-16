@@ -4,6 +4,7 @@
  */
 
  #cookie-bar {
+    z-index: 100000;
   a {
     color:white!important;
     font-weight: bold;
@@ -16,7 +17,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 10000;
     &.bottom {
       bottom: 0;
       top: auto;
