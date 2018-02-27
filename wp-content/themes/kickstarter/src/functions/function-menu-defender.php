@@ -14,6 +14,13 @@ if (!in_array(get_current_user_id(), array(1)))
   add_filter('acf/settings/show_admin', '__return_false');
 }
 
+// Display all menu pages in the admin
+// add_action( 'admin_init', 'the_dramatist_debug_admin_menu' );
+// function the_dramatist_debug_admin_menu() {
+
+//     echo '<pre>' . print_r( $GLOBALS[ 'menu' ], TRUE) . '</pre>';
+// }
+
 add_action('admin_init', 'my_remove_menu_pages');
 
 function my_remove_menu_pages()
@@ -33,6 +40,11 @@ function my_remove_menu_pages()
 
     /* Comments */
     remove_menu_page('edit-comments.php');
+
+    // Hummingbird
+    remove_menu_page('wphb');
+    // Ag License
+    remove_menu_page('AG_licence');
 
     /* Tools */
     remove_menu_page('tools.php');
