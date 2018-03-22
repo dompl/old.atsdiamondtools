@@ -58,7 +58,7 @@
   color: color(text);
   @include em('font-size', 14px);
   display: block;
-  background: white;
+  background: transparent;
   @content;
 }
 
@@ -92,6 +92,7 @@ ul.variations {
           right: 10px;
           @include scut-center-transform(y);
           color:color(brand);
+          z-index: -1;
         }
         select {
           @include q-input() {
