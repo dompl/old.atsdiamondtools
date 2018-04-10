@@ -56,7 +56,7 @@ function ats_single_product_layout()
   </div>
   <?php if ($product->get_description() != ''): ?>
     <div class="product-description clx">
-      <h3 class="title"><?php esc_html_e('Prodct Description', 'TEXT_DOMAIN')?></h3>
+      <h3 class="title"><?php esc_html_e('Product Description', 'TEXT_DOMAIN')?></h3>
       <div class="product-description-content first-last"><?php the_content()?></div>
     </div>
   <?php endif?>
