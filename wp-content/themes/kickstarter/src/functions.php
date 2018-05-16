@@ -231,3 +231,6 @@ function bbloomer_unset_shipping_when_free_is_available_in_zone($rates, $package
   return $rates;
 
 }
+
+/* Replace the IP address with an empty string */
+add_filter( 'gform_ip_address', '__return_empty_string' );
