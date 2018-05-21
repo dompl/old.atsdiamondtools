@@ -57,6 +57,7 @@
     "susy": "^2.2.12"
   },
   "dependencies": {
+    "cookie-policy": "dompl/cookie-policy",
     "jquery-backstretch": "^2.1.16",
     "jquery-match-height": "^0.7.2",
     "jquery.cookie": "^1.4.1",

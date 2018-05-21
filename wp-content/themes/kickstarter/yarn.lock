@@ -866,6 +866,10 @@ convert-source-map@1.X, convert-source-map@^1.0.0, convert-source-map@^1.1.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.0.tgz#9acd70851c6d5dfdd93d9282e5edf94a03ff46b5"
 
+cookie-policy@dompl/cookie-policy:
+  version "0.0.0"
+  resolved "git+ssh://git@github.com/dompl/cookie-policy.git#02f8501fe5568af3f7c490ce1b0d70f3c4379f19"
+
 cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
