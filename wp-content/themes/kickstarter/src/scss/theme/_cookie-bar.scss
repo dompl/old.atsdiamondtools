@@ -6,22 +6,24 @@
  #cookie-bar {
   position: fixed;
   bottom: 0;
+  font-weight: bold !important;
   left: 0;
   width: 100%;
   background: rgba(#000000, 0.88);
   padding: 0 10px;
-  font-size: 12px;
+  font-size: 14px;
   z-index: 1000000!important;
   p {
     text-align: center;
     color: #FFFFFF;
   }
   a {
-    color: lighten(color(brand), 45%) !important;
+    color: white !important;
+    text-decoration: underline;
     cursor: pointer;
     @extend %transition;
     &:hover {
-      color: lighten(color(brand), 20%) !important;;
+      color: lighten(color(brand), 55%) !important;;
     }
   }
 }
