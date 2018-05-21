@@ -70,7 +70,19 @@
          *   https://github.com/kiuz/jquery-cookie-bar/blob/master/index.html
          *  ********************************************************
          */
-        $.cookieBar({});
+        $.cookieBar({
+				    message: 'Please note our website uses cookies to improve your experience. <a class="cb-enable">I understand</a>. For more information see our ',
+				    policyText: 'Privacy Statement & Cookie Notice',
+				    policyURL: '/privacy-statement', //URL of Privacy Policy
+				    policyButton: true, //Set to true to show Privacy Policy button
+				    acceptButton: false, //Set to true to show accept/enable button
+				    declineButton: false, //Text on decline/disable button
+				    autoEnable: false, //Set to true for cookies to be accepted automatically. Banner still shows
+				    effect: 'slide', //Options: slide, fade, hide
+				    declineButton: false, //Set to true to show decline/disable button
+				    declineText: 'Disable Cookies', //Text on decline/disable button
+				    element: 'body', //Element to append/prepend cookieBar to. Remember "." for class or "#" for id.
+				})
         /*  ********************************************************
          *   Slick Carousel settings
          *  ********************************************************

@@ -8,7 +8,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(#000000, 0.8);
+  background: rgba(#000000, 0.88);
   padding: 0 10px;
   font-size: 12px;
   z-index: 1000000!important;
@@ -17,11 +17,11 @@
     color: #FFFFFF;
   }
   a {
-    color: color(brand);
-    padding-left: 20px;
+    color: lighten(color(brand), 45%) !important;
+    cursor: pointer;
     @extend %transition;
     &:hover {
-      color: lighten(color(brand), 20%);
+      color: lighten(color(brand), 20%) !important;;
     }
   }
 }
