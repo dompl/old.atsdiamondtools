@@ -413,14 +413,13 @@ if (is_woocommerce_active()) {
                 $value = 'checked' == $this->checkbox_status ? 1 : 0;
 
                 woocommerce_form_field('subscribe_to_newsletter', array(
-                    // http://woocommerce.wp-a2z.org/oik_api/woocommerce_form_field/
-                    'type'        => 'checkbox',
-                    'class'       => array('form-row-wide'),
-                    'label'       => get_option('woocommerce_newsletter_label'),
-                    'description' => 'I consent to my submitted data being collected and stored by ATS Diamond Tools and I would like to receive newsletter from ATS Diamond Tools. By checking this box you are agreeing to our Privacy Statement & Cookie Notice',
+                    'type'  => 'checkbox',
+                    'class' => array('form-row-wide'),
+                    'label' => get_option('woocommerce_newsletter_label'),
                 ), $value);
 
-                echo '<div class="clear"></div>';
+                do_action('after_newseltter_signup');
+
             }
 
             /**
