@@ -1,14 +1,16 @@
 <section class="container">
+<?php if ( ! is_checkout() && ! is_page(19) && ! is_cart()): ?>
 <div id="footer-signup" class="clx">
     <div><p><?php _e('Get the latest on ats diamond tools right into your inbox', 'TEXT_DOMAIN')?></p></div>
    <?php echo do_shortcode('[gravityform id="1" title="false" description="false" ajax="true"]') ?>
 </div>
+<?php endif;?>
 </section>
-<?php do_action('ats_after_email_signup'); ?>
+<?php do_action('ats_after_email_signup');?>
 <footer id="footer" data-responsive="769">
   <div class="container">
     <div class="susy-reset">
-     <?php if (!function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-footer')) {} ?>
+     <?php if ( ! function_exists('dynamic_sidebar') || ! dynamic_sidebar('sidebar-footer')) {}?>
    </div>
  </div>
  <div class="copyright">

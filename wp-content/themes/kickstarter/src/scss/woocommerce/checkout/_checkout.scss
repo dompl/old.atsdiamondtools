@@ -261,34 +261,40 @@
  * ---
  */
 
-#subscribe_to_newsletter_field {
-  font-weight: bold;
-  margin: 10px 0 0;
-  padding:10px 0;
-  background: color(gray-lightest);
-  border-bottom:1px solid #ccc;
-  @extend %clx;
-  input {
-    float:left;
-    margin-right:10px;
-    margin-left: 10px;
-    margin-top:3px;
-  }
-  label {
-    margin: 0;
-  }
-}
-.wc-terms-and-conditions {
-  margin-bottom: 0;
-}
-#newsletter-consent, #gdpr-term-conditions {
-  margin:10px 0 0 0;
-  @include em('font-size', 12px);
+.terms.wc-terms-and-conditions, #newsletter-consent, #gdpr-term-conditions {
   a {
     font-weight: bold;
     text-decoration: underline;
   }
 }
+
+#subscribe_to_newsletter_field {
+  font-weight: bold;
+  margin: 10px 0 0;
+  padding: 10px 0;
+  background: color(gray-lightest);
+  border-bottom: 1px solid #ccc;
+  @extend %clx;
+  input {
+    float: left;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 3px;
+  }
+  label {
+    margin: 0;
+  }
+}
+
+.wc-terms-and-conditions {
+  margin-bottom: 0;
+}
+
+#newsletter-consent, #gdpr-term-conditions {
+  margin: 10px 0 0 0;
+  @include em('font-size', 12px);
+}
+
 #gdpr-term-conditions {
   margin-top: 0;
   margin-bottom: 20px;
