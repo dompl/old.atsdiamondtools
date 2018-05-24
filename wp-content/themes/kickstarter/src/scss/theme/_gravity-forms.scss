@@ -3,7 +3,6 @@
  *  ********************************************************
  */
 
-
 /**
  * Labels with asterix
  * ---
@@ -11,14 +10,13 @@
 
 $labels-display: true !default; // Show or hide labels
 $labels-font-size: $font-size-sm !default; // Labels font size
-$labels-font-color: color( text ) !default; // Labels font color
+$labels-font-color: color( text) !default; // Labels font color
 $labels-font-weight: $font-weight-bold !default; // Labels font weight
 $labels-margin: 0 0 5px 0 !default; // Margin around labels
 // Required asterix
 $labels-asterix-color: color( danger) !default; // Asterix color
 $labels-asterix-margin: 0 0 0 3px !default; // margins for equired asterix (*)
 $labels-asterix-font-size: $font-size-sm !default; // Font size for required asterix (*)
-
 /**
  * Inputs
  * ---
@@ -28,7 +26,7 @@ $input-border-radius:0; // Border radious
 $input-border-width:0; // Border width
 $input-border-color: color(border); // Border color
 $input-border-style: solid; // none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset, initial, inherit
-$input-bacground-color: color( gray-lightest ); // Input bacground color
+$input-bacground-color: color( gray-lightest); // Input bacground color
 $input-font-size: $font-size-base;
 $input-text-color: color(text);
 // Paddings
@@ -43,7 +41,6 @@ $input-placeholder-color: white;
 $input-placeholder-font-style: italic;
 $input-placeholder-font-weight: $font-weight-normal;
 $input-placeholder-font-size: $input-font-size;
-
 /**
  * Textarea // Per default styles are infernited from input
  * @content inclided
@@ -70,31 +67,28 @@ $textarea-placeholder-font-style: $input-placeholder-font-style;
 $textarea-placeholder-font-weight: $input-placeholder-font-weight;
 $textarea-placeholder-font-size: $input-placeholder-font-size;
 $textarea-resize: none;
-
 /**
  * Fields description
  * @content inclided
  * ---
  */
 
- $f-description-color: color( text) !default;
- $f-description-font-weight: $font-weight-normal !default;
- $f-description-font-size: $font-size-xs !default;
- $f-description-font-style: inherit !default;
- $f-description-margins: 5px 0 0 0 !default;
-
+$f-description-color: color( text) !default;
+$f-description-font-weight: $font-weight-normal !default;
+$f-description-font-size: $font-size-xs !default;
+$f-description-font-style: inherit !default;
+$f-description-margins: 5px 0 0 0 !default;
 /**
  * Characters counter ( inhernits from description)
  * @content inclided
  * ---
  */
 
- $f-counter-color: $f-description-color !default;
- $f-counter-font-weight: $f-description-font-weight !default;
- $f-counter-font-size: $f-description-font-size !default;
- $f-counter-font-style: $f-description-font-style !default;
- $f-counter-margins: $f-description-margins !default;
-
+$f-counter-color: $f-description-color !default;
+$f-counter-font-weight: $f-description-font-weight !default;
+$f-counter-font-size: $f-description-font-size !default;
+$f-counter-font-style: $f-description-font-style !default;
+$f-counter-margins: $f-description-margins !default;
 /**
  * Select // Per default styles are infernited from input
  * @content inclided
@@ -121,15 +115,12 @@ $select-placeholder-font-style: $input-placeholder-font-style;
 $select-placeholder-font-weight: $input-placeholder-font-weight;
 $select-placeholder-font-size: $input-placeholder-font-size;
 $select-resize: none;
-
 /*  ********************************************************
  *   Styles
  *  ********************************************************
  */
 
- .gform_wrapper *,
- .gform_wrapper:after,
- .gform_wrapper:before {
+.gform_wrapper *, .gform_wrapper:after, .gform_wrapper:before {
   box-sizing: border-box!important;
 }
 
@@ -156,21 +147,41 @@ $select-resize: none;
   select {
     @include gf-select();
   }
-    /* Fields descriptions */
-    .gfield_description {
-      @include gf-description();
+  /* Fields descriptions */
+  .gfield_description {
+    @include gf-description();
+  }
+  /* Caracter counter */
+  .ginput_counter {
+    @include gf-counter();
+  }
+  /* Checkboxes */
+  @include gf-checkboxes() {}
+  ;
+  /* Remove the stupid outer glow in Webkit */
+  input:focus, select:focus, textarea:focus {
+    outline: 0!important;
+  }
+  #field_2_5 {
+    li {
+      margin-bottom: 5px;
     }
-    /* Caracter counter */
-    .ginput_counter {
-      @include gf-counter();
+    label {
+      display: inline-block;
+      padding-left: 0;
+      margin-left: 14px;
+      &:before {
+        top: 4px;
+      }
+      &:after {
+        top: 6px;
+      }
     }
-    /* Checkboxes */
-    @include gf-checkboxes() {}
-    ;
-    /* Remove the stupid outer glow in Webkit */
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: 0!important;
+    label.gfield_label {
+      display: none;
+    }
+    a {
+      color: #721fa2;
     }
   }
+}

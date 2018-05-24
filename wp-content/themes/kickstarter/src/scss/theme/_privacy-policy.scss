@@ -1,0 +1,43 @@
+/*  ********************************************************
+ *   Privacy Policy styles
+ *  ********************************************************
+ */
+
+#privacy-policy {
+  padding-bottom: 15px;
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin: 28px 0;
+    font-size: 25px;
+    font-weight: bold;
+  }
+  h3, h4, h5, h6 {
+    font-size: 20px;
+  }
+  a {
+    color: color(brand);
+  }
+  .small-font {
+    font-size: 13px;
+    display: block;
+    margin-top: -13px;
+  }
+  table {
+    margin: 20px 0;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border-bottom: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+  }
+  table td {
+    border-top: 1px solid #dedede;
+    border-left: 1px solid #dedede;
+    padding: 10px 15px;
+  }
+  thead td {
+    font-weight: bold;
+  }
+  li {
+    margin: 10px 0;
+  }
+}

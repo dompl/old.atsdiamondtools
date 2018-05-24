@@ -281,7 +281,7 @@
  * ---
  */
 
- @mixin gf-checkboxes( $width: 34px, $height: 18px, $active:color(success), $non-active:color(danger)) {
+ @mixin gf-checkboxes( $width: 34px, $height: 18px, $active:color(success), $non-active:gray) {
   .gfield_checkbox {
     padding: 0;
     margin: 0;
@@ -300,11 +300,11 @@
               background-color: $active;
               background-size: ($height / 2) auto;
               background-position: 6px 50%;
-              background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmUlEQVQ4T6WT0RWDMAhFeZs4ipu0mawZpaO4yevBc6hUIWLNd+4NeQDk5sE/PMkZwFvZywKSTxF5iUgH0C4JHGyF97IggFVSqyCFga0CvQSg70Mdwd8QSSr4sGBMcgavAgdvwQCtApvA2uKr1x7Pu++06ItrF5LXPB/CP4M0kKTwYRIDyRAOR9lJTuF0F0hOAJbKopVHOZN9ACS0UgowIx8ZAAAAAElFTkSuQmCC");
             }
             &:after {
               top: 3px;
-              left: $width - $height + 2px;
+              left: -14px;
+              background: color(success);
             }
           }
         }
@@ -320,15 +320,14 @@
           @include border-radius(12px);
           display: block;
           background-color: $non-active;
-          width: $width;
-          height: $height;
+          width: 12px;
+          height: 12px;
           display: block;
           content: "";
           z-index: 1;
           top: 1px;
           position: absolute;
-          left: 0;
-          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAyklEQVQ4T42TaxHCQAyENw5wAhLACVUAUkABOCkSwEkdhNmbpHNckzv689L98toIAKjqGcAFwElEFr5ln6ruAMwA7iLyFBM/TPDuQSrxwf6fCKBoX2UMIYGYkg8BLOnVg2RiAEexGaQQq4w9e9klcxGLLAUwgDAcihlYAR1IvZA1sz/+AAaQjXhTQQVoe2Yo3E7UQiT2ijeQdojRtClOfVKvMVyVpU594kZK9zzySWTlcNqZY9tjCsUds00+A57z1e35xzlzJjee8xf0HYp+cOZQUQAAAABJRU5ErkJggg==");
+          left: -16px;
           background-size: ($height / 2) auto;
           background-repeat: no-repeat;
           background-position: $width - $height + 4px 50%;
@@ -338,12 +337,12 @@
           position: absolute;
           display: block;
           background-color: white;
-          width: $height - 4px;
-          height: $height - 4px;
+          width: 8px;
+          height: 8px;
           display: block;
           position: absolute;
           z-index: 2;
-          left: 2px;
+          left: -14px;
           top: 3px;
           content: "";
           @include border-radius(50%);
