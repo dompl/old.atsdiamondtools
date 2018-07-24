@@ -1,13 +1,13 @@
-{{> spacer-10 }}
+<layout label="Product - Full Width">
 <container class="product product-1-2">
     <row>
         <columns small="12" large="12">
-            <img src="http://placehold.it/548x200/212223" mc:edit="feature_left_image" style="vertical-align: bottom; width:100%;" />
-            <spacer size="15" />
-            <h4>Crown Segment Sintered Diamond Holesaw M14</h4>
-            <p>M14 Crown segment sintered holesaw designed for hard materials such as granite.</p>
-            <a href="https://www.atsdiamondtools.co.uk/product/crown-segment-sintered-diamond-holesaw-m14/" target="_blank"><img src="{{assets}}/read-more.jpg" style="vertical-align: bottom;" /></a>
+            <img src="http://placehold.it/548x200/212223" editable="true" width="548" label="Product image" style="vertical-align: bottom; width:100%;" />
+            <spacer size="10" />
+            <h3 style="margin-top:0px; margin-bottom:10px;"><singleline label='Product Title'>Product Title</singleline></h3>
+            <multiline label="Product Description"><p>Product description</p></multiline>
+            {{> read-more-button}}
         </columns>
     </row>
 </container>
-{{> spacer-10 }}
+</layout>
