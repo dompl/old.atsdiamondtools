@@ -1,0 +1,11 @@
+table.container {
+    &.links {
+        margin-bottom: 0;
+        background: #f3f3f3;
+        font-size: 11px;
+        p {
+            margin-bottom: 0;
+            font-size: 11px!important;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+table.container {
+    &.top {
+        border-bottom:1px solid $border-gray;
+        margin-bottom: 0;
+        font-size: 12px;
+        p {
+            margin-bottom: 0;
+            font-size: 12px!important;
+            margin-top:10px;
+            margin-bottom:10px;
+        }
+    }
+}
