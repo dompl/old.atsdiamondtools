@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Classes
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -43,5 +43,15 @@ function wc_order_status_manager_get_order_status_posts( $args = array() ) {
 		'order'            => 'ASC',
 	);
 
-	return get_posts( wp_parse_args( $args, $defaults ) );
+	$posts = wp_cache_get( 'wc_order_status_manager_order_status_posts' );
+
+	if ( ! $posts ) {
+
+		$posts = get_posts( wp_parse_args( $args, $defaults ) );
+
+		// expire cache after 1 second to avoid potential issues with persistent caching
+		wp_cache_set( 'wc_order_status_manager_order_status_posts', $posts, null, 1 );
+	}
+
+	return $posts;
 }

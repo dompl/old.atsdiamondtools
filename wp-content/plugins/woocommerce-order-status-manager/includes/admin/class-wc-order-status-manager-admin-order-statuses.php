@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Admin
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -150,10 +150,15 @@ class WC_Order_Status_Manager_Admin_Order_Statuses {
 					'id'    => 'post_title',
 					'label' => __( 'Name', 'woocommerce-order-status-manager' ),
 					'value' => $post->post_title,
+					'custom_attributes' => array(
+						'maxlength' => 35,
+					),
+					'desc_tip'          => true,
+					'description'       => __( 'Maximum 35 characters.', 'woocommerce-order-status-manager' ),
 				) );
 
 				// Disable slug editing for core statuses
-				$custom_attributes = array();
+				$custom_attributes = array( 'maxlength' => 17 );
 				if ( $status->is_core_status() ) {
 					$custom_attributes['disabled'] = 'disabled';
 				}
@@ -214,7 +219,8 @@ class WC_Order_Status_Manager_Admin_Order_Statuses {
 						data-icon-image="<?php echo esc_attr( $icon_attachment_src ? $icon_attachment_src[0] : '' ); ?>"
 					/>
 
-					<a href="#_icon" class="button upload-icon upload-icon-image" data-uploader-button-text="<?php _e( 'Set as status icon', 'woocommerce-order-status-manager' ); ?>"><?php _e( "Select File", 'woocommerce-order-status-manager' ); ?></a>
+					<a href="#_icon" class="button button-small upload-icon upload-icon-image" data-uploader-button-text="<?php _e( 'Set as status icon', 'woocommerce-order-status-manager' ); ?>"><?php _e( "Select File", 'woocommerce-order-status-manager' ); ?></a>
+					<a href="#_icon" class="button button-small remove-icon" ><?php esc_html_e( "Remove Icon", 'woocommerce-order-status-manager' ); ?></a>
 					<?php echo wc_help_tip( __( 'Optional status icon. If not supplied, then Name will be displayed to represent the status', 'woocommerce-order-status-manager' ) ); ?>
 				</p>
 
@@ -241,7 +247,8 @@ class WC_Order_Status_Manager_Admin_Order_Statuses {
 						data-icon-image="<?php echo esc_attr( $action_icon_attachment_src ? $action_icon_attachment_src[0] : '' ); ?>"
 					/>
 
-					<a href="#_action_icon" class="button upload-icon upload-icon-image" data-uploader-button-text="<?php esc_attr_e( 'Set as status icon', 'woocommerce-order-status-manager' ); ?>"><?php esc_html_e( "Select File", 'woocommerce-order-status-manager' ); ?></a>
+					<a href="#_action_icon" class="button button-small upload-icon upload-icon-image" data-uploader-button-text="<?php esc_attr_e( 'Set as status icon', 'woocommerce-order-status-manager' ); ?>"><?php esc_html_e( "Select File", 'woocommerce-order-status-manager' ); ?></a>
+					<a href="#_action_icon" class="button button-small remove-icon" ><?php esc_html_e( "Remove Icon", 'woocommerce-order-status-manager' ); ?></a>
 					<?php echo wc_help_tip( __( 'Optional action icon displayed in the action buttons for the next statuses.', 'woocommerce-order-status-manager' ) ); ?>
 				</p>
 			</div><!-- // .options_group -->

@@ -98,3 +98,33 @@
     border-bottom: 1px solid #ccc;
     padding-bottom: 4px;
 }
+
+#aws_form .description.activation {
+    font-size: 14px;
+    line-height: 1.5;
+    font-style: normal;
+}
+
+#aws_form .description.activation .list {
+    padding-top: 2px;
+}
+
+
+h1.aws-instance-name {
+    position: relative;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.aws-instance-shortcode {
+    display: inline-block;
+    background: #fff;
+    padding: 4px;
+    margin-left: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    top: -4px;
+}

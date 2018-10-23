@@ -73,16 +73,17 @@ class Assets {
 				'wpo-wcpdf',
 				'wpo_wcpdf_ajax',
 				array(
-					'ajaxurl'		=> admin_url( 'admin-ajax.php' ), // URL to WordPress ajax handling page  
-					'nonce'			=> wp_create_nonce('generate_wpo_wcpdf'),
-					'bulk_actions'	=> array_keys( $bulk_actions ),
+					'ajaxurl'			=> admin_url( 'admin-ajax.php' ), // URL to WordPress ajax handling page  
+					'nonce'				=> wp_create_nonce('generate_wpo_wcpdf'),
+					'bulk_actions'		=> array_keys( $bulk_actions ),
+					'confirm_delete'	=> __( 'Are you sure you want to delete this document? This cannot be undone.', 'woocommerce-pdf-invoices-packing-slips'),
 				)
 			);
 		}
 
 		// only load on our own settings page
 		// maybe find a way to refer directly to WPO\WC\PDF_Invoices\Settings::$options_page_hook ?
-		if ( $hook == 'woocommerce_page_wpo_wcpdf_options_page' || $hook == 'settings_page_wpo_wcpdf_options_page' ) {
+		if ( $hook == 'woocommerce_page_wpo_wcpdf_options_page' || $hook == 'settings_page_wpo_wcpdf_options_page' || ( isset($_GET['page']) && $_GET['page'] == 'wpo_wcpdf_options_page' ) ) {
 			wp_enqueue_style(
 				'wpo-wcpdf-settings-styles',
 				WPO_WCPDF()->plugin_url() . '/assets/css/settings-styles.css',

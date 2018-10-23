@@ -27,12 +27,20 @@ class Admin {
 		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'send_emails' ), 60, 2 );
 
 		add_action( 'admin_notices', array( $this, 'review_plugin_notice' ) );
+		add_action( 'admin_notices', array( $this, 'install_wizard_notice' ) );
 
 		add_action( 'init', array( $this, 'setup_wizard') );
 		// add_action( 'wpo_wcpdf_after_pdf', array( $this,'update_pdf_counter' ), 10, 2 );
 
 		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'invoice_number_column_sortable' ) );
-		add_filter( 'pre_get_posts', array( $this, 'sort_by_invoice_number' ) );
+		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '3.0', '>=' ) ) {
+			add_filter( 'request', array( $this, 'request_query_sort_by_invoice_number' ) );
+		} else {
+			add_filter( 'pre_get_posts', array( $this, 'pre_get_posts_sort_by_invoice_number' ) );
+		}
+
+		// AJAX action for deleting document data
+		add_action( 'wp_ajax_wpo_wcpdf_delete_document', array($this, 'delete_document' ) );
 	}
 
 	// display review admin notice after 100 pdf downloads
@@ -49,22 +57,22 @@ class Admin {
 				return;
 			}
 
-			// keep track of how many days this notice is show so we can remove it after 7 days
-			$notice_shown_on = get_option( 'wpo_wcpdf_review_notice_shown', array() );
-			$today = date('Y-m-d');
-			if ( !in_array($today, $notice_shown_on) ) {
-				$notice_shown_on[] = $today;
-				update_option( 'wpo_wcpdf_review_notice_shown', $notice_shown_on );
-			}
-			// count number of days review is shown, dismiss forever if shown more than 7
-			if (count($notice_shown_on) > 7) {
-				update_option( 'wpo_wcpdf_review_notice_dismissed', true );
-				return;
-			}
-
 			// get invoice count to determine whether notice should be shown
 			$invoice_count = $this->get_invoice_count();
 			if ( $invoice_count > 100 ) {
+				// keep track of how many days this notice is show so we can remove it after 7 days
+				$notice_shown_on = get_option( 'wpo_wcpdf_review_notice_shown', array() );
+				$today = date('Y-m-d');
+				if ( !in_array($today, $notice_shown_on) ) {
+					$notice_shown_on[] = $today;
+					update_option( 'wpo_wcpdf_review_notice_shown', $notice_shown_on );
+				}
+				// count number of days review is shown, dismiss forever if shown more than 7
+				if (count($notice_shown_on) > 7) {
+					update_option( 'wpo_wcpdf_review_notice_dismissed', true );
+					return;
+				}
+
 				$rounded_count = (int) substr( (string) $invoice_count, 0, 1 ) * pow( 10, strlen( (string) $invoice_count ) - 1);
 				?>
 				<div class="notice notice-info is-dismissible wpo-wcpdf-review-notice">
@@ -76,6 +84,14 @@ class Admin {
 						<li><a href="mailto:support@wpovernight.com?Subject=Here%20is%20how%20I%20think%20you%20can%20do%20better"><?php _e( 'Actually, I have a complaint...', 'woocommerce-pdf-invoices-packing-slips' ); ?></a></li>
 					</ul>
 				</div>
+				<script type="text/javascript">
+				jQuery( function( $ ) {
+					$( '.wpo-wcpdf-review-notice' ).on( 'click', '.notice-dismiss', function( event ) {
+						event.preventDefault();
+				  		window.location.href = $( '.wpo-wcpdf-dismiss' ).attr('href');
+					});
+				});
+				</script>
 				<!-- Hide extensions ad if this is shown -->
 				<style>.wcpdf-extensions-ad { display: none; }</style>
 				<?php
@@ -83,14 +99,45 @@ class Admin {
 		}
 	}
 
+	public function install_wizard_notice() {
+		// automatically remove notice after 1 week, set transient the first time
+		if ( $this->is_order_page() === false && !( isset( $_GET['page'] ) && $_GET['page'] == 'wpo_wcpdf_options_page' ) ) {
+			return;
+		}
+		
+		if ( get_option( 'wpo_wcpdf_install_notice_dismissed' ) !== false ) {
+			return;
+		} else {
+			if ( isset( $_GET['wpo_wcpdf_dismis_install'] ) ) {
+				update_option( 'wpo_wcpdf_install_notice_dismissed', true );
+				return;
+			}
+
+			if ( get_transient( 'wpo_wcpdf_new_install' ) !== false ) {
+				?>
+				<div class="notice notice-info is-dismissible wpo-wcpdf-install-notice">
+					<p><strong><?php _e( 'New to WooCommerce PDF Invoices & Packing Slips?', 'woocommerce-pdf-invoices-packing-slips' ); ?></strong> &#8211; <?php _e( 'Jumpstart the plugin by following our wizard!', 'woocommerce-pdf-invoices-packing-slips' ); ?></p>
+					<p class="submit"><a href="<?php echo esc_url( admin_url( 'admin.php?page=wpo-wcpdf-setup' ) ); ?>" class="button-primary"><?php _e( 'Run the Setup Wizard', 'woocommerce-pdf-invoices-packing-slips' ); ?></a> <a href="<?php echo esc_url( add_query_arg( 'wpo_wcpdf_dismis_install', true ) ); ?>" class="wpo-wcpdf-dismiss-wizard"><?php _e( 'I am the wizard', 'woocommerce-pdf-invoices-packing-slips' ); ?></a></p>
+				</div>
+				<script type="text/javascript">
+				jQuery( function( $ ) {
+					$( '.wpo-wcpdf-install-notice' ).on( 'click', '.notice-dismiss', function( event ) {
+						event.preventDefault();
+				  		window.location.href = $( '.wpo-wcpdf-dismiss-wizard' ).attr('href');
+					});
+				});
+				</script>
+				<?php
+			}
+		}
+
+	}
+
 	public function setup_wizard() {
 		// Setup/welcome
-		if ( ! empty( $_GET['page'] ) ) {
-			switch ( $_GET['page'] ) {
-				case 'wpo-wcpdf-setup' :
-					include_once( WPO_WCPDF()->plugin_path() . '/includes/class-wcpdf-setup-wizard.php' );
-				break;
-			}
+		if ( ! empty( $_GET['page'] ) && $_GET['page'] == 'wpo-wcpdf-setup' ) {
+			delete_transient( 'wpo_wcpdf_new_install' );
+			include_once( WPO_WCPDF()->plugin_path() . '/includes/class-wcpdf-setup-wizard.php' );
 		}
 	}
 
@@ -292,8 +339,8 @@ class Admin {
 			$invoice_number = $invoice->get_number();
 			$invoice_date = $invoice->get_date();
 			?>
-			<div class="wcpdf-data-fields">
-				<h4><?php echo $invoice->get_title(); ?><?php if ($invoice->exists()) : ?><span id="" class="wpo-wcpdf-edit-date-number dashicons dashicons-edit"></span><?php endif; ?></h4>
+			<div class="wcpdf-data-fields" data-document="invoice" data-order_id="<?php echo WCX_Order::get_id( $order ); ?>">
+				<h4><?php echo $invoice->get_title(); ?><?php if ($invoice->exists()) : ?><span class="wpo-wcpdf-edit-date-number dashicons dashicons-edit"></span><span class="wpo-wcpdf-delete-document dashicons dashicons-trash" data-nonce="<?php echo wp_create_nonce( "wpo_wcpdf_delete_document" ); ?>"></span><?php endif; ?></h4>
 
 				<!-- Read only -->
 				<div class="read-only">
@@ -472,13 +519,73 @@ class Admin {
 		return $columns;
 	}
 
-	public function sort_by_invoice_number( $query ) {
-		if( ! is_admin() )
+
+	/**
+	 * Pre WC3.X sorting
+	 */
+	public function pre_get_posts_sort_by_invoice_number( $query ) {
+		if( ! is_admin() ) {
 			return;
+		}
 		$orderby = $query->get( 'orderby');
 		if( 'pdf_invoice_number' == $orderby ) {
 			$query->set('meta_key','_wcpdf_invoice_number');
-			$query->set('orderby','meta_value_num');
+			$query->set('orderby','meta_value');
+		}
+	}
+
+	/**
+	 * WC3.X+ sorting
+	 */
+	public function request_query_sort_by_invoice_number( $query_vars ) {
+		global $typenow;
+
+		if ( in_array( $typenow, wc_get_order_types( 'order-meta-boxes' ), true ) ) {
+			if ( isset( $query_vars['orderby'] ) ) {
+				if ( 'pdf_invoice_number' === $query_vars['orderby'] ) {
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key'  => '_wcpdf_invoice_number',
+						'orderby'   => 'meta_value',
+					) );
+				}
+			}
+		}
+
+		return $query_vars;
+	}
+
+	public function delete_document() {
+		if ( check_ajax_referer( "wpo_wcpdf_delete_document", 'security', false ) === false ) {
+			wp_send_json_error( array(
+				'message' => 'nonce expired',
+			) );
+		}
+		if ( empty($_POST['order_id']) || empty($_POST['document']) ) {
+			wp_send_json_error( array(
+				'message' => 'incomplete request',
+			) );
+		}
+
+		$order_id = absint($_POST['order_id']);
+		$document = sanitize_text_field($_POST['document']);
+
+		try {
+			$document = wcpdf_get_document( $document, wc_get_order( $order_id ) );
+			if ( !empty($document) && $document->exists() ) {
+				$document->delete();
+				$response = array(
+					'message' => $document->get_type()." deleted",
+				);
+				wp_send_json_success($response);
+			} else {
+				wp_send_json_error( array(
+					'message' => 'document does not exist',
+				) );
+			}
+		} catch (\Exception $e) {
+			wp_send_json_error( array(
+				'message' => 'error: '.$e->getMessage(),
+			) );			
 		}
 	}
 
