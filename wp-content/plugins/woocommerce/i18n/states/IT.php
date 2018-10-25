@@ -2,13 +2,16 @@
 /**
  * Italy Provinces
  *
- * @package WooCommerce/i18n
- * @version 2.0.0
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.0.0
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['IT'] = array(
 	'AG' => __( 'Agrigento', 'woocommerce' ),
@@ -32,6 +35,7 @@ $states['IT'] = array(
 	'CA' => __( 'Cagliari', 'woocommerce' ),
 	'CL' => __( 'Caltanissetta', 'woocommerce' ),
 	'CB' => __( 'Campobasso', 'woocommerce' ),
+	'CI' => __( 'Carbonia-Iglesias', 'woocommerce' ),
 	'CE' => __( 'Caserta', 'woocommerce' ),
 	'CT' => __( 'Catania', 'woocommerce' ),
 	'CZ' => __( 'Catanzaro', 'woocommerce' ),
@@ -72,6 +76,7 @@ $states['IT'] = array(
 	'NA' => __( 'Napoli', 'woocommerce' ),
 	'NO' => __( 'Novara', 'woocommerce' ),
 	'NU' => __( 'Nuoro', 'woocommerce' ),
+	'OT' => __( 'Olbia-Tempio', 'woocommerce' ),
 	'OR' => __( 'Oristano', 'woocommerce' ),
 	'PD' => __( 'Padova', 'woocommerce' ),
 	'PA' => __( 'Palermo', 'woocommerce' ),
@@ -95,16 +100,17 @@ $states['IT'] = array(
 	'RM' => __( 'Roma', 'woocommerce' ),
 	'RO' => __( 'Rovigo', 'woocommerce' ),
 	'SA' => __( 'Salerno', 'woocommerce' ),
+	'VS' => __( 'Medio Campidano', 'woocommerce' ),
 	'SS' => __( 'Sassari', 'woocommerce' ),
 	'SV' => __( 'Savona', 'woocommerce' ),
 	'SI' => __( 'Siena', 'woocommerce' ),
 	'SR' => __( 'Siracusa', 'woocommerce' ),
 	'SO' => __( 'Sondrio', 'woocommerce' ),
-	'SU' => __( 'Sud Sardegna', 'woocommerce' ),
 	'TA' => __( 'Taranto', 'woocommerce' ),
 	'TE' => __( 'Teramo', 'woocommerce' ),
 	'TR' => __( 'Terni', 'woocommerce' ),
 	'TO' => __( 'Torino', 'woocommerce' ),
+	'OG' => __( 'Ogliastra', 'woocommerce' ),
 	'TP' => __( 'Trapani', 'woocommerce' ),
 	'TN' => __( 'Trento', 'woocommerce' ),
 	'TV' => __( 'Treviso', 'woocommerce' ),

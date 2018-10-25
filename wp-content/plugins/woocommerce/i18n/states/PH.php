@@ -2,13 +2,15 @@
 /**
  * Philippines Provinces
  *
- * @package WooCommerce/i18n
- * @version 2.4.0
+ * @category i18n
+ * @package  WooCommerce/i18n
+ * @version  2.4.0
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['PH'] = array(
 	'ABR' => __( 'Abra', 'woocommerce' ),
@@ -40,7 +42,7 @@ $states['PH'] = array(
 	'NCO' => __( 'Cotabato', 'woocommerce' ),
 	'DAV' => __( 'Davao del Norte', 'woocommerce' ),
 	'DAS' => __( 'Davao del Sur', 'woocommerce' ),
-	'DAC' => __( 'Davao Occidental', 'woocommerce' ), // TODO: Needs to be updated when ISO code is assigned.
+	'DAC' => __( 'Davao Occidental', 'woocommerce' ), // TODO: Needs to be updated when ISO code is assigned
 	'DAO' => __( 'Davao Oriental', 'woocommerce' ),
 	'DIN' => __( 'Dinagat Islands', 'woocommerce' ),
 	'EAS' => __( 'Eastern Samar', 'woocommerce' ),

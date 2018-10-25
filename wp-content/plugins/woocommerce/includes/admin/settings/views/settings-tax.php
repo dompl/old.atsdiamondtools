@@ -1,20 +1,12 @@
 <?php
-/**
- * Tax settings.
- *
- * @package Settings.
- */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $settings = array(
 
-	array(
-		'title' => __( 'Tax options', 'woocommerce' ),
-		'type'  => 'title',
-		'desc'  => '',
-		'id'    => 'tax_options',
-	),
+	array( 'title' => __( 'Tax options', 'woocommerce' ), 'type' => 'title','desc' => '', 'id' => 'tax_options' ),
 
 	array(
 		'title'    => __( 'Prices entered with tax', 'woocommerce' ),
@@ -50,7 +42,7 @@ $settings = array(
 		'default'  => 'inherit',
 		'type'     => 'select',
 		'class'    => 'wc-enhanced-select',
-		'options'  => array( 'inherit' => __( 'Shipping tax class based on cart items', 'woocommerce' ) ) + wc_get_product_tax_class_options(),
+		'options'  => array_merge( array( 'inherit' => __( 'Shipping tax class based on cart items', 'woocommerce' ) ), wc_get_product_tax_class_options() ),
 		'desc_tip' => true,
 	),
 
@@ -63,13 +55,12 @@ $settings = array(
 	),
 
 	array(
-		'title'    => __( 'Additional tax classes', 'woocommerce' ),
-		'desc_tip' => __( 'List additional tax classes below (1 per line). This is in addition to the default "Standard rate".', 'woocommerce' ),
-		'id'       => 'woocommerce_tax_classes',
-		'css'      => 'width:100%; height: 65px;',
-		'type'     => 'textarea',
-		/* Translators: %s New line char. */
-		'default'  => sprintf( __( 'Reduced rate%sZero rate', 'woocommerce' ), PHP_EOL ),
+		'title'   => __( 'Additional tax classes', 'woocommerce' ),
+		'desc_tip'    => __( 'List additional tax classes below (1 per line). This is in addition to the default "Standard rate".', 'woocommerce' ),
+		'id'      => 'woocommerce_tax_classes',
+		'css'     => 'width:100%; height: 65px;',
+		'type'    => 'textarea',
+		'default' => sprintf( __( 'Reduced rate%sZero rate', 'woocommerce' ), PHP_EOL ),
 	),
 
 	array(
@@ -79,8 +70,8 @@ $settings = array(
 		'type'    => 'select',
 		'class'   => 'wc-enhanced-select',
 		'options' => array(
-			'incl' => __( 'Including tax', 'woocommerce' ),
-			'excl' => __( 'Excluding tax', 'woocommerce' ),
+			'incl'   => __( 'Including tax', 'woocommerce' ),
+			'excl'   => __( 'Excluding tax', 'woocommerce' ),
 		),
 	),
 
@@ -91,9 +82,10 @@ $settings = array(
 		'type'    => 'select',
 		'class'   => 'wc-enhanced-select',
 		'options' => array(
-			'incl' => __( 'Including tax', 'woocommerce' ),
-			'excl' => __( 'Excluding tax', 'woocommerce' ),
+			'incl'   => __( 'Including tax', 'woocommerce' ),
+			'excl'   => __( 'Excluding tax', 'woocommerce' ),
 		),
+		'autoload'      => false,
 	),
 
 	array(
@@ -106,22 +98,19 @@ $settings = array(
 	),
 
 	array(
-		'title'    => __( 'Display tax totals', 'woocommerce' ),
-		'id'       => 'woocommerce_tax_total_display',
-		'default'  => 'itemized',
-		'type'     => 'select',
-		'class'    => 'wc-enhanced-select',
-		'options'  => array(
-			'single'   => __( 'As a single total', 'woocommerce' ),
-			'itemized' => __( 'Itemized', 'woocommerce' ),
+		'title'   => __( 'Display tax totals', 'woocommerce' ),
+		'id'      => 'woocommerce_tax_total_display',
+		'default' => 'itemized',
+		'type'    => 'select',
+		'class'   => 'wc-enhanced-select',
+		'options' => array(
+			'single'     => __( 'As a single total', 'woocommerce' ),
+			'itemized'   => __( 'Itemized', 'woocommerce' ),
 		),
 		'autoload' => false,
 	),
 
-	array(
-		'type' => 'sectionend',
-		'id'   => 'tax_options',
-	),
+	array( 'type' => 'sectionend', 'id' => 'tax_options' ),
 
 );
 

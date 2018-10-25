@@ -1,5 +1,5 @@
 /*!
-	Zoom 1.7.21
+	Zoom 1.7.18
 	license: MIT
 	http://www.jacklmoore.com/zoom
 */
@@ -220,14 +220,12 @@
 							}
 						});
 				}
-				
+
 				if ($.isFunction(settings.callback)) {
 					settings.callback.call(img);
 				}
 			};
 
-			img.setAttribute('role', 'presentation');
-			img.alt = '';
 			img.src = settings.url;
 		});
 	};

@@ -1,10 +1,4 @@
 <?php
-/**
- * Class Abstract_WC_Order_Item_Type_Data_Store file.
- *
- * @package WooCommerce\DataStores
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -13,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WC Order Item Data Store
  *
  * @version  3.0.0
+ * @category Class
+ * @author   WooCommerce
  */
 abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP implements WC_Object_Data_Store_Interface {
 
@@ -20,8 +16,6 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * Meta type. This should match up with
 	 * the types available at https://codex.wordpress.org/Function_Reference/add_metadata.
 	 * WP defines 'post', 'user', 'comment', and 'term'.
-	 *
-	 * @var string
 	 */
 	protected $meta_type = 'order_item';
 
@@ -29,7 +23,6 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * This only needs set if you are using a custom metadata type (for example payment tokens.
 	 * This should be the name of the field your table uses for associating meta with objects.
 	 * For example, in payment_tokenmeta, this would be payment_token_id.
-	 *
 	 * @var string
 	 */
 	protected $object_id_field_for_meta = 'order_item_id';
@@ -38,18 +31,16 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * Create a new order item in the database.
 	 *
 	 * @since 3.0.0
-	 * @param WC_Order_Item $item Order item object.
+	 * @param WC_Order_Item $item
 	 */
 	public function create( &$item ) {
 		global $wpdb;
 
-		$wpdb->insert(
-			$wpdb->prefix . 'woocommerce_order_items', array(
-				'order_item_name' => $item->get_name(),
-				'order_item_type' => $item->get_type(),
-				'order_id'        => $item->get_order_id(),
-			)
-		);
+		$wpdb->insert( $wpdb->prefix . 'woocommerce_order_items', array(
+			'order_item_name' => $item->get_name(),
+			'order_item_type' => $item->get_type(),
+			'order_id'        => $item->get_order_id(),
+		) );
 		$item->set_id( $wpdb->insert_id );
 		$this->save_item_data( $item );
 		$item->save_meta_data();
@@ -63,7 +54,7 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * Update a order item in the database.
 	 *
 	 * @since 3.0.0
-	 * @param WC_Order_Item $item Order item object.
+	 * @param WC_Order_Item $item
 	 */
 	public function update( &$item ) {
 		global $wpdb;
@@ -71,13 +62,11 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 		$changes = $item->get_changes();
 
 		if ( array_intersect( array( 'name', 'order_id' ), array_keys( $changes ) ) ) {
-			$wpdb->update(
-				$wpdb->prefix . 'woocommerce_order_items', array(
-					'order_item_name' => $item->get_name(),
-					'order_item_type' => $item->get_type(),
-					'order_id'        => $item->get_order_id(),
-				), array( 'order_item_id' => $item->get_id() )
-			);
+			$wpdb->update( $wpdb->prefix . 'woocommerce_order_items', array(
+				'order_item_name' => $item->get_name(),
+				'order_item_type' => $item->get_type(),
+				'order_id'        => $item->get_order_id(),
+			), array( 'order_item_id' => $item->get_id() ) );
 		}
 
 		$this->save_item_data( $item );
@@ -92,8 +81,8 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * Remove an order item from the database.
 	 *
 	 * @since 3.0.0
-	 * @param WC_Order_Item $item Order item object.
-	 * @param array         $args Array of args to pass to the delete method.
+	 * @param WC_Order_Item $item
+	 * @param array $args Array of args to pass to the delete method.
 	 */
 	public function delete( &$item, $args = array() ) {
 		if ( $item->get_id() ) {
@@ -111,9 +100,9 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param WC_Order_Item $item Order item object.
+	 * @param WC_Order_Item $item
 	 *
-	 * @throws Exception If invalid order item.
+	 * @throws Exception
 	 */
 	public function read( &$item ) {
 		global $wpdb;
@@ -132,12 +121,10 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 			throw new Exception( __( 'Invalid order item.', 'woocommerce' ) );
 		}
 
-		$item->set_props(
-			array(
-				'order_id' => $data->order_id,
-				'name'     => $data->order_item_name,
-			)
-		);
+		$item->set_props( array(
+			'order_id' => $data->order_id,
+			'name'     => $data->order_item_name,
+		) );
 		$item->read_meta_data();
 	}
 
@@ -146,14 +133,14 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	 * Ran after both create and update, so $item->get_id() will be set.
 	 *
 	 * @since 3.0.0
-	 * @param WC_Order_Item $item Order item object.
+	 * @param WC_Order_Item $item
 	 */
 	public function save_item_data( &$item ) {}
 
 	/**
 	 * Clear meta cache.
 	 *
-	 * @param WC_Order_Item $item Order item object.
+	 * @param WC_Order_Item $item
 	 */
 	public function clear_cache( &$item ) {
 		wp_cache_delete( 'item-' . $item->get_id(), 'order-items' );

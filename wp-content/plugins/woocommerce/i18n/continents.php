@@ -4,11 +4,15 @@
  *
  * Returns an array of continents.
  *
- * @package WooCommerce/i18n
- * @version 2.5.0
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.5.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 return array(
 	'AF' => array(
@@ -205,6 +209,7 @@ return array(
 		'countries' => array(
 			'AG',
 			'AI',
+			'AN',
 			'AW',
 			'BB',
 			'BL',

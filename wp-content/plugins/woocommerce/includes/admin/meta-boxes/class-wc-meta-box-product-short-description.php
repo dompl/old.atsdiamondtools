@@ -4,11 +4,15 @@
  *
  * Replaces the standard excerpt box.
  *
+ * @author      WooThemes
+ * @category    Admin
  * @package     WooCommerce/Admin/Meta Boxes
  * @version     2.1.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 /**
  * WC_Meta_Box_Product_Short_Description Class.
@@ -18,7 +22,7 @@ class WC_Meta_Box_Product_Short_Description {
 	/**
 	 * Output the metabox.
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param WP_Post $post
 	 */
 	public static function output( $post ) {
 
@@ -32,6 +36,6 @@ class WC_Meta_Box_Product_Short_Description {
 			'editor_css'    => '<style>#wp-excerpt-editor-container .wp-editor-area{height:175px; width:100%;}</style>',
 		);
 
-		wp_editor( htmlspecialchars_decode( $post->post_excerpt, ENT_QUOTES ), 'excerpt', apply_filters( 'woocommerce_product_short_description_editor_settings', $settings ) );
+		wp_editor( htmlspecialchars_decode( $post->post_excerpt ), 'excerpt', apply_filters( 'woocommerce_product_short_description_editor_settings', $settings ) );
 	}
 }

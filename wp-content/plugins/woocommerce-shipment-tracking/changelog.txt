@@ -1,22 +1,5 @@
 *** Shipment Tracking Changelog ***
 
-2018-09-25 - version 1.6.12
-* Fix    - New tracking URL for UK Mail.
-* Enhancement - Added UPS support for Netherlands
-* Update - WC 3.5 compatibility.
-
-2018-05-23 - version 1.6.11
-* Fix    - Belgian Shipping Provider BPOST tracking link does not work.
-* Fix    - Prevent updater from running more than once.
-* Update - Privacy policy notification.
-* Update - Export/erasure hooks added.
-* Update - WC 3.4 compatibility.
-
-2018-01-25 - version 1.6.10
-* Fix - Ensures a vertical space below the tracking information in HTML emails.
-* Fix - Ensure the "Date" label is shown correctly when viewing tracking information on a mobile device.
-* Tweak - Hide the "Track" button if no tracking URL is present.
-
 2017-12-14 - version 1.6.9
 * Add - WC minimum requirements to header.
 

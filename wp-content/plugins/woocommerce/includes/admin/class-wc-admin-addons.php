@@ -24,7 +24,7 @@ class WC_Admin_Addons {
 	 */
 	public static function get_featured() {
 		if ( false === ( $featured = get_transient( 'wc_addons_featured' ) ) ) {
-			$raw_featured = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/add-ons/featured-v2.json', array( 'user-agent' => 'WooCommerce Addons Page' ) );
+			$raw_featured = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/add-ons/featured.json', array( 'user-agent' => 'WooCommerce Addons Page' ) );
 			if ( ! is_wp_error( $raw_featured ) ) {
 				$featured = json_decode( wp_remote_retrieve_body( $raw_featured ) );
 				if ( $featured ) {
@@ -40,63 +40,35 @@ class WC_Admin_Addons {
 	}
 
 	/**
-	 * Build url parameter string
-	 *
-	 * @param  string $category
-	 * @param  string $term
-	 * @param  string $country
-	 *
-	 * @return string url parameter string
-	 */
-	public static function build_parameter_string( $category, $term, $country ) {
-
-		$paramters = array(
-			'category' => $category,
-			'term'     => $term,
-			'country'  => $country,
-		);
-
-		return '?' . http_build_query( $paramters );
-	}
-
-	/**
-	 * Call API to get extensions
-	 *
-	 * @param  string $category
-	 * @param  string $term
-	 * @param  string $country
-	 *
-	 * @return array of extensions
-	 */
-	public static function get_extension_data( $category, $term, $country ) {
-		$parameters     = self::build_parameter_string( $category, $term, $country );
-		$raw_extensions = wp_remote_get(
-			'https://woocommerce.com/wp-json/wccom-extensions/1.0/search' . $parameters
-		);
-		if ( ! is_wp_error( $raw_extensions ) ) {
-			$addons = json_decode( wp_remote_retrieve_body( $raw_extensions ) )->products;
-		}
-		return $addons;
-	}
-
-	/**
 	 * Get sections for the addons screen
 	 *
 	 * @return array of objects
 	 */
 	public static function get_sections() {
-		$addon_sections = get_transient( 'wc_addons_sections' );
-		if ( false === ( $addon_sections ) ) {
-			$raw_sections = wp_safe_remote_get(
-				'https://woocommerce.com/wp-json/wccom-extensions/1.0/categories'
-			);
+		if ( false === ( $sections = get_transient( 'wc_addons_sections' ) ) ) {
+			$raw_sections = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/addon-sections.json', array( 'user-agent' => 'WooCommerce Addons Page' ) );
 			if ( ! is_wp_error( $raw_sections ) ) {
-				$addon_sections = json_decode( wp_remote_retrieve_body( $raw_sections ) );
-				if ( $addon_sections ) {
-					set_transient( 'wc_addons_sections', $addon_sections, WEEK_IN_SECONDS );
+				$sections = json_decode( wp_remote_retrieve_body( $raw_sections ) );
+
+				if ( $sections ) {
+					set_transient( 'wc_addons_sections', $sections, WEEK_IN_SECONDS );
 				}
 			}
 		}
+
+		$addon_sections = array();
+
+		if ( $sections ) {
+			foreach ( $sections as $sections_id => $section ) {
+				if ( empty( $sections_id ) ) {
+					continue;
+				}
+				$addon_sections[ $sections_id ]           = new stdClass;
+				$addon_sections[ $sections_id ]->title    = wc_clean( $section->title );
+				$addon_sections[ $sections_id ]->endpoint = wc_clean( $section->endpoint );
+			}
+		}
+
 		return apply_filters( 'woocommerce_addons_sections', $addon_sections );
 	}
 
@@ -166,14 +138,12 @@ class WC_Admin_Addons {
 			$utm_content = 'nostorefront';
 		}
 
-		$url = add_query_arg(
-			array(
-				'utm_source'   => 'addons',
-				'utm_medium'   => 'product',
-				'utm_campaign' => 'woocommerceplugin',
-				'utm_content'  => $utm_content,
-			), $url
-		);
+		$url = add_query_arg( array(
+			'utm_source'   => 'addons',
+			'utm_medium'   => 'product',
+			'utm_campaign' => 'woocommerceplugin',
+			'utm_content'  => $utm_content,
+		), $url );
 
 		echo '<a href="' . esc_url( $url ) . '" class="add-new-h2">' . esc_html( $text ) . '</a>' . "\n";
 	}
@@ -190,25 +160,23 @@ class WC_Admin_Addons {
 			<p><?php echo esc_html( $block->description ); ?></p>
 			<div class="addons-banner-block-items">
 				<?php foreach ( $block->items as $item ) : ?>
-					<?php if ( self::show_extension( $item ) ) : ?>
-						<div class="addons-banner-block-item">
-							<div class="addons-banner-block-item-icon">
-								<img class="addons-img" src="<?php echo esc_url( $item->image ); ?>" />
-							</div>
-							<div class="addons-banner-block-item-content">
-								<h3><?php echo esc_html( $item->title ); ?></h3>
-								<p><?php echo esc_html( $item->description ); ?></p>
-								<?php
-									self::output_button(
-										$item->href,
-										$item->button,
-										'addons-button-solid',
-										$item->plugin
-									);
-								?>
-							</div>
+					<div class="addons-banner-block-item">
+						<div class="addons-banner-block-item-icon">
+							<img class="addons-img" src="<?php echo esc_url( $item->image ); ?>" />
 						</div>
-					<?php endif; ?>
+						<div class="addons-banner-block-item-content">
+							<h3><?php echo esc_html( $item->title ); ?></h3>
+							<p><?php echo esc_html( $item->description ); ?></p>
+							<?php
+								self::output_button(
+									$item->href,
+									$item->button,
+									'addons-button-solid',
+									$item->plugin
+								);
+							?>
+						</div>
+					</div>
 				<?php endforeach; ?>
 			</div>
 		</div>
@@ -253,25 +221,25 @@ class WC_Admin_Addons {
 			<h1><?php echo esc_html( $block->title ); ?></h1>
 			<p><?php echo esc_html( $block->description ); ?></p>
 			<?php foreach ( $block->items as $item ) : ?>
-				<?php if ( self::show_extension( $item ) ) : ?>
-					<div class="addons-column-block-item">
-						<div class="addons-column-block-item-icon">
-							<img class="addons-img" src="<?php echo esc_url( $item->image ); ?>" />
-						</div>
-						<div class="addons-column-block-item-content">
-							<h2><?php echo esc_html( $item->title ); ?></h2>
-							<?php
-								self::output_button(
-									$item->href,
-									$item->button,
-									'addons-button-solid',
-									$item->plugin
-								);
-							?>
-							<p><?php echo esc_html( $item->description ); ?></p>
-						</div>
+				<div class="addons-column-block-item">
+					<div class="addons-column-block-item-icon">
+						<img class="addons-img" src="<?php echo esc_url( $item->image ); ?>" />
 					</div>
-				<?php endif; ?>
+
+					<div class="addons-column-block-item-content">
+						<h2><?php echo esc_html( $item->title ); ?></h2>
+						<?php
+							self::output_button(
+								$item->href,
+								$item->button,
+								'addons-button-solid',
+								$item->plugin
+							);
+						?>
+						<p><?php echo esc_html( $item->description ); ?></p>
+
+					</div>
+				</div>
 			<?php endforeach; ?>
 		</div>
 
@@ -286,7 +254,7 @@ class WC_Admin_Addons {
 	public static function output_small_light_block( $block ) {
 		?>
 		<div class="addons-small-light-block">
-			<img class="addons-img" src="<?php echo esc_url( $block->image ); ?>" />
+			<img class="addons-img" src="<?php echo esc_url( $block->image ) ?>" />
 			<div class="addons-small-light-block-content">
 				<h1><?php echo esc_html( $block->title ); ?></h1>
 				<p><?php echo esc_html( $block->description ); ?></p>
@@ -357,11 +325,9 @@ class WC_Admin_Addons {
 		}
 
 		$button_url = wp_nonce_url(
-			add_query_arg(
-				array(
-					'install-addon' => 'woocommerce-services',
-				)
-			),
+			add_query_arg( array(
+				'install-addon' => 'woocommerce-services',
+			) ),
 			'install-addon_woocommerce-services'
 		);
 
@@ -381,26 +347,22 @@ class WC_Admin_Addons {
 					'image'       => WC()->plugin_url() . '/assets/images/wcs-truck-banner-3x.png',
 					'title'       => __( 'Show Canada Post shipping rates', 'woocommerce' ),
 					'description' => __( 'Display live rates from Canada Post at checkout to make shipping a breeze. Powered by WooCommerce Services.', 'woocommerce' ),
-					'logos'       => array_merge(
-						$defaults['logos'], array(
-							array(
-								'link' => WC()->plugin_url() . '/assets/images/wcs-canada-post-logo.jpg',
-								'alt'  => 'Canada Post logo',
-							),
-						)
-					),
+					'logos'       => array_merge( $defaults['logos'], array(
+						array(
+							'link' => WC()->plugin_url() . '/assets/images/wcs-canada-post-logo.jpg',
+							'alt'  => 'Canada Post logo',
+						),
+					) ),
 				);
 				break;
 			case 'US':
 				$local_defaults = array(
-					'logos' => array_merge(
-						$defaults['logos'], array(
-							array(
-								'link' => WC()->plugin_url() . '/assets/images/wcs-usps-logo.png',
-								'alt'  => 'USPS logo',
-							),
-						)
-					),
+					'logos'       => array_merge( $defaults['logos'], array(
+						array(
+							'link' => WC()->plugin_url() . '/assets/images/wcs-usps-logo.png',
+							'alt'  => 'USPS logo',
+						),
+					) ),
 				);
 				break;
 			default:
@@ -487,7 +449,7 @@ class WC_Admin_Addons {
 	public static function output_button( $url, $text, $theme, $plugin = '' ) {
 		$theme = __( 'Free', 'woocommerce' ) === $text ? 'addons-button-outline-green' : $theme;
 		$theme = is_plugin_active( $plugin ) ? 'addons-button-installed' : $theme;
-		$text  = is_plugin_active( $plugin ) ? __( 'Installed', 'woocommerce' ) : $text;
+		$text = is_plugin_active( $plugin ) ? __( 'Installed', 'woocommerce' ) : $text;
 		?>
 		<a
 			class="addons-button <?php echo esc_attr( $theme ); ?>"
@@ -513,25 +475,18 @@ class WC_Admin_Addons {
 
 		$sections        = self::get_sections();
 		$theme           = wp_get_theme();
-		$current_section = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : '_featured';
-		$addons          = array();
-
-		if ( '_featured' !== $current_section ) {
-			$category = isset( $_GET['section'] ) ? $_GET['section'] : null;
-			$term     = isset( $_GET['search'] ) ? $_GET['search'] : null;
-			$country  = WC()->countries->get_base_country();
-			$addons   = self::get_extension_data( $category, $term, $country );
-		}
+		$section_keys    = array_keys( $sections );
+		$current_section = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : current( $section_keys );
 
 		/**
 		 * Addon page view.
 		 *
-		 * @uses $addons
 		 * @uses $sections
 		 * @uses $theme
+		 * @uses $section_keys
 		 * @uses $current_section
 		 */
-		include_once dirname( __FILE__ ) . '/views/html-admin-page-addons.php';
+		include_once( dirname( __FILE__ ) . '/views/html-admin-page-addons.php' );
 	}
 
 	/**
@@ -550,28 +505,5 @@ class WC_Admin_Addons {
 
 		wp_safe_redirect( remove_query_arg( array( 'install-addon', '_wpnonce' ) ) );
 		exit;
-	}
-
-	/**
-	 * Should an extension be shown on the featured page.
-	 *
-	 * @param object $item
-	 * @return boolean
-	 */
-	public static function show_extension( $item ) {
-		$location = WC()->countries->get_base_country();
-		if ( isset( $item->geowhitelist ) && ! in_array( $location, $item->geowhitelist, true ) ) {
-			return false;
-		}
-
-		if ( isset( $item->geoblacklist ) && in_array( $location, $item->geoblacklist, true ) ) {
-			return false;
-		}
-
-		if ( is_plugin_active( $item->plugin ) ) {
-			return false;
-		}
-
-		return true;
 	}
 }

@@ -2,13 +2,16 @@
 /**
  * Mexico States
  *
- * @package WooCommerce/i18n
- * @version 2.2.9
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.2.9
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['MX'] = array(
 	'DF' => __( 'Ciudad de M&eacute;xico', 'woocommerce' ),

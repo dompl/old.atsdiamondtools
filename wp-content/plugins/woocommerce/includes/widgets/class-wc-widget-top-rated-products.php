@@ -1,16 +1,19 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Top Rated Products Widget.
+ *
  * Gets and displays top rated products in an unordered list.
  *
- * @package WooCommerce/Widgets
- * @version 3.3.0
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Widget top rated products class.
+ * @author   WooThemes
+ * @category Widgets
+ * @package  WooCommerce/Widgets
+ * @version  3.0.0
+ * @extends  WC_Widget
  */
 class WC_Widget_Top_Rated_Products extends WC_Widget {
 
@@ -45,8 +48,9 @@ class WC_Widget_Top_Rated_Products extends WC_Widget {
 	 * Output widget.
 	 *
 	 * @see WP_Widget
-	 * @param array $args     Arguments.
-	 * @param array $instance Widget instance.
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
 
@@ -68,7 +72,7 @@ class WC_Widget_Top_Rated_Products extends WC_Widget {
 			'order'          => 'DESC',
 			'meta_query'     => WC()->query->get_meta_query(),
 			'tax_query'      => WC()->query->get_tax_query(),
-		); // WPCS: slow query ok.
+		);
 
 		$r = new WP_Query( $query_args );
 
@@ -76,19 +80,14 @@ class WC_Widget_Top_Rated_Products extends WC_Widget {
 
 			$this->widget_start( $args, $instance );
 
-			echo wp_kses_post( apply_filters( 'woocommerce_before_widget_product_list', '<ul class="product_list_widget">' ) );
-
-			$template_args = array(
-				'widget_id'   => $args['widget_id'],
-				'show_rating' => true,
-			);
+			echo apply_filters( 'woocommerce_before_widget_product_list', '<ul class="product_list_widget">' );
 
 			while ( $r->have_posts() ) {
 				$r->the_post();
-				wc_get_template( 'content-widget-product.php', $template_args );
+				wc_get_template( 'content-widget-product.php', array( 'show_rating' => true ) );
 			}
 
-			echo wp_kses_post( apply_filters( 'woocommerce_after_widget_product_list', '</ul>' ) );
+			echo apply_filters( 'woocommerce_after_widget_product_list', '</ul>' );
 
 			$this->widget_end( $args );
 		}
@@ -97,7 +96,7 @@ class WC_Widget_Top_Rated_Products extends WC_Widget {
 
 		$content = ob_get_clean();
 
-		echo $content; // WPCS: XSS ok.
+		echo $content;
 
 		$this->cache_widget( $args, $content );
 	}

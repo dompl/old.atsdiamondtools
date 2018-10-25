@@ -1,9 +1,4 @@
 <?php
-/**
- * WordPress mappings
- *
- * @package WooCommerce\Admin\Importers
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -13,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add mappings for WordPress tables.
  *
  * @since 3.1.0
- * @param array $mappings Importer columns mappings.
+ * @param array $mappings
  * @return array
  */
 function wc_importer_wordpress_mappings( $mappings ) {

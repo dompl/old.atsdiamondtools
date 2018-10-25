@@ -64,6 +64,20 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
+         * Check if we should override default search query
+         *
+         * @param string $query
+         * @return bool
+         */
+        private function aws_searchpage_enabled( $query ) {
+            $enabled = true;
+            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) || ! isset( $query->query_vars['s'] ) || ! $query->query_vars['s'] ) {
+                $enabled = false;
+            }
+            return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
+        }
+
+        /**
         * Filter query string used for get_posts(). Query for posts and save for later.
         * Return a query that will return nothing.
         *
@@ -89,15 +103,6 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             $paged  = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
             $offset = ( $paged > 1 ) ? $paged * $posts_per_page - $posts_per_page : 0;
 
-            if ( $query->query && ( isset( $query->query['orderby'] ) || isset( $query->query_vars['orderby'] ) ) ) {
-
-                if ( isset( $posts_array['products'] ) && ! empty( $posts_array['products'] ) ) {
-
-                    $posts_array['products'] = AWS()->order( $posts_array['products'], $query );
-
-                }
-
-            }
 
             $products = array_slice( $posts_array['products'], $offset, $posts_per_page );
 
@@ -219,25 +224,6 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             }
 
             return '';
-        }
-
-        /**
-         * Check if we should override default search query
-         *
-         * @param string $query
-         * @return bool
-         */
-        private function aws_searchpage_enabled( $query ) {
-            $enabled = true;
-            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
-                ! isset( $query->query_vars['s'] ) ||
-                ! $query->is_search() ||
-                ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) !== 'product' )
-            ) {
-                $enabled = false;
-            }
-
-            return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
         }
 
     }

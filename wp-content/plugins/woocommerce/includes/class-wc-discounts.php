@@ -2,11 +2,15 @@
 /**
  * Discount calculation
  *
+ * @author  Automattic
  * @package WooCommerce/Classes
+ * @version 3.2.0
  * @since   3.2.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Discounts class.
@@ -17,7 +21,7 @@ class WC_Discounts {
 	 * Reference to cart or order object.
 	 *
 	 * @since 3.2.0
-	 * @var WC_Cart|WC_Order
+	 * @var array
 	 */
 	protected $object;
 
@@ -36,11 +40,11 @@ class WC_Discounts {
 	protected $discounts = array();
 
 	/**
-	 * WC_Discounts Constructor.
+	 * Constructor.
 	 *
-	 * @param WC_Cart|WC_Order $object Cart or order object.
+	 * @param array $object Cart or order object.
 	 */
-	public function __construct( $object = null ) {
+	public function __construct( $object = array() ) {
 		if ( is_a( $object, 'WC_Cart' ) ) {
 			$this->set_items_from_cart( $object );
 		} elseif ( is_a( $object, 'WC_Order' ) ) {
@@ -67,8 +71,7 @@ class WC_Discounts {
 	 * @param WC_Cart $cart Cart object.
 	 */
 	public function set_items_from_cart( $cart ) {
-		$this->items     = array();
-		$this->discounts = array();
+		$this->items = $this->discounts = array();
 
 		if ( ! is_a( $cart, 'WC_Cart' ) ) {
 			return;
@@ -93,11 +96,10 @@ class WC_Discounts {
 	 * Normalise order items which will be discounted.
 	 *
 	 * @since 3.2.0
-	 * @param WC_Order $order Order object.
+	 * @param array $order Cart object.
 	 */
 	public function set_items_from_order( $order ) {
-		$this->items     = array();
-		$this->discounts = array();
+		$this->items = $this->discounts = array();
 
 		if ( ! is_a( $order, 'WC_Order' ) ) {
 			return;
@@ -106,31 +108,21 @@ class WC_Discounts {
 		$this->object = $order;
 
 		foreach ( $order->get_items() as $order_item ) {
-			$item           = new stdClass();
-			$item->key      = $order_item->get_id();
-			$item->object   = $order_item;
-			$item->product  = $order_item->get_product();
-			$item->quantity = $order_item->get_quantity();
-			$item->price    = wc_add_number_precision_deep( $order_item->get_subtotal() );
+			$item                = new stdClass();
+			$item->key           = $order_item->get_id();
+			$item->object        = $order_item;
+			$item->product       = $order_item->get_product();
+			$item->quantity      = $order_item->get_quantity();
+			$item->price         = wc_add_number_precision_deep( $order_item->get_total() );
 
 			if ( $order->get_prices_include_tax() ) {
-				$item->price += wc_add_number_precision_deep( $order_item->get_subtotal_tax() );
+				$item->price += wc_add_number_precision_deep( $order_item->get_total_tax() );
 			}
 
 			$this->items[ $order_item->get_id() ] = $item;
 		}
 
 		uasort( $this->items, array( $this, 'sort_by_price' ) );
-	}
-
-	/**
-	 * Get the object concerned.
-	 *
-	 * @since  3.3.2
-	 * @return object
-	 */
-	public function get_object() {
-		return $this->object;
 	}
 
 	/**
@@ -141,16 +133,6 @@ class WC_Discounts {
 	 */
 	public function get_items() {
 		return $this->items;
-	}
-
-	/**
-	 * Get items to validate.
-	 *
-	 * @since  3.3.2
-	 * @return object[]
-	 */
-	public function get_items_to_validate() {
-		return apply_filters( 'woocommerce_coupon_get_items_to_validate', $this->get_items(), $this );
 	}
 
 	/**
@@ -230,7 +212,7 @@ class WC_Discounts {
 	 * @return int
 	 */
 	public function get_discounted_price_in_cents( $item ) {
-		return absint( round( $item->price - $this->get_discount( $item->key, true ) ) );
+		return absint( $item->price - $this->get_discount( $item->key, true ) );
 	}
 
 	/**
@@ -239,7 +221,6 @@ class WC_Discounts {
 	 * @since  3.2.0
 	 * @param  WC_Coupon $coupon Coupon object being applied to the items.
 	 * @param  bool      $validate Set to false to skip coupon validation.
-	 * @throws Exception Error message when coupon isn't valid.
 	 * @return bool|WP_Error True if applied or WP_Error instance in failure.
 	 */
 	public function apply_coupon( $coupon, $validate = true ) {
@@ -258,20 +239,29 @@ class WC_Discounts {
 		}
 
 		$items_to_apply = $this->get_items_to_apply_coupon( $coupon );
+		$coupon_type    = $coupon->get_discount_type();
 
 		// Core discounts are handled here as of 3.2.
 		switch ( $coupon->get_discount_type() ) {
-			case 'percent':
+			case 'percent' :
 				$this->apply_coupon_percent( $coupon, $items_to_apply );
 				break;
-			case 'fixed_product':
+			case 'fixed_product' :
 				$this->apply_coupon_fixed_product( $coupon, $items_to_apply );
 				break;
-			case 'fixed_cart':
+			case 'fixed_cart' :
 				$this->apply_coupon_fixed_cart( $coupon, $items_to_apply );
 				break;
-			default:
-				$this->apply_coupon_custom( $coupon, $items_to_apply );
+			default :
+				foreach ( $items_to_apply as $item ) {
+					$discounted_price  = $this->get_discounted_price_in_cents( $item );
+					$price_to_discount = wc_remove_number_precision( ( 'yes' === get_option( 'woocommerce_calc_discounts_sequentially', 'no' ) ) ? $discounted_price : $item->price );
+					$discount          = wc_add_number_precision( $coupon->get_discount_amount( $price_to_discount / $item->quantity, $item->object, true ) ) * $item->quantity;
+					$discount          = min( $discounted_price, $discount );
+
+					// Store code and discount amount per item.
+					$this->discounts[ $coupon->get_code() ][ $item->key ] += $discount;
+				}
 				break;
 		}
 
@@ -315,9 +305,9 @@ class WC_Discounts {
 	 * @return array
 	 */
 	protected function get_items_to_apply_coupon( $coupon ) {
-		$items_to_apply = array();
+		$items_to_apply  = array();
 
-		foreach ( $this->get_items_to_validate() as $item ) {
+		foreach ( $this->items as $item ) {
 			$item_to_apply = clone $item; // Clone the item so changes to this item do not affect the originals.
 
 			if ( 0 === $this->get_discounted_price_in_cents( $item_to_apply ) || 0 >= $item_to_apply->quantity ) {
@@ -352,18 +342,18 @@ class WC_Discounts {
 			$limit_usage_qty = $coupon->get_limit_usage_to_x_items();
 		}
 
-		$coupon_amount = $coupon->get_amount();
+		// Because get_amount() could return an empty string, let's be sure to set our local variable to a known good value.
+		$coupon_amount  = ( '' === $coupon->get_amount() ) ? 0 : $coupon->get_amount();
 
 		foreach ( $items_to_apply as $item ) {
 			// Find out how much price is available to discount for the item.
-			$discounted_price = $this->get_discounted_price_in_cents( $item );
+			$discounted_price  = $this->get_discounted_price_in_cents( $item );
 
 			// Get the price we actually want to discount, based on settings.
 			$price_to_discount = ( 'yes' === get_option( 'woocommerce_calc_discounts_sequentially', 'no' ) ) ? $discounted_price : $item->price;
 
 			// See how many and what price to apply to.
-			$apply_quantity    = $limit_usage_qty && ( $limit_usage_qty - $applied_count ) < $item->quantity ? $limit_usage_qty - $applied_count : $item->quantity;
-			$apply_quantity    = max( 0, apply_filters( 'woocommerce_coupon_get_apply_quantity', $apply_quantity, $item, $coupon, $this ) );
+			$apply_quantity    = max( 0, ( $limit_usage_qty && ( $limit_usage_qty - $applied_count ) < $item->quantity ? $limit_usage_qty - $applied_count : $item->quantity ) );
 			$price_to_discount = ( $price_to_discount / $item->quantity ) * $apply_quantity;
 
 			// Run coupon calculations.
@@ -379,7 +369,7 @@ class WC_Discounts {
 				}
 			}
 
-			$discount       = wc_round_discount( min( $discounted_price, $discount ), 0 );
+			$discount       = wc_cart_round_discount( min( $discounted_price, $discount ), 0 );
 			$cart_total     = $cart_total + $price_to_discount;
 			$total_discount = $total_discount + $discount;
 			$applied_count  = $applied_count + $apply_quantity;
@@ -389,7 +379,7 @@ class WC_Discounts {
 		}
 
 		// Work out how much discount would have been given to the cart as a whole and compare to what was discounted on all line items.
-		$cart_total_discount = wc_round_discount( $cart_total * ( $coupon_amount / 100 ), 0 );
+		$cart_total_discount = wc_cart_round_discount( $cart_total * ( $coupon_amount / 100 ), 0 );
 
 		if ( $total_discount < $cart_total_discount && $adjust_final_discount ) {
 			$total_discount += $this->apply_coupon_remainder( $coupon, $items_to_apply, $cart_total_discount - $total_discount );
@@ -409,7 +399,7 @@ class WC_Discounts {
 	 */
 	protected function apply_coupon_fixed_product( $coupon, $items_to_apply, $amount = null ) {
 		$total_discount  = 0;
-		$amount          = $amount ? $amount : wc_add_number_precision( $coupon->get_amount() );
+		$amount          = $amount ? $amount: wc_add_number_precision( $coupon->get_amount() );
 		$limit_usage_qty = 0;
 		$applied_count   = 0;
 
@@ -419,18 +409,17 @@ class WC_Discounts {
 
 		foreach ( $items_to_apply as $item ) {
 			// Find out how much price is available to discount for the item.
-			$discounted_price = $this->get_discounted_price_in_cents( $item );
+			$discounted_price  = $this->get_discounted_price_in_cents( $item );
 
 			// Get the price we actually want to discount, based on settings.
 			$price_to_discount = ( 'yes' === get_option( 'woocommerce_calc_discounts_sequentially', 'no' ) ) ? $discounted_price : $item->price;
 
 			// Run coupon calculations.
 			if ( $limit_usage_qty ) {
-				$apply_quantity = $limit_usage_qty - $applied_count < $item->quantity ? $limit_usage_qty - $applied_count : $item->quantity;
-				$apply_quantity = max( 0, apply_filters( 'woocommerce_coupon_get_apply_quantity', $apply_quantity, $item, $coupon, $this ) );
+				$apply_quantity = max( 0, ( $limit_usage_qty - $applied_count < $item->quantity ? $limit_usage_qty - $applied_count: $item->quantity ) );
 				$discount       = min( $amount, $item->price / $item->quantity ) * $apply_quantity;
 			} else {
-				$apply_quantity = apply_filters( 'woocommerce_coupon_get_apply_quantity', $item->quantity, $item, $coupon, $this );
+				$apply_quantity = $item->quantity;
 				$discount       = $amount * $apply_quantity;
 			}
 
@@ -462,9 +451,8 @@ class WC_Discounts {
 		$total_discount = 0;
 		$amount         = $amount ? $amount : wc_add_number_precision( $coupon->get_amount() );
 		$items_to_apply = array_filter( $items_to_apply, array( $this, 'filter_products_with_price' ) );
-		$item_count     = array_sum( wp_list_pluck( $items_to_apply, 'quantity' ) );
 
-		if ( ! $item_count ) {
+		if ( ! $item_count = array_sum( wp_list_pluck( $items_to_apply, 'quantity' ) ) ) {
 			return $total_discount;
 		}
 
@@ -491,48 +479,6 @@ class WC_Discounts {
 	}
 
 	/**
-	 * Apply custom coupon discount to items.
-	 *
-	 * @since  3.3
-	 * @param  WC_Coupon $coupon Coupon object. Passed through filters.
-	 * @param  array     $items_to_apply Array of items to apply the coupon to.
-	 * @return int Total discounted.
-	 */
-	protected function apply_coupon_custom( $coupon, $items_to_apply ) {
-		$limit_usage_qty = 0;
-		$applied_count   = 0;
-
-		if ( null !== $coupon->get_limit_usage_to_x_items() ) {
-			$limit_usage_qty = $coupon->get_limit_usage_to_x_items();
-		}
-
-		// Apply the coupon to each item.
-		foreach ( $items_to_apply as $item ) {
-			// Find out how much price is available to discount for the item.
-			$discounted_price = $this->get_discounted_price_in_cents( $item );
-
-			// Get the price we actually want to discount, based on settings.
-			$price_to_discount = wc_remove_number_precision( ( 'yes' === get_option( 'woocommerce_calc_discounts_sequentially', 'no' ) ) ? $discounted_price : $item->price );
-
-			// See how many and what price to apply to.
-			$apply_quantity = $limit_usage_qty && ( $limit_usage_qty - $applied_count ) < $item->quantity ? $limit_usage_qty - $applied_count : $item->quantity;
-			$apply_quantity = max( 0, apply_filters( 'woocommerce_coupon_get_apply_quantity', $apply_quantity, $item, $coupon, $this ) );
-
-			// Run coupon calculations.
-			$discount = wc_add_number_precision( $coupon->get_discount_amount( $price_to_discount / $item->quantity, $item->object, true ) ) * $apply_quantity;
-			$discount = wc_round_discount( min( $discounted_price, $discount ), 0 );
-
-			// Store code and discount amount per item.
-			$this->discounts[ $coupon->get_code() ][ $item->key ] += $discount;
-		}
-
-		// Allow post-processing for custom coupon types (e.g. calculating discrepancy, etc).
-		$this->discounts[ $coupon->get_code() ] = apply_filters( 'woocommerce_coupon_custom_discounts_array', $this->discounts[ $coupon->get_code() ], $coupon );
-
-		return array_sum( $this->discounts[ $coupon->get_code() ] );
-	}
-
-	/**
 	 * Deal with remaining fractional discounts by splitting it over items
 	 * until the amount is expired, discounting 1 cent at a time.
 	 *
@@ -548,7 +494,7 @@ class WC_Discounts {
 		foreach ( $items_to_apply as $item ) {
 			for ( $i = 0; $i < $item->quantity; $i ++ ) {
 				// Find out how much price is available to discount for the item.
-				$discounted_price = $this->get_discounted_price_in_cents( $item );
+				$discounted_price  = $this->get_discounted_price_in_cents( $item );
 
 				// Get the price we actually want to discount, based on settings.
 				$price_to_discount = ( 'yes' === get_option( 'woocommerce_calc_discounts_sequentially', 'no' ) ) ? $discounted_price : $item->price;
@@ -572,6 +518,12 @@ class WC_Discounts {
 		}
 		return $total_discount;
 	}
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Validation & Error Handling
+	 |--------------------------------------------------------------------------
+	 */
 
 	/**
 	 * Ensure coupon exists or throw exception.
@@ -620,14 +572,10 @@ class WC_Discounts {
 	 */
 	protected function validate_coupon_user_usage_limit( $coupon, $user_id = 0 ) {
 		if ( empty( $user_id ) ) {
-			if ( $this->object instanceof WC_Order ) {
-				$user_id = $this->object->get_customer_id();
-			} else {
-				$user_id = get_current_user_id();
-			}
+			$user_id = get_current_user_id();
 		}
 
-		if ( $coupon && $user_id && apply_filters( 'woocommerce_coupon_validate_user_usage_limit', $coupon->get_usage_limit_per_user() > 0, $user_id, $coupon, $this ) && $coupon->get_id() && $coupon->get_data_store() ) {
+		if ( $coupon && $user_id && $coupon->get_usage_limit_per_user() > 0 && $coupon->get_id() && $coupon->get_data_store() ) {
 			$date_store  = $coupon->get_data_store();
 			$usage_count = $date_store->get_usage_by_user_id( $coupon, $user_id );
 			if ( $usage_count >= $coupon->get_usage_limit_per_user() ) {
@@ -647,7 +595,7 @@ class WC_Discounts {
 	 * @return bool
 	 */
 	protected function validate_coupon_expiry_date( $coupon ) {
-		if ( $coupon->get_date_expires() && apply_filters( 'woocommerce_coupon_validate_expiry_date', current_time( 'timestamp', true ) > $coupon->get_date_expires()->getTimestamp(), $coupon, $this ) ) {
+		if ( $coupon->get_date_expires() && current_time( 'timestamp', true ) > $coupon->get_date_expires()->getTimestamp() ) {
 			throw new Exception( __( 'This coupon has expired.', 'woocommerce' ), 107 );
 		}
 
@@ -702,7 +650,7 @@ class WC_Discounts {
 		if ( count( $coupon->get_product_ids() ) > 0 ) {
 			$valid = false;
 
-			foreach ( $this->get_items_to_validate() as $item ) {
+			foreach ( $this->items as $item ) {
 				if ( $item->product && in_array( $item->product->get_id(), $coupon->get_product_ids(), true ) || in_array( $item->product->get_parent_id(), $coupon->get_product_ids(), true ) ) {
 					$valid = true;
 					break;
@@ -729,7 +677,7 @@ class WC_Discounts {
 		if ( count( $coupon->get_product_categories() ) > 0 ) {
 			$valid = false;
 
-			foreach ( $this->get_items_to_validate() as $item ) {
+			foreach ( $this->items as $item ) {
 				if ( $coupon->get_exclude_sale_items() && $item->product && $item->product->is_on_sale() ) {
 					continue;
 				}
@@ -765,11 +713,11 @@ class WC_Discounts {
 	 */
 	protected function validate_coupon_sale_items( $coupon ) {
 		if ( $coupon->get_exclude_sale_items() ) {
-			$valid = true;
+			$valid = false;
 
-			foreach ( $this->get_items_to_validate() as $item ) {
-				if ( $item->product && $item->product->is_on_sale() ) {
-					$valid = false;
+			foreach ( $this->items as $item ) {
+				if ( $item->product && ! $item->product->is_on_sale() ) {
+					$valid = true;
 					break;
 				}
 			}
@@ -791,11 +739,10 @@ class WC_Discounts {
 	 * @return bool
 	 */
 	protected function validate_coupon_excluded_items( $coupon ) {
-		$items = $this->get_items_to_validate();
-		if ( ! empty( $items ) && $coupon->is_type( wc_get_product_coupon_types() ) ) {
+		if ( ! empty( $this->items ) && $coupon->is_type( wc_get_product_coupon_types() ) ) {
 			$valid = false;
 
-			foreach ( $items as $item ) {
+			foreach ( $this->items as $item ) {
 				if ( $item->product && $coupon->is_valid_for_product( $item->product, $item->object ) ) {
 					$valid = true;
 					break;
@@ -820,7 +767,6 @@ class WC_Discounts {
 	 */
 	protected function validate_coupon_eligible_items( $coupon ) {
 		if ( ! $coupon->is_type( wc_get_product_coupon_types() ) ) {
-			$this->validate_coupon_sale_items( $coupon );
 			$this->validate_coupon_excluded_product_ids( $coupon );
 			$this->validate_coupon_excluded_product_categories( $coupon );
 		}
@@ -841,7 +787,7 @@ class WC_Discounts {
 		if ( count( $coupon->get_excluded_product_ids() ) > 0 ) {
 			$products = array();
 
-			foreach ( $this->get_items_to_validate() as $item ) {
+			foreach ( $this->items as $item ) {
 				if ( $item->product && in_array( $item->product->get_id(), $coupon->get_excluded_product_ids(), true ) || in_array( $item->product->get_parent_id(), $coupon->get_excluded_product_ids(), true ) ) {
 					$products[] = $item->product->get_name();
 				}
@@ -868,8 +814,8 @@ class WC_Discounts {
 		if ( count( $coupon->get_excluded_product_categories() ) > 0 ) {
 			$categories = array();
 
-			foreach ( $this->get_items_to_validate() as $item ) {
-				if ( ! $item->product ) {
+			foreach ( $this->items as $item ) {
+				if ( $coupon->get_exclude_sale_items() && $item->product && $item->product->is_on_sale() ) {
 					continue;
 				}
 
@@ -879,7 +825,7 @@ class WC_Discounts {
 					$product_cats = array_merge( $product_cats, wc_get_product_cat_ids( $item->product->get_parent_id() ) );
 				}
 
-				$cat_id_list = array_intersect( $product_cats, $coupon->get_excluded_product_categories() );
+				$cat_id_list  = array_intersect( $product_cats, $coupon->get_excluded_product_categories() );
 				if ( count( $cat_id_list ) > 0 ) {
 					foreach ( $cat_id_list as $cat_id ) {
 						$cat          = get_term( $cat_id, 'product_cat' );
@@ -947,6 +893,7 @@ class WC_Discounts {
 			$this->validate_coupon_maximum_amount( $coupon );
 			$this->validate_coupon_product_ids( $coupon );
 			$this->validate_coupon_product_categories( $coupon );
+			$this->validate_coupon_sale_items( $coupon );
 			$this->validate_coupon_excluded_items( $coupon );
 			$this->validate_coupon_eligible_items( $coupon );
 

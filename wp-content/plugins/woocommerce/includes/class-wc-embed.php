@@ -1,9 +1,11 @@
 <?php
 /**
- * WooCommerce product embed
+ * WooCommerce Product Embed.
  *
  * @version  2.4.11
  * @package  WooCommerce/Classes/Embed
+ * @category Class
+ * @author   WooThemes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Embed Class which handles any WooCommerce Products that are embedded on this site or another site.
+ *
+ * @class    WC_Embed
+ * @version  2.4.11
+ * @author   WooThemes
  */
 class WC_Embed {
 
@@ -74,7 +80,7 @@ class WC_Embed {
 
 		// Make sure we're only affecting embedded products.
 		if ( self::is_embedded_product() ) {
-			echo '<p><span class="wc-embed-price">' . $_product->get_price_html() . '</span></p>'; // WPCS: XSS ok.
+			echo '<p><span class="wc-embed-price">' . $_product->get_price_html() . '</span></p>';
 
 			if ( ! empty( $post->post_excerpt ) ) {
 				ob_start();
@@ -115,18 +121,12 @@ class WC_Embed {
 	 */
 	public static function get_ratings() {
 		// Make sure we're only affecting embedded products.
-		if ( ! self::is_embedded_product() ) {
-			return;
-		}
-
-		$_product = wc_get_product( get_the_ID() );
-
-		if ( $_product && $_product->get_average_rating() > 0 ) {
+		if ( self::is_embedded_product() && ( $_product = wc_get_product( get_the_ID() ) ) && $_product->get_average_rating() > 0 ) {
 			?>
 			<div class="wc-embed-rating">
 				<?php
+					/* translators: %s: average rating */
 					printf(
-						/* translators: %s: average rating */
 						esc_html__( 'Rated %s out of 5', 'woocommerce' ),
 						esc_html( $_product->get_average_rating() )
 					);

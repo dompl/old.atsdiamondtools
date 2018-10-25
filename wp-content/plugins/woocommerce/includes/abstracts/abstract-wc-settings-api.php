@@ -1,64 +1,60 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Abstract Settings API Class
  *
  * Admin Settings API used by Integrations, Shipping Methods, and Payment Gateways.
  *
+ * @class    WC_Settings_API
+ * @version  2.6.0
  * @package  WooCommerce/Abstracts
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * WC_Settings_API class.
+ * @category Abstract Class
+ * @author   WooThemes
  */
 abstract class WC_Settings_API {
 
 	/**
 	 * The plugin ID. Used for option names.
-	 *
 	 * @var string
 	 */
 	public $plugin_id = 'woocommerce_';
 
 	/**
 	 * ID of the class extending the settings API. Used in option names.
-	 *
 	 * @var string
 	 */
 	public $id = '';
 
 	/**
 	 * Validation errors.
-	 *
 	 * @var array of strings
 	 */
 	public $errors = array();
 
 	/**
 	 * Setting values.
-	 *
 	 * @var array
 	 */
 	public $settings = array();
 
 	/**
 	 * Form option fields.
-	 *
 	 * @var array
 	 */
 	public $form_fields = array();
 
 	/**
 	 * The posted settings data. When empty, $_POST data will be used.
-	 *
 	 * @var array
 	 */
 	protected $data = array();
 
 	/**
 	 * Get the form fields after they are initialized.
-	 *
 	 * @return array of options
 	 */
 	public function get_form_fields() {
@@ -68,7 +64,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Set default required properties for each field.
 	 *
-	 * @param array $field Setting field array.
+	 * @param array $field
+	 *
 	 * @return array
 	 */
 	protected function set_defaults( $field ) {
@@ -82,13 +79,14 @@ abstract class WC_Settings_API {
 	 * Output the admin options table.
 	 */
 	public function admin_options() {
-		echo '<table class="form-table">' . $this->generate_settings_html( $this->get_form_fields(), false ) . '</table>'; // WPCS: XSS ok.
+		echo '<table class="form-table">' . $this->generate_settings_html( $this->get_form_fields(), false ) . '</table>';
 	}
 
 	/**
 	 * Initialise settings form fields.
 	 *
-	 * Add an array of fields to be displayed on the gateway's settings screen.
+	 * Add an array of fields to be displayed
+	 * on the gateway's settings screen.
 	 *
 	 * @since  1.0.0
 	 */
@@ -96,7 +94,6 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Return the name of the option in the WP DB.
-	 *
 	 * @since 2.6.0
 	 * @return string
 	 */
@@ -106,8 +103,7 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Get a fields type. Defaults to "text" if not set.
-	 *
-	 * @param  array $field Field key.
+	 * @param  array $field
 	 * @return string
 	 */
 	public function get_field_type( $field ) {
@@ -116,8 +112,7 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Get a fields default value. Defaults to "" if not set.
-	 *
-	 * @param  array $field Field key.
+	 * @param  array $field
 	 * @return string
 	 */
 	public function get_field_default( $field ) {
@@ -126,40 +121,35 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Get a field's posted and validated value.
-	 *
-	 * @param string $key Field key.
-	 * @param array  $field Field array.
-	 * @param array  $post_data Posted data.
+	 * @param string $key
+	 * @param array $field
+	 * @param array $post_data
 	 * @return string
 	 */
 	public function get_field_value( $key, $field, $post_data = array() ) {
 		$type      = $this->get_field_type( $field );
 		$field_key = $this->get_field_key( $key );
-		$post_data = empty( $post_data ) ? $_POST : $post_data; // WPCS: CSRF ok, input var ok.
+		$post_data = empty( $post_data ) ? $_POST : $post_data;
 		$value     = isset( $post_data[ $field_key ] ) ? $post_data[ $field_key ] : null;
 
-		if ( isset( $field['sanitize_callback'] ) && is_callable( $field['sanitize_callback'] ) ) {
-			return call_user_func( $field['sanitize_callback'], $value );
-		}
-
-		// Look for a validate_FIELDID_field method for special handling.
+		// Look for a validate_FIELDID_field method for special handling
 		if ( is_callable( array( $this, 'validate_' . $key . '_field' ) ) ) {
 			return $this->{'validate_' . $key . '_field'}( $key, $value );
 		}
 
-		// Look for a validate_FIELDTYPE_field method.
+		// Look for a validate_FIELDTYPE_field method
 		if ( is_callable( array( $this, 'validate_' . $type . '_field' ) ) ) {
 			return $this->{'validate_' . $type . '_field'}( $key, $value );
 		}
 
-		// Fallback to text.
+		// Fallback to text
 		return $this->validate_text_field( $key, $value );
 	}
 
 	/**
-	 * Sets the POSTed data. This method can be used to set specific data, instead of taking it from the $_POST array.
-	 *
-	 * @param array $data Posted data.
+	 * Sets the POSTed data. This method can be used to set specific data, instead
+	 * of taking it from the $_POST array.
+	 * @param array data
 	 */
 	public function set_post_data( $data = array() ) {
 		$this->data = $data;
@@ -167,38 +157,18 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Returns the POSTed data, to be used to save the settings.
-	 *
 	 * @return array
 	 */
 	public function get_post_data() {
 		if ( ! empty( $this->data ) && is_array( $this->data ) ) {
 			return $this->data;
 		}
-		return $_POST; // WPCS: CSRF ok, input var ok.
-	}
-
-	/**
-	 * Update a single option.
-	 *
-	 * @since 3.4.0
-	 * @param string $key Option key.
-	 * @param mixed  $value Value to set.
-	 * @return bool was anything saved?
-	 */
-	public function update_option( $key, $value = '' ) {
-		if ( empty( $this->settings ) ) {
-			$this->init_settings();
-		}
-
-		$this->settings[ $key ] = $value;
-
-		return update_option( $this->get_option_key(), apply_filters( 'woocommerce_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
+		return $_POST;
 	}
 
 	/**
 	 * Processes and saves options.
 	 * If there is an error thrown, will continue to save and validate fields, but will leave the erroring field out.
-	 *
 	 * @return bool was anything saved?
 	 */
 	public function process_admin_options() {
@@ -216,13 +186,12 @@ abstract class WC_Settings_API {
 			}
 		}
 
-		return update_option( $this->get_option_key(), apply_filters( 'woocommerce_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
+		return update_option( $this->get_option_key(), apply_filters( 'woocommerce_settings_api_sanitized_fields_' . $this->id, $this->settings ) );
 	}
 
 	/**
 	 * Add an error message for display in admin on save.
-	 *
-	 * @param string $error Error message.
+	 * @param string $error
 	 */
 	public function add_error( $error ) {
 		$this->errors[] = $error;
@@ -269,12 +238,12 @@ abstract class WC_Settings_API {
 	}
 
 	/**
-	 * Get option from DB.
+	 * get_option function.
 	 *
 	 * Gets an option from the settings API, using defaults if necessary to prevent undefined notices.
 	 *
-	 * @param  string $key Option key.
-	 * @param  mixed  $empty_value Value when empty.
+	 * @param  string $key
+	 * @param  mixed  $empty_value
 	 * @return string The value specified for the option or a default value for the option.
 	 */
 	public function get_option( $key, $empty_value = null ) {
@@ -298,7 +267,7 @@ abstract class WC_Settings_API {
 	/**
 	 * Prefix key for settings.
 	 *
-	 * @param  string $key Field key.
+	 * @param  mixed $key
 	 * @return string
 	 */
 	public function get_field_key( $key ) {
@@ -310,8 +279,9 @@ abstract class WC_Settings_API {
 	 *
 	 * Generate the HTML for the fields on the "settings" screen.
 	 *
-	 * @param array $form_fields (default: array()) Array of form fields.
-	 * @param bool  $echo Echo or return.
+	 * @param  array $form_fields (default: array())
+	 * @param bool $echo
+	 *
 	 * @return string the html for the settings
 	 * @since  1.0.0
 	 * @uses   method_exists()
@@ -333,7 +303,7 @@ abstract class WC_Settings_API {
 		}
 
 		if ( $echo ) {
-			echo $html; // WPCS: XSS ok.
+			echo $html;
 		} else {
 			return $html;
 		}
@@ -342,7 +312,7 @@ abstract class WC_Settings_API {
 	/**
 	 * Get HTML for tooltips.
 	 *
-	 * @param  array $data Data for the tooltip.
+	 * @param  array $data
 	 * @return string
 	 */
 	public function get_tooltip_html( $data ) {
@@ -360,7 +330,7 @@ abstract class WC_Settings_API {
 	/**
 	 * Get HTML for descriptions.
 	 *
-	 * @param  array $data Data for the description.
+	 * @param  array $data
 	 * @return string
 	 */
 	public function get_description_html( $data ) {
@@ -380,7 +350,7 @@ abstract class WC_Settings_API {
 	/**
 	 * Get custom attributes.
 	 *
-	 * @param  array $data Field data.
+	 * @param  array $data
 	 * @return string
 	 */
 	public function get_custom_attribute_html( $data ) {
@@ -398,8 +368,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Text Input HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -423,13 +393,14 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?> />
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -441,8 +412,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Price Input HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -466,13 +437,14 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<input class="wc_input_price input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $this->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?> />
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<input class="wc_input_price input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( wc_format_localized_price( $this->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -484,8 +456,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Decimal Input HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -509,13 +481,14 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( wc_format_localized_decimal( $this->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?> />
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( wc_format_localized_decimal( $this->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -527,8 +500,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Password Input HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -540,8 +513,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Color Picker Input HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -564,15 +537,16 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<span class="colorpickpreview" style="background:<?php echo esc_attr( $this->get_option( $key ) ); ?>;">&nbsp;</span>
-					<input class="colorpick <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?> />
+					<span class="colorpickpreview" style="background:<?php echo esc_attr( $this->get_option( $key ) ); ?>;"></span>
+					<input class="colorpick <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
 					<div id="colorPickerDiv_<?php echo esc_attr( $field_key ); ?>" class="colorpickdiv" style="z-index: 100; background: #eee; border: 1px solid #ccc; position: absolute; display: none;"></div>
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -584,8 +558,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Textarea HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -609,13 +583,14 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<textarea rows="3" cols="20" class="input-text wide-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?>><?php echo esc_textarea( $this->get_option( $key ) ); ?></textarea>
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<textarea rows="3" cols="20" class="input-text wide-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>><?php echo esc_textarea( $this->get_option( $key ) ); ?></textarea>
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -627,8 +602,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Checkbox HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -656,14 +631,15 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
 					<label for="<?php echo esc_attr( $field_key ); ?>">
-					<input <?php disabled( $data['disabled'], true ); ?> class="<?php echo esc_attr( $data['class'] ); ?>" type="checkbox" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="1" <?php checked( $this->get_option( $key ), 'yes' ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?> /> <?php echo wp_kses_post( $data['label'] ); ?></label><br/>
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<input <?php disabled( $data['disabled'], true ); ?> class="<?php echo esc_attr( $data['class'] ); ?>" type="checkbox" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="1" <?php checked( $this->get_option( $key ), 'yes' ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> /> <?php echo wp_kses_post( $data['label'] ); ?></label><br/>
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -675,8 +651,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Select HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -701,17 +677,18 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?>>
+					<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
 						<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
-							<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( (string) $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
+							<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
 			</td>
 		</tr>
@@ -723,8 +700,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Multiselect HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -751,27 +728,20 @@ abstract class WC_Settings_API {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				<?php echo $this->get_tooltip_html( $data ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<select multiple="multiple" class="multiselect <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>[]" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?>>
+					<select multiple="multiple" class="multiselect <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>[]" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
 						<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
-							<?php if ( is_array( $option_value ) ) : ?>
-								<optgroup label="<?php echo esc_attr( $option_key ); ?>">
-									<?php foreach ( $option_value as $option_key_inner => $option_value_inner ) : ?>
-										<option value="<?php echo esc_attr( $option_key_inner ); ?>" <?php selected( in_array( (string) $option_key_inner, $value, true ), true ); ?>><?php echo esc_attr( $option_value_inner ); ?></option>
-									<?php endforeach; ?>
-								</optgroup>
-							<?php else : ?>
-								<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( in_array( (string) $option_key, $value, true ), true ); ?>><?php echo esc_attr( $option_value ); ?></option>
-							<?php endif; ?>
+							<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( in_array( $option_key, $value ), true ); ?>><?php echo esc_attr( $option_value ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					<?php echo $this->get_description_html( $data ); ?>
 					<?php if ( $data['select_buttons'] ) : ?>
-						<br/><a class="select_all button" href="#"><?php esc_html_e( 'Select all', 'woocommerce' ); ?></a> <a class="select_none button" href="#"><?php esc_html_e( 'Select none', 'woocommerce' ); ?></a>
+						<br/><a class="select_all button" href="#"><?php _e( 'Select all', 'woocommerce' ); ?></a> <a class="select_none button" href="#"><?php _e( 'Select none', 'woocommerce' ); ?></a>
 					<?php endif; ?>
 				</fieldset>
 			</td>
@@ -784,8 +754,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Generate Title HTML.
 	 *
-	 * @param string $key Field key.
-	 * @param array  $data Field data.
+	 * @param  mixed $key
+	 * @param  mixed $data
 	 * @since  1.0.0
 	 * @return string
 	 */
@@ -816,8 +786,8 @@ abstract class WC_Settings_API {
 	 *
 	 * Make sure the data is escaped correctly, etc.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key Field key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_text_field( $key, $value ) {
@@ -830,8 +800,8 @@ abstract class WC_Settings_API {
 	 *
 	 * Make sure the data is escaped correctly, etc.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_price_field( $key, $value ) {
@@ -844,8 +814,8 @@ abstract class WC_Settings_API {
 	 *
 	 * Make sure the data is escaped correctly, etc.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_decimal_field( $key, $value ) {
@@ -856,8 +826,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Validate Password Field. No input sanitization is used to avoid corrupting passwords.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_password_field( $key, $value ) {
@@ -868,8 +838,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Validate Textarea Field.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_textarea_field( $key, $value ) {
@@ -877,12 +847,7 @@ abstract class WC_Settings_API {
 		return wp_kses( trim( stripslashes( $value ) ),
 			array_merge(
 				array(
-					'iframe' => array(
-						'src'   => true,
-						'style' => true,
-						'id'    => true,
-						'class' => true,
-					),
+					'iframe' => array( 'src' => true, 'style' => true, 'id' => true, 'class' => true ),
 				),
 				wp_kses_allowed_html( 'post' )
 			)
@@ -894,8 +859,8 @@ abstract class WC_Settings_API {
 	 *
 	 * If not set, return "no", otherwise return "yes".
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string|null $value Posted Value
 	 * @return string
 	 */
 	public function validate_checkbox_field( $key, $value ) {
@@ -905,8 +870,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Validate Select Field.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string $value Posted Value
 	 * @return string
 	 */
 	public function validate_select_field( $key, $value ) {
@@ -917,8 +882,8 @@ abstract class WC_Settings_API {
 	/**
 	 * Validate Multiselect Field.
 	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string $value Posted Value
 	 * @return string|array
 	 */
 	public function validate_multiselect_field( $key, $value ) {
@@ -927,9 +892,9 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Validate the data on the "Settings" form.
+	 * @deprecated 2.6.0 No longer used
 	 *
-	 * @deprecated 2.6.0 No longer used.
-	 * @param array $form_fields Array of fields.
+	 * @param array $form_fields
 	 */
 	public function validate_settings_fields( $form_fields = array() ) {
 		wc_deprecated_function( 'validate_settings_fields', '2.6' );
@@ -937,9 +902,8 @@ abstract class WC_Settings_API {
 
 	/**
 	 * Format settings if needed.
-	 *
-	 * @deprecated 2.6.0 Unused.
-	 * @param  array $value Value to format.
+	 * @deprecated 2.6.0 Unused
+	 * @param  array $value
 	 * @return array
 	 */
 	public function format_settings( $value ) {

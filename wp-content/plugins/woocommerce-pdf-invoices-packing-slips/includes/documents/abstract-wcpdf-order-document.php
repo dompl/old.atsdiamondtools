@@ -93,7 +93,7 @@ abstract class Order_Document {
 	public function __construct( $order = 0 ) {
 		if ( is_numeric( $order ) && $order > 0 ) {
 			$this->order_id = $order;
-			$this->order = WCX::get_order( $this->order_id );
+			$this->order = WCX::get_order( $order_id );
 		} elseif ( $order instanceof \WC_Order || is_subclass_of( $order, '\WC_Abstract_Order') ) {
 			$this->order_id = WCX_Order::get_id( $order );
 			$this->order = $order;
@@ -101,6 +101,10 @@ abstract class Order_Document {
 
 		// set properties
 		$this->slug = str_replace('-', '_', $this->type);
+
+		// load settings
+		$this->settings = $this->get_settings();
+		$this->enabled = $this->get_setting( 'enabled', false );
 
 		// load data
 		if ( $this->order ) {
@@ -113,48 +117,17 @@ abstract class Order_Document {
 				$wpo_wcpdf->export->template_type = $this->type;
 			}
 		}
-
-		// load settings
-		$this->settings = $this->get_settings();
-		$this->enabled = $this->get_setting( 'enabled', false );
+		
 	}
 
 	public function init_settings() {
-		return;
+		return ;
 	}
 
-	public function get_settings( $latest = false ) {
-		// get most current settings
+	public function get_settings() {
 		$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
 		$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
-		$settings = (array) $document_settings + (array) $common_settings;
-
-		// return only most current if forced
-		if ( $latest == true ) {
-			return $settings;
-		}
-
-		// get historical settings if enabled
-		if ( !empty( $this->order ) && $this->use_historical_settings() == true ) {
-			$order_settings = WCX_Order::get_meta( $this->order, "_wcpdf_{$this->slug}_settings" );
-			// not sure what happens if combining with current settings will have unwanted side effects
-			// like unchecked options being enabled because missing = unchecked in historical - disabled for now
-			if (!empty($order_settings)) {
-				// $settings = (array) $order_settings + (array) $settings;
-				$settings = $order_settings;
-			}
-		}
-		if ( empty( $order_settings ) && !empty( $this->order ) ) {
-			// this is either the first time the document is generated, or historical settings are disabled
-			// in both cases, we store the document settings
-			WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
-		}
-
-		return $settings;
-	}
-
-	public function use_historical_settings() {
-		return apply_filters( 'wpo_wcpdf_document_use_historical_settings', false, $this );
+		return (array) $document_settings + (array) $common_settings;
 	}
 
 	public function get_setting( $key, $default = '' ) {
@@ -201,14 +174,6 @@ abstract class Order_Document {
 	}
 
 	public function init() {
-		// store settings in order
-		if ( !empty( $this->order ) ) {
-			$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
-			$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
-			$settings = (array) $document_settings + (array) $common_settings;
-			WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
-		}
-
 		$this->set_date( current_time( 'timestamp', true ) );
 		do_action( 'wpo_wcpdf_init_document', $this );
 	}
@@ -226,8 +191,6 @@ abstract class Order_Document {
 					WCX_Order::delete_meta_data( $order, "_wcpdf_{$this->slug}_{$key}_formatted" );
 				} elseif ( $key == 'number' ) {
 					WCX_Order::delete_meta_data( $order, "_wcpdf_{$this->slug}_{$key}_data" );
-					// deleting the number = deleting the document, so also delete document settings
-					WCX_Order::delete_meta_data( $order, "_wcpdf_{$this->slug}_settings" );
 				}
 			} else {
 				if ( $key == 'date' ) {
@@ -241,26 +204,6 @@ abstract class Order_Document {
 				}
 			}
 		}
-	}
-
-	public function delete( $order = null ) {
-		$order = empty( $order ) ? $this->order : $order;
-		if ( empty( $order ) ) {
-			return; // nothing to delete
-		}
-
-		$data_to_remove = apply_filters( 'wpo_wcpdf_delete_document_data_keys', array(
-			'settings',
-			'date',
-			'date_formatted',
-			'number',
-			'number_data',
-		), $this );
-		foreach ($data_to_remove as $data_key) {
-			WCX_Order::delete_meta_data( $order, "_wcpdf_{$this->slug}_{$data_key}" );
-		}
-
-		do_action( 'wpo_wcpdf_delete_document', $this );
 	}
 
 	public function exists() {
@@ -370,11 +313,8 @@ abstract class Order_Document {
 			}
 
 			$this->data[ 'date' ] = $datetime;
-		} catch ( \Exception $e ) {
-			wcpdf_log_error( $e->getMessage() );
-		} catch ( \Error $e ) {
-			wcpdf_log_error( $e->getMessage() );
-		}
+		} catch ( Exception $e ) {}
+
 
 	}
 
@@ -408,12 +348,7 @@ abstract class Order_Document {
 	*/
 
 	public function get_number_settings() {
-		if (empty($this->settings)) {
-			$settings = $this->get_settings();
-			$number_settings = isset($settings['number_format'])?$settings['number_format']:array();
-		} else {
-			$number_settings = isset($this->settings['number_format'])?$this->settings['number_format']:array();
-		}
+		$number_settings = isset($this->settings['number_format'])?$this->settings['number_format']:array();
 		return apply_filters( 'wpo_wcpdf_document_number_settings', $number_settings, $this );
 	}
 
@@ -482,12 +417,7 @@ abstract class Order_Document {
 		} else {
 			$text = $default;
 		}
-		// legacy filters
-		if ( in_array( $settings_key, array( 'shop_name', 'shop_address', 'footer', 'extra_1', 'extra_2', 'extra_3' ) ) ) {
-			$text = apply_filters( "wpo_wcpdf_{$settings_key}", $text, $this );
-		}
-
-		return apply_filters( "wpo_wcpdf_{$settings_key}_settings_text", $text, $this );
+		return apply_filters( "wpo_wcpdf_{$settings_key}", $text, $this );
 	}
 
 	/**
@@ -572,7 +502,7 @@ abstract class Order_Document {
 		do_action( 'wpo_wcpdf_after_pdf', $this->get_type(), $this );
 		do_action( 'wpo_wcpdf_pdf_created', $pdf, $this );
 
-		return apply_filters( 'wpo_wcpdf_get_pdf', $pdf, $this );
+		return $pdf;
 	}
 
 	public function get_html( $args = array() ) {
@@ -582,11 +512,7 @@ abstract class Order_Document {
 		);
 		$args = $args + $default_args;
 
-		$html = $this->render_template( $this->locate_template_file( "{$this->type}.php" ), array(
-				'order' => $this->order,
-				'order_id' => $this->order_id,
-			)
-		);
+		$html = $this->render_template( $this->locate_template_file( "{$this->type}.php" ) );
 		if ($args['wrap_html_content']) {
 			$html = $this->wrap_html_content( $html );
 		}

@@ -4,14 +4,18 @@
  *
  * Extends Exception to provide additional data.
  *
- * @package WooCommerce\Classes
- * @since   3.0.0
+ * @author   WooThemes
+ * @category Core
+ * @package  WooCommerce
+ * @since    3.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
- * Data exception class.
+ * WC_Data_Exception class.
  */
 class WC_Data_Exception extends Exception {
 

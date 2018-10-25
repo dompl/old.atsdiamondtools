@@ -5,11 +5,11 @@
  * Description: Easily create custom order statuses and trigger custom emails when order status changes
  * Author: SkyVerge
  * Author URI: http://www.woocommerce.com
- * Version: 1.9.2
+ * Version: 1.8.0
  * Text Domain: woocommerce-order-status-manager
  * Domain Path: /i18n/languages/
  *
- * Copyright: (c) 2015-2018, SkyVerge, Inc. (info@skyverge.com)
+ * Copyright: (c) 2015-2017, SkyVerge, Inc. (info@skyverge.com)
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -17,12 +17,12 @@
  * @package   WC-Order-Status-Manager
  * @author    SkyVerge
  * @category  Integration
- * @copyright Copyright (c) 2015-2018, SkyVerge, Inc.
+ * @copyright Copyright (c) 2015-2017, SkyVerge, Inc.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  * Woo: 588398:51fd9ab45394b4cad5a0ebf58d012342
  * WC requires at least: 2.6.14
- * WC tested up to: 3.4.0
+ * WC tested up to: 3.2.0
  */
 
 defined( 'ABSPATH' ) or exit;
@@ -45,9 +45,9 @@ if ( ! class_exists( 'SV_WC_Framework_Bootstrap' ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'lib/skyverge/woocommerce/class-sv-wc-framework-bootstrap.php' );
 }
 
-SV_WC_Framework_Bootstrap::instance()->register_plugin( '4.9.0', __( 'WooCommerce Order Status Manager', 'woocommerce-order-status-manager' ), __FILE__, 'init_woocommerce_order_status_manager', array(
+SV_WC_Framework_Bootstrap::instance()->register_plugin( '4.8.0', __( 'WooCommerce Order Status Manager', 'woocommerce-order-status-manager' ), __FILE__, 'init_woocommerce_order_status_manager', array(
 	'minimum_wc_version'   => '2.6.14',
-	'minimum_wp_version'   => '4.4',
+	'minimum_wp_version'   => '4.1',
 	'backwards_compatible' => '4.4',
 ) );
 
@@ -67,7 +67,7 @@ class WC_Order_Status_Manager extends SV_WC_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '1.9.2';
+	const VERSION = '1.8.0';
 
 	/** @var WC_Order_Status_Manager single instance of this plugin */
 	protected static $instance;

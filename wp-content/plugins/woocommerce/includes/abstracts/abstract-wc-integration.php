@@ -1,14 +1,4 @@
 <?php
-/**
- * Abstract Integration class
- *
- * Extension of the Settings API which in turn gets extended
- * by individual integrations to offer additional functionality.
- *
- * @class       WC_Settings_API
- * @version     2.6.0
- * @package     WooCommerce/Abstracts
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,33 +13,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @extends  WC_Settings_API
  * @version  2.6.0
  * @package  WooCommerce/Abstracts
+ * @category Abstract Class
+ * @author   WooThemes
  */
 abstract class WC_Integration extends WC_Settings_API {
 
 	/**
-	 * Yes or no based on whether the integration is enabled.
-	 *
+	 * yes or no based on whether the integration is enabled.
 	 * @var string
 	 */
 	public $enabled = 'yes';
 
 	/**
 	 * Integration title.
-	 *
 	 * @var string
 	 */
 	public $method_title = '';
 
 	/**
 	 * Integration description.
-	 *
 	 * @var string
 	 */
 	public $method_description = '';
 
 	/**
 	 * Return the title for admin screens.
-	 *
 	 * @return string
 	 */
 	public function get_method_title() {
@@ -58,7 +46,6 @@ abstract class WC_Integration extends WC_Settings_API {
 
 	/**
 	 * Return the description for admin screens.
-	 *
 	 * @return string
 	 */
 	public function get_method_description() {

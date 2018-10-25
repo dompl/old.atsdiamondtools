@@ -66,13 +66,14 @@ class WC_REST_Reports_V1_Controller extends WC_REST_Controller {
 	}
 
 	/**
-	 * Get reports list.
+	 * Get all reports.
 	 *
-	 * @since 3.5.0
-	 * @return array
+	 * @param WP_REST_Request $request
+	 * @return array|WP_Error
 	 */
-	protected function get_reports() {
-		return array(
+	public function get_items( $request ) {
+		$data    = array();
+		$reports = array(
 			array(
 				'slug'        => 'sales',
 				'description' => __( 'List of sales reports.', 'woocommerce' ),
@@ -82,17 +83,6 @@ class WC_REST_Reports_V1_Controller extends WC_REST_Controller {
 				'description' => __( 'List of top sellers products.', 'woocommerce' ),
 			),
 		);
-	}
-
-	/**
-	 * Get all reports.
-	 *
-	 * @param WP_REST_Request $request
-	 * @return array|WP_Error
-	 */
-	public function get_items( $request ) {
-		$data    = array();
-		$reports = $this->get_reports();
 
 		foreach ( $reports as $report ) {
 			$item   = $this->prepare_item_for_response( (object) $report, $request );

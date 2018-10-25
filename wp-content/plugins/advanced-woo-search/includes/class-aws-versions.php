@@ -118,103 +118,6 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
-                if ( version_compare( $current_version, '1.41', '<' ) ) {
-
-                    if ( AWS_Helpers::is_index_table_has_terms() == 'no_terms' ) {
-
-                        global $wpdb;
-                        $table_name =  $wpdb->prefix . AWS_INDEX_TABLE_NAME;
-
-                        $wpdb->query("
-                            ALTER TABLE {$table_name}
-                            ADD COLUMN `term_id` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0
-                        ");
-
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.42', '<' ) ) {
-
-                    $settings = get_option( 'aws_settings' );
-
-                    if ( $settings ) {
-                        if ( ! isset( $settings['show_more'] ) ) {
-                            $settings['show_more'] = 'false';
-                            update_option( 'aws_settings', $settings );
-                        }
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.43', '<' ) ) {
-
-                    if ( ! AWS_Helpers::is_table_not_exist() ) {
-
-                        global $wpdb;
-                        $table_name =  $wpdb->prefix . AWS_INDEX_TABLE_NAME;
-
-                        $wpdb->query("
-                            ALTER TABLE {$table_name}
-                            MODIFY term_source varchar(50);
-                        ");
-
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.47', '<' ) ) {
-
-                    $settings = get_option( 'aws_settings' );
-
-                    if ( $settings ) {
-                        if ( ! isset( $settings['seamless'] ) ) {
-                            $settings['seamless'] = 'false';
-                            update_option( 'aws_settings', $settings );
-                        }
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.48', '<' ) ) {
-
-                    $settings = get_option( 'aws_settings' );
-
-                    if ( $settings ) {
-                        if ( ! isset( $settings['show_clear'] ) ) {
-                            $settings['show_clear'] = 'false';
-                            update_option( 'aws_settings', $settings );
-                        }
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.49', '<' ) ) {
-
-                    $settings = get_option( 'aws_settings' );
-
-                    if ( $settings ) {
-                        if ( ! isset( $settings['show_more_text'] ) ) {
-                            $settings['show_more_text'] = __('View all results', 'aws');
-                            update_option( 'aws_settings', $settings );
-                        }
-                    }
-
-                }
-
-                if ( version_compare( $current_version, '1.53', '<' ) ) {
-
-                    $settings = get_option( 'aws_settings' );
-
-                    if ( $settings ) {
-                        if ( ! isset( $settings['show_featured'] ) ) {
-                            $settings['show_featured'] = 'false';
-                            update_option( 'aws_settings', $settings );
-                        }
-                    }
-
-                }
-
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );
@@ -226,7 +129,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
          */
         public function admin_notice_no_index() { ?>
             <div class="updated notice is-dismissible">
-                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to plugin setting page and start the indexing of your products. %s', 'aws' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'aws' ).'</a>'  ); ?></p>
+                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to plugin setting page and start the indexing of your products. %s', 'aws' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Reindex Table', 'aws' ).'</a>'  ); ?></p>
             </div>
         <?php }
 
@@ -235,7 +138,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
          */
         public function admin_notice_reindex() { ?>
             <div class="updated notice is-dismissible">
-                <p><?php printf( esc_html__( 'Advanced Woo Search: Please reindex table for proper work of new plugin features. %s', 'aws' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'aws' ).'</a>'  ); ?></p>
+                <p><?php printf( esc_html__( 'Advanced Woo Search: Please reindex table for proper work of new plugin features. %s', 'aws' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Reindex Table', 'aws' ).'</a>'  ); ?></p>
             </div>
         <?php }
 

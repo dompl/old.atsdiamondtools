@@ -114,20 +114,11 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * See also filter_billing_fields below.
 	 *
 	 * @since 1.2.1
-	 * @since 1.5.4 Check to make sure PPEC is even enable before continuing.
 	 * @param $fields array
 	 *
 	 * @return array
 	 */
 	public function filter_default_address_fields( $fields ) {
-		if ( 'yes' !== wc_gateway_ppec()->settings->enabled ) {
-			return $fields;
-		}
-
-		if ( ! apply_filters( 'woocommerce_paypal_express_checkout_address_not_required', ! WC_Gateway_PPEC_Plugin::needs_shipping() ) ) {
-			return $fields;
-		}
-
 		if ( method_exists( WC()->cart, 'needs_shipping' ) && ! WC()->cart->needs_shipping() ) {
 			$not_required_fields = array( 'address_1', 'city', 'postcode', 'country' );
 			foreach ( $not_required_fields as $not_required_field ) {
@@ -155,16 +146,12 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * This is one of two places we need to filter fields. See also filter_default_address_fields above.
 	 *
 	 * @since 1.2.0
-	 * @since 1.5.4 Check to make sure PPEC is even enable before continuing.
+	 * @version 1.2.1
 	 * @param $billing_fields array
 	 *
 	 * @return array
 	 */
 	public function filter_billing_fields( $billing_fields ) {
-		if ( 'yes' !== wc_gateway_ppec()->settings->enabled ) {
-			return $billing_fields;
-		}
-
 		$require_phone_number = wc_gateway_ppec()->settings->require_phone_number;
 
 		if ( array_key_exists( 'billing_phone', $billing_fields ) ) {
@@ -416,7 +403,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	}
 
 	/**
-	 * Checks data is correctly set when returning from PayPal Checkout
+	 * Checks data is correctly set when returning from PayPal Express Checkout
 	 */
 	public function maybe_return_from_paypal() {
 		if ( empty( $_GET['woo-paypal-return'] ) || empty( $_GET['token'] ) || empty( $_GET['PayerID'] ) ) {
@@ -437,9 +424,6 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$session->checkout_completed = true;
 		$session->payer_id           = $payer_id;
 		$session->token              = $token;
-
-		// Update customer addresses here from PayPal selection so they can be used to calculate local taxes.
-		$this->update_customer_addresses_from_paypal( $token );
 
 		WC()->session->set( 'paypal', $session );
 
@@ -477,48 +461,6 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			wp_safe_redirect( wc_get_page_permalink( 'cart' ) );
 			exit;
 		}
-	}
-
-	/**
-	 * Updates shipping and billing addresses.
-	 *
-	 * Retrieves shipping and billing addresses from PayPal session.
-	 * This should be done prior to generating order confirmation so
-	 * local taxes can be calculated and displayed to customer.
-	 *
-	 * @since 1.6.2.
-	 *
-	 * @param string $token Token
-	 *
-	 * @return void
-	 */
-	private function update_customer_addresses_from_paypal( $token ) {
-		// Get the buyer details from PayPal.
-		try {
-			$checkout_details = $this->get_checkout_details( $token );
-		} catch ( PayPal_API_Exception $e ) {
-			wc_add_notice( $e->getMessage(), 'error' );
-			return;
-		}
-		$shipping_details = $this->get_mapped_shipping_address( $checkout_details );
-		$billing_details  = $this->get_mapped_billing_address( $checkout_details );
-
-		$customer = WC()->customer;
-
-		// Update billing/shipping addresses.
-		$customer->set_billing_address( $billing_details['address_1'] );
-		$customer->set_billing_address_2( $billing_details['address_2'] );
-		$customer->set_billing_city( $billing_details['city'] );
-		$customer->set_billing_postcode( $billing_details['postcode'] );
-		$customer->set_billing_state( $billing_details['state'] );
-		$customer->set_billing_country( $billing_details['country'] );
-
-		$customer->set_shipping_address( $shipping_details['address_1'] );
-		$customer->set_shipping_address_2( $shipping_details['address_2'] );
-		$customer->set_shipping_city( $shipping_details['city'] );
-		$customer->set_shipping_postcode( $shipping_details['postcode'] );
-		$customer->set_shipping_state( $shipping_details['state'] );
-		$customer->set_shipping_country( $shipping_details['country'] );
 	}
 
 	/**
@@ -698,7 +640,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 			WC()->session->paypal = new WC_Gateway_PPEC_Session_Data( $session_data_args );
 
-			return $settings->get_paypal_redirect_url( $response['TOKEN'], true, $session_data_args['use_paypal_credit'] );
+			return $settings->get_paypal_redirect_url( $response['TOKEN'], false, $session_data_args['use_paypal_credit'] );
 		} else {
 			throw new PayPal_API_Exception( $response );
 		}
@@ -759,10 +701,6 @@ class WC_Gateway_PPEC_Checkout_Handler {
 	 * @return bool Returns true if buyer checkout from checkout page
 	 */
 	public function is_started_from_checkout_page() {
-		if ( ! is_object( WC()->session ) ) {
-			return false;
-		}
-
 		$session = WC()->session->get( 'paypal' );
 
 		return (

@@ -2,11 +2,15 @@
 /**
  * Display notices in admin
  *
- * @package WooCommerce\Admin
- * @version 3.4.0
+ * @author      WooThemes
+ * @category    Admin
+ * @package     WooCommerce/Admin
+ * @version     2.3.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WC_Admin_Notices Class.
@@ -15,26 +19,22 @@ class WC_Admin_Notices {
 
 	/**
 	 * Stores notices.
-	 *
 	 * @var array
 	 */
 	private static $notices = array();
 
 	/**
 	 * Array of notices - name => callback.
-	 *
 	 * @var array
 	 */
 	private static $core_notices = array(
-		'install'                 => 'install_notice',
-		'update'                  => 'update_notice',
-		'template_files'          => 'template_file_check_notice',
-		'legacy_shipping'         => 'legacy_shipping_notice',
-		'no_shipping_methods'     => 'no_shipping_methods_notice',
-		'simplify_commerce'       => 'simplify_commerce_notice',
-		'regenerating_thumbnails' => 'regenerating_thumbnails_notice',
-		'no_secure_connection'    => 'secure_connection_notice',
-		'wootenberg'              => 'wootenberg_feature_plugin_notice',
+		'install'             => 'install_notice',
+		'update'              => 'update_notice',
+		'template_files'      => 'template_file_check_notice',
+		'theme_support'       => 'theme_check_notice',
+		'legacy_shipping'     => 'legacy_shipping_notice',
+		'no_shipping_methods' => 'no_shipping_methods_notice',
+		'simplify_commerce'   => 'simplify_commerce_notice',
 	);
 
 	/**
@@ -50,7 +50,6 @@ class WC_Admin_Notices {
 
 		if ( current_user_can( 'manage_woocommerce' ) ) {
 			add_action( 'admin_print_styles', array( __CLASS__, 'add_notices' ) );
-			add_action( 'activate_gutenberg/gutenberg.php', array( __CLASS__, 'add_wootenberg_feature_plugin_notice_on_gutenberg_activate' ) );
 		}
 	}
 
@@ -63,7 +62,6 @@ class WC_Admin_Notices {
 
 	/**
 	 * Get notices
-	 *
 	 * @return array
 	 */
 	public static function get_notices() {
@@ -81,26 +79,23 @@ class WC_Admin_Notices {
 	 * Reset notices for themes when switched or a new version of WC is installed.
 	 */
 	public static function reset_admin_notices() {
+		if ( ! current_theme_supports( 'woocommerce' ) && ! in_array( get_option( 'template' ), wc_get_core_supported_themes() ) ) {
+			self::add_notice( 'theme_support' );
+		}
+
 		$simplify_options = get_option( 'woocommerce_simplify_commerce_settings', array() );
 		$location         = wc_get_base_location();
-		$shop_page        = 0 < wc_get_page_id( 'shop' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : get_home_url();
 
-		if ( ! class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) && ! empty( $simplify_options['enabled'] ) && 'yes' === $simplify_options['enabled'] && in_array( $location['country'], apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ), true ) ) {
+		if ( ! class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) && ! empty( $simplify_options['enabled'] ) && 'yes' === $simplify_options['enabled'] && in_array( $location['country'], apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ) ) ) {
 			WC_Admin_Notices::add_notice( 'simplify_commerce' );
 		}
 
-		if ( ! is_ssl() || 'https' !== substr( $shop_page, 0, 5 ) ) {
-			WC_Admin_Notices::add_notice( 'no_secure_connection' );
-		}
-
-		WC_Admin_Notices::add_wootenberg_feature_plugin_notice();
 		self::add_notice( 'template_files' );
 	}
 
 	/**
 	 * Show a notice.
-	 *
-	 * @param string $name Notice name.
+	 * @param string $name
 	 */
 	public static function add_notice( $name ) {
 		self::$notices = array_unique( array_merge( self::get_notices(), array( $name ) ) );
@@ -108,8 +103,7 @@ class WC_Admin_Notices {
 
 	/**
 	 * Remove a notice from being displayed.
-	 *
-	 * @param string $name Notice name.
+	 * @param  string $name
 	 */
 	public static function remove_notice( $name ) {
 		self::$notices = array_diff( self::get_notices(), array( $name ) );
@@ -118,33 +112,28 @@ class WC_Admin_Notices {
 
 	/**
 	 * See if a notice is being shown.
-	 *
-	 * @param  string $name Notice name.
+	 * @param  string  $name
 	 * @return boolean
 	 */
 	public static function has_notice( $name ) {
-		return in_array( $name, self::get_notices(), true );
+		return in_array( $name, self::get_notices() );
 	}
 
 	/**
 	 * Hide a notice if the GET variable is set.
 	 */
 	public static function hide_notices() {
-		if ( isset( $_GET['wc-hide-notice'] ) && isset( $_GET['_wc_notice_nonce'] ) ) { // WPCS: input var ok, CSRF ok.
-			if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['_wc_notice_nonce'] ) ), 'woocommerce_hide_notices_nonce' ) ) { // WPCS: input var ok, CSRF ok.
-				wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
+		if ( isset( $_GET['wc-hide-notice'] ) && isset( $_GET['_wc_notice_nonce'] ) ) {
+			if ( ! wp_verify_nonce( $_GET['_wc_notice_nonce'], 'woocommerce_hide_notices_nonce' ) ) {
+				wp_die( __( 'Action failed. Please refresh the page and retry.', 'woocommerce' ) );
 			}
 
 			if ( ! current_user_can( 'manage_woocommerce' ) ) {
-				wp_die( esc_html__( 'You don&#8217;t have permission to do this.', 'woocommerce' ) );
+				wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce' ) );
 			}
 
-			$hide_notice = sanitize_text_field( wp_unslash( $_GET['wc-hide-notice'] ) ); // WPCS: input var ok, CSRF ok.
-
+			$hide_notice = sanitize_text_field( $_GET['wc-hide-notice'] );
 			self::remove_notice( $hide_notice );
-
-			update_user_meta( get_current_user_id(), 'dismissed_' . $hide_notice . '_notice', true );
-
 			do_action( 'woocommerce_hide_' . $hide_notice . '_notice' );
 		}
 	}
@@ -155,41 +144,26 @@ class WC_Admin_Notices {
 	public static function add_notices() {
 		$notices = self::get_notices();
 
-		if ( empty( $notices ) ) {
-			return;
-		}
+		if ( ! empty( $notices ) ) {
+			wp_enqueue_style( 'woocommerce-activation', plugins_url( '/assets/css/activation.css', WC_PLUGIN_FILE ), array(), WC_VERSION );
 
-		$screen          = get_current_screen();
-		$screen_id       = $screen ? $screen->id : '';
-		$show_on_screens = array(
-			'dashboard',
-			'plugins',
-		);
+			// Add RTL support
+			wp_style_add_data( 'woocommerce-activation', 'rtl', 'replace' );
 
-		// Notices should only show on WooCommerce screens, the main dashboard, and on the plugins screen.
-		if ( ! in_array( $screen_id, wc_get_screen_ids(), true ) && ! in_array( $screen_id, $show_on_screens, true ) ) {
-			return;
-		}
-
-		wp_enqueue_style( 'woocommerce-activation', plugins_url( '/assets/css/activation.css', WC_PLUGIN_FILE ), array(), WC_VERSION );
-
-		// Add RTL support.
-		wp_style_add_data( 'woocommerce-activation', 'rtl', 'replace' );
-
-		foreach ( $notices as $notice ) {
-			if ( ! empty( self::$core_notices[ $notice ] ) && apply_filters( 'woocommerce_show_admin_notice', true, $notice ) ) {
-				add_action( 'admin_notices', array( __CLASS__, self::$core_notices[ $notice ] ) );
-			} else {
-				add_action( 'admin_notices', array( __CLASS__, 'output_custom_notices' ) );
+			foreach ( $notices as $notice ) {
+				if ( ! empty( self::$core_notices[ $notice ] ) && apply_filters( 'woocommerce_show_admin_notice', true, $notice ) ) {
+					add_action( 'admin_notices', array( __CLASS__, self::$core_notices[ $notice ] ) );
+				} else {
+					add_action( 'admin_notices', array( __CLASS__, 'output_custom_notices' ) );
+				}
 			}
 		}
 	}
 
 	/**
 	 * Add a custom notice.
-	 *
-	 * @param string $name        Notice name.
-	 * @param string $notice_html Notice HTML.
+	 * @param string $name
+	 * @param string $notice_html
 	 */
 	public static function add_custom_notice( $name, $notice_html ) {
 		self::add_notice( $name );
@@ -208,7 +182,7 @@ class WC_Admin_Notices {
 					$notice_html = get_option( 'woocommerce_admin_notice_' . $notice );
 
 					if ( $notice_html ) {
-						include dirname( __FILE__ ) . '/views/html-notice-custom.php';
+						include( 'views/html-notice-custom.php' );
 					}
 				}
 			}
@@ -221,13 +195,13 @@ class WC_Admin_Notices {
 	public static function update_notice() {
 		if ( version_compare( get_option( 'woocommerce_db_version' ), WC_VERSION, '<' ) ) {
 			$updater = new WC_Background_Updater();
-			if ( $updater->is_updating() || ! empty( $_GET['do_update_woocommerce'] ) ) { // WPCS: input var ok, CSRF ok.
-				include dirname( __FILE__ ) . '/views/html-notice-updating.php';
+			if ( $updater->is_updating() || ! empty( $_GET['do_update_woocommerce'] ) ) {
+				include( 'views/html-notice-updating.php' );
 			} else {
-				include dirname( __FILE__ ) . '/views/html-notice-update.php';
+				include( 'views/html-notice-update.php' );
 			}
 		} else {
-			include dirname( __FILE__ ) . '/views/html-notice-updated.php';
+			include( 'views/html-notice-updated.php' );
 		}
 	}
 
@@ -235,19 +209,17 @@ class WC_Admin_Notices {
 	 * If we have just installed, show a message with the install pages button.
 	 */
 	public static function install_notice() {
-		include dirname( __FILE__ ) . '/views/html-notice-install.php';
+		include( 'views/html-notice-install.php' );
 	}
 
 	/**
 	 * Show the Theme Check notice.
-	 *
-	 * @todo Remove this next major release.
 	 */
 	public static function theme_check_notice() {
-		wc_deprecated_function( 'WC_Admin_Notices::theme_check_notice', '3.3.0' );
-
-		if ( ! current_theme_supports( 'woocommerce' ) ) {
-			include dirname( __FILE__ ) . '/views/html-notice-theme-support.php';
+		if ( ! current_theme_supports( 'woocommerce' ) && ! in_array( get_option( 'template' ), wc_get_core_supported_themes() ) ) {
+			include( 'views/html-notice-theme-support.php' );
+		} else {
+			self::remove_notice( 'theme_support' );
 		}
 	}
 
@@ -283,7 +255,7 @@ class WC_Admin_Notices {
 		}
 
 		if ( $outdated ) {
-			include dirname( __FILE__ ) . '/views/html-notice-template-check.php';
+			include( 'views/html-notice-template-check.php' );
 		} else {
 			self::remove_notice( 'template_files' );
 		}
@@ -304,7 +276,7 @@ class WC_Admin_Notices {
 		}
 
 		if ( $enabled ) {
-			include dirname( __FILE__ ) . '/views/html-notice-legacy-shipping.php';
+			include( 'views/html-notice-legacy-shipping.php' );
 		} else {
 			self::remove_notice( 'template_files' );
 		}
@@ -314,12 +286,12 @@ class WC_Admin_Notices {
 	 * No shipping methods.
 	 */
 	public static function no_shipping_methods_notice() {
-		if ( wc_shipping_enabled() && ( empty( $_GET['page'] ) || empty( $_GET['tab'] ) || 'wc-settings' !== $_GET['page'] || 'shipping' !== $_GET['tab'] ) ) { // WPCS: input var ok, CSRF ok.
+		if ( wc_shipping_enabled() && ( empty( $_GET['page'] ) || empty( $_GET['tab'] ) || 'wc-settings' !== $_GET['page'] || 'shipping' !== $_GET['tab'] ) ) {
 			$product_count = wp_count_posts( 'product' );
 			$method_count  = wc_get_shipping_method_count();
 
 			if ( $product_count->publish > 0 && 0 === $method_count ) {
-				include dirname( __FILE__ ) . '/views/html-notice-no-shipping-methods.php';
+				include( 'views/html-notice-no-shipping-methods.php' );
 			}
 
 			if ( $method_count > 0 ) {
@@ -334,67 +306,13 @@ class WC_Admin_Notices {
 	public static function simplify_commerce_notice() {
 		$location = wc_get_base_location();
 
-		if ( class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) || ! in_array( $location['country'], apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ), true ) ) {
+		if ( class_exists( 'WC_Gateway_Simplify_Commerce_Loader' ) || ! in_array( $location['country'], apply_filters( 'woocommerce_gateway_simplify_commerce_supported_countries', array( 'US', 'IE' ) ) ) ) {
 			self::remove_notice( 'simplify_commerce' );
 			return;
 		}
-		if ( empty( $_GET['action'] ) ) { // WPCS: input var ok, CSRF ok.
-			include dirname( __FILE__ ) . '/views/html-notice-simplify-commerce.php';
+		if ( empty( $_GET['action'] ) ) {
+			include( 'views/html-notice-simplify-commerce.php' );
 		}
-	}
-
-	/**
-	 * Notice shown when regenerating thumbnails background process is running.
-	 */
-	public static function regenerating_thumbnails_notice() {
-		include dirname( __FILE__ ) . '/views/html-notice-regenerating-thumbnails.php';
-	}
-
-	/**
-	 * Notice about secure connection.
-	 */
-	public static function secure_connection_notice() {
-		if ( get_user_meta( get_current_user_id(), 'dismissed_no_secure_connection_notice', true ) ) {
-			return;
-		}
-
-		include dirname( __FILE__ ) . '/views/html-notice-secure-connection.php';
-	}
-
-	/**
-	 * If Gutenberg is active, tell people about the Products block feature plugin.
-	 *
-	 * @since 3.4.3
-	 * @todo Remove this notice and associated code once the feature plugin has been merged into core.
-	 */
-	public static function add_wootenberg_feature_plugin_notice() {
-		if ( is_plugin_active( 'gutenberg/gutenberg.php' ) && ! is_plugin_active( 'woo-gutenberg-products-block/woocommerce-gutenberg-products-block.php' ) ) {
-			self::add_notice( 'wootenberg' );
-		}
-	}
-
-	/**
-	 * Tell people about the Products block feature plugin when they activate Gutenberg.
-	 *
-	 * @since 3.4.3
-	 * @todo Remove this notice and associated code once the feature plugin has been merged into core.
-	 */
-	public static function add_wootenberg_feature_plugin_notice_on_gutenberg_activate() {
-		if ( ! is_plugin_active( 'woo-gutenberg-products-block/woocommerce-gutenberg-products-block.php' ) ) {
-			self::add_notice( 'wootenberg' );
-		}
-	}
-
-	/**
-	 * Notice about trying the Products block.
-	 */
-	public static function wootenberg_feature_plugin_notice() {
-		if ( get_user_meta( get_current_user_id(), 'dismissed_wootenberg_notice', true ) || is_plugin_active( 'woo-gutenberg-products-block/woocommerce-gutenberg-products-block.php' ) ) {
-			self::remove_notice( 'wootenberg' );
-			return;
-		}
-
-		include dirname( __FILE__ ) . '/views/html-notice-wootenberg.php';
 	}
 }
 

@@ -77,7 +77,8 @@ function wc_gateway_ppec_log( $message ) {
  */
 function wc_gateway_ppec_is_credit_supported() {
 	$base = wc_get_base_location();
-	return 'US' === $base['country'] && 'USD' === get_woocommerce_currency();
+
+	return 'US' === $base['country'];
 }
 
 /**

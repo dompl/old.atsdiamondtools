@@ -87,13 +87,12 @@ jQuery( function( $ ) {
 							delay:       250,
 							data:        function( params ) {
 								return {
-									term         : params.term,
-									action       : $( this ).data( 'action' ) || 'woocommerce_json_search_products_and_variations',
-									security     : wc_enhanced_select_params.search_products_nonce,
-									exclude      : $( this ).data( 'exclude' ),
-									include      : $( this ).data( 'include' ),
-									limit        : $( this ).data( 'limit' ),
-									display_stock: $( this ).data( 'display_stock' )
+									term:     params.term,
+									action:   $( this ).data( 'action' ) || 'woocommerce_json_search_products_and_variations',
+									security: wc_enhanced_select_params.search_products_nonce,
+									exclude:  $( this ).data( 'exclude' ),
+									include:  $( this ).data( 'include' ),
+									limit:    $( this ).data( 'limit' )
 								};
 							},
 							processResults: function( data ) {

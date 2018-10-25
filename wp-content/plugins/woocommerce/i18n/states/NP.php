@@ -2,13 +2,16 @@
 /**
  * Nepal states (Zones)
  *
- * @package WooCommerce/i18n
- * @version 2.2.5
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.2.5
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['NP'] = array(
 	'BAG' => __( 'Bagmati', 'woocommerce' ),

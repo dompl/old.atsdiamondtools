@@ -1475,14 +1475,8 @@ S2.define('select2/selection/base',[
         }
 
         var $element = $this.data('element');
-        $element.select2('close');
 
-        // Remove any focus when dropdown is closed by clicking outside the select area.
-        // Timeout of 1 required for close to finish wrapping up.
-        setTimeout(function(){
-         $this.find('*:focus').blur();
-         $target.focus();
-        }, 1);
+        $element.select2('close');
       });
     });
   };
@@ -1681,11 +1675,6 @@ S2.define('select2/selection/multiple',[
         container.open();
       }
     });
-
-    // Focus on the search field when the container is focused instead of the main container.
-    container.on( 'focus', function(){
-      self.focusOnSearch();
-    });
   };
 
   MultipleSelection.prototype.clear = function () {
@@ -1711,25 +1700,8 @@ S2.define('select2/selection/multiple',[
     return $container;
   };
 
-  /**
-   * Focus on the search field instead of the main multiselect container.
-   */
-  MultipleSelection.prototype.focusOnSearch = function() {
-    var self = this;
-
-    if ('undefined' !== typeof self.$search) {
-      // Needs 1 ms delay because of other 1 ms setTimeouts when rendering.
-      setTimeout(function(){
-        // Prevent the dropdown opening again when focused from this.
-        // This gets reset automatically when focus is triggered.
-        self._keyUpPrevented = true;
-
-        self.$search.focus();
-      }, 1);
-    }
-  }
-
   MultipleSelection.prototype.update = function (data) {
+    var self = this;
     this.clear();
 
     if (data.length === 0) {
@@ -1742,10 +1714,7 @@ S2.define('select2/selection/multiple',[
       var selection = data[d];
 
       var $selection = this.selectionContainer();
-      var formatted = this.display(selection, $selection);
-      if ('string' === typeof formatted) {
-        formatted = formatted.trim();
-      }
+      var formatted = this.display(selection, $selection).trim();
 
       $selection.append(formatted);
       $selection.prop('title', selection.title || selection.text);
@@ -1758,6 +1727,14 @@ S2.define('select2/selection/multiple',[
     var $rendered = this.$selection.find('.select2-selection__rendered');
 
     Utils.appendMany($rendered, $selections);
+
+    // Return cursor to search field after updating.
+    // Needs 1 ms delay because of other 1 ms setTimeouts when rendering.
+    if ('undefined' !== typeof this.$search) {
+      setTimeout(function(){
+        self.$search.focus();
+      }, 1);
+    }
   };
 
   return MultipleSelection;
@@ -2003,9 +1980,6 @@ S2.define('select2/selection/search',[
 
           evt.preventDefault();
         }
-      } else if (evt.which === KEYS.ENTER) {
-        container.open();
-        evt.preventDefault();
       }
     });
 
@@ -5465,11 +5439,12 @@ S2.define('select2/core',[
     $(document).on('keydown', function (evt) {
       var key = evt.which;
       if (self.isOpen()) {
-        if (key === KEYS.ESC || (key === KEYS.UP && evt.altKey)) {
+        if (key === KEYS.ESC || key === KEYS.TAB ||
+            (key === KEYS.UP && evt.altKey)) {
           self.close();
 
           evt.preventDefault();
-        } else if (key === KEYS.ENTER || key === KEYS.TAB) {
+        } else if (key === KEYS.ENTER) {
           self.trigger('results:select', {});
 
           evt.preventDefault();
@@ -5505,9 +5480,18 @@ S2.define('select2/core',[
               self.focusOnActiveElement();
           }, 1000);
         }
+
+        // If focus is in the search field, select the current active element on Enter key.
+        $searchField.on('keydown', function (evt) {
+          if (evt.which === KEYS.ENTER) {
+            self.trigger('results:select', {});
+            evt.preventDefault();
+          }
+        });
+
       } else if (self.hasFocus()) {
         if (key === KEYS.ENTER || key === KEYS.SPACE ||
-            key === KEYS.DOWN) {
+            (key === KEYS.DOWN && evt.altKey)) {
           self.open();
           evt.preventDefault();
         }
@@ -5517,7 +5501,7 @@ S2.define('select2/core',[
 
   Select2.prototype.focusOnActiveElement = function () {
     // Don't mess with the focus on touchscreens because it causes havoc with on-screen keyboards.
-    if (this.isOpen() && ! Utils.isTouchscreen()) {
+    if (! Utils.isTouchscreen()) {
       this.$results.find('li.select2-results__option--highlighted').focus();
     }
   };

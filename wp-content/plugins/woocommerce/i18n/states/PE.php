@@ -2,13 +2,16 @@
 /**
  * Peru states
  *
- * @package WooCommerce/i18n
- * @version 2.1.0
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.1.0
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['PE'] = array(
 	'CAL' => __( 'El Callao', 'woocommerce' ),

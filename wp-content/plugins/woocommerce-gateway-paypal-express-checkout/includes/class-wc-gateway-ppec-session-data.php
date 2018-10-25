@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * PayPal Checkout session wrapper.
+ * PayPal Express Checkout session wrapper.
  */
 class WC_Gateway_PPEC_Session_Data {
 

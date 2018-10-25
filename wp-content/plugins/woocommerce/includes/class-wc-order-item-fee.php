@@ -1,19 +1,18 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * Order Line Item (fee)
+ * Order Line Item (fee).
  *
  * Fee is an amount of money charged for a particular piece of work
  * or for a particular right or service, and not supposed to be negative.
  *
- * @package WooCommerce/Classes
- * @version 3.0.0
- * @since   3.0.0
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Order item fee.
+ * @version     3.0.0
+ * @since       3.0.0
+ * @package     WooCommerce/Classes
+ * @author      WooThemes
  */
 class WC_Order_Item_Fee extends WC_Order_Item {
 
@@ -53,7 +52,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 			if ( 'taxable' !== $item->get_tax_status() ) {
 				$costs['non-taxable'] += $item->get_total();
 			} elseif ( 'inherit' === $item->get_tax_class() ) {
-				$inherit_class            = reset( $order_item_tax_classes );
+				$inherit_class = reset( $order_item_tax_classes );
 				$costs[ $inherit_class ] += $item->get_total();
 			} else {
 				$costs[ $item->get_tax_class() ] += $item->get_total();
@@ -77,8 +76,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 		if ( 0 <= $this->get_total() ) {
 			return parent::calculate_taxes( $calculate_tax_for );
 		}
-
-		if ( wc_tax_enabled() && $this->get_order() ) {
+		if ( wc_tax_enabled() && ( $order = $this->get_order() ) ) {
 			// Apportion taxes to order items, shipping, and fees.
 			$order           = $this->get_order();
 			$tax_class_costs = $this->get_tax_class_costs( $order );
@@ -89,18 +87,16 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 					if ( 'non-taxable' === $tax_class ) {
 						continue;
 					}
-					$proportion                     = $tax_class_cost / $total_costs;
-					$cart_discount_proportion       = $this->get_total() * $proportion;
-					$calculate_tax_for['tax_class'] = $tax_class;
-					$tax_rates                      = WC_Tax::find_rates( $calculate_tax_for );
-					$discount_taxes                 = wc_array_merge_recursive_numeric( $discount_taxes, WC_Tax::calc_tax( $cart_discount_proportion, $tax_rates ) );
+					$proportion               = $tax_class_cost / $total_costs;
+					$cart_discount_proportion = $this->get_total() * $proportion;
+					$discount_taxes           = wc_array_merge_recursive_numeric( $discount_taxes, WC_Tax::calc_tax( $cart_discount_proportion, WC_Tax::get_rates( $tax_class ) ) );
 				}
 			}
 			$this->set_taxes( array( 'total' => $discount_taxes ) );
 		} else {
 			$this->set_taxes( false );
 		}
-
+		
 		do_action( 'woocommerce_order_item_fee_after_calculate_taxes', $this, $calculate_tax_for );
 
 		return true;
@@ -115,7 +111,8 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Set fee amount.
 	 *
-	 * @param string $value Amount.
+	 * @param string $value
+	 * @throws WC_Data_Exception
 	 */
 	public function set_amount( $value ) {
 		$this->set_prop( 'amount', wc_format_decimal( $value ) );
@@ -124,10 +121,11 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Set tax class.
 	 *
-	 * @param string $value Tax class.
+	 * @param string $value
+	 * @throws WC_Data_Exception
 	 */
 	public function set_tax_class( $value ) {
-		if ( $value && ! in_array( $value, WC_Tax::get_tax_class_slugs(), true ) ) {
+		if ( $value && ! in_array( $value, WC_Tax::get_tax_class_slugs() ) ) {
 			$this->error( 'order_item_fee_invalid_tax_class', __( 'Invalid tax class', 'woocommerce' ) );
 		}
 		$this->set_prop( 'tax_class', $value );
@@ -136,10 +134,11 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Set tax_status.
 	 *
-	 * @param string $value Tax status.
+	 * @param string $value
+	 * @throws WC_Data_Exception
 	 */
 	public function set_tax_status( $value ) {
-		if ( in_array( $value, array( 'taxable', 'none' ), true ) ) {
+		if ( in_array( $value, array( 'taxable', 'none' ) ) ) {
 			$this->set_prop( 'tax_status', $value );
 		} else {
 			$this->set_prop( 'tax_status', 'taxable' );
@@ -150,6 +149,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	 * Set total.
 	 *
 	 * @param string $amount Fee amount (do not enter negative amounts).
+	 * @throws WC_Data_Exception
 	 */
 	public function set_total( $amount ) {
 		$this->set_prop( 'total', wc_format_decimal( $amount ) );
@@ -158,7 +158,8 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Set total tax.
 	 *
-	 * @param string $amount Amount.
+	 * @param string $amount
+	 * @throws WC_Data_Exception
 	 */
 	public function set_total_tax( $amount ) {
 		$this->set_prop( 'total_tax', wc_format_decimal( $amount ) );
@@ -168,8 +169,8 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	 * Set taxes.
 	 *
 	 * This is an array of tax ID keys with total amount values.
-	 *
-	 * @param array $raw_tax_data Raw tax data.
+	 * @param array $raw_tax_data
+	 * @throws WC_Data_Exception
 	 */
 	public function set_taxes( $raw_tax_data ) {
 		$raw_tax_data = maybe_unserialize( $raw_tax_data );
@@ -192,7 +193,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get fee amount.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_amount( $context = 'view' ) {
@@ -202,7 +203,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get order item name.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_name( $context = 'view' ) {
@@ -226,7 +227,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get tax class.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_tax_class( $context = 'view' ) {
@@ -236,7 +237,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get tax status.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_tax_status( $context = 'view' ) {
@@ -246,7 +247,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get total fee.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_total( $context = 'view' ) {
@@ -256,7 +257,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get total tax.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_total_tax( $context = 'view' ) {
@@ -266,7 +267,7 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	/**
 	 * Get fee taxes.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return array
 	 */
 	public function get_taxes( $context = 'view' ) {
@@ -283,10 +284,9 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	*/
 
 	/**
-	 * OffsetGet for ArrayAccess/Backwards compatibility.
-	 *
+	 * offsetGet for ArrayAccess/Backwards compatibility.
 	 * @deprecated Add deprecation notices in future release.
-	 * @param string $offset Offset.
+	 * @param string $offset
 	 * @return mixed
 	 */
 	public function offsetGet( $offset ) {
@@ -301,11 +301,10 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	}
 
 	/**
-	 * OffsetSet for ArrayAccess/Backwards compatibility.
-	 *
+	 * offsetSet for ArrayAccess/Backwards compatibility.
 	 * @deprecated Add deprecation notices in future release.
-	 * @param string $offset Offset.
-	 * @param mixed  $value  Value.
+	 * @param string $offset
+	 * @param mixed $value
 	 */
 	public function offsetSet( $offset, $value ) {
 		if ( 'line_total' === $offset ) {
@@ -319,13 +318,12 @@ class WC_Order_Item_Fee extends WC_Order_Item {
 	}
 
 	/**
-	 * OffsetExists for ArrayAccess
-	 *
-	 * @param string $offset Offset.
+	 * offsetExists for ArrayAccess
+	 * @param string $offset
 	 * @return bool
 	 */
 	public function offsetExists( $offset ) {
-		if ( in_array( $offset, array( 'line_total', 'line_tax', 'line_tax_data' ), true ) ) {
+		if ( in_array( $offset, array( 'line_total', 'line_tax', 'line_tax_data' ) ) ) {
 			return true;
 		}
 		return parent::offsetExists( $offset );

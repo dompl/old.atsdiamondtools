@@ -2,39 +2,31 @@
 /**
  * WooCommerce API Keys Table List
  *
- * @package WooCommerce\Admin
- * @version 2.4.0
+ * @author   WooThemes
+ * @category Admin
+ * @package  WooCommerce/Admin
+ * @version  2.4.0
  */
 
-defined( 'ABSPATH' ) || exit;
-
-if ( ! class_exists( 'WP_List_Table' ) ) {
-	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-/**
- * API Keys table list class.
- */
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
+
 class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 
 	/**
-	 * Initialize the API key table list.
+	 * Initialize the webhook table list.
 	 */
 	public function __construct() {
-		parent::__construct(
-			array(
-				'singular' => 'key',
-				'plural'   => 'keys',
-				'ajax'     => false,
-			)
-		);
-	}
-
-	/**
-	 * No items found text.
-	 */
-	public function no_items() {
-		esc_html_e( 'No keys found.', 'woocommerce' );
+		parent::__construct( array(
+			'singular' => 'key',
+			'plural'   => 'keys',
+			'ajax'     => false,
+		) );
 	}
 
 	/**
@@ -45,7 +37,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	public function get_columns() {
 		return array(
 			'cb'            => '<input type="checkbox" />',
-			'title'         => __( 'Description', 'woocommerce' ),
+			'description'   => __( 'Description', 'woocommerce' ),
 			'truncated_key' => __( 'Consumer key ending in', 'woocommerce' ),
 			'user'          => __( 'User', 'woocommerce' ),
 			'permissions'   => __( 'Permissions', 'woocommerce' ),
@@ -56,7 +48,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	/**
 	 * Column cb.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
 	public function column_cb( $key ) {
@@ -64,15 +56,15 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Return title column.
+	 * Return description column.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
-	public function column_title( $key ) {
-		$url = admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys&edit-key=' . $key['key_id'] );
+	public function column_description( $key ) {
+		$url = admin_url( 'admin.php?page=wc-settings&tab=api&section=keys&edit-key=' . $key['key_id'] );
 
-		$output  = '<strong>';
+		$output = '<strong>';
 		$output .= '<a href="' . esc_url( $url ) . '" class="row-title">';
 		if ( empty( $key['description'] ) ) {
 			$output .= esc_html__( 'API key', 'woocommerce' );
@@ -82,20 +74,11 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 		$output .= '</a>';
 		$output .= '</strong>';
 
-		// Get actions.
+		// Get actions
 		$actions = array(
-			/* translators: %s: API key ID. */
 			'id'    => sprintf( __( 'ID: %d', 'woocommerce' ), $key['key_id'] ),
 			'edit'  => '<a href="' . esc_url( $url ) . '">' . __( 'View/Edit', 'woocommerce' ) . '</a>',
-			'trash' => '<a class="submitdelete" aria-label="' . esc_attr__( 'Revoke API key', 'woocommerce' ) . '" href="' . esc_url(
-				wp_nonce_url(
-					add_query_arg(
-						array(
-							'revoke-key' => $key['key_id'],
-						), admin_url( 'admin.php?page=wc-settings&tab=advanced&section=keys' )
-					), 'revoke'
-				)
-			) . '">' . esc_html__( 'Revoke', 'woocommerce' ) . '</a>',
+			'trash' => '<a class="submitdelete" aria-label="' . esc_attr__( 'Revoke API key', 'woocommerce' ) . '" href="' . esc_url( wp_nonce_url( add_query_arg( array( 'revoke-key' => $key['key_id'] ), admin_url( 'admin.php?page=wc-settings&tab=api&section=keys' ) ), 'revoke' ) ) . '">' . __( 'Revoke', 'woocommerce' ) . '</a>',
 		);
 
 		$row_actions = array();
@@ -112,7 +95,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	/**
 	 * Return truncated consumer key column.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
 	public function column_truncated_key( $key ) {
@@ -122,7 +105,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	/**
 	 * Return user column.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
 	public function column_user( $key ) {
@@ -142,7 +125,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	/**
 	 * Return permissions column.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
 	public function column_permissions( $key ) {
@@ -163,7 +146,7 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	/**
 	 * Return last access column.
 	 *
-	 * @param  array $key Key data.
+	 * @param  array $key
 	 * @return string
 	 */
 	public function column_last_access( $key ) {
@@ -189,40 +172,20 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Search box.
-	 *
-	 * @param  string $text     Button text.
-	 * @param  string $input_id Input ID.
-	 */
-	public function search_box( $text, $input_id ) {
-		if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) { // WPCS: input var okay, CSRF ok.
-			return;
-		}
-
-		$input_id     = $input_id . '-search-input';
-		$search_query = isset( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : ''; // WPCS: input var okay, CSRF ok.
-
-		echo '<p class="search-box">';
-		echo '<label class="screen-reader-text" for="' . esc_attr( $input_id ) . '">' . esc_html( $text ) . ':</label>';
-		echo '<input type="search" id="' . esc_attr( $input_id ) . '" name="s" value="' . esc_attr( $search_query ) . '" />';
-		submit_button(
-			$text, '', '', false,
-			array(
-				'id' => 'search-submit',
-			)
-		);
-		echo '</p>';
-	}
-
-	/**
 	 * Prepare table list items.
 	 */
 	public function prepare_items() {
 		global $wpdb;
 
-		$per_page     = $this->get_items_per_page( 'woocommerce_keys_per_page' );
-		$current_page = $this->get_pagenum();
+		$per_page = apply_filters( 'woocommerce_api_keys_settings_items_per_page', 10 );
+		$columns  = $this->get_columns();
+		$hidden   = array();
+		$sortable = $this->get_sortable_columns();
 
+		// Column headers
+		$this->_column_headers = array( $columns, $hidden, $sortable );
+
+		$current_page = $this->get_pagenum();
 		if ( 1 < $current_page ) {
 			$offset = $per_page * ( $current_page - 1 );
 		} else {
@@ -231,27 +194,25 @@ class WC_Admin_API_Keys_Table_List extends WP_List_Table {
 
 		$search = '';
 
-		if ( ! empty( $_REQUEST['s'] ) ) { // WPCS: input var okay, CSRF ok.
-			$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( wc_clean( wp_unslash( $_REQUEST['s'] ) ) ) ) . "%' "; // WPCS: input var okay, CSRF ok.
+		if ( ! empty( $_REQUEST['s'] ) ) {
+			$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( wc_clean( $_REQUEST['s'] ) ) ) . "%' ";
 		}
 
-		// Get the API keys.
+		// Get the API keys
 		$keys = $wpdb->get_results(
 			"SELECT key_id, user_id, description, permissions, truncated_key, last_access FROM {$wpdb->prefix}woocommerce_api_keys WHERE 1 = 1 {$search}" .
-			$wpdb->prepare( 'ORDER BY key_id DESC LIMIT %d OFFSET %d;', $per_page, $offset ), ARRAY_A
-		); // WPCS: unprepared SQL ok.
+			$wpdb->prepare( "ORDER BY key_id DESC LIMIT %d OFFSET %d;", $per_page, $offset ), ARRAY_A
+		);
 
-		$count = $wpdb->get_var( "SELECT COUNT(key_id) FROM {$wpdb->prefix}woocommerce_api_keys WHERE 1 = 1 {$search};" ); // WPCS: unprepared SQL ok.
+		$count = $wpdb->get_var( "SELECT COUNT(key_id) FROM {$wpdb->prefix}woocommerce_api_keys WHERE 1 = 1 {$search};" );
 
 		$this->items = $keys;
 
-		// Set the pagination.
-		$this->set_pagination_args(
-			array(
-				'total_items' => $count,
-				'per_page'    => $per_page,
-				'total_pages' => ceil( $count / $per_page ),
-			)
-		);
+		// Set the pagination
+		$this->set_pagination_args( array(
+			'total_items' => $count,
+			'per_page'    => $per_page,
+			'total_pages' => ceil( $count / $per_page ),
+		) );
 	}
 }

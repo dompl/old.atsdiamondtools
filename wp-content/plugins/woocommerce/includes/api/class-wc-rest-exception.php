@@ -4,11 +4,15 @@
  *
  * Extends Exception to provide additional data.
  *
- * @package WooCommerce/API
- * @since   2.6.0
+ * @author   WooThemes
+ * @category API
+ * @package  WooCommerce/API
+ * @since    2.6.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WC_REST_Exception class.

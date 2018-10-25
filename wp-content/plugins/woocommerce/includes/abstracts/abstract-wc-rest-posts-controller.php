@@ -1,18 +1,14 @@
 <?php
-/**
- * Abstract Rest Posts Controller Class
- *
- * @class WC_REST_Posts_Controller
- * @package WooCommerce/Abstracts
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * WC_REST_Posts_Controller
+ * Abstract Rest Posts Controller Class
  *
+ * @author   WooThemes
+ * @category API
  * @package  WooCommerce/Abstracts
  * @version  2.6.0
  */
@@ -227,8 +223,8 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 	/**
 	 * Add post meta fields.
 	 *
-	 * @param WP_Post         $post Post Object.
-	 * @param WP_REST_Request $request WP_REST_Request Object.
+	 * @param WP_Post $post
+	 * @param WP_REST_Request $request
 	 * @return bool|WP_Error
 	 */
 	protected function add_post_meta_fields( $post, $request ) {
@@ -238,7 +234,7 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 	/**
 	 * Delete post.
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param WP_Post $post
 	 */
 	protected function delete_post( $post ) {
 		wp_delete_post( $post->ID, true );
@@ -368,7 +364,7 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 		$total_posts = $posts_query->found_posts;
 
 		if ( $total_posts < 1 ) {
-			// Out-of-bounds, run the query again without LIMIT for total count.
+			// Out-of-bounds, run the query again without LIMIT for total count
 			unset( $query_args['paged'] );
 			$count_query = new WP_Query();
 			$count_query->query( $query_args );
@@ -482,7 +478,7 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 	/**
 	 * Prepare links for the request.
 	 *
-	 * @param WP_Post         $post Post object.
+	 * @param WP_Post $post Post object.
 	 * @param WP_REST_Request $request Request object.
 	 * @return array Links for the given post.
 	 */
@@ -503,8 +499,8 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 	 * Determine the allowed query_vars for a get_items() response and
 	 * prepare for WP_Query.
 	 *
-	 * @param array           $prepared_args Prepared arguments.
-	 * @param WP_REST_Request $request Request object.
+	 * @param array           $prepared_args
+	 * @param WP_REST_Request $request
 	 * @return array          $query_args
 	 */
 	protected function prepare_items_query( $prepared_args = array(), $request = null ) {
@@ -519,6 +515,7 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 				 * The dynamic portion of the hook name, $var, refers to the query_var key.
 				 *
 				 * @param mixed $prepared_args[ $var ] The query_var value.
+				 *
 				 */
 				$query_args[ $var ] = apply_filters( "woocommerce_rest_query_var-{$var}", $prepared_args[ $var ] );
 			}
@@ -529,7 +526,7 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 		if ( 'include' === $query_args['orderby'] ) {
 			$query_args['orderby'] = 'post__in';
 		} elseif ( 'id' === $query_args['orderby'] ) {
-			$query_args['orderby'] = 'ID'; // ID must be capitalized.
+			$query_args['orderby'] = 'ID'; // ID must be capitalized
 		}
 
 		return $query_args;
@@ -711,8 +708,8 @@ abstract class WC_REST_Posts_Controller extends WC_REST_Controller {
 	/**
 	 * Update post meta fields.
 	 *
-	 * @param WP_Post         $post Post object.
-	 * @param WP_REST_Request $request Request object.
+	 * @param WP_Post $post
+	 * @param WP_REST_Request $request
 	 * @return bool|WP_Error
 	 */
 	protected function update_post_meta_fields( $post, $request ) {

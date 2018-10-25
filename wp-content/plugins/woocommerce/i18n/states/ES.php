@@ -2,13 +2,16 @@
 /**
  * Spain states
  *
- * @package WooCommerce/i18n
- * @version 2.0.11
+ * @author      WooThemes
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     2.0.11
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['ES'] = array(
 	'C'  => __( 'A Coru&ntilde;a', 'woocommerce' ),

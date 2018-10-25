@@ -6,23 +6,6 @@
 $options = array();
 
 $options['general'][] = array(
-    "name" => __( "Main Settings", "aws" ),
-    "type" => "heading"
-);
-
-$options['general'][] = array(
-    "name"  => __( "Seamless integration", "aws" ),
-    "desc"  => __( "Replace all the standard search forms on your website ( may not work with some themes ).", "aws" ),
-    "id"    => "seamless",
-    "value" => 'false',
-    "type"  => "radio",
-    'choices' => array(
-        'true'  => __( 'On', 'aws' ),
-        'false'  => __( 'Off', 'aws' ),
-    )
-);
-
-$options['general'][] = array(
     "name"  => __( "Cache results", "aws" ),
     "desc"  => __( "Turn off if you have old data in the search results after content of products was changed.<br><strong>CAUTION:</strong> can dramatically increase search speed", "aws" ),
     "id"    => "cache",
@@ -36,7 +19,7 @@ $options['general'][] = array(
 
 $options['general'][] = array(
     "name"  => __( "Search in", "aws" ),
-    "desc"  => __( "Search source: Drag&drop sources to activate or deactivate them.", "aws" ),
+    "desc"  => __( "Search source: Drag&drop sources order to change priority, or exclude by moving to deactivated sources.", "aws" ),
     "id"    => "search_in",
     "value" => "title,content,sku,excerpt",
     "choices" => array( "title", "content", "sku", "excerpt", "category", "tag" ),
@@ -85,14 +68,6 @@ $options['form'][] = array(
 );
 
 $options['form'][] = array(
-    "name"  => __( "Text for show more button", "aws" ),
-    "desc"  => __( "Text for link to search results page at the bottom of search results block.", "aws" ),
-    "id"    => "show_more_text",
-    "value" => __( "View all results", "aws" ),
-    "type"  => "text"
-);
-
-$options['form'][] = array(
     "name"  => __( "Nothing found field", "aws" ),
     "desc"  => __( "Text when there is no search results. HTML tags is allowed.", "aws" ),
     "id"    => "not_found_text",
@@ -121,21 +96,9 @@ $options['form'][] = array(
 );
 
 $options['form'][] = array(
-    "name"  => __( "Show clear button", "aws" ),
-    "desc"  => __( "Show 'Clear search string' button for desktop devices ( for mobile it is always visible ).", "aws" ),
-    "id"    => "show_clear",
-    "value" => 'true',
-    "type"  => "radio",
-    'choices' => array(
-        'true'  => __( 'On', 'aws' ),
-        'false' => __( 'Off', 'aws' ),
-    )
-);
-
-$options['form'][] = array(
-    "name"  => __( "Show 'View All Results'", "aws" ),
-    "desc"  => __( "Show link to search results page at the bottom of search results block.", "aws" ),
-    "id"    => "show_more",
+    "name"  => __( "Search Results Page", "aws" ),
+    "desc"  => __( "Go to search results page when user clicks 'Enter' key on search form?", "aws" ),
+    "id"    => "show_page",
     "value" => 'false',
     "type"  => "radio",
     'choices' => array(
@@ -144,54 +107,7 @@ $options['form'][] = array(
     )
 );
 
-$options['form'][] = array(
-    "name"  => __( "Search Results", "aws" ),
-    "desc"  => __( "Choose how to view search results.", "aws" ),
-    "id"    => "show_page",
-    "value" => 'false',
-    "type"  => "radio",
-    'choices' => array(
-        'true'     => __( 'Both ajax search results and search results page', 'aws' ),
-        'false'    => __( 'Only ajax search results ( no search results page )', 'aws' ),
-        'ajax_off' => __( 'Only search results page ( no ajax search results )', 'aws' )
-    )
-);
-
 // Search Results Settings
-
-
-$options['results'][] = array(
-    "name"  => __( "Description source", "aws" ),
-    "desc"  => __( "From where to take product description.<br>If first source is empty data will be taken from other sources.", "aws" ),
-    "id"    => "desc_source",
-    "value" => 'content',
-    "type"  => "radio",
-    'choices' => array(
-        'content'  => __( 'Content', 'aws' ),
-        'excerpt'  => __( 'Excerpt', 'aws' ),
-    )
-);
-
-$options['results'][] = array(
-    "name"  => __( "Description length", "aws" ),
-    "desc"  => __( "Maximal allowed number of words for product description.", "aws" ),
-    "id"    => "excerpt_length",
-    "value" => 20,
-    "type"  => "number"
-);
-
-$options['results'][] = array(
-    "name"  => __( "Max number of results", "aws" ),
-    "desc"  => __( "Maximum number of displayed search results.", "aws" ),
-    "id"    => "results_num",
-    "value" => 10,
-    "type"  => "number"
-);
-
-$options['results'][] = array(
-    "name"    => __( "View", "aws" ),
-    "type"    => "heading"
-);
 
 $options['results'][] = array(
     "name"  => __( "Show image", "aws" ),
@@ -215,6 +131,26 @@ $options['results'][] = array(
         'true'  => __( 'On', 'aws' ),
         'false'  => __( 'Off', 'aws' ),
     )
+);
+
+$options['results'][] = array(
+    "name"  => __( "Description source", "aws" ),
+    "desc"  => __( "From where to take product description.<br>If first source is empty data will be taken from other sources.", "aws" ),
+    "id"    => "desc_source",
+    "value" => 'content',
+    "type"  => "radio",
+    'choices' => array(
+        'content'  => __( 'Content', 'aws' ),
+        'excerpt'  => __( 'Excerpt', 'aws' ),
+    )
+);
+
+$options['results'][] = array(
+    "name"  => __( "Description length", "aws" ),
+    "desc"  => __( "Maximal allowed number of words for product description.", "aws" ),
+    "id"    => "excerpt_length",
+    "value" => 20,
+    "type"  => "number"
 );
 
 $options['results'][] = array(
@@ -289,6 +225,7 @@ $options['results'][] = array(
     )
 );
 
+
 $options['results'][] = array(
     "name"  => __( "Show stock status", "aws" ),
     "desc"  => __( "Show stock status for every product in search results.", "aws" ),
@@ -302,13 +239,9 @@ $options['results'][] = array(
 );
 
 $options['results'][] = array(
-    "name"  => __( "Show featured icon", "aws" ),
-    "desc"  => __( "Show or not star icon for featured products.", "aws" ),
-    "id"    => "show_featured",
-    "value" => 'false',
-    "type"  => "radio",
-    'choices' => array(
-        'true'  => __( 'On', 'aws' ),
-        'false' => __( 'Off', 'aws' ),
-    )
+    "name"  => __( "Max number of results", "aws" ),
+    "desc"  => __( "Maximum number of displayed search results.", "aws" ),
+    "id"    => "results_num",
+    "value" => 10,
+    "type"  => "number"
 );

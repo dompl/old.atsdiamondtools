@@ -81,7 +81,7 @@ class AWS_Admin {
 
         }
 
-        $tabs_html .= '<a href="https://advanced-woo-search.com/?utm_source=plugin&utm_medium=settings-tab&utm_campaign=aws-pro-plugin" class="nav-tab premium-tab" target="_blank">' . __( 'Get Premium', 'aws' ) . '</a>';
+        $tabs_html .= '<a href="https://advanced-woo-search.com/" class="nav-tab premium-tab" target="_blank">' . __( 'Get Premium', 'aws' ) . '</a>';
 
         $tabs_html = '<h2 class="nav-tab-wrapper woo-nav-tab-wrapper">'.$tabs_html.'</h2>';
 
@@ -119,8 +119,6 @@ class AWS_Admin {
 
             update_option( 'aws_settings', $update_settings );
 
-            AWS_Helpers::register_wpml_translations( $update_settings );
-
             do_action( 'aws_settings_saved' );
             
             do_action( 'aws_cache_clear' );
@@ -128,10 +126,6 @@ class AWS_Admin {
         }
 
         echo '<div class="wrap">';
-
-        echo '<h1></h1>';
-
-        echo '<h1 class="aws-instance-name">Advanced Woo Search</h1>';
 
         echo $tabs_html;
 
@@ -379,34 +373,12 @@ class AWS_Admin {
      */
     private function update_table() {
 
-
-        echo '<tr>';
-
-            echo '<th>' . __( 'Activation', 'aws' ) . '</th>';
-            echo '<td>';
-                echo '<div class="description activation">';
-                    echo __( 'In case you need to add plugin search form on your website, you can do it in several ways:', 'aws' ) . '<br>';
-                    echo '<div class="list">';
-                        echo '1. ' . __( 'Enable a "Seamless integration" option ( may not work with some themes )', 'aws' ) . '<br>';
-                        echo '2. ' . sprintf( __( 'Add search form using shortcode %s', 'aws' ), "<code>[aws_search_form]</code>" ) . '<br>';
-                        echo '3. ' . __( 'Add search form as widget for one of your theme widget areas. Go to Appearance -> Widgets and drag&drop AWS Widget to one of your widget areas', 'aws' ) . '<br>';
-                        echo '4. ' . sprintf( __( 'Add PHP code to the necessary files of your theme: %s', 'aws' ), "<code>&lt;?php if ( function_exists( 'aws_get_search_form' ) ) { aws_get_search_form(); } ?&gt;</code>" ) . '<br>';
-                    echo '</div>';
-                echo '</div>';
-            echo '</td>';
-
-        echo '</tr>';
-
-
-
-
         echo '<tr>';
 
             echo '<th>' . __( 'Reindex table', 'aws' ) . '</th>';
             echo '<td>';
                 echo '<div id="aws-reindex"><input class="button" type="button" value="' . __( 'Reindex table', 'aws' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span></div><br><br>';
                 echo '<span class="description">' .
-                    sprintf( __( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'aws' ), '<strong>', '</strong>' ) . '<br>' .
                     __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br><strong>CAUTION:</strong> this can take large amount of time.', 'aws' ) . '<br><br>' .
                     __( 'Products in index:', 'aws' ) . '<span id="aws-reindex-count"> <strong>' . AWS_Helpers::get_indexed_products_count() . '</strong></span>';
                 echo '</span>';

@@ -5,7 +5,7 @@ Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice,
 Requires at least: 3.5
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.2.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,62 +102,6 @@ There's a setting on the Status tab of the settings page that allows you to togg
 6. Set shop name, address, header logo, etc.
 
 == Changelog ==
-
-= 2.2.3 =
-* Fix: issues reading shop settings
-
-= 2.2.2 =
-* Feature: Added option to always use most current settings for the invoice
-* Fix: Double check for empty document numbers on initialization
-* New filter: `wpo_wcpdf_output_format` to set output per document type
-
-= 2.2.1 =
-* Fix: potential number formatting issues with `wpo_wcpdf_raw_document_number` filter
-* Fix: prevent direct loading of template files
-
-= 2.2.0 =
-* Feature: Document settings are now saved per order - changing settings after a PDF has been created will no longer affect the output
-* Feature: Button to delete invoice or packing slip
-* Feature: Better error handling and logging via WC Logger (WooCommerce > Status > Logs)
-* Fix: Broader payment gateway compatibility (lower priority for documents initialization)
-* Fix: undefined variable in construct when loading document programmatically (props to Christopher)
-* Fix: compatibility with renamed WooCommerce plugins (settings page detection)
-* Tweak: Reload translations before creating attachment
-* Translations: Updated translations POT
-
-= 2.1.10 =
-* Feature: Include invoice number and date in WooCommerce data remover and exporter 
-* Fix: Row class for Chained Products compatibility
-* Fix: Improved compatibility with Advanced Custom Fields
-* Fix: Setting for diabling for free invoices should be applied even when other plugins are applying rules
-
-= 2.1.9 =
-* Feature: Automatic cleanup of temporary attachments folder (settings in Status tab)
-* Fix: prevent infinite loop on sites without uploads folder
-* Fix: tag replacements for externally hosted images (CDN)
-
-= 2.1.8 =
-* Fix: Fatal error on PHP 5.X
-
-= 2.1.7 =
-* Feature: add [order_number] placeholder for number format
-* Feature: $order and $order_id variables now available directly template (without needing the document object)
-* Feature: add actions before & after addresses
-* Fix: Sorting orders by invoice number
-* Fix: Aelia Currency Switcher - use decimal & Thousand separator settings
-* Fix: fix jquery migrate warnings for media upload script
-* Tweak: add calculated tax rate to item data
-
-= 2.1.6 =
-* Fix: Extended currency symbol setting for WooCommerce Currency Switcher by realmag777
-* Fix: Apply WooCommerce decimal settings to tax rates with decimals
-* Tweak: Pass document object to `wpo_wcpdf_email_attachment` filter
-
-= 2.1.5 =
-* Feature: Filter for number store table (wpo_wcpdf_number_store_table_name)
-* Fix: prevent accessing order properties as custom field/order meta
-* Fix: prevent wrong application of wpo_wcpdf_filename filter
-* Fix: Improved tax rate calculation fallback
 
 = 2.1.4 =
 * Fix: WooCommerce 3.3 action buttons
@@ -286,5 +230,5 @@ There's a setting on the Status tab of the settings page that allows you to togg
 
 == Upgrade Notice ==
 
-= 2.1.10 =
-2.X is a BIG update! Make a full site backup before upgrading if you were using version 1.X!
+= 2.1.4 =
+2.0 is a BIG update! Make a full site backup before upgrading!

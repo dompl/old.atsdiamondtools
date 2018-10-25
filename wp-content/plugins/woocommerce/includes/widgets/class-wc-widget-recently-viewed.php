@@ -1,15 +1,17 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Recent Products Widget.
  *
- * @package WooCommerce/Widgets
- * @version 3.3.0
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Widget recently viewed.
+ * @author   WooThemes
+ * @category Widgets
+ * @package  WooCommerce/Widgets
+ * @version  2.3.0
+ * @extends  WC_Widget
  */
 class WC_Widget_Recently_Viewed extends WC_Widget {
 
@@ -31,7 +33,7 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 				'type'  => 'number',
 				'step'  => 1,
 				'min'   => 1,
-				'max'   => 15,
+				'max'   => '',
 				'std'   => 10,
 				'label' => __( 'Number of products to show', 'woocommerce' ),
 			),
@@ -44,11 +46,13 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 	 * Output widget.
 	 *
 	 * @see WP_Widget
-	 * @param array $args     Arguments.
-	 * @param array $instance Widget instance.
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		$viewed_products = ! empty( $_COOKIE['woocommerce_recently_viewed'] ) ? (array) explode( '|', wp_unslash( $_COOKIE['woocommerce_recently_viewed'] ) ) : array(); // @codingStandardsIgnoreLine
+
+		$viewed_products = ! empty( $_COOKIE['woocommerce_recently_viewed'] ) ? (array) explode( '|', $_COOKIE['woocommerce_recently_viewed'] ) : array();
 		$viewed_products = array_reverse( array_filter( array_map( 'absint', $viewed_products ) ) );
 
 		if ( empty( $viewed_products ) ) {
@@ -76,27 +80,23 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 					'terms'    => 'outofstock',
 					'operator' => 'NOT IN',
 				),
-			); // WPCS: slow query ok.
+			);
 		}
 
-		$r = new WP_Query( apply_filters( 'woocommerce_recently_viewed_products_widget_query_args', $query_args ) );
+		$r = new WP_Query( $query_args );
 
 		if ( $r->have_posts() ) {
 
 			$this->widget_start( $args, $instance );
 
-			echo wp_kses_post( apply_filters( 'woocommerce_before_widget_product_list', '<ul class="product_list_widget">' ) );
-
-			$template_args = array(
-				'widget_id' => $args['widget_id'],
-			);
+			echo apply_filters( 'woocommerce_before_widget_product_list', '<ul class="product_list_widget">' );
 
 			while ( $r->have_posts() ) {
 				$r->the_post();
-				wc_get_template( 'content-widget-product.php', $template_args );
+				wc_get_template( 'content-widget-product.php' );
 			}
 
-			echo wp_kses_post( apply_filters( 'woocommerce_after_widget_product_list', '</ul>' ) );
+			echo apply_filters( 'woocommerce_after_widget_product_list', '</ul>' );
 
 			$this->widget_end( $args );
 		}
@@ -105,6 +105,6 @@ class WC_Widget_Recently_Viewed extends WC_Widget {
 
 		$content = ob_get_clean();
 
-		echo $content; // WPCS: XSS ok.
+		echo $content;
 	}
 }

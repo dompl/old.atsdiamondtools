@@ -2,13 +2,16 @@
 /**
  * Angola states
  *
- * @package WooCommerce/i18n
- * @version 1.0.0
+ * @author      Marcio Zebedeu
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     1.0.0
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['AO'] = array(
 	'BGO' => __( 'Bengo', 'woocommerce' ),

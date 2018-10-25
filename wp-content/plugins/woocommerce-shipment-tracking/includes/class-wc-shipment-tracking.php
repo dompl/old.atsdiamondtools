@@ -50,7 +50,7 @@ class WC_Shipment_Tracking_Actions {
 				'Correios' => 'http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=%1$s',
 			),
 			'Belgium' => array(
-				'bpost' => 'https://track.bpost.be/btr/web/#/search?itemCode=%1$s',
+				'bpost' => 'http://track.bpost.be/etr/light/showSearchPage.do?oss_language=EN',
 			),
 			'Canada' => array(
 				'Canada Post' => 'http://www.canadapost.ca/cpotools/apps/track/personal/findByTrackNumber?trackingNumber=%1$s',
@@ -88,7 +88,6 @@ class WC_Shipment_Tracking_Actions {
 			'Netherlands' => array(
 				'PostNL' => 'https://mijnpakket.postnl.nl/Claim?Barcode=%1$s&Postalcode=%2$s&Foreign=False&ShowAnonymousLayover=False&CustomerServiceClaim=False',
 				'DPD.NL' => 'http://track.dpdnl.nl/?parcelnumber=%1$s',
-				'UPS Netherlands'        => 'http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&loc=nl_NL&InquiryNumber1=%1$s',
 			),
 			'New Zealand' => array(
 				'Courier Post' => 'http://trackandtrace.courierpost.co.nz/Search/%1$s',
@@ -120,7 +119,7 @@ class WC_Shipment_Tracking_Actions {
 				'TNT Express (consignment)' => 'http://www.tnt.com/webtracker/tracking.do?requestType=GEN&searchType=CON&respLang=en&respCountry=GENERIC&sourceID=1&sourceCountry=ww&cons=%1$s&navigation=1&g
 enericSiteIdent=',
 				'TNT Express (reference)'   => 'http://www.tnt.com/webtracker/tracking.do?requestType=GEN&searchType=REF&respLang=en&respCountry=GENERIC&sourceID=1&sourceCountry=ww&cons=%1$s&navigation=1&genericSiteIdent=',
-				'UK Mail'                   => 'https://www.ukmail.com/manage-my-delivery/manage-my-delivery?ConsignmentNumber=%1$s',
+				'UK Mail'                   => 'https://old.ukmail.com/ConsignmentStatus/ConsignmentSearchResults.aspx?SearchType=Reference&SearchString=%1$s',
 			),
 			'United States' => array(
 				'Fedex'         => 'http://www.fedex.com/Tracking?action=track&tracknumbers=%1$s',
@@ -285,11 +284,6 @@ enericSiteIdent=',
 		echo '</select> ';
 
 		woocommerce_wp_hidden_input( array(
-			'id'    => 'wc_shipment_tracking_get_nonce',
-			'value' => wp_create_nonce( 'get-tracking-item' ),
-		) );
-
-		woocommerce_wp_hidden_input( array(
 			'id'    => 'wc_shipment_tracking_delete_nonce',
 			'value' => wp_create_nonce( 'delete-tracking-item' ),
 		) );
@@ -415,24 +409,6 @@ enericSiteIdent=',
 
 			$this->add_tracking_item( $post_id, $args );
 		}
-	}
-
-	/**
-	 * Order Tracking Get All Order Items AJAX
-	 *
-	 * Function for getting all tracking items associated with the order
-	 */
-	public function get_meta_box_items_ajax() {
-		check_ajax_referer( 'get-tracking-item', 'security', true );
-
-		$order_id = wc_clean( $_POST['order_id'] );
-		$tracking_items = $this->get_tracking_items( $order_id );
-
-		foreach ( $tracking_items as $tracking_item ) {
-			$this->display_html_tracking_item_for_meta_box( $order_id, $tracking_item );
-		}
-
-		die();
 	}
 
 	/**

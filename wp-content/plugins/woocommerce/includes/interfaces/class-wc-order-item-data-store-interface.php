@@ -1,11 +1,4 @@
 <?php
-/**
- * Order Item Data Store Interface
- *
- * @version 3.0.0
- * @package WooCommerce/Interface
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,13 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Functions that must be defined by the order item data store (for functions).
  *
  * @version  3.0.0
+ * @category Interface
+ * @author   WooCommerce
  */
 interface WC_Order_Item_Data_Store_Interface {
 
 	/**
 	 * Add an order item to an order.
-	 *
-	 * @param  int   $order_id Order ID.
+	 * @param  int   $order_id
 	 * @param  array $item order_item_name and order_item_type.
 	 * @return int   Order Item ID
 	 */
@@ -30,8 +24,7 @@ interface WC_Order_Item_Data_Store_Interface {
 
 	/**
 	 * Update an order item.
-	 *
-	 * @param  int   $item_id Item ID.
+	 * @param  int   $item_id
 	 * @param  array $item order_item_name or order_item_type.
 	 * @return boolean
 	 */
@@ -39,67 +32,60 @@ interface WC_Order_Item_Data_Store_Interface {
 
 	/**
 	 * Delete an order item.
-	 *
-	 * @param int $item_id Item ID.
+	 * @param int $item_id
 	 */
 	public function delete_order_item( $item_id );
 
 	/**
 	 * Update term meta.
-	 *
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  mixed  $meta_value Meta value.
-	 * @param  string $prev_value Previous value (default: '').
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  mixed  $meta_value
+	 * @param  string $prev_value (default: '')
 	 * @return bool
 	 */
-	public function update_metadata( $item_id, $meta_key, $meta_value, $prev_value = '' );
+	function update_metadata( $item_id, $meta_key, $meta_value, $prev_value = '' );
 
 	/**
 	 * Add term meta.
-	 *
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  mixed  $meta_value Meta value.
-	 * @param  bool   $unique Unique? (default: false).
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  mixed  $meta_value
+	 * @param  bool   $unique (default: false)
 	 * @return int    New row ID or 0
 	 */
-	public function add_metadata( $item_id, $meta_key, $meta_value, $unique = false );
+	function add_metadata( $item_id, $meta_key, $meta_value, $unique = false );
 
 
 	/**
 	 * Delete term meta.
-	 *
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  string $meta_value Meta value (default: '').
-	 * @param  bool   $delete_all Delete all matching entries? (default: false).
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  string $meta_value (default: '')
+	 * @param  bool   $delete_all (default: false)
 	 * @return bool
 	 */
-	public function delete_metadata( $item_id, $meta_key, $meta_value = '', $delete_all = false );
+	function delete_metadata( $item_id, $meta_key, $meta_value = '', $delete_all = false );
 
 	/**
 	 * Get term meta.
-	 *
-	 * @param  int    $item_id Item ID.
-	 * @param  string $key Meta key.
-	 * @param  bool   $single Store as single value and not serialised (default: true).
+	 * @param  int    $item_id
+	 * @param  string $key
+	 * @param  bool   $single (default: true)
 	 * @return mixed
 	 */
-	public function get_metadata( $item_id, $key, $single = true );
+	function get_metadata( $item_id, $key, $single = true );
 
 	/**
 	 * Get order ID by order item ID.
-	 *
-	 * @param  int $item_id Item ID.
+	 * @param  int $item_id
 	 * @return int
 	 */
-	public function get_order_id_by_order_item_id( $item_id );
+	function get_order_id_by_order_item_id( $item_id );
 
 	/**
 	 * Get the order item type based on Item ID.
-	 *
-	 * @param  int $item_id Item ID.
+	 * @param  int $item_id
 	 * @return string
 	 */
 	public function get_order_item_type( $item_id );

@@ -52,13 +52,6 @@ class WC_Stripe_Customer {
 	 * @param [type] $id [description]
 	 */
 	public function set_id( $id ) {
-		// Backwards compat for customer ID stored in array format. (Pre 3.0)
-		if ( is_array( $id ) && isset( $id['customer_id'] ) ) {
-			$id = $id['customer_id'];
-
-			update_user_meta( $this->get_user_id(), '_stripe_customer_id', $id );
-		}
-
 		$this->id = wc_clean( $id );
 	}
 
@@ -100,27 +93,15 @@ class WC_Stripe_Customer {
 	 */
 	public function create_customer( $args = array() ) {
 		$billing_email = isset( $_POST['billing_email'] ) ? filter_var( $_POST['billing_email'], FILTER_SANITIZE_EMAIL ) : '';
-		$user          = $this->get_user();
+		$user = $this->get_user();
 
 		if ( $user ) {
 			$billing_first_name = get_user_meta( $user->ID, 'billing_first_name', true );
 			$billing_last_name  = get_user_meta( $user->ID, 'billing_last_name', true );
 
-			// If billing first name does not exists try the user first name.
-			if ( empty( $billing_first_name ) ) {
-				$billing_first_name = get_user_meta( $user->ID, 'first_name', true );
-			}
-
-			// If billing last name does not exists try the user last name.
-			if ( empty( $billing_last_name ) ) {
-				$billing_last_name = get_user_meta( $user->ID, 'last_name', true );
-			}
-
-			$description = __( 'Name', 'woocommerce-gateway-stripe' ) . ': ' . $billing_first_name . ' ' . $billing_last_name . ' ' . __( 'Username', 'woocommerce-gateway-stripe' ) . ': ' . $user->user_login;
-
 			$defaults = array(
 				'email'       => $user->user_email,
-				'description' => $description,
+				'description' => $billing_first_name . ' ' . $billing_last_name,
 			);
 		} else {
 			$defaults = array(
@@ -154,21 +135,6 @@ class WC_Stripe_Customer {
 	}
 
 	/**
-	 * Checks to see if error is of invalid request
-	 * error and it is no such customer.
-	 *
-	 * @since 4.1.2
-	 * @param array $error
-	 */
-	public function is_no_such_customer_error( $error ) {
-		return (
-			$error &&
-			'invalid_request_error' === $error->type &&
-			preg_match( '/No such customer/i', $error->message )
-		);
-	}
-
-	/**
 	 * Add a source for this stripe customer.
 	 * @param string $source_id
 	 * @param bool $retry
@@ -179,20 +145,15 @@ class WC_Stripe_Customer {
 			$this->set_id( $this->create_customer() );
 		}
 
-		$response = WC_Stripe_API::request(
-			array(
-				'source' => $source_id,
-			),
-			'customers/' . $this->get_id() . '/sources'
-		);
-
-		$wc_token = false;
+		$response = WC_Stripe_API::request( array(
+			'source' => $source_id,
+		), 'customers/' . $this->get_id() . '/sources' );
 
 		if ( ! empty( $response->error ) ) {
 			// It is possible the WC user once was linked to a customer on Stripe
 			// but no longer exists. Instead of failing, lets try to create a
 			// new customer.
-			if ( $this->is_no_such_customer_error( $response->error ) ) {
+			if ( preg_match( '/No such customer/i', $response->error->message ) ) {
 				delete_user_meta( $this->get_user_id(), '_stripe_customer_id' );
 				$this->create_customer();
 				return $this->add_source( $source_id, false );
@@ -262,13 +223,9 @@ class WC_Stripe_Customer {
 
 		$sources = get_transient( 'stripe_sources_' . $this->get_id() );
 
-		$response = WC_Stripe_API::request(
-			array(
-				'limit' => 100,
-			),
-			'customers/' . $this->get_id() . '/sources',
-			'GET'
-		);
+		$response = WC_Stripe_API::request( array(
+			'limit'       => 100,
+		), 'customers/' . $this->get_id() . '/sources', 'GET' );
 
 		if ( ! empty( $response->error ) ) {
 			return array();
@@ -308,13 +265,9 @@ class WC_Stripe_Customer {
 	 * @param string $source_id
 	 */
 	public function set_default_source( $source_id ) {
-		$response = WC_Stripe_API::request(
-			array(
-				'default_source' => sanitize_text_field( $source_id ),
-			),
-			'customers/' . $this->get_id(),
-			'POST'
-		);
+		$response = WC_Stripe_API::request( array(
+			'default_source' => sanitize_text_field( $source_id ),
+		), 'customers/' . $this->get_id(), 'POST' );
 
 		$this->clear_cache();
 

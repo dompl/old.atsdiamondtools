@@ -222,7 +222,6 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		add_action( 'load-' . $this->hook, array( $this, 'process_request' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_print_scripts', array( $this, 'enqueue_scripts' ) );
-		
 	} // End register_settings_screen()
 
 	/**

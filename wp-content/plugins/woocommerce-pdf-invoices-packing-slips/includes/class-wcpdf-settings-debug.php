@@ -13,15 +13,6 @@ class Settings_Debug {
 		add_action( 'admin_init', array( $this, 'init_settings' ) );
 		add_action( 'wpo_wcpdf_settings_output_debug', array( $this, 'output' ), 10, 1 );
 		add_action( 'wpo_wcpdf_after_settings_page', array( $this, 'debug_tools' ), 10, 2 );
-
-		// yes, we're hiring!
-		if (defined('WP_DEBUG') && WP_DEBUG) {
-			add_action( 'wpo_wcpdf_before_settings_page', array( $this, 'work_at_wpovernight' ), 10, 2 );
-		} else {
-			add_action( 'wpo_wcpdf_after_settings_page', array( $this, 'work_at_wpovernight' ), 30, 2 );			
-		}
-
-		add_action( 'wpo_wcpdf_after_settings_page', array( $this, 'dompdf_status' ), 20, 2 );
 	}
 
 	public function output( $section ) {
@@ -116,18 +107,7 @@ class Settings_Debug {
 			?>
 		</form>
 		<?php
-	}
-
-	public function work_at_wpovernight( $tab, $section ) {
-		if ($tab === 'debug') {
-			include( WPO_WCPDF()->plugin_path() . '/includes/views/work-at-wpovernight.php' );		
-		}
-	}
-
-	public function dompdf_status( $tab, $section ) {
-		if ($tab === 'debug') {
-			include( WPO_WCPDF()->plugin_path() . '/includes/views/dompdf-status.php' );
-		}
+		include( WPO_WCPDF()->plugin_path() . '/includes/views/dompdf-status.php' );
 	}
 
 	public function init_settings() {
@@ -176,25 +156,6 @@ class Settings_Debug {
 					'id'			=> 'enable_debug',
 					'description'	=> __( "Enable this option to output plugin errors if you're getting a blank page or other PDF generation issues", 'woocommerce-pdf-invoices-packing-slips' ) . '<br>' .
 									   __( '<b>Caution!</b> This setting may reveal errors (from other plugins) in other places on your site too, therefor this is not recommended to leave it enabled on live sites.', 'woocommerce-pdf-invoices-packing-slips' ),
-				)
-			),
-			array(
-				'type'			=> 'setting',
-				'id'			=> 'enable_cleanup',
-				'title'			=> __( 'Enable automatic cleanup', 'woocommerce-pdf-invoices-packing-slips' ),
-				'callback'		=> 'checkbox_text_input',
-				'section'		=> 'debug_settings',
-				'args'			=> array(
-					'option_name'		=> $option_name,
-					'id'				=> 'enable_cleanup',
-					'disabled'			=> ( !function_exists("glob") || !function_exists('filemtime') ) ? 1 : NULL,
-					'text_input_wrap'	=> __( "every %s days", 'woocommerce-pdf-invoices-packing-slips' ),
-					'text_input_size'	=> 4,
-					'text_input_id'		=> 'cleanup_days',
-					'text_input_default'=> 7,
-					'description'		=> ( function_exists("glob") && function_exists('filemtime') ) ?
-										   __( "Automatically clean up PDF files stored in the temporary folder (used for email attachments)", 'woocommerce-pdf-invoices-packing-slips' ) :
-										   __( '<b>Disabled:</b> The PHP functions glob and filemtime are required for automatic cleanup but not enabled on your server.', 'woocommerce-pdf-invoices-packing-slips' ),
 				)
 			),
 			array(

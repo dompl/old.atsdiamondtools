@@ -1,31 +1,31 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 /**
- * Product Factory
+ * Product Factory Class
  *
  * The WooCommerce product factory creating the right product object.
  *
- * @package WooCommerce/Classes
- * @version 3.0.0
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Product factory class.
+ * @class 		WC_Product_Factory
+ * @version		3.0.0
+ * @package		WooCommerce/Classes
+ * @category	Class
+ * @author 		WooThemes
  */
 class WC_Product_Factory {
 
 	/**
 	 * Get a product.
 	 *
-	 * @param mixed $product_id WC_Product|WP_Post|int|bool $product Product instance, post instance, numeric or false to use global $post.
+	 * @param mixed $product_id (default: false)
 	 * @param array $deprecated Previously used to pass arguments to the factory, e.g. to force a type.
 	 * @return WC_Product|bool Product object or null if the product cannot be loaded.
 	 */
 	public function get_product( $product_id = false, $deprecated = array() ) {
-		$product_id = $this->get_product_id( $product_id );
-
-		if ( ! $product_id ) {
+		if ( ! $product_id = $this->get_product_id( $product_id ) ) {
 			return false;
 		}
 
@@ -53,8 +53,8 @@ class WC_Product_Factory {
 	 * Gets a product classname and allows filtering. Returns WC_Product_Simple if the class does not exist.
 	 *
 	 * @since  3.0.0
-	 * @param  int    $product_id   Product ID.
-	 * @param  string $product_type Product type.
+	 * @param  int    $product_id
+	 * @param  string $product_type
 	 * @return string
 	 */
 	public static function get_product_classname( $product_id, $product_type ) {
@@ -71,7 +71,7 @@ class WC_Product_Factory {
 	 * Get the product type for a product.
 	 *
 	 * @since 3.0.0
-	 * @param  int $product_id Product ID.
+	 * @param  int $product_id
 	 * @return string|false
 	 */
 	public static function get_product_type( $product_id ) {
@@ -87,7 +87,7 @@ class WC_Product_Factory {
 	/**
 	 * Create a WC coding standards compliant class name e.g. WC_Product_Type_Class instead of WC_Product_type-class.
 	 *
-	 * @param  string $product_type Product type.
+	 * @param  string $product_type
 	 * @return string|false
 	 */
 	public static function get_classname_from_product_type( $product_type ) {
@@ -97,15 +97,13 @@ class WC_Product_Factory {
 	/**
 	 * Get the product ID depending on what was passed.
 	 *
-	 * @since  3.0.0
-	 * @param  WC_Product|WP_Post|int|bool $product Product instance, post instance, numeric or false to use global $post.
+	 * @since 3.0.0
+	 * @param  mixed $product
 	 * @return int|bool false on failure
 	 */
 	private function get_product_id( $product ) {
-		global $post;
-
-		if ( false === $product && isset( $post, $post->ID ) && 'product' === get_post_type( $post->ID ) ) {
-			return absint( $post->ID );
+		if ( false === $product && isset( $GLOBALS['post'], $GLOBALS['post']->ID ) && 'product' === get_post_type( $GLOBALS['post']->ID ) ) {
+			return $GLOBALS['post']->ID;
 		} elseif ( is_numeric( $product ) ) {
 			return $product;
 		} elseif ( $product instanceof WC_Product ) {

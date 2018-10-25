@@ -1,10 +1,4 @@
 <?php
-/**
- * Class WC_Order_Item_Data_Store file.
- *
- * @package WooCommerce\DataStores
- */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -13,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WC Order Item Data Store: Misc Order Item Data functions.
  *
  * @version  3.0.0
+ * @category Class
+ * @author   WooCommerce
  */
 class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 
@@ -20,18 +16,18 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Add an order item to an order.
 	 *
 	 * @since  3.0.0
-	 * @param  int   $order_id Order ID.
+	 * @param  int   $order_id
 	 * @param  array $item order_item_name and order_item_type.
 	 * @return int Order Item ID
 	 */
 	public function add_order_item( $order_id, $item ) {
 		global $wpdb;
 		$wpdb->insert(
-			$wpdb->prefix . 'woocommerce_order_items',
+			$wpdb->prefix . "woocommerce_order_items",
 			array(
-				'order_item_name' => $item['order_item_name'],
-				'order_item_type' => $item['order_item_type'],
-				'order_id'        => $order_id,
+				'order_item_name'       => $item['order_item_name'],
+				'order_item_type'       => $item['order_item_type'],
+				'order_id'              => $order_id,
 			),
 			array(
 				'%s',
@@ -47,7 +43,7 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Update an order item.
 	 *
 	 * @since  3.0.0
-	 * @param  int   $item_id Item ID.
+	 * @param  int   $item_id
 	 * @param  array $item order_item_name or order_item_type.
 	 * @return boolean
 	 */
@@ -60,7 +56,7 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Delete an order item.
 	 *
 	 * @since  3.0.0
-	 * @param  int $item_id Item ID.
+	 * @param  int   $item_id
 	 */
 	public function delete_order_item( $item_id ) {
 		global $wpdb;
@@ -72,10 +68,10 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Update term meta.
 	 *
 	 * @since  3.0.0
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  mixed  $meta_value Meta value.
-	 * @param  string $prev_value (default: '').
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  mixed  $meta_value
+	 * @param  string $prev_value (default: '')
 	 * @return bool
 	 */
 	public function update_metadata( $item_id, $meta_key, $meta_value, $prev_value = '' ) {
@@ -86,10 +82,10 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Add term meta.
 	 *
 	 * @since  3.0.0
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  mixed  $meta_value Meta value.
-	 * @param  bool   $unique (default: false).
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  mixed  $meta_value
+	 * @param  bool   $unique (default: false)
 	 * @return int    New row ID or 0
 	 */
 	public function add_metadata( $item_id, $meta_key, $meta_value, $unique = false ) {
@@ -100,10 +96,10 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Delete term meta.
 	 *
 	 * @since  3.0.0
-	 * @param  int    $item_id Item ID.
-	 * @param  string $meta_key Meta key.
-	 * @param  string $meta_value (default: '').
-	 * @param  bool   $delete_all (default: false).
+	 * @param  int    $item_id
+	 * @param  string $meta_key
+	 * @param  string $meta_value (default: '')
+	 * @param  bool   $delete_all (default: false)
 	 * @return bool
 	 */
 	public function delete_metadata( $item_id, $meta_key, $meta_value = '', $delete_all = false ) {
@@ -114,9 +110,9 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Get term meta.
 	 *
 	 * @since  3.0.0
-	 * @param  int    $item_id Item ID.
-	 * @param  string $key Meta key.
-	 * @param  bool   $single (default: true).
+	 * @param  int    $item_id
+	 * @param  string $key
+	 * @param  bool   $single (default: true)
 	 * @return mixed
 	 */
 	public function get_metadata( $item_id, $key, $single = true ) {
@@ -127,24 +123,22 @@ class WC_Order_Item_Data_Store implements WC_Order_Item_Data_Store_Interface {
 	 * Get order ID by order item ID.
 	 *
 	 * @since 3.0.0
-	 * @param  int $item_id Item ID.
+	 * @param  int $item_id
 	 * @return int
 	 */
-	public function get_order_id_by_order_item_id( $item_id ) {
+	function get_order_id_by_order_item_id( $item_id ) {
 		global $wpdb;
-		return (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT order_id FROM {$wpdb->prefix}woocommerce_order_items WHERE order_item_id = %d",
-				$item_id
-			)
-		);
+		return (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT order_id FROM {$wpdb->prefix}woocommerce_order_items WHERE order_item_id = %d",
+			$item_id
+		) );
 	}
 
 	/**
 	 * Get the order item type based on Item ID.
 	 *
 	 * @since 3.0.0
-	 * @param int $item_id Item ID.
+	 * @param int $item_id
 	 * @return string
 	 */
 	public function get_order_item_type( $item_id ) {

@@ -68,8 +68,8 @@ class WC_Shipment_Tracking_Updates {
 	public static function check_updates() {
 		$installed_version = get_option( 'woocommerce_shipment_tracking_version' );
 		if ( WC_SHIPMENT_TRACKING_VERSION !== $installed_version ) {
-			self::update_version();
 			self::maybe_perform_update( $installed_version );
+			self::update_version();
 		}
 	}
 

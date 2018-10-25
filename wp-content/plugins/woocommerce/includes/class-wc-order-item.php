@@ -1,25 +1,23 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Order Item
  *
  * A class which represents an item within an order and handles CRUD.
  * Uses ArrayAccess to be BW compatible with WC_Orders::get_items().
  *
- * @package WooCommerce/Classes
- * @version 3.0.0
- * @since   3.0.0
- */
-
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Order item class.
+ * @version     3.0.0
+ * @since       3.0.0
+ * @package     WooCommerce/Classes
+ * @author      WooThemes
  */
 class WC_Order_Item extends WC_Data implements ArrayAccess {
 
 	/**
 	 * Order Data array. This is the core order data exposed in APIs since 3.0.0.
-	 *
 	 * @since 3.0.0
 	 * @var array
 	 */
@@ -31,7 +29,6 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Stores meta in cache for future reads.
 	 * A group must be set to to enable caching.
-	 *
 	 * @var string
 	 */
 	protected $cache_group = 'order-items';
@@ -40,22 +37,18 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	 * Meta type. This should match up with
 	 * the types available at https://codex.wordpress.org/Function_Reference/add_metadata.
 	 * WP defines 'post', 'user', 'comment', and 'term'.
-	 *
-	 * @var string
 	 */
 	protected $meta_type = 'order_item';
 
 	/**
 	 * This is the name of this object type.
-	 *
 	 * @var string
 	 */
 	protected $object_type = 'order_item';
 
 	/**
 	 * Constructor.
-	 *
-	 * @param int|object|array $item ID to load from the DB, or WC_Order_Item object.
+	 * @param int|object|array $item ID to load from the DB, or WC_Order_Item Object
 	 */
 	public function __construct( $item = 0 ) {
 		parent::__construct( $item );
@@ -68,7 +61,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 			$this->set_object_read( true );
 		}
 
-		$type             = 'line_item' === $this->get_type() ? 'product' : $this->get_type();
+		$type = 'line_item' === $this->get_type() ? 'product' : $this->get_type();
 		$this->data_store = WC_Data_Store::load( 'order-item-' . $type );
 		if ( $this->get_id() > 0 ) {
 			$this->data_store->read( $this );
@@ -85,7 +78,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	 */
 	public function apply_changes() {
 		if ( function_exists( 'array_replace' ) ) {
-			$this->data = array_replace( $this->data, $this->changes ); // phpcs:ignore PHPCompatibility.PHP.NewFunctions.array_replaceFound
+			$this->data = array_replace( $this->data, $this->changes );
 		} else { // PHP 5.2 compatibility.
 			foreach ( $this->changes as $key => $change ) {
 				$this->data[ $key ] = $change;
@@ -103,7 +96,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Get order ID this meta belongs to.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return int
 	 */
 	public function get_order_id( $context = 'view' ) {
@@ -113,7 +106,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Get order item name.
 	 *
-	 * @param  string $context What the value is for. Valid values are 'view' and 'edit'.
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_name( $context = 'view' ) {
@@ -126,12 +119,11 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	 * @return string
 	 */
 	public function get_type() {
-		return '';
+		return;
 	}
 
 	/**
 	 * Get quantity.
-	 *
 	 * @return int
 	 */
 	public function get_quantity() {
@@ -140,7 +132,6 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 
 	/**
 	 * Get tax status.
-	 *
 	 * @return string
 	 */
 	public function get_tax_status() {
@@ -150,6 +141,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Get tax class.
 	 *
+	 * @param  string $context
 	 * @return string
 	 */
 	public function get_tax_class() {
@@ -158,7 +150,6 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 
 	/**
 	 * Get parent order object.
-	 *
 	 * @return WC_Order
 	 */
 	public function get_order() {
@@ -174,7 +165,8 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Set order ID.
 	 *
-	 * @param int $value Order ID.
+	 * @param  int $value
+	 * @throws WC_Data_Exception
 	 */
 	public function set_order_id( $value ) {
 		$this->set_prop( 'order_id', absint( $value ) );
@@ -183,10 +175,11 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Set order item name.
 	 *
-	 * @param string $value Item name.
+	 * @param  string $value
+	 * @throws WC_Data_Exception
 	 */
 	public function set_name( $value ) {
-		$this->set_prop( 'name', wp_check_invalid_utf8( $value ) );
+		$this->set_prop( 'name', wc_clean( $value ) );
 	}
 
 	/*
@@ -198,11 +191,11 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	/**
 	 * Type checking.
 	 *
-	 * @param  string|array $type Type.
+	 * @param  string|array  $type
 	 * @return boolean
 	 */
 	public function is_type( $type ) {
-		return is_array( $type ) ? in_array( $this->get_type(), $type, true ) : $type === $this->get_type();
+		return is_array( $type ) ? in_array( $this->get_type(), $type ) : $type === $this->get_type();
 	}
 
 	/**
@@ -223,12 +216,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 
 			if ( method_exists( $this, 'get_subtotal' ) ) {
 				$subtotal_taxes = WC_Tax::calc_tax( $this->get_subtotal(), $tax_rates, false );
-				$this->set_taxes(
-					array(
-						'total'    => $taxes,
-						'subtotal' => $subtotal_taxes,
-					)
-				);
+				$this->set_taxes( array( 'total' => $taxes, 'subtotal' => $subtotal_taxes ) );
 			} else {
 				$this->set_taxes( array( 'total' => $taxes ) );
 			}
@@ -270,7 +258,7 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 			$meta->value   = rawurldecode( (string) $meta->value );
 			$attribute_key = str_replace( 'attribute_', '', $meta->key );
 			$display_key   = wc_attribute_label( $attribute_key, $product );
-			$display_value = wp_kses_post( $meta->value );
+			$display_value = $meta->value;
 
 			if ( taxonomy_exists( $attribute_key ) ) {
 				$term = get_term_by( 'slug', $meta->value, $attribute_key );
@@ -305,10 +293,9 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	*/
 
 	/**
-	 * OffsetSet for ArrayAccess.
-	 *
-	 * @param string $offset Offset.
-	 * @param mixed  $value  Value.
+	 * offsetSet for ArrayAccess
+	 * @param string $offset
+	 * @param mixed $value
 	 */
 	public function offsetSet( $offset, $value ) {
 		if ( 'item_meta_array' === $offset ) {
@@ -330,9 +317,8 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	}
 
 	/**
-	 * OffsetUnset for ArrayAccess.
-	 *
-	 * @param string $offset Offset.
+	 * offsetUnset for ArrayAccess
+	 * @param string $offset
 	 */
 	public function offsetUnset( $offset ) {
 		$this->maybe_read_meta_data();
@@ -354,9 +340,8 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	}
 
 	/**
-	 * OffsetExists for ArrayAccess.
-	 *
-	 * @param string $offset Offset.
+	 * offsetExists for ArrayAccess
+	 * @param string $offset
 	 * @return bool
 	 */
 	public function offsetExists( $offset ) {
@@ -368,9 +353,8 @@ class WC_Order_Item extends WC_Data implements ArrayAccess {
 	}
 
 	/**
-	 * OffsetGet for ArrayAccess.
-	 *
-	 * @param string $offset Offset.
+	 * offsetGet for ArrayAccess
+	 * @param string $offset
 	 * @return mixed
 	 */
 	public function offsetGet( $offset ) {

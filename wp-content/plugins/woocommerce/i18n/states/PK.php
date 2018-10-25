@@ -2,13 +2,16 @@
 /**
  * Pakistan's states
  *
- * @package WooCommerce/i18n
- * @version 3.0.0
+ * @author      WooCommerce
+ * @category    i18n
+ * @package     WooCommerce/i18n
+ * @version     3.0.0
  */
-
 global $states;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $states['PK'] = array(
 	'JK' => __( 'Azad Kashmir', 'woocommerce' ),
