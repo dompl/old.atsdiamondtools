@@ -8,6 +8,7 @@ jQuery(document).ready(function ($) {
     var syncStatus;
     var processed;
     var toProcess;
+    var syncData = false;
 
     var $clearCacheBtn = $('#aws-clear-cache .button');
 
@@ -39,6 +40,7 @@ jQuery(document).ready(function ($) {
                 data: data
             },
             dataType: "json",
+            timeout:0,
             success: function (response) {
                 if ( 'sync' !== syncStatus ) {
                     return;
@@ -48,6 +50,8 @@ jQuery(document).ready(function ($) {
                 processed = response.data.offset;
 
                 processed = Math.floor( processed / toProcess * 100 );
+
+                syncData = response.data;
 
                 if ( 0 === response.data.offset && ! response.data.start ) {
 
@@ -74,10 +78,26 @@ jQuery(document).ready(function ($) {
                 }
 
             },
-            error : function( jqXHR, textStatus ) {
+            error : function( jqXHR, textStatus, errorThrown ) {
                 console.log( "Request failed: " + textStatus );
+
+                if ( textStatus == 'timeout' || jqXHR.status == 504 ) {
+                    console.log( 'timeout' );
+                    if ( syncData ) {
+                        setTimeout(function() { sync( syncData ); }, 1000);
+                    }
+                } else if ( textStatus == 'error') {
+                    if ( syncData ) {
+
+                        if ( 0 !== syncData.offset && ! syncData.start ) {
+                            setTimeout(function() { sync( syncData ); }, 3000);
+                        }
+
+                    }
+                }
+
             },
-            complete: function () {
+            complete: function ( jqXHR, textStatus ) {
             }
         });
 

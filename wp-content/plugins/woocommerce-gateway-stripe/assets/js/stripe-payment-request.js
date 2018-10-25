@@ -21,21 +21,19 @@ jQuery( function( $ ) {
 				.replace( '%%endpoint%%', 'wc_stripe_' + endpoint );
 		},
 
-		getCartDetails: function( paymentRequest ) {
+		getCartDetails: function() {
 			var data = {
 				security: wc_stripe_payment_request_params.nonce.payment
 			};
 
-			$.ajax({
+			$.ajax( {
 				type:    'POST',
 				data:    data,
 				url:     wc_stripe_payment_request.getAjaxURL( 'get_cart_details' ),
 				success: function( response ) {
-					paymentRequest.update({
-						total: response.order_data.total
-					});
+					wc_stripe_payment_request.startPaymentRequest( response );
 				}
-			});
+			} );
 		},
 
 		getAttributes: function() {
@@ -66,12 +64,12 @@ jQuery( function( $ ) {
 		processSource: function( source, paymentRequestType ) {
 			var data = wc_stripe_payment_request.getOrderData( source, paymentRequestType );
 
-			return $.ajax({
+			return $.ajax( {
 				type:    'POST',
 				data:    data,
 				dataType: 'json',
 				url:     wc_stripe_payment_request.getAjaxURL( 'create_order' )
-			});
+			} );
 		},
 
 		/**
@@ -198,13 +196,13 @@ jQuery( function( $ ) {
 		},
 
 		block: function() {
-			$.blockUI({
+			$.blockUI( {
 				message: null,
 				overlayCSS: {
 					background: '#fff',
 					opacity: 0.6
 				}
-			});
+			} );
 		},
 
 		/**
@@ -225,11 +223,11 @@ jQuery( function( $ ) {
 				payment_request_type: paymentRequestType
 			};
 
-			return $.ajax({
+			return $.ajax( {
 				type:    'POST',
 				data:    data,
 				url:     wc_stripe_payment_request.getAjaxURL( 'get_shipping_options' )
-			});
+			} );
 		},
 
 		/**
@@ -245,11 +243,11 @@ jQuery( function( $ ) {
 				payment_request_type: paymentRequestType
 			};
 
-			return $.ajax({
+			return $.ajax( {
 				type: 'POST',
 				data: data,
 				url:  wc_stripe_payment_request.getAjaxURL( 'update_shipping_method' )
-			});
+			} );
 		},
 
 		/**
@@ -271,11 +269,11 @@ jQuery( function( $ ) {
 				attributes: $( '.variations_form' ).length ? wc_stripe_payment_request.getAttributes().data : []
 			};
 
-			return $.ajax({
+			return $.ajax( {
 				type: 'POST',
 				data: data,
 				url:  wc_stripe_payment_request.getAjaxURL( 'add_to_cart' )
-			});
+			} );
 		},
 
 		clearCart: function() {
@@ -283,12 +281,12 @@ jQuery( function( $ ) {
 					'security': wc_stripe_payment_request_params.nonce.clear_cart
 				};
 
-			return $.ajax({
+			return $.ajax( {
 				type:    'POST',
 				data:    data,
 				url:     wc_stripe_payment_request.getAjaxURL( 'clear_cart' ),
 				success: function( response ) {}
-			});
+			} );
 		},
 
 		getRequestOptionsFromLocal: function() {
@@ -335,7 +333,7 @@ jQuery( function( $ ) {
 
 			var paymentRequest = stripe.paymentRequest( options );
 
-			var elements = stripe.elements({ locale: wc_stripe_payment_request_params.button.locale });
+			var elements = stripe.elements( { locale: wc_stripe_payment_request_params.button.locale } );
 			var prButton = elements.create( 'paymentRequestButton', {
 				paymentRequest: paymentRequest,
 				style: {
@@ -345,10 +343,12 @@ jQuery( function( $ ) {
 						height: wc_stripe_payment_request_params.button.height + 'px'
 					},
 				}
-			});
+			} );
 
 			// Check the availability of the Payment Request API first.
 			paymentRequest.canMakePayment().then( function( result ) {
+				var paymentRequestError = [];
+
 				if ( result ) {
 					paymentRequestType = result.applePay ? 'apple_pay' : 'payment_request_api';
 
@@ -364,36 +364,45 @@ jQuery( function( $ ) {
 								} else if ( addToCartButton.is( '.wc-variation-selection-needed' ) ) {
 									window.alert( wc_add_to_cart_variation_params.i18n_make_a_selection_text );
 								}
+							} else if ( 0 < paymentRequestError.length ) {
+								e.preventDefault();
+								window.alert( paymentRequestError );
 							} else {
 								wc_stripe_payment_request.addToCart();
 							}
-						});
+						} );
 
 						$( document.body ).on( 'woocommerce_variation_has_changed', function() {
-							$( '#wc-stripe-payment-request-button' ).block({ message: null });
+							$( '#wc-stripe-payment-request-button' ).block( { message: null } );
 
 							$.when( wc_stripe_payment_request.getSelectedProductData() ).then( function( response ) {
-								$.when( paymentRequest.update({
+								$.when( paymentRequest.update( {
 									total: response.total,
 									displayItems: response.displayItems
-								}) ).then( function() {
+								} ) ).then( function() {
 									$( '#wc-stripe-payment-request-button' ).unblock();
-								});
-							});
-						});
+								} );
+							} );
+						} );
 
-						$( '.quantity' ).on( 'change', '.qty', function() {
-							$( '#wc-stripe-payment-request-button' ).block({ message: null });
+						$( '.quantity' ).on( 'keyup', '.qty', function() {
+							$( '#wc-stripe-payment-request-button' ).block( { message: null } );
+							paymentRequestError = [];
 
 							$.when( wc_stripe_payment_request.getSelectedProductData() ).then( function( response ) {
-								$.when( paymentRequest.update({
-									total: response.total,
-									displayItems: response.displayItems
-								}) ).then( function() {
+								if ( response.error ) {
+									paymentRequestError = [ response.error ];
 									$( '#wc-stripe-payment-request-button' ).unblock();
-								});
-							});
-						});
+								} else {
+									$.when( paymentRequest.update( {
+										total: response.total,
+										displayItems: response.displayItems
+									} ) ).then( function() {
+										$( '#wc-stripe-payment-request-button' ).unblock();
+									} );
+								}
+							} );
+						} );
 					}
 
 					if ( $( '#wc-stripe-payment-request-button' ).length ) {
@@ -404,14 +413,14 @@ jQuery( function( $ ) {
 					$( '#wc-stripe-payment-request-button' ).hide();
 					$( '#wc-stripe-payment-request-button-separator' ).hide();
 				}
-			});
+			} );
 
 			// Possible statuses success, fail, invalid_payer_name, invalid_payer_email, invalid_payer_phone, invalid_shipping_address.
 			paymentRequest.on( 'shippingaddresschange', function( evt ) {
 				$.when( wc_stripe_payment_request.updateShippingOptions( paymentDetails, evt.shippingAddress ) ).then( function( response ) {
 					evt.updateWith( { status: response.result, shippingOptions: response.shipping_options, total: response.total, displayItems: response.displayItems } );
-				});
-			});
+				} );
+			} );
 
 			paymentRequest.on( 'shippingoptionchange', function( evt ) {
 				$.when( wc_stripe_payment_request.updateShippingDetails( paymentDetails, evt.shippingOption ) ).then( function( response ) {
@@ -422,8 +431,8 @@ jQuery( function( $ ) {
 					if ( 'fail' === response.result ) {
 						evt.updateWith( { status: 'fail' } );
 					}
-				});												
-			});
+				} );												
+			} );
 
 			paymentRequest.on( 'source', function( evt ) {
 				// Check if we allow prepaid cards.
@@ -436,9 +445,9 @@ jQuery( function( $ ) {
 						} else {
 							wc_stripe_payment_request.abortPayment( evt, response.messages );
 						}
-					});
+					} );
 				}
-			});
+			} );
 		},
 
 		getSelectedProductData: function() {
@@ -456,11 +465,11 @@ jQuery( function( $ ) {
 				attributes: $( '.variations_form' ).length ? wc_stripe_payment_request.getAttributes().data : []
 			};
 
-			return $.ajax({
+			return $.ajax( {
 				type: 'POST',
 				data: data,
 				url:  wc_stripe_payment_request.getAjaxURL( 'get_selected_product_data' )
-			});
+			} );
 		},
 
 		/**
@@ -470,18 +479,12 @@ jQuery( function( $ ) {
 		 * @version 4.0.0
 		 */
 		init: function() {
-			var data = {
-				security: wc_stripe_payment_request_params.nonce.payment
-			};
+			if ( wc_stripe_payment_request_params.is_product_page ) {
+				wc_stripe_payment_request.startPaymentRequest( '' );
+			} else {
+				wc_stripe_payment_request.getCartDetails();
+			}
 
-			$.ajax({
-				type:    'POST',
-				data:    data,
-				url:     wc_stripe_payment_request.getAjaxURL( 'get_cart_details' ),
-				success: function( response ) {
-					wc_stripe_payment_request.startPaymentRequest( response );
-				}
-			});
 		},
 	};
 
@@ -490,10 +493,10 @@ jQuery( function( $ ) {
 	// We need to refresh payment request data when total is updated.
 	$( document.body ).on( 'updated_cart_totals', function() {
 		wc_stripe_payment_request.init();
-	});
+	} );
 
 	// We need to refresh payment request data when total is updated.
 	$( document.body ).on( 'updated_checkout', function() {
 		wc_stripe_payment_request.init();
-	});
-});
+	} );
+} );

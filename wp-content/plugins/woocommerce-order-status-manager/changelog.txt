@@ -1,5 +1,19 @@
 *** WooCommerce Order Status Manager Changelog ***
 
+2018.05.23 - version 1.9.2
+ * Misc - Add support for WooCommerce 3.4
+
+2018.03.21 - version 1.9.1
+ * Tweak - Cache order status posts within each request to prevent duplicate database queries
+ * Fix - Fix PHP notice when viewing trashed orders in WC 3.3+
+ * Fix - Re-establish argument parity with 'woocommerce_email_' actions
+
+2018.01.23 - version 1.9.0
+ * Tweak - Improve icon picker UI: add Remove Icon button, match WordPress styles
+ * Tweak - Limit order status names to 35 characters
+ * Misc - Update FontAwesome to 4.7.0
+ * Misc - Add support for WooCommerce 3.3
+
 2017.11.07 - version 1.8.0
  * Tweak - Add order actions to manually send custom emails removed by WooCommerce 3.2
  * Tweak - Don't suppress filters when getting statuses for improved WPML compatibility

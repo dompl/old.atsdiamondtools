@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Classes
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -187,12 +187,13 @@ class WC_Order_Status_Manager_Order_Statuses {
 
 
 	/**
-	 * Create a custom post type (wc_order_status) for an order status
+	 * Creates a custom post type (wc_order_status) for an order status.
 	 *
 	 * @since 1.0.0
-	 * @param string $slug Slug. Example: `processing`
-	 * @param string $name Name. Example: `Processing`
-	 * @return int Post ID
+	 *
+	 * @param string $slug slug, for example: `processing`
+	 * @param string $name name, for example: `Processing`
+	 * @return int the created post id
 	 */
 	public function create_post_for_status( $slug, $name ) {
 
@@ -215,12 +216,13 @@ class WC_Order_Status_Manager_Order_Statuses {
 				$paid_statuses = apply_filters( 'woocommerce_order_is_paid_statuses', array( 'processing', 'completed' ) );
 			}
 
+			update_post_meta( $post_id, '_color', $this->get_core_order_status_color( $slug ) );
+
 			switch ( $slug ) {
 
 				case 'pending':
 
 					update_post_meta( $post_id, '_icon',          'wcicon-status-pending' );
-					update_post_meta( $post_id, '_color',         '#ffba00' );
 					update_post_meta( $post_id, '_next_statuses', $paid_statuses );
 					update_post_meta( $post_id, '_is_paid',       'needs_payment' );
 
@@ -232,7 +234,6 @@ class WC_Order_Status_Manager_Order_Statuses {
 					unset( $completed_paid_statuses['processing'] );
 
 					update_post_meta( $post_id, '_icon',               'wcicon-status-processing' );
-					update_post_meta( $post_id, '_color',              '#73a724' );
 					update_post_meta( $post_id, '_action_icon',        'wcicon-processing' );
 					update_post_meta( $post_id, '_next_statuses',      $completed_paid_statuses );
 					update_post_meta( $post_id, '_bulk_action',        'yes' );
@@ -244,7 +245,6 @@ class WC_Order_Status_Manager_Order_Statuses {
 				case 'on-hold':
 
 					update_post_meta( $post_id, '_icon',               'wcicon-on-hold' );
-					update_post_meta( $post_id, '_color',              '#999999' );
 					update_post_meta( $post_id, '_next_statuses',      $paid_statuses );
 					update_post_meta( $post_id, '_bulk_action',        'yes' );
 					update_post_meta( $post_id, '_include_in_reports', 'yes' );
@@ -255,8 +255,7 @@ class WC_Order_Status_Manager_Order_Statuses {
 				case 'completed':
 
 					update_post_meta( $post_id, '_icon',               'wcicon-status-completed' );
-					update_post_meta( $post_id, '_color',              '#2ea2cc' );
-					update_post_meta( $post_id, '_action_icon',        'wcicon-check' );
+					update_post_meta( $post_id, '_action_icon',        ( SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? 'dashicons dashicons-yes' : 'wcicon-check' ) );
 					update_post_meta( $post_id, '_bulk_action',        'yes' );
 					update_post_meta( $post_id, '_include_in_reports', 'yes' );
 					update_post_meta( $post_id, '_is_paid',            'yes' );
@@ -266,7 +265,6 @@ class WC_Order_Status_Manager_Order_Statuses {
 				case 'cancelled':
 
 					update_post_meta( $post_id, '_icon',    'wcicon-status-cancelled' );
-					update_post_meta( $post_id, '_color',   '#aa0000' );
 					update_post_meta( $post_id, '_is_paid', 'no' );
 
 				break;
@@ -274,7 +272,6 @@ class WC_Order_Status_Manager_Order_Statuses {
 				case 'refunded':
 
 					update_post_meta( $post_id, '_icon',               'wcicon-status-refunded' );
-					update_post_meta( $post_id, '_color',              '#999999' );
 					update_post_meta( $post_id, '_include_in_reports', 'yes' );
 					update_post_meta( $post_id, '_is_paid',            'no' );
 
@@ -283,7 +280,6 @@ class WC_Order_Status_Manager_Order_Statuses {
 				case 'failed':
 
 					update_post_meta( $post_id, '_icon',    'wcicon-status-failed' );
-					update_post_meta( $post_id, '_color',   '#d0c21f' );
 					update_post_meta( $post_id, '_is_paid', 'needs_payment' );
 
 				break;
@@ -292,6 +288,38 @@ class WC_Order_Status_Manager_Order_Statuses {
 		}
 
 		return $post_id;
+	}
+
+
+	/**
+	 * Returns the badge color for a core order status.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param string $status the status slug
+	 * @return string the badge color for the status
+	 */
+	public function get_core_order_status_color( $status ) {
+
+		switch ( $status ) {
+
+			case 'pending':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#c6e1c6' : '#73a724';
+			case 'processing':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#c6e1c6' : '#73a724';
+			case 'on-hold':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#f8dda7' : '#999999';
+			case 'completed':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#c8d7e1' : '#2ea2cc';
+			case 'cancelled':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#e5e5e5' : '#2ea2cc';
+			case 'refunded':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#e5e5e5' : '#999999';
+			case 'failed':
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#eba3a3' : '#d0c21f';
+			default:
+				return SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ? '#e5e5e5' : '#999999';
+		}
 	}
 
 
@@ -813,5 +841,77 @@ class WC_Order_Status_Manager_Order_Statuses {
 		return $args;
 	}
 
+
+	/**
+	 * Remove Order Status Manager actions from Order actions
+	 *
+	 * @see WC_Order_Status_Manager_Admin_Orders::custom_order_actions()
+	 *
+	 * @since 1.4.3
+	 *
+	 * @param array $order_actions
+	 * @return array
+	 */
+	public function trim_order_actions( $order_actions ) {
+
+		if ( $order_statuses = $this->get_order_status_posts() ) {
+
+			foreach ( $order_statuses as $post ) {
+
+				if ( $status = new WC_Order_Status_Manager_Order_Status( $post ) ) {
+
+					$slug = $status->get_slug();
+
+					if ( isset( $order_statuses[ $slug ] ) ) {
+						unset( $order_actions[ $slug ] );
+					} elseif ( 'completed' === $slug ) {
+						unset( $order_actions['complete'] );
+					}
+				}
+			}
+		}
+
+		return $order_actions;
+	}
+
+
+	/**
+	 * Returns a list of customized order actions.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param \WC_Order $order the order instance
+	 * @return array an array of customized order actions
+	 */
+	public function get_custom_order_actions( $order ) {
+
+		$custom_actions = array();
+		$status         = new WC_Order_Status_Manager_Order_Status( $order->get_status() );
+
+		// sanity check: bail if status is not found
+		// this can happen if some statuses are registered late
+		if ( ! $status || ! $status->get_id() ) {
+			return $custom_actions;
+		}
+
+		$next_statuses  = $status->get_next_statuses();
+
+		if ( ! empty( $next_statuses ) ) {
+
+			$order_statuses = wc_get_order_statuses();
+
+			// add next statuses as actions
+			foreach ( $next_statuses as $next_status ) {
+
+				$custom_actions[ $next_status ] = array(
+					'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=woocommerce_mark_order_status&status=' . $next_status . '&order_id=' . SV_WC_Order_Compatibility::get_prop( $order, 'id' ) ), 'woocommerce-mark-order-status' ),
+					'name'   => $order_statuses[ 'wc-' . $next_status ],
+					'action' => $next_status,
+				);
+			}
+		}
+
+		return $custom_actions;
+	}
 
 }

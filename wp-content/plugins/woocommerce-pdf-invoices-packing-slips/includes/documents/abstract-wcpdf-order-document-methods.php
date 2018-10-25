@@ -186,9 +186,11 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * Return/Show a custom field
 	 */		
 	public function get_custom_field( $field_name ) {
-		$custom_field = WCX_Order::get_meta( $this->order, $field_name, true );
-		// if not found, try prefixed with underscore
-		if ( !$custom_field && substr( $field_name, 0, 1 ) !== '_' ) {
+		if ( !$this->is_order_prop( $field_name ) ) {
+			$custom_field = WCX_Order::get_meta( $this->order, $field_name, true );
+		}
+		// if not found, try prefixed with underscore (not when ACF is active!)
+		if ( !$custom_field && substr( $field_name, 0, 1 ) !== '_' && !$this->is_order_prop( "_{$field_name}" ) && !class_exists('ACF') ) {
 			$custom_field = WCX_Order::get_meta( $this->order, "_{$field_name}", true );
 		}
 
@@ -201,7 +203,9 @@ abstract class Order_Document_Methods extends Order_Document {
 		// fallback to parent for refunds
 		if ( !$custom_field && $this->is_refund( $this->order ) ) {
 			$parent_order = $this->get_refund_parent( $this->order );
-			$custom_field = WCX_Order::get_meta( $parent_order, $field_name, true );
+			if ( !$this->is_order_prop( $field_name ) ) {
+				$custom_field = WCX_Order::get_meta( $parent_order, $field_name, true );
+			}
 
 			// WC3.0 fallback to properties
 			if ( !$custom_field && is_callable( array( $parent_order, "get_{$property}" ) ) ) {
@@ -221,6 +225,64 @@ abstract class Order_Document_Methods extends Order_Document {
 		if (!empty($custom_field) || $display_empty) {
 			echo $field_label . nl2br ($custom_field);
 		}
+	}
+
+	public function is_order_prop( $key ) {
+		if ( version_compare( WOOCOMMERCE_VERSION, '3.0', '<' ) ) {
+			return false; // WC 2.X didn't have CRUD
+		}
+		// Taken from WC class
+		$order_props = array(
+			// Abstract order props
+			'parent_id',
+			'status',
+			'currency',
+			'version',
+			'prices_include_tax',
+			'date_created',
+			'date_modified',
+			'discount_total',
+			'discount_tax',
+			'shipping_total',
+			'shipping_tax',
+			'cart_tax',
+			'total',
+			'total_tax',
+			// Order props
+			'customer_id',
+			'order_key',
+			'billing_first_name',
+			'billing_last_name',
+			'billing_company',
+			'billing_address_1',
+			'billing_address_2',
+			'billing_city',
+			'billing_state',
+			'billing_postcode',
+			'billing_country',
+			'billing_email',
+			'billing_phone',
+			'shipping_first_name',
+			'shipping_last_name',
+			'shipping_company',
+			'shipping_address_1',
+			'shipping_address_2',
+			'shipping_city',
+			'shipping_state',
+			'shipping_postcode',
+			'shipping_country',
+			'payment_method',
+			'payment_method_title',
+			'transaction_id',
+			'customer_ip_address',
+			'customer_user_agent',
+			'created_via',
+			'customer_note',
+			'date_completed',
+			'date_paid',
+			'cart_hash',
+		);
+		return in_array($key, $order_props);
 	}
 
 	/**
@@ -248,7 +310,7 @@ abstract class Order_Document_Methods extends Order_Document {
 		}
 
 		// WC3.0+ fallback parent product for variations
-		if ( empty($attribute) &&  version_compare( WOOCOMMERCE_VERSION, '3.0', '>=' ) && $product->is_type( 'variation' ) ) {
+		if ( empty($attribute) && version_compare( WOOCOMMERCE_VERSION, '3.0', '>=' ) && $product->is_type( 'variation' ) ) {
 			$product = wc_get_product( $product->get_parent_id() );
 			$attribute = $this->get_product_attribute( $attribute_name, $product );
 		}
@@ -426,7 +488,8 @@ abstract class Order_Document_Methods extends Order_Document {
 				$data['single_line_tax'] = $this->format_price( $item['line_tax'] / max( 1, abs( $item['qty'] ) ) );
 				
 				$line_tax_data = maybe_unserialize( isset( $item['line_tax_data'] ) ? $item['line_tax_data'] : '' );
-				$data['tax_rates'] = $this->get_tax_rate( $item['tax_class'], $item['line_total'], $item['line_tax'], $line_tax_data );
+				$data['tax_rates'] = $this->get_tax_rate( $item['tax_class'], $item['line_total'], $item['line_tax'], $line_tax_data, true );
+				$data['calculated_tax_rates'] = $this->get_tax_rate( $item['tax_class'], $item['line_total'], $item['line_tax'], $line_tax_data, false );
 				
 				// Set the line subtotal (=before discount)
 				$data['line_subtotal'] = $this->format_price( $item['line_subtotal'] );
@@ -493,7 +556,7 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * @param  string $tax_class tax class slug
 	 * @return string $tax_rates imploded list of tax rates
 	 */
-	public function get_tax_rate( $tax_class, $line_total, $line_tax, $line_tax_data = '' ) {
+	public function get_tax_rate( $tax_class, $line_total, $line_tax, $line_tax_data = '', $force_calculation = false ) {
 		// first try the easy wc2.2+ way, using line_tax_data
 		if ( !empty( $line_tax_data ) && isset($line_tax_data['total']) ) {
 			$tax_rates = array();
@@ -501,7 +564,19 @@ abstract class Order_Document_Methods extends Order_Document {
 			$line_taxes = $line_tax_data['subtotal'];
 			foreach ( $line_taxes as $tax_id => $tax ) {
 				if ( isset($tax) && $tax !== '' ) {
-					$tax_rates[] = $this->get_tax_rate_by_id( $tax_id ) . ' %';
+					$tax_rate = $this->get_tax_rate_by_id( $tax_id );
+					if ( $tax_rate !== false && $force_calculation !== false ) {
+						$tax_rates[] = $tax_rate . ' %';
+					} else {
+						$tax_rates[] = $this->calculate_tax_rate( $line_total, $line_tax );
+					}
+				}
+			}
+
+			// apply decimal setting
+			if (function_exists('wc_get_price_decimal_separator')) {
+				foreach ($tax_rates as &$tax_rate) {
+					$tax_rate = str_replace('.', wc_get_price_decimal_separator(), strval($tax_rate) );
 				}
 			}
 
@@ -526,24 +601,26 @@ abstract class Order_Document_Methods extends Order_Document {
 
 			if (empty($tax_rates)) {
 				// one last try: manually calculate
-				if ( $line_total != 0) {
-					$tax_rates[] = round( ($line_tax / $line_total)*100, 1 ).' %';
-				} else {
-					$tax_rates[] = '-';
-				}
+				$tax_rates[] = $this->calculate_tax_rate( $line_total, $line_tax );
 			}
 
 			$tax_rates = implode(' ,', $tax_rates );
 		} else {
 			// Backwards compatibility/fallback: calculate tax from line items
-			if ( $line_total != 0) {
-				$tax_rates = round( ($line_tax / $line_total)*100, 1 ).' %';
-			} else {
-				$tax_rates = '-';
-			}
+			$tax_rates[] = $this->calculate_tax_rate( $line_total, $line_tax );
 		}
 		
 		return $tax_rates;
+	}
+
+	public function calculate_tax_rate( $price_ex_tax, $tax ) {
+		$precision = apply_filters( 'wpo_wcpdf_calculate_tax_rate_precision', 1 );
+		if ( $price_ex_tax != 0) {
+			$tax_rate = round( ($tax / $price_ex_tax)*100, $precision ).' %';
+		} else {
+			$tax_rate = '-';
+		}
+		return $tax_rate;
 	}
 
 	/**
@@ -554,7 +631,11 @@ abstract class Order_Document_Methods extends Order_Document {
 	public function get_tax_rate_by_id( $rate_id ) {
 		global $wpdb;
 		$rate = $wpdb->get_var( $wpdb->prepare( "SELECT tax_rate FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %d;", $rate_id ) );
-		return (float) $rate;
+		if ($rate === NULL) {
+			return false;
+		} else {
+			return (float) $rate;
+		}
 	}
 
 	/**
@@ -567,8 +648,6 @@ abstract class Order_Document_Methods extends Order_Document {
 
 		$tax_rate_ids = array();
 		foreach ($rates as $rate) {
-			// var_dump($rate->tax_rate_id);
-			// die($rate);
 			$rate_id = $rate->tax_rate_id;
 			unset($rate->tax_rate_id);
 			$tax_rate_ids[$rate_id] = (array) $rate;
@@ -649,8 +728,8 @@ abstract class Order_Document_Methods extends Order_Document {
 			if ( substr( $thumbnail_url, 0, 2 ) === "//" ) {
 				$prefix = is_ssl() ? 'https://' : 'http://';
 				$https_thumbnail_url = $prefix . ltrim( $thumbnail_url, '/' );
+				$thumbnail_img_tag_url = str_replace($thumbnail_url, $https_thumbnail_url, $thumbnail_img_tag_url);
 			}
-			$thumbnail_img_tag_url = str_replace($thumbnail_url, $https_thumbnail_url, $thumbnail_img_tag_url);
 			$thumbnail = $thumbnail_img_tag_url;
 		} else {
 			// load img with http url when filtered

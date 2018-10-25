@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Admin
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -322,6 +322,7 @@ class WC_Order_Status_Manager_Admin {
 					'to_status'             => __( 'To Status', 'woocommerce-order-status-manager' ),
 					'remove'                => __( 'Remove', 'woocommerce-order-status-manager' ),
 					'any'                   => __( 'Any', 'woocommerce-order-status-manager' ),
+					'remove_icon'           => __( 'Remove Icon', 'woocommerce-order-status-manager' ),
 					'select_icon'           => __( 'Select Icon', 'woocommerce-order-status-manager' ),
 					'all_icon_packages'     => __( 'All icon packages', 'woocommerce-order-status-manager' ),
 					'search_icons'          => __( 'Search Icons', 'woocommerce-order-status-manager' ),

@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Classes
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -51,6 +51,8 @@ class WC_Order_Status_Manager_AJAX {
 		// Upon deleting an order status
 		add_action( 'wp_ajax_wc_order_status_manager_can_safely_delete_order_status', array( $this, 'can_safely_delete_order_status' ) );
 		add_action( 'wp_ajax_wc_order_status_manager_bulk_reassign_order_status',     array( $this, 'bulk_reassign_order_status' ) );
+
+		add_filter( 'woocommerce_admin_order_preview_actions', array( $this, 'custom_order_preview_actions' ), 10, 2 );
 	}
 
 
@@ -199,4 +201,35 @@ class WC_Order_Status_Manager_AJAX {
 	}
 
 
+
+	/**
+	 * Adds custom order preview actions in order preview modal.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @internal
+	 *
+	 * @param array $actions
+	 * @param \WC_Order $order
+	 * @return array
+	 */
+	public function custom_order_preview_actions( $actions, WC_Order $order ) {
+
+		$custom_actions = wc_order_status_manager()->get_order_statuses_instance()->get_custom_order_actions( $order );
+
+		if ( ! empty( $custom_actions ) ) {
+
+			if ( ! isset( $actions['status'] ) ) {
+				$actions['status'] = array(
+					'group'   => __( 'Change status: ', 'woocommerce' ), // this textdomain is used here on purpose
+					'actions' => $custom_actions,
+				);
+			} else {
+				$actions['status']['actions'] = array_merge( $custom_actions, wc_order_status_manager()->get_order_statuses_instance()->trim_order_actions( $actions['status']['actions'] ) );
+			}
+
+		}
+
+		return $actions;
+	}
 }

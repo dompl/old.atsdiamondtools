@@ -18,13 +18,13 @@ class Ignition_Updater_Update_Checker {
 	 * URL of endpoint to check for product/changelog info
 	 * @var string
 	 */
-	private $api_url = 'http://ignitewoo.com/api2/';
+	private $api_url = 'https://ignitewoo.com/api2/';
 
 	/**
 	 * URL of endpoint to check for updates
 	 * @var string
 	 */
-	private $update_check_url = 'http://ignitewoo.com/api2/?api=installer-api&';
+	private $update_check_url = 'https://ignitewoo.com/api2/?api=installer-api&';
 
 	/**
 	 * Array of plugins info
@@ -274,7 +274,7 @@ class Ignition_Updater_Update_Checker {
 		}
 
 		// Check if we must output error messages
-		if ( count( $this->errors ) > 0 ) {
+		if ( !empty( $this->errors ) && count( $this->errors ) > 0 ) {
 			add_action( 'admin_notices', array( $this, 'error_notices') );
 		}
 
@@ -305,7 +305,7 @@ return;
 						$activated_products[ $theme_key ][3] = $theme->license_expiry_date;
 					}
 					$transient->response[ $theme_key ]['new_version'] = $theme->new_version;
-		        	$transient->response[ $theme_key ]['url'] = 'http://ignitewoo.com/';
+		        	$transient->response[ $theme_key ]['url'] = 'https://ignitewoo.com/';
 		        	$transient->response[ $theme_key ]['package'] = $theme->package;
 				} elseif ( isset( $theme->error ) ) {
 					$this->errors[] = $theme->error;
@@ -356,6 +356,7 @@ return;
 	 * @since  1.0.0
 	 * @return object $response
 	 */
+	 
 	public function plugin_information ( $false, $action, $args ) {
 		global $ignition_updater;
 		

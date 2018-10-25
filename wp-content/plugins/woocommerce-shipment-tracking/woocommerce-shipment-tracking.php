@@ -3,13 +3,13 @@
  * Plugin Name: WooCommerce Shipment Tracking
  * Plugin URI: https://woocommerce.com/products/shipment-tracking/
  * Description: Add tracking numbers to orders allowing customers to track their orders via a link. Supports many shipping providers, as well as custom ones if neccessary via a regular link.
- * Version: 1.6.9
+ * Version: 1.6.12
  * Author: WooCommerce
  * Author URI: https://woocommerce.com
  * Text Domain: woocommerce-shipment-tracking
  * Domain Path: /languages
  * WC requires at least: 2.6
- * WC tested up to: 3.3
+ * WC tested up to: 3.5
  *
  * Copyright: © 2009-2017 WooCommerce.
  * License: GNU General Public License v3.0
@@ -36,7 +36,7 @@ if ( ! function_exists( 'woothemes_queue_update' ) ) {
  */
 woothemes_queue_update( plugin_basename( __FILE__ ), '1968e199038a8a001c9f9966fd06bf88', '18693' );
 
-define( 'WC_SHIPMENT_TRACKING_VERSION', '1.6.9' );
+define( 'WC_SHIPMENT_TRACKING_VERSION', '1.6.12' );
 
 if ( is_woocommerce_active() ) {
 
@@ -118,6 +118,7 @@ if ( is_woocommerce_active() ) {
 				// Order page metabox actions.
 				add_action( 'wp_ajax_wc_shipment_tracking_delete_item', array( $this->actions, 'meta_box_delete_tracking' ) );
 				add_action( 'wp_ajax_wc_shipment_tracking_save_form', array( $this->actions, 'save_meta_box_ajax' ) );
+				add_action( 'wp_ajax_wc_shipment_tracking_get_items', array( $this->actions, 'get_meta_box_items_ajax' ) );
 
 				$subs_version = class_exists( 'WC_Subscriptions' ) && ! empty( WC_Subscriptions::$version ) ? WC_Subscriptions::$version : null;
 
@@ -130,8 +131,17 @@ if ( is_woocommerce_active() ) {
 
 				// Check for updates.
 				add_action( 'init', array( 'WC_Shipment_Tracking_Updates', 'check_updates' ) );
+				add_action( 'woocommerce_loaded', array( $this, 'load_post_wc_class' ) );
 			}
 
+			/**
+			 * Loads any class that needs to check for WC loaded.
+			 *
+			 * @since 1.6.11
+			 */
+			public function load_post_wc_class() {
+				require_once( dirname( __FILE__ ) . '/includes/class-wc-shipment-tracking-privacy.php' );
+			}
 
 			/**
 			 * Include required files.

@@ -12,6 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	/**
+	 * The delay between retries.
+	 *
+	 * @var int
+	 */
+	public $retry_interval;
+
+	/**
 	 * Notices (array)
 	 * @var array
 	 */
@@ -53,14 +60,23 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	public $saved_cards;
 
 	/**
+	 * Pre Orders Object
+	 *
+	 * @var object
+	 */
+	public $pre_orders;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->id                   = 'stripe_sepa';
-		$this->method_title         = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-stripe' );
+		$this->retry_interval = 1;
+		$this->id             = 'stripe_sepa';
+		$this->method_title   = __( 'Stripe SEPA Direct Debit', 'woocommerce-gateway-stripe' );
 		/* translators: link */
-		$this->method_description   = sprintf( __( 'All other general Stripe settings can be adjusted <a href="%s">here</a>.', 'woocommerce-gateway-stripe' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) );
-		$this->supports             = array(
+		$this->method_description = sprintf( __( 'All other general Stripe settings can be adjusted <a href="%s">here</a>.', 'woocommerce-gateway-stripe' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe' ) );
+		$this->has_fields         = true;
+		$this->supports           = array(
 			'products',
 			'refunds',
 			'tokenization',
@@ -100,50 +116,13 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 		}
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'admin_notices', array( $this, 'check_environment' ) );
-		add_action( 'admin_head', array( $this, 'remove_admin_notice' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'payment_scripts' ) );
-	}
 
-	/**
-	 * Checks to make sure environment is setup correctly to use this payment method.
-	 *
-	 * @since 4.0.0
-	 * @version 4.0.0
-	 */
-	public function check_environment() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			return;
+		if ( WC_Stripe_Helper::is_pre_orders_exists() ) {
+			$this->pre_orders = new WC_Stripe_Pre_Orders_Compat();
+
+			add_action( 'wc_pre_orders_process_pre_order_completion_payment_' . $this->id, array( $this->pre_orders, 'process_pre_order_release_payment' ) );
 		}
-
-		$environment_warning = $this->get_environment_warning();
-
-		if ( $environment_warning ) {
-			$this->add_admin_notice( 'bad_environment', 'error', $environment_warning );
-		}
-
-		foreach ( (array) $this->notices as $notice_key => $notice ) {
-			echo "<div class='" . esc_attr( $notice['class'] ) . "'><p>";
-			echo wp_kses( $notice['message'], array( 'a' => array( 'href' => array() ) ) );
-			echo '</p></div>';
-		}
-	}
-
-	/**
-	 * Checks the environment for compatibility problems. Returns a string with the first incompatibility
-	 * found or false if the environment has no problems.
-	 *
-	 * @since 4.0.0
-	 * @version 4.0.0
-	 */
-	public function get_environment_warning() {
-		if ( 'yes' === $this->enabled && ! in_array( get_woocommerce_currency(), $this->get_supported_currency() ) ) {
-			$message = __( 'SEPA is enabled - it requires store currency to be set to Euros.', 'woocommerce-gateway-stripe' );
-
-			return $message;
-		}
-
-		return false;
 	}
 
 	/**
@@ -154,9 +133,12 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	 * @return array
 	 */
 	public function get_supported_currency() {
-		return apply_filters( 'wc_stripe_sepa_supported_currencies', array(
-			'EUR',
-		) );
+		return apply_filters(
+			'wc_stripe_sepa_supported_currencies',
+			array(
+				'EUR',
+			)
+		);
 	}
 
 	/**
@@ -190,7 +172,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 
 		$icons_str = '';
 
-		$icons_str .= $icons['sepa'];
+		$icons_str .= isset( $icons['sepa'] ) ? $icons['sepa'] : '';
 
 		return apply_filters( 'woocommerce_gateway_icon', $icons_str, $this->id );
 	}
@@ -207,7 +189,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		wp_enqueue_style( 'stripe_paymentfonts' );
+		wp_enqueue_style( 'stripe_styles' );
 		wp_enqueue_script( 'woocommerce_stripe' );
 	}
 
@@ -242,19 +224,17 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 			<?php do_action( 'woocommerce_credit_card_form_start', $this->id ); ?>
 			<p class="wc-stripe-sepa-mandate" style="margin-bottom:40px;"><?php $this->mandate_display(); ?></p>
 			<p class="form-row form-row-wide">
-				<label for="stripe-sepa-owner">
-					<?php esc_html_e( 'IBAN Account Name.', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span>
+				<label for="stripe-iban-element">
+					<?php esc_html_e( 'IBAN.', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span>
 				</label>
-				<input id="stripe-sepa-owner" name="stripe_sepa_owner" value="" style="border:1px solid #ddd;margin:5px 0;padding:10px 5px;background-color:#fff;outline:0;" />
+				<div id="stripe-iban-element" class="wc-stripe-iban-element-field">
+					<!-- A Stripe Element will be inserted here. -->
+				</div>
 			</p>
-			<p class="form-row form-row-wide">
-				<label for="stripe-sepa-iban">
-					<?php esc_html_e( 'IBAN Account Number.', 'woocommerce-gateway-stripe' ); ?> <span class="required">*</span>
-				</label>
-				<input id="stripe-sepa-iban" name="stripe_sepa_iban" value="" style="border:1px solid #ddd;margin:5px 0;padding:10px 5px;background-color:#fff;outline:0;" />
-			</p>
+
 			<!-- Used to display form errors -->
 			<div class="stripe-source-errors" role="alert"></div>
+			<br />
 			<?php do_action( 'woocommerce_credit_card_form_end', $this->id ); ?>
 			<div class="clear"></div>
 		</fieldset>
@@ -265,9 +245,10 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 	 * Payment form on checkout page
 	 */
 	public function payment_fields() {
-		$user                 = wp_get_current_user();
 		$total                = WC()->cart->total;
 		$display_tokenization = $this->supports( 'tokenization' ) && is_checkout() && $this->saved_cards;
+		$description          = $this->get_description();
+		$description          = ! empty( $description ) ? $description : '';
 
 		// If paying from order, we need to get total from order not cart.
 		if ( isset( $_GET['pay_for_order'] ) && ! empty( $_GET['key'] ) ) {
@@ -276,10 +257,7 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 		}
 
 		if ( is_add_payment_method_page() ) {
-			$pay_button_text = __( 'Add Payment', 'woocommerce-gateway-stripe' );
-			$total        = '';
-		} else {
-			$pay_button_text = '';
+			$total = '';
 		}
 
 		echo '<div
@@ -287,13 +265,13 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 			data-amount="' . esc_attr( WC_Stripe_Helper::get_stripe_amount( $total ) ) . '"
 			data-currency="' . esc_attr( strtolower( get_woocommerce_currency() ) ) . '">';
 
-		if ( $this->description ) {
-			if ( $this->testmode ) {
-				$this->description .= ' ' . __( 'TEST MODE ENABLED. In test mode, you can use IBAN number DE89370400440532013000.', 'woocommerce-gateway-stripe' );
-				$this->description  = trim( $this->description );
-			}
-			echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $this->description ) ) );
+		if ( $this->testmode ) {
+			$description .= ' ' . __( 'TEST MODE ENABLED. In test mode, you can use IBAN number DE89370400440532013000.', 'woocommerce-gateway-stripe' );
 		}
+
+		$description = trim( $description );
+
+		echo apply_filters( 'wc_stripe_description', wpautop( wp_kses_post( $description ) ), $this->id );
 
 		if ( $display_tokenization ) {
 			$this->tokenization_script();
@@ -305,6 +283,8 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 		if ( apply_filters( 'wc_stripe_display_save_payment_method_checkbox', $display_tokenization ) && ! is_add_payment_method_page() && ! isset( $_GET['change_payment_method'] ) ) {
 			$this->save_payment_method_checkbox();
 		}
+
+		do_action( 'wc_stripe_sepa_payment_fields', $this->id );
 
 		echo '</div>';
 	}
@@ -324,16 +304,20 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 		try {
 			$order = wc_get_order( $order_id );
 
+			if ( $this->maybe_process_pre_orders( $order_id ) ) {
+				return $this->pre_orders->process_pre_order( $order_id );
+			}
+
 			// This comes from the create account checkbox in the checkout page.
 			$create_account = ! empty( $_POST['createaccount'] ) ? true : false;
 
 			if ( $create_account ) {
-				$new_customer_id     = WC_Stripe_Helper::is_pre_30() ? $order->customer_user : $order->get_customer_id();
+				$new_customer_id     = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->customer_user : $order->get_customer_id();
 				$new_stripe_customer = new WC_Stripe_Customer( $new_customer_id );
 				$new_stripe_customer->create_customer();
 			}
 
-			$prepared_source = $this->prepare_source( $this->get_source_object(), get_current_user_id(), $force_save_source );
+			$prepared_source = $this->prepare_source( get_current_user_id(), $force_save_source );
 
 			$this->save_source_to_order( $order, $prepared_source );
 
@@ -350,21 +334,9 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 				$response = WC_Stripe_API::request( $this->generate_payment_request( $order, $prepared_source ) );
 
 				if ( ! empty( $response->error ) ) {
-					// If it is an API error such connection or server, let's retry.
-					if ( 'api_connection_error' === $response->error->type || 'api_error' === $response->error->type ) {
-						if ( $retry ) {
-							sleep( 5 );
-							return $this->process_payment( $order_id, false, $force_save_source );
-						} else {
-							$localized_message = 'API connection error and retries exhausted.';
-							$order->add_order_note( $localized_message );
-							throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
-						}
-					}
-
 					// Customer param wrong? The user may have been deleted on stripe's end. Remove customer_id. Can be retried without.
-					if ( preg_match( '/No such customer/i', $response->error->message ) && $retry ) {
-						if ( WC_Stripe_Helper::is_pre_30() ) {
+					if ( $this->is_no_such_customer_error( $response->error ) ) {
+						if ( WC_Stripe_Helper::is_wc_lt( '3.0' ) ) {
 							delete_user_meta( $order->customer_user, '_stripe_customer_id' );
 							delete_post_meta( $order_id, '_stripe_customer_id' );
 						} else {
@@ -372,15 +344,36 @@ class WC_Gateway_Stripe_Sepa extends WC_Stripe_Payment_Gateway {
 							$order->delete_meta_data( '_stripe_customer_id' );
 							$order->save();
 						}
+					}
 
-						return $this->process_payment( $order_id, false, $force_save_source );
-					} elseif ( preg_match( '/No such token/i', $response->error->message ) && $prepared_source->token_id ) {
+					if ( $this->is_no_such_token_error( $response->error ) && $prepared_source->token_id ) {
 						// Source param wrong? The CARD may have been deleted on stripe's end. Remove token and show message.
 						$wc_token = WC_Payment_Tokens::get( $prepared_source->token_id );
 						$wc_token->delete();
 						$localized_message = __( 'This card is no longer available and has been removed.', 'woocommerce-gateway-stripe' );
 						$order->add_order_note( $localized_message );
 						throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+					}
+
+					// We want to retry.
+					if ( $this->is_retryable_error( $response->error ) ) {
+						if ( $retry ) {
+							// Don't do anymore retries after this.
+							if ( 5 <= $this->retry_interval ) {
+
+								return $this->process_payment( $order_id, false, $force_save_source );
+							}
+
+							sleep( $this->retry_interval );
+
+							$this->retry_interval++;
+
+							return $this->process_payment( $order_id, true, $force_save_source );
+						} else {
+							$localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'woocommerce-gateway-stripe' );
+							$order->add_order_note( $localized_message );
+							throw new WC_Stripe_Exception( print_r( $response, true ), $localized_message );
+						}
 					}
 
 					$localized_messages = WC_Stripe_Helper::get_localized_messages();

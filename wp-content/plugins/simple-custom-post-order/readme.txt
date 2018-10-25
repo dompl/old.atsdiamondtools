@@ -2,10 +2,11 @@
 Contributors: colorlibplugins, silkalns
 Tags: custom post order, post order, js post order, page order, posts order, category order, sort posts, sort pages, sort custom posts
 Requires at least: 3.5.1
-Tested up to: 4.7.3
-Stable tag: 4.7.3
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 4.9
+Requires PHP: 5.6
+Stable tag: trunk
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Order posts(posts, any custom post types) using a Drag and Drop Sortable JavaScript. Configuration is unnecessary. 
 
@@ -33,6 +34,7 @@ An answer to that question.
 2. screenshot-2
 
 == Changelog ==
+
 = Version 1.0 (20-07-2013) =
 *  Initial release.
 
@@ -59,3 +61,6 @@ An answer to that question.
 
 = Version 2.3.2 (17-03-2017) =
 * Minor documentation and readme tweaks
+
+= Version 2.3.3 (22-10-2018) = 
+* Minor tweaks & fixes

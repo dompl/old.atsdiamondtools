@@ -331,6 +331,7 @@ class WC_Order_Status_Manager_Order_Status_Email extends WC_Email {
 			'email_body_text'     => $this->get_body_text(),
 			'sent_to_admin'       => 'admin' === $this->type,
 			'plain_text'          => false,
+			'email'               => $this,
 		) );
 
 		return ob_get_clean();
@@ -355,6 +356,7 @@ class WC_Order_Status_Manager_Order_Status_Email extends WC_Email {
 			'email_body_text'     => $this->get_body_text(),
 			'sent_to_admin'       => 'admin' === $this->type,
 			'plain_text'          => true,
+			'email'               => $this,
 		) );
 
 		return ob_get_clean();

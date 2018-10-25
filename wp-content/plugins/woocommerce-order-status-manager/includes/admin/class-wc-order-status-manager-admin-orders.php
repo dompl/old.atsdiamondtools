@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Admin
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -72,65 +72,13 @@ class WC_Order_Status_Manager_Admin_Orders {
 	 */
 	public function custom_order_actions( $actions, WC_Order $order ) {
 
-		$status = new WC_Order_Status_Manager_Order_Status( $order->get_status() );
+		$custom_actions = $custom_actions = wc_order_status_manager()->get_order_statuses_instance()->get_custom_order_actions( $order );
 
-		// sanity check: bail if status is not found
-		// this can happen if some statuses are registered late
-		if ( ! $status || ! $status->get_id() ) {
-			return $actions;
+		if ( ! empty( $custom_actions ) ) {
+			$actions = array_merge( $custom_actions, wc_order_status_manager()->get_order_statuses_instance()->trim_order_actions( $actions ) );
 		}
 
-		$custom_actions = array();
-		$next_statuses  = $status->get_next_statuses();
-
-		if ( ! empty( $next_statuses ) ) {
-
-			$order_statuses = wc_get_order_statuses();
-
-			// add next statuses as actions
-			foreach ( $next_statuses as $next_status ) {
-
-				$custom_actions[ $next_status ] = array(
-					'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=woocommerce_mark_order_status&status=' . $next_status . '&order_id=' . SV_WC_Order_Compatibility::get_prop( $order, 'id' ) ), 'woocommerce-mark-order-status' ),
-					'name'   => $order_statuses[ 'wc-' . $next_status ],
-					'action' => $next_status,
-				);
-			}
-		}
-
-		return array_merge( $custom_actions, $this->trim_order_actions( $actions ) );
-	}
-
-
-	/**
-	 * Remove Order Status Manager actions from Order actions
-	 *
-	 * @see WC_Order_Status_Manager_Admin_Orders::custom_order_actions()
-	 *
-	 * @since 1.4.3
-	 * @param array $order_actions
-	 * @return array
-	 */
-	private function trim_order_actions( $order_actions ) {
-
-		if ( $order_statuses = wc_order_status_manager()->get_order_statuses_instance()->get_order_status_posts() ) {
-
-			foreach ( $order_statuses as $post ) {
-
-				if ( $status = new WC_Order_Status_Manager_Order_Status( $post ) ) {
-
-					$slug = $status->get_slug();
-
-					if ( isset( $order_statuses[ $slug ] ) ) {
-						unset( $order_actions[ $slug ] );
-					} elseif ( 'completed' === $slug ) {
-						unset( $order_actions['complete'] );
-					}
-				}
-			}
-		}
-
-		return $order_actions;
+		return $actions;
 	}
 
 
@@ -284,36 +232,53 @@ class WC_Order_Status_Manager_Admin_Orders {
 		<style type="text/css">
 			/*<![CDATA[*/
 
-			<?php // General styles for status badges ?>
+			<?php // general styles for status badges ?>
 			<?php if ( ! empty( $custom_status_badges ) ) : ?>
-				.widefat .column-order_status mark.<?php echo implode( ', .widefat .column-order_status mark.', $custom_status_badges ); ?> {
-					display: inline-block;
-					font-size: 0.8em;
-					line-height: 1.1;
-					text-indent: 0;
-					background-color: #666;
-					width: auto;
-					height: auto;
-					padding: 0.4em;
-					color: #fff;
-					border-radius: 2px;
-					word-wrap: break-word;
-					max-width: 100%;
-				}
+				<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ) : ?>
+					.widefat .column-order_status mark.<?php echo esc_html( implode( ', .widefat .column-order_status mark.', $custom_status_badges ) ); ?> {
+						display: inline-block;
+						font-size: 0.8em;
+						line-height: 1.1;
+						text-indent: 0;
+						background-color: #666;
+						width: auto;
+						height: auto;
+						padding: 0.4em;
+						color: #fff;
+						border-radius: 2px;
+						word-wrap: break-word;
+						max-width: 100%;
+					}
 
-				.widefat .column-order_status mark.<?php echo implode( ':after, .widefat .column-order_status mark.', $custom_status_badges ); ?>:after {
-					display: none;
-				}
+					.widefat .column-order_status mark.<?php echo esc_html( implode( ':after, .widefat .column-order_status mark.', $custom_status_badges ) ); ?>:after {
+						display: none;
+					}
+				<?php endif; ?>
 			<?php endif; ?>
 
-			<?php // General styles for status icons ?>
+			<?php // general styles for status icons ?>
 			<?php if ( ! empty( $custom_status_icons ) ) : ?>
 
 				<?php $custom_status_font_icons = array_filter( $custom_status_icons, 'is_array' ); ?>
 
 				<?php if ( ! empty( $custom_status_font_icons ) ) : ?>
 
-					.widefat .column-order_status mark.<?php echo implode( ':after, .widefat .column-order_status mark.', array_keys( $custom_status_font_icons ) ); ?>:after {
+					<?php $selector = SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ? '.widefat .column-order_status mark.' : '.widefat .column-order_status .order-status.status-'; ?>
+
+					<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ) : ?>
+						<?php echo esc_html( $selector . implode( ', ' . $selector, array_keys( $custom_status_font_icons ) ) ); ?> {
+							position: relative;
+							padding: 0;
+							text-indent: -9999px;
+							background: transparent;
+							border: 0;
+							font-size: 2em;
+							line-height: 1;
+							vertical-align: text-top;
+						}
+					<?php endif; ?>
+
+					<?php echo esc_html( $selector . implode( ':after, ' . $selector, array_keys( $custom_status_font_icons ) ) ); ?>:after {
 						speak: none;
 						font-weight: normal;
 						font-variant: normal;
@@ -325,15 +290,17 @@ class WC_Order_Status_Manager_Admin_Orders {
 						position: absolute;
 						top: 0;
 						left: 0;
+						text-align: center;
+						<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ) : ?>
 						width: 100%;
 						height: 100%;
-						text-align: center;
+						<?php endif; ?>
 					}
 
 				<?php endif; ?>
 			<?php endif; ?>
 
-			<?php // General styles for action icons ?>
+			<?php // general styles for action icons ?>
 			.widefat .column-order_actions a.button {
 				padding: 0 0.5em;
 				height: 2em;
@@ -345,7 +312,7 @@ class WC_Order_Status_Manager_Admin_Orders {
 				<?php $custom_action_font_icons = array_filter( $custom_action_icons, 'is_array' ); ?>
 				<?php if ( ! empty( $custom_action_font_icons ) ) : ?>
 
-					.order_actions .<?php echo implode( ', .order_actions .', array_keys( $custom_action_icons ) ); ?> {
+					.order_actions .<?php echo esc_html( implode( ', .order_actions .', array_keys( $custom_action_icons ) ) ); ?> {
 						display: block;
 						text-indent: -9999px;
 						position: relative;
@@ -353,7 +320,7 @@ class WC_Order_Status_Manager_Admin_Orders {
 						height: 2em!important;
 						width: 2em;
 					}
-					.order_actions .<?php echo implode( ':after, .order_actions .', array_keys( $custom_action_icons ) ); ?>:after {
+					.order_actions .<?php echo esc_html( implode( ':after, .order_actions .', array_keys( $custom_action_icons ) ) ); ?>:after {
 						speak: none;
 						font-weight: 400;
 						font-variant: normal;
@@ -373,62 +340,97 @@ class WC_Order_Status_Manager_Admin_Orders {
 				<?php endif; ?>
 			<?php endif; ?>
 
-			<?php // Specific status icon styles ?>
+			<?php // specific status icon styles ?>
 			<?php if ( ! empty( $custom_status_icons ) ) : ?>
 				<?php foreach ( $custom_status_icons as $status => $value ) : ?>
 
+					<?php $selector = SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ? '.widefat .column-order_status mark.' : '.widefat .column-order_status .order-status.status-'; ?>
+
 					<?php if ( is_array( $value ) ) : ?>
-						.widefat .column-order_status mark.<?php echo $status; ?>:after {
-							font-family: "<?php echo $value['font']; ?>";
-							content:     "<?php echo $value['glyph']; ?>";
+						<?php echo esc_html( $selector. $status ); ?>:after {
+							font-family: "<?php echo esc_html( $value['font'] ); ?>";
+							content:     "<?php echo esc_html( $value['glyph'] ); ?>";
 						}
 					<?php else : ?>
-						.widefat .column-order_status mark.<?php echo $status; ?> {
+						<?php echo esc_html( $selector . $status ); ?> {
 							background-size: 100% 100%;
-							background-image: url( <?php echo $value; ?> );
+							background-image: url( <?php echo esc_url( $value ); ?> );
+							<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' ) ) : ?>
+							background-color: transparent;
+							border: 0;
+							padding: 0;
+							text-indent: -9999px;
+							width: 2em;
+							height: 2em;
+							<?php endif; ?>
 						}
 					<?php endif; ?>
 
 				<?php endforeach; ?>
 			<?php endif; ?>
 
-			<?php // Specific status color styles ?>
+			<?php // specific status color styles ?>
 			<?php if ( ! empty( $custom_status_colors ) ) : ?>
 				<?php foreach ( $custom_status_colors as $status => $color ) : ?>
 
 					<?php if ( in_array( $status, $custom_status_badges, true ) ) : ?>
-						.widefat .column-order_status mark.<?php echo $status; ?> {
+
+						<?php $selector = SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ? '.widefat .column-order_status mark.' : '.widefat .order-status.status-'; ?>
+
+						<?php echo esc_html( $selector . $status ); ?> {
+							background-color: <?php echo esc_html( $color ); ?>;
+							color: <?php echo esc_html( wc_order_status_manager()->get_icons_instance()->get_contrast_text_color( $color ) ); ?>;
+						}
+					<?php endif; ?>
+
+					<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_gte( '3.3' )  ) : ?>
+						.wc-order-preview .order-status.status-<?php echo esc_html( $status ); ?> {
 							background-color: <?php echo $color; ?>;
-							color: <?php echo wc_order_status_manager()->get_icons_instance()->get_contrast_text_color( $color ); ?>;
+							color: <?php echo esc_html( wc_order_status_manager()->get_icons_instance()->get_contrast_text_color( $color ) ); ?>;
 						}
 					<?php endif; ?>
 
 					<?php if ( isset( $custom_status_icons[ $status ] ) ) : ?>
-						.widefat .column-order_status mark.<?php echo $status; ?>:after {
-							color: <?php echo $color; ?>;
-						}
+						<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ) : ?>
+							.widefat .column-order_status mark.<?php echo esc_html( $status ); ?>:after {
+								color: <?php echo esc_html( $color ); ?>;
+							}
+						<?php else : ?>
+							.order-status.status-<?php echo esc_html( $status ); ?> {
+								background-color: none;
+								border: 0;
+								color: <?php echo esc_html( $color ); ?>
+							}
+						<?php endif; ?>
 					<?php endif; ?>
 
 				<?php endforeach; ?>
 			<?php endif; ?>
 
-			<?php // Specific  action icon styles ?>
+			<?php // specific action icon styles ?>
 			<?php if ( ! empty( $custom_action_icons ) ) : ?>
 				<?php foreach ( $custom_action_icons as $status => $value ) : ?>
 
 					<?php if ( is_array( $value ) ) : ?>
-						.order_actions .<?php echo $status; ?>:after {
-							font-family: "<?php echo $value['font']; ?>";
-							content:     "<?php echo $value['glyph']; ?>";
-						}
+						<?php if ( SV_WC_Plugin_Compatibility::is_wc_version_lt( '3.3' ) ) : ?>
+							.order_actions .<?php echo esc_html( $status ); ?>:after {
+								font-family: "<?php echo esc_html( $value['font'] ); ?>";
+								content:     "<?php echo esc_html( $value['glyph'] ); ?>";
+							}
+						<?php else : ?>
+							.widefat .column-wc_actions a.<?php echo esc_html( $status ); ?>::after {
+								font-family: "<?php echo esc_html( $value['font'] ); ?>";
+								content:     "<?php echo esc_html( $value['glyph'] ); ?>";
+							}
+						<?php endif; ?>
 					<?php else : ?>
-						.order_actions .<?php echo $status; ?>,
-						.order_actions .<?php echo $status; ?>:focus,
-						.order_actions .<?php echo $status; ?>:hover {
+						.order_actions .<?php echo esc_html( $status ); ?>,
+						.order_actions .<?php echo esc_html( $status ); ?>:focus,
+						.order_actions .<?php echo esc_html( $status ); ?>:hover {
 							background-size: 69% 69%;
 							background-position: center center;
 							background-repeat: no-repeat;
-							background-image: url( <?php echo $value; ?> );
+							background-image: url( <?php echo esc_url( $value ); ?> );
 						}
 					<?php endif; ?>
 
@@ -479,21 +481,9 @@ class WC_Order_Status_Manager_Admin_Orders {
 						$status  = new WC_Order_Status_Manager_Order_Status( $custom_order_status );
 						$slug    = $status->get_slug();
 						$name    = $status->get_name();
+						?>
 
-						// replace status filter labels for core statuses ?>
-						<?php if ( $status->is_core_status() && SV_WC_Plugin_Compatibility::is_wc_version_lt_2_6() ) : ?>
-
-							$breadcrumb = $filterPostsList.find( 'li[class="wc-<?php echo sanitize_html_class( $slug ); ?>"] > a' );
-							$count      = $( '.count', $breadcrumb );
-
-							if ( null != $breadcrumb ) {
-								$breadcrumb.text( '<?php echo esc_html( $name ); ?> ' );
-								$breadcrumb.append( $count );
-							}
-
-						<?php endif; ?>
-
-						<?php // bulk actions ?>
+						<?php // bulk actions - TODO: refactor this when WP 4.7 is the minimum required WP version, see https://make.wordpress.org/core/2016/10/04/custom-bulk-actions/ {IT 2018-01-15} ?>
 						$optionTop    = $dropdownTop.find( 'option[value="mark_<?php echo sanitize_html_class( $slug ); ?>"]' );
 						$optionBottom = $dropdownBottom.find( 'option[value="mark_<?php echo sanitize_html_class( $slug ); ?>"]' );
 
