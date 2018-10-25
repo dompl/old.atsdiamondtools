@@ -17,6 +17,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
         private $data = array();
 
         /**
+         * @var AWS_Search Current language $lang
+         */
+        private $lang = 0;
+
+        /**
          * Return a singleton instance of the current class
          *
          * @return object
@@ -54,6 +59,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
          */
         public function action_callback() {
 
+            if ( ! defined( 'DOING_AJAX' ) ) {
+                define( 'DOING_AJAX', true );
+            }
+
             echo json_encode( $this->search() );
 
             die;
@@ -67,17 +76,26 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             global $wpdb;
 
+            $this->lang = isset( $_REQUEST['lang'] ) ? $_REQUEST['lang'] : '';
+
+            if ( $this->lang ) {
+                do_action( 'wpml_switch_language', $this->lang );
+            }
+
             $cache = AWS()->get_settings( 'cache' );
-            $special_chars = AWS_Helpers::get_special_chars();
 
             $s = $keyword ? esc_attr( $keyword ) : esc_attr( $_POST['keyword'] );
-            $s = stripslashes( $s );
-            $s = str_replace( array( "\r", "\n" ), '', $s );
-            $s = str_replace( $special_chars, '', $s );
+            $s = htmlspecialchars_decode( $s );
 
-            $cache_option_name = AWS()->cache->get_cache_name( $s );
+            $s = AWS_Helpers::normalize_string( $s );
+
+
+            //$s = strtolower( $s );
+
+            $cache_option_name = '';
             
-            if ( $cache === 'true' ) {
+            if ( $cache === 'true' && ! $keyword  ) {
+                $cache_option_name = AWS()->cache->get_cache_name( $s );
                 $res = AWS()->cache->get_from_cache_table( $cache_option_name );
                 if ( $res ) {
                     $cached_value = json_decode( $res );
@@ -89,7 +107,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $show_cats     = AWS()->get_settings( 'show_cats' );
             $show_tags     = AWS()->get_settings( 'show_tags' );
-            $results_num   = $keyword ? 100 : AWS()->get_settings( 'results_num' );
+            $results_num   = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
             $search_in     = AWS()->get_settings( 'search_in' );
             $outofstock    = AWS()->get_settings( 'outofstock' );
 
@@ -103,25 +121,85 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $categories_array = array();
             $tags_array = array();
 
-
             $this->data['s'] = $s;
             $this->data['results_num']  = $results_num ? $results_num : 10;
             $this->data['search_terms'] = array();
-            $this->data['search_terms'] = array_unique( explode( ' ', $s ) );
             $this->data['search_in']    = $search_in_arr;
             $this->data['outofstock']   = $outofstock;
 
 
+            $search_array = array_unique( explode( ' ', $s ) );
+
+            if ( is_array( $search_array ) && ! empty( $search_array ) ) {
+                foreach ( $search_array as $search_term ) {
+                    $search_term = trim( $search_term );
+                    if ( $search_term ) {
+                        $this->data['search_terms'][] = $search_term;
+                    }
+                }
+            }
+
+            if ( empty( $this->data['search_terms'] ) ) {
+                $this->data['search_terms'][] = '';
+            }
+
+
             $posts_ids = $this->query_index_table();
+
+            /**
+             * Filters array of products ids
+             *
+             * @since 1.53
+             *
+             * @param array $posts_ids Array of products ids
+             * @param string $s Search query
+             */
+            $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s );
+
+
             $products_array = $this->get_products( $posts_ids );
+
+            /**
+             * Filters array of products before they displayed in search results
+             *
+             * @since 1.42
+             *
+             * @param array $products_array Array of products results
+             * @param string $s Search query
+             */
+            $products_array = apply_filters( 'aws_search_results_products', $products_array, $s );
 
 
             if ( $show_cats === 'true' ) {
+
                 $categories_array = $this->get_taxonomies( 'product_cat' );
+
+                /**
+                 * Filters array of product categories before they displayed in search results
+                 *
+                 * @since 1.42
+                 *
+                 * @param array $categories_array Array of products categories
+                 * @param string $s Search query
+                 */
+                $categories_array = apply_filters( 'aws_search_results_categories', $categories_array, $s );
+
             }
 
             if ( $show_tags === 'true' ) {
+
                 $tags_array = $this->get_taxonomies( 'product_tag' );
+
+                /**
+                 * Filters array of product tags before they displayed in search results
+                 *
+                 * @since 1.42
+                 *
+                 * @param array $tags_array Array of products tags
+                 * @param string $s Search query
+                 */
+                $tags_array = apply_filters( 'aws_search_results_tags', $tags_array, $s );
+
             }
 
             $result_array = array(
@@ -130,11 +208,19 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 'products' => $products_array
             );
 
+            /**
+             * Filters array of all results data before they displayed in search results
+             *
+             * @since 1.43
+             *
+             * @param array $brands_array Array of products data
+             * @param string $s Search query
+             */
+            $result_array = apply_filters( 'aws_search_results_all', $result_array, $s );
 
-            if ( $cache === 'true' ) {
+            if ( $cache === 'true' && ! $keyword  ) {
                 AWS()->cache->insert_into_cache_table( $cache_option_name, $result_array );
             }
-
 
             return $result_array;
 
@@ -171,6 +257,16 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $new_relevance_array = array();
 
 
+            /**
+             * Filters array of search terms before generating SQL query
+             *
+             * @since 1.49
+             *
+             * @param array $this->data['search_terms'] Array of search terms
+             */
+            $this->data['search_terms'] = apply_filters( 'aws_search_terms', $this->data['search_terms'] );
+
+
             foreach ( $this->data['search_terms'] as $search_term ) {
 
                 $search_term_len = strlen( $search_term );
@@ -180,8 +276,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 $relevance_title_like   = 40 + 2 * $search_term_len;
                 $relevance_content_like = 35 + 1 * $search_term_len;
 
-                $search_term_like = preg_replace( '/(s|es|ies)$/i', '', $search_term );
-                $like = '%' . $wpdb->esc_like( $search_term_like ) . '%';
+
+                $search_term_norm = preg_replace( '/(s|es|ies)$/i', '', $search_term );
+
+                if ( $search_term_norm ) {
+                    $search_term = $search_term_norm;
+                }
+
+                $like = '%' . $wpdb->esc_like( $search_term ) . '%';
+
 
                 if ( $search_term_len > 1 ) {
                     $search_array[] = $wpdb->prepare( '( term LIKE %s )', $like );
@@ -256,28 +359,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             }
 
 
-            if ( ( defined( 'ICL_SITEPRESS_VERSION' ) || function_exists( 'pll_current_language' ) ) && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
+            if ( $this->lang ) {
+                $current_lang = $this->lang;
+            } else {
+                $current_lang = AWS_Helpers::get_lang();
+            }
 
-                $current_lang = false;
-
-                if ( has_filter('wpml_current_language') ) {
-                    $current_lang = apply_filters( 'wpml_current_language', NULL );
-                } elseif ( function_exists( 'pll_current_language' ) ) {
-                    $current_lang = pll_current_language();
-                }
-
-                if ( $current_lang ) {
-                    $query['lang'] .= $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
-                }
-
-            } elseif( function_exists( 'qtranxf_getLanguage' ) ) {
-
-                $current_lang = qtranxf_getLanguage();
-
-                if ( $current_lang ) {
-                    $query['lang'] .= $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
-                }
-
+            if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
+                $query['lang'] .= $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
             }
 
 
@@ -298,6 +387,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     relevance DESC
 				LIMIT 0, {$results_num}
 		    ";
+
 
             $posts_ids = $this->get_posts_ids( $sql );
 
@@ -350,6 +440,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 $show_image        = AWS()->get_settings( 'show_image' );
                 $show_sku          = AWS()->get_settings( 'show_sku' );
                 $show_stock_status = AWS()->get_settings( 'show_stock' );
+                $show_featured     = AWS()->get_settings( 'show_featured' );
 
 
                 foreach ( $posts_ids as $post_id ) {
@@ -371,12 +462,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     $image        = '';
                     $sku          = '';
                     $stock_status = '';
+                    $featured     = '';
+
 
                     if ( $show_excerpt === 'true' ) {
                         $excerpt = ( $excerpt_source === 'excerpt' && $post_data->post_excerpt ) ? $post_data->post_excerpt : $post_data->post_content;
                         $excerpt = AWS_Helpers::html2txt( $excerpt );
                         $excerpt = str_replace('"', "'", $excerpt);
                         $excerpt = strip_shortcodes( $excerpt );
+                        $excerpt = AWS_Helpers::strip_shortcodes( $excerpt );
                     }
 
                     if ( $mark_search_words === 'true'  ) {
@@ -384,7 +478,12 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $marked_content = $this->mark_search_words( $title, $excerpt );
 
                         $title   = $marked_content['title'];
-                        $excerpt = $marked_content['content'];
+
+                        if ( $marked_content['content'] ) {
+                            $excerpt = $marked_content['content'];
+                        } else {
+                            $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
+                        }
 
                     } else {
                         $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
@@ -407,7 +506,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     if ( $show_sku === 'true' ) {
                         $sku = $product->get_sku();
                     }
-                    
+
+                    if ( $show_featured === 'true' ) {
+                        $featured = $product->is_featured();
+                    }
+
                     if ( $show_stock_status === 'true' ) {
                         if ( $product->is_in_stock() ) {
                             $stock_status = array(
@@ -422,6 +525,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         }
                     }
 
+
+                    $f_price   = $product->get_price();
+                    $f_rating  = $product->get_average_rating();
+                    $f_reviews = $product->get_review_count();
+
 //                    $categories = $product->get_categories( ',' );
 //                    $tags = $product->get_tags( ',' );
 
@@ -434,6 +542,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         'on_sale'      => $on_sale,
                         'sku'          => $sku,
                         'stock_status' => $stock_status,
+                        'featured'     => $featured,
+                        'f_price'      => $f_price,
+                        'f_rating'     => $f_rating,
+                        'f_reviews'    => $f_reviews,
                         'post_data'    => $post_data
                     );
 
@@ -556,9 +668,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $excludes = '';
             $search_query = '';
 
-            foreach ( $this->data['search_terms'] as $search_term ) {
-                $like = '%' . $wpdb->esc_like($search_term) . '%';
-                $search_array[] = $wpdb->prepare('( name LIKE %s )', $like);
+            $filtered_terms = AWS_Helpers::filter_stopwords( array_count_values( $this->data['search_terms'] ) );
+
+            if ( $filtered_terms && ! empty( $filtered_terms ) ) {
+                foreach ( $this->data['search_terms'] as $search_term ) {
+                    $like = '%' . $wpdb->esc_like($search_term) . '%';
+                    $search_array[] = $wpdb->prepare('( name LIKE %s )', $like);
+                }
+            } else {
+                return $result_array;
             }
 
             $search_query .= sprintf( ' AND ( %s )', implode( ' OR ', $search_array ) );
