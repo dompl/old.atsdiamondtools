@@ -9,6 +9,172 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class WC_Stripe_Helper {
+	const LEGACY_META_NAME_FEE      = 'Stripe Fee';
+	const LEGACY_META_NAME_NET      = 'Net Revenue From Stripe';
+	const META_NAME_FEE             = '_stripe_fee';
+	const META_NAME_NET             = '_stripe_net';
+	const META_NAME_STRIPE_CURRENCY = '_stripe_currency';
+
+	/**
+	 * Gets the Stripe currency for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @return string $currency
+	 */
+	public static function get_stripe_currency( $order = null ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		return WC_Stripe_Helper::is_wc_lt( '3.0' ) ? get_post_meta( $order_id, self::META_NAME_STRIPE_CURRENCY, true ) : $order->get_meta( self::META_NAME_STRIPE_CURRENCY, true );
+	}
+
+	/**
+	 * Updates the Stripe currency for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @param string $currency
+	 */
+	public static function update_stripe_currency( $order = null, $currency ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		WC_Stripe_Helper::is_wc_lt( '3.0' ) ? update_post_meta( $order_id, self::META_NAME_STRIPE_CURRENCY, $currency ) : $order->update_meta_data( self::META_NAME_STRIPE_CURRENCY, $currency );
+	}
+
+	/**
+	 * Gets the Stripe fee for order. With legacy check.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @return string $amount
+	 */
+	public static function get_stripe_fee( $order = null ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		$amount = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? get_post_meta( $order_id, self::META_NAME_FEE, true ) : $order->get_meta( self::META_NAME_FEE, true );
+
+		// If not found let's check for legacy name.
+		if ( empty( $amount ) ) {
+			$amount = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? get_post_meta( $order_id, self::LEGACY_META_NAME_FEE, true ) : $order->get_meta( self::LEGACY_META_NAME_FEE, true );
+
+			// If found update to new name.
+			if ( $amount ) {
+				self::update_stripe_fee( $order, $amount );
+			}
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * Updates the Stripe fee for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @param float $amount
+	 */
+	public static function update_stripe_fee( $order = null, $amount = 0.0 ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		WC_Stripe_Helper::is_wc_lt( '3.0' ) ? update_post_meta( $order_id, self::META_NAME_FEE, $amount ) : $order->update_meta_data( self::META_NAME_FEE, $amount );
+	}
+
+	/**
+	 * Deletes the Stripe fee for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 */
+	public static function delete_stripe_fee( $order = null ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		delete_post_meta( $order_id, self::META_NAME_FEE );
+		delete_post_meta( $order_id, self::LEGACY_META_NAME_FEE );
+	}
+
+	/**
+	 * Gets the Stripe net for order. With legacy check.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @return string $amount
+	 */
+	public static function get_stripe_net( $order = null ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		$amount = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? get_post_meta( $order_id, self::META_NAME_NET, true ) : $order->get_meta( self::META_NAME_NET, true );
+
+		// If not found let's check for legacy name.
+		if ( empty( $amount ) ) {
+			$amount = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? get_post_meta( $order_id, self::LEGACY_META_NAME_NET, true ) : $order->get_meta( self::LEGACY_META_NAME_NET, true );
+
+			// If found update to new name.
+			if ( $amount ) {
+				self::update_stripe_net( $order, $amount );
+			}
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * Updates the Stripe net for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 * @param float $amount
+	 */
+	public static function update_stripe_net( $order = null, $amount = 0.0 ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		WC_Stripe_Helper::is_wc_lt( '3.0' ) ? update_post_meta( $order_id, self::META_NAME_NET, $amount ) : $order->update_meta_data( self::META_NAME_NET, $amount );
+	}
+
+	/**
+	 * Deletes the Stripe net for order.
+	 *
+	 * @since 4.1.0
+	 * @param object $order
+	 */
+	public static function delete_stripe_net( $order = null ) {
+		if ( is_null( $order ) ) {
+			return false;
+		}
+
+		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
+
+		delete_post_meta( $order_id, self::META_NAME_NET );
+		delete_post_meta( $order_id, self::LEGACY_META_NAME_NET );
+	}
+
 	/**
 	 * Get Stripe amount to pay
 	 *
@@ -37,25 +203,28 @@ class WC_Stripe_Helper {
 	 * @return array
 	 */
 	public static function get_localized_messages() {
-		return apply_filters( 'wc_stripe_localized_messages', array(
-			'invalid_number'           => __( 'The card number is not a valid credit card number.', 'woocommerce-gateway-stripe' ),
-			'invalid_expiry_month'     => __( 'The card\'s expiration month is invalid.', 'woocommerce-gateway-stripe' ),
-			'invalid_expiry_year'      => __( 'The card\'s expiration year is invalid.', 'woocommerce-gateway-stripe' ),
-			'invalid_cvc'              => __( 'The card\'s security code is invalid.', 'woocommerce-gateway-stripe' ),
-			'incorrect_number'         => __( 'The card number is incorrect.', 'woocommerce-gateway-stripe' ),
-			'incomplete_number'        => __( 'The card number is incomplete.', 'woocommerce-gateway-stripe' ),
-			'incomplete_cvc'           => __( 'The card\'s security code is incomplete.', 'woocommerce-gateway-stripe' ),
-			'incomplete_expiry'        => __( 'The card\'s expiration date is incomplete.', 'woocommerce-gateway-stripe' ),
-			'expired_card'             => __( 'The card has expired.', 'woocommerce-gateway-stripe' ),
-			'incorrect_cvc'            => __( 'The card\'s security code is incorrect.', 'woocommerce-gateway-stripe' ),
-			'incorrect_zip'            => __( 'The card\'s zip code failed validation.', 'woocommerce-gateway-stripe' ),
-			'invalid_expiry_year_past' => __( 'The card\'s expiration year is in the past', 'woocommerce-gateway-stripe' ),
-			'card_declined'            => __( 'The card was declined.', 'woocommerce-gateway-stripe' ),
-			'missing'                  => __( 'There is no card on a customer that is being charged.', 'woocommerce-gateway-stripe' ),
-			'processing_error'         => __( 'An error occurred while processing the card.', 'woocommerce-gateway-stripe' ),
-			'invalid_request_error'    => __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-stripe' ),
-			'invalid_sofort_country'   => __( 'The billing country is not accepted by SOFORT. Please try another country.', 'woocommerce-gateway-stripe' ),
-		) );
+		return apply_filters(
+			'wc_stripe_localized_messages',
+			array(
+				'invalid_number'           => __( 'The card number is not a valid credit card number.', 'woocommerce-gateway-stripe' ),
+				'invalid_expiry_month'     => __( 'The card\'s expiration month is invalid.', 'woocommerce-gateway-stripe' ),
+				'invalid_expiry_year'      => __( 'The card\'s expiration year is invalid.', 'woocommerce-gateway-stripe' ),
+				'invalid_cvc'              => __( 'The card\'s security code is invalid.', 'woocommerce-gateway-stripe' ),
+				'incorrect_number'         => __( 'The card number is incorrect.', 'woocommerce-gateway-stripe' ),
+				'incomplete_number'        => __( 'The card number is incomplete.', 'woocommerce-gateway-stripe' ),
+				'incomplete_cvc'           => __( 'The card\'s security code is incomplete.', 'woocommerce-gateway-stripe' ),
+				'incomplete_expiry'        => __( 'The card\'s expiration date is incomplete.', 'woocommerce-gateway-stripe' ),
+				'expired_card'             => __( 'The card has expired.', 'woocommerce-gateway-stripe' ),
+				'incorrect_cvc'            => __( 'The card\'s security code is incorrect.', 'woocommerce-gateway-stripe' ),
+				'incorrect_zip'            => __( 'The card\'s zip code failed validation.', 'woocommerce-gateway-stripe' ),
+				'invalid_expiry_year_past' => __( 'The card\'s expiration year is in the past', 'woocommerce-gateway-stripe' ),
+				'card_declined'            => __( 'The card was declined.', 'woocommerce-gateway-stripe' ),
+				'missing'                  => __( 'There is no card on a customer that is being charged.', 'woocommerce-gateway-stripe' ),
+				'processing_error'         => __( 'An error occurred while processing the card.', 'woocommerce-gateway-stripe' ),
+				'invalid_request_error'    => __( 'Unable to process this payment, please try again or use alternative method.', 'woocommerce-gateway-stripe' ),
+				'invalid_sofort_country'   => __( 'The billing country is not accepted by SOFORT. Please try another country.', 'woocommerce-gateway-stripe' ),
+			)
+		);
 	}
 
 	/**
@@ -173,14 +342,38 @@ class WC_Stripe_Helper {
 	}
 
 	/**
+	 * Checks if Pre Orders is available.
+	 *
+	 * @since 4.1.0
+	 * @return bool
+	 */
+	public static function is_pre_orders_exists() {
+		return class_exists( 'WC_Pre_Orders_Order' );
+	}
+
+	/**
 	 * Check if WC version is pre 3.0.
 	 *
+	 * @todo Remove in the future.
 	 * @since 4.0.0
-	 * @version 4.0.0
+	 * @deprecated 4.1.11
 	 * @return bool
 	 */
 	public static function is_pre_30() {
-		return version_compare( WC_VERSION, '3.0.0', '<' );
+		error_log( 'is_pre_30() function has been deprecated since 4.1.11. Please use is_wc_lt( $version ) instead.' );
+
+		return self::is_wc_lt( '3.0' );
+	}
+
+	/**
+	 * Checks if WC version is less than passed in version.
+	 *
+	 * @since 4.1.11
+	 * @param string $version Version to check against.
+	 * @return bool
+	 */
+	public static function is_wc_lt( $version ) {
+		return version_compare( WC_VERSION, $version, '<' );
 	}
 
 	/**
@@ -206,7 +399,7 @@ class WC_Stripe_Helper {
 	public static function get_order_by_source_id( $source_id ) {
 		global $wpdb;
 
-		$order_id = $wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT ID FROM $wpdb->posts as posts LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id WHERE meta.meta_value = %s", $source_id ) );
+		$order_id = $wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT ID FROM $wpdb->posts as posts LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id WHERE meta.meta_value = %s AND meta.meta_key = %s", $source_id, '_stripe_source_id' ) );
 
 		if ( ! empty( $order_id ) ) {
 			return wc_get_order( $order_id );
@@ -225,7 +418,7 @@ class WC_Stripe_Helper {
 	public static function get_order_by_charge_id( $charge_id ) {
 		global $wpdb;
 
-		$order_id = $wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT ID FROM $wpdb->posts as posts LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id WHERE meta.meta_value = %s", $charge_id ) );
+		$order_id = $wpdb->get_var( $wpdb->prepare( "SELECT DISTINCT ID FROM $wpdb->posts as posts LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id WHERE meta.meta_value = %s AND meta.meta_key = %s", $charge_id, '_transaction_id' ) );
 
 		if ( ! empty( $order_id ) ) {
 			return wc_get_order( $order_id );
