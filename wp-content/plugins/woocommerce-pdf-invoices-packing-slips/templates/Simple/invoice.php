@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <?php do_action( 'wpo_wcpdf_before_document', $this->type, $this->order ); ?>
 
 <table class="head container">
@@ -28,7 +29,9 @@
 	<tr>
 		<td class="address billing-address">
 			<!-- <h3><?php _e( 'Billing Address:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3> -->
+			<?php do_action( 'wpo_wcpdf_before_billing_address', $this->type, $this->order ); ?>
 			<?php $this->billing_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_billing_address', $this->type, $this->order ); ?>
 			<?php if ( isset($this->settings['display_email']) ) { ?>
 			<div class="billing-email"><?php $this->billing_email(); ?></div>
 			<?php } ?>
@@ -39,7 +42,9 @@
 		<td class="address shipping-address">
 			<?php if ( isset($this->settings['display_shipping_address']) && $this->ships_to_different_address()) { ?>
 			<h3><?php _e( 'Ship To:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3>
+			<?php do_action( 'wpo_wcpdf_before_shipping_address', $this->type, $this->order ); ?>
 			<?php $this->shipping_address(); ?>
+			<?php do_action( 'wpo_wcpdf_after_shipping_address', $this->type, $this->order ); ?>
 			<?php } ?>
 		</td>
 		<td class="order-data">

@@ -36,12 +36,31 @@ class Invoice extends Order_Document_Methods {
 		parent::__construct( $order );
 	}
 
+	public function use_historical_settings() {
+		$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
+		// this setting is inverted on the frontend so that it needs to be actively/purposely enabled to be used
+		if (!empty($document_settings) && isset($document_settings['use_latest_settings'])) {
+			$use_historical_settings = false;
+		} else {
+			$use_historical_settings = true;
+		}
+		return apply_filters( 'wpo_wcpdf_document_use_historical_settings', $use_historical_settings, $this );
+	}
+
 	public function get_title() {
 		// override/not using $this->title to allow for language switching!
 		return apply_filters( "wpo_wcpdf_{$this->slug}_title", __( 'Invoice', 'woocommerce-pdf-invoices-packing-slips' ), $this );
 	}
 
 	public function init() {
+		// store settings in order
+		if ( !empty( $this->order ) ) {
+			$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
+			$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
+			$settings = (array) $document_settings + (array) $common_settings;
+			WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
+		}
+
 		$this->set_date( current_time( 'timestamp', true ) );
 		$this->init_number();
 	}
@@ -83,12 +102,6 @@ class Invoice extends Order_Document_Methods {
 		$this->set_number( $invoice_number );
 
 		return $invoice_number;
-	}
-
-	public function get_settings() {
-		$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
-		$document_settings = get_option( 'wpo_wcpdf_documents_settings_invoice' );
-		return (array) $document_settings + (array) $common_settings;
 	}
 
 	public function get_filename( $context = 'download', $args = array() ) {
@@ -319,8 +332,21 @@ class Invoice extends Order_Document_Methods {
 					'description'	=> __( "Disable automatic creation/attachment when only free products are ordered", 'woocommerce-pdf-invoices-packing-slips' ),
 				)
 			),
+			array(
+				'type'			=> 'setting',
+				'id'			=> 'use_latest_settings',
+				'title'			=> __( 'Always use most current settings', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'invoice',
+				'args'			=> array(
+					'option_name'	=> $option_name,
+					'id'			=> 'use_latest_settings',
+					'description'	=> __( "When enabled, the document will always reflect the most current settings (such as footer text, document name, etc.) rather than using historical settings.", 'woocommerce-pdf-invoices-packing-slips' )
+					                   . "<br>"
+					                   . __( "<strong>Caution:</strong> enabling this will also mean that if you change your company name or address in the future, previously generated documents will also be affected.", 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
 		);
-
 
 		// remove/rename some fields when invoice number is controlled externally
 		if( apply_filters('woocommerce_invoice_number_by_plugin', false) ) {

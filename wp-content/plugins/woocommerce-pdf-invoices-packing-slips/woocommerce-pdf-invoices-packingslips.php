@@ -3,14 +3,14 @@
  * Plugin Name: WooCommerce PDF Invoices & Packing Slips
  * Plugin URI: http://www.wpovernight.com
  * Description: Create, print & email PDF invoices & packing slips for WooCommerce orders.
- * Version: 2.1.4
+ * Version: 2.2.3
  * Author: Ewout Fernhout
  * Author URI: http://www.wpovernight.com
  * License: GPLv2 or later
  * License URI: http://www.opensource.org/licenses/gpl-license.php
  * Text Domain: woocommerce-pdf-invoices-packing-slips
  * WC requires at least: 2.2.0
- * WC tested up to: 3.3.0
+ * WC tested up to: 3.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,7 @@ if ( !class_exists( 'WPO_WCPDF' ) ) :
 
 class WPO_WCPDF {
 
-	public $version = '2.1.4';
+	public $version = '2.2.3';
 	public $plugin_basename;
 	public $legacy_mode;
 
@@ -88,7 +88,8 @@ class WPO_WCPDF {
 		 * 	 	- woocommerce-pdf-invoices-packing-slips-pro/languages/woocommerce-pdf-invoices-packing-slips-LOCALE.mo (which if not found falls back to:)
 		 * 	 	- WP_LANG_DIR/plugins/woocommerce-pdf-invoices-packing-slips-LOCALE.mo
 		 */
-		foreach ($textdomains as $textdomain) {
+		foreach ( $textdomains as $textdomain ) {
+			unload_textdomain( $textdomain );
 			load_textdomain( $textdomain, $dir . 'woocommerce-pdf-invoices-packing-slips/woocommerce-pdf-invoices-packing-slips-' . $locale . '.mo' );
 			load_textdomain( $textdomain, $dir . 'plugins/woocommerce-pdf-invoices-packing-slips-' . $locale . '.mo' );
 			load_plugin_textdomain( $textdomain, false, dirname( plugin_basename(__FILE__) ) . '/languages' );
