@@ -15,6 +15,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo get_template_directory_uri(); ?>/img/favicons/favicon-16x16.png">
   <link rel="mask-icon" href="<?php echo get_template_directory_uri(); ?>/img/favicons/safari-pinned-tab.svg" color="#4c3948">
   <meta name="theme-color" content="#ffffff">
+  <script>(function(n,t,i,r){var u,f;n[i]=n[i]||{},n[i].initial={accountCode:"ATSDI11112",host:"ATSDI11112.pcapredict.com"},n[i].on=n[i].on||function(){(n[i].onq=n[i].onq||[]).push(arguments)},u=t.createElement("script"),u.async=!0,u.src=r,f=t.getElementsByTagName("script")[0],f.parentNode.insertBefore(u,f)})(window,document,"pca","//ATSDI11112.pcapredict.com/js/sensor.js")</script>
   <link rel="pingback" href="<?php bloginfo('pingback_url');?>" />
   <?php wp_head();?>
  <script type="text/javascript">
