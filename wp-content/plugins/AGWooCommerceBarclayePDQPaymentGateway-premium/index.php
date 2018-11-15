@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Plugin Name: AG WooCommerce Barclay ePDQ Payment Gateway (Premium)
+ * Plugin Name: AG WooCommerce Barclay ePDQ Payment Gateway (Premium) (Premium)
  * Plugin URI: https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/
  * Description: Add a Barclay ePDQ payment gateway to WooCommerce 3.4+.
  * Author: We are AG
@@ -12,16 +12,16 @@
  * Last Modified: Tuesday, 16th October 2018 12:33:09 pm
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 2.11.0
+ * Version: 2.11.1
  * WC requires at least: 3.0.0
  * WC tested up to: 3.4.4
  * License: GPL3
  */
 /*
-Plugin Name: AG WooCommerce Barclay ePDQ Payment Gateway (Premium)
+Plugin Name: AG WooCommerce Barclay ePDQ Payment Gateway (Premium) (Premium)
 Plugin URI: https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/
 Description: Add a Barclay ePDQ payment gateway to WooCommerce 3.0+.
-Version: 2.11.0
+Version: 2.11.1
 Author: Aaron @ We are AG
 Author URI: https://www.weareag.co.uk
 WC requires at least: 3.0.0
@@ -29,7 +29,7 @@ WC tested up to: 3.4.4
 */
 defined( 'ABSPATH' ) or die( "No script kiddies please!" );
 if ( !defined( 'PLUGIN_VER' ) ) {
-    define( 'PLUGIN_VER', '2.11.0' );
+    define( 'PLUGIN_VER', '2.11.1' );
 }
 // Create a helper function for easy SDK access.
 function ag_epdq_fs()
