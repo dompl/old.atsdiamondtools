@@ -100,7 +100,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$icon = '';
 		if ( !$this->cardtypes ) {
 			// default behavior
-			$icon = '<img src="' . plugins_url('AG-woocommerce-epdq-payment-gateway/cards.gif') . '" alt="' . $this->title . '" />';
+			$icon = '<img src="' . plugins_url('AGWooCommerceBarclayePDQPaymentGateway-premium/cards.gif') . '" alt="' . $this->title . '" />';
 		} elseif ( $this->cardtypes ) {
 			// display icons for the selected card types
 			$icon = '';
