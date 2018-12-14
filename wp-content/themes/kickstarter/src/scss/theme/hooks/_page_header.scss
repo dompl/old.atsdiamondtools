@@ -3,82 +3,122 @@
  *  ********************************************************
  */
 
- header#page-header {
-  color: white;
-  padding: spacer() 0;
-  margin: 0 0 spacer() 0;
-  @include nav-break() {
-    padding:25px 0 20px;
-  }
-  &.has-image {
-    position: relative;
-    .container {
-      z-index: 10;
-      position: relative;
-    }
-    &:after {
-      content: "";
-      background: rgba(black, .8);
-      display: block;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      height: 100%;
-      width: 100%;
-    }
-  }
-  &.no-image {
-    color: color(text);
-    background: color(gray-lightest);
-    a {
-      color: lighten(color(text), 10%);
-    }
-  }
-  h1 {
-    width: 50%;
-    margin-top: -12px;
-    float: left;
-    display: block;
-    margin-bottom: 0;
-
-  }
-  .header-description {
-    clear: both;
-    float: left;
-    width: 75%;
-    margin-top: spacer(.5);
-    p {
-      @include _only() {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-  }
-  a {
-    color: rgba(white, .6);
-  }
-  .page-breadcrumbs {
-    float: left;
-    margin-top: spacer(.5);
+header#page-header {
+    color: white;
+    padding: spacer() 0;
+    margin: 0 0 spacer() 0;
     @include nav-break() {
-      margin-top: 10px;
-      text-align: center;
+        padding: 25px 0 20px;
     }
-    margin-bottom: -1px;
-    clear: both;
-    @include em('font-size', 12px);
-    font-style: italic;
-  }
-  @include to(4) {
-    .header-description,
+    &.has-image {
+        position: relative;
+        .container {
+            z-index: 10;
+            position: relative;
+        }
+        &:after {
+            content: "";
+            background: rgba(black, .8);
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+        }
+    }
+    &.no-image {
+        color: color(text);
+        background: color(gray-lightest);
+        a {
+            color: lighten(color(text), 10%);
+        }
+    }
     h1 {
-      width: 100%;
-      @include em('font-size', 20px);
-      font-weight: bold;
+        width: 50%;
+        margin-top: -12px;
+        float: left;
+        display: block;
+        margin-bottom: 0;
     }
     .header-description {
-      @include em('font-size', 14px);
+        clear: both;
+        float: left;
+        width: 75%;
+        margin-top: spacer(.5);
+        p {
+            @include _only() {
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+        }
     }
-  }
+    a {
+        color: rgba(white, .6);
+    }
+    .page-breadcrumbs {
+        float: left;
+        margin-top: spacer(.5);
+        @include nav-break() {
+            margin-top: 10px;
+            text-align: center;
+        }
+        margin-bottom: -1px;
+        clear: both;
+        @include em('font-size', 12px);
+        font-style: italic;
+    }
+    @include to(4) {
+        .header-description, h1 {
+            width: 100%;
+            @include em('font-size', 20px);
+            font-weight: bold;
+        }
+        .header-description {
+            @include em('font-size', 14px);
+        }
+    }
+}
+.snow {
+    background-image: url(img/theme/show-1.png), url(img/theme/show-2.png), url(img/theme/show-3.png);
+    animation: snow 30s linear infinite;
+    background-color: color(brand);
+}
+@keyframes snow {
+    0% {
+        background-position: 0px 0px, 0px 0px, 0px 0px;
+    }
+    100% {
+        background-position: 500px 1000px, 400px 400px, 300px 300px
+    }
+}
+#chrismtas-note {
+    padding: 10px 5%;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    a {
+        color: white;
+        // text-decoration: underline;
+        display: inline-block;
+        background: white;
+        padding: 2px 5px 3px;
+        border-radius: 3px;
+        color:color(brand);
+        @extend %transition;
+        &:hover {
+            background: black;
+            color: white!important;
+        }
+    }
+    p {
+        margin: 0;
+        font-size: 12px;
+        text-align: center;
+        font-weight: bold;
+        @include breakpoint(max-width $md) {
+            font-size: 12px;
+        }
+    }
 }
