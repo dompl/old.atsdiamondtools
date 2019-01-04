@@ -28,7 +28,7 @@
 
 <body <?php body_class()?>>
   <header id="masthead" class="clx">
-    <?php get_template_part( 'modules/header/christmas'); ?>
+    <?php // get_template_part( 'modules/header/christmas'); ?>
     <?php get_template_part( 'modules/header/top'); ?>
     <?php get_template_part( 'modules/header/middle'); ?>
     <?php get_template_part( 'modules/header/navigation'); ?>
