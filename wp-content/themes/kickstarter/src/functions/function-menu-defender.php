@@ -45,6 +45,7 @@ function my_remove_menu_pages()
     remove_menu_page('wphb');
     // Ag License
     remove_menu_page('AG_licence');
+    remove_menu_page('AG_plugins');
 
     /* Tools */
     remove_menu_page('tools.php');
@@ -52,6 +53,7 @@ function my_remove_menu_pages()
 
     /* Plugins */
     remove_menu_page('plugins.php');
+    // remove_menu_page('woocommerce');
 
     remove_submenu_page('themes.php', 'themes.php');
     remove_submenu_page('themes.php', 'customize.php');
@@ -75,6 +77,9 @@ function my_remove_menu_pages()
     remove_submenu_page('gf_edit_forms', 'gf_help');
     remove_submenu_page('gf_edit_forms', 'gf_export');
     remove_submenu_page('gf_edit_forms', 'gf_new_form');
+
+    remove_submenu_page('woocommerce', 'wc-ncr');
+    // remove_menu_page( 'admin.php?page=wc-ncr' );
 
     /* Core updates */
     remove_submenu_page('index.php', 'update-core.php');
