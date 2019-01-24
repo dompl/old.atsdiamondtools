@@ -1,6 +1,8 @@
 // ==== FOOTER ==== //
 ;(function($) {
     $(function() {
+
+
         function checkPasswordStrength($pass1, $pass2, $strengthResult, $submitButton, blacklistArray) {
             var pass1 = $pass1.val();
             var pass2 = $pass2.val();
