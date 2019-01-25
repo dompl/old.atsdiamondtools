@@ -90,6 +90,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $s = AWS_Helpers::normalize_string( $s );
 
 
+            /**
+             * Fires each time when performing the search
+             * @since 1.59
+             * @param string $s Search query
+             */
+            do_action( 'aws_search_start', $s );
+
+
             //$s = strtolower( $s );
 
             $cache_option_name = '';
@@ -249,6 +257,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $query['relevance'] = '';
             $query['stock'] = '';
             $query['visibility'] = '';
+            $query['exclude_products'] = '';
             $query['lang'] = '';
 
             $search_array = array();
@@ -279,7 +288,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                 $search_term_norm = preg_replace( '/(s|es|ies)$/i', '', $search_term );
 
-                if ( $search_term_norm ) {
+                if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
                     $search_term = $search_term_norm;
                 }
 
@@ -343,19 +352,33 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 $source_array[] = "term_source = '{$search_in_term}'";
             }
 
-            $query['relevance'] .= sprintf( ' (SUM( %s )) ', implode( ' + ', $new_relevance_array ) );
-            $query['search'] .= sprintf( ' AND ( %s )', implode( ' OR ', $search_array ) );
-            $query['source'] .= sprintf( ' AND ( %s )', implode( ' OR ', $source_array ) );
+            $query['relevance'] = sprintf( ' (SUM( %s )) ', implode( ' + ', $new_relevance_array ) );
+            $query['search'] = sprintf( ' AND ( %s )', implode( ' OR ', $search_array ) );
+            $query['source'] = sprintf( ' AND ( %s )', implode( ' OR ', $source_array ) );
 
 
             if ( $reindex_version && version_compare( $reindex_version, '1.16', '>=' ) ) {
 
                 if ( $outofstock !== 'true' ) {
-                    $query['stock'] .= " AND in_stock = 1";
+                    $query['stock'] = " AND in_stock = 1";
                 }
 
-                $query['visibility'] .= " AND NOT visibility LIKE '%hidden%'";
+                $query['visibility'] = " AND NOT visibility LIKE '%hidden%'";
 
+            }
+
+
+            /**
+             * Exclude certain products from search
+             *
+             * @since 1.58
+             *
+             * @param array
+             */
+            $exclude_products_filter = apply_filters( 'aws_exclude_products', array() );
+
+            if ( $exclude_products_filter && is_array( $exclude_products_filter ) && ! empty( $exclude_products_filter ) ) {
+                $query['exclude_products'] = sprintf( ' AND ( id NOT IN ( %s ) )', implode( ',', $exclude_products_filter ) );
             }
 
 
@@ -365,8 +388,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 $current_lang = AWS_Helpers::get_lang();
             }
 
+            /**
+             * Filter current language code
+             * @since 1.59
+             * @param string $current_lang Lang code
+             */
+            $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
+
             if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
-                $query['lang'] .= $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
+                $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
             }
 
 
@@ -381,6 +411,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 {$query['search']}
                 {$query['stock']}
                 {$query['visibility']}
+                {$query['exclude_products']}
                 {$query['lang']}
                 GROUP BY ID
                 ORDER BY
@@ -431,16 +462,17 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             if ( count( $posts_ids ) > 0 ) {
 
-                $show_excerpt      = AWS()->get_settings( 'show_excerpt' );
-                $excerpt_source    = AWS()->get_settings( 'desc_source' );
-                $excerpt_length    = AWS()->get_settings( 'excerpt_length' );
-                $mark_search_words = AWS()->get_settings( 'mark_words' );
-                $show_price        = AWS()->get_settings( 'show_price' );
-                $show_sale         = AWS()->get_settings( 'show_sale' );
-                $show_image        = AWS()->get_settings( 'show_image' );
-                $show_sku          = AWS()->get_settings( 'show_sku' );
-                $show_stock_status = AWS()->get_settings( 'show_stock' );
-                $show_featured     = AWS()->get_settings( 'show_featured' );
+                $show_excerpt         = AWS()->get_settings( 'show_excerpt' );
+                $excerpt_source       = AWS()->get_settings( 'desc_source' );
+                $excerpt_length       = AWS()->get_settings( 'excerpt_length' );
+                $mark_search_words    = AWS()->get_settings( 'mark_words' );
+                $show_price           = AWS()->get_settings( 'show_price' );
+                $show_outofstockprice =  AWS()->get_settings( 'show_outofstock_price' );
+                $show_sale            = AWS()->get_settings( 'show_sale' );
+                $show_image           = AWS()->get_settings( 'show_image' );
+                $show_sku             = AWS()->get_settings( 'show_sku' );
+                $show_stock_status    = AWS()->get_settings( 'show_stock' );
+                $show_featured        = AWS()->get_settings( 'show_featured' );
 
 
                 foreach ( $posts_ids as $post_id ) {
@@ -450,6 +482,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     if( ! is_a( $product, 'WC_Product' ) ) {
                         continue;
                     }
+
+                    /**
+                     * Filter additional product data
+                     * @since 1.60
+                     * @param array $this->data Additional data
+                     * @param int $post_id Product id
+                     * @param object $product Product
+                     */
+                    $this->data = apply_filters( 'aws_search_data_params', $this->data, $post_id, $product );
 
                     $post_data = get_post( $post_id );
 
@@ -489,11 +530,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
                     }
 
-                    if ( $show_price === 'true' ) {
+                    if ( $show_price === 'true' && ( $product->is_in_stock() || ( ! $product->is_in_stock() && $show_outofstockprice === 'true' ) ) ) {
                         $price = $product->get_price_html();
                     }
 
-                    if ( $show_sale === 'true' ) {
+                    if ( $show_sale === 'true' && ( $product->is_in_stock() || ( ! $product->is_in_stock() && $show_outofstockprice === 'true' ) ) ) {
                         $on_sale = $product->is_on_sale();
                     }
 
@@ -524,7 +565,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                             );
                         }
                     }
-
+                    
 
                     $f_price   = $product->get_price();
                     $f_rating  = $product->get_average_rating();
@@ -534,6 +575,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 //                    $tags = $product->get_tags( ',' );
 
                     $new_result = array(
+                        'id'           => $post_id,
                         'title'        => $title,
                         'excerpt'      => $excerpt,
                         'link'         => get_permalink( $post_id ),
@@ -553,6 +595,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 }
 
             }
+
+            /**
+             * Filter products array before output
+             * @since 1.60
+             * @param array $products_array Products array
+             * @param array $this->data Additional data
+             */
+            $products_array = apply_filters( 'aws_search_pre_filter_products', $products_array, $this->data );
 
             return $products_array;
 
@@ -681,6 +731,18 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $search_query .= sprintf( ' AND ( %s )', implode( ' OR ', $search_array ) );
 
+            /**
+             * Exclude certain terms from search
+             *
+             * @since 1.58
+             *
+             * @param array
+             */
+            $exclude_terms = apply_filters( 'aws_terms_exclude_' . $taxonomy, array() );
+
+            if ( $exclude_terms && is_array( $exclude_terms ) && ! empty( $exclude_terms ) ) {
+                $excludes = $wpdb->prepare( " AND ( " . $wpdb->terms . ".term_id NOT IN ( %s ) )", implode( ',', $exclude_terms ) );
+            }
 
             $sql = "
 			SELECT
@@ -695,8 +757,9 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 				{$search_query}
 				AND $wpdb->term_taxonomy.taxonomy = '{$taxonomy}'
 				AND $wpdb->term_taxonomy.term_id = $wpdb->terms.term_id
-			$excludes
+			    {$excludes}
 			LIMIT 0, 10";
+
 
             $search_results = $wpdb->get_results( $sql );
 

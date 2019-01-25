@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 4.9.8
-Stable tag: 1.53
+Tested up to: 5.0
+Stable tag: 1.60
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,12 +32,15 @@ Advanced Woo Search - powerful live search plugin for WooCommerce. Just start ty
 * Plurals support
 * Diacritical marks support
 * Google Analytics support
+* Seamless integration option for easy replacing your current search form
 * **WPML**, **Polylang**, **WooCommerce Multilingual**, **qTranslate** support
 * **WPML multi-currency** support
 * Custom Product Tabs for WooCommerce plugin support
 * Search Exclude plugin support
 
 = Premium Features =
+
+Additional features available only in PRO plugin version.
 
 [Premium Version Demo](https://advanced-woo-search.com/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 	
@@ -49,7 +52,7 @@ Advanced Woo Search - powerful live search plugin for WooCommerce. Just start ty
 * Product **custom taxonomies** search
 * Product **custom fields** search
 * **Advanced settings page** with lot of options
-* **Exclude/include** spicific products by its ids, categories or tags from search results
+* **Exclude/include** spicific products by its ids, taxonomies or attributes from search results
 * Ability to specify **source of image** for search results: featured image, gallery, product content, product short description or set default image if there is no other images
 * **Visibility/stock status option** - choose what catalog visibility and stock status must be for product to displayed in search results
 * Show product **categories** and **variations** in search results
@@ -97,6 +100,50 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 1.60 =
+* Update cron job action
+* Update Protected Categories plugin integration
+* Update B2B Market plugin integration
+* Add WC Marketplace plugin integration
+* Add new option to disable auto sync for index page
+* Add aws_filter_yikes_woo_products_tabs_sync filter
+* Add aws_search_data_params filter
+* Add aws_search_pre_filter_products filter
+
+= 1.59 =
+* Add aws_search_start action
+* Update caching naming
+* Update cron job action. Now its must works fine with large amount of products
+* Fix singular form of terms
+* Add aws_search_current_lang filter
+* Add B2B Market plugin support
+* Add Datafeedr WooCommerce Importer plugin support
+* Add option to hide price for out-of-stock products
+
+= 1.58 =
+* Add option for preventing submit of empty search form
+* Add support for Protected Categories plugin
+* Add aws_exclude_products filter
+* Add aws_terms_exclude_product_cat filter
+* Add aws_terms_exclude_product_tag filter
+
+= 1.57 =
+* Update search query string
+* Fix style for search icon
+* Fix search field style
+* Fix clear button style
+
+= 1.56 =
+* Update stopwords list
+* Add search box layout options
+
+= 1.55 =
+* Update search behavior on text paste
+
+= 1.54 =
+* Update plugin index table
+* Update WooCommerce version support
 
 = 1.53 =
 * Fix bug with search results page ordering

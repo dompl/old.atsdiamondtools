@@ -29,6 +29,8 @@ class WC_Gateway_PPEC_Admin_Handler {
 
 		add_action( 'load-woocommerce_page_wc-settings', array( $this, 'maybe_redirect_to_ppec_settings' ) );
 		add_action( 'load-woocommerce_page_wc-settings', array( $this, 'maybe_reset_api_credentials' ) );
+
+		add_action( 'woocommerce_admin_order_totals_after_total', array( $this, 'display_order_fee_and_payout' ) );
 	}
 
 	public function add_capture_charge_order_action( $actions ) {
@@ -86,7 +88,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 
 	/**
 	 * Prevent PPEC Credit showing up in the admin, because it shares its settings
-	 * with the PayPal Express Checkout class.
+	 * with the PayPal Checkout class.
 	 *
 	 * @param array $sections List of sections in checkout
 	 *
@@ -173,7 +175,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 						update_post_meta( $order_id, '_transaction_id', $result['TRANSACTIONID'] );
 					}
 
-					$order->add_order_note( sprintf( __( 'PayPal Express Checkout charge complete (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
+					$order->add_order_note( sprintf( __( 'PayPal Checkout charge complete (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
 				}
 			}
 		}
@@ -217,7 +219,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 				if ( is_wp_error( $result ) ) {
 					$order->add_order_note( __( 'Unable to void charge!', 'woocommerce-gateway-paypal-express-checkout' ) . ' ' . $result->get_error_message() );
 				} else {
-					$order->add_order_note( sprintf( __( 'PayPal Express Checkout charge voided (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
+					$order->add_order_note( sprintf( __( 'PayPal Checkout charge voided (Charge ID: %s)', 'woocommerce-gateway-paypal-express-checkout' ), $trans_id ) );
 				}
 			}
 		}
@@ -296,5 +298,53 @@ class WC_Gateway_PPEC_Admin_Handler {
 		$settings->save();
 
 		wp_safe_redirect( wc_gateway_ppec()->get_admin_setting_link() );
+	}
+
+	/**
+	 * Displays the PayPal fee and the net total of the transaction without the PayPal charges
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $order_id
+	 */
+	public function display_order_fee_and_payout( $order_id ) {
+		$order = wc_get_order( $order_id );
+
+		$old_wc         = version_compare( WC_VERSION, '3.0', '<' );
+		$payment_method = $old_wc ? $order->payment_method : $order->get_payment_method();
+		$paypal_fee     = wc_gateway_ppec_get_transaction_fee( $order );
+		$order_currency = $old_wc ? $order->order_currency : $order->get_currency();
+		$order_total    = $old_wc ? $order->order_total : $order->get_total();
+
+		if ( 'ppec_paypal' !== $payment_method || ! is_numeric( $paypal_fee ) ) {
+			return;
+		}
+
+		$net = $order_total - $paypal_fee;
+
+		?>
+
+		<tr>
+			<td class="label ppec-fee">
+				<?php echo wc_help_tip( __( 'This represents the fee PayPal collects for the transaction.', 'woocommerce-gateway-paypal-express-checkout' ) ); ?>
+				<?php esc_html_e( 'PayPal Fee:', 'woocommerce-gateway-paypal-express-checkout' ); ?>
+			</td>
+			<td width="1%"></td>
+			<td class="total">
+				-&nbsp;<?php echo wc_price( $paypal_fee, array( 'currency' => $order_currency ) ); ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="label ppec-payout">
+				<?php echo wc_help_tip( __( 'This represents the net total that will be credited to your PayPal account. This may be in a different currency than is set in your PayPal account.', 'woocommerce-gateway-paypal-express-checkout' ) ); ?>
+				<?php esc_html_e( 'PayPal Payout:', 'woocommerce-gateway-paypal-express-checkout' ); ?>
+			</td>
+			<td width="1%"></td>
+			<td class="total">
+				<?php echo wc_price( $net, array( 'currency' => $order_currency ) ); ?>
+			</td>
+		</tr>
+
+		<?php
 	}
 }

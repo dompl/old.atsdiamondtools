@@ -33,6 +33,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             $show_page     = AWS()->get_settings( 'show_page' );
             $show_clear    = AWS()->get_settings( 'show_clear' );
             $use_analytics = AWS()->get_settings( 'use_analytics' );
+            $buttons_order = AWS()->get_settings( 'buttons_order' );
 
             $current_lang = AWS_Helpers::get_lang();
 
@@ -56,6 +57,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
                 'data-show-clear'    => $show_clear,
                 'data-use-analytics' => $use_analytics,
                 'data-min-chars'     => $min_chars,
+                'data-buttons-order' => $buttons_order,
             );
 
             foreach( $params as $key => $value ) {
@@ -65,25 +67,42 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             $markup = '';
             $markup .= '<div class="aws-container" ' . $params_string . '>';
             $markup .= '<form class="aws-search-form" action="' . home_url('/') . '" method="get" role="search" >';
-            $markup .= '<input  type="text" name="s" value="' . get_search_query() . '" class="aws-search-field" placeholder="' . $placeholder . '" autocomplete="off" />';
-            $markup .= '<input type="hidden" name="post_type" value="product">';
-            $markup .= '<input type="hidden" name="type_aws" value="true">';
 
-            if ( $current_lang ) {
-                $markup .= '<input type="hidden" name="lang" value="' . $current_lang . '">';
-            }
+            $markup .= '<div class="aws-wrapper">';
 
-            if ( $url_query_parts ) {
-                foreach( $url_query_parts as $url_query_key => $url_query_value  ) {
-                    $markup .= '<input type="hidden" name="' . $url_query_key . '" value="' . $url_query_value . '">';
+                $markup .= '<input  type="text" name="s" value="' . get_search_query() . '" class="aws-search-field" placeholder="' . $placeholder . '" autocomplete="off" />';
+                $markup .= '<input type="hidden" name="post_type" value="product">';
+                $markup .= '<input type="hidden" name="type_aws" value="true">';
+
+                if ( $current_lang ) {
+                    $markup .= '<input type="hidden" name="lang" value="' . $current_lang . '">';
                 }
-            }
 
-            $markup .= '<div class="aws-search-clear">';
-                $markup .= '<span aria-label="Clear Search">×</span>';
+                if ( $url_query_parts ) {
+                    foreach( $url_query_parts as $url_query_key => $url_query_value  ) {
+                        $markup .= '<input type="hidden" name="' . $url_query_key . '" value="' . $url_query_value . '">';
+                    }
+                }
+
+                $markup .= '<div class="aws-search-clear">';
+                    $markup .= '<span aria-label="Clear Search">×</span>';
+                $markup .= '</div>';
+
+                $markup .= '<div class="aws-loader"></div>';
+
             $markup .= '</div>';
 
-            $markup .= '<div class="aws-loader"></div>';
+            if ( $buttons_order && $buttons_order !== '1' ) {
+
+                $markup .= '<div class="aws-search-btn aws-form-btn">';
+                    $markup .= '<span class="aws-search-btn_icon">';
+                        $markup .= '<svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px">';
+                            $markup .= '<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>';
+                        $markup .= '</svg>';
+                    $markup .= '</span>';
+                $markup .= '</div>';
+
+            }
 
             $markup .= '</form>';
             $markup .= '</div>';
