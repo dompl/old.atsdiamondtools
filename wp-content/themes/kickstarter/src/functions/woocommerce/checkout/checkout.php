@@ -36,3 +36,9 @@ function gdpr_terms_additional_note() {
 
     echo '<p id="gdpr-term-conditions">This form collects your name, email, billing address, shipping address, telephone number and VAT number, so we can process your order. Check out our <a href="' . esc_url(get_permalink($privacy_policy_page_id)) . '" title="Privacy Statement & Cookie Notice" target="_blank">privacy statement</a> to see how we protect and manage your data. We will not store or collect your payment card details. That information is provided directly to our third-party payment processors whose use of your personal information is governed by their Privacy Policy. By checking this box you are agreeing to our <a href="' . esc_url(get_permalink($privacy_policy_page_id)) . '" title="Privacy Statement & Cookie Notice" target="_blank">Privacy Statement & Cookie Notice.</a> and <a href="'.esc_url(wc_get_page_permalink('terms')).'" target="_blank" class="woocommerce-terms-and-conditions-link">terms &amp; conditions</a></p>';
 }
+/* Make phone number non mandatory */
+add_filter( 'woocommerce_billing_fields', 'ats_filter_phone', 10, 1 );
+function ats_filter_phone( $address_fields ) {
+$address_fields['billing_phone']['required'] = false;
+return $address_fields;
+}
