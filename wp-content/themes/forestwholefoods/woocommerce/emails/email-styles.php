@@ -20,17 +20,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load colors.
-$bg        = get_option( 'woocommerce_email_background_color' );
-$body      = get_option( 'woocommerce_email_body_background_color' );
-$base      = get_option( 'woocommerce_email_base_color' );
-$base_text = wc_light_or_dark( $base, '#202020', '#ffffff' );
-$text      = get_option( 'woocommerce_email_text_color' );
+$bg              = get_option( 'woocommerce_email_background_color' );
+$body            = get_option( 'woocommerce_email_body_background_color' );
+$base            = get_option( 'woocommerce_email_base_color' );
+$base_text       = wc_light_or_dark( $base, '#202020', '#ffffff' );
+$text            = get_option( 'woocommerce_email_text_color' );
 
 // Pick a contrasting color for links.
-$link_color = wc_hex_is_light( $base ) ? $base : $base_text;
-
+$link = wc_hex_is_light( $base ) ? $base : $base_text;
 if ( wc_hex_is_light( $body ) ) {
-	$link_color = wc_hex_is_light( $base ) ? $base_text : $base;
+	$link = wc_hex_is_light( $base ) ? $base_text : $base;
 }
 
 $bg_darker_10    = wc_hex_darker( $bg, 10 );
@@ -84,7 +83,7 @@ $text_lighter_20 = wc_hex_lighter( $text, 20 );
 	font-size:12px;
 	line-height:125%;
 	text-align:center;
-	padding: 0 48px 48px 48px;
+	padding: 0 48px 30px 48px;
 }
 
 #body_content {
@@ -92,7 +91,7 @@ $text_lighter_20 = wc_hex_lighter( $text, 20 );
 }
 
 #body_content table td {
-	padding: 48px 48px 0;
+	padding: 30px 30px 0;
 }
 
 #body_content table td td {
@@ -138,7 +137,7 @@ $text_lighter_20 = wc_hex_lighter( $text, 20 );
 }
 
 .address {
-	padding: 12px;
+	padding:12px 12px 0;
 	color: <?php echo esc_attr( $text_lighter_20 ); ?>;
 	border: 1px solid <?php echo esc_attr( $body_darker_10 ); ?>;
 }
@@ -191,7 +190,7 @@ h3 {
 }
 
 a {
-	color: <?php echo esc_attr( $link_color ); ?>;
+	color: <?php echo esc_attr( $link ); ?>;
 	font-weight: normal;
 	text-decoration: underline;
 }
