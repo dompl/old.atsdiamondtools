@@ -5,7 +5,6 @@
  * File: class.epdq.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Last Modified: Wednesday, 7th November 2018 5:13:34 pm
  * Modified By: Aaron Bowie - We are AG
  * -----
  * WC requires at least: 3.0.0
@@ -84,7 +83,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$icon = '';
 		if ( !$this->cardtypes ) {
 			// default behavior
-			$icon = '<img src="' . plugins_url('AGWooCommerceBarclayePDQPaymentGateway-premium/img/cards.gif') . '" alt="' . $this->title . '" />';
+			$icon = '<img src="' . AG_ePDQ_server_path .'/img/cards.gif" alt="' . $this->title . '" />';
 		} elseif ( $this->cardtypes ) {
 			// display icons for the selected card types
 			$icon = '';
@@ -151,7 +150,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 							'title' => __( 'Description', 'ag_epdq_checkout' ),
 							'type' => 'textarea',
 							'description' => __( 'Description of the payment process. This description will be visible throuhout the site and the payment page.', 'ag_epdq_checkout' ),
-							'default' => 'Use the payment processor of barclay bank and checkout with your debit/credit card.',
+							'default' => 'Use the <strong>secure payment processor of Barclays Bank Plc</strong> and checkout with your debit/credit card.',
 							'desc_tip'      => true
 					),
 					'access_key' => array(
@@ -184,7 +183,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 							'desc_tip'      => true
 					),
 					'sha_method' => array(
-							'title' => __( 'SHA encription method', 'ag_epdq_checkout' ),
+							'title' => __( 'SHA encryption method', 'ag_epdq_checkout' ),
 							'type' => 'select',
 							'css'  => 'height: 35px;',
 							'options'=> array(0=>'SHA-1',1=>'SHA-256',2=>'SHA-512'),
@@ -263,7 +262,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 						'title' => __( 'Description', 'ag_epdq_checkout' ),
 						'type' => 'textarea',
 						'description' => __( 'Description of the payment process. This description will be visible throuhout the site and the payment page.', 'ag_epdq_checkout' ),
-						'default' => 'Use the payment processor of barclay bank and checkout with your debit/credit card.',
+						'default' => 'Use the <strong>secure payment processor of Barclays Bank Plc</strong> and checkout with your debit/credit card.',
 						'desc_tip'      => true
 				),
 				'access_key' => array(
@@ -297,7 +296,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 						'desc_tip'      => true
 				),
 				'sha_method' => array(
-						'title' => __( 'SHA encription method', 'ag_epdq_checkout' ),
+						'title' => __( 'SHA encryption method', 'ag_epdq_checkout' ),
 						'type' => 'select',
 						'css'  => 'height: 35px;',
 						'options'=> array(0=>'SHA-1',1=>'SHA-256',2=>'SHA-512'),
@@ -382,18 +381,18 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 		$fields = array(
 			'PSPID'=>$this->access_key,
-			'ORDERID'=>$order->id,
-			'AMOUNT'=>$order->order_total*100,
+			'ORDERID'=>$order->get_id(),
+			'AMOUNT'=>$order->get_total() * 100,
 			'CURRENCY'=>get_woocommerce_currency(),
 			'LANGUAGE'=>get_bloginfo('language'),
-			'CN'=>$order->billing_first_name . ' ' . $order->billing_last_name,
-			'EMAIL'=>$order->billing_email,
-			'OWNERZIP'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->billing_postcode),
-			'OWNERADDRESS'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->billing_address_1),
-			'OWNERADDRESS2'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->billing_address_2),
-			'OWNERCTY'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $woocommerce->countries->countries[$order->billing_country]),
-			'OWNERTOWN'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->billing_city),
-			'OWNERTELNO'=>$order->billing_phone,
+			'CN'=>$order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+			'EMAIL'=>$order->get_billing_email(),
+			'OWNERZIP'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_postcode()),
+			'OWNERADDRESS'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_1()),
+			'OWNERADDRESS2'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_2()),
+			'OWNERCTY'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $woocommerce->countries->countries[$order->get_billing_country()]),
+			'OWNERTOWN'=>preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_city()),
+			'OWNERTELNO'=>$order->get_billing_phone(),
 			'ACCEPTURL'=>$order_received_url,
 			'DECLINEURL'=>$cancel_order_url,
 			'TP'=>$this->template,
@@ -415,7 +414,6 @@ class epdq_checkout extends WC_Payment_Gateway {
 			$shasign = hash('sha256',implode($this->sha_in, $shasign_arg).$this->sha_in);
 		elseif ( $this->sha_method == 2 )
 			$shasign = hash('sha512',implode($this->sha_in, $shasign_arg).$this->sha_in);
-		else{}
 
 		$epdq_args = array();
 		foreach($fields as $key => $value){
@@ -427,7 +425,6 @@ class epdq_checkout extends WC_Payment_Gateway {
 			if($this->status=='test')	$url = $this->test_url;
 			if($this->status=='live')	$url = $this->live_url;
 
-			//echo '<p>'.__('Thank you for your order, please click the button below to pay securely.', 'ag_epdq_checkout').'</p>';
 			echo '<form action="'.$url.'" method="post" id="epdq_payment_form">';
 			echo implode('', $epdq_args);
 			echo '<input type="hidden" name="SHASIGN" value="'.$shasign.'"/>';

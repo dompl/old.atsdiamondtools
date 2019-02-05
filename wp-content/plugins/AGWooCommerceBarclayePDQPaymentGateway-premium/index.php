@@ -8,12 +8,11 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Last Modified: Thursday, 8th November 2018 1:21:35 am
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 2.12.2
+ * Version: 2.13.1
  * WC requires at least: 3.0.0
- * WC tested up to: 3.5.4
+ * WC tested up to: 3.5
  * License: GPL3
  */
 
@@ -23,7 +22,7 @@ define( 'AG_ePDQ_server_path', plugin_dir_url( __FILE__ ) );
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  2.12.2
+ * @version  2.13.1
  * @category Class
  * @author   We are AG
  */
@@ -35,7 +34,7 @@ class AG_ePDQ_server {
 	 *
 	 * @var string
 	 */
-	public static $AGversion = "2.12.2";
+	public static $AGversion = "2.13.0";
 
 
 	/**
@@ -138,8 +137,9 @@ class AG_ePDQ_server {
 		AG_up_sell::run_instance(array(
 			'plugins'   => array(
 				'sagepay_direct',
-				'visa_checkout',
+				'safecharge',
 				'adyen',
+				'pay360',
 			),
 			'plugin_slug'   => self::$AG_ePDQ_slug,
 		));
@@ -147,6 +147,7 @@ class AG_ePDQ_server {
 
 		AG_gateway_tips::run_instance(array(
 			'tips'   => array(
+				'for_you',
 				'PCI',
 				'payments_101',
 			),

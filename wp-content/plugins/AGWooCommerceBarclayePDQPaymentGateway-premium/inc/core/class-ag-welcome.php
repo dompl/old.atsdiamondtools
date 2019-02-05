@@ -60,7 +60,7 @@ class AG_welcome_screen {
 	/**
 	 * Add Welcome page
 	 */
-	public static function ag_welcome_screen() {
+	public function ag_welcome_screen() {
 
 		add_menu_page(
             'Welcome to AG',
@@ -78,9 +78,9 @@ class AG_welcome_screen {
 	/**
 	 * Setting up the welcome page
 	 */
-	public static function setup_welcome_page() {
+	public function setup_welcome_page() {
 
-		$page_title = sprintf( '<div style="padding-bottom: 15px;">%s from <a href="https://weareag.co.uk/?utm_source=%s&utm_medium=insideplugin" target="_blank">We are AG</a> <em style="opacity: 0.6; font-size: 80%%;">(v%s)</em></div>', self::$args['plugin_title'], self::$args['slug'], self::$args['plugin_version'] );
+		$page_title = sprintf( '<div style="padding-bottom: 15px;">%s from <a href="https://weareag.co.uk/?utm_source=%s&utm_medium=insideplugin" target="_blank">We are AG</a> <em style="opacity: 0.6; font-size: 80%%;">(v%s)</em></div>', self::$args['plugin_title'], self::$args['main_slug'], self::$args['plugin_version'] );
 
 		self::getting_started(); ?>
 
@@ -89,7 +89,7 @@ class AG_welcome_screen {
 
 			<div class="ag-welcome-body">
 
-				<h2><!--Account and -->Licence settings</h2>
+				<h2>Account and Licence settings</h2>
 				<div class="section">
 
 				        <div class="main-card">
@@ -102,7 +102,7 @@ class AG_welcome_screen {
 							</div>
 						</div>
 
-						<!--<div class="main-card">
+						<div class="main-card">
 							<div class="card-contents">
 								<div class="card-body">
 									<h3>Your Account</h3>
@@ -110,7 +110,7 @@ class AG_welcome_screen {
 									<a target="_blank" href="https://weareag.co.uk/account?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Manage Your Account</a>
 								</div>
 							</div>
-						</div> -->
+						</div>
 						<div style="clear: both"></div>
 				</div>
 				<h2>Getting the help you need</h2>

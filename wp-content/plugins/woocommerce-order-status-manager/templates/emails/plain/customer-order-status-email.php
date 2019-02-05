@@ -18,7 +18,7 @@
  *
  * @package     WC-Order-Status-Manager/Templates
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2017, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
@@ -34,7 +34,6 @@ defined( 'ABSPATH' ) or exit;
  * @type bool $plain_text Whether email is plain text.
  * @type bool $show_download_links Whether to show download links.
  * @type bool $show_purchase_note Whether to show purchase note.
- * @type \WC_Email $email The email object.
  *
  * @since 1.0.0
  * @version 1.7.0
@@ -48,7 +47,7 @@ if ( $email_body_text ) {
 
 echo "****************************************************\n\n";
 
-do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
+do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text );
 
 /* translators: Placeholders: %s - order number */
 echo sprintf( __( 'Order number: %s', 'woocommerce-order-status-manager' ), $order->get_order_number() ) . "\n";
@@ -58,7 +57,7 @@ $order_timestamp = SV_WC_Order_Compatibility::get_date_created( $order )->getTim
 /* translators: Placeholders: %s - order date */
 echo sprintf( __( 'Order date: %s', 'woocommerce-order-status-manager' ), date_i18n( wc_date_format(), $order_timestamp ) ) . "\n";
 
-do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
+do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text );
 
 echo "\n";
 
@@ -81,7 +80,7 @@ if ( $totals = $order->get_order_item_totals() ) {
 
 echo "\n****************************************************\n\n";
 
-do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email );
+do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text );
 
 echo esc_html__( 'Your details', 'woocommerce-order-status-manager' ) . "\n\n";
 

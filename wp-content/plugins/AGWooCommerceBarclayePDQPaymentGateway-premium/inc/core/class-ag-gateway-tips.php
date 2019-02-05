@@ -44,6 +44,12 @@ class AG_gateway_tips {
                 'dec'            =>  'What is online payment processing? Online payment processing is the system that allows you to purchase goods or services on the internet without using cash. There are two main elements, the payment gateway and the payment processor. ',
                 'tip_img'        =>  'https://weareag.co.uk/wp/wp-content/uploads/2018/08/online-payment-processing-options-101.jpg',
             ),
+            'for_you' =>  array(
+                'title'          =>  'What Payment Gateway Solution is Best for You?',
+                'tip_url'        =>  'https://weareag.co.uk/what-payment-gateway-solution-is-best-for-you/',
+                'dec'            =>  'Growing a business is exciting. Seeing sales come pouring in is a shot of energy that helps you keep going even when things get tough. Choose the payment gateway that will work best with your business. Take time to do the research and read the reviews. Ask other online business owners what gateway they’ve used.                ',
+                'tip_img'        =>  'https://weareag.co.uk/wp/wp-content/uploads/2018/11/What-Payment-Gateway-Solution-is-Best-for-You-1024x576.jpg',
+            ),
         );
     }
 
@@ -66,7 +72,7 @@ class AG_gateway_tips {
     }
 
 
-    public function output_tips() {
+    public static function output_tips() {
         $tips = self::get_defined_tips();
         foreach ( $tips as $tip ) { ?>
 
@@ -88,8 +94,6 @@ class AG_gateway_tips {
             </div>
         </div>
 
-
-		
         <?php } ?>
 
         <style>
@@ -234,7 +238,4 @@ class AG_gateway_tips {
             .tip-card .card-contents .card-body .ag-button:hover { color: #fff; background-color: #543a60;}
         </style>
 	<?php }
-    
-
 }
-

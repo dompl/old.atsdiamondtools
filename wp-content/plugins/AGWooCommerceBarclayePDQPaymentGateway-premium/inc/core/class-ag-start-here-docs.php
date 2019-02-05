@@ -38,7 +38,8 @@ class AG_start_here_docs {
     public static function get_doc_links() {
 
 		$return = array();
-        $url    = self::$AG_doc_url . self::$args['start_here'];
+		$url    = self::$AG_doc_url . self::$args['start_here'];
+		$transient_name = 'ePDQ_server';
         
         
 		$html   = file_get_contents( $url );

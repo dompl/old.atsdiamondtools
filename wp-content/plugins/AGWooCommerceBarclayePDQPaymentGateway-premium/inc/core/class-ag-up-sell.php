@@ -78,6 +78,13 @@ class AG_up_sell {
                 'plugin_img'     =>  'https://weareag.co.uk/wp/wp-content/uploads/2018/10/ag-pay360.png',
                 'plugin_color'   =>  '#287470', 
            ),
+            'safecharge'         =>  array(
+                'title'          =>  'SafeCharge  For WooCommerce',
+                'plugin_url'     =>  'https://weareag.co.uk/product/safecharge-payment-gateway-for-woocommerce/',
+                'dec'            =>  'SafeCharge Checkout page is a ready to use, customisable payment page designed to give your customers a smooth payment experience, online and on mobile.',
+                'plugin_img'     =>  'https://weareag.co.uk/wp/wp-content/uploads/2019/01/AG-safecharge-WooCommerce-e1548292046998.png',
+                'plugin_color'   =>  '#016080', 
+            ),
         );
 
     }
@@ -105,7 +112,7 @@ class AG_up_sell {
     }
     
 
-    public function output_up_sells() {
+    public static function output_up_sells() {
         $upsells = self::get_defined_plugins();
         foreach ( $upsells as $upsell ) { ?>
 
