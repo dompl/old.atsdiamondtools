@@ -114,5 +114,12 @@ function paypal_checkout_icon() {
     return get_template_directory_uri() . '/img/theme/paypal.png'; // write your own image URL here
 
 }
-
 add_filter('woocommerce_paypal_icon', 'paypal_checkout_icon');
+
+/* Add link on clients email confirmation */
+add_filter( 'woocommerce_order_item_name', 'display_product_title_as_link', 10, 2 );
+function display_product_title_as_link( $item_name, $item ) {
+    $_product = wc_get_product( $item['variation_id'] ? $item['variation_id'] : $item['product_id'] );
+    $link = get_permalink( $_product->get_id() );
+    return '<a href="'. $link .'"  rel="nofollow">'. $item_name .'</a>';
+}
