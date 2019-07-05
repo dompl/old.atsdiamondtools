@@ -1,8 +1,8 @@
 <?php // ==== FUNCTIONS ==== //
 /* Remove direct access */
 if ( ! defined('ABSPATH')) {
-    exit; // Exit if accessed directly
-  }
+  exit; // Exit if accessed directly
+}
 /*  ********************************************************
  *   Load functions files
  *  ********************************************************
@@ -52,14 +52,14 @@ if (class_exists('WooCommerce')) {
 // Only the bare minimum to get the theme up and running
 function voidx_setup() {
 
-    // HTML5 support; mainly here to get rid of some nasty default styling that WordPress used to inject
+  // HTML5 support; mainly here to get rid of some nasty default styling that WordPress used to inject
   add_theme_support('html5', array('search-form', 'gallery'));
 
-    // Automatic feed links
-    // add_theme_support( 'automatic-feed-links' );
+  // Automatic feed links
+  // add_theme_support( 'automatic-feed-links' );
 
-    // $content_width limits the size of the largest image size available via the media uploader
-    // It should be set once and left alone apart from that; don't do anything fancy with it; it is part of WordPress core
+  // $content_width limits the size of the largest image size available via the media uploader
+  // It should be set once and left alone apart from that; don't do anything fancy with it; it is part of WordPress core
   global $content_width;
   $content_width = 1140;
 
@@ -87,41 +87,41 @@ add_action('widgets_init', 'voidx_widgets_init');
 function micnav_unregister_default_widgets() {
 
   $unregister_widgets = array(
-        'WP_Widget_Pages',           // PagesWidget;
-        'WP_Widget_Calendar',        // CalendarWidget;
-        'WP_Widget_Archives',        // ArchivesWidget;
-        'WP_Widget_Links',           // LinksWidget;
-        'WP_Widget_Media_Audio',     // AudioPlayerMediaWidget;
-        'WP_Widget_Media_Image',     // ImageMediaWidget;
-        'WP_Widget_Media_Video',     // VideoMediaWidget;
-        'WP_Widget_Meta',            // MetaWidget;
-        'WP_Widget_Search',          // SearchWidget;
-                                     // 'WP_Widget_Text',            // TextWidget;
-        'WP_Widget_Categories',      // CategoriesWidget;
-        'WP_Widget_Recent_Posts',    // RecentPostsWidget;
-        'WP_Widget_Recent_Comments', // RecentCommentsWidget;
-        'WP_Widget_RSS',             // RSSWidget;
-        'WP_Widget_Tag_Cloud',       // TagCloudWidget;
-        'WP_Widget_Custom_HTML',     // CustomHTMLWidget,
-        'WP_Widget_Media_Gallery',   // CustomHTMLWidget,
-        # 'WP_Nav_Menu_Widget',        // MenusWidget;
-        /* Woocomerce */
-        'WC_Widget_Recent_Products',
-        'WC_Widget_Featured_Products',
-        'WC_Widget_Product_Categories',
-        'WC_Widget_Product_Tag_Cloud',
-        'WC_Widget_Cart',
-        'WC_Widget_Layered_Nav',
-        'WC_Widget_Layered_Nav_Filters',
-        'WC_Widget_Price_Filter',
-        'WC_Widget_Product_Search',
-        'WC_Widget_Top_Rated_Products',
-        'WC_Widget_Recent_Reviews',
-        'WC_Widget_Recently_Viewed',
-        'WC_Widget_Best_Sellers',
-        'WC_Widget_Onsale',
-        'WC_Widget_Random_Products',
-      );
+    'WP_Widget_Pages',           // PagesWidget;
+    'WP_Widget_Calendar',        // CalendarWidget;
+    'WP_Widget_Archives',        // ArchivesWidget;
+    'WP_Widget_Links',           // LinksWidget;
+    'WP_Widget_Media_Audio',     // AudioPlayerMediaWidget;
+    'WP_Widget_Media_Image',     // ImageMediaWidget;
+    'WP_Widget_Media_Video',     // VideoMediaWidget;
+    'WP_Widget_Meta',            // MetaWidget;
+    'WP_Widget_Search',          // SearchWidget;
+                                 // 'WP_Widget_Text',            // TextWidget;
+    'WP_Widget_Categories',      // CategoriesWidget;
+    'WP_Widget_Recent_Posts',    // RecentPostsWidget;
+    'WP_Widget_Recent_Comments', // RecentCommentsWidget;
+    'WP_Widget_RSS',             // RSSWidget;
+    'WP_Widget_Tag_Cloud',       // TagCloudWidget;
+    'WP_Widget_Custom_HTML',     // CustomHTMLWidget,
+    'WP_Widget_Media_Gallery',   // CustomHTMLWidget,
+    # 'WP_Nav_Menu_Widget',        // MenusWidget;
+    /* Woocomerce */
+    'WC_Widget_Recent_Products',
+    'WC_Widget_Featured_Products',
+    'WC_Widget_Product_Categories',
+    'WC_Widget_Product_Tag_Cloud',
+    'WC_Widget_Cart',
+    'WC_Widget_Layered_Nav',
+    'WC_Widget_Layered_Nav_Filters',
+    'WC_Widget_Price_Filter',
+    'WC_Widget_Product_Search',
+    'WC_Widget_Top_Rated_Products',
+    'WC_Widget_Recent_Reviews',
+    'WC_Widget_Recently_Viewed',
+    'WC_Widget_Best_Sellers',
+    'WC_Widget_Onsale',
+    'WC_Widget_Random_Products',
+  );
 
   foreach ($unregister_widgets as $unregister_widget) {
     unregister_widget($unregister_widget);
@@ -156,7 +156,7 @@ function wp_get_attachment($attachment_id = null, $attachment_size = null) {
 add_filter('woocommerce_redirect_single_search_result', '__return_false');
 function my_maybe_woocommerce_variation_permalink($permalink) {
 
-    // check to see if the search was for a product variation SKU
+  // check to see if the search was for a product variation SKU
   $sku  = get_search_query();
   $args = array(
     'post_type'      => 'product_variation',
@@ -170,12 +170,12 @@ function my_maybe_woocommerce_variation_permalink($permalink) {
     ),
   );
   $variation = get_posts($args);
-    // make sure the permalink we're filtering is for the parent product
+  // make sure the permalink we're filtering is for the parent product
   if (get_permalink(wp_get_post_parent_id($variation[0])) !== $permalink) {
     return $permalink;
   }
   if ( ! empty($variation) && function_exists('wc_get_attribute_taxonomy_names')) {
-        // this is a variation SKU, we need to prepopulate the filters
+    // this is a variation SKU, we need to prepopulate the filters
     $variation_id  = absint($variation[0]);
     $variation_obj = new WC_Product_Variation($variation_id);
     $attributes    = $variation_obj->get_variation_attributes();
@@ -208,7 +208,7 @@ add_filter('woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_wh
 
 function bbloomer_unset_shipping_when_free_is_available_in_zone($rates, $package) {
 
-    // Only unset rates if free_shipping is available
+  // Only unset rates if free_shipping is available
 
   unset($rates['shipping_method_0_table_rate313']);
 
@@ -222,17 +222,21 @@ add_filter('gform_ip_address', '__return_empty_string');
  *   Comment
  *  ********************************************************
  */
-function yourname_fix_shipping_tax( $taxes, $price, $rates) {
+function yourname_fix_shipping_tax($taxes, $price, $rates) {
 
-  if(wc_prices_include_tax()){
-    return  WC_Tax::calc_inclusive_tax( $price, $rates );
+  if (wc_prices_include_tax()) {
+    return WC_Tax::calc_inclusive_tax($price, $rates);
   }
 
   return $taxes;
 }
 
- /* Add delivery cost to subtotal */
-function add_shipping_cost_to_subtotal( $cart) {
-   $cart->subtotal  =  $cart->cart_contents_total + $cart->shipping_total ;
+/* Add delivery cost to subtotal */
+function add_shipping_cost_to_subtotal($cart) {
+  if (get_field('enable_new_subtotal_calculation', 'option') != true) {
+    return;
+  }
+  $cart->subtotal = $cart->cart_contents_total + $cart->shipping_total;
 }
-add_filter( 'woocommerce_calculate_totals', 'add_shipping_cost_to_subtotal');
+
+add_filter('woocommerce_calculate_totals', 'add_shipping_cost_to_subtotal');

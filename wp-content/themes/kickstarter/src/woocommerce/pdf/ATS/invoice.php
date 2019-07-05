@@ -75,7 +75,7 @@
 					<td><?php $this->payment_method(); ?></td>
 				</tr>
 				<?php do_action( 'wpo_wcpdf_after_order_data', $this->type, $this->order ); ?>
-			</table>			
+			</table>
 		</td>
 	</tr>
 </table>
@@ -120,7 +120,7 @@
 						<?php $this->shipping_notes(); ?>
 					<?php endif; ?>
 					<?php do_action( 'wpo_wcpdf_after_customer_notes', $this->type, $this->order ); ?>
-				</div>				
+				</div>
 			</td>
 			<td class="no-borders" colspan="2">
 				<table class="totals">
