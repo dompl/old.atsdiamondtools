@@ -63,7 +63,7 @@
 					<td><?php $this->shipping_method(); ?></td>
 				</tr>
 				<?php do_action( 'wpo_wcpdf_after_order_data', $this->type, $this->order ); ?>
-			</table>
+			</table>			
 		</td>
 	</tr>
 </table>
