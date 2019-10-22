@@ -141,14 +141,18 @@
             }
             td {
                 border-left: none;
+                &.methods-a {
+                    border-left: 1px solid #CCC;
+                }
             }
         }
     }
     /* Payments */
     td ul#shipping_method {
         margin-top: 0;
+        padding: 10px!important;
         li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             line-height: 1.2;
             @include _last-child() {
                 margin-bottom: -5px;
@@ -157,6 +161,12 @@
                 float: left;
                 display: block;
                 width: calc(100% - 30px);
+            }
+            .shipping_method_description {
+                text-transform: none;
+                margin-left: 25px;
+                font-size:12px;
+                font-weight: normal;
             }
         }
     }
