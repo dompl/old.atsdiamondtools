@@ -45,10 +45,10 @@ if ( ! defined( 'ABSPATH' ) ) {
                     $index, sanitize_title( $method->id ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ), '<span class="s-wrap">' . wc_cart_totals_shipping_method_label( $method ) . '</span>' );
                   do_action( 'woocommerce_after_shipping_rate', $method, $index );
                   ?>
-                  <?php if (sanitize_title( $method->id ) == 'table_rate828'): ?>
+                  <?php if (sanitize_title( $method->instance_id ) == 8): ?>
                     <div class="shipping_method_description"><?php echo __('(If ordered Mon-Fri before 4pm)' , 'TEXT_DOAMIN') ?></div>
                   <?php endif ?>
-                    <?php if (sanitize_title( $method->id ) == 'table_rate1257'): ?>
+                    <?php if (sanitize_title( $method->instance_id ) == 12): ?>
                     <div class="shipping_method_description"><?php echo __('(If ordered on Friday before 4pm)' , 'TEXT_DOAMIN') ?></div>
                   <?php endif ?>
                 </li>
