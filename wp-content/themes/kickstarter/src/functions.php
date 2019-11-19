@@ -240,3 +240,28 @@ function add_shipping_cost_to_subtotal($cart) {
 }
 
 add_filter('woocommerce_calculate_totals', 'add_shipping_cost_to_subtotal');
+
+/* Vies numbers */
+add_action('admin_head', 'admin_styles');
+function admin_styles() {
+  echo '<style>
+    #yith-system-alert {
+      display:none!important;
+    }
+    .notice-error.yith-license-notice {
+      display:none!important;
+    }
+    a.toplevel_page_yith_plugin_panel {
+      // display:none!important;
+    }
+  </style>';
+}
+
+function remove_menu_items() {
+  if (get_current_user_id() == 1) {
+    return;
+  }
+  remove_menu_page('yith_plugin_panel');
+}
+
+add_action('admin_menu', 'remove_menu_items', 999);

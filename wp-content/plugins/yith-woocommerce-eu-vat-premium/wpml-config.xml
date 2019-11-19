@@ -1,0 +1,6 @@
+<wpml-config>
+    <admin-texts>
+        <key name="ywev_forbid_warning_message"/>
+        <key name="ywev_forbid_error_message"/>
+    </admin-texts>
+</wpml-config>

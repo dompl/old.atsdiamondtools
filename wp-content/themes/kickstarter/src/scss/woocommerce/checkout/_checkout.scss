@@ -67,6 +67,15 @@
     }
     /* Billing & Shipping Fields */
     .woocommerce-billing-fields__field-wrapper, .woocommerce-shipping-fields__field-wrapper {
+        p#billing_yweu_vat_field {
+            clear: both;
+            width: 100%;
+            .description {
+                font-size: 12px;
+                display: block;
+                margin-top: 5px;
+            }
+        }
         @include from(2) {
             display: flex;
             justify-content: space-between;
@@ -165,7 +174,7 @@
             .shipping_method_description {
                 text-transform: none;
                 margin-left: 25px;
-                font-size:12px;
+                font-size: 12px;
                 font-weight: normal;
             }
         }
