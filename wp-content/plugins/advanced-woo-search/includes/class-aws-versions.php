@@ -98,7 +98,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                     if ( $settings ) {
                         if ( ! isset( $settings['stopwords'] ) ) {
-                            $settings['stopwords'] = 'a, about, above, across, after, afterwards, again, against, all, almost, alone, along, already, also, although, always, am, among, amongst, amoungst, amount, an, and, another, any, anyhow, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, beforehand, behind, being, below, beside, besides, between, beyond, bill, both, bottom, but, by, call, can, cannot, cant, co, con, could, couldnt, cry, de, describe, detail, do, done, down, due, during, each, eg, eight, either, eleven, else, elsewhere, empty, enough, etc, even, ever, every, everyone, everything, everywhere, except, few, fifteen, fify, fill, find, fire, first, five, for, former, formerly, forty, found, four, from, front, full, further, get, give, go, had, has, hasnt, have, he, hence, her, here, hereafter, hereby, herein, hereupon, hers, herself, him, himself, his, how, however, hundred, ie, if, in, inc, indeed, interest, into, is, it, its, itself, keep, last, latter, latterly, least, less, ltd, made, many, may, me, meanwhile, might, mill, mine, more, moreover, most, mostly, move, much, must, my, myself, name, namely, neither, never, nevertheless, next, nine, no, nobody, none, noone, nor, not, nothing, now, nowhere, of, off, often, on, once, one, only, onto, or, other, others, otherwise, our, ours, ourselves, out, over, own, part, per, perhaps, please, put, rather, re, same, see, seem, seemed, seeming, seems, serious, several, she, should, show, side, since, sincere, six, sixty, so, some, somehow, someone, something, sometime, sometimes, somewhere, still, such, system, take, ten, than, that, the, their, them, themselves, then, thence, there, thereafter, thereby, therefore, therein, thereupon, these, they, thickv, thin, third, this, those, though, three, through, throughout, thru, thus, to, together, too, top, toward, towards, twelve, twenty, two, un, under, until, up, upon, us, very, via, was, we, well, were, what, whatever, when, whence, whenever, where, whereafter, whereas, whereby, wherein, whereupon, wherever, whether, which, while, whither, who, whoever, whole, whom, whose, why, will, with, within, without, would, yet, you, your, yours, yourself, yourselves';
+                            $settings['stopwords'] = 'a, also, am, an, and, are, as, at, be, but, by, call, can, co, con, de, do, due, eg, eight, etc, even, ever, every, for, from, full, go, had, has, hasnt, have, he, hence, her, here, his, how, ie, if, in, inc, into, is, it, its, ltd, me, my, no, none, nor, not, now, of, off, on, once, one, only, onto, or, our, ours, out, over, own, part, per, put, re, see, so, some, ten, than, that, the, their, there, these, they, this, three, thru, thus, to, too, top, un, up, us, very, via, was, we, well, were, what, when, where, who, why, will';
                             update_option( 'aws_settings', $settings );
                         }
                     }
@@ -209,6 +209,61 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
                     if ( $settings ) {
                         if ( ! isset( $settings['show_featured'] ) ) {
                             $settings['show_featured'] = 'false';
+                            update_option( 'aws_settings', $settings );
+                        }
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '1.54', '<' ) ) {
+
+                    if ( AWS_Helpers::is_index_table_has_on_sale() == 'no' ) {
+
+                        global $wpdb;
+                        $table_name =  $wpdb->prefix . AWS_INDEX_TABLE_NAME;
+
+                        $wpdb->query("
+                            ALTER TABLE {$table_name}
+                            ADD COLUMN `on_sale` INT(11) NOT NULL DEFAULT 0
+                        ");
+
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '1.56', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['buttons_order'] ) ) {
+                            $settings['buttons_order'] = '1';
+                            update_option( 'aws_settings', $settings );
+                        }
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '1.59', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['show_outofstock_price'] ) ) {
+                            $settings['show_outofstock_price'] = 'true';
+                            update_option( 'aws_settings', $settings );
+                        }
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '1.60', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['autoupdates'] ) ) {
+                            $settings['autoupdates'] = 'true';
                             update_option( 'aws_settings', $settings );
                         }
                     }

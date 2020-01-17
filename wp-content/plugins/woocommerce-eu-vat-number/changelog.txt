@@ -1,5 +1,54 @@
 *** EU VAT Number Changelog ***
 
+2019-11-05 - version 2.3.16
+* Fix   - Update WC header.
+
+2019-11-05 - version 2.3.15
+* Tweak - WC 3.8 compatibility.
+
+2019-08-08 - version 2.3.14
+* Fix   - Adding/editing VAT in admin new order or edit order not updating VAT amount.
+* Tweak - WC 3.7 compatibility.
+
+2019-04-16 - version 2.3.13
+* Tweak - WC 3.6 compatibility.
+
+2019-01-07 - version 2.3.12
+* Fix - Always show VAT number field if b2b is enabled.
+
+2018-09-26 - version 2.3.11
+* Update - WC tested up to 3.5
+
+2018-08-21 - version 2.3.10
+* Fix - Re-deployment to fix VAT numbers being removed when order is saved.
+
+2018-08-21 - version 2.3.9
+* Fix - VAT numbers were removed when order is saved.
+
+2018-08-02 - version 2.3.8
+* Fix - Properly handle shipping address depending on 'Ship to different address' checked or not.
+
+2018-05-22 - version 2.3.7
+* Fix    - PHP deprecation notice for 'parse_str'.
+* Fix    - Increasing timeout for SOAP requests.
+* Fix    - Show SOAP requirement notice and disable VAT lookups if needed.
+* Add    - Added woocommerce_eu_vat_number_soap_parameters filter for modifying SOAP request parameters.
+* Fix    - Use proper parse_str format in ajax_update_checkout_totals.
+* Update - WC tested up to 3.4
+* Update - Privacy policy notification.
+* Update - Export/erasure hooks added.
+
+2018-02-05 - version 2.3.6
+* Fix - Cached VAT lookups not applying proper exemptions
+* New - Adds a filter to be able to control which countries charge VAT, via code.
+
+2018-01-17 - version 2.3.5
+* Fix - Properly handle shipping address depending on 'Ship to different address' checked or not.
+* Fix - Make SOAP request to VIES directly to help prevent IPs being blocked.
+
+2017-12-13 - version 2.3.4
+* Fix - WC 3.3 compatibility.
+
 2017-10-09 - version 2.3.3
 * Fix - Issue where exempt check uses both shipping and billing country for matching base country.
 

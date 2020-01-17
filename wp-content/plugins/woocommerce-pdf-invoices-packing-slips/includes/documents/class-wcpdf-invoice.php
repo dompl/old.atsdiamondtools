@@ -65,6 +65,10 @@ class Invoice extends Order_Document_Methods {
 		$this->init_number();
 	}
 
+	public function exists() {
+		return !empty( $this->data['number'] );
+	}
+
 	public function init_number() {
 		global $wpdb;
 		// If a third-party plugin claims to generate invoice numbers, trigger this instead
@@ -357,8 +361,8 @@ class Invoice extends Order_Document_Methods {
 				} elseif ( $settings_field['id'] == 'display_number' ) {
 					// alternate description for invoice number
 					$invoice_number_desc = __( 'Invoice numbers are created by a third-party extension.', 'woocommerce-pdf-invoices-packing-slips' );
-					if ( esc_attr( apply_filters( 'woocommerce_invoice_number_configuration_link', null ) ) ) {
-						$invoice_number_desc .= ' '.sprintf(__( 'Configure it <a href="%s">here</a>.', 'woocommerce-pdf-invoices-packing-slips' ), $config_link);
+					if ( $config_link = apply_filters( 'woocommerce_invoice_number_configuration_link', null ) ) {
+						$invoice_number_desc .= ' '.sprintf(__( 'Configure it <a href="%s">here</a>.', 'woocommerce-pdf-invoices-packing-slips' ), esc_attr( $config_link ) );
 					}
 					$settings_fields[$key]['args']['description'] = '<i>'.$invoice_number_desc.'</i>';
 				}

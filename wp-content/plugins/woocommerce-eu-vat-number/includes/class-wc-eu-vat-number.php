@@ -1,19 +1,15 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+require_once dirname( __FILE__ ) . '/vies/class-vies-client.php';
 
 /**
  * WC_EU_VAT_Number class.
  */
 class WC_EU_VAT_Number {
-
-	/**
-	 * Stores the URL to the vat number validation API.
-	 *
-	 * @var string
-	 */
-	private static $validation_api_url = 'http://woo-vat-validator.herokuapp.com/v1/validate/';
 
 	/**
 	 * Stores an array of EU country codes.
@@ -23,13 +19,49 @@ class WC_EU_VAT_Number {
 	private static $eu_countries = array();
 
 	/**
+	 * Stores an array of RegEx patterns for country codes.
+	 *
+	 * @var array
+	 */
+	private static $country_codes_patterns = array(
+		'AT' => 'U[A-Z\d]{8}',
+		'BE' => '0\d{9}',
+		'BG' => '\d{9,10}',
+		'CY' => '\d{8}[A-Z]',
+		'CZ' => '\d{8,10}',
+		'DE' => '\d{9}',
+		'DK' => '(\d{2} ?){3}\d{2}',
+		'EE' => '\d{9}',
+		'EL' => '\d{9}',
+		'ES' => '[A-Z]\d{7}[A-Z]|\d{8}[A-Z]|[A-Z]\d{8}',
+		'FI' => '\d{8}',
+		'FR' => '([A-Z]{2}|[A-Z0-9]{2})\d{9}',
+		'GB' => '\d{9}|\d{12}|(GD|HA)\d{3}',
+		'HR' => '\d{11}',
+		'HU' => '\d{8}',
+		'IE' => '[A-Z\d]{8,10}',
+		'IT' => '\d{11}',
+		'LT' => '(\d{9}|\d{12})',
+		'LU' => '\d{8}',
+		'LV' => '\d{11}',
+		'MT' => '\d{8}',
+		'NL' => '\d{9}B\d{2}',
+		'PL' => '\d{10}',
+		'PT' => '\d{9}',
+		'RO' => '\d{2,10}',
+		'SE' => '\d{12}',
+		'SI' => '\d{8}',
+		'SK' => '\d{10}',
+	);
+
+	/**
 	 * VAT Number data.
 	 *
 	 * @var array
 	 */
 	private static $data = array(
-		'vat_number'  => false,
-		'validation'  => false,
+		'vat_number' => false,
+		'validation' => false,
 	);
 
 	/**
@@ -82,7 +114,9 @@ class WC_EU_VAT_Number {
 	 */
 	public static function load_scripts() {
 		if ( is_checkout() ) {
-			wp_enqueue_script( 'wc-eu-vat', WC_EU_VAT_PLUGIN_URL . '/assets/js/eu-vat.js', array( 'jquery', 'wc-checkout' ) );
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+			wp_enqueue_script( 'wc-eu-vat', WC_EU_VAT_PLUGIN_URL . '/assets/js/eu-vat' . $suffix . '.js', array( 'jquery', 'wc-checkout' ), WC_EU_VAT_VERSION, true );
 			wp_localize_script( 'wc-eu-vat', 'wc_eu_vat_params', array( 'eu_countries' => self::get_eu_countries() ) );
 		}
 	}
@@ -117,8 +151,10 @@ class WC_EU_VAT_Number {
 	 * @version 2.3.1
 	 */
 	public static function vat_number_field() {
-		// If order total is zero (free), don't need to proceed.
-		if ( ! WC()->cart->needs_payment() ) {
+		$b2b_vat_enabled = get_option( 'woocommerce_eu_vat_number_b2b', 'no' );
+
+		// If order total is zero (free) and not b2b, don't need to proceed.
+		if ( ! WC()->cart->needs_payment() && 'no' === $b2b_vat_enabled ) {
 			return;
 		}
 
@@ -191,26 +227,32 @@ class WC_EU_VAT_Number {
 		$transient_name = 'vat_number_' . $vat_prefix . $vat_number;
 		$cached_result  = get_transient( $transient_name );
 
-		if ( empty( $cached_result ) ) {
-
-			$response = wp_remote_get( self::$validation_api_url . $vat_prefix . '/' . $vat_number . '/', array( 'timeout' => 30 ) );
-
-			if ( is_wp_error( $response ) ) {
-				return new WP_Error( 'api', sprintf( __( 'VAT API Error: %s', 'woocommerce-eu-vat-number' ), $response->get_error_message() ) );
-			} elseif ( empty( $response['body'] ) ) {
-				return new WP_Error( 'api', __( 'Error communicating with the VAT validation server - please try again', 'woocommerce-eu-vat-number' ) );
-			} elseif ( 'true' === (string) $response['body'] ) {
-				set_transient( $transient_name, 1, 7 * DAY_IN_SECONDS );
-				return true;
-			} elseif ( strstr( $response['body'], 'SERVER_BUSY' ) ) {
-				return new WP_Error( 'api', __( 'The VAT validation server is busy - please try again', 'woocommerce-eu-vat-number' ) );
-			} else {
-				set_transient( $transient_name, 0, 7 * DAY_IN_SECONDS );
-				return false;
-			}
-		} else {
-			return ! empty( $cached_result );
+		if ( ! empty( $cached_result ) ) {
+			return 'yes' === $cached_result;
 		}
+
+		$vies = new VIES_Client();
+
+		if ( $vies->get_soap_client() ) {
+
+			$vat_number = str_replace( array( ' ', '.', '-', ',', ', ' ), '', trim( $vat_number ) );
+
+			if ( ! isset( self::$country_codes_patterns[ $vat_prefix ] ) ) {
+				return new WP_Error( 'api', __( 'Invalid country code', 'woocommerce-eu-vat-number' ) );
+			}
+
+			try {
+				$vies_req = $vies->check_vat( $vat_prefix, $vat_number );
+				$is_valid = $vies_req->is_valid();
+
+				set_transient( $transient_name, $is_valid ? 'yes' : 'no', 7 * DAY_IN_SECONDS );
+				return $is_valid;
+			} catch( SoapFault $e ) {
+				return new WP_Error( 'api', __( 'Error communicating with the VAT validation server - please try again', 'woocommerce-eu-vat-number' ) );
+			}
+
+		}
+
 		return false;
 	}
 
@@ -253,6 +295,7 @@ class WC_EU_VAT_Number {
 		}
 
 		if ( ( $base_country_match && 'yes' === get_option( 'woocommerce_eu_vat_number_deduct_in_base', 'yes' ) ) || ! $base_country_match ) {
+			$exempt = apply_filters( 'woocommerce_eu_vat_number_set_is_vat_exempt', $exempt, $base_country_match, $billing_country, $shipping_country );
 			WC()->customer->set_is_vat_exempt( $exempt );
 		}
 	}
@@ -266,17 +309,17 @@ class WC_EU_VAT_Number {
 		self::reset();
 
 		$billing_country  = wc_clean( $_POST['billing_country'] );
-		$shipping_country = wc_clean( ! empty( $_POST['shipping_country'] ) ? $_POST['shipping_country'] : $_POST['billing_country'] );
+		$shipping_country = wc_clean( ! empty( $_POST['shipping_country'] ) && ! empty( $_POST['ship_to_different_address'] ) ? $_POST['shipping_country'] : $_POST['billing_country'] );
 
 		if ( in_array( $billing_country, self::get_eu_countries() ) && 'yes' === get_option( 'woocommerce_eu_vat_number_b2b', 'no' ) && empty( $_POST['vat_number'] ) ) {
-			wc_add_notice( __( 'Please enter your VAT Number.', 'woocommerce-eu-vat-number' ), 'error' );
+			wc_add_notice( __( 'Please enter your <strong>VAT Number</strong>.', 'woocommerce-eu-vat-number' ), 'error' );
 		}
 
 		// B2B.
 		if ( in_array( $billing_country, self::get_eu_countries() ) && ! empty( $_POST['vat_number'] ) ) {
 			self::validate( wc_clean( $_POST['vat_number'] ), $billing_country );
 
-			if ( true === self::$data['validation']['valid'] ) {
+			if ( true === (bool) self::$data['validation']['valid'] ) {
 				self::maybe_set_vat_exempt( true, $billing_country, $shipping_country );
 			} else {
 				$fail_handler = get_option( 'woocommerce_eu_vat_number_failure_handling', 'reject' );
@@ -366,27 +409,26 @@ class WC_EU_VAT_Number {
 			return;
 		}
 
-		parse_str( $form_data );
+		parse_str( $form_data, $form_data );
 
 		self::reset();
 
-		if ( empty( $billing_country ) && empty( $shipping_country ) ) {
+		if ( empty( $form_data['billing_country'] ) && empty( $form_data['shipping_country'] ) ) {
 			return;
 		}
 
-		if ( in_array( $billing_country, self::get_eu_countries() ) && ! empty( $vat_number ) ) {
-			$billing_country = ! empty( $billing_country ) ? $billing_country : '';
-			$shipping_country = ! empty( $shipping_country ) ? $shipping_country : '';
+		if ( in_array( $form_data['billing_country'], self::get_eu_countries() ) && ! empty( $form_data['vat_number'] ) ) {
+			$shipping_country = wc_clean( ! empty( $form_data['shipping_country'] ) && ! empty( $form_data['ship_to_different_address'] ) ? $form_data['shipping_country'] : $form_data['billing_country'] );
 
-			self::validate( wc_clean( $vat_number ), $billing_country );
+			self::validate( wc_clean( $form_data['vat_number'] ), $form_data['billing_country'] );
 
-			if ( true === self::$data['validation']['valid'] ) {
-				self::maybe_set_vat_exempt( true, $billing_country, $shipping_country );
+			if ( true === (bool) self::$data['validation']['valid'] ) {
+				self::maybe_set_vat_exempt( true, $form_data['billing_country'], $shipping_country );
 			} else {
 				$fail_handler = get_option( 'woocommerce_eu_vat_number_failure_handling', 'reject' );
 				switch ( $fail_handler ) {
 					case 'accept' :
-						self::maybe_set_vat_exempt( true, $billing_country, $shipping_country );
+						self::maybe_set_vat_exempt( true, $form_data['billing_country'], $shipping_country );
 					break;
 				}
 			}

@@ -29,10 +29,11 @@ function gf_apply_rules(formId, fields, isInit){
 function gf_check_field_rule(formId, fieldId, isInit, callback){
 
 	//if conditional logic is not specified for that field, it is supposed to be displayed
-	if(!window["gf_form_conditional_logic"] || !window["gf_form_conditional_logic"][formId] || !window["gf_form_conditional_logic"][formId]["logic"][fieldId])
-		return "show";
+	var conditionalLogic = gf_get_field_logic( formId, fieldId );
+	if ( ! conditionalLogic ) {
+		return 'show';
+	}
 
-	var conditionalLogic = window["gf_form_conditional_logic"][formId]["logic"][fieldId];
 	var action = gf_get_field_action(formId, conditionalLogic["section"]);
 
 	//If section is hidden, always hide field. If section is displayed, see if field is supposed to be displayed or hidden
@@ -40,6 +41,42 @@ function gf_check_field_rule(formId, fieldId, isInit, callback){
 		action = gf_get_field_action(formId, conditionalLogic["field"]);
 
 	return action;
+}
+
+/**
+ * Retrieves the conditional logic properties for the specified field.
+ *
+ * @since 2.4.16
+ *
+ * @param {(string|number)} formId  The ID of the current form.
+ * @param {(string|number)} fieldId The ID of the current field.
+ *
+ * @return {(boolean|object)} False or the field conditional logic properties.
+ */
+function gf_get_field_logic(formId, fieldId) {
+	var formConditionalLogic = rgars( window, 'gf_form_conditional_logic/' + formId );
+	if ( ! formConditionalLogic ) {
+		return false;
+	}
+
+	var conditionalLogic = rgars( formConditionalLogic, 'logic/' + fieldId );
+	if ( conditionalLogic ) {
+		return conditionalLogic;
+	}
+
+	var dependents = rgar( formConditionalLogic, 'dependents' );
+	if ( ! dependents ) {
+		return false;
+	}
+
+	// Attempting to get section field conditional logic instead.
+	for ( var key in dependents ) {
+		if ( dependents[key].indexOf( fieldId ) !== -1 ) {
+			return rgars( formConditionalLogic, 'logic/' + key );
+		}
+	}
+
+	return false;
 }
 
 function gf_apply_field_rule(formId, fieldId, isInit, callback){
@@ -89,7 +126,7 @@ function gf_is_match( formId, rule ) {
 	if( isInputSpecific ) {
 		$inputs = $( '#input_{0}_{1}_{2}'.format( formId, fieldId, inputIndex ) );
 	} else {
-		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, rule.fieldId ) );
+		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, fieldId ) );
 	}
 
 	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1,
@@ -120,7 +157,7 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 		}
 		// if the 'other' choice is selected, get the value from the 'other' text input
 		else if ( fieldValue == 'gf_other_choice' ) {
-			fieldValue = $( '#input_{0}_{1}_other'.format( formId, fieldId ) ).val();
+			fieldValue = jQuery( '#input_{0}_{1}_other'.format( formId, fieldId ) ).val();
 		}
 
 		if( gf_matches_operation( fieldValue, rule.value, rule.operator ) ) {
@@ -311,7 +348,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		// reset tabindex for selects
 		$target.find( 'select' ).each( function() {
-			$select = jQuery( this );
+			var $select = jQuery( this );
 			$select.attr( 'tabindex', $select.data( 'tabindex' ) );
 		} );
 
@@ -353,7 +390,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		// remove tabindex and stash as a data attr for selects
 		$target.find( 'select' ).each( function() {
-			$select = jQuery( this );
+			var $select = jQuery( this );
 			$select.data( 'tabindex', $select.attr( 'tabindex' ) ).removeAttr( 'tabindex' );
 		} );
 
@@ -376,6 +413,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			}
 		}
 	}
+
 }
 
 function gf_reset_to_default(targetId, defaultValue){
@@ -421,8 +459,7 @@ function gf_reset_to_default(targetId, defaultValue){
 
 	//cascading down conditional logic to children to support nested conditions
 	//text fields and drop downs, filter out list field text fields name with "_shim"
-	var target = jQuery(targetId).find('select, input[type="text"]:not([id*="_shim"]), input[type="number"], textarea');
-
+	var target = jQuery(targetId).find( 'select, input[type="text"]:not([id*="_shim"]), input[type="number"], input[type="hidden"], input[type="email"], input[type="tel"], input[type="url"], textarea' );
 	var target_index = 0;
 
 	// When a List field is hidden via conditional logic during a page submission, the markup will be reduced to a
@@ -435,9 +472,15 @@ function gf_reset_to_default(targetId, defaultValue){
 	}
 
 	target.each(function(){
+
 		var val = "";
 
 		var element = jQuery(this);
+
+		// Only reset Single Product and Shipping hidden inputs.
+		if( element.is( '[type="hidden"]' ) && ! gf_is_hidden_pricing_input( element ) ) {
+			return;
+		}
 
 		//get name of previous input field to see if it is the radio button which goes with the "Other" text box
 		//otherwise field is populated with input field name
@@ -445,14 +488,18 @@ function gf_reset_to_default(targetId, defaultValue){
 		if(radio_button_name == "gf_other_choice"){
 			val = element.attr("value");
 		}
-		else if(jQuery.isArray(defaultValue)){
+		else if( jQuery.isArray( defaultValue ) && ! element.is( 'select[multiple]' ) ) {
 			val = defaultValue[target_index];
 		}
 		else if(jQuery.isPlainObject(defaultValue)){
 			val = defaultValue[element.attr("name")];
-			if( ! val ) {
+			if( ! val && element.attr( 'id' ) ) {
 				// 'input_123_3_1' => '3.1'
 				var inputId = element.attr( 'id' ).split( '_' ).slice( 2 ).join( '.' );
+				val = defaultValue[ inputId ];
+			}
+			if( ! val && element.attr( 'name' ) ) {
+				var inputId = element.attr( 'name' ).split( '_' )[1];
 				val = defaultValue[ inputId ];
 			}
 		}
@@ -469,11 +516,15 @@ function gf_reset_to_default(targetId, defaultValue){
 			if (element.is('select') && element.next().hasClass('chosen-container')) {
 				element.trigger('chosen:updated');
 			}
+			// Check for Single Product & Shipping input and force visual price update.
+			if( gf_is_hidden_pricing_input( element ) ) {
+				var ids = gf_get_ids_by_html_id( element.parents( '.gfield' ).attr( 'id' ) );
+				jQuery( '#input_' + ids[0] + '_' + ids[1] ).text( gformFormatMoney( element.val() ) );
+			}
 		}
 		else{
 			element.val(val);
 		}
-
 
 		target_index++;
 	});
@@ -503,4 +554,19 @@ function gf_reset_to_default(targetId, defaultValue){
 		}
 	});
 
+}
+
+function gf_is_hidden_pricing_input( element ) {
+
+	if( element.attr( 'type' ) !== 'hidden' ) {
+		return false;
+	}
+
+	// Check for Single Product fields.
+	if( element.attr( 'id' ) && element.attr( 'id' ).indexOf( 'ginput_base_price' ) === 0 ) {
+		return true;
+	}
+
+	// Check for Shipping fields.
+	return element.parents( '.gfield_shipping' ).length;
 }

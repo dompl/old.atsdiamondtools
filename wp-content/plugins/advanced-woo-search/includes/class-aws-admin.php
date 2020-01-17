@@ -285,6 +285,23 @@ class AWS_Admin {
                     </tr>
                     <?php break;
 
+                case 'radio-image': ?>
+                    <tr valign="top">
+                        <th scope="row"><?php echo $value['name']; ?></th>
+                        <td>
+                            <ul class="img-select">
+                                <?php foreach ( $value['choices'] as $val => $img ) { ?>
+                                    <li class="option">
+                                        <input class="radio" type="radio" name="<?php echo $value['id']; ?>" id="<?php echo $value['id'].$val; ?>" value="<?php echo $val; ?>" <?php checked( $plugin_options[ $value['id'] ], $val ); ?>>
+                                        <span class="ico" style="background: url('<?php echo AWS_URL . '/assets/img/' . $img; ?>') no-repeat 50% 50%;"></span>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                            <br><span class="description"><?php echo $value['desc']; ?></span>
+                        </td>
+                    </tr>
+                    <?php break;
+
                 case 'sortable': ?>
                     <tr valign="top">
                         <th scope="row"><?php echo $value['name']; ?></th>

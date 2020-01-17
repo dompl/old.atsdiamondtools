@@ -147,13 +147,69 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          */
         public function reindex_table_job() {
 
-            $meta = 'start';
+            /*
+             * Added in WordPress v4.6.0
+             */
+            if ( function_exists( 'wp_raise_memory_limit' ) ) {
+                wp_raise_memory_limit( 'admin' );
+            }
 
-            do {
-                $meta = $this->reindex_table( $meta );
-                $offset = (int) isset( $meta['offset'] ) ? $meta['offset'] : 0;
-                $start = (int) isset( $meta['start'] ) ? $meta['start'] : 0;
-            } while ( !( $offset === 0 && ! $start ) );
+            /**
+             * Max execution time for script
+             * @since 1.59
+             * @param integer
+             */
+            @set_time_limit( apply_filters( 'aws_index_cron_runner_time_limit', 600 ) );
+
+            $meta = get_option( 'aws_cron_job' );
+
+            if ( ! $meta || ! is_array( $meta ) ) {
+                $meta = 'start';
+            } else {
+                $meta['attemps'] = (int) isset( $meta['attemps'] ) ? $meta['attemps'] + 1 : 1;
+            }
+
+            /**
+             * Max number of script repeats
+             * @since 1.59
+             * @param integer
+             */
+            $max_cron_attemps = apply_filters( 'aws_index_max_cron_attemps', 10 );
+
+            try {
+
+                do {
+
+                    wp_clear_scheduled_hook( 'aws_reindex_table', array( 'inner' ) );
+
+                    // Fallback if re-index failed by timeout in this iteration
+                    if ( ! isset( $meta['attemps'] ) || ( isset( $meta['attemps'] ) && $meta['attemps'] < $max_cron_attemps ) ) {
+                        if ( ! wp_next_scheduled( 'aws_reindex_table', array( 'inner' ) ) ) {
+                            wp_schedule_single_event( time() + 60, 'aws_reindex_table', array( 'inner' ) );
+                        }
+                    }
+
+                    $meta = $this->reindex_table( $meta );
+                    $offset = (int) isset( $meta['offset'] ) ? $meta['offset'] : 0;
+                    $start = (int) isset( $meta['start'] ) ? $meta['start'] : 0;
+
+                    // No more attemps
+                    if ( isset( $meta['attemps'] ) && $meta['attemps'] >= $max_cron_attemps ) {
+                        delete_option( 'aws_cron_job' );
+                    } else {
+                        update_option( 'aws_cron_job', $meta );
+                    }
+
+                } while ( !( $offset === 0 && ! $start ) );
+
+            } catch ( Exception $e ) {
+
+            }
+
+            // Its no longer needs
+            wp_clear_scheduled_hook( 'aws_reindex_table', array( 'inner' ) );
+
+            delete_option( 'aws_cron_job' );
 
         }
 
@@ -203,6 +259,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                       type VARCHAR(50) NOT NULL DEFAULT 0,
                       count BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
                       in_stock INT(11) NOT NULL DEFAULT 0,
+                      on_sale INT(11) NOT NULL DEFAULT 0,
                       term_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
                       visibility VARCHAR(20) NOT NULL DEFAULT 0,
                       lang VARCHAR(20) NOT NULL DEFAULT 0
@@ -249,6 +306,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
 
                 $data['in_stock'] = method_exists( $product, 'get_stock_status' ) ? ( ( $product->get_stock_status() === 'outofstock' ) ? 0 : 1 ) : ( method_exists( $product, 'is_in_stock' ) ? $product->is_in_stock() : 1 );
+                $data['on_sale'] = $product->is_on_sale();
                 $data['visibility'] = method_exists( $product, 'get_catalog_visibility' ) ? $product->get_catalog_visibility() : ( method_exists( $product, 'get_visibility' ) ? $product->get_visibility() : 'visible' );
                 $data['lang'] = $lang ? $lang : '';
 
@@ -387,6 +445,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                     $translated_post_data = array();
                                     $translated_post_data['id'] = $translated_post->ID;
                                     $translated_post_data['in_stock'] = $data['in_stock'];
+                                    $translated_post_data['on_sale'] = $data['on_sale'];
                                     $translated_post_data['visibility'] = $data['visibility'];
                                     $translated_post_data['lang'] = $lang_obj->language_code;
                                     $translated_post_data['terms'] = array();
@@ -435,6 +494,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                     $translated_post_data = array();
                                     $translated_post_data['id'] = $data['id'];
                                     $translated_post_data['in_stock'] = $data['in_stock'];
+                                    $translated_post_data['on_sale'] = $data['on_sale'];
                                     $translated_post_data['visibility'] = $data['visibility'];
                                     $translated_post_data['lang'] = $current_lang;
                                     $translated_post_data['terms'] = array();
@@ -501,8 +561,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                     }
 
                     $value = $wpdb->prepare(
-                        "(%d, %s, %s, %s, %d, %d, %d, %s, %s)",
-                        $data['id'], $term, $source, 'product', $count, $data['in_stock'], $term_id, $data['visibility'], $data['lang']
+                        "(%d, %s, %s, %s, %d, %d, %d, %d, %s, %s)",
+                        $data['id'], $term, $source, 'product', $count, $data['in_stock'], $data['on_sale'], $term_id, $data['visibility'], $data['lang']
                     );
 
                     $values[] = $value;
@@ -517,7 +577,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 $values = implode( ', ', $values );
 
                 $query  = "INSERT IGNORE INTO {$this->table_name}
-				              (`id`, `term`, `term_source`, `type`, `count`, `in_stock`, `term_id`, `visibility`, `lang`)
+				              (`id`, `term`, `term_source`, `type`, `count`, `in_stock`, `on_sale`, `term_id`, `visibility`, `lang`)
 				              VALUES $values
                     ";
 
@@ -602,7 +662,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          */
         public function updated_custom_tabs( $meta_id, $object_id, $meta_key, $meta_value ) {
 
-            if ( $meta_key === 'yikes_woo_products_tabs' ) {
+            if ( $meta_key === 'yikes_woo_products_tabs' && apply_filters( 'aws_filter_yikes_woo_products_tabs_sync', true ) ) {
 
                 $this->update_table( $object_id );
 
@@ -617,8 +677,14 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             global $wpdb;
 
+            $sunc = AWS()->get_settings( 'autoupdates' );
+
             if ( AWS_Helpers::is_table_not_exist() ) {
                 $this->create_table();
+            }
+
+            if ( $sunc === 'false' ) {
+                return;
             }
 
             $wpdb->delete( $this->table_name, array( 'id' => $product_id ) );
@@ -730,7 +796,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                     if ( $str_item_term  ) {
                         $new_array_key = preg_replace( '/(s|es|ies)$/i', '', $str_item_term );
 
-                        if ( $new_array_key ) {
+                        if ( $new_array_key && strlen( $str_item_term ) > 3 && strlen( $new_array_key ) > 2 ) {
                             if ( ! isset( $str_new_array[$new_array_key] ) ) {
                                 $str_new_array[$new_array_key] = $str_item_num;
                             }

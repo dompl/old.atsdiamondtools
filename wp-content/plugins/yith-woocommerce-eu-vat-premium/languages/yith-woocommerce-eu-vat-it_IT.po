@@ -1,0 +1,724 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: YITH WooCommerce Order Tracking\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/init\n"
+"POT-Creation-Date: 2018-12-07 09:37:33+00:00\n"
+"PO-Revision-Date: 2019-02-26 19:52+0100\n"
+"Last-Translator: \n"
+"Language-Team: Your Inspiration Themes <plugins@yithemes.com>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __ ;_e;_n:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: plugin-fw\n"
+
+#: init.php:51
+msgid ""
+"YITH WooCommerce EU VAT is enabled but not effective. It requires "
+"WooCommerce in order to work."
+msgstr ""
+"YITH WooCommerce EU VAT è attivo ma non operativo. Richiede WooCommerce per "
+"funzionare correttamente."
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:28
+msgctxt "Privacy Policy Content"
+msgid "YITH EU VAT for WooCommerce premium"
+msgstr "YITH EU VAT for WooCommerce premium"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:129
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:179
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:217
+#: lib/class.yith-woocommerce-eu-vat.php:174
+#: lib/class.yith-ywev-frontend-premium.php:326
+#: plugin-options/general-options.php:36 plugin-options/general-options.php:37
+msgid "VAT number"
+msgstr "Partita IVA"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:218
+msgid "Reverse charge amount"
+msgstr "Importo inversione contabile"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:220
+msgid "Customer country"
+msgstr "Paese del cliente"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:221
+msgid "Customer state"
+msgstr "Stato del cliente"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:222
+msgid "Customer city"
+msgstr "Città del cliente"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:223
+msgid "Customer post code"
+msgstr "Codice postale cliente"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:224
+msgid "Geolocalized country:"
+msgstr "Paese geolocalizzato:"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:225
+msgid "Customer ip address"
+msgstr "Indirizzo IP del cliente"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:227
+msgid "Country confirmation"
+msgstr "Conferma del paese"
+
+#: lib/class.yith-woocommerce-eu-vat.php:172
+#: lib/class.yith-ywev-frontend-premium.php:324
+#: plugin-options/general-options.php:53 plugin-options/general-options.php:54
+msgid "European companies with valid EU VAT number will be exempt of VAT."
+msgstr ""
+"Le aziende europee con numero di partita IVA INTRASTAT sono esenti da IVA."
+
+#: lib/class.yith-woocommerce-eu-vat.php:175
+#: lib/class.yith-ywev-frontend-premium.php:327
+#: plugin-options/general-options.php:44 plugin-options/general-options.php:45
+msgid "Enter your VAT number"
+msgstr "Inserisci il tuo numero di partita IVA"
+
+#: lib/class.yith-ywev-backend-premium.php:84
+msgid "EU VAT"
+msgstr "EU VAT"
+
+#: lib/class.yith-ywev-backend-premium.php:138
+msgid "VAT number: "
+msgstr "Partita IVA: "
+
+#: lib/class.yith-ywev-backend-premium.php:142
+msgid "Reverse charge amount: "
+msgstr "Importo inversione contabile:"
+
+#: lib/class.yith-ywev-backend-premium.php:146
+msgid "Customer country: "
+msgstr "Paese del cliente:"
+
+#: lib/class.yith-ywev-backend-premium.php:150
+msgid "Geolocalized country: "
+msgstr "Paese geolocalizzato:"
+
+#: lib/class.yith-ywev-backend-premium.php:156
+msgid "Customer IP address: "
+msgstr "Indirizzo IP del cliente:"
+
+#: lib/class.yith-ywev-backend-premium.php:162
+msgid "The customer manually confirmed his/her country"
+msgstr "Il cliente ha confermato il suo paese manualmente"
+
+#: lib/class.yith-ywev-backend-premium.php:167
+msgid "The customer did NOT confirm his/her country"
+msgstr "Il cliente NON ha confermato il suo paese"
+
+#: lib/class.yith-ywev-backend-premium.php:176
+msgid "Reverse charge not applied."
+msgstr "Inversione contabile non applicata."
+
+#: lib/class.yith-ywev-backend.php:134
+msgid "EU VAT Reports"
+msgstr "EU VAT - Statistiche"
+
+#: lib/class.yith-ywev-frontend-premium.php:281
+msgid "I confirm I reside in {user_country}"
+msgstr "Confermo di risiedere in {user_country}"
+
+#: lib/class.yith-ywev-frontend-premium.php:282
+msgid "Calculate normal tax rates."
+msgstr "Calcola aliquote normali."
+
+#: lib/class.yith-ywev-frontend-premium.php:283
+msgid "I'm from"
+msgstr "Vengo da"
+
+#: lib/class.yith-ywev-frontend-premium.php:284
+msgid "apply the EU VAT reverse charge."
+msgstr "applica l'inversione contabile dell'IVA valida ai fini INTRASTAT"
+
+#: lib/class.yith-ywev-frontend-premium.php:391
+#: lib/class.yith-ywev-frontend-premium.php:402
+msgid "Valid EU VAT number."
+msgstr "Partita IVA valida."
+
+#: lib/class.yith-ywev-frontend-premium.php:408
+msgid ""
+"%s is not a valid EU VAT number or the VAT number can't be validated at the "
+"moment."
+msgstr ""
+"%s non è un numero IVA valido oppure al momento non può essere verificato."
+
+#: lib/class.yith-ywev-frontend-premium.php:690
+msgid "EU VAT exempted"
+msgstr "Esente da IVA"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:132
+msgid "General"
+msgstr "Generale"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:133
+msgid "Tax"
+msgstr "Tasse"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:134
+msgid "Reports"
+msgstr "Report"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:137
+msgid "Premium Version"
+msgstr "Versione Premium"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:189
+msgid ""
+"YITH WooCommerce EU VAT is available in an outstanding PREMIUM version with "
+"many new options, discover it now."
+msgstr ""
+"YITH WooCommerce EU VAT è disponibile in un'eccezionale versione PREMIUM con "
+"molte nuove opzioni, scoprila ora."
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:190
+msgid "Premium version"
+msgstr "Versione premium"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:197
+msgid ""
+"In the YITH tab, you can find the YITH WooCommerce EU VAT options.<br> From "
+"this menu you can have access to all settings of the activated YITH plugins."
+msgstr ""
+"Puoi trovare le opzioni di YITH WooCommerce EU VAT nella tab YITH Plugins."
+"<br>Da questo menu puoi accedere a tutte le impostazioni dei plugin YITH "
+"attivati. "
+
+#: plugin-options/general-options.php:20
+msgid "General Settings"
+msgstr "Impostazioni Generali"
+
+#: plugin-options/general-options.php:25
+msgid "Forbid EU customer checkout"
+msgstr "Vieta agli utenti dell'UE di procedere con il pagamento."
+
+#: plugin-options/general-options.php:26
+msgid ""
+"If the cart of an European customer contains digital goods, the checkout "
+"will not be allowed."
+msgstr ""
+"Se il carrello di un cliente europeo contiene prodotti digitali non gli sarà "
+"permesso di procedere con il pagamento."
+
+#: plugin-options/general-options.php:33
+msgid "EU VAT field label"
+msgstr "Etichetta campo IVA"
+
+#: plugin-options/general-options.php:34
+msgid "Set the text to use as label for the field EU VAT in checkout page"
+msgstr ""
+"Imposta il testo da usare come etichetta per il campo IVA nella pagina "
+"checkout"
+
+#: plugin-options/general-options.php:41
+msgid "EU VAT field placeholder"
+msgstr "Segnaposto del campo IVA"
+
+#: plugin-options/general-options.php:42
+msgid ""
+"Set the text to use as placeholder for the field EU VAT in checkout page"
+msgstr ""
+"Imposta il testo da usare come segnaposto per il campo IVA nella pagina "
+"checkout"
+
+#: plugin-options/general-options.php:50
+msgid "EU VAT field description"
+msgstr "Descrizione campo IVA"
+
+#: plugin-options/general-options.php:51
+msgid ""
+"Set the text to use as description for the field EU VAT in checkout page"
+msgstr ""
+"Imposta il testo da usare come descrizione per il campo IVA nella pagina "
+"checkout"
+
+#: plugin-options/general-options.php:59
+msgid "EU customer warning"
+msgstr "Avviso cliente UE"
+
+#: plugin-options/general-options.php:60
+msgid ""
+"If \"Forbid EU customer checkout\" is selected, you can choose to show a "
+"warning message in cart page to remind customers of digital goods in the "
+"cart."
+msgstr ""
+"Se hai selezionato \"Vieta agli utenti dell'UE di procedere con il pagamento"
+"\" puoi scegliere di mostrare un messaggio di avviso nella pagina Carrello "
+"per ricordarlo agli acquirenti di prodotti digitali."
+
+#: plugin-options/general-options.php:67
+msgid "EU VAT warning message"
+msgstr "Messaggio di avviso"
+
+#: plugin-options/general-options.php:69 plugin-options/general-options.php:70
+msgid ""
+"For EU area customers.<br>Due to EU VAT law terms, some products may be not "
+"purchasable."
+msgstr ""
+"Per i clienti della zona UE.<br>Per via delle normative UE, alcuni prodotti "
+"potrebbero non essere acquistabili."
+
+#: plugin-options/general-options.php:75
+msgid "EU VAT error message"
+msgstr "Messaggio di errore"
+
+#: plugin-options/general-options.php:77
+msgid ""
+"This order can't be accepted due to EU VAT laws. This shop doesn't allow EU "
+"area customers to purchase."
+msgstr ""
+"Questo ordine non può essere accettato per via delle normative europee sulla "
+"partita IVA valida ai fini Intrastat. Questo negozio non permette ai clienti "
+"dell'Unione Europea di acquistare."
+
+#: plugin-options/general-options.php:84
+msgid "Custom base locations"
+msgstr "Sedi negozio personalizzate"
+
+#: plugin-options/general-options.php:85
+msgid ""
+"Add comma separated country codes that will be used as base location(s) "
+"instead of the base location(s) specified in the WooCommerce settings."
+msgstr ""
+"Aggiungi i codici paese separandoli con la virgola: verranno utilizzati come "
+"sede del negozio al posto di quelli specificati nel pannello impostazioni di "
+"WooCommerce."
+
+#: plugin-options/general-options.php:92
+msgid "Mandatory VAT number"
+msgstr "Partita IVA obbligatoria"
+
+#: plugin-options/general-options.php:93
+msgid "The VAT number is a mandatory field."
+msgstr "Il numero di partita IVA è un campo obbligatorio."
+
+#: plugin-options/general-options.php:100
+msgid "Enable VAT number in same country"
+msgstr "Abilita il numero di partita IVA per lo stesso paese"
+
+#: plugin-options/general-options.php:101
+msgid ""
+"Show the VAT number field to all EU customers even the ones coming from the "
+"same country as the shop base location."
+msgstr ""
+"Mostra il numero di partita IVA a tutti i clienti europei, inclusi quelli "
+"provenienti dalla stessa nazione della sede del negozio."
+
+#: plugin-options/general-options.php:108
+msgid "Disable VAT exception in same country"
+msgstr "Disattiva esenzione IVA per lo stesso paese"
+
+#: plugin-options/general-options.php:109
+msgid "Disable VAT exception in calculate totals in same country"
+msgstr "Disattiva l'esenzione IVA nel calcolo totale per lo stesso paese"
+
+#: plugin-options/general-options.php:116
+msgid "Apply to physical products"
+msgstr "Applica ai prodotti fisici"
+
+#: plugin-options/general-options.php:117
+msgid "Choose if you want to apply the VAT exemption on physical products too."
+msgstr "Scegli se vuoi applicare l'esenzione IVA anche per i prodotti fisici."
+
+#: plugin-options/general-options.php:124
+msgid "Country confirmation message"
+msgstr "Messaggio di conferma del paese"
+
+#: plugin-options/general-options.php:125
+msgid ""
+"Configure here the message to show to EU customers when the IP address and "
+"the billing country do not match"
+msgstr ""
+"Configura qui il messaggio da mostrare ai clienti dell'Unione Europea quando "
+"l'indirizzo IP e il paese di fatturazione non corrispondono"
+
+#: plugin-options/general-options.php:126
+msgid ""
+"Your IP Address does not match the billing country. In order to fit European "
+"VAT laws, you should confirm your billing country using the checkbox below."
+msgstr ""
+"Il tuo indirizzo IP non corrisponde con il paese indicato nei dati di "
+"fatturazione. Per adempiere alla normativa europea sull'IVA conferma il tuo "
+"paese di fatturazione mettendo una spunta nella casella qui sotto."
+
+#: plugin-options/general-options.php:132
+msgid "Mandatory VAT number message"
+msgstr "Messaggio per campo IVA obbligatorio"
+
+#: plugin-options/general-options.php:133
+msgid "Set the message to show when the mandatory VAT number is not provided"
+msgstr ""
+"Imposta qui il messaggio da mostrare quando il numero di partita IVA non "
+"viene specificato"
+
+#: plugin-options/general-options.php:134
+msgid "The VAT number is mandatory, please fill the VAT number field."
+msgstr ""
+"Il numero di Partita IVA è obbligatorio. Per favore, compila questo campo."
+
+#: plugin-options/tax-options.php:18
+msgid "Tax Settings"
+msgstr "Impostazioni tasse"
+
+#: plugin-options/tax-options.php:24
+msgid "EU VAT tax rates"
+msgstr "Aliquote IVA"
+
+#: plugin-options/tax-options.php:25
+msgid "Install the VAT tax rates of the European countries."
+msgstr "Importa le aliquote per l'IVA dei paesi europei."
+
+#: plugin-options/tax-options.php:30
+msgid "EU VAT taxes"
+msgstr "IVA valida ai fini Intrastat"
+
+#: plugin-options/tax-options.php:31
+msgid ""
+"Select which taxes have to be recorded during the checkout, according to the "
+"EU VAT law terms."
+msgstr ""
+"Seleziona l'importo delle tasse da registrare durante il pagamento in base "
+"alle normative europee sull'IVA valida ai fini Intrastat."
+
+#: templates/admin/eu-vat-tax-list.php:26
+msgid "Import standard tax rates"
+msgstr "Importa aliquote standard"
+
+#: templates/admin/eu-vat-tax-list.php:38
+msgid "Country Code"
+msgstr "Codice del paese"
+
+#: templates/admin/eu-vat-tax-list.php:40
+msgid "State Code"
+msgstr "Codice stato"
+
+#: templates/admin/eu-vat-tax-list.php:42
+msgid "ZIP/Postcode"
+msgstr "CAP"
+
+#: templates/admin/eu-vat-tax-list.php:44
+msgid "City"
+msgstr "Città"
+
+#: templates/admin/eu-vat-tax-list.php:46
+msgid "Rate %"
+msgstr "Tasso %"
+
+#: templates/admin/eu-vat-tax-list.php:47
+msgid "Tax class"
+msgstr "Classe fiscale"
+
+#: templates/admin/eu-vat-tax-list.php:49
+msgid "Tax Name"
+msgstr "Nome tassa"
+
+#: templates/admin/eu-vat-tax-list.php:99
+msgid "Standard"
+msgstr "Standard"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:30
+msgid "Export CSV"
+msgstr "Esporta CSV"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:40
+msgid "Year"
+msgstr "Anno"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:41
+msgid "Last Month"
+msgstr "Ultimo mese"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:42
+msgid "This Month"
+msgstr "Questo mese"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:120
+msgid "Country"
+msgstr "Paese"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:121
+msgid "Number of orders"
+msgstr "Numero di ordini"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:122
+msgid "Total tax amount"
+msgstr "Importo totale delle tasse"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:141
+msgid "Totals"
+msgstr "Totali"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:149
+msgid "No taxes payments found in this period"
+msgstr "Nessun pagamento con IVA trovato in questo periodo"
+
+#: templates/report/yith-html-report-eu-vat.php:23
+msgid "Custom:"
+msgstr "Personalizza:"
+
+#: templates/report/yith-html-report-eu-vat.php:41
+msgid "Go"
+msgstr "Vai"
+
+#: templates/yith-eu-vat/country-confirmation.php:14
+msgid "I confirm that my base location is %s"
+msgstr "Confermo che il mio negozio ha sede in %s"
+
+#: views/privacy/html-policy-content-collect_and_store.php:1
+msgctxt "Privacy Policy Content"
+msgid ""
+"While you visit our site, we collect information about you during the "
+"checkout process on our store. We’ll track:"
+msgstr ""
+"Mentre visiti il nostro sito raccogliamo informazioni su di te durante il "
+"processo di pagamento. Terremo traccia di:"
+
+#: views/privacy/html-policy-content-collect_and_store.php:4
+msgctxt "Privacy Policy Content"
+msgid ""
+"EU VAT number:  we’ll use this to, for example, if a company has a valid VAT "
+"number, the purchase will not be charged by any VAT"
+msgstr ""
+"Partita IVA: lo useremo, ad esempio, se un'azienda ha una partita IVA valida "
+"per non includere le tasse nell'acquisto"
+
+#: views/privacy/html-policy-content-collect_and_store.php:5
+msgctxt "Privacy Policy Content"
+msgid ""
+"Location and IP address: we’ll use this for purposes like estimating taxes"
+msgstr ""
+"Luogo e indirizzo IP: li useremo per scopi quali il calcolo delle tasse"
+
+#: views/privacy/html-policy-content-collect_and_store.php:8
+msgctxt "Privacy Policy Content"
+msgid ""
+"When you purchase from us, we’ll ask you to provide information including "
+"your location and eu vat. We’ll use this information for purposes, such as, "
+"to:"
+msgstr ""
+"Quando acquisti sul nostro sito ti chiederemo di fornirci informazioni tra "
+"cui luogo e partita IVA. Useremo queste informazioni per scopi come:"
+
+#: views/privacy/html-policy-content-collect_and_store.php:10
+msgctxt "Privacy Policy Content"
+msgid ""
+"Set up the reverse charge amount of the order in case your company has a "
+"valid VAT"
+msgstr ""
+"Impostare l'importo inversione contabile dell'ordine nel caso la tua azienda "
+"abbia una partita IVA valida"
+
+#: views/privacy/html-policy-content-collect_and_store.php:11
+msgctxt "Privacy Policy Content"
+msgid ""
+"Set up the confirmation country of the order in case the geolocalization "
+"does not match with the country selected"
+msgstr ""
+"Impostare la conferma del paese dell'ordine nel caso la geolocalizzazione "
+"non coincida con il paese selezionato"
+
+#: views/privacy/html-policy-content-has_access.php:1
+msgctxt "Privacy Policy Content"
+msgid ""
+"Members of our team have access to the information you provide us. For "
+"example, both Administrators and Shop Managers can access:"
+msgstr ""
+"I membri del nostro team hanno accesso alle informazioni che ci fornisci. Ad "
+"esempio, sia amministratori che shop manager possono accedere:"
+
+#: views/privacy/html-policy-content-has_access.php:4
+msgctxt "Privacy Policy Content"
+msgid ""
+"Customer information like your name, email address, and billing and shipping "
+"information"
+msgstr ""
+"Informazioni del cliente come nome, indirizzo email, informazioni di "
+"fatturazione e spedizione"
+
+#. Plugin Name of the plugin/theme
+msgid "YITH WooCommerce EU VAT Premium"
+msgstr "YITH WooCommerce EU VAT Premium"
+
+#. Plugin URI of the plugin/theme
+msgid "https://yithemes.com/themes/plugins/yith-woocommerce-eu-vat/"
+msgstr "https://yithemes.com/themes/plugins/yith-woocommerce-eu-vat/"
+
+#. Description of the plugin/theme
+msgid ""
+"<code><strong>YITH WooCommerce EU VAT</strong></code> allows you to be fully "
+"compliance with EU VAT laws, storing checkout data and filling the EU VAT "
+"MOSS report for digital goods. <a href=\"https://yithemes.com/\" target="
+"\"_blank\">Get more plugins for your e-commerce shop on <strong>YITH</"
+"strong></a>."
+msgstr ""
+"<code><strong>YITH WooCommerce EU VAT</strong></code> ti permette di essere "
+"completamente conforme alle leggi europee inerenti l'IVA, raccogliendo i "
+"dati di acquisto e completando i report EU VAT MOSS per i prodotti digitali. "
+"<a href=\"https://yithemes.com/\" target=\"_blank\">Ottieni più plugin per "
+"il tuo e-commerce su <strong>YITH</strong></a>."
+
+#. Author of the plugin/theme
+msgid "YITH"
+msgstr "YITH"
+
+#. Author URI of the plugin/theme
+msgid "https://yithemes.com/"
+msgstr "https://yithemes.com/"
+
+#~ msgid "Settings"
+#~ msgstr "Impostazioni"
+
+#~ msgid "Plugin Documentation"
+#~ msgstr "Documentazione plugin"
+
+#~ msgid "Tax Report"
+#~ msgstr "Statistiche tasse"
+
+#~ msgid "EU VAT taxes report"
+#~ msgstr "Statistiche IVA Intrastat"
+
+#~ msgid "Choose if you want to apply the VAT exemption on physical products."
+#~ msgstr ""
+#~ "Scegli se vuoi applicare l'esenzione per partita IVA sui prodotti fisici."
+
+#~ msgid ""
+#~ "Show the VAT number field to all EU customers even the ones from the shop "
+#~ "base location."
+#~ msgstr ""
+#~ "Mostra il numero di partita IVA a tutti i clienti europei, inclusi i "
+#~ "clienti provenienti dalla stessa nazione sede del negozio."
+
+#~ msgid ""
+#~ "In order to make the digital goods in the cart VAT exempted, you must "
+#~ "validate your base location."
+#~ msgstr ""
+#~ "Al fine di applicare l'esenzione Vat per i prodotti digitali nel "
+#~ "carrello, devi confermare la tua sede fiscale."
+
+#~ msgid "Never check EU VAT number validity, VAT will always be charged."
+#~ msgstr ""
+#~ "Non verificare mai la validità del numero EU VAT, il VAT sarà sempre "
+#~ "addebitato."
+
+#~ msgid ""
+#~ "Check EU VAT number validity and charge VAT if the number is not valid."
+#~ msgstr ""
+#~ "Controlla la validità del numero EU VAT e applica VAT se il numero non è "
+#~ "valido."
+
+#~ msgid ""
+#~ "Check EU VAT number validity and stop checkout if the number is not valid."
+#~ msgstr ""
+#~ "Controlla la validità del numero EU VAT e ferma il checkout se il numero "
+#~ "non è valido."
+
+#~ msgid "EU VAT number check"
+#~ msgstr "Controllo numero EU VAT"
+
+#~ msgid ""
+#~ "When selling to EU customers, choose which check should be done about the "
+#~ "EU VAT number validitation."
+#~ msgstr ""
+#~ "Se vendi a clienti EU, scegli quale controllo deve essere effettuato per "
+#~ "la conferma del numero EU VAT."
+
+#~ msgid "Never check customer's origin."
+#~ msgstr "Non verificare mai l'origine del cliente."
+
+#~ msgid "Allow the checkout but store the origin."
+#~ msgstr "Consenti il checkout ma archivia l'origine."
+
+#~ msgid ""
+#~ "Allow the checkout only after an origin confirmation by the customer."
+#~ msgstr ""
+#~ "Consenti il checkout solo dopo una conferma dell'origine da parte del "
+#~ "cliente."
+
+#~ msgid "Customer's country check"
+#~ msgstr "Verifica del paese del cliente"
+
+#~ msgid ""
+#~ "Choose how to proceed when the customer's location is different from the "
+#~ "geolocalized country."
+#~ msgstr ""
+#~ "Scegli come procedere se la posizione del cliente è diversa dal paese "
+#~ "geolocalizzato. "
+
+#~ msgid "Custom base location"
+#~ msgstr "Sede fiscale personalizzata"
+
+#~ msgid "Use custom base location instead of WooCommerce setting."
+#~ msgstr ""
+#~ "Utilizza sede fiscale personalizzata al posto dell'impostazione "
+#~ "WooCommerce."
+
+#~ msgid "Base locations"
+#~ msgstr "Sedi fiscali"
+
+#~ msgid "Add comma separated countries code to be used as base location."
+#~ msgstr ""
+#~ "Aggiungi il codice dei paesi separati dalla virgola per essere usati come "
+#~ "sede fiscale."
+
+#~ msgid "VAT information"
+#~ msgstr "Informazioni VAT"
+
+#~ msgid "Please insert you're VAT number, it is a mandatory field."
+#~ msgstr "Per favore inserisci il tuo numero VAT, è un campo obbligatorio."
+
+#~ msgid ""
+#~ "The VAT number was not validated by the EU VAT number checking service. "
+#~ "Please check if the number is correct and try again."
+#~ msgstr ""
+#~ "Il numero VAT non è stato convalidato dal servizio di verifica del numero "
+#~ "EU VAT. Per favore, controlla che il numero sia corretto e prova di "
+#~ "nuovo. "
+
+#~ msgid ""
+#~ "You must manually confirm your base location to complete the current "
+#~ "order."
+#~ msgstr ""
+#~ "Per completare l'ordine corrente devi confermare manualmente la tua sede "
+#~ "fiscale."
+
+#~ msgid "Upgrade to the PREMIUM VERSION"
+#~ msgstr "Fai l'upgrade alla VERSIONE PREMIUM"
+
+#~ msgid "Discover The Advanced Features"
+#~ msgstr "Scopri le funzionalità avanzate"
+
+#~ msgid ""
+#~ "Upgrade to the PREMIUM VERSION of YITH WOOCOMMERCE EU VAT to benefit from "
+#~ "all features!"
+#~ msgstr ""
+#~ "Fai l'upgrade alla VERSIONE PREMIUM di YITH WOOCOMMERCE EU VAT per "
+#~ "beneficiare di tutte le funzionalità! "
+
+#~ msgid ""
+#~ "See YITH WooCommerce EU VAT plugin with full premium features in action"
+#~ msgstr ""
+#~ "Vedi il plugin YITH WooCommerce EU VAT con tutte le funzioni premium in "
+#~ "azione"
+
+#~ msgid "Get Support and Pro Features"
+#~ msgstr "Ottieni supporto e funzionalità premium"
+
+#~ msgid ""
+#~ "By purchasing the premium version of the plugin, you will take advantage "
+#~ "of the advanced features of the product and you will get one year of free "
+#~ "updates and support through our platform available 24h/24."
+#~ msgstr ""
+#~ "Con l'acquisto della versione premium del plugin potrai approfittare "
+#~ "delle funzioni avanzate del prodotto ed ottenere un anno di update e "
+#~ "supporto gratuiti tramite la nostra piattaforma disponibile 24 ore su 24."

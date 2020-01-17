@@ -1,0 +1,28 @@
+version: '3'
+services:
+  wordpress:
+    image: visiblevc/wordpress:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./data:/data # Required if importing an existing database
+      - ./:/app/wp-content/plugins/woocommerce-cart-reports # Plugin development
+    environment:
+      DB_HOST: db # must match db service name below
+      DB_NAME: wordpress
+      DB_PASS: root # must match below
+      PLUGINS: >-
+        woocommerce
+      THEMES: >-
+        storefront
+      WP_DEBUG: 'true'
+  db:
+    image: mysql:5.7 # or mariadb:10
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+volumes:
+  data: {}

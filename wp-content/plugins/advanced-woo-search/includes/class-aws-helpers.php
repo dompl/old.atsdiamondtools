@@ -102,6 +102,35 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             return $return;
 
         }
+
+        /*
+         * Check if index table has new on_sale columns
+         */
+        static public function is_index_table_has_on_sale() {
+
+            global $wpdb;
+
+            $table_name =  $wpdb->prefix . AWS_INDEX_TABLE_NAME;
+
+            $return = false;
+
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+
+                $columns = $wpdb->get_row("
+                    SELECT * FROM {$table_name} LIMIT 0, 1
+                ", ARRAY_A );
+
+                if ( $columns && ! isset( $columns['on_sale'] ) ) {
+                    $return = 'no';
+                } else {
+                    $return = 'has';
+                }
+
+            }
+
+            return $return;
+
+        }
         
         /*
          * Get special characters that must be striped

@@ -2,6 +2,14 @@
     position: relative;
     width: 100%;
     float: none !important;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: stretch;
+    height: 44px;
 }
 
 .aws-container .aws-search-form * {
@@ -20,6 +28,14 @@
     border-radius: 50% !important;
     width: 20px;
     height: 20px;
+}
+
+.aws-container .aws-search-form .aws-wrapper {
+    flex-grow: 1;
+    position: relative;
+    vertical-align: top;
+    padding: 0;
+    width: 100%;
 }
 
 .aws-container .aws-search-form .aws-loader {
@@ -70,10 +86,9 @@
 }
 
 
-
 .aws-container .aws-search-field {
-    height: 44px;
     width: 100%;
+    max-width: 100%;
     color: #313131;
     padding: 6px;
     line-height: 30px;
@@ -81,8 +96,11 @@
     font-size: 12px;
     position: relative;
     z-index: 2;
-    background: rgb(247, 247, 247);
     -webkit-appearance: none;
+    height: 100%;
+    margin: 0 !important;
+    border: 1px solid #d8d8d8;
+    outline: 0;
 }
 
 .aws-container .aws-search-field::-ms-clear {
@@ -115,6 +133,7 @@
     height: 100%;
     width: 38px;
     padding-left: 10px;
+    text-align: left;
 }
 .aws-container .aws-search-form .aws-search-clear span {
     position: relative;
@@ -134,6 +153,80 @@
 }
 
 
+/* Search button */
+.aws-container .aws-search-form .aws-search-btn {
+    padding: 0;
+    line-height: 10px;
+    width: 42px;
+}
+
+.aws-container .aws-search-form .aws-search-btn_icon {
+    display: inline-block;
+    fill: currentColor;
+    height: 24px;
+    line-height: 24px;
+    position: relative;
+    width: 42px;
+    color: #555;
+}
+
+.aws-container .aws-search-form .aws-search-btn svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.aws-container[data-show-page="false"] .aws-search-form .aws-search-btn:hover {
+    background: #ededed;
+    cursor: default;
+}
+
+
+/* Form buttons */
+.aws-container .aws-search-form .aws-form-btn {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+    background: #ededed;
+    border: 1px solid #d8d8d8;
+    /*border-left: none;*/
+    margin: 0 0 0 -1px;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    -webkit-transition: background-color 100ms ease-in-out;
+    -moz-transition: background-color 100ms ease-in-out;
+    -o-transition: background-color 100ms ease-in-out;
+    transition: background-color 100ms ease-in-out;
+}
+.aws-container .aws-search-form .aws-form-btn:hover {
+    background: #dcdcdc;
+}
+.aws-container .aws-search-form .aws-form-btn:active {
+    background: #d8d8d8;
+}
+
+
+/* Form buttons layouts */
+.aws-container[data-buttons-order="3"] .aws-search-form .aws-wrapper{
+    -webkit-order: 2;
+    order: 2;
+}
+
+.aws-container[data-buttons-order="3"] .aws-search-form .aws-search-btn{
+    margin: 0 -1px 0 0;
+}
 
 .aws-search-result {
     position: absolute;

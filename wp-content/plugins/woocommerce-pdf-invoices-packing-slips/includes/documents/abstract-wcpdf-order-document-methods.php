@@ -67,25 +67,28 @@ abstract class Order_Document_Methods extends Order_Document {
 			$order = $this->order;
 		}
 
-		$address_comparison_fields = apply_filters( 'wpo_wcpdf_address_comparison_fields', array(
-			'first_name',
-			'last_name',
-			'company',
-			'address_1',
-			'address_2',
-			'city',
-			'state',
-			'postcode',
-			'country'
-		), $this );
-		
-		foreach ($address_comparison_fields as $address_field) {
-			$billing_field = WCX_Order::get_prop( $order, "billing_{$address_field}", 'view');
-			$shipping_field = WCX_Order::get_prop( $order, "shipping_{$address_field}", 'view');
-			if ( $shipping_field != $billing_field ) {
-				// this address field is different -> ships to different address!
-				return true;
-			}
+		// only check if there is a shipping address at all
+		if ( $formatted_shipping_address = $order->get_formatted_shipping_address() ) {
+			$address_comparison_fields = apply_filters( 'wpo_wcpdf_address_comparison_fields', array(
+				'first_name',
+				'last_name',
+				'company',
+				'address_1',
+				'address_2',
+				'city',
+				'state',
+				'postcode',
+				'country'
+			), $this );
+			
+			foreach ($address_comparison_fields as $address_field) {
+				$billing_field = WCX_Order::get_prop( $order, "billing_{$address_field}", 'view');
+				$shipping_field = WCX_Order::get_prop( $order, "shipping_{$address_field}", 'view');
+				if ( $shipping_field != $billing_field ) {
+					// this address field is different -> ships to different address!
+					return true;
+				}
+			}			
 		}
 
 		//if we got here, it means the addresses are equal -> doesn't ship to different address!
@@ -377,7 +380,7 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * Return/Show the current date
 	 */
 	public function get_current_date() {
-		return apply_filters( 'wpo_wcpdf_date', date_i18n( get_option( 'date_format' ) ) );
+		return apply_filters( 'wpo_wcpdf_date', date_i18n( wc_date_format() ) );
 	}
 	public function current_date() {
 		echo $this->get_current_date();
@@ -448,7 +451,7 @@ abstract class Order_Document_Methods extends Order_Document {
 			$order_date = WCX_Order::get_prop( $this->order, 'date_created' );
 		}
 
-		$date = $order_date->date_i18n( get_option( 'date_format' ) );
+		$date = $order_date->date_i18n( wc_date_format() );
 		$mysql_date = $order_date->date( "Y-m-d H:i:s" );
 		return apply_filters( 'wpo_wcpdf_order_date', $date, $mysql_date, $this );
 	}
@@ -475,8 +478,14 @@ abstract class Order_Document_Methods extends Order_Document {
 				$data['product_id'] = $item['product_id'];
 				$data['variation_id'] = $item['variation_id'];
 
+				// Compatibility: WooCommerce Composit Products uses a workaround for
+				// setting the order before the item name filter, so we run this first
+				if ( class_exists('WC_Composite_Products') ) {
+					$order_item_class = apply_filters( 'woocommerce_order_item_class', '', $item, $this->order );
+				}
+				
 				// Set item name
-				$data['name'] = $item['name'];
+				$data['name'] = apply_filters( 'woocommerce_order_item_name', $item['name'], $item, false );
 				
 				// Set item quantity
 				$data['quantity'] = $item['qty'];
@@ -692,7 +701,12 @@ abstract class Order_Document_Methods extends Order_Document {
 	 */
 	public function get_thumbnail ( $product ) {
 		// Get default WooCommerce img tag (url/http)
-		$size = apply_filters( 'wpo_wcpdf_thumbnail_size', 'shop_thumbnail' );
+		if ( version_compare( WOOCOMMERCE_VERSION, '3.3', '>=' ) ) {
+			$thumbnail_size = 'woocommerce_thumbnail';
+		} else {
+			$thumbnail_size = 'shop_thumbnail';
+		}
+		$size = apply_filters( 'wpo_wcpdf_thumbnail_size', $thumbnail_size );
 		$thumbnail_img_tag_url = $product->get_image( $size, array( 'title' => '' ) );
 		
 		// Extract the url from img

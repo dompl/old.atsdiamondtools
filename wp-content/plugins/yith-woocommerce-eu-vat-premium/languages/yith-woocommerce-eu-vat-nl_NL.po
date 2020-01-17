@@ -1,0 +1,584 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: YITH WooCommerce Order Tracking\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/init\n"
+"POT-Creation-Date: 2018-12-07 09:37:33+00:00\n"
+"PO-Revision-Date: 2018-12-21 20:10+0000\n"
+"Last-Translator: \n"
+"Language-Team: Your Inspiration Themes <plugins@yithemes.com>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __ ;_e;_n:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: plugin-fw\n"
+
+#: init.php:51
+msgid ""
+"YITH WooCommerce EU VAT is enabled but not effective. It requires "
+"WooCommerce in order to work."
+msgstr ""
+"YITH WooCommerce EU VAT is ingeschakeld maar niet actief. Het heeft "
+"WooCommerce nodig om te functioneren."
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:28
+msgctxt "Privacy Policy Content"
+msgid "YITH EU VAT for WooCommerce premium"
+msgstr "YITH EU VAT for WooCommerce premium"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:129
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:179
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:217
+#: lib/class.yith-woocommerce-eu-vat.php:174
+#: lib/class.yith-ywev-frontend-premium.php:326
+#: plugin-options/general-options.php:36 plugin-options/general-options.php:37
+msgid "VAT number"
+msgstr "BTW nummer"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:218
+msgid "Reverse charge amount"
+msgstr "Berekende bedrag omzetten"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:220
+msgid "Customer country"
+msgstr "Land klant"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:221
+msgid "Customer state"
+msgstr "Staat klant"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:222
+msgid "Customer city"
+msgstr "Stad klant"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:223
+msgid "Customer post code"
+msgstr "Postcode klant"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:224
+msgid "Geolocalized country:"
+msgstr "Geo-gelokaliseerd land: "
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:225
+msgid "Customer ip address"
+msgstr "IP adres klant"
+
+#: lib/class.yith-woocommerce-eu-vat-privacy.php:227
+msgid "Country confirmation"
+msgstr "Bevestiging land"
+
+#: lib/class.yith-woocommerce-eu-vat.php:172
+#: lib/class.yith-ywev-frontend-premium.php:324
+#: plugin-options/general-options.php:53 plugin-options/general-options.php:54
+msgid "European companies with valid EU VAT number will be exempt of VAT."
+msgstr ""
+"Europese bedrijven met geldig BTW nummer zullen vrijstelling krijgen van VAT."
+
+#: lib/class.yith-woocommerce-eu-vat.php:175
+#: lib/class.yith-ywev-frontend-premium.php:327
+#: plugin-options/general-options.php:44 plugin-options/general-options.php:45
+msgid "Enter your VAT number"
+msgstr "Vul uw BTW nummer in"
+
+#: lib/class.yith-ywev-backend-premium.php:84
+msgid "EU VAT"
+msgstr "EU BTW"
+
+#: lib/class.yith-ywev-backend-premium.php:138
+msgid "VAT number: "
+msgstr "BTW nummer: "
+
+#: lib/class.yith-ywev-backend-premium.php:142
+msgid "Reverse charge amount: "
+msgstr "Wissel het berekende bedrag "
+
+#: lib/class.yith-ywev-backend-premium.php:146
+msgid "Customer country: "
+msgstr "Land van herkomst "
+
+#: lib/class.yith-ywev-backend-premium.php:150
+msgid "Geolocalized country: "
+msgstr "Geolocolized land "
+
+#: lib/class.yith-ywev-backend-premium.php:156
+msgid "Customer IP address: "
+msgstr "IP adres van klant "
+
+#: lib/class.yith-ywev-backend-premium.php:162
+msgid "The customer manually confirmed his/her country"
+msgstr "De klant heeft handmatig zijn/haar land bevestigd"
+
+#: lib/class.yith-ywev-backend-premium.php:167
+msgid "The customer did NOT confirm his/her country"
+msgstr "De klant heeft niet zijn/haar land bevestigd"
+
+#: lib/class.yith-ywev-backend-premium.php:176
+msgid "Reverse charge not applied."
+msgstr "Gewisselde kosten niet toegepast."
+
+#: lib/class.yith-ywev-backend.php:134
+msgid "EU VAT Reports"
+msgstr "EU BTW Raporten"
+
+#: lib/class.yith-ywev-frontend-premium.php:281
+msgid "I confirm I reside in {user_country}"
+msgstr "Ik bevestig dat ik woon in {user_country}"
+
+#: lib/class.yith-ywev-frontend-premium.php:282
+msgid "Calculate normal tax rates."
+msgstr "Bereken normale tax nummers."
+
+#: lib/class.yith-ywev-frontend-premium.php:283
+msgid "I'm from"
+msgstr "Ik woon in"
+
+#: lib/class.yith-ywev-frontend-premium.php:284
+msgid "apply the EU VAT reverse charge."
+msgstr "voeg de EU BTW gewisselde kosten toe."
+
+#: lib/class.yith-ywev-frontend-premium.php:391
+#: lib/class.yith-ywev-frontend-premium.php:402
+msgid "Valid EU VAT number."
+msgstr "Geldig EU BTW nummer."
+
+#: lib/class.yith-ywev-frontend-premium.php:408
+msgid ""
+"%s is not a valid EU VAT number or the VAT number can't be validated at the "
+"moment."
+msgstr ""
+"%s is geen geldig EU BTW nummer of het BTW nummer kan momenteel niet "
+"gevalideerd worden."
+
+#: lib/class.yith-ywev-frontend-premium.php:690
+msgid "EU VAT exempted"
+msgstr "EU BTW vrijgesteld"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:132
+msgid "General"
+msgstr "Algemeen"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:133
+msgid "Tax"
+msgstr "Tax"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:134
+msgid "Reports"
+msgstr "Rapporten"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:137
+msgid "Premium Version"
+msgstr "Premium Versie"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:189
+msgid ""
+"YITH WooCommerce EU VAT is available in an outstanding PREMIUM version with "
+"many new options, discover it now."
+msgstr ""
+"YITH WooCommerce EU VAT is beschikbaar in een geweldige PREMIUM versie met "
+"veel nieuwe opties, ontdek het nu."
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:190
+msgid "Premium version"
+msgstr "Premium versie"
+
+#: lib/class.yith-ywev-plugin-fw-loader.php:197
+msgid ""
+"In the YITH tab, you can find the YITH WooCommerce EU VAT options.<br> From "
+"this menu you can have access to all settings of the activated YITH plugins."
+msgstr ""
+"Op het tabblad YITH u de YITH WooCommerce EU-BTW-opties vinden. <br> van dit "
+"menu u toegang hebben tot alle instellingen van de geactiveerde YITH plugins."
+
+#: plugin-options/general-options.php:20
+msgid "General Settings"
+msgstr "Algemene instellingen"
+
+#: plugin-options/general-options.php:25
+msgid "Forbid EU customer checkout"
+msgstr "Sta EU klanten checkout niet toe"
+
+#: plugin-options/general-options.php:26
+msgid ""
+"If the cart of an European customer contains digital goods, the checkout "
+"will not be allowed."
+msgstr ""
+"Als de winkelwagen van Europese klanten digitale goederen bevat, is de "
+"checkout niet mogelijk."
+
+#: plugin-options/general-options.php:33
+msgid "EU VAT field label"
+msgstr "EU BTW veld tabel"
+
+#: plugin-options/general-options.php:34
+msgid "Set the text to use as label for the field EU VAT in checkout page"
+msgstr ""
+"Stel de tekst in die wordt gebruikt als tabel voor het EU BTW veld in de "
+"checkout pagina"
+
+#: plugin-options/general-options.php:41
+msgid "EU VAT field placeholder"
+msgstr "EU BTW invulveld"
+
+#: plugin-options/general-options.php:42
+msgid ""
+"Set the text to use as placeholder for the field EU VAT in checkout page"
+msgstr ""
+"Stel de tekst in die wordt gebruikt als invulveld voor het EU BTW veld in de "
+"checkout pagina"
+
+#: plugin-options/general-options.php:50
+msgid "EU VAT field description"
+msgstr "EU BTW veld beschrijving"
+
+#: plugin-options/general-options.php:51
+msgid ""
+"Set the text to use as description for the field EU VAT in checkout page"
+msgstr ""
+"Stel de tekst in die wordt gebruikt als beschrijving voor het EU BTW veld in "
+"de checkout pagina"
+
+#: plugin-options/general-options.php:59
+msgid "EU customer warning"
+msgstr "EU klant waarschuwing"
+
+#: plugin-options/general-options.php:60
+msgid ""
+"If \"Forbid EU customer checkout\" is selected, you can choose to show a "
+"warning message in cart page to remind customers of digital goods in the "
+"cart."
+msgstr ""
+"Als “sta EU klant checkout niet toe” is geselecteerd, kunt u kiezen om een "
+"waarschuwings bericht te laten zien om klanten te herinneren dat ze digitale "
+"goederen in hun winkelwagen hebben."
+
+#: plugin-options/general-options.php:67
+msgid "EU VAT warning message"
+msgstr "EU BTW waarschuwings bericht"
+
+#: plugin-options/general-options.php:69 plugin-options/general-options.php:70
+msgid ""
+"For EU area customers.<br>Due to EU VAT law terms, some products may be not "
+"purchasable."
+msgstr ""
+"Voor EU klanten. <br>Door de EU BTW wet, zijn sommige producten niet "
+"aankoopbaar."
+
+#: plugin-options/general-options.php:75
+msgid "EU VAT error message"
+msgstr "EU BTW error bericht"
+
+#: plugin-options/general-options.php:77
+msgid ""
+"This order can't be accepted due to EU VAT laws. This shop doesn't allow EU "
+"area customers to purchase."
+msgstr ""
+"Deze bestelling kan niet geaccepteerd worden door EU BTW wetten. Deze winkel "
+"staat niet toe om Europese klanten dit product aan te kopen."
+
+#: plugin-options/general-options.php:84
+msgid "Custom base locations"
+msgstr "Klant locatie"
+
+#: plugin-options/general-options.php:85
+msgid ""
+"Add comma separated country codes that will be used as base location(s) "
+"instead of the base location(s) specified in the WooCommerce settings."
+msgstr ""
+"Voeg een komma toe aan landcodes die worden gebruikt als locatie(s) in "
+"plaats van de locatie(s) die staat in de WooCommerce settings."
+
+#: plugin-options/general-options.php:92
+msgid "Mandatory VAT number"
+msgstr "Verplicht BTW nummer"
+
+#: plugin-options/general-options.php:93
+msgid "The VAT number is a mandatory field."
+msgstr "Het BTW nummer is een verplicht veld."
+
+#: plugin-options/general-options.php:100
+msgid "Enable VAT number in same country"
+msgstr "Schakel BTW nummer in hetzelfde land in"
+
+#: plugin-options/general-options.php:101
+msgid ""
+"Show the VAT number field to all EU customers even the ones coming from the "
+"same country as the shop base location."
+msgstr ""
+"Weergeef het BTW nummer veld aan alle EU klanten, ook die van dezelfde "
+"locatie komen als de locatie van de winkel."
+
+#: plugin-options/general-options.php:108
+msgid "Disable VAT exception in same country"
+msgstr "BTW uitsluiting in zelfde land, uitschakelen"
+
+#: plugin-options/general-options.php:109
+msgid "Disable VAT exception in calculate totals in same country"
+msgstr "BTW uitsluiting in calculeren totalen in zelfde land, uitschakelen"
+
+#: plugin-options/general-options.php:116
+msgid "Apply to physical products"
+msgstr "Voeg toe aan fysieke producten"
+
+#: plugin-options/general-options.php:117
+msgid "Choose if you want to apply the VAT exemption on physical products too."
+msgstr ""
+"Kies of je de BTW vrijstelling ook aan fysieke producten toe wil voegen."
+
+#: plugin-options/general-options.php:124
+msgid "Country confirmation message"
+msgstr "Land bevestigings bericht"
+
+#: plugin-options/general-options.php:125
+msgid ""
+"Configure here the message to show to EU customers when the IP address and "
+"the billing country do not match"
+msgstr ""
+"Configureer hier het bericht om weer te geven aan EU klanten wanneer het IP "
+"adres en de rekeninginformatie niet hetzelfde zijn"
+
+#: plugin-options/general-options.php:126
+msgid ""
+"Your IP Address does not match the billing country. In order to fit European "
+"VAT laws, you should confirm your billing country using the checkbox below."
+msgstr ""
+"Uw IP adres matcht niet met uw rekening adres en land, Door Europese BTW "
+"wetten, moet u uw land invullen in de checkbox hieronder."
+
+#: plugin-options/general-options.php:132
+msgid "Mandatory VAT number message"
+msgstr "Verplicht BTW nummer bericht"
+
+#: plugin-options/general-options.php:133
+msgid "Set the message to show when the mandatory VAT number is not provided"
+msgstr ""
+"Stel het bericht in om te laten zien als het verplichte BTW nummer niet is "
+"ingevuld"
+
+#: plugin-options/general-options.php:134
+msgid "The VAT number is mandatory, please fill the VAT number field."
+msgstr "Dit BTW nummer is verplicht, vul alstublieft het BTW nummer in."
+
+#: plugin-options/tax-options.php:18
+msgid "Tax Settings"
+msgstr "Belasting instellingen"
+
+#: plugin-options/tax-options.php:24
+msgid "EU VAT tax rates"
+msgstr "EU BTW belasting tarieven"
+
+#: plugin-options/tax-options.php:25
+msgid "Install the VAT tax rates of the European countries."
+msgstr "Installeer de BTW belasting tarieven voor de Europese landen."
+
+#: plugin-options/tax-options.php:30
+msgid "EU VAT taxes"
+msgstr "EU BTW belastingen"
+
+#: plugin-options/tax-options.php:31
+msgid ""
+"Select which taxes have to be recorded during the checkout, according to the "
+"EU VAT law terms."
+msgstr ""
+"Selecteer welke belastingen moeten worden berekend tijdens het afrekenen, "
+"volgens de EU BTW wet en termen."
+
+#: templates/admin/eu-vat-tax-list.php:26
+msgid "Import standard tax rates"
+msgstr "Importeer standaard belasting tarieven"
+
+#: templates/admin/eu-vat-tax-list.php:38
+msgid "Country Code"
+msgstr "Landcode"
+
+#: templates/admin/eu-vat-tax-list.php:40
+msgid "State Code"
+msgstr "Staats code"
+
+#: templates/admin/eu-vat-tax-list.php:42
+msgid "ZIP/Postcode"
+msgstr "Postcode"
+
+#: templates/admin/eu-vat-tax-list.php:44
+msgid "City"
+msgstr "Stad"
+
+#: templates/admin/eu-vat-tax-list.php:46
+msgid "Rate %"
+msgstr "Vergoeding %"
+
+#: templates/admin/eu-vat-tax-list.php:47
+msgid "Tax class"
+msgstr "Belasting groep"
+
+#: templates/admin/eu-vat-tax-list.php:49
+msgid "Tax Name"
+msgstr "Belasting naam"
+
+#: templates/admin/eu-vat-tax-list.php:99
+msgid "Standard"
+msgstr "Standaard"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:30
+msgid "Export CSV"
+msgstr "Exporteer CSV"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:40
+msgid "Year"
+msgstr "Jaar"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:41
+msgid "Last Month"
+msgstr "Laatste Maand"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:42
+msgid "This Month"
+msgstr "Deze Maand"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:120
+msgid "Country"
+msgstr "Land"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:121
+msgid "Number of orders"
+msgstr "Aantal bestellingen"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:122
+msgid "Total tax amount"
+msgstr "Totaal belasting bedrag"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:141
+msgid "Totals"
+msgstr "Totaal"
+
+#: templates/report/class.yith-ywev-report-eu-vat-taxes.php:149
+msgid "No taxes payments found in this period"
+msgstr "Geen belastingen gevonden in deze periode"
+
+#: templates/report/yith-html-report-eu-vat.php:23
+msgid "Custom:"
+msgstr "Custom:"
+
+#: templates/report/yith-html-report-eu-vat.php:41
+msgid "Go"
+msgstr "Ga"
+
+#: templates/yith-eu-vat/country-confirmation.php:14
+msgid "I confirm that my base location is %s"
+msgstr "Ik bevestig dat mijn locatie %s is"
+
+#: views/privacy/html-policy-content-collect_and_store.php:1
+msgctxt "Privacy Policy Content"
+msgid ""
+"While you visit our site, we collect information about you during the "
+"checkout process on our store. We’ll track:"
+msgstr ""
+"Terwijl u onze site bezoekt, verzamelen wij informatie over u tijdens het "
+"checkout proces in onze winkel. We volgen:"
+
+#: views/privacy/html-policy-content-collect_and_store.php:4
+msgctxt "Privacy Policy Content"
+msgid ""
+"EU VAT number:  we’ll use this to, for example, if a company has a valid VAT "
+"number, the purchase will not be charged by any VAT"
+msgstr ""
+"EU BTW nummer: we gebruiken dit om, bijvoorbeeld als een bedrijf een geldig "
+"BTW nummer heeft, geen BTW te berekenen bij de aankoop"
+
+#: views/privacy/html-policy-content-collect_and_store.php:5
+msgctxt "Privacy Policy Content"
+msgid ""
+"Location and IP address: we’ll use this for purposes like estimating taxes"
+msgstr "Locatie en IP adres: we gebruiken dit voor het bepalen van belastingen"
+
+#: views/privacy/html-policy-content-collect_and_store.php:8
+msgctxt "Privacy Policy Content"
+msgid ""
+"When you purchase from us, we’ll ask you to provide information including "
+"your location and eu vat. We’ll use this information for purposes, such as, "
+"to:"
+msgstr ""
+"Als u bij ons koopt, vragen wij u om ons van informatie te voorzien zoals uw "
+"locatie en eu btw. We gebruiken deze informatie voor doeleinden zoals:"
+
+#: views/privacy/html-policy-content-collect_and_store.php:10
+msgctxt "Privacy Policy Content"
+msgid ""
+"Set up the reverse charge amount of the order in case your company has a "
+"valid VAT"
+msgstr ""
+"Het instellen van omzetten berekende bedrag van de bestelling, als uw "
+"bedrijf een geldige BTW nummer heeft"
+
+#: views/privacy/html-policy-content-collect_and_store.php:11
+msgctxt "Privacy Policy Content"
+msgid ""
+"Set up the confirmation country of the order in case the geolocalization "
+"does not match with the country selected"
+msgstr ""
+"Het instellen van bevestigen land van de bestelling, indien de geo-"
+"lokalisering niet overeenkomst met het geselecteerde land"
+
+#: views/privacy/html-policy-content-has_access.php:1
+msgctxt "Privacy Policy Content"
+msgid ""
+"Members of our team have access to the information you provide us. For "
+"example, both Administrators and Shop Managers can access:"
+msgstr ""
+"Onze teamleden hebben toegang tot de informatie die u ons geeft. Voorbeeld, "
+"zowel administrateurs als winkelmanagers hebben toegang tot:"
+
+#: views/privacy/html-policy-content-has_access.php:4
+msgctxt "Privacy Policy Content"
+msgid ""
+"Customer information like your name, email address, and billing and shipping "
+"information"
+msgstr ""
+"Klantinformatie zoals je naam, e-mailadres en factuur- en verzendinformatie"
+
+#. Plugin Name of the plugin/theme
+msgid "YITH WooCommerce EU VAT Premium"
+msgstr "YITH WooCommerce EU VAT Premium"
+
+#. Plugin URI of the plugin/theme
+msgid "https://yithemes.com/themes/plugins/yith-woocommerce-eu-vat/"
+msgstr "https://yithemes.com/themes/plugins/yith-woocommerce-eu-vat/"
+
+#. Description of the plugin/theme
+msgid ""
+"<code><strong>YITH WooCommerce EU VAT</strong></code> allows you to be fully "
+"compliance with EU VAT laws, storing checkout data and filling the EU VAT "
+"MOSS report for digital goods. <a href=\"https://yithemes.com/\" target="
+"\"_blank\">Get more plugins for your e-commerce shop on <strong>YITH</"
+"strong></a>."
+msgstr ""
+"<code> <strong> YITH WooCommerce EU VAT </ strong> </ code> biedt u de "
+"mogelijkheid om volledig aan de EU-btw-wetgeving te voldoen, kassagegevens "
+"op te slaan en het EU VAT MOSS-rapport voor digitale goederen te vullen. <a "
+"href=\"https://yithemes.com/\" target=\"_blank\"> Download meer plug-ins "
+"voor uw e-commerceshop op <strong> YITH </strong></a>."
+
+#. Author of the plugin/theme
+msgid "YITH"
+msgstr "YITH"
+
+#. Author URI of the plugin/theme
+msgid "https://yithemes.com/"
+msgstr "https://yithemes.com/"
+
+#~ msgid "Settings"
+#~ msgstr "Instellingen"
+
+#~ msgid "Plugin Documentation"
+#~ msgstr "Plugin Documentatie"
+
+#~ msgid "Tax Report"
+#~ msgstr "Belasting rapport"
+
+#~ msgid "EU VAT taxes report"
+#~ msgstr "EU VAT belasting rapport"

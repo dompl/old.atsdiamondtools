@@ -325,6 +325,7 @@
         var self           = $(this),
             $searchForm    = self.find('.aws-search-form'),
             $searchField   = self.find('.aws-search-field'),
+            $searchButton  = self.find('.aws-search-btn'),
             haveResults    = false,
             requests       = Array(),
             searchFor      = '',
@@ -366,7 +367,7 @@
         }
 
 
-        $searchField.on( 'keyup', function(e) {
+        $searchField.on( 'keyup input', function(e) {
             if ( e.keyCode != 40 && e.keyCode != 38 ) {
                 methods.onKeyup(e);
             }
@@ -379,8 +380,15 @@
 
 
         $searchForm.on( 'keypress', function(e) {
-            if ( e.keyCode == 13 && ! d.showPage ) {
+            if ( e.keyCode == 13 && ( ! d.showPage || $searchField.val() === '' ) ) {
                 e.preventDefault();
+            }
+        });
+
+
+        $searchButton.on( 'click', function (e) {
+            if ( d.showPage && $searchField.val() !== '' ) {
+                $searchForm.submit();
             }
         });
 

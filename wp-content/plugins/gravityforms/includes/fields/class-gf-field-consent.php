@@ -114,7 +114,6 @@ class GF_Field_Consent extends GF_Field {
 			'checkbox_label_setting',
 			'rules_setting',
 			'visibility_setting',
-			'placeholder_setting',
 			'description_setting',
 			'css_class_setting',
 		);
@@ -165,24 +164,23 @@ class GF_Field_Consent extends GF_Field {
 			$revision_id    = ! is_array( $value ) || empty( $value[ $id . '.3' ] ) ? GFFormsModel::get_latest_form_revisions_id( $form['id'] ) : $value[ $id . '.3' ];
 			$value          = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) ? '0' : esc_attr( $value[ $id . '.1' ] );
 		} else {
-			$checkbox_label = $this->checkboxLabel;
+			$checkbox_label = trim( $this->checkboxLabel );
 			$revision_id    = GFFormsModel::get_latest_form_revisions_id( $form['id'] );
 			// We compare if the description text from different revisions has been changed.
 			$current_description   = $this->get_field_description_from_revision( $revision_id );
 			$submitted_description = $this->get_field_description_from_revision( $value[ $id . '.3' ] );
 
-			$value = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) || ( $this->checkboxLabel !== $value[ $id . '.2' ] ) || ( $current_description !== $submitted_description ) ? '0' : esc_attr( $value[ $id . '.1' ] );
+			$value = ! is_array( $value ) || empty( $value[ $id . '.1' ] ) || ( $checkbox_label !== $value[ $id . '.2' ] ) || ( $current_description !== $submitted_description ) ? '0' : esc_attr( $value[ $id . '.1' ] );
 		}
 		$checked = $is_form_editor ? '' : checked( '1', $value, false );
 
-		$tooltip     = '';
-		$description = $is_entry_detail ? $this->get_field_description_from_revision( $revision_id ) : $this->description;
+		$aria_describedby  = '';
+		$description       = $is_entry_detail ? $this->get_field_description_from_revision( $revision_id ) : $this->description;
 		if ( ! empty( $description ) ) {
 			$aria_describedby = "aria-describedby='gfield_consent_description_{$form['id']}_{$this->id}'";
-			$tooltip          = sprintf( "<button {$aria_describedby} aria-hidden='false' class='screen-reader-text'>%s</button>", esc_html__( 'Show Full Agreement', 'gravityforms' ) );
 		}
 
-		$input  = "<input name='input_{$id}.1' id='{$target_input_id}' type='{$html_input_type}' value='1' {$tabindex} {$required_attribute} {$invalid_attribute} {$disabled_text} {$checked} /> <label {$label_class_attribute} {$for_attribute} >{$checkbox_label}</label>{$required_div} {$tooltip}";
+		$input  = "<input name='input_{$id}.1' id='{$target_input_id}' type='{$html_input_type}' value='1' {$tabindex} {$aria_describedby} {$required_attribute} {$invalid_attribute} {$disabled_text} {$checked} /> <label {$label_class_attribute} {$for_attribute} >{$checkbox_label}</label>{$required_div}";
 		$input .= "<input type='hidden' name='input_{$id}.2' value='" . esc_attr( $checkbox_label ) . "' class='gform_hidden' />";
 		$input .= "<input type='hidden' name='input_{$id}.3' value='" . esc_attr( $revision_id ) . "' class='gform_hidden' />";
 
@@ -472,10 +470,6 @@ class GF_Field_Consent extends GF_Field {
 			array(
 				'value' => '1',
 				'text'  => esc_html__( 'Checked', 'gravityforms' ),
-			),
-			array(
-				'value' => '',
-				'text'  => esc_html__( 'Not Checked', 'gravityforms' ),
 			),
 		);
 

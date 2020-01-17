@@ -27,13 +27,15 @@ if ( ! defined( 'ABSPATH' ) ) {
       <div id="shipping-method-header">
         <h3 class="basket-total-title basket-total-title-shipping"><?php echo esc_attr( $package_name ); ?></h3>
       </div>
-    <?php else: ?>
-      <tr class="shipping">
-        <th><?php echo wp_kses_post( $package_name ); ?></th>
-        <td data-title="<?php echo esc_attr( $package_name ); ?>">
-        <?php endif ?>
-        <?php if ( 1 < count( $available_methods ) ) : ?>
-          <?php echo is_cart() ? '<div id="shipping-method-list">' : '' ?>
+      <?php else: ?>
+        <tr class="sh-meths-title">
+           <th colspan="2"><?php echo wp_kses_post( $package_name ); ?></th>
+        </tr>
+        <tr class="shipping sh-meths">
+          <td data-title="<?php echo esc_attr( $package_name ); ?>" colspan="2" class="methods-a">
+          <?php endif ?>
+          <?php if ( 1 < count( $available_methods ) ) : ?>
+            <?php echo is_cart() ? '<div id="shipping-method-list">' : '' ?>
             <ul id="shipping_method">
               <?php foreach ( $available_methods as $method ) : ?>
                 <li>
@@ -43,21 +45,27 @@ if ( ! defined( 'ABSPATH' ) ) {
                     $index, sanitize_title( $method->id ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ), '<span class="s-wrap">' . wc_cart_totals_shipping_method_label( $method ) . '</span>' );
                   do_action( 'woocommerce_after_shipping_rate', $method, $index );
                   ?>
+                  <?php if (sanitize_title( $method->instance_id ) == 8): ?>
+                    <div class="shipping_method_description"><?php echo __('(If ordered Mon-Fri before 4pm)' , 'TEXT_DOAMIN') ?></div>
+                  <?php endif ?>
+                    <?php if (sanitize_title( $method->instance_id ) == 12): ?>
+                    <div class="shipping_method_description"><?php echo __('(If ordered on Friday before 4pm)' , 'TEXT_DOAMIN') ?></div>
+                  <?php endif ?>
                 </li>
               <?php endforeach; ?>
             </ul>
             <?php echo is_cart() ? '</div>' : '' ?>
-          <?php elseif ( 1 === count( $available_methods ) ) :  ?>
-            <?php
-            $method = current( $available_methods );
-            printf( '%3$s <input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d" value="%2$s" class="shipping_method" />', $index, esc_attr( $method->id ), wc_cart_totals_shipping_method_label( $method ) );
-            do_action( 'woocommerce_after_shipping_rate', $method, $index );
-            ?>
-            <?php echo is_cart() ? '<div class="shipping-info shipping-info-checkout">' : ''; ?>
+            <?php elseif ( 1 === count( $available_methods ) ) :  ?>
+              <?php
+              $method = current( $available_methods );
+              printf( '%3$s <input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d" value="%2$s" class="shipping_method" />', $index, esc_attr( $method->id ), wc_cart_totals_shipping_method_label( $method ) );
+              do_action( 'woocommerce_after_shipping_rate', $method, $index );
+              ?>
+              <?php echo is_cart() ? '<div class="shipping-info shipping-info-checkout">' : ''; ?>
               <?php // echo wpautop( __( 'Shipping costs will be calculated once you have provided your address.', 'woocommerce' ) ); ?>
               <?php echo is_cart() ? '</div>' : '' ?>
-            <?php else : ?>
-              <?php echo is_cart() ? '<div class="shipping-info shipping-info-na">' : ''; ?>
+              <?php else : ?>
+                <?php echo is_cart() ? '<div class="shipping-info shipping-info-na">' : ''; ?>
                 <?php echo apply_filters( is_cart() ? 'woocommerce_cart_no_shipping_available_html' : 'woocommerce_no_shipping_available_html', wpautop( __( 'There are no shipping methods available. Please double check your address, or contact us if you need any help.', 'woocommerce' ) ) ); ?>
                 <?php echo is_cart() ? '</div>' : '' ?>
               <?php endif; ?>
@@ -73,4 +81,4 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <?php woocommerce_shipping_calculator(); ?>
                   </div>
                 </div>
-              <?php endif; ?>
+                <?php endif; ?>

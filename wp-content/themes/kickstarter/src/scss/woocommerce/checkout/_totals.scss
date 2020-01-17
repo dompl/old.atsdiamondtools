@@ -75,12 +75,21 @@
         @include _last_child() {
           margin-bottom: 0;
         }
+        .shipping_method_description {
+          margin-left:22px;
+          margin-top: 4px;
+          font-size:13px;
+          font-weight: bold;
+        }
         input {
           display: none;
           &:checked {
             +label {
               @include icon(check-circle);
               color: color(success);
+              +.shipping_method_description {
+                color: color(success);
+              }
             }
           }
         }

@@ -128,6 +128,15 @@ msgstr ""
 msgid "Cache results"
 msgstr ""
 
+msgid "Sync index table"
+msgstr ""
+
+msgid "Automatically update plugin index table when product content was changed. This means that in search there will be always latest product data."
+msgstr ""
+
+msgid "Turn this off if you have any problems with performance."
+msgstr ""
+
 msgid "Main Settings"
 msgstr ""
 
@@ -247,6 +256,15 @@ msgstr ""
 msgid "Only search results page ( no ajax search results )"
 msgstr ""
 
+msgid "Form Styling"
+msgstr ""
+
+msgid "Choose search form layout"
+msgstr ""
+
+msgid "Filter button will be visible only if you have more than one active filter for current search form instance."
+msgstr ""
+
 #: includes/options.php:49
 msgid "Show image"
 msgstr ""
@@ -295,6 +313,12 @@ msgstr ""
 
 #: includes/options.php:94
 msgid "Show product price for each search result."
+msgstr ""
+
+msgid "Show price for out of stock"
+msgstr ""
+
+msgid "Show product price for out of stock products."
 msgstr ""
 
 #: includes/options.php:105
