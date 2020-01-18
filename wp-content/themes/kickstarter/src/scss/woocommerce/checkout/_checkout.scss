@@ -56,6 +56,22 @@
 }
 #ats-checkout {
     padding-top: spacer(.5);
+
+    .wc-address-validation-field {
+        clear: both;
+        width: 100%!important;
+        margin-bottom: 15px!important;
+        margin-top: 15px!important;
+        a {
+          text-transform: uppercase;
+          font-weight: bold;
+          margin-left: 3px;
+          font-size: 14px;
+        }
+    }
+    .wc-address-validation-results {
+      display: none!important;
+    }
     /* Headings */
     h3:not(#ship-to-different-address) {
         text-transform: uppercase;
