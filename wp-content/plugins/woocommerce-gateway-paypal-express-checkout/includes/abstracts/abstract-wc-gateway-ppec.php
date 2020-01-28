@@ -18,7 +18,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 		$this->method_title       = __( 'PayPal Checkout', 'woocommerce-gateway-paypal-express-checkout' );
 		$this->method_description = __( 'Allow customers to conveniently checkout directly with PayPal.', 'woocommerce-gateway-paypal-express-checkout' );
 
-		if ( empty( $_GET['woo-paypal-return'] ) ) {
+		if ( empty( $_GET['woo-paypal-return'] ) && 'yes' !== $this->get_option( 'use_spb' ) ) {
 			$this->order_button_text  = __( 'Continue to payment', 'woocommerce-gateway-paypal-express-checkout' );
 		}
 
@@ -173,6 +173,7 @@ abstract class WC_Gateway_PPEC extends WC_Payment_Gateway {
 						'redirect' => wc_gateway_ppec()->settings->get_paypal_redirect_url( $session->token, true ),
 					);
 				} else {
+					do_action( 'wc_gateway_ppec_process_payment_error', $e, $order );
 					wc_add_notice( $e->getMessage(), 'error' );
 				}
 			}

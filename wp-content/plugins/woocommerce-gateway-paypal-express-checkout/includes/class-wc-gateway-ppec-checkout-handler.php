@@ -128,8 +128,8 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			return $fields;
 		}
 
-		if ( method_exists( WC()->cart, 'needs_shipping' ) && ! WC()->cart->needs_shipping() ) {
-			$not_required_fields = array( 'address_1', 'city', 'postcode', 'country' );
+		if ( method_exists( WC()->cart, 'needs_shipping' ) && ! WC()->cart->needs_shipping() && 'no' === wc_gateway_ppec()->settings->require_billing ) {
+			$not_required_fields = array( 'first_name', 'last_name', 'company', 'address_1', 'address_2', 'city', 'postcode', 'country' );
 			foreach ( $not_required_fields as $not_required_field ) {
 				if ( array_key_exists( $not_required_field, $fields ) ) {
 					$fields[ $not_required_field ]['required'] = false;
@@ -210,7 +210,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			// Set flag so that WC copies billing to shipping
 			$_POST['ship_to_different_address'] = 0;
 
-			$copyable_keys = array( 'address_1', 'address_2', 'city', 'state', 'postcode', 'country' );
+			$copyable_keys = array( 'first_name', 'last_name', 'address_1', 'address_2', 'city', 'state', 'postcode', 'country' );
 			foreach ( $copyable_keys as $copyable_key ) {
 				if ( array_key_exists( $copyable_key, $shipping_details ) ) {
 					$billing_details[ $copyable_key ] = $shipping_details[ $copyable_key ];
@@ -246,32 +246,31 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			wc_add_notice( $e->getMessage(), 'error' );
 			return;
 		}
+
+		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+			$fields = WC()->checkout->checkout_fields['billing'];
+		} else {
+			$fields = WC()->checkout->get_checkout_fields( 'billing' );
+		}
 		?>
 		<h3><?php _e( 'Billing details', 'woocommerce-gateway-paypal-express-checkout' ); ?></h3>
 		<ul>
-			<?php if ( $checkout_details->payer_details->billing_address ) : ?>
+			<?php if ( ! empty( $checkout_details->payer_details->billing_address ) ) : ?>
 				<li><strong><?php _e( 'Address:', 'woocommerce-gateway-paypal-express-checkout' ) ?></strong></br><?php echo WC()->countries->get_formatted_address( $this->get_mapped_billing_address( $checkout_details ) ); ?></li>
-			<?php else : ?>
+			<?php elseif ( ! empty( $checkout_details->payer_details->first_name ) && ! empty( $checkout_details->payer_details->last_name ) ) : ?>
 				<li><strong><?php _e( 'Name:', 'woocommerce-gateway-paypal-express-checkout' ) ?></strong> <?php echo esc_html( $checkout_details->payer_details->first_name . ' ' . $checkout_details->payer_details->last_name ); ?></li>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $checkout_details->payer_details->email ) ) : ?>
 				<li><strong><?php _e( 'Email:', 'woocommerce-gateway-paypal-express-checkout' ) ?></strong> <?php echo esc_html( $checkout_details->payer_details->email ); ?></li>
+			<?php else : ?>
+				<li><?php woocommerce_form_field( 'billing_email', $fields['billing_email'], WC()->checkout->get_value( 'billing_email' ) ); ?></li>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $checkout_details->payer_details->phone_number ) ) : ?>
 				<li><strong><?php _e( 'Phone:', 'woocommerce-gateway-paypal-express-checkout' ) ?></strong> <?php echo esc_html( $checkout_details->payer_details->phone_number ); ?></li>
 			<?php elseif ( 'yes' === wc_gateway_ppec()->settings->require_phone_number ) : ?>
-				<li>
-				<?php
-				if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
-					$fields = WC()->checkout->checkout_fields['billing'];
-				} else {
-					$fields = WC()->checkout->get_checkout_fields( 'billing' );
-				}
-				woocommerce_form_field( 'billing_phone', $fields['billing_phone'], WC()->checkout->get_value( 'billing_phone' ) );
-				?>
-				</li>
+				<li><?php woocommerce_form_field( 'billing_phone', $fields['billing_phone'], WC()->checkout->get_value( 'billing_phone' ) ); ?></li>
 			<?php endif; ?>
 		</ul>
 		<?php
@@ -293,7 +292,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			if ( $checkout->enable_guest_checkout ) {
 				?>
 				<p class="form-row form-row-wide create-account">
-					<input class="input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true) ?> type="checkbox" name="createaccount" value="1" /> <label for="createaccount" class="checkbox"><?php _e( 'Create an account?', '' ); ?></label>
+					<input class="input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true) ?> type="checkbox" name="createaccount" value="1" /> <label for="createaccount" class="checkbox"><?php _e( 'Create an account?', 'woocommerce-gateway-paypal-express-checkout' ); ?></label>
 				</p>
 				<?php
 			}
@@ -302,7 +301,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				?>
 				<div class="create-account">
 
-					<p><?php _e( 'Create an account by entering the information below. If you are a returning customer please login at the top of the page.', 'woocommerce' ); ?></p>
+					<p><?php _e( 'Create an account by entering the information below. If you are a returning customer please login at the top of the page.', 'woocommerce-gateway-paypal-express-checkout' ); ?></p>
 
 					<?php foreach ( $checkout->checkout_fields['account'] as $key => $field ) : ?>
 
@@ -402,10 +401,9 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$name       = explode( ' ', $checkout_details->payments[0]->shipping_address->getName() );
 		$first_name = array_shift( $name );
 		$last_name  = implode( ' ', $name );
-		return array(
+		$result = array(
 			'first_name'    => $first_name,
 			'last_name'     => $last_name,
-			'company'       => $checkout_details->payer_details->business_name,
 			'address_1'     => $checkout_details->payments[0]->shipping_address->getStreet1(),
 			'address_2'     => $checkout_details->payments[0]->shipping_address->getStreet2(),
 			'city'          => $checkout_details->payments[0]->shipping_address->getCity(),
@@ -413,6 +411,10 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			'postcode'      => $checkout_details->payments[0]->shipping_address->getZip(),
 			'country'       => $checkout_details->payments[0]->shipping_address->getCountry(),
 		);
+		if ( ! empty( $checkout_details->payer_details ) && property_exists( $checkout_details->payer_details, 'business_name' ) ) {
+			$result['company'] = $checkout_details->payer_details->business_name;
+		}
+		return $result;
 	}
 
 	/**
@@ -506,19 +508,23 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$customer = WC()->customer;
 
 		// Update billing/shipping addresses.
-		$customer->set_billing_address( $billing_details['address_1'] );
-		$customer->set_billing_address_2( $billing_details['address_2'] );
-		$customer->set_billing_city( $billing_details['city'] );
-		$customer->set_billing_postcode( $billing_details['postcode'] );
-		$customer->set_billing_state( $billing_details['state'] );
-		$customer->set_billing_country( $billing_details['country'] );
+		if ( ! empty( $billing_details ) ) {
+			$customer->set_billing_address( $billing_details['address_1'] );
+			$customer->set_billing_address_2( $billing_details['address_2'] );
+			$customer->set_billing_city( $billing_details['city'] );
+			$customer->set_billing_postcode( $billing_details['postcode'] );
+			$customer->set_billing_state( $billing_details['state'] );
+			$customer->set_billing_country( $billing_details['country'] );
+		}
 
-		$customer->set_shipping_address( $shipping_details['address_1'] );
-		$customer->set_shipping_address_2( $shipping_details['address_2'] );
-		$customer->set_shipping_city( $shipping_details['city'] );
-		$customer->set_shipping_postcode( $shipping_details['postcode'] );
-		$customer->set_shipping_state( $shipping_details['state'] );
-		$customer->set_shipping_country( $shipping_details['country'] );
+		if ( ! empty( $shipping_details ) ) {
+			$customer->set_shipping_address( $shipping_details['address_1'] );
+			$customer->set_shipping_address_2( $shipping_details['address_2'] );
+			$customer->set_shipping_city( $shipping_details['city'] );
+			$customer->set_shipping_postcode( $shipping_details['postcode'] );
+			$customer->set_shipping_state( $shipping_details['state'] );
+			$customer->set_shipping_country( $shipping_details['country'] );
+		}
 	}
 
 	/**
@@ -981,12 +987,14 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 		$destination = $this->get_mapped_shipping_address( $checkout_details );
 
-		$packages[0]['destination']['country']   = $destination['country'];
-		$packages[0]['destination']['state']     = $destination['state'];
-		$packages[0]['destination']['postcode']  = $destination['postcode'];
-		$packages[0]['destination']['city']      = $destination['city'];
-		$packages[0]['destination']['address']   = $destination['address_1'];
-		$packages[0]['destination']['address_2'] = $destination['address_2'];
+		if ( ! empty( $destination ) ) {
+			$packages[0]['destination']['country']   = $destination['country'];
+			$packages[0]['destination']['state']     = $destination['state'];
+			$packages[0]['destination']['postcode']  = $destination['postcode'];
+			$packages[0]['destination']['city']      = $destination['city'];
+			$packages[0]['destination']['address']   = $destination['address_1'];
+			$packages[0]['destination']['address_2'] = $destination['address_2'];
+		}
 
 		return $packages;
 	}
@@ -1008,8 +1016,13 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		$needs_billing_agreement = false;
 
 		if ( empty( $args['order_id'] ) ) {
-			if ( class_exists( 'WC_Subscriptions_Cart' ) ) {
-				$needs_billing_agreement = WC_Subscriptions_Cart::cart_contains_subscription();
+			if ( class_exists( 'WC_Subscriptions_Cart' ) && function_exists( 'wcs_cart_contains_renewal' ) ) {
+				// Needs a billing agreement if the cart contains a subscription
+				// or a renewal of a subscription
+				$needs_billing_agreement = (
+					WC_Subscriptions_Cart::cart_contains_subscription()
+					|| wcs_cart_contains_renewal()
+				);
 			}
 		} else {
 			if ( function_exists( 'wcs_order_contains_subscription' ) ) {
@@ -1020,7 +1033,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			}
 		}
 
-		return $needs_billing_agreement;
+		return apply_filters( 'woocommerce_paypal_express_checkout_needs_billing_agreement', $needs_billing_agreement );
 	}
 
 	/**

@@ -455,12 +455,14 @@ class WC_Gateway_PPEC_Client {
 		$settings = wc_gateway_ppec()->settings;
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 
+		WC()->cart->calculate_totals();
+
 		$decimals      = $settings->get_number_of_decimal_digits();
 		$rounded_total = $this->_get_rounded_total_in_cart();
 		$discounts     = WC()->cart->get_cart_discount_total();
 
 		$details = array(
-			'total_item_amount' => round( WC()->cart->cart_contents_total, $decimals ) + $discounts,
+			'total_item_amount' => round( WC()->cart->cart_contents_total + $discounts + WC()->cart->fee_total, $decimals ),
 			'order_tax'         => round( WC()->cart->tax_total + WC()->cart->shipping_tax_total, $decimals ),
 			'shipping'          => round( WC()->cart->shipping_total, $decimals ),
 			'items'             => $this->_get_paypal_line_items_from_cart(),
@@ -505,6 +507,17 @@ class WC_Gateway_PPEC_Client {
 			$items[] = $item;
 		}
 
+		foreach ( WC()->cart->get_fees() as $fee_key => $fee_values ) {
+			$item   = array(
+				'name'        => $fee_values->name,
+				'description' => '',
+				'quantity'    => 1,
+				'amount'      => round( $fee_values->total, $decimals ),
+			);
+
+			$items[] = $item;
+		}
+
 		return $items;
 	}
 
@@ -523,6 +536,10 @@ class WC_Gateway_PPEC_Client {
 		foreach ( WC()->cart->cart_contents as $cart_item_key => $values ) {
 			$amount         = round( $values['line_subtotal'] / $values['quantity'] , $decimals );
 			$rounded_total += round( $amount * $values['quantity'], $decimals );
+		}
+
+		foreach ( WC()->cart->get_fees() as $fee_key => $fee_values ) {
+			$rounded_total += round( $fee_values->total, $decimals );
 		}
 
 		return $rounded_total;
@@ -577,7 +594,7 @@ class WC_Gateway_PPEC_Client {
 		if ( $details['total_item_amount'] == $discounts ) {
 			// Omit line items altogether.
 			unset( $details['items'] );
-		} else if ( $discounts > 0 && $discounts < $details['total_item_amount'] ) {
+		} else if ( $discounts > 0 && $discounts < $details['total_item_amount'] && ! empty( $details['items'] ) ) {
 			// Else if there is discount, add them to the line-items
 			$details['items'][] = $this->_get_extra_discount_line_item($discounts);
 		}
@@ -585,10 +602,10 @@ class WC_Gateway_PPEC_Client {
 		$details['ship_discount_amount'] = 0;
 
 		// AMT
-		$details['order_total']       = $details['order_total'] - $discounts;
+		$details['order_total']       = round( $details['order_total'] - $discounts, $decimals );
 
 		// ITEMAMT
-		$details['total_item_amount'] = $details['total_item_amount'] - $discounts;
+		$details['total_item_amount'] = round( $details['total_item_amount'] - $discounts, $decimals );
 
 		// If the totals don't line up, adjust the tax to make it work (it's
 		// probably a tax mismatch).
@@ -626,16 +643,26 @@ class WC_Gateway_PPEC_Client {
 
 		/**
 		 * Filter PayPal order details.
-		 * 
+		 *
 		 * Provide opportunity for developers to modify details passed to PayPal.
 		 * This was originally introduced to add a mechanism to allow for
 		 * decimal product quantity support.
-		 * 
+		 *
 		 * @since 1.6.6
-		 * 
+		 *
 		 * @param array $details Current PayPal order details
 		 */
 		return apply_filters( 'woocommerce_paypal_express_checkout_get_details', $details );
+	}
+
+	protected function _get_total_order_fees( $order ) {
+		$total = 0;
+		$fees = $order->get_fees();
+		foreach( $fees as $fee ) {
+			$total = $total + $fee->get_amount();
+		}
+
+		return $total;
 	}
 
 	/**
@@ -656,9 +683,10 @@ class WC_Gateway_PPEC_Client {
 		$decimals      = $settings->is_currency_supports_zero_decimal() ? 0 : 2;
 		$rounded_total = $this->_get_rounded_total_in_order( $order );
 		$discounts     = $order->get_total_discount();
+		$fees          = round( $this->_get_total_order_fees( $order ), $decimals );
 
 		$details = array(
-			'total_item_amount' => round( $order->get_subtotal(), $decimals ) + $discounts,
+			'total_item_amount' => round( $order->get_subtotal() + $discounts + $fees, $decimals ),
 			'order_tax'         => round( $order->get_total_tax(), $decimals ),
 			'shipping'          => round( ( version_compare( WC_VERSION, '3.0', '<' ) ? $order->get_total_shipping() : $order->get_shipping_total() ), $decimals ),
 			'items'             => $this->_get_paypal_line_items_from_order( $order ),
@@ -779,13 +807,25 @@ class WC_Gateway_PPEC_Client {
 		$order    = wc_get_order( $order );
 
 		$items = array();
-		foreach ( $order->get_items() as $cart_item_key => $values ) {
-			$amount = round( $values['line_subtotal'] / $values['qty'] , $decimals );
-			$item   = array(
-				'name'     => $values['name'],
-				'quantity' => $values['qty'],
-				'amount'   => $amount,
-			);
+		foreach ( $order->get_items( array( 'line_item', 'fee' ) ) as $cart_item_key => $values ) {
+
+
+			if( 'fee' === $values['type']) {
+				$item   = array(
+					'name'     => $values['name'],
+					'quantity' => 1,
+					'amount'   => round( $values['line_total'], $decimals),
+				);
+			} else {
+				$amount = round( $values['line_subtotal'] / $values['qty'] , $decimals );
+				$item   = array(
+					'name'     => $values['name'],
+					'quantity' => $values['qty'],
+					'amount'   => $amount,
+				);
+
+			}
+
 
 			$items[] = $item;
 		}
@@ -808,9 +848,14 @@ class WC_Gateway_PPEC_Client {
 		$order    = wc_get_order( $order );
 
 		$rounded_total = 0;
-		foreach ( $order->get_items() as $cart_item_key => $values ) {
-			$amount         = round( $values['line_subtotal'] / $values['qty'] , $decimals );
-			$rounded_total += round( $amount * $values['qty'], $decimals );
+		foreach ( $order->get_items( array( 'line_item', 'fee' ) ) as $cart_item_key => $values ) {
+			if( 'fee' === $values['type']) {
+				$amount = round( $values['line_total'], $decimals);
+			} else {
+				$amount = round( $values['line_subtotal'] / $values['qty'] , $decimals );
+				$amount = round( $amount * $values['qty'], $decimals );
+			}
+			$rounded_total += $amount;
 		}
 
 		return $rounded_total;
@@ -1002,7 +1047,7 @@ class WC_Gateway_PPEC_Client {
 			'SHIPDISCAMT'   => $details['ship_discount_amount'],
 			'INSURANCEAMT'  => 0,
 			'HANDLINGAMT'   => 0,
-			'CURRENCYCODE'  => get_woocommerce_currency(),
+			'CURRENCYCODE'  => $old_wc ? $order->order_currency : $order->get_currency(),
 			'NOTIFYURL'     => WC()->api_request_url( 'WC_Gateway_PPEC' ),
 			'PAYMENTACTION' => $settings->get_paymentaction(),
 			'INVNUM'        => $settings->invoice_prefix . $order->get_order_number(),
@@ -1012,7 +1057,14 @@ class WC_Gateway_PPEC_Client {
 			) ),
 		);
 
-		if ( ! empty( $details['shipping_address'] ) ) {
+		// We want to add the shipping parameters only if we have all of the required
+		// parameters for a DoReferenceTransaction call. Otherwise, we don't want to
+		// include any of the shipping parameters, even if we have some of them.
+		// The call will fail if not all of the required paramters are present.
+		if (
+			! empty( $details['shipping_address'] )
+			&& $details['shipping_address']->has_all_required_shipping_params()
+		) {
 			$params = array_merge(
 				$params,
 				$details['shipping_address']->getAddressParams( 'SHIPTO' )

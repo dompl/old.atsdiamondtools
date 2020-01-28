@@ -51,7 +51,7 @@ class WC_Gateway_PPEC_With_SPB_Addons extends WC_Gateway_PPEC_With_PayPal_Addons
 			$session->checkout_completed = true;
 			$session->payer_id           = $_POST['payerID'];
 			$session->token              = $_POST['paymentToken'];
-	
+
 			WC()->session->set( 'paypal', $session );
 		}
 

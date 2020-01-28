@@ -23,6 +23,8 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
         private $posts_by_query = array();
 
+        private $data = array();
+
         /**
          * Return a singleton instance of the current class
          *
@@ -50,16 +52,28 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         public function setup() {
 
             // Make sure we return nothing for MySQL posts query
-            add_filter( 'posts_request', array( $this, 'filter_posts_request' ), 10, 2 );
+            add_filter( 'posts_request', array( $this, 'filter_posts_request' ), 999, 2 );
 
             // Query and filter to WP_Query
-            add_filter( 'the_posts', array( $this, 'filter_the_posts' ), 10, 2 );
+            add_filter( 'the_posts', array( $this, 'filter_the_posts' ), 999, 2 );
 
             // Add header
 		    add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ), 5 );
 
+            // Overwrite query
+            add_action( 'pre_get_posts', array( $this, 'pre_get_posts_overwrite' ), 999 );
+
             // Nukes the FOUND_ROWS() database query
 		    add_filter( 'found_posts_query', array( $this, 'filter_found_posts_query' ), 5, 2 );
+
+            // WooCommerce default widget filters
+            add_filter( 'woocommerce_layered_nav_link', array( $this, 'woocommerce_layered_nav_link' ) );
+            add_filter( 'woocommerce_get_filtered_term_product_counts_query', array( $this, 'woocommerce_get_filtered_term_product_counts_query' ), 999 );
+            add_filter( 'woocommerce_price_filter_sql', array( $this, 'woocommerce_price_filter_sql' ), 999 );
+
+            add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 999, 2 );
+
+            add_filter( 'body_class', array( $this, 'body_class' ), 999 );
 
         }
 
@@ -79,30 +93,13 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             $new_posts = array();
 
             $search_query = $query->query_vars['s'];
-            
-            $posts_array = (array) aws_search( $search_query );
+            $search_res = $this->search( $search_query, $query );
             $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
 
-            $query->found_posts = count( $posts_array['products'] );
-            $query->max_num_pages = ceil( count( $posts_array['products'] ) / $posts_per_page );
+            $query->found_posts = count( $search_res['all'] );
+            $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
 
-            $paged  = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
-            $offset = ( $paged > 1 ) ? $paged * $posts_per_page - $posts_per_page : 0;
-
-            if ( $query->query && ( isset( $query->query['orderby'] ) || isset( $query->query_vars['orderby'] ) ) ) {
-
-                if ( isset( $posts_array['products'] ) && ! empty( $posts_array['products'] ) ) {
-
-                    $posts_array['products'] = AWS()->order( $posts_array['products'], $query );
-
-                }
-
-            }
-
-            $products = array_slice( $posts_array['products'], $offset, $posts_per_page );
-
-
-            foreach ( $products as $post_array ) {
+            foreach ( $search_res['products'] as $post_array ) {
                 $post = new stdClass();
 
                 $post_array = (array) $post_array;
@@ -162,6 +159,38 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
+         * Filter the posts array.
+         *
+         * @param array $posts
+         * @param object $query
+         * @return array|null
+         */
+        public function posts_pre_query( $posts, $query ) {
+
+            if ( isset( $_GET['type_aws'] ) && isset( $query->query_vars['s'] ) && $query->query && isset( $query->query['fields'] ) && $query->query['fields'] == 'ids' &&
+                isset( $this->data['is_elementor'] ) && $this->data['is_elementor']  )
+            {
+
+                $products_ids = array();
+                $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
+                $search_query = $_GET['s'];
+
+                $search_res = $this->search( $search_query, $query );
+
+                $query->found_posts = count( $search_res['all'] );
+                $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+
+                foreach ( $search_res['products'] as $product ) {
+                    $products_ids[] = $product['id'];
+                }
+
+                $posts = $products_ids;
+
+            }
+            return $posts;
+        }
+
+        /**
          * Filter the posts array to contain ES query results in EP_Post form. Pull previously queried posts.
          *
          * @param array $posts
@@ -207,6 +236,36 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
+         * Make necessary changes in main query.
+         *
+         * @param $query
+         */
+        public function pre_get_posts_overwrite( $query ) {
+            if ( ! $this->aws_searchpage_enabled( $query ) ) {
+                return;
+            }
+
+            // Divi builder fix
+            if ( defined( 'ET_CORE' ) && $GLOBALS && isset( $GLOBALS['et_builder_used_in_wc_shop'] ) && $GLOBALS['et_builder_used_in_wc_shop'] ) {
+
+                $GLOBALS['et_builder_used_in_wc_shop'] = false;
+
+                $query->set( 'page_id', 0 );
+                $query->set( 'post_type', 'product' );
+                $query->set( 'posts_per_page', apply_filters( 'aws_posts_per_page', get_option( 'posts_per_page' ) ) );
+                $query->set( 'wc_query', 'product_query' );
+                $query->set( 'meta_query', array() );
+
+                $query->is_singular          = false;
+                $query->is_page              = false;
+                $query->is_post_type_archive = true;
+                $query->is_archive           = true;
+
+            }
+
+        }
+
+        /**
          * Remove the found_rows from the SQL Query
          *
          * @param string $sql
@@ -222,6 +281,150 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
+         * Perform the search.
+         *
+         * @param string $s
+         * @param object $query
+         * @return array
+         */
+        private function search( $s, $query ) {
+
+            $hash = spl_object_hash( $query );
+
+            if ( isset( $this->data['search_res'][$hash] ) ) {
+                return $this->data['search_res'][$hash];
+            }
+
+            if ( isset( $this->data['search_res']['s'] ) ) {
+                $posts_array = $this->data['search_res']['s'];
+            } else {
+                $posts_array = (array) aws_search( $s );
+                $this->data['search_res']['s'] = $posts_array;
+            }
+
+            $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
+            $post_array_products = $posts_array['products'];
+
+            // Filter and order output
+            if ( $post_array_products && is_array( $post_array_products ) && ! empty( $post_array_products ) ) {
+                $post_array_products = AWS()->order( $post_array_products, $query );
+            }
+
+            if ( is_numeric( $posts_per_page ) && (int) $posts_per_page < 0 ) {
+                $posts_per_page = 999999;
+            }
+
+            $paged  = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
+            $offset = ( $paged > 1 ) ? $paged * $posts_per_page - $posts_per_page : 0;
+
+            $products = array_slice( $post_array_products, $offset, $posts_per_page );
+
+            $this->data['all_products'] = $post_array_products;
+
+            $this->data['search_res'][$hash] = array(
+                'all'      => $post_array_products,
+                'products' => $products
+            );
+
+            return $this->data['search_res'][$hash];
+
+        }
+
+        /*
+         * Update links for WooCommerce filter widgets
+         */
+        public function woocommerce_layered_nav_link( $link ) {
+            if ( ! isset( $_GET['type_aws'] ) ) {
+                return $link;
+            }
+
+            $first_char = '&';
+
+            if ( strpos( $link, '?' ) === false ) {
+                $first_char = '?';
+            }
+
+            if ( isset( $_GET['type_aws'] ) && strpos( $link, 'type_aws' ) === false ) {
+                $link = $link . $first_char . 'type_aws=true';
+            }
+
+            return $link;
+
+        }
+
+        /*
+        * Enable cache for WooCommerce filter widget
+        */
+        public function woocommerce_layered_nav_count_maybe_cache( $cache ) {
+            if ( ! isset( $_GET['type_aws'] ) ) {
+                return $cache;
+            }
+            return true;
+        }
+
+        /*
+         * Change WooCommerce attributes filter widget query
+         */
+        public function woocommerce_get_filtered_term_product_counts_query( $query ) {
+            if ( ! isset( $_GET['type_aws'] ) ) {
+                return $query;
+            }
+
+            $search = ' AND ' . WC_Query::get_main_search_query_sql();
+            $product_ids = array();
+
+            $query['where'] = str_replace( $search, '', $query['where'] );
+
+            if ( isset( $this->data['all_products'] ) && $this->data['all_products'] ) {
+                global $wpdb;
+
+                foreach( $this->data['all_products'] as $sproduct ) {
+                    $product_ids[] = $sproduct['id'];
+                }
+
+                $query['where'] .= " AND {$wpdb->posts}.ID IN (". implode( ',', array_map( 'absint', $product_ids ) ) .")";
+
+            }
+
+            return $query;
+        }
+
+        /*
+         * Change WooCommerce price filter widget query
+         */
+        public function woocommerce_price_filter_sql( $sql ) {
+
+            if ( isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] ) {
+                global $wpdb;
+
+                foreach( $this->data['all_products'] as $sproduct ) {
+                    $product_ids[] = $sproduct['id'];
+                }
+
+                $sql = "SELECT min( min_price ) as min_price, MAX( max_price ) as max_price
+                        FROM {$wpdb->wc_product_meta_lookup}
+                        WHERE product_id IN (". implode( ',', array_map( 'absint', $product_ids ) ) .")";
+
+            }
+
+            return $sql;
+
+        }
+
+        /*
+         * Check some strings inside body classes
+         */
+        function body_class( $classes ) {
+            foreach( $classes as $class ) {
+                if ( strpos( $class, 'elementor-page-' ) !== false ) {
+                    $this->data['is_elementor'] = true;
+                    break;
+                }
+            }
+            return $classes;
+        }
+
+        /**
          * Check if we should override default search query
          *
          * @param string $query
@@ -229,10 +432,14 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         private function aws_searchpage_enabled( $query ) {
             $enabled = true;
+
+            $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true :
+                ( ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' ) ? true : false );
+
             if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
                 ! isset( $query->query_vars['s'] ) ||
                 ! $query->is_search() ||
-                ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) !== 'product' )
+                ! $post_type_product
             ) {
                 $enabled = false;
             }

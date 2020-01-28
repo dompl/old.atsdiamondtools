@@ -38,7 +38,7 @@
 	// Map funding method settings to enumerated options provided by PayPal.
 	var getFundingMethods = function( methods ) {
 		if ( ! methods ) {
-			return null;
+			return undefined;
 		}
 
 		var paypal_funding_methods = [];
@@ -59,12 +59,18 @@
 		var allowed       = wc_ppec_context[ prefix + 'allowed_methods' ];
 		var disallowed    = wc_ppec_context[ prefix + 'disallowed_methods' ];
 
-		var selector = isMiniCart ? '#woo_pp_ec_button_mini_cart' : '#woo_pp_ec_button_' + wc_ppec_context.page;
+		var selector     = isMiniCart ? '#woo_pp_ec_button_mini_cart' : '#woo_pp_ec_button_' + wc_ppec_context.page;
+		var fromCheckout = 'checkout' === wc_ppec_context.page && ! isMiniCart;
+
+		// Don't render if already rendered in DOM.
+		if ( $( selector ).children().length ) {
+			return;
+		}
 
 		paypal.Button.render( {
 			env: wc_ppec_context.environment,
 			locale: wc_ppec_context.locale,
-			commit: 'checkout' === wc_ppec_context.page && ! isMiniCart,
+			commit: fromCheckout,
 
 			funding: {
 				allowed: getFundingMethods( allowed ),
@@ -106,7 +112,7 @@
 							.attr( 'value', wc_ppec_context.start_checkout_nonce )
 						)
 						.add( $( '<input type="hidden" name="from_checkout" /> ' )
-							.attr( 'value', 'checkout' === wc_ppec_context.page && ! isMiniCart ? 'yes' : 'no' )
+							.attr( 'value', fromCheckout ? 'yes' : 'no' )
 						)
 						.serialize();
 
@@ -129,7 +135,7 @@
 			},
 
 			onAuthorize: function( data, actions ) {
-				if ( 'checkout' === wc_ppec_context.page && ! isMiniCart ) {
+				if ( fromCheckout ) {
 					// Pass data necessary for authorizing payment to back-end.
 					$( 'form.checkout' )
 						.append( $( '<input type="hidden" name="paymentToken" /> ' ).attr( 'value', data.paymentToken ) )
@@ -146,7 +152,9 @@
 
 	// Render cart, single product, or checkout buttons.
 	if ( wc_ppec_context.page ) {
-		render();
+		if ( 'checkout' !== wc_ppec_context.page ) {
+			render();
+		}
 		$( document.body ).on( 'updated_cart_totals updated_checkout', render.bind( this, false ) );
 	}
 

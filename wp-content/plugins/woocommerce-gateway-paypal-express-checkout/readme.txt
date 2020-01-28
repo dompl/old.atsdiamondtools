@@ -1,9 +1,9 @@
 === WooCommerce PayPal Checkout Payment Gateway ===
-Contributors: automattic, woothemes, akeda, dwainm, royho, allendav, slash1andy, woosteve, spraveenitpro, mikedmoore, fernashes, shellbeezy, danieldudzic, mikaey, fullysupportedphil, dsmithweb, corsonr, bor0, zandyring, pauldechov
+Contributors: automattic, woothemes, akeda, dwainm, royho, allendav, slash1andy, woosteve, spraveenitpro, mikedmoore, fernashes, shellbeezy, danieldudzic, mikaey, fullysupportedphil, dsmithweb, corsonr, bor0, zandyring, pauldechov, robobot3000
 Tags: ecommerce, e-commerce, commerce, woothemes, wordpress ecommerce, store, sales, sell, shop, shopping, cart, checkout, configurable, paypal
 Requires at least: 4.4
-Tested up to: 5.0.2
-Stable tag: 1.6.6
+Tested up to: 5.3
+Stable tag: 1.6.18
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -100,6 +100,57 @@ Please use this to inform us about bugs, or make contributions via PRs.
 9. Initiate checkout from mini-cart.
 
 == Changelog ==
+
+= 1.6.18 - 2019-12-05 =
+* Fix - Send fees to PayPal as line items
+* Fix - Fix error 10426 when coupons are used
+* Fix - Call to a member function has_session() on null
+* Add - Notice about legacy payment buttons deprecation
+* Fix - Use order currency when renewing subscription instead of store currency
+* Update - WooCommerce 3.8 compatibility
+* Update - WordPress 5.3 compatibility
+
+= 1.6.17 - 2019-08-08 =
+* Update - WooCommerce 3.7 compatibility
+* Add - Filter to require display of billing agreement during checkout
+* Add - Add CURRENCYCODE to capture_payment
+* Add - Add filter for buttons on products
+* Fix - Skip wasteful render on initial Checkout page load
+* Fix - Appearance tweaks on Checkout screen
+
+= 1.6.16 - 2019-07-18 =
+* Fix - Don't require address for renewal of virtual subscriptions
+* Fix - Avoid broken confirmation screen edge case after 10486 redirect
+
+= 1.6.15 - 2019-06-19 =
+* Fix - Prevent PHP errors when no billing details are present in PP response
+* Fix - Require billing address for virtual products when enabled
+* Add - Hook when a payment error occurs
+
+= 1.6.14 - 2019-05-08 =
+* Fix - Failing checkout when no addons are used
+
+= 1.6.12 - 2019-05-08 =
+* Fix - Better handling of virtual subscriptions when billing address is not required
+* Fix - Prevent errors showing when purchasing a virtual product with WP_DEBUG enabled
+
+= 1.6.11 - 2019-04-17 =
+* Fix/Performance - Prevent db option updates during bootstrap on each page load
+* Tweak = WC 3.6 compatibiliy.
+
+= 1.6.10 - 2019-03-05 =
+* Fix - Use only product attributes when adding to cart
+
+= 1.6.9 - 2019-02-03 =
+* Fix - Avoid SPB render error by tweaking 'allowed' funding methods' empty value
+
+= 1.6.8 - 2019-01-25 =
+* Fix - Guard against themes applying filter with too few params
+
+= 1.6.7 - 2019-01-25 =
+* Fix - Error 10413 when using coupons
+* Fix: All variation details when using buttons on product pages are kept
+* Fix: Always render the PayPal buttons in the mini cart
 
 = 1.6.6 - 2019-01-09 =
 * Fix - Discount items were not being included

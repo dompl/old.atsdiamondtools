@@ -47,7 +47,7 @@
                     return;
                 }
 
-                if ( typeof cachedResponse[searchFor] != 'undefined') {
+                if ( cachedResponse.hasOwnProperty( searchFor ) ) {
                     methods.showResults( cachedResponse[searchFor] );
                     return;
                 }
@@ -74,8 +74,10 @@
                 var data = {
                     action: 'aws_action',
                     keyword : searchFor,
-                    page: 0,
-                    lang: d.lang
+                    page: d.pageId,
+                    tax: d.tax,
+                    lang: d.lang,
+                    pageurl: window.location.href
                 };
 
                 requests.push(
@@ -97,7 +99,9 @@
                             methods.analytics( searchFor );
 
                         },
-                        error: function (data, dummy) {
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log( "Request failed: " + textStatus );
+                            methods.hideLoader();
                         }
                     })
 
@@ -107,42 +111,33 @@
 
             showResults: function( response ) {
 
+                var resultNum = 0;
                 var html = '<ul>';
 
+                if ( typeof response.tax !== 'undefined' ) {
 
-                if ( ( typeof response.cats !== 'undefined' ) && response.cats.length > 0 ) {
+                    $.each(response.tax, function (i, taxes) {
 
-                    $.each(response.cats, function (i, result) {
+                        if ( ( typeof taxes !== 'undefined' ) && taxes.length > 0 ) {
+                            $.each(taxes, function (i, taxitem) {
 
-                        html += '<li class="aws_result_item aws_result_cat">';
-                        html += '<a class="aws_result_link" href="' + result.link + '" >';
-                        html += '<span class="aws_result_content">';
-                        html += '<span class="aws_result_title">';
-                        html += result.name;
-                        html += '<span class="aws_result_count"> (' + result.count + ')</span>';
-                        html += '</span>';
-                        html += '</span>';
-                        html += '</a>';
-                        html += '</li>';
+                                resultNum++;
 
-                    });
+                                html += '<li class="aws_result_item aws_result_tag">';
+                                    html += '<a class="aws_result_link" href="' + taxitem.link + '" >';
+                                        html += '<span class="aws_result_content">';
+                                            html += '<span class="aws_result_title">';
+                                                html += taxitem.name;
+                                                if ( taxitem.count ) {
+                                                    html += '<span class="aws_result_count">&nbsp;(' + taxitem.count + ')</span>';
+                                                }
+                                            html += '</span>';
+                                        html += '</span>';
+                                    html += '</a>';
+                                html += '</li>';
 
-                }
-
-                if ( ( typeof response.tags !== 'undefined' ) && response.tags.length > 0 ) {
-
-                    $.each(response.tags, function (i, result) {
-
-                        html += '<li class="aws_result_item aws_result_tag">';
-                        html += '<a class="aws_result_link" href="' + result.link + '" >';
-                        html += '<span class="aws_result_content">';
-                        html += '<span class="aws_result_title">';
-                        html += result.name;
-                        html += '<span class="aws_result_count"> (' + result.count + ')</span>';
-                        html += '</span>';
-                        html += '</span>';
-                        html += '</a>';
-                        html += '</li>';
+                            });
+                        }
 
                     });
 
@@ -151,6 +146,8 @@
                 if ( ( typeof response.products !== 'undefined' ) && response.products.length > 0 ) {
 
                     $.each(response.products, function (i, result) {
+
+                        resultNum++;
 
                         html += '<li class="aws_result_item">';
                         html += '<a class="aws_result_link" href="' + result.link + '" >';
@@ -210,7 +207,7 @@
 
                 }
 
-                if ( ( typeof response.cats !== 'undefined' ) && response.cats.length <= 0 && ( typeof response.tags !== 'undefined' ) && response.tags.length <= 0 && ( typeof response.products !== 'undefined' ) && response.products.length <= 0 ) {
+                if ( ! resultNum ) {
                     html += '<li class="aws_result_item aws_no_result">' + translate.noresults + '</li>';
                 }
 
@@ -222,6 +219,10 @@
                 $(d.resultBlock).html( html );
 
                 methods.showResultsBlock();
+
+                if ( eShowResults ) {
+                    self[0].dispatchEvent( eShowResults );
+                }
 
             },
 
@@ -279,7 +280,7 @@
                     var top = 0;
                     var left = 0;
 
-                    if ( bodyPosition === 'relative' ) {
+                    if ( bodyPosition === 'relative' || bodyPosition === 'absolute' ) {
                         top = offset.top + $(self).innerHeight() - bodyOffset.top;
                         left = offset.left - bodyOffset.left;
                     } else {
@@ -300,7 +301,16 @@
             analytics: function( label ) {
                 if ( d.useAnalytics ) {
                     try {
-                        ga('send', 'event', 'AWS search', 'AWS Search Term', label);
+                        if ( typeof gtag !== 'undefined' ) {
+                            gtag('event', 'AWS search', {
+                                'event_label': label,
+                                'event_category': 'AWS Search Term'
+                            });
+                        }
+                        if ( typeof ga !== 'undefined' ) {
+                            ga('send', 'event', 'AWS search', 'AWS Search Term', label);
+                            ga( 'send', 'pageview', '/?s=' + encodeURIComponent( 'ajax-search:' + label ) );
+                        }
                     }
                     catch (error) {
                     }
@@ -317,24 +327,29 @@
                 var check = false;
                 (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
                 return check;
-            }
+            },
 
         };
 
 
-        var self           = $(this),
-            $searchForm    = self.find('.aws-search-form'),
-            $searchField   = self.find('.aws-search-field'),
-            $searchButton  = self.find('.aws-search-btn'),
-            haveResults    = false,
-            requests       = Array(),
-            searchFor      = '',
+        var self            = $(this),
+            $searchForm     = self.find('.aws-search-form'),
+            $searchField    = self.find('.aws-search-field'),
+            $searchButton   = self.find('.aws-search-btn'),
+            haveResults     = false,
+            eShowResults    = false,
+            requests        = Array(),
+            searchFor       = '',
             keyupTimeout,
             cachedResponse = new Array();
 
-
         var ajaxUrl = ( self.data('url') !== undefined ) ? self.data('url') : false;
 
+        if ( document.createEvent ){
+            eShowResults = document.createEvent("Event");
+            eShowResults.initEvent('awsShowingResults', true, true);
+            eShowResults.eventName = 'awsShowingResults';
+        }
 
         if ( options === 'relayout' ) {
             var d = self.data(pluginPfx);
@@ -346,7 +361,7 @@
         instance++;
 
         self.data( pluginPfx, {
-            minChars  : ( self.data('min-chars')   !== undefined ) ? self.data('min-chars') : 1,
+            minChars  : ( self.data('min-chars') !== undefined ) ? self.data('min-chars') : 1,
             lang : ( self.data('lang') !== undefined ) ? self.data('lang') : false,
             showLoader: ( self.data('show-loader') !== undefined ) ? self.data('show-loader') : true,
             showMore: ( self.data('show-more') !== undefined ) ? self.data('show-more') : true,
@@ -354,7 +369,9 @@
             showClear: ( self.data('show-clear') !== undefined ) ? self.data('show-clear') : false,
             useAnalytics: ( self.data('use-analytics') !== undefined ) ? self.data('use-analytics') : false,
             instance: instance,
-            resultBlock: '#aws-search-result-' + instance
+            resultBlock: '#aws-search-result-' + instance,
+            pageId: ( self.data('page-id') !== undefined ) ? self.data('page-id') : 0,
+            tax: ( self.data('tax') !== undefined ) ? self.data('tax') : 0
         });
 
 
@@ -489,11 +506,37 @@
 
 
     // Call plugin method
-    $(document).ready(function() {
+    $(document).ready( function() {
 
         $(selector).each( function() {
             $(this).aws_search();
         });
+
+        // Enfold header
+        $('[data-avia-search-tooltip]').on( 'click', function() {
+            window.setTimeout(function(){
+                $(selector).aws_search();
+            }, 1000);
+        } );
+
+        // Search results filters fix
+        var $filters_widget = $('.woocommerce.widget_layered_nav_filters');
+        var searchQuery = window.location.search;
+
+        if ( $filters_widget.length > 0 && searchQuery ) {
+            if ( searchQuery.indexOf('type_aws=true') !== -1 ) {
+                var $filterLinks = $filters_widget.find('ul li.chosen a');
+                if ( $filterLinks.length > 0 ) {
+                    var addQuery = '&type_aws=true';
+                    $filterLinks.each( function() {
+                        var filterLink = $(this).attr("href");
+                        if ( filterLink && filterLink.indexOf('post_type=product') !== -1 ) {
+                            $(this).attr( "href", filterLink + addQuery );
+                        }
+                    });
+                }
+            }
+        }
 
     });
 

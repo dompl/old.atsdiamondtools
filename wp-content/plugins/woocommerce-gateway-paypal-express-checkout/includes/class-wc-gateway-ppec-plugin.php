@@ -161,15 +161,13 @@ class WC_Gateway_PPEC_Plugin {
 			$this->_check_credentials();
 
 			$this->_bootstrapped = true;
-			delete_option( 'wc_gateway_ppce_bootstrap_warning_message' );
-			delete_option( 'wc_gateway_ppce_prompt_to_connect' );
 		} catch ( Exception $e ) {
 			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
-				update_option( 'wc_gateway_ppce_bootstrap_warning_message', $e->getMessage() );
+				$this->bootstrap_warning_message = $e->getMessage();
 			}
 
 			if ( self::NOT_CONNECTED === $e->getCode() ) {
-				update_option( 'wc_gateway_ppce_prompt_to_connect', $e->getMessage() );
+				$this->prompt_to_connect = $e->getMessage();
 			}
 
 			add_action( 'admin_notices', array( $this, 'show_bootstrap_warning' ) );
@@ -177,7 +175,7 @@ class WC_Gateway_PPEC_Plugin {
 	}
 
 	public function show_bootstrap_warning() {
-		$dependencies_message = get_option( 'wc_gateway_ppce_bootstrap_warning_message', '' );
+		$dependencies_message = isset( $this->bootstrap_warning_message ) ? $this->bootstrap_warning_message : null;
 		if ( ! empty( $dependencies_message ) && 'yes' !== get_option( 'wc_gateway_ppec_bootstrap_warning_message_dismissed', 'no' ) ) {
 			?>
 			<div class="notice notice-warning is-dismissible ppec-dismiss-bootstrap-warning-message">
@@ -199,7 +197,7 @@ class WC_Gateway_PPEC_Plugin {
 			<?php
 		}
 
-		$prompt_connect = get_option( 'wc_gateway_ppce_prompt_to_connect', '' );
+		$prompt_connect = isset( $this->prompt_to_connect ) ? $this->prompt_to_connect : null;
 		if ( ! empty( $prompt_connect ) && 'yes' !== get_option( 'wc_gateway_ppec_prompt_to_connect_message_dismissed', 'no' ) ) {
 			?>
 			<div class="notice notice-warning is-dismissible ppec-dismiss-prompt-to-connect-message">
@@ -235,26 +233,13 @@ class WC_Gateway_PPEC_Plugin {
 			return;
 		}
 
-		if ( 'yes' !== get_option( 'wc_gateway_ppec_spb_notice_dismissed', 'no' ) ) {
-			$setting_link = $this->get_admin_setting_link();
-			$message = sprintf( __( '<p>PayPal&nbsp;Checkout with new <strong>Smart&nbsp;Payment&nbsp;Buttons™</strong> gives your customers the power to pay the way they want without leaving your site.</p><p>The <strong>existing buttons will be deprecated and removed</strong> in future releases. Upgrade to Smart&nbsp;Payment&nbsp;Buttons in the <a href="%s">PayPal&nbsp;Checkout settings</a>.</p>', 'woocommerce-gateway-paypal-express-checkout' ), esc_url( $setting_link ) );
-			?>
-			<div class="notice notice-warning is-dismissible ppec-dismiss-spb-notice">
-				<?php echo wp_kses( $message, array( 'a' => array( 'href' => array() ), 'strong' => array(), 'p' => array() ) ); ?>
-			</div>
-			<script>
-			( function( $ ) {
-				$( '.ppec-dismiss-spb-notice' ).on( 'click', '.notice-dismiss', function() {
-					jQuery.post( "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>", {
-						action: "ppec_dismiss_notice_message",
-						dismiss_action: "ppec_dismiss_spb_notice",
-						nonce: "<?php echo esc_js( wp_create_nonce( 'ppec_dismiss_notice' ) ); ?>"
-					} );
-				} );
-			} )( jQuery );
-			</script>
-			<?php
-		}
+		$setting_link = $this->get_admin_setting_link();
+		$message = sprintf( __( '<p>PayPal Checkout with new <strong>Smart Payment Buttons™</strong> gives your customers the power to pay the way they want without leaving your site.</p><p>The <strong>existing buttons will be removed</strong> in the <strong>next release</strong>. Please upgrade to Smart Payment Buttons on the <a href="%s">PayPal Checkout settings page</a>.</p>', 'woocommerce-gateway-paypal-express-checkout' ), esc_url( $setting_link ) );
+		?>
+		<div class="notice notice-error">
+			<?php echo wp_kses( $message, array( 'a' => array( 'href' => array() ), 'strong' => array(), 'p' => array() ) ); ?>
+		</div>
+		<?php
 	}
 
 	/**
@@ -275,9 +260,6 @@ class WC_Gateway_PPEC_Plugin {
 				break;
 			case 'ppec_dismiss_prompt_to_connect':
 				update_option( 'wc_gateway_ppec_prompt_to_connect_message_dismissed', 'yes' );
-				break;
-			case 'ppec_dismiss_spb_notice':
-				update_option( 'wc_gateway_ppec_spb_notice_dismissed', 'yes' );
 				break;
 		}
 		wp_die();

@@ -11,17 +11,21 @@
 class WPSEO_WooCommerce_Shop_Page implements WPSEO_WordPress_Integration {
 
 	/**
-	 * @var int Holds the shop page id.
+	 * Holds the shop page id.
+	 *
+	 * @var int
 	 */
 	protected static $shop_page_id;
 
 	/**
-	 * @var bool True when current page is the shop page.
+	 * True when current page is the shop page.
+	 *
+	 * @var bool
 	 */
 	protected static $is_shop_page;
 
 	/**
-	 * Registers the hooks
+	 * Registers the hooks.
 	 *
 	 * @return void
 	 */
@@ -30,7 +34,7 @@ class WPSEO_WooCommerce_Shop_Page implements WPSEO_WordPress_Integration {
 			return;
 		}
 
-		add_filter( 'wpseo_frontend_page_type_simple_page_id', array( $this, 'get_page_id' ) );
+		add_filter( 'wpseo_frontend_page_type_simple_page_id', [ $this, 'get_page_id' ] );
 	}
 
 	/**

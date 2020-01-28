@@ -87,6 +87,10 @@
     display: inline-block;
 }
 
+#aws_form .aws-heading {
+    margin-right: -40px;
+}
+
 /* Image select option */
 #aws_form .img-select {
     position: relative;

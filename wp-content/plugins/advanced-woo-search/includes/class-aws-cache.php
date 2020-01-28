@@ -47,8 +47,16 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
             $this->cache_table_name = $wpdb->prefix . AWS_CACHE_TABLE_NAME;
 
             add_action( 'aws_cache_clear', array( $this, 'clear_cache' ) );
-            add_action( 'wp_ajax_aws-clear-cache', array( $this, 'clear_cache' ) );
+            add_action( 'wp_ajax_aws-clear-cache', array( $this, 'clear_cache_ajax' ) );
 
+        }
+
+        /*
+         * Clear cahce ajax hook
+         */
+        public function clear_cache_ajax() {
+            check_ajax_referer( 'aws_admin_ajax_nonce' );
+            $this->clear_cache();
         }
 
         /**
@@ -56,6 +64,7 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
          */
         public function get_cache_name( $s ) {
 
+            $s = sanitize_text_field( $s );
             $cache_option_name = 'aws_search_term_' . $s;
 
             if ( has_filter('wpml_current_language') ) {
@@ -117,7 +126,7 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
 
             $values = $wpdb->prepare(
                 "(%s, %s)",
-                $cache_option_name, json_encode( $result_array )
+                sanitize_text_field( $cache_option_name ), json_encode( $result_array )
             );
 
             $query  = "INSERT IGNORE INTO {$this->cache_table_name}
@@ -143,7 +152,7 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
             global $wpdb;
 
             $result = '';
-            $where = $wpdb->prepare( " name LIKE %s", $cache_option_name );
+            $where = $wpdb->prepare( " name = %s", sanitize_text_field( $cache_option_name ) );
 
             $sql = "SELECT *
                 FROM

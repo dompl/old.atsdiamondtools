@@ -19,10 +19,10 @@ class WC_Gateway_PPEC_Admin_Handler {
 		// defer this until for next release.
 		// add_filter( 'woocommerce_get_sections_checkout', array( $this, 'filter_checkout_sections' ) );
 
-		add_action( 'woocommerce_order_status_on-hold_to_processing', array( $this, 'capture_payment' ) );
-		add_action( 'woocommerce_order_status_on-hold_to_completed', array( $this, 'capture_payment' ) );
-		add_action( 'woocommerce_order_status_on-hold_to_cancelled', array( $this, 'cancel_payment' ) );
-		add_action( 'woocommerce_order_status_on-hold_to_refunded', array( $this, 'cancel_payment' ) );
+		add_action( 'woocommerce_order_status_processing', array( $this, 'capture_payment' ) );
+		add_action( 'woocommerce_order_status_completed', array( $this, 'capture_payment' ) );
+		add_action( 'woocommerce_order_status_cancelled', array( $this, 'cancel_authorization' ) );
+		add_action( 'woocommerce_order_status_refunded', array( $this, 'cancel_authorization' ) );
 
 		add_filter( 'woocommerce_order_actions', array( $this, 'add_capture_charge_order_action' ) );
 		add_action( 'woocommerce_order_action_ppec_capture_charge', array( $this, 'maybe_capture_charge' ) );
@@ -162,6 +162,7 @@ class WC_Gateway_PPEC_Admin_Handler {
 
 				$params['AUTHORIZATIONID'] = $trans_id;
 				$params['AMT'] = floatval( $order_total );
+				$params['CURRENCYCODE'] = $old_wc ? $order->order_currency : $order->get_currency();
 				$params['COMPLETETYPE'] = 'Complete';
 
 				$result = wc_gateway_ppec()->client->do_express_checkout_capture( $params );
@@ -197,11 +198,11 @@ class WC_Gateway_PPEC_Admin_Handler {
 	}
 
 	/**
-	 * Cancel authorization
+	 * Cancel authorization (if one is present)
 	 *
 	 * @param  int $order_id
 	 */
-	public function cancel_payment( $order_id ) {
+	public function cancel_authorization( $order_id ) {
 		$order = wc_get_order( $order_id );
 		$old_wc = version_compare( WC_VERSION, '3.0', '<' );
 		$payment_method = $old_wc ? $order->payment_method : $order->get_payment_method();
