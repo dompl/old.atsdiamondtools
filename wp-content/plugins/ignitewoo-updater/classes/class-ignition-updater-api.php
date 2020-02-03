@@ -10,23 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @subpackage Ignition Updater
  * @category Core
  * @author Ignition
- * @since 1.0.0
+ * @since 3.0.0
  *
- * TABLE OF CONTENTS
- *
- * private $token
- * private $api_url
- * private $errors
- *
- * - __construct()
- * - activate()
- * - deactivate()
- * - check()
- * - request()
- * - log_request_error()
- * - store_error_log()
- * - get_error_log()
- * - clear_error_log()
  */
 class Ignition_Updater_API {
 	private $token;
@@ -40,9 +25,12 @@ class Ignition_Updater_API {
 		
 		$this->version = '2.0';
 		$this->token = $ignition_updater_token;
-		$this->api_url = 'https://ignitewoo.com/api2/?api=product-key-api';
-		$this->products_api_url = 'https://ignitewoo.com/api2/?api=installer-api';
-		$this->license_check_url = 'https://ignitewoo.com/api2/?api=license-status-check';
+	
+		$this->api_url 			= 'https://ignitewoo.com/wc-api/product-key-api'; 
+		// Deprecated: 
+		//$this->products_api_url 	= 'https://ignitewoo.com/wc-api/installer-api';
+		//$this->license_check_url 	= 'https://ignitewoo.com/wc-api/license-status-check';
+		
 		$this->errors = array();
 	} // End __construct()
 
@@ -129,17 +117,19 @@ class Ignition_Updater_API {
 			'redirection' => 5,
 			'httpversion' => '1.0',
 			'headers' => array( 'user-agent' => 'IgnitionUpdater/' . $this->version ),
-			'body' => json_encode( array( 'licenses' => $product_details ) ),
+			'body' => array( 'request' => 'license_check', 'licenses' => $product_details ),
 			'sslverify' => false
 		);
 
-		$response = wp_remote_post( $this->license_check_url, $args );
+		//$response = wp_remote_post( $this->license_check_url, $args );
+		$response = wp_remote_post( $this->api_url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
 
 		$payload = json_decode( wp_remote_retrieve_body( $response ) );
+		
 		if ( ! isset( $payload->payload ) ) {
 			return false;
 		}
@@ -157,15 +147,17 @@ class Ignition_Updater_API {
 	 * @return array $data
 	 */
 	public function request ( $endpoint = 'check', $params = array(), $method = 'get' ) {
+		global $current_user, $ignition_updater;
+
 		$url = $this->api_url;
 
-		if ( in_array( $endpoint, array( 'themeupdatecheck', 'pluginupdatecheck' ) ) ) {
-			$url = $this->products_api_url;
-		}
+		//if ( in_array( $endpoint, array( 'themeupdatecheck', 'pluginupdatecheck' ) ) ) {
+		//	$url = $this->products_api_url;
+		//}
 
-		$supported_methods = array( 'check', 'activation', 'deactivation', 'ping', 'pluginupdatecheck', 'themeupdatecheck');
+		$supported_methods = array( 'check', 'activation', 'deactivation', 'ping', 'pluginupdatecheck', 'plugininformation', 'themeupdatecheck');
 		
-		$supported_params = array( 'licence_key',  'licence_hash', 'file_id', 'product_id', 'home_url', 'host', 'license_hash', 'plugin_name', 'theme_name', 'version', 'plugininformation', 'request', 'plugin-information', 'slug' );
+		$supported_params = array( 'licence_key',  'licence_hash', 'file_id', 'product_id', 'home_url', 'host', 'sitename', 'user', 'admin_email', 'email', 'license_hash', 'plugin_name', 'theme_name', 'version', 'plugininformation', 'request', 'plugin-information', 'slug', 'updater_version' );
 
 		$defaults = array(
 			'method' => strtoupper( $method ),
@@ -176,14 +168,27 @@ class Ignition_Updater_API {
 			'headers' => array( 'user-agent' => 'IgnitionUpdater/' . $this->version ),
 			'cookies' => array(),
 			'ssl_verify' => false,
-			'user-agent' => 'Ignition Updater; http://ignitewoo.com'
+			'user-agent' => 'Ignition Updater; https://ignitewoo.com'
 		);
 
+		$params['updater_version' ] = $ignition_updater->version;
+		$params['sitename'] = '';
+		$params['user'] = '';
+		$params['email'] = '';
+		$params['admin_email'] = '';
+
+		if ( is_multisite() ) {
+			$params['network'] = 1;
+		} else {
+			$params['network'] = 0;
+		}
+		
 		if ( 'GET' == strtoupper( $method ) ) {
-			if ( 0 < count( $params ) ) {
+		
+			if ( count( $params ) > 0 ) {
+			
 				foreach ( $params as $k => $v ) {
 					if ( in_array( $k, $supported_params ) ) {
-
 						$url = add_query_arg( $k, $v, $url );
 					}
 				}
@@ -195,12 +200,9 @@ class Ignition_Updater_API {
 
 			// Pass if this is a network install on all requests
 			$url = add_query_arg( 'network', is_multisite() ? 1 : 0, $url );
+			
 		} else {
-			if ( is_multisite() ) {
-				$params['network'] = 1;
-			} else {
-				$params['network'] = 0;
-			}
+		
 
 			if ( in_array( $endpoint, $supported_methods ) ) {
 				$params['request'] = $endpoint;
@@ -212,7 +214,7 @@ class Ignition_Updater_API {
 		}
 
 		// Set up a filter on our default arguments. If any arguments are removed by the filter, replace them with the default value.
-		$args = wp_parse_args( (array)apply_filters( 'ignition_updater_request_args', $defaults, $endpoint, $params, $method ), $defaults );
+		$args = wp_parse_args( $params, $defaults );
 
 		$url = add_query_arg( 'wc-api', 'product-key-api', $url );
 
@@ -220,7 +222,7 @@ class Ignition_Updater_API {
 
 		if( is_wp_error( $response ) ) {
 			$data = new StdClass;
-			$data->error = __( 'Ignition Request Error', 'ignition-updater' );
+			$data->error = __( 'IgniteWoo Request Error', 'ignition-updater' );
 		} else {
 			$data = $response['body'];
 			$data = json_decode( $data );
@@ -278,4 +280,3 @@ class Ignition_Updater_API {
 		return delete_transient( $this->token . '-request-error' );
 	} // End clear_error_log()
 } // End Class
-?>

@@ -1,19 +1,19 @@
-<?php
+<?php 
 /**
  * Plugin Name: IgniteWoo Updater
- * Plugin URI: http://ignitewoo.com/products/
- * Description: Helps you manage licenses and receive updates for your IgniteWoo products.
- * Version: 2.1.12
+ * Plugin URI: https://ignitewoo.com/
+ * Description: Helps you manage your IgniteWoo software licenses and receive important updates for your IgniteWoo products.
+ * Version: 3.0
  * Author: IgniteWoo.com
- * Author URI: http://ignitewoo.com/
+ * Author URI: https://ignitewoo.com/
  * Network: true
  * Requires at least: 3.8.1
- * Tested up to: 4.5.1
+ * Tested up to: 5.2.1
  *
  * Text Domain: ignition-updater
  */
 /*
-    Copyright 2012 - Ignition 
+    Copyright 2012 - 2019 IgniteWoo.com
     Copyright 2012 - WooThemes
 
     This program is free software; you can redistribute it and/or modify
@@ -31,30 +31,46 @@
     
 */
 
+
+/* TODO:
+
+WARNING: SECURITY: MAKE SURE CLICK TO RENEW GIVES AUTOMATIC DISCOUNT BEFORE ROLLING OUT
+
+
+	Implement the package signing for WP 5.2.x when the WP developers integrate that for plugins. 
+*/
+
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( is_admin() && ( isset( $_POST['action'] ) && 'ignition_activate_license_keys' == $_POST['action'] ) ) {
-	add_action( 'plugins_loaded', '__ignition_updater' );
-} else if ( is_admin() && !defined( 'DOING_AJAX' ) ) {
+ // Always load.
+if ( is_admin() ) {
 	add_action( 'plugins_loaded', '__ignition_updater' );
 }
 
+/* DEPRECATED: 
+if ( is_admin() && ( isset( $_POST['action'] ) && 'ignition_activate_license_keys' == $_POST['action'] ) ) {
+	add_action( 'plugins_loaded', '__ignition_updater' );
+}
+	else if ( is_admin() && !defined( 'DOING_AJAX' ) ) {
+	add_action( 'plugins_loaded', '__ignition_updater' );
+}
+*/
 
 function __ignition_updater () {
-	global $ignition_updater_token; 
+	global $ignition_updater_token, $ignition_updater;
 	
 	$ignition_updater_token = 'ignitewoo-updater'; 
-	
-	require_once( 'classes/class-ignition-updater.php' );
-
-	global $ignition_updater;
-	$ignition_updater = new IgniteWoo_Updater( __FILE__, '2.0' );
 
 	// Load the version from the plugin header in this file. This way we 
 	// don't need to remember to change it anywhere else.
 	$version = get_file_data( __FILE__, array( 'Version' ), '' );
 
-	$ignition_updater->version = $version[0];
+	require_once( 'classes/class-ignition-updater.php' );
+
+	$ignition_updater = new IgniteWoo_Updater( __FILE__, $version ); // ENSURE THE VERSION IS CORRECT AND MATCHES THIS PLUGIN VERSION
+
+	$ignition_updater->version = '3.0'; // Must be a string, not a float.
+
 	@$ignition_updater->admin->product_id = 'Updater';
 	@$ignition_updater->admin->licence_hash = '6471fb9bec3ef8e9dcafe3ba5bd994c8';
 	@$ignition_updater->admin->slug = plugin_basename( __FILE__ );

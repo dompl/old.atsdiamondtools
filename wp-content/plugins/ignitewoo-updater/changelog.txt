@@ -1,3 +1,15 @@
+Version 3.0  
+	
+	Updated to use the new license API endpoints at IgniteWoo, the old endpoints are being retired and will totally be disabled.
+	
+	Updated for future support of the new WordPress package signing features (added in WP v5.2), support currently not implemented.
+	
+	Ensure better operation on multisite installations.
+	
+	Removed deprecated class files.
+	
+	Ensure calls for "plugininformation" in the admin class file only run when the updates page or license pages is being viewed.
+	
 Version 2.1.12 - September 15, 2018
 
 	PHP compatibility, avoid using count() on empty variables

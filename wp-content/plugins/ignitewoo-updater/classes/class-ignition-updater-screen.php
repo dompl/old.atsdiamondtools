@@ -16,7 +16,7 @@ class Ignition_Updater_Screen {
 		
 		do_action( 'ignition_updater_screen_before', $token, $screen_icon );
 		$html = '<div class="wrap ignition-updater-wrap">' . "\n";
-		$html .= get_screen_icon( $screen_icon );
+		//$html .= get_screen_icon( $screen_icon );
 		$html .= '<h2 class="nav-tab-wrapper">' . "\n";
 		$html .= self::get_navigation_tabs();
 		$html .= '</h2>' . "\n";
@@ -95,4 +95,3 @@ class Ignition_Updater_Screen {
 			);
 	} // End get_available_screens()
 } // End Class
-?>

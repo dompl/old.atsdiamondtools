@@ -3,9 +3,9 @@ Contributors: pomegranate
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice, packing slip, export, email, bulk, automatic
 Requires at least: 3.5
-Tested up to: 5.0
+Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 2.2.6
+Stable tag: 2.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,7 @@ This WooCommerce extension automatically adds a PDF invoice to the order confirm
 
 In addition to this, we offer several premium extensions:
 
-* Create/email PDF Proforma Invoices, Credit Notes (for Refunds), email Packing Slips & more with [WooCommerce PDF Invoices & Packing Slips Professional](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-professional/)
-* Upload all invoices automatically to Dropbox with [WooCommerce PDF Invoices & Packing Slips to Dropbox](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-dropbox/)
+* Create/email PDF Proforma Invoices, Credit Notes (for Refunds), email Packing Slips, automatic upload to Dropbox & more with [WooCommerce PDF Invoices & Packing Slips Professional](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-professional/)
 * Automatically send new orders or packing slips to your printer, as soon as the customer orders! [WooCommerce Automatic Order Printing](https://www.simbahosting.co.uk/s3/product/woocommerce-automatic-order-printing/?affiliates=2) (from our partners at Simba Hosting)
 * More advanced & stylish templates with [WooCommerce PDF Invoices & Packing Slips Premium Templates](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-premium-templates/)
 
@@ -67,7 +66,7 @@ In the search field type "WooCommerce PDF Invoices & Packing Slips" and click Se
 
 = Where can I find the documentation? =
 
-[WooCommerce PDF Invoices & Packing Slips documentation](http://docs.wpovernight.com/woocommerce-pdf-invoices-packing-slips/)
+[WooCommerce PDF Invoices & Packing Slips documentation](https://docs.wpovernight.com/woocommerce-pdf-invoices-packing-slips/)
 
 = It's not working! =
 
@@ -102,6 +101,119 @@ There's a setting on the Status tab of the settings page that allows you to togg
 6. Set shop name, address, header logo, etc.
 
 == Changelog ==
+
+= 2.4.5 =
+* Fix: Prevent errors for subscription tax fallback on refunds
+
+= 2.4.4 =
+* Fix: German Market thumbnail settings conflict
+* Fix: Correctly sanitize wizard text input
+* Fix: Link to documentation for increasing memory
+* Fix: Fallback for subscription renewal tax rates
+
+= 2.4.3 =
+* Fix: Prevent errors unsetting a non-existing setting
+* Fix: Potential crash on improperly initiated documents 
+* Fix: Reversed tax rate calculation arguments
+* Fix: Support tax rate functions for non-line items
+* Fix: comma position on multiple tax rates
+* Fix: Setup wizard styles
+* Translations: Added lv locale for Latvian (keeping lv_LV as fallback)
+* Translations: Updated bundled Czech translations
+* Tested up to WooCommerce 3.9
+
+= 2.4.2 =
+* Fix: 'No' option in new date & number visibility setting
+* Fix: Resetting headers caused unintended caching of PDF files on some hosts
+
+= 2.4.1 =
+* Fix: Creating invoices for draft orders would crash plugin
+* Tweak: Include time in default invoice date
+
+= 2.4.0 =
+* Feature: Option to use order number & date for invoice number & date
+* Fix: prevent errors during update when WC not active
+* Fix: don't auto create invoice number when manually entered & directly changing order status
+* Fix: invoice tax amount for refunded orders (in combination with WooCommerce tax setting "as a single total")
+* Tweak: Default to today's date when editing empty invoice date
+
+
+= 2.3.5 =
+* Feature: Accept single order ID for wcpdf_get_document function
+* Feature: Filter to change number store for invoice
+* Tweak: Always prefer WC() function over global for WC3.0+
+* Fix: Incorrectly stored attachment settings couldn't be reset
+* Fix: Prevent error notices during setup wizard
+* Tested up to WooCommerce 3.8
+
+= 2.3.4 =
+* Fix: Prevent duplicate invoice numbers for multiple attachment setups
+* Fix: Apply email order filter for each email separately
+
+= 2.3.3 =
+* Tweak: Move filter to override order object to document level (rather than per email)
+
+= 2.3.2 = 
+* Fix: Load enhanced selection styles on settings page
+* Fix: WC Bookings email attachment
+* Tweak: Use WooCommerce 3.7 tax rate data when available.
+
+= 2.3.1 =
+* Fix: Errors for filtered formatted invoice numbers
+
+= 2.3.0 =
+* Feature: Setting to disable invoices globally for specific order statuses
+* Feature: Control action buttons visibility from settings wizard.
+* Feature: Allow loading of existing PDF file instead of generating on the fly via filter (`wpo_wcpdf_load_pdf_file_path`)
+* Fix: Check if temp folder exists before creating
+* Fix: Newlines in address from settings wizard
+* Fix: Double images issue with WooCommerce German Market
+* Fix: Only store document settings when creating one
+* Tested with WooCommerce 3.7
+
+= 2.2.14 =
+* Fix: Set default PHPMailer validator to 'php' (fixing 'setFrom' errors on PHP 7.3)
+* Fix: Attachment path for file lock check
+* Tweak: Don't wait for file lock if locking disabled
+* Tweak: JIT loading of core documents for early requests (before init 15)
+
+= 2.2.13 =
+* Feature: Better order notes formatting & optional filter for system notes
+* Feature: add email object to attachment hook and allow order object filtering
+* Fix: WooCommerce Chained Products row classes
+* Fix: Issues with locked attachment files preventing the email from being sent correctly
+
+= 2.2.12 =
+* Tested up to WC3.6
+* Fix: Prevent infinite loop on temporary folder creation for partially migrated sites or write permission issues
+* Tweak: Removed height & width attributes from logo image (+filter `wpo_wcpdf_header_logo_img_element`)
+* Dev: Enable guest access to PDF with order key in URL 
+
+= 2.2.11 =
+* Fix: Fatal error on orders with multiple refunds
+
+= 2.2.10 =
+* Fix: Possible conflict with latest Subscriptions
+* Fix: Load correct translations when admin user profile language is set to different locale
+* Fix: Use file lock to prevent parallel processes creating the same attachment file
+* Fix: Prevent notices for incorrectly loaded email classes
+* Feature: Allow different invoice number column sorting methods by filter
+* Feature: Filter for global prevention of creating specific document (`wpo_wcpdf_document_is_allowed`)
+
+= 2.2.9 =
+* Feature: Added customer note email to attachment options
+* Fix: Prevent empty invoice dates from being saved as 1970 (fallback to current date/time)
+
+= 2.2.8 =
+* Tested up to WP5.1
+* Tweak: Re-use attachment file if not older than 60 seconds (tentative fix for parallel read & write issues)
+* Dev: Added URL overrides to switch between output mode (`&output=html`) and debug (`&debug=true`)
+
+= 2.2.7 =
+* Fix: Hardened permissions & security checks on several admin actions (audit by pluginvulnerabilities.com)
+* Feature: Show checkmarks for existing documents on order details page buttons too
+* Tweak: Product Bundles compatibility, hide items by default, following bundle settings (Simple Template)
+* Tweak: Fallback to billing address on packing slip for orders without shipping address
 
 = 2.2.6 =
 * Fix: ship to different address check for empty shipping addresses

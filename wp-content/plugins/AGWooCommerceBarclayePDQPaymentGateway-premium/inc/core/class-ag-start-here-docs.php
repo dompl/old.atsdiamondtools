@@ -100,9 +100,11 @@ class AG_start_here_docs {
 			<?php } ?>
 		</ol>
 
-        <p><strong>Still having problems?</strong> Have a look at our <a href="<?php echo self::$AG_doc_url . self::$args['troubleshooting']; ?>" target="_blank">troubleshooting</a> documentaion.<br />There is a permanent link to the plugin documentation below.</p>
+        <p><strong>Still having problems?</strong> Have a look at our <a href="<?php echo self::$AG_doc_url . self::$args['troubleshooting']; ?>" target="_blank">troubleshooting</a> documentation.<br />There is a permanent link to the plugin documentation below.</p>
 
 		<p>Want to know more about other Payment options or PCI compliance? have a look at our tips and information section below.</p>
+
+		<p><strong>Need multiple payment gateways for your clients? <a href="https://weareag.co.uk/ag-bundles/?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank">Save over 50% with a AG bundle.</a></strong></p>
 	<?php }
 
 

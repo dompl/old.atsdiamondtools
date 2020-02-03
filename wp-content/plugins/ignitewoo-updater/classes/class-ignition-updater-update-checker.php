@@ -2,15 +2,16 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
- * Ignition Updater - Plugins/Themes Updater Class
  *
  * The Ignition Updater - plugins/theme updater class.
+ * 
+ * This class is used by the Admin class, class-ignition-updater-admin.php, which checks for new versions
  *
  * @package WordPress
  * @subpackage Ignition Updater
  * @category Core
  * @author Ignition
- * @since 1.5.0
+ * @since 3.0.0
  */
 class Ignition_Updater_Update_Checker {
 
@@ -18,13 +19,13 @@ class Ignition_Updater_Update_Checker {
 	 * URL of endpoint to check for product/changelog info
 	 * @var string
 	 */
-	private $api_url = 'https://ignitewoo.com/api2/';
+	private $api_url = 'https://ignitewoo.com/wc-api/product-key-api';
 
 	/**
 	 * URL of endpoint to check for updates
 	 * @var string
 	 */
-	private $update_check_url = 'https://ignitewoo.com/api2/?api=installer-api&';
+	private $update_check_url = 'https://ignitewoo.com/wc-api/product-key-api';
 
 	/**
 	 * Array of plugins info
@@ -78,7 +79,7 @@ class Ignition_Updater_Update_Checker {
 	 * @return  void
 	 */
 	public function init () {
-	
+
 		// Check For Updates
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'plugin_update_check' ), 20, 1 );
 		//add_filter( 'pre_set_site_transient_update_themes', array( $this, 'theme_update_check' ), 20, 1 );
@@ -96,8 +97,15 @@ class Ignition_Updater_Update_Checker {
 			delete_transient( 'ignition_helper_updates' );
 			
 			// This is the version cache for the specific plugin, delete that too.
-			if ( !empty( $_REQUEST['checked'] ) && isset( $_REQUEST['checked'][0] ) )
-				delete_transient( 'ign_' . esc_attr( sanitize_title( $_REQUEST['checked'][0] ) ) . '_latest_version' );
+			if ( !empty( $_REQUEST['checked'] ) && isset( $_REQUEST['checked'] ) ) {
+				foreach( $_REQUEST['checked'] as $k => $plugin ) { 
+					delete_transient( 'ign_' . esc_attr( sanitize_title( $_REQUEST['checked'][ $k ] ) ) . '_latest_version' );
+				}
+			} else if ( !empty( $_REQUEST['plugins'] ) ) { 
+				foreach( $_REQUEST['plugins'] as $plugin ) { 
+					delete_transient( 'ign_' . esc_attr( sanitize_title( $plugin ) ) . '_latest_version' );
+				}
+			}
 		}
 	} // End init()
 
@@ -180,7 +188,7 @@ class Ignition_Updater_Update_Checker {
 			if ( !empty( $k ) && !empty( $v ) )
 				$transient->no_update[ $k ] = $v;
 		}
-	
+
 		$response = $this->fetch_remote_update_data();
 
 		if ( FALSE == $response ) {
@@ -253,7 +261,7 @@ class Ignition_Updater_Update_Checker {
 					}
 				}
 			}
-//var_dump( 'AP:' , $activated_products ); 
+
 			update_option( $this->token . '-activated', $activated_products );
 		}
 
@@ -359,7 +367,7 @@ return;
 	 
 	public function plugin_information ( $false, $action, $args ) {
 		global $ignition_updater;
-		
+
 		$transient = get_site_transient( 'update_plugins' );
 		$found = false;
 		$found_plugin = array();
@@ -477,8 +485,8 @@ return;
 			);
 			
 		} else if ( ! isset( $response->banners ) ) {
-			$response->banners['low'] = '//ignitewoo.com/api2/ignitewoo-banner-1544x500.png';
-			$response->banners['high'] = '//ignitewoo.com/api2/ignitewoo-banner-1544x500.png';
+			$response->banners['low'] = '//ignitewoo.com/api/ignitewoo-banner-1544x500.png';
+			$response->banners['high'] = '//ignitewoo.com/api/ignitewoo-banner-1544x500.png';
 		}
 		
 		
@@ -494,11 +502,21 @@ return;
 	 * @return object $response or boolean false
 	 */
 	protected function request ( $args, $api = 'info' ) {
+		global $ignition_updater;
+		
+		$args['updater_version'] = $ignition_updater->version;
 
 		$url = ( $api == 'info' ) ? $this->api_url : $this->update_check_url;
+
+		if ( 'info' == $api ) { 
+			$url = add_query_arg( array( 'wc-api' => 'product-key-api' ), $url );
+		}
 		
-		$url = add_query_arg( array( 'wc-api' => 'product-key-api' ), $url );
-		$url = add_query_arg( array( 'home_url' => home_url( '/' ) ), $url );
+		$url = add_query_arg( array( 'home_url' => home_url( '/' ), 'updater_version' => $ignition_updater->version ), $url );
+		
+		if ( empty( $args['request'] ) ) {
+			$args['request'] = 'update_check';
+		}
 
 		// Send request
 		$request = wp_remote_post( $url, array(
@@ -508,12 +526,16 @@ return;
 			'httpversion' => '1.0',
 			'headers' => array( 'user-agent' => 'IgnitionUpdater/' . $this->version ),
 			'body' => $args,
-			'sslverify' => false
-			) );
+			'sslverify' => false,
+			
+			'cookies' => array(),
+			'user-agent' => 'Ignition Updater; https://ignitewoo.com',
+			'blocking' => true,
+		) );
 
-		// Make sure the request was successful
-		if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
-			trigger_error( __( 'An unexpected error occurred. Something may be wrong with IgniteWoo.com or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://ignitewoo.com/hc/en-us">help center</a>.', 'ignition-updater' ) . ' ' . __( '(WordPress could not establish a secure connection to IgniteWoo.com. Please contact your server administrator.)', 'ignition-updater' ), headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE );
+		// Make sure the request was successful, check for 200 response code
+		if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) !== 200 ) {
+			trigger_error( __( 'An unexpected error occurred. Something may be wrong with IgniteWoo.com or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://ignitewoo.com/">contact page</a>.', 'ignition-updater' ) . ' ' . __( '(WordPress could not establish a secure connection to IgniteWoo.com. Please contact your server administrator.)', 'ignition-updater' ), headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE );
 			return false;
 		}
 		// Read server response, which should be an object
@@ -558,4 +580,3 @@ return;
 	} // End parse_changelog_line_to_html()
 
 } // End Class
-?>

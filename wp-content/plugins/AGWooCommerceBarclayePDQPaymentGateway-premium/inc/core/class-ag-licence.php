@@ -37,6 +37,13 @@ class AG_licence
             99,
             1
         );
+        add_action(
+            'in_plugin_update_message-' . self::$args['update']['plugin'],
+            array( $this, 'ag_update_message' ),
+            10,
+            2
+        );
+        add_action( 'admin_notices', array( $this, 'ag_admin_notice' ) );
     }
     
     public static function start_FS()
@@ -44,13 +51,14 @@ class AG_licence
         if ( !is_null( self::$freemius ) ) {
             return;
         }
-        require_once self::$args['paths']['plugin'] . 'inc/freemius/start.php';
+        require_once self::$args['paths']['plugin'] . 'inc/vendor/freemius/start.php';
         $menu = array(
-            'slug'    => self::get_fs_arg( 'menu/slug', null ),
-            'contact' => self::get_fs_arg( 'menu/contact', false ),
-            'support' => self::get_fs_arg( 'menu/support', false ),
-            'account' => self::get_fs_arg( 'menu/account', false ),
-            'pricing' => self::get_fs_arg( 'menu/pricing', false ),
+            'slug'        => self::get_fs_arg( 'menu/slug', null ),
+            'contact'     => self::get_fs_arg( 'menu/contact', false ),
+            'support'     => self::get_fs_arg( 'menu/support', false ),
+            'account'     => self::get_fs_arg( 'menu/account', false ),
+            'pricing'     => self::get_fs_arg( 'menu/pricing', false ),
+            'affiliation' => self::get_fs_arg( 'menu/affiliation', false ),
         );
         self::$freemius = fs_dynamic_init( array(
             'id'               => self::get_fs_arg( 'id', null ),
@@ -66,6 +74,7 @@ class AG_licence
             'days'               => self::get_fs_arg( 'trial/days', 7 ),
             'is_require_payment' => self::get_fs_arg( 'trial/is_require_payment', true ),
         ),
+            'has_affiliation'  => self::get_fs_arg( 'has_affiliation', true ),
             'menu'             => $menu,
             'is_live'          => true,
         ) );
@@ -132,6 +141,36 @@ class AG_licence
             unset( $available_gateways['epdq_checkout'] );
         }
         return $available_gateways;
+    }
+    
+    public function ag_update_message( $data, $response )
+    {
+        if ( !self::$args['update']['update_notice'] ) {
+            return;
+        }
+        printf( '<br /><br /><strong>%s</strong>', __( self::$args['update']['message'], 'epdq_checkout' ) );
+    }
+    
+    public function ag_admin_notice()
+    {
+        $payment_gateway = WC()->payment_gateways->payment_gateways()['epdq_checkout'];
+        
+        if ( empty($payment_gateway->sha_in) ) {
+            if ( !self::$args['update']['update_notice'] ) {
+                return;
+            }
+            ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><strong><?php 
+            _e( self::$args['update']['name'], 'epdq_checkout' );
+            ?></strong></p>
+                <p><?php 
+            _e( self::$args['update']['message'], 'epdq_checkout' );
+            ?></p>
+            </div>
+        <?php 
+        }
+    
     }
 
 }

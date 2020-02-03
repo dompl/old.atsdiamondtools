@@ -89,7 +89,7 @@ class AG_welcome_screen {
 
 			<div class="ag-welcome-body">
 
-				<h2>Account and Licence settings</h2>
+				<h2>Account, Licence settings & Affiliation</h2>
 				<div class="section">
 
 				        <div class="main-card">
@@ -97,7 +97,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>License &amp; Billing</h3>
 									<p>Activate or sync your license, cancel your subscription, print invoices, and manage your account information.</p>
-									<a href="/wp-admin/admin.php?page=<?php echo self::$args['main_slug']; ?>-account" class="ag-button">Manage Licence &amp; Billing</a>
+									<a href="<?php echo AG_ePDQ_admin ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-account" class="ag-button">Manage Licence &amp; Billing</a>
 								</div>
 							</div>
 						</div>
@@ -106,8 +106,18 @@ class AG_welcome_screen {
 							<div class="card-contents">
 								<div class="card-body">
 									<h3>Your Account</h3>
-									<p>Manage all of your AG plugins, supscriptions, renewals, and more.</p>
+									<p>Manage all of your AG plugins, subscriptions, renewals, and more.</p>
 									<a target="_blank" href="https://weareag.co.uk/account?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Manage Your Account</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="main-card">
+							<div class="card-contents">
+								<div class="card-body">
+									<h3>Affiliate</h3>
+									<p>Become an ambassador for AG and earn 20% commission for each sale!</p>
+									<a href="<?php echo AG_ePDQ_admin ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-affiliation" class="ag-button">Find Out More</a>
 								</div>
 							</div>
 						</div>
@@ -127,9 +137,18 @@ class AG_welcome_screen {
 						<div class="main-card">
 							<div class="card-contents">
 								<div class="card-body">
-									<h3>Documentaion</h3>
-									<p>Have a read of the plugin documentaion.</p>
-									<a target="_blank" href="<?php echo self::$AG_doc_url; ?>collection/<?php echo self::$args['collection']; ?>" class="ag-button" target="_blank">Documentaion</a>
+									<h3>Documentation</h3>
+									<p>Have a read of the plugin documentation.</p>
+									<a target="_blank" href="<?php echo self::$AG_doc_url; ?>collection/<?php echo self::$args['collection']; ?>" class="ag-button" target="_blank">Documentation</a>
+								</div>
+							</div>
+						</div>
+						<div class="main-card">
+							<div class="card-contents">
+								<div class="card-body">
+									<h3>Feature Request</h3>
+									<p>Have a feature you'd love to be part of the plugin?'.</p>
+									<a target="_blank" href="https://weareag.co.uk/feature-requests?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Submit a feature request</a>
 								</div>
 							</div>
 						</div>
@@ -157,181 +176,7 @@ class AG_welcome_screen {
 
 
 		</div>
-		<style>
 
-			.st1 {
-				fill: #23282d !important;
-			}
-
-        	.ag-notice {
-				padding: 35px 30px;
-				background-color: #fff;
-				margin: 20px 20px 20px 0;
-				box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-				font-size: 15px;
-				position: relative;
-				border-left: 4px solid #422450;
-			}
-
-			.ag-notice h2 {
-				margin: 0 0 1.2em;
-				font-size: 28px;
-				position: relative;
-				line-height: 1.2em;
-			}
-
-			.ag-notice h3 {
-				margin: 0 0 1.5em;
-			}
-
-			.ag-notice p,
-			.ag-notice li {
-				font-size: 15px;
-			}
-
-			.ag-notice li {
-				margin: 0 0 10px;
-			}
-
-			.ag-notice p,
-			.ag-notice ol,
-			.ag-notice ul {
-				margin-bottom: 2em;
-			}
-
-			.ag-notice :last-child {
-				margin-bottom: 0;
-			}
-
-			.ag-notice__dismiss {
-				position: absolute;
-				top: 20px;
-				right: 20px;
-			}
-
-			.ag-notice__dismiss button {
-				background: none;
-				border: none;
-				padding: 0;
-				margin: 0;
-				cursor: pointer;
-				color: #422450;
-				outline: none;
-			}
-
-			.ag-notice__dismiss button:hover,
-			.ag-notice__dismiss button:active {
-				color: #422450;
-			}
-
-			.ag-welcome .ag-badge {
-				position: absolute;
-				right: 0;
-				top: 0;
-			}
-			.ag-welcome {
-				font-size: 15px;
-				margin: 25px 40px 0 20px;
-				max-width: 1050px;
-				position: relative;
-			}
-			.thickbox strong {
-				display: block;
-				width: 100%
-			}
-
-            .ag-welcome h2 { text-align: left; }
-
-			.ag-welcome-body { margin-top: 20px;
-			    border: 0.0625rem solid rgba(56, 56, 56, 0.1);
-    border-radius: 0.25rem;
-    -webkit-box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, 0.05);
-    box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, 0.05);
-	}
-
-			.ag-welcome-body h2 {
-				padding: 15px 30px;
-				border: none;
-				margin: 0;
-				background: #23282d;
-				color: #fff;
-				font-size: 1.25em;
-			}
-
-			.ag-welcome-body .section {
-				padding: 30px;
-				background: #eaeaea;
-			}
-
-			.main-card {
-                -webkit-box-flex: 0 0 25%;
-                -ms-flex: 0 0 25%;
-                flex: 0 0 25%;
-                max-width: 350px;
-            }
-
-            .main-card {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                float: left;
-                position: relative;
-                min-height: 1px;
-                padding-right: 14px;
-                padding-left: 14px;
-                padding-bottom: 28px;
-                padding-top: 30px;
-            }
-            .main-card .card-contents {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -moz-flex-direction: column;
-                -ms-flex-direction: column;
-                -webkit-box-orient: vertical;
-                -webkit-box-direction: normal;
-                flex-direction: column;
-                border: 0.0625rem solid rgba(56, 56, 56, 0.1);
-                border-radius: 0.25rem;
-                -webkit-box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, 0.05);
-                box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, 0.05);
-            }
-
-            .main-card .card-body {
-                -webkit-box-flex: 1;
-                -ms-flex: 1;
-                flex: 1;
-                background-color: #ffffff;
-                padding: 0.9375rem 0.9375rem 4rem 0.9375rem;
-                border-radius: 0.25rem;
-                position: relative;
-				min-width: 318px;
-            }
-            .main-card .card-body p { height: 50px; }
-            .main-card .card-body .ag-button {
-                position: absolute;
-                bottom: 0.9375rem;
-                left: 0.9375rem;
-                right: 0.9375rem;
-            }
-            .main-card .card-contents .card-body .ag-button {
-                display: block;
-                text-align: center;
-                color: #ffffff;
-                background-color: #383838;
-                text-decoration: none;
-                line-height: 1;
-                padding: 1.0625rem 1.5rem 1.125rem 1.5rem;
-                border: none;
-                border-radius: 0.25rem;
-                font-size: 1.1875rem;
-                font-weight: 700;
-                -webkit-transition: background-color .2s ease;
-                transition: background-color .2s ease;
-            }
-
-            .main-card .card-contents .card-body .ag-button:hover { color: #fff; background-color: #543a60;}
-		</style>
 		<?php
 	}
 

@@ -1,0 +1,24 @@
+.AG-redirect-icon {
+    width: 100%;
+    display: inline-block;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.AG-redirect-icon img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    float: none !important;
+    max-height: 50px !important; 
+}
+
+.AG-redirect-notice { 
+    text-align: center;
+    padding: 0px 25px 30px 25px;
+}
+
+.ePDQ-card-icons {
+    margin-left:5px; 
+    margin-right: 5px;
+}

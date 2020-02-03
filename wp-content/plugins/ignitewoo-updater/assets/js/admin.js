@@ -12,7 +12,7 @@ jQuery( document ).ready(function( $ ) {
 			$( 'div.error.fade' ).remove();
 			$( '#activate-products table.licenses' ).css({ opacity: 0.2 });
 			$( '#activate-products' ).attr( 'disabled','disabled' );
-			$( 'table.dashboard_page_ignition-helper' ).fadeTo( '400', '0.6' ).block({
+			$( 'table.dashboard_page_ignition-helper' ).fadeTo( '400', '0.4' ).block({
 				message: null,
 				overlayCSS: {
 					background: '#fff url(' + ignition_helper.spinner + ') no-repeat center', backgroundSize: '16px 16px',

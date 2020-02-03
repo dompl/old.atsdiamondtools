@@ -145,10 +145,19 @@ abstract class Order_Document {
 				$settings = $order_settings;
 			}
 		}
-		if ( empty( $order_settings ) && !empty( $this->order ) ) {
+		if ( $this->storing_settings_enabled() && empty( $order_settings ) && !empty( $this->order ) ) {
 			// this is either the first time the document is generated, or historical settings are disabled
 			// in both cases, we store the document settings
 			WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
+		}
+
+		// display date & display number were checkbox settings but now a select setting that could be set but empty - should behave as 'unchecked'
+		if ( array_key_exists( 'display_date', $settings ) && empty( $settings['display_date'] ) ) {
+			unset( $settings['display_date'] );
+		}
+		
+		if ( array_key_exists( 'display_number', $settings ) && empty( $settings['display_number'] ) ) {
+			unset( $settings['display_number'] );
 		}
 
 		return $settings;
@@ -158,10 +167,15 @@ abstract class Order_Document {
 		return apply_filters( 'wpo_wcpdf_document_use_historical_settings', false, $this );
 	}
 
+	public function storing_settings_enabled() {
+		return apply_filters( 'wpo_wcpdf_document_store_settings', false, $this );
+	}
+
 	public function get_setting( $key, $default = '' ) {
 		$non_historical_settings = apply_filters( 'wpo_wcpdf_non_historical_settings', array(
 			'enabled',
 			'attach_to_email_ids',
+			'disable_for_statuses',
 			'number_format', // this is stored in the number data already!
 			'my_account_buttons',
 			'my_account_restrict',
@@ -178,7 +192,7 @@ abstract class Order_Document {
 	}
 
 	public function get_attach_to_email_ids() {
-		$email_ids = isset( $this->settings['attach_to_email_ids'] ) ? array_keys( $this->settings['attach_to_email_ids'] ) : array();
+		$email_ids = isset( $this->settings['attach_to_email_ids'] ) ? array_keys( array_filter( $this->settings['attach_to_email_ids'] ) ) : array();
 		return $email_ids;  
 	}
 
@@ -217,7 +231,7 @@ abstract class Order_Document {
 
 	public function init() {
 		// store settings in order
-		if ( !empty( $this->order ) ) {
+		if ( $this->storing_settings_enabled() && !empty( $this->order ) ) {
 			$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
 			$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
 			$settings = (array) $document_settings + (array) $common_settings;
@@ -276,6 +290,23 @@ abstract class Order_Document {
 		}
 
 		do_action( 'wpo_wcpdf_delete_document', $this );
+	}
+
+	public function is_allowed() {
+		$allowed = true;
+		if ( !empty( $this->settings['disable_for_statuses'] ) && !empty( $this->order ) && is_callable( array( $this->order, 'get_status' ) ) ) {
+			$status = $this->order->get_status();
+
+			$disabled_statuses = array_map( function($status){
+				$status = 'wc-' === substr( $status, 0, 3 ) ? substr( $status, 3 ) : $status;
+				return $status;
+			}, $this->settings['disable_for_statuses'] );
+
+			if ( in_array( $status, $disabled_statuses ) ) {
+				$allowed = false;
+			}
+		}
+		return apply_filters( 'wpo_wcpdf_document_is_allowed', $allowed, $this );
 	}
 
 	public function exists() {
@@ -483,7 +514,9 @@ abstract class Order_Document {
 					$src = $attachment_src;
 				}
 				
-				printf('<img src="%1$s" width="%2$d" height="%3$d" alt="%4$s" />', $src, $attachment_width, $attachment_height, esc_attr( $company ) );
+				$img_element = sprintf('<img src="%1$s" alt="%4$s" />', $src, $attachment_width, $attachment_height, esc_attr( $company ) );
+				
+				echo apply_filters( 'wpo_wcpdf_header_logo_img_element', $img_element, $attachment, $this );
 			}
 		}
 	}
@@ -574,6 +607,13 @@ abstract class Order_Document {
 	*/
 
 	public function get_pdf() {
+		if ( $pdf_file = apply_filters( 'wpo_wcpdf_load_pdf_file_path', null, $this ) ) {
+			$pdf = file_get_contents( $pdf_file );
+			if ( !empty( $pdf ) ) {
+				return $pdf;
+			}
+		}
+
 		do_action( 'wpo_wcpdf_before_pdf', $this->get_type(), $this );
 		
 		$pdf_settings = array(
@@ -713,18 +753,29 @@ abstract class Order_Document {
 	 */
 	public function get_wc_emails() {
 		// get emails from WooCommerce
-		global $woocommerce;
-		$mailer = $woocommerce->mailer();
+		if (function_exists('WC')) {
+			$mailer = WC()->mailer();
+		} else {
+			global $woocommerce;
+
+			if ( empty( $woocommerce ) ) { // bail if WooCommerce not active
+				return apply_filters( 'wpo_wcpdf_wc_emails', array() );
+			}
+			
+			$mailer = $woocommerce->mailer();
+		}
 		$wc_emails = $mailer->get_emails();
 
 		$non_order_emails = array(
-			'customer_note',
 			'customer_reset_password',
 			'customer_new_account'
 		);
 
 		$emails = array();
 		foreach ($wc_emails as $class => $email) {
+			if ( !is_object( $email ) ) {
+				continue;
+			}
 			if ( !in_array( $email->id, $non_order_emails ) ) {
 				switch ($email->id) {
 					case 'new_order':

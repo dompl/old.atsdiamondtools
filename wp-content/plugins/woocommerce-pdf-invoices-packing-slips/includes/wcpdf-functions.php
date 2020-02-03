@@ -34,6 +34,9 @@ function wcpdf_get_document( $document_type, $order, $init = false ) {
 	// - array of order ids
 	// - null if order not loaded or loaded later
 	if ( !empty( $order ) ) {
+		if ( !is_object( $order) && !is_array( $order ) && is_numeric( $order ) ) {
+			$order = array( absint( $order ) ); // convert single order id to array.
+		}
 		if ( is_object( $order ) ) {
 			// we filter order_ids for objects too:
 			// an order object may need to be converted to several refunds for example
@@ -46,11 +49,14 @@ function wcpdf_get_document( $document_type, $order, $init = false ) {
 				do_action( 'wpo_wcpdf_process_template_order', $document_type, WCX_Order::get_id( $order ) );
 				$document = WPO_WCPDF()->documents->get_document( $document_type, $order );
 
+				if ( !$document->is_allowed() ) {
+					return false;
+				}
+
 				if ( $init && !$document->exists() ) {
 					$document->init();
 					$document->save();
 				}
-				// $document->read_data( $order ); // isn't data already read from construct?
 				return $document;
 			} else {
 				// order ids array changed, continue processing that array
@@ -74,6 +80,11 @@ function wcpdf_get_document( $document_type, $order, $init = false ) {
 			$order = WCX::get_order( $order_id );
 
 			$document = WPO_WCPDF()->documents->get_document( $document_type, $order );
+
+			if ( !$document->is_allowed() ) {
+				return false;
+			}
+
 			if ( $init && !$document->exists() ) {
 				$document->init();
 				$document->save();

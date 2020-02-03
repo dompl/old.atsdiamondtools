@@ -10,26 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @subpackage Ignition Updater
  * @category Core
  * @author Ignition
- * @since 1.0.0
+ * @since 3.0.0
  *
- * TABLE OF CONTENTS
- *
- * public $updater
- * public $admin
- * private $token
- * public $plugin_url
- * public $plugin_path
- * public $version
- * private $file
- *
- * - __construct()
- * - load_localisation()
- * - load_plugin_textdomain()
- * - activation()
- * - register_plugin_version()
- * - add_product()
- * - remove_product()
- * - get_product()
  */
  
 // When changing this class name all plugins' IgniteWoo Updater code must also be changed because it looks for this class name
@@ -52,7 +34,7 @@ class IgniteWoo_Updater {
 	 */
 	public function __construct ( $file, $version ) {
 		global $ignition_updater_token;
-		
+
 		$this->token = $ignition_updater_token;
 		
 		// If multisite, plugin must be network activated. First make sure the is_plugin_active_for_network function exists
@@ -73,7 +55,7 @@ class IgniteWoo_Updater {
 		$this->products = array();
 
 		$this->load_plugin_textdomain();
-		
+
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
 
 		// Run this on activation.
@@ -95,9 +77,170 @@ class IgniteWoo_Updater {
 		$this->add_notice_unlicensed_product();
 
 		add_filter( 'site_transient_' . 'update_plugins', array( $this, 'change_update_information' ) );
+		
+		//apply_filters( 'http_request_timeout', 5, $url )
+		add_filter( 'http_request_timeout', array( &$this, 'maybe_set_http_timeout' ), 99999, 2 );
+		
+		// Runs after WP does plugin update installs, check if any IGN plugin were updated, 
+		// if so, remove our transient.
+		add_action( 'upgrader_process_complete', array( &$this, 'my_upgrade_function' ), 10, 2 );
+		
+		add_filter( 'http_request_host_is_external', array( &$this, 'http_request_host_is_localhost_network' ), 999, 3 );
 
+		// PACKAGE SIGNING: NOT IMPLEMENTED YET. 
+		// WAIT FOR WP TO ADD SIGNING TO PLUGINS IN FUTURE VERSION BEYOND 5.2.1. 
+		// SEE: wp-admin/includes/file.php, function download_url() { }
+		// 
+		// This filter adds the trusted public key so WP can use it to verify plugin downloads. 
+		// This is used when the sending server injects a X-Content-Signature header into the download response:
+		// BUT this only allows for one signature key, which makes it difficult to retire a key and replace it with a new key. 
+		// add_filter( 'wp_trusted_keys', array( &$this, 'add_trusted_key'), 1, 1 );
+		
+		// OR INSTEAD, THIS IS MORE IDEAL: 
+		
+		// The IgniteWoo API plugin signs zip packages with its private key and stores those *.sig files on
+		// the ignitewoo server. These two filters add a signature host to WP and get a signature URL: 
+		// add_filter( 'wp_signature_hosts', array( &$this, 'add_signature_host' ), 1, 1 );
+		// add_filter( 'wp_signature_url', array( &$this, 'get_signature_url' ) );
+		
+		// Soft-failure can be imposed against the URL like this: 
+		// add_filter( 'wp_signature_softfail', array( &$this, 'allow_upgrade_signature_softfail' ) );
+		
+		
 	} // End __construct()
 
+	function http_request_host_is_localhost_network( $result = false, $host = '', $url = '' ) {
+		// Allow testing on internal systems - e.g. localhost, 127.0.0.1, etc.
+		// This is primarily for internal testing by IgniteWoo
+		if ( false !== strpos( $url, '://localhost' ) && ( false !== strpos( $url, 'wc-api=product-key-api' ) || false !== strpos( $url, 'wc-api=ignitewoo_api' ) ) ) { 
+			return true; 
+		} else { 
+			return $result;
+		}
+	}
+
+	/*
+	public function add_trusted_key( $trusted_keys ) { 
+		// ADD PUBLIC KEY, used by WP to verify plugin package signature.
+		// EXAMPLE OF WHAT A BASE64 ENCODED EKY MIGHT LOOK LIKE: 
+		$trusted_keys[] = 'csj65c3D/Afc+ws8Qu5r8m1ZFn+TdR/zDkeul1WxRmc=';
+		return $trusted_keys; 
+	}
+	*/
+	
+	/**
+	* Add signature host to those know to WP so that signatures can be obtained from IgniteWoo when necessary: 
+	*
+	* @since 3.0
+	* 
+	* @param string $hosts		An array of signature hosts known to WP 
+	* 
+	* NOTE: NOT IMPLEMENTED 
+	*/
+	public function add_signature_host( $hosts = array() ) { 
+		$hosts[] = 'https://ignitewoo.com/';
+		return $hosts;
+	}
+	
+	/**
+	* Whether to allow signature softfail for download packages from ignitewoo.com
+	*
+	* @since 3.0
+	* 
+	* @param string $hosts		An array of signature hosts known to WP 
+	*
+	* NOTE: NOT IMPLEMENTED 
+	*/
+	public function allow_upgrade_signature_softfail( $softfail, $url ) { 
+		if ( false === strpos( $url, 'https://ignitewoo.com/' ) || false === strpos( $url, 'request=ignitewoo_update' ) ) { 
+			return $softfail;
+		}
+		
+		return true;
+	}
+	
+	
+	/**
+	* Filter the URL where the signature for a file is located IF the URL it came from is ignitewoo.com. 
+	*
+	* @since 3.0
+	*
+	* @param false|string $signature_url The URL where signatures can be found for a file, or false if none are known.
+	* @param string $url                 The URL of the package being verified.
+	*
+	* NOTE: NOT IMPLEMENTED 
+	*
+	*/
+	public function get_signature_url( $signature_url, $url ) { 
+		
+		if ( false === strpos( $url, 'https://ignitewoo.com/' ) || false === strpos( $url, 'request=ignitewoo_update' ) ) { 
+			return $signature_url; 
+		}
+		
+		// Modify request param to get the signature file contents and send it back.
+		$signature_url = str_replace( 'request=ignitewoo_update', 'request=get_signature_for_update', $url );
+		
+		return $signature_url; 
+		
+		/* For direct access do this instead: 
+		$url_path = parse_url( $url, PHP_URL_PATH );
+		
+		if ( empty( $url_path ) ) { 
+			return $signature_url; 
+		}
+		
+		$parts = explode( '/', $url_path );
+
+		$filename = end( $parts );
+		
+		if ( '.zip' !== substr( $filename, -4 ) ) {
+			return $signature_url;
+		}
+
+		$filename = str_replace( '.zip', '.sig', $filename );
+		
+		$signature_url = 'https://ignitewoo.com/whatever/subdir/we/want/to/use/for/direct/access/'. $filename; 
+
+		return $signature_url;
+		*/
+	}
+	
+	function my_upgrade_function( $upgrader_object, $options ) {
+
+		if ( empty( $options ) || empty( $options['plugins'] ) ) { 
+			return;
+		}
+		
+		foreach( $options['plugins']  as $plugin) { 
+			delete_transient( 'ign_' . esc_attr( sanitize_title( $plugin ) ) . '_latest_version' );
+		}
+
+		delete_transient( 'ignition_helper_updates' );
+		
+		return;
+		
+	}
+	
+	// Maybe increase HTTP request timeout if the request is being sent to IgniteWoo, this helps when the site has heavy loads
+	public function maybe_set_http_timeout( $timeout = 5, $url = '' ) { 
+		
+		if ( empty( $url ) ) {
+			return $url;
+		}
+		
+		$url = parse_url( $url );
+		
+		if ( empty( $url ) || !isset( $url['host'] ) ) { 
+			return $url;
+		}
+		
+		if ( false === strpos( $url['host'], 'ignitewoo.com') ) { 
+			return $timeout; 
+		} else { 
+			return 10;
+		}
+	}
+	
 	/**
 	 * Load the plugin's localisation file.
 	 * @access public
@@ -212,10 +355,13 @@ class IgniteWoo_Updater {
 	public function load_queued_updates() {
 		global $ignitewoo_queued_updates;
 
-		if ( ! empty( $ignitewoo_queued_updates ) && is_array( $ignitewoo_queued_updates ) )
-			foreach ( $ignitewoo_queued_updates as $plugin )
-				if ( is_object( $plugin ) && ! empty( $plugin->file ) && ! empty( $plugin->file_id ) && ! empty( $plugin->product_id ) )
+		if ( ! empty( $ignitewoo_queued_updates ) && is_array( $ignitewoo_queued_updates ) ) { 
+			foreach ( $ignitewoo_queued_updates as $plugin ) { 
+				if ( is_object( $plugin ) && ! empty( $plugin->file ) && ! empty( $plugin->file_id ) && ! empty( $plugin->product_id ) ) {
 					$this->add_product( $plugin->file, $plugin->file_id, $plugin->product_id );
+				}
+			}
+		}
 	} // End load_queued_updates()
 
 	/**
@@ -306,10 +452,9 @@ class IgniteWoo_Updater {
 	 * @return object
 	 */
 	public function change_update_information ( $transient ) {
-		
-		//If we are on the update core page, change the update message for unlicensed products
 		global $pagenow;
 		
+		//If we are on the update core page, change the update message for unlicensed products
 		if ( ( 'update-core.php' == $pagenow ) && $transient && isset( $transient->response ) && ! isset( $_GET['action'] ) ) {
 
 			global $ignitewoo_queued_updates;
@@ -320,7 +465,11 @@ class IgniteWoo_Updater {
 			$notice_text = __( 'To enable this update please activate your IgniteWoo license by visiting the Dashboard > IgniteWoo Licenses screen.' , 'ignition-updater' );
 
 			foreach ( $ignitewoo_queued_updates as $key => $value ) {
-				if ( isset( $transient->response[ $value->file ] ) && isset( $transient->response[ $value->file ]->package ) && '' == $transient->response[ $value->file ]->package && ( FALSE === stristr($transient->response[ $value->file ]->upgrade_notice, $notice_text ) ) ) {
+
+				if ( !empty( $transient->response[ $value->file ]->updater_upgrade_required_notice ) ) {
+					$transient->response[ $value->file ]->upgrade_notice = wp_kses_post( $transient->response[ $value->file ]->updater_upgrade_required_notice );
+					
+				} else if ( isset( $transient->response[ $value->file ] ) && isset( $transient->response[ $value->file ]->package ) && '' == $transient->response[ $value->file ]->package && ( FALSE === stristr($transient->response[ $value->file ]->upgrade_notice, $notice_text ) ) ) {
 					$message = '<div class="ignition-updater-plugin-upgrade-notice">' . $notice_text . '</div>';
 					$transient->response[ $value->file ]->upgrade_notice = wp_kses_post( $message );
 				}
@@ -331,4 +480,3 @@ class IgniteWoo_Updater {
 	} // End change_update_information()
 
 } // End Class
-?>

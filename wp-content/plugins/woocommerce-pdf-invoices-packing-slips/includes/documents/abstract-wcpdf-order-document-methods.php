@@ -176,7 +176,13 @@ abstract class Order_Document_Methods extends Order_Document {
 			$address = apply_filters( 'wpo_wcpdf_shipping_address', $address, $this );
 		} else {
 			// no address
-			$address = apply_filters( 'wpo_wcpdf_shipping_address', __('N/A', 'woocommerce-pdf-invoices-packing-slips' ), $this );
+			// use fallback for packing slip
+			if ( apply_filters( 'wpo_wcpdf_shipping_address_fallback', ( $this->get_type() == 'packing-slip' ), $this ) ) {
+				$address = $this->get_billing_address();
+			} else{
+				$address = apply_filters( 'wpo_wcpdf_shipping_address', __('N/A', 'woocommerce-pdf-invoices-packing-slips' ), $this );
+
+			}
 		}
 
 		return $address;
@@ -328,7 +334,7 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * Return/Show order notes
 	 * could use $order->get_customer_order_notes(), but that filters out private notes already
 	 */		
-	public function get_order_notes( $filter = 'customer' ) {
+	public function get_order_notes( $filter = 'customer', $include_system_notes = true ) {
 		if ( $this->is_refund( $this->order ) ) {
 			$post_id = $this->get_refund_parent_id( $this->order );
 		} else {
@@ -339,37 +345,62 @@ abstract class Order_Document_Methods extends Order_Document {
 			return; // prevent order notes from all orders showing when document is not loaded properly
 		}
 
-		$args = array(
-			'post_id' 	=> $post_id,
-			'approve' 	=> 'approve',
-			'type' 		=> 'order_note'
-		);
+		if ( function_exists('wc_get_order_notes') ) { // WC3.2+
+			$type = ( $filter == 'private' ) ? 'internal' : $filter;
+			$notes = wc_get_order_notes( array(
+				'order_id' => $post_id,
+				'type'     => $type, // use 'internal' for admin and system notes, empty for all
+			) );
 
-		remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
-
-		$notes = get_comments( $args );
-
-		add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
-
-		if ( $notes ) {
-			foreach( $notes as $key => $note ) {
-				if ( $filter == 'customer' && !get_comment_meta( $note->comment_ID, 'is_customer_note', true ) ) {
-					unset($notes[$key]);
+			if ( $include_system_notes === false ) {
+				foreach ($notes as $key => $note) {
+            		if ( $note->added_by == 'system' ) {
+            			unset($notes[$key]);
+            		}
 				}
-				if ( $filter == 'private' && get_comment_meta( $note->comment_ID, 'is_customer_note', true ) ) {
-					unset($notes[$key]);
-				}					
 			}
+
 			return $notes;
+		} else {
+
+			$args = array(
+				'post_id' 	=> $post_id,
+				'approve' 	=> 'approve',
+				'type' 		=> 'order_note'
+			);
+
+			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+
+			$notes = get_comments( $args );
+
+			add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+
+			if ( $notes ) {
+				foreach( $notes as $key => $note ) {
+					if ( $filter == 'customer' && !get_comment_meta( $note->comment_ID, 'is_customer_note', true ) ) {
+						unset($notes[$key]);
+					}
+					if ( $filter == 'private' && get_comment_meta( $note->comment_ID, 'is_customer_note', true ) ) {
+						unset($notes[$key]);
+					}					
+				}
+				return $notes;
+			}
 		}
+
 	}
-	public function order_notes( $filter = 'customer' ) {
-		$notes = $this->get_order_notes( $filter );
+	public function order_notes( $filter = 'customer', $include_system_notes = true ) {
+		$notes = $this->get_order_notes( $filter, $include_system_notes );
 		if ( $notes ) {
 			foreach( $notes as $note ) {
+				$css_class   = array( 'note', 'note_content' );
+				$css_class[] = $note->customer_note ? 'customer-note' : '';
+				$css_class[] = 'system' === $note->added_by ? 'system-note' : '';
+				$css_class   = apply_filters( 'woocommerce_order_note_class', array_filter( $css_class ), $note );
+				$content = isset($note->content) ? $note->content : $note->comment_content; 
 				?>
-				<div class="note_content">
-					<?php echo wpautop( wptexturize( wp_kses_post( $note->comment_content ) ) ); ?>
+				<div class="<?php echo esc_attr( implode( ' ', $css_class ) ); ?>">
+					<?php echo wpautop( wptexturize( wp_kses_post( $content ) ) ); ?>
 				</div>
 				<?php
 			}
@@ -496,9 +527,8 @@ abstract class Order_Document_Methods extends Order_Document {
 				$data['line_tax'] = $this->format_price( $item['line_tax'] );
 				$data['single_line_tax'] = $this->format_price( $item['line_tax'] / max( 1, abs( $item['qty'] ) ) );
 				
-				$line_tax_data = maybe_unserialize( isset( $item['line_tax_data'] ) ? $item['line_tax_data'] : '' );
-				$data['tax_rates'] = $this->get_tax_rate( $item['tax_class'], $item['line_total'], $item['line_tax'], $line_tax_data, true );
-				$data['calculated_tax_rates'] = $this->get_tax_rate( $item['tax_class'], $item['line_total'], $item['line_tax'], $line_tax_data, false );
+				$data['tax_rates'] = $this->get_tax_rate( $item, $this->order, false );
+				$data['calculated_tax_rates'] = $this->get_tax_rate( $item, $this->order, true );
 				
 				// Set the line subtotal (=before discount)
 				$data['line_subtotal'] = $this->format_price( $item['line_subtotal'] );
@@ -561,20 +591,39 @@ abstract class Order_Document_Methods extends Order_Document {
 	}
 
 	/**
-	 * Get the tax rates/percentages for a given tax class
-	 * @param  string $tax_class tax class slug
+	 * Get the tax rates/percentages for an item
+	 * @param  object $item order item
+	 * @param  object $order WC_Order
+	 * @param  bool $force_calculation force calculation of rates rather than retrieving from db
 	 * @return string $tax_rates imploded list of tax rates
 	 */
-	public function get_tax_rate( $tax_class, $line_total, $line_tax, $line_tax_data = '', $force_calculation = false ) {
+	public function get_tax_rate( $item, $order, $force_calculation = false ) {
+		if ( version_compare( WOOCOMMERCE_VERSION, '3.0', '>=' ) ) {
+	        $tax_data_container = ( $item['type'] == 'line_item' ) ? 'line_tax_data' : 'taxes';
+	        $tax_data_key = ( $item['type'] == 'line_item' ) ? 'subtotal' : 'total';
+	        $line_total_key = ( $item['type'] == 'line_item' ) ? 'line_total' : 'total';
+	        $line_tax_key = ( $item['type'] == 'shipping' ) ? 'total_tax' : 'line_tax';
+
+			$tax_class = isset($item['tax_class']) ? $item['tax_class'] : '';
+			$line_tax = $item[$line_tax_key];
+	        $line_total = $item[$line_total_key];
+	        $line_tax_data = $item[$tax_data_container];
+		} else {
+			$tax_class = $item['tax_class'];
+			$line_total = $item['line_total'];
+			$line_tax = $item['line_tax'];
+			$line_tax_data = maybe_unserialize( isset( $item['line_tax_data'] ) ? $item['line_tax_data'] : '' );
+		}
+
 		// first try the easy wc2.2+ way, using line_tax_data
-		if ( !empty( $line_tax_data ) && isset($line_tax_data['total']) ) {
+		if ( !empty( $line_tax_data ) && isset($line_tax_data[$tax_data_key]) ) {
 			$tax_rates = array();
 
-			$line_taxes = $line_tax_data['subtotal'];
+			$line_taxes = $line_tax_data[$tax_data_key];
 			foreach ( $line_taxes as $tax_id => $tax ) {
 				if ( isset($tax) && $tax !== '' ) {
-					$tax_rate = $this->get_tax_rate_by_id( $tax_id );
-					if ( $tax_rate !== false && $force_calculation !== false ) {
+					$tax_rate = $this->get_tax_rate_by_id( $tax_id, $order );
+					if ( $tax_rate !== false && $force_calculation === false ) {
 						$tax_rates[] = $tax_rate . ' %';
 					} else {
 						$tax_rates[] = $this->calculate_tax_rate( $line_total, $line_tax );
@@ -589,7 +638,7 @@ abstract class Order_Document_Methods extends Order_Document {
 				}
 			}
 
-			$tax_rates = implode(' ,', $tax_rates );
+			$tax_rates = implode(', ', $tax_rates );
 			return $tax_rates;
 		}
 
@@ -637,13 +686,51 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * @param  int    $rate_id  woocommerce tax rate id
 	 * @return float  $rate     percentage rate
 	 */
-	public function get_tax_rate_by_id( $rate_id ) {
+	public function get_tax_rate_by_id( $rate_id, $order = null ) {
 		global $wpdb;
+		// WC 3.7+ stores rate in tax items!
+		if ( $order_rates = $this->get_tax_rates_from_order( $order ) ) {
+			if ( isset( $order_rates[ $rate_id ] ) ) {
+				return (float) $order_rates[ $rate_id ];
+			}
+		}
+
 		$rate = $wpdb->get_var( $wpdb->prepare( "SELECT tax_rate FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %d;", $rate_id ) );
 		if ($rate === NULL) {
 			return false;
 		} else {
 			return (float) $rate;
+		}
+	}
+
+	public function get_tax_rates_from_order( $order ) {
+		if ( !empty( $order ) && method_exists( $order, 'get_version' ) && version_compare( $order->get_version(), '3.7', '>=' ) && version_compare( WC_VERSION, '3.7', '>=' ) ) {
+			$tax_rates = array();
+			$tax_items = $order->get_items( array('tax') );
+
+			if ( empty( $tax_items ) ) {
+				return $tax_rates;
+			}
+
+			foreach( $tax_items as $tax_item_key => $tax_item ) {
+				if ( is_callable( array( $order, 'get_created_via' ) ) && $order->get_created_via() == 'subscription' ) {
+					// subscription renewals didn't properly record the rate_percent property between WC3.7 and WCS3.0.1
+					// so we use a fallback if the rate_percent = 0 and the amount != 0
+					$rate_percent = $tax_item->get_rate_percent();
+					$tax_amount = $tax_item->get_tax_total() + $tax_item->get_shipping_tax_total();
+					if ( $tax_amount > 0 && $rate_percent > 0 ) {
+						$tax_rates[ $tax_item->get_rate_id() ] = $rate_percent;
+					} else {
+						continue; // not setting the rate will let the plugin fall back to the rate from the settings
+					}
+				} else {
+					$tax_rates[ $tax_item->get_rate_id() ] = $tax_item->get_rate_percent();
+				}
+
+			}
+			return $tax_rates;
+		} else {
+			return false;
 		}
 	}
 
@@ -674,8 +761,6 @@ abstract class Order_Document_Methods extends Order_Document {
 	 * @return string
 	 */
 	public function get_thumbnail_id ( $product ) {
-		global $woocommerce;
-
 		$product_id = WCX_Product::get_id( $product );
 
 		if ( has_post_thumbnail( $product_id ) ) {
@@ -795,7 +880,7 @@ abstract class Order_Document_Methods extends Order_Document {
 							$tax_string_array[] = sprintf( '%s %s', $tax_amount, $tax->label );
 						}
 					} else {
-						$tax_string_array[] = sprintf( '%s %s', wc_price( $this->order->get_total_tax() - $this->order->get_total_tax_refunded(), array( 'currency' => WCX_Order::get_prop( $this->order, 'currency' ) ) ), WC()->countries->tax_or_vat() );
+						$tax_string_array[] = sprintf( '%s %s', wc_price( $this->order->get_total_tax(), array( 'currency' => WCX_Order::get_prop( $this->order, 'currency' ) ) ), WC()->countries->tax_or_vat() );
 					}
 					if ( ! empty( $tax_string_array ) ) {
 						if ( version_compare( WOOCOMMERCE_VERSION, '2.6', '>=' ) ) {

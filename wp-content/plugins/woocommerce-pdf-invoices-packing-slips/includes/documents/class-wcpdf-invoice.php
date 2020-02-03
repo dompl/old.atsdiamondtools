@@ -47,6 +47,10 @@ class Invoice extends Order_Document_Methods {
 		return apply_filters( 'wpo_wcpdf_document_use_historical_settings', $use_historical_settings, $this );
 	}
 
+	public function storing_settings_enabled() {
+		return apply_filters( 'wpo_wcpdf_document_store_settings', true, $this );
+	}
+
 	public function get_title() {
 		// override/not using $this->title to allow for language switching!
 		return apply_filters( "wpo_wcpdf_{$this->slug}_title", __( 'Invoice', 'woocommerce-pdf-invoices-packing-slips' ), $this );
@@ -54,14 +58,19 @@ class Invoice extends Order_Document_Methods {
 
 	public function init() {
 		// store settings in order
-		if ( !empty( $this->order ) ) {
+		if ( $this->storing_settings_enabled() && !empty( $this->order ) ) {
 			$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
 			$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
 			$settings = (array) $document_settings + (array) $common_settings;
 			WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
 		}
 
-		$this->set_date( current_time( 'timestamp', true ) );
+		if ( isset( $this->settings['display_date'] ) && $this->settings['display_date'] == 'order_date' && !empty( $this->order ) ) {
+			$this->set_date( WCX_Order::get_prop( $this->order, 'date_created' ) );
+		} else {
+			$this->set_date( current_time( 'timestamp', true ) );
+		}
+
 		$this->init_number();
 	}
 
@@ -75,6 +84,11 @@ class Invoice extends Order_Document_Methods {
 		if ( apply_filters( 'woocommerce_invoice_number_by_plugin', false ) || apply_filters( 'wpo_wcpdf_external_invoice_number_enabled', false, $this ) ) {
 			$invoice_number = apply_filters( 'woocommerce_generate_invoice_number', null, $this->order );
 			$invoice_number = apply_filters( 'wpo_wcpdf_external_invoice_number', $invoice_number, $this );
+		} elseif ( isset( $this->settings['display_number'] ) && $this->settings['display_number'] == 'order_number' && !empty( $this->order ) ) {
+			$invoice_number = $this->order->get_order_number();
+		}
+
+		if ( !empty( $invoice_number ) ) { // overriden by plugin or set to order number
 			if ( is_numeric($invoice_number) || $invoice_number instanceof Document_Number ) {
 				$this->set_number( $invoice_number );
 			} else {
@@ -83,13 +97,14 @@ class Invoice extends Order_Document_Methods {
 				$formatted_number = $invoice_number;
 				$number = (int) preg_replace('/\D/', '', $invoice_number);
 				$invoice_number = compact( 'number', 'formatted_number' );
-				$this->set_number( $invoice_number );				
+				$this->set_number( $invoice_number );
 			}
 			return $invoice_number;
 		}
 
 		$number_store_method = WPO_WCPDF()->settings->get_sequential_number_store_method();
-		$number_store = new Sequential_Number_Store( 'invoice_number', $number_store_method );
+		$number_store_name = apply_filters( 'wpo_wcpdf_document_sequential_number_store', 'invoice_number', $this );
+		$number_store = new Sequential_Number_Store( $number_store_name, $number_store_method );
 		// reset invoice number yearly
 		if ( isset( $this->settings['reset_number_yearly'] ) ) {
 			$current_year = date("Y");
@@ -179,6 +194,21 @@ class Invoice extends Order_Document_Methods {
 			),
 			array(
 				'type'			=> 'setting',
+				'id'			=> 'disable_for_statuses',
+				'title'			=> __( 'Disable for:', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'select',
+				'section'		=> 'invoice',
+				'args'			=> array(
+					'option_name'		=> $option_name,
+					'id'				=> 'disable_for_statuses',
+					'options' 			=> wc_get_order_statuses(),
+					'multiple'			=> true,
+					'enhanced_select'	=> true,
+					'placeholder'		=> __( 'Select one or more statuses', 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
+			array(
+				'type'			=> 'setting',
 				'id'			=> 'display_shipping_address',
 				'title'			=> __( 'Display shipping address', 'woocommerce-pdf-invoices-packing-slips' ),
 				'callback'		=> 'checkbox',
@@ -215,24 +245,38 @@ class Invoice extends Order_Document_Methods {
 				'type'			=> 'setting',
 				'id'			=> 'display_date',
 				'title'			=> __( 'Display invoice date', 'woocommerce-pdf-invoices-packing-slips' ),
-				'callback'		=> 'checkbox',
+				'callback'		=> 'select',
 				'section'		=> 'invoice',
 				'args'			=> array(
-					'option_name'		=> $option_name,
-					'id'				=> 'display_date',
-					'value' 			=> 'invoice_date',
+					'option_name'	=> $option_name,
+					'id'			=> 'display_date',
+					'options' 		=> array(
+						''				=> __( 'No' , 'woocommerce-pdf-invoices-packing-slips' ),
+						'invoice_date'	=> __( 'Invoice Date' , 'woocommerce-pdf-invoices-packing-slips' ),
+						'order_date'	=> __( 'Order Date' , 'woocommerce-pdf-invoices-packing-slips' ),
+					),
 				)
 			),
 			array(
 				'type'			=> 'setting',
 				'id'			=> 'display_number',
 				'title'			=> __( 'Display invoice number', 'woocommerce-pdf-invoices-packing-slips' ),
-				'callback'		=> 'checkbox',
+				'callback'		=> 'select',
 				'section'		=> 'invoice',
 				'args'			=> array(
-					'option_name'		=> $option_name,
-					'id'				=> 'display_number',
-					'value' 			=> 'invoice_number',
+					'option_name'	=> $option_name,
+					'id'			=> 'display_number',
+					'options' 		=> array(
+						''					=> __( 'No' , 'woocommerce-pdf-invoices-packing-slips' ),
+						'invoice_number'	=> __( 'Invoice Number' , 'woocommerce-pdf-invoices-packing-slips' ),
+						'order_number'		=> __( 'Order Number' , 'woocommerce-pdf-invoices-packing-slips' ),
+					),
+					'description'	=> sprintf(
+						'<strong>%s</strong> %s <a href="https://docs.wpovernight.com/woocommerce-pdf-invoices-packing-slips/invoice-numbers-explained/#why-is-the-pdf-invoice-number-different-from-the-woocommerce-order-number">%s</a>',
+						__( 'Warning!', 'woocommerce-pdf-invoices-packing-slips' ),
+						__( 'Using the Order Number as invoice number is not recommended as this may lead to gaps in the invoice number sequence (even when order numbers are sequential).', 'woocommerce-pdf-invoices-packing-slips' ),
+						__( 'More information', 'woocommerce-pdf-invoices-packing-slips' )
+					),
 				)
 			),
 			array(

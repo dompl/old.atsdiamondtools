@@ -57,6 +57,13 @@ class Ignition_Updater_Licenses_Table extends WP_List_Table {
 			case 'product_version':
 			case 'license_expiry':
 				return $item[$column_name];
+			/*
+			case 'activation_data': 
+				$data = json_decode( $item[$column_name], true  );
+				if ( is_array( $data ) ) {
+					return $data;
+				}
+			*/
 			break;
 		}
 	} // End column_default()
@@ -80,6 +87,7 @@ class Ignition_Updater_Licenses_Table extends WP_List_Table {
 			'product_name' => __( 'Product', 'ignition-updater' ),
 			'product_version' => __( 'Version', 'ignition-updater' ),
 			'product_status' => __( 'Key', 'ignition-updater' ),
+			//'activation_data' => __( 'Activations', 'ignition-updater' ),
 			'product_expiry' => __( 'Renew By', 'ignition-updater' )
 		);
 		 return $columns;
@@ -103,7 +111,7 @@ class Ignition_Updater_Licenses_Table extends WP_List_Table {
 	 */
 	public function column_product_version ( $item ) {
 		if ( isset( $item['latest_version'], $item['product_version'] ) && version_compare( $item['product_version'], $item['latest_version'], '<' ) ) {
-			$version_text = '<strong>' . $item['product_version'] . '<span class="update-available"> - ' . sprintf( __( 'version %1$s available', 'ignition-updater' ), esc_html( $item['latest_version'] ) ) .  '</span></strong>' . "\n";
+			$version_text = '<strong>' . $item['product_version'] . '<span class="update-available"> - ' . sprintf( __( 'version %1$s is available', 'ignition-updater' ), esc_html( $item['latest_version'] ) ) .  '</span></strong>' . "\n";
 		} else {
 			$version_text = '<strong class="latest-version">' . $item['product_version'] . '</strong>' . "\n";
 		}
@@ -129,6 +137,24 @@ class Ignition_Updater_Licenses_Table extends WP_List_Table {
 		return $response;
 	} // End column_status()
 
+	/*
+	public function column_activation_data ( $item ) {
+		
+			$response = print_r( $item );
+			return $response;
+		
+			$response = '';
+		if ( 'active' == $item['product_status'] ) {
+			$deactivate_url = wp_nonce_url( add_query_arg( 'action', 'deactivate-product', add_query_arg( 'filepath', $item['product_file_path'], add_query_arg( 'page', 'ignition-helper', network_admin_url( 'index.php' ) ) ) ), 'bulk-licenses' );
+			$response = '<a href="' . esc_url( $deactivate_url ) . '">' . __( 'Deactivate', 'ignition-updater' ) . '</a>' . "\n";
+		} else {
+			$response .= '<input name="license_keys[' . esc_attr( $item['product_file_path'] ) . ']" id="license_keys-' . esc_attr( $item['product_file_path'] ) . '" type="text" value="" size="37" aria-required="true" placeholder="' . esc_attr__( 'Place your license key here', 'ignition-updater' ) . '" />' . "\n";
+		}
+
+		return $response;
+	} // End column_activation_data()
+	*/
+	
 	public function column_product_expiry ( $item ) {
 		if ( '-' != $item['license_expiry'] && 'Not activated' != $item['license_expiry'] ) {
 			$renew_link = add_query_arg( array( 'utm_source' => 'product', 'utm_medium' => 'upsell', 'utm_campaign' => 'licenserenewal' ), 'https://ignitewoo.com/my-account/' );
@@ -170,4 +196,3 @@ class Ignition_Updater_Licenses_Table extends WP_List_Table {
 	  	$this->items = $this->data;
 	} // End prepare_items()
 } // End Class
-?>

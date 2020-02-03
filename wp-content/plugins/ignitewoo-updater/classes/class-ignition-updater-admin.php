@@ -10,32 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @subpackage Ignition Updater
  * @category Core
  * @author Ignition
- * @since 1.0.0
+ * @since 3.0.0
  *
- * TABLE OF CONTENTS
- *
- * private $token
- * private $api
- * private $name
- * private $menu_label
- * private $page_slug
- * private $plugin_path
- * private $screens_path
- * private $classes_path
- *
- * private $installed_products
- * private $pending_products
- *
- * - __construct()
- * - register_settings_screen()
- * - settings_screen()
- * - get_activated_products()
- * - get_product_reference_list()
- * - get_detected_products()
- * - get_pending_products()
- * - activate_products()
- * - deactivate_product()
- * - load_updater_instances()
  */
 class Ignition_Updater_Admin {
 	private $token;
@@ -65,7 +41,7 @@ class Ignition_Updater_Admin {
 	 */
 	public function __construct ( $file ) {
 		global $ignition_updater_token;
-		
+
 		$this->token = $ignition_updater_token; // Don't ever change this, as it will mess with the data stored of which products are activated, etc.
 
 		// Load in the class to use for the admin screens.
@@ -97,7 +73,7 @@ class Ignition_Updater_Admin {
 		$menu_hook = is_multisite() ? 'network_admin_menu' : 'admin_menu';
 		add_action( $menu_hook, array( $this, 'register_settings_screen' ) );
 
-		// Display an admin notice, if there are Woo products, eligible for licenses, that are not activated.
+		// Display an admin notice, if there are IgniteWoo products that do not have license keys activated.
 		add_action( 'network_admin_notices', array( $this, 'maybe_display_activation_notice' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_display_activation_notice' ) );
 		
@@ -169,9 +145,9 @@ class Ignition_Updater_Admin {
 				}
 
 				if ( current_time( 'timestamp' ) > strtotime( '-60 days', $date->format( 'U' ) ) && current_time( 'timestamp' ) < strtotime( '+14 days', $date->format( 'U' ) ) ) {
-					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid losing access to updates and support.', 'ignition-updater' ), $product['product_name'], $date->format( get_option( 'date_format' ) ), '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
+					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid losing access to important updates and support.', 'ignition-updater' ), $product['product_name'], $date->format( get_option( 'date_format' ) ), '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
 				} elseif ( current_time( 'timestamp' ) > $date->format( 'U' ) ) {
-					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> has expired. Please %srenew%s to receive updates and support.', 'ignition-updater' ), $product['product_name'], '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
+					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> has expired. Please %srenew%s to receive important updates and support.', 'ignition-updater' ), $product['product_name'], '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
 				}
 			}
 		}
@@ -239,13 +215,20 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 
 			<div class="about-text ignition-helper-about-text">
 				<?php
-					_e( 'This is where you can activate your license keys.', 'ignition-updater' );
+					_e( 'This is where you activate your IgniteWoo license keys.', 'ignition-updater' );
 				?>
 			</div>
 			<div class="short-description ignition-helper-short-description">
 				<?php //echo wpautop( sprintf( __( 'To make sure your licenses stay active %1$sadd a saved card%2$s and %3$senable auto-renew%2$s on the licenses you’re continuing to enjoy.', 'ignition-updater' ), '<a href="' . esc_url( $this->my_account_url ) . '">', '</a>', '<a href="' . esc_url( $this->my_subscriptions_url ) . '">' ) ); ?>
-				<?php echo wpautop( sprintf( __( 'To make sure your licenses stay active be sure to renew before expiration, otherwise you lose access to updates and support.', 'ignition-updater' ), '<a href="' . esc_url( $this->my_account_url ) . '">', '</a>', '<a href="' . esc_url( $this->my_subscriptions_url ) . '">' ) );  ?>
+				<i><b><?php echo wpautop( sprintf( __( "Make certain that you activate your licenses otherwise you cannot receive important software updates and support.", 'ignition-updater' ), '<a href="' . esc_url( $this->my_account_url ) . '">', '</a>', '<a href="' . esc_url( $this->my_subscriptions_url ) . '">' ) );  ?></b></i>
 			</div><!--/.short-description-->
+			<?php /*
+			<div style="font-size:1.1em">
+				<?php echo sprintf( __( 'See below for a list of the IgniteWoo products in use on %s. You can %s, as well as our %s on how this works. %s', 'ignition-updater' ), get_bloginfo( 'name' ), '<a href="https://ignitewoo.com/my-account/">view your licenses here</a>', '<a href="https://ignitewoo.com/ignitewoo-software-documentation/?utm_source=helper">documentation</a>', '&nbsp;&nbsp;<a href="' . esc_url( add_query_arg( array( 'force-check' => '1' ), admin_url( 'update-core.php' ) ) ) . '" class="button">' . __( 'Check for Updates', 'ignition-updater' ) . '</a>' );
+				?>
+			</div>
+			*/ ?>
+	
 		</div><!--/#welcome-panel .welcome-panel-->
 		<?php
 
@@ -265,7 +248,20 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 			// Licenses screen.
 			case 'license':
 			default:
+
+				$show_screen = false; 
+				
 				if ( $this->api->ping() ) {
+					$show_screen = true;
+				}
+				
+				// On initial activate of this updater plugin on multisite it may not 
+				// always show the updater screen on the first load. So force it. 
+				if ( !$show_screen && is_multisite() ) { 
+					$show_screen = true; 
+				}
+				
+				if ( $show_screen ) { 
 					$this->installed_products = $this->get_detected_products();
 					$this->pending_products = $this->get_pending_products();
 
@@ -304,15 +300,14 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 	 */
 	public function display_general_links () {
 		$links = array(
-			'http://ignitewoo.com/faq/' => __( 'FAQ', 'ignition-updater' ),
-			'http://ignitewoo.com/ignitewoo-software-documentation/' => __( 'Documentation', 'ignition-updater' ),
-			'http://ignitewoo.com/contact-us/' => __( 'Contact Us', 'ignition-updater' )
+			'https://ignitewoo.com/faq/' => __( 'Frequently Asked Questions', 'ignition-updater' ),
+			'https://ignitewoo.com/ignitewoo-software-documentation/' => __( 'Documentation', 'ignition-updater' ),
+			'https://ignitewoo.com/contact-us/' => __( 'Contact IgniteWoo', 'ignition-updater' )
 			);
 		//echo '<img src="' . esc_url( $this->assets_url . 'images/woocommerce.png' ) . '" alt="' . __( 'Getting Started', 'ignition-updater' ) . '" />' . "\n";
 		echo '<h4>' . __( 'For help please review our FAQ, our documentation, or contact us.', 'ignition-updater' ) . '</h4>' . "\n";
-		echo '<ul>' . $this->_generate_link_list( $links ) . "\n";
+		echo $this->_generate_link_list( $links ) . "\n";
 		
-		echo '</ul>' . "\n";
 	} // End display_general_links()
 
 	/**
@@ -338,7 +333,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		if ( 0 >= count( $links ) ) return;
 		$html = '';
 		foreach ( $links as $k => $v ) {
-			$html .= '<li><a href="' . esc_url( trailingslashit( $k ) . '?utm_source=helper' ) . '" title="' . esc_attr( $v ) . '" target="_blank">' . esc_html( $v ) . '</a></li>' . "\n";
+			$html .= '<span><a href="' . esc_url( trailingslashit( $k ) . '?utm_source=helper' ) . '" title="' . esc_attr( $v ) . '" target="_blank" style="text-decoration:none; min-width:100px;text-align:center; margin-right:1em"  class="button">' . esc_html( $v ) . '</a></span>' . "\n";
 		}
 
 		return $html;
@@ -439,7 +434,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 					if ( isset( $_POST['license_keys'] ) && 0 < count( $_POST['license_keys'] ) ) {
 						foreach ( $_POST['license_keys'] as $k => $v ) {
 							if ( '' != $v ) {
-								$license_keys[$k] = $v;
+								$license_keys[$k] = trim( $v );
 							}
 						}
 					}
@@ -479,16 +474,19 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 	public function ajax_process_request() {
 
 		if ( isset( $_POST['security'] ) && wp_verify_nonce( $_POST['security'], 'activate-license-keys' ) && isset( $_POST['license_data'] ) && ! empty( $_POST['license_data'] ) ) {
+			
 			$license_keys = array();
+			
 			foreach ( $_POST['license_data'] as $license_data ) {
-				if ( '' != $license_data['key'] ) {
-					$license_keys[ $license_data['name'] ] = $license_data['key'];
+				if ( !empty( $license_data['key'] ) ) {
+					$license_keys[ $license_data['name'] ] = trim( $license_data['key'] );
 				}
 			}
-			if ( 0 < count( $license_keys ) ) {
+			if ( count( $license_keys ) > 0 ) {
 
 				$response = $this->activate_products( $license_keys );
 			}
+		
 			if ( $response == true ) {
 			
 				$request_errors = $this->api->get_error_log();
@@ -523,11 +521,17 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 				
 			} else {
 				$return = '<div class="error fade notice is-dismissible">' . "\n";
-				$return .= wpautop( __( 'No license keys were specified for activation.', 'ignition-updater' ) );
+				$return .= wpautop( __( 'Oops. Something went wrong with key activation.', 'ignition-updater' ) );
 				$return .= '</div>' . "\n";
 				$return_json = array( 'success' => 'false', 'message' => $return );
 			}
+			
 			echo json_encode( $return_json );
+		} else { 
+			$return = '<div class="error fade notice is-dismissible">' . "\n";
+			$return .= wpautop( __( 'No license keys were specified for activation.', 'ignition-updater' ) );
+			$return .= '</div>' . "\n";
+			$return_json = array( 'success' => 'false', 'message' => $return );
 		}
 		die();
 	}
@@ -592,7 +596,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 				break;
 
 				case 'deactivate-product':
-					if ( 'true' == $_GET['status'] && ( 0 >= count( $request_errors ) ) ) {
+					if ( 'true' == $_GET['status'] && is_array( $request_errors ) && count( $request_errors ) <=0 ) {
 						$message = __( 'Product deactivated successfully.', 'ignition-updater' );
 					} else {
 						$message = __( 'There was an error while deactivating the product.', 'ignition-updater' );
@@ -692,7 +696,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		if ( is_array( $products ) && ( 0 < count( $products ) ) ) {
 			$reference_list = $this->get_product_reference_list();
 			$activated_products = $this->get_activated_products();
-//var_dump( 'x', $activated_products ); die;
+
 			if ( is_array( $reference_list ) && ( 0 < count( $reference_list ) ) ) {
 				foreach ( $products as $k => $v ) {
 					if ( in_array( $k, array_keys( $reference_list ) ) ) {
@@ -712,8 +716,10 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 
 						// Retrieve the latest actual version, from the hosted changelog file.
 						$latest_version = $this->get_version_from_changelog( $k, $v, $item );
+
+						//$activation_data = get_transient( 'ign_' . esc_attr( sanitize_title( $k ) ) . '_activations_remaining' );
 						
-						$response[$k] = array( 'product_name' => $v['Name'], 'product_version' => $v['Version'], 'file_id' => $reference_list[$k]['file_id'], 'product_id' => $reference_list[$k]['product_id'], 'product_status' => $status, 'product_file_path' => $k, 'license_expiry' => $license_expiry, 'latest_version' => $latest_version );
+						$response[$k] = array( 'product_name' => $v['Name'], 'product_version' => $v['Version'], 'file_id' => $reference_list[$k]['file_id'], 'product_id' => $reference_list[$k]['product_id'], 'product_status' => $status, 'product_file_path' => $k, 'license_expiry' => $license_expiry, 'latest_version' => $latest_version /*, 'activation_data' => $activation_data */ );
 
 					}
 				}
@@ -731,7 +737,18 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 	 * @return  string Product version number.
 	 */
 	protected function get_version_from_changelog ( $slug, $vals, $product ) {
-	
+		global $pagenow, $ignition_updater;
+
+		$is_licenses_page = false; 
+		
+		if ( !empty( $_GET ) && !empty( $_GET['page'] ) && 'ignition-helper' == $_GET['page'] ) { 
+			$is_licenses_page = true; 
+		}
+		
+		if ( ( empty( $pagenow ) || 'update-core.php' !== $pagenow ) && !$is_licenses_page ) { 
+			return;
+		}
+
 		// Check the cache first, this way we avoid hitting the API with every page load
 		// UNLESS someone is forcing a check for updates from the Dashboard -> Updates page, in that
 		// case let the check take place
@@ -758,23 +775,33 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 			'licence_key' => 'version_info',
 			'home_url' => esc_url( home_url( '/' ) ),
 			'slug' => $slug,
+			'updater_version' => $ignition_updater->version,
 		);
 
 		// Send request for detailed information
 		$response = $this->api->request( 'plugininformation', $args );
-		
+
 		if ( !empty( $response->new_version ) ) {
 			set_transient( 'ign_' . esc_attr( sanitize_title( $slug ) ) . '_latest_version', $response->new_version, HOUR_IN_SECONDS );
+		} else if ( !empty( $response->payload->new_version ) ) {
+			set_transient( 'ign_' . esc_attr( sanitize_title( $slug ) ) . '_latest_version', $response->payload->new_version, HOUR_IN_SECONDS );
 		} else if ( !empty( $response->current_version ) ) {
 			set_transient( 'ign_' . esc_attr( sanitize_title( $slug ) ) . '_latest_version', $response->current_version, HOUR_IN_SECONDS );
 		}
 
-
+		/*
+		if ( !empty( $response->activation_data ) ) {
+			set_transient( 'ign_' . esc_attr( sanitize_title( $slug ) ) . '_activations_remaining', $response->activation_data, HOUR_IN_SECONDS );
+		} else if ( !empty( $response->current_version ) ) {
+			delete_transient( 'ign_' . esc_attr( sanitize_title( $slug ) ) . '_activations_remaining' );
+		}
+		*/
+		
 		if ( empty( $response->new_version ) )
 			return false;
 
 		return $response->new_version;
-	} // End get_version_from_changelog()
+	}
 
 	/**
 	 * Get an array of products that haven't yet been activated.
@@ -841,7 +868,8 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		$this->api->store_error_log();
 
 		if ( $has_update ) {
-			$response = update_option( $key, $already_active );
+			update_option( $key, $already_active );
+			$response = true;
 		} else {
 			$response = true; // We got through successfully, and the supplied keys are already active.
 		}
@@ -867,6 +895,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 			$deactivated = true;
 
 			if ( isset( $already_active[ $filename ][0] ) ) {
+			
 				$key = $already_active[ $filename ][2];
 
 				if ( false == $local_only ) {
@@ -927,12 +956,15 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 	 * @return void
 	 */
 	public function ensure_keys_are_actually_active () {
+	
 		$products = (array)$this->get_activated_products();
+		
 		$call_data = array();
 
-		if ( 0 < count( $products ) ) {
+		if ( count( $products ) > 0 ) {
 			foreach ( $products as $k => $v ) {
-				if ( 3 <= count( $v ) ) { // Prevents undefined offset notices
+			
+				if ( count( $v ) >= 3 ) { // Prevents undefined offset notices
 					$call_data[$k] = array( $v[0], $v[1], $v[2], esc_url( home_url( '/' ) ) );
 				}
 			}
@@ -943,7 +975,8 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		}
 
 		$statuses = $this->api->product_active_statuses_check( $call_data );
-		if ( ! $statuses ) {
+;
+		if ( !$statuses ) {
 			return;
 		}
 
@@ -952,6 +985,6 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 				$this->deactivate_product( $k, true );
 			}
 		}
+
 	} // End ensure_keys_are_actually_active()
 } // End Class
-?>
