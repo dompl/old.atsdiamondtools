@@ -67,6 +67,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 define( 'DOING_AJAX', true );
             }
 
+            if ( ! headers_sent() && isset( $_REQUEST['typedata'] ) ) {
+                header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
+            }
+
             echo json_encode( $this->search() );
 
             die;
@@ -548,6 +552,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     if ( $show_price === 'true' && ( $product->is_in_stock() || ( ! $product->is_in_stock() && $show_outofstockprice === 'true' ) ) ) {
                         $price = $product->get_price_html();
+                        $price = preg_replace("/<a\s(.+?)>(.+?)<\/a>/is", "<span>$2</span>", $price);
                     }
 
                     if ( $show_sale === 'true' && ( $product->is_in_stock() || ( ! $product->is_in_stock() && $show_outofstockprice === 'true' ) ) ) {

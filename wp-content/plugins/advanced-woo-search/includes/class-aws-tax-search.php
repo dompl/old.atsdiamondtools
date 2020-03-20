@@ -36,6 +36,14 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
          */
         public function __construct( $taxonomy, $data ) {
 
+            /**
+             * Filters array taxonomies search data
+             * @since 1.93
+             * @param array $data Array of search data
+             * @param string $taxonomy Taxonomy name
+             */
+            $data = apply_filters( 'aws_tax_search_data', $data, $taxonomy );
+
             $this->taxonomy = $taxonomy;
             $this->search_string = isset( $data['s'] ) ? $data['s'] : '';
             $this->search_string_unfiltered = isset( $data['s_nonormalize'] ) ? $data['s_nonormalize'] : $this->search_string ;
@@ -60,7 +68,9 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             $filtered_terms_full = $wpdb->prepare( '( name LIKE %s )',  '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
 
-            $search_array = $this->get_search_array( $this->search_terms );
+            $search_array = array_map( array( $this, 'singularize' ), $this->search_terms  );
+            $search_array = $this->synonyms( $search_array );
+            $search_array = $this->get_search_array( $search_array );
 
             $search_array_chars = $this->get_unfiltered_search_array();
 
@@ -272,14 +282,6 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             foreach ( $search_terms as $search_term ) {
 
-                $search_term_len = strlen( $search_term );
-
-                $search_term_norm = AWS_Plurals::singularize( $search_term );
-
-                if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
-                    $search_term = $search_term_norm;
-                }
-
                 $like = '%' . $wpdb->esc_like($search_term) . '%';
 
                 $search_array[] = $wpdb->prepare('( name LIKE %s )', $like);
@@ -373,6 +375,49 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
         private function prepare_tax_names( $name ) {
             global $wpdb;
             return $wpdb->prepare('%s', $name);
+        }
+
+        /*
+         * Singularize terms
+         * @param string $search_term Search term
+         * @return string Singularized search term
+         */
+        private function singularize( $search_term ) {
+
+            $search_term_len = strlen( $search_term );
+            $search_term_norm = AWS_Plurals::singularize( $search_term );
+
+            if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
+                $search_term = $search_term_norm;
+            }
+
+            return $search_term;
+
+        }
+
+        /*
+         * Add synonyms
+         * @param array $search_terms Search term
+         * @return array Search term with synonyms
+         */
+        private function synonyms( $search_terms ) {
+
+            if ( $search_terms && ! empty( $search_terms ) ) {
+
+                $new_search_terms = array();
+
+                foreach( $search_terms as $search_term ) {
+                    $new_search_terms[$search_term] = 1;
+                }
+
+                $new_search_terms = AWS_Helpers::get_synonyms( $new_search_terms );
+
+                return array_keys( $new_search_terms );
+
+            }
+
+            return $search_terms;
+
         }
 
     }

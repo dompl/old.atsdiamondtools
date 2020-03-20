@@ -684,6 +684,39 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Get search form action link
+         *
+         * @return string Search URL
+         */
+        static public function get_search_url() {
+
+            $search_url = home_url( '/' );
+
+            if ( function_exists( 'pll_home_url' ) ) {
+
+                $search_url = pll_home_url();
+
+                if ( get_option( 'show_on_front' ) === 'page' ) {
+
+                    $current_language = pll_current_language();
+                    $default_language = pll_default_language();
+
+                    if ( $current_language != $default_language ) {
+                        if ( strpos( $search_url, '/' . $current_language ) !== false ) {
+                            $language_subdir = $current_language.'/';
+                            $search_url = home_url( '/' . $language_subdir );
+                        }
+                    }
+
+                }
+
+            }
+
+            return $search_url;
+
+        }
+
+        /*
          * Get string with current product terms names
          *
          * @return string List of terms names

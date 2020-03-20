@@ -20,7 +20,7 @@ class Install {
 	/**
 	 * Plugin version option name.
 	 */
-	const VERSION_OPTION = 'wc_admin_version';
+	const VERSION_OPTION = 'woocommerce_admin_version';
 
 	/**
 	 * DB updates and callbacks that need to be run per version.
@@ -36,17 +36,72 @@ class Install {
 			'wc_admin_update_0230_rename_gross_total',
 			'wc_admin_update_0230_db_version',
 		),
+		'0.25.1' => array(
+			'wc_admin_update_0251_remove_unsnooze_action',
+			'wc_admin_update_0251_db_version',
+		),
+	);
+
+	/**
+	 * Migrated option names mapping. New => old.
+	 *
+	 * @var array
+	 */
+	protected static $migrated_options = array(
+		'woocommerce_onboarding_profile'           => 'wc_onboarding_profile',
+		'woocommerce_admin_install_timestamp'      => 'wc_admin_install_timestamp',
+		'woocommerce_onboarding_opt_in'            => 'wc_onboarding_opt_in',
+		'woocommerce_admin_import_stats'           => 'wc_admin_import_stats',
+		'woocommerce_admin_version'                => 'wc_admin_version',
+		'woocommerce_admin_last_orders_milestone'  => 'wc_admin_last_orders_milestone',
+		'woocommerce_admin-wc-helper-last-refresh' => 'wc-admin-wc-helper-last-refresh',
+		'woocommerce_admin_report_export_status'   => 'wc_admin_report_export_status',
 	);
 
 	/**
 	 * Hook in tabs.
 	 */
 	public static function init() {
-		add_action( 'admin_init', array( __CLASS__, 'check_version' ), 5 );
+		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
 
 		// Add wc-admin report tables to list of WooCommerce tables.
 		add_filter( 'woocommerce_install_get_tables', array( __CLASS__, 'add_tables' ) );
+
+		// Migrate option names by filtering their default values.
+		// This attaches a targeted filter for each migrated option name that will retreive
+		// the old value and use it as the default for the new option. This default
+		// will be used in the first retreival of the new option.
+		foreach ( self::$migrated_options as $new_option => $old_option ) {
+			add_filter( "default_option_{$new_option}", array( __CLASS__, 'handle_option_migration' ), 10, 2 );
+		}
+	}
+
+	/**
+	 * Migrate option values to their new keys/names.
+	 *
+	 * @param mixed  $default Default value for the option.
+	 * @param string $new_option Option name.
+	 * @return mixed Migrated option value.
+	 */
+	public static function handle_option_migration( $default, $new_option ) {
+		if ( isset( self::$migrated_options[ $new_option ] ) ) {
+			wc_maybe_define_constant( 'WC_ADMIN_MIGRATING_OPTIONS', true );
+
+			// Avoid infinite loops - this filter is applied in add_option(), update_option(), and get_option().
+			remove_filter( "default_option_{$new_option}", array( __CLASS__, 'handle_option_migration' ), 10, 2 );
+
+			// Migrate the old option value.
+			$old_option_name  = self::$migrated_options[ $new_option ];
+			$old_option_value = get_option( $old_option_name, $default );
+
+			update_option( $new_option, $old_option_value );
+			delete_option( $old_option_name );
+
+			return $old_option_value;
+		}
+
+		return $default;
 	}
 
 	/**
@@ -107,7 +162,7 @@ class Install {
 
 		// Use add_option() here to avoid overwriting this value with each
 		// plugin version update. We base plugin age off of this value.
-		add_option( 'wc_admin_install_timestamp', time() );
+		add_option( 'woocommerce_admin_install_timestamp', time() );
 		do_action( 'woocommerce_admin_installed' );
 	}
 
@@ -379,6 +434,7 @@ class Install {
 		if ( ! wp_next_scheduled( 'wc_admin_daily' ) ) {
 			wp_schedule_event( time(), 'daily', 'wc_admin_daily' );
 		}
+		// @todo This is potentially redundant when the core package exists.
 		wp_schedule_single_event( time() + 10, 'generate_category_lookup_table' );
 	}
 
@@ -391,15 +447,17 @@ class Install {
 	}
 
 	/**
-	 * Delete all data from tables.
+	 * Drop WooCommerce Admin tables.
+	 *
+	 * @return void
 	 */
-	public static function delete_table_data() {
+	public static function drop_tables() {
 		global $wpdb;
 
 		$tables = self::get_tables();
 
 		foreach ( $tables as $table ) {
-			$wpdb->query( "TRUNCATE TABLE {$table}" ); // WPCS: unprepared SQL ok.
+			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // WPCS: unprepared SQL ok.
 		}
 	}
 }

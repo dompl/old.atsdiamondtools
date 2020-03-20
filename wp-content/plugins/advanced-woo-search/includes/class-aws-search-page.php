@@ -66,6 +66,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             // Nukes the FOUND_ROWS() database query
 		    add_filter( 'found_posts_query', array( $this, 'filter_found_posts_query' ), 5, 2 );
 
+            // Update found post query param
+            add_filter( 'found_posts', array( $this, 'filter_found_posts' ), 999, 2 );
+
             // WooCommerce default widget filters
             add_filter( 'woocommerce_layered_nav_link', array( $this, 'woocommerce_layered_nav_link' ) );
             add_filter( 'woocommerce_get_filtered_term_product_counts_query', array( $this, 'woocommerce_get_filtered_term_product_counts_query' ), 999 );
@@ -278,6 +281,24 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             }
 
             return '';
+        }
+
+        /**
+         * Filters the number of found posts for the query.
+         *
+         * @param int $found_posts The number of posts found
+         * @param object $query
+         * @return string
+         */
+        public function filter_found_posts( $found_posts, $query ) {
+
+            // Elementor search template fix
+            if ( isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] && isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] && isset( $query->query_vars['nopaging'] ) && ! $query->query_vars['nopaging'] ) {
+                $found_posts = count( $this->data['all_products'] );
+            }
+
+            return $found_posts;
+
         }
 
         /**

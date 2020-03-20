@@ -55,6 +55,8 @@ class epdq_checkout extends WC_Payment_Gateway
 
 		$this->sha_method 	= ($this->sha_method != '') ? $this->sha_method : 2;
 		$this->notice 	= ($this->notice != '') ? $this->notice : 'no';
+		$this->threeds = $this->get_option( 'threeds' ) ?: 'no';
+		update_option( 'threeds', $this->threeds );
 		$this->description = $this->display_checkout_description();
 
 		$this->supports = array(
@@ -70,6 +72,8 @@ class epdq_checkout extends WC_Payment_Gateway
 		// Payment listener/API hook
 		add_action('woocommerce_receipt_epdq_checkout', array($this, 'receipt_page'));
 		add_action('woocommerce_api_epdq_checkout', array($this, 'check_response'));
+
+		add_action('admin_head', array('AG_ePDQ_Helpers', 'add_disable_to_input'));
 	}
 
 	/**
@@ -221,8 +225,7 @@ public function receipt_page($order_id)
 	$hash_fields = array($this->access_key, date('Y:m:d'), $order->get_order_number(), $this->sha_in);
 	$encrypted_string = ePDQ_crypt::ripemd_crypt(implode($hash_fields), $this->sha_in);
 
-
-	$fullName = 	remove_accents($order->get_billing_first_name() . ' ' . str_replace("'", "", $order->get_billing_last_name()));
+	$fullName = remove_accents($order->get_billing_first_name() . ' ' . str_replace("'", "", $order->get_billing_last_name()));
 
 	if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
 		$PSPID = ePDQ_PSPID;
@@ -293,6 +296,9 @@ public function receipt_page($order_id)
 	// Order card icons on ePDQ side
 	$fields['PMLISTTYPE'] = $this->pmlisttype;
 
+	// Hook to add extra para
+	do_action( 'AG_ePDQ_extra_parameters' );
+
 	$shasign = '';
 	$shasign_arg = array();
 	ksort($fields);
@@ -311,7 +317,7 @@ public function receipt_page($order_id)
 	$epdq_args = array();
 	foreach ($fields as $key => $value) {
 		if ($value == '') continue;
-		$epdq_args[] = "<input type='hidden' name='$key' value='$value'/>";
+		$epdq_args[] = '<input type="hidden" name="' . sanitize_text_field( $key ) .'" value="' . sanitize_text_field( $value ) . '"/>';
 	}
 
 
@@ -319,9 +325,9 @@ public function receipt_page($order_id)
 		if ($this->status == 'test')	$url = $this->test_url;
 		if ($this->status == 'live')	$url = $this->live_url;
 
-		echo '<form action="' . $url . '" method="post" id="epdq_payment_form">';
+		echo '<form action="' . esc_url_raw( $url ) . '" method="post" id="epdq_payment_form">';
 		echo implode('', $epdq_args);
-		echo '<input type="hidden" name="SHASIGN" value="' . $shasign . '"/>';
+		echo '<input type="hidden" name="SHASIGN" value="' . sanitize_text_field( $shasign ) . '"/>';
 		echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce('generate-nonce') . '" />';
 		echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_checkout') . '" />';
 		echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_checkout') . '</a></form>';
@@ -358,43 +364,47 @@ public function receipt_page($order_id)
  function check_response()
  {
  
-	 $nonce = $_REQUEST['COMPLUS'];
+	 $nonce = sanitize_text_field( $_REQUEST['COMPLUS'] );
+
+	 // Store 3D secure data
+	 //ePDQ_Display_Score::AG_sore_PSP_returned_data($_REQUEST);
  
 	 $check_data = array();
-	 foreach ($_REQUEST as $key => $value) {
+	 $data = $_REQUEST;
+	 foreach ($data as $key => $value) {
 		 if ($value == "") {
 			 continue;
 		 }
-		 $check_data[$key] = $value;
-		 $datacheck[strtoupper($key)] = strtoupper($value);
+		 $check_data[$key] = sanitize_text_field($value);
+		 $datacheck[strtoupper($key)] = sanitize_text_field(strtoupper($value));
 	 }
  
 	 // Server-to-server API callback
-	 if( isset($_REQUEST['callback']) ) {
+	 if( isset( $datacheck['callback'] ) ) {
 		 AG_ePDQ_Helpers::ag_log('API call back happened', 'warning', $this->debug);
 	  
 		 // Passing id 
-		 if( ! isset($_REQUEST['PARAMVAR']) ) {
+		 if( ! isset( $datacheck['PARAMVAR'] ) ) {
 			 AG_ePDQ_Helpers::ag_log('PARAMVAR parameter is missing, please read the docs ' . self::$AG_ePDQ_doc . 'article/106-pending-failed-transactions', 'warning', $this->debug);
 		 } else {
-			 $check_data['idOrder'] = $_REQUEST['PARAMVAR'];
+			 $check_data['idOrder'] = $datacheck['PARAMVAR'];
 		 }
 	  
 	 }
  
  
-	 if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription($_REQUEST['orderID'])) {
-		 //$check_data['SUBSCRIPTION_ID'] = isset($_REQUEST['subscription_id']) ? $_REQUEST['subscription_id'] : '';
-		 //$check_data['CREATION_STATUS'] = isset($_REQUEST['creation_status']) ? $_REQUEST['creation_status'] : '';
+	 if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription( $check_data['orderID'] ) ) {
+		 //$check_data['SUBSCRIPTION_ID'] = isset($check_data['subscription_id']) ? $check_data['subscription_id'] : '';
+		 //$check_data['CREATION_STATUS'] = isset($check_data['creation_status']) ? $check_data['creation_status'] : '';
 	 }
 	  
  
 	 // Hash
-	 $hash_fields = array($this->access_key, date('Y:m:d'), $_REQUEST['orderID'], $this->sha_in);
+	 $hash_fields = array($this->access_key, date('Y:m:d'), $check_data['orderID'], $this->sha_in);
 	 $encrypted_string = ePDQ_crypt::ripemd_crypt(implode($hash_fields), $this->sha_in);
 
  
-	 if (isset($_REQUEST['STATUS'])) {
+	 if (isset($check_data['STATUS'])) {
  
 		 if (hash_equals($encrypted_string, $nonce)) {
 			 if (!empty($this->sha_out)) {
@@ -402,9 +412,13 @@ public function receipt_page($order_id)
 				 if ($SHA_check) {
 					 $this->successful_transaction($check_data);
 				 } else {
-					 // SHA-Out check fail
-					 AG_ePDQ_Helpers::ag_log('Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'article/88-transaction-is-unsuccessful-due-to-a-sha-out-issue', 'warning', $this->debug);
-					 wp_die('Transaction is unsuccessful due to a SHA-Out issue');
+					if($this->threeds == 'yes'){
+						AG_ePDQ_Helpers::ag_log('Extra parameters are required to be sent back when using the AG 3D secure score system, please check through the trouble shooting in the plugin docs.', 'warning', $this->debug);
+					} else {
+						AG_ePDQ_Helpers::ag_log('Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'article/88-transaction-is-unsuccessful-due-to-a-sha-out-issue', 'warning', $this->debug);
+					}
+					// SHA-Out check fail
+					wp_die('Transaction is unsuccessful due to a SHA-Out issue');
 				 }
 			 } else {
 				 // SHA-Out not set
@@ -439,9 +453,26 @@ public function receipt_page($order_id)
 	 unset($datatocheck['idOrder']);
 	 unset($datatocheck['PARAMVAR']);
 	 unset($datatocheck['callback']);
+	 unset($datatocheck['doing_wp_cron']);
+
+	 // 3D score check
+	if($this->threeds != 'yes' && isset($datatocheck['SCORING'])){
+		unset($datatocheck['CCCTY']);
+		unset($datatocheck['ECI']);
+		unset($datatocheck['CVCCheck']);
+		unset($datatocheck['AAVCheck']);
+		unset($datatocheck['VC']);
+		unset($datatocheck['AAVZIP']);
+		unset($datatocheck['AAVADDRESS']);
+		unset($datatocheck['AAVNAME']);
+		unset($datatocheck['AAVPHONE']);
+		unset($datatocheck['AAVMAIL']);
+		unset($datatocheck['SCORING']);
+	}
+	 // END
+
 	 uksort($datatocheck, 'strcasecmp');
    
-  
 	 $SHAsig = '';
 	 foreach ($datatocheck as $key => $value) {
 		 $SHAsig .= trim(strtoupper($key)) . '=' . utf8_encode(trim($value)) . $SHA_out;
@@ -456,7 +487,7 @@ public function receipt_page($order_id)
 	 }
   
 	 $SHAsig = strtoupper(hash($shasign_method, $SHAsig));
-  
+
 	 if (hash_equals($SHAsig, $origsig)) {
 		 return true;
 	 } else {
@@ -486,21 +517,21 @@ function successful_transaction($args)
 
 
 
-	$order_notes = array(
-		'Order ID: '		=>	$args['ORDERID'] = $args['ORDERID'] ?? '',
-		'Amount: '			=>	$args['AMOUNT'] = $args['AMOUNT'] ?? '',
-		'Order Currency: '	=>	$args['CURRENCY'] = $args['CURRENCY'] ?? '',
-		'Payment Method: '	=>	$args['PM'] = $args['PM'] ?? '',
-		'Acceptance Code Returned By Acquirer: '	=>	$args['ACCEPTANCE'] = $args['ACCEPTANCE'] ?? '',
-		'Payment Reference In ePDQ System: '	=>	$args['PAYID'] = $args['PAYID'] ?? '',
-		'Error Code: '		=>	$args['NCERROR'] = $args['NCERROR'] ?? '',
-		'Card Brand: '		=>	$args['BRAND'] = $args['BRAND'] ?? '',
-		'Transaction Date: '	=>	$args['TRXDATE'] = $args['TRXDATE'] ?? '',
-		'Cardholder/Customer Name: '	=>	$args['CN'] = $args['CN'] ?? '',
-		'Customer IP: '		=>	$args['IP'] = $args['IP'] ?? '',
-		'AAV Result For Address: '	=>	$args['AAVADDRESS'] = $args['AAVADDRESS'] ?? '',
-		'Result for AAV Check: '	=>	$args['AAVCHECK'] = $args['AAVCHECK'] ?? '',
-		'AAV Result For Postcode: '	=>	$args['AAVZIP'] = $args['AAVZIP'] ?? '',
+	$order_notes                          = array(
+		'Order ID                            : ' => $args['ORDERID']    = $args['ORDERID'] ?? '',
+		'Amount                              : ' => $args['AMOUNT']     = $args['AMOUNT'] ?? '',
+		'Order Currency                      : ' => $args['CURRENCY']   = $args['CURRENCY'] ?? '',
+		'Payment Method                      : ' => $args['PM']         = $args['PM'] ?? '',
+		'Acceptance Code Returned By Acquirer: ' => $args['ACCEPTANCE'] = $args['ACCEPTANCE'] ?? '',
+		'Payment Reference In ePDQ System    : ' => $args['PAYID']      = $args['PAYID'] ?? '',
+		'Error Code                          : ' => $args['NCERROR']    = $args['NCERROR'] ?? '',
+		'Card Brand                          : ' => $args['BRAND']      = $args['BRAND'] ?? '',
+		'Transaction Date                    : ' => $args['TRXDATE']    = $args['TRXDATE'] ?? '',
+		'Cardholder/Customer Name            : ' => $args['CN']         = $args['CN'] ?? '',
+		'Customer IP                         : ' => $args['IP']         = $args['IP'] ?? '',
+		'AAV Result For Address              : ' => $args['AAVADDRESS'] = $args['AAVADDRESS'] ?? '',
+		'Result for AAV Check                : ' => $args['AAVCHECK']   = $args['AAVCHECK'] ?? '',
+		'AAV Result For Postcode             : ' => $args['AAVZIP']     = $args['AAVZIP'] ?? '',
 	);
 
 	if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription($order)) {
@@ -513,6 +544,7 @@ function successful_transaction($args)
 	$order_data = array();
 	unset($args['SHASIGN']);
 	unset($args['COMPLUS']);
+	unset($args['CARDNO']);
 	foreach ($args as $key => $value) {
 		if ($value == "") {
 			continue;
@@ -624,6 +656,23 @@ public function process_refund($order_id, $amount = NULL, $reason = '')
 	$data_post['REFID'] = $this->api_REFID;
 	$data_post['USERID'] = $this->api_user;
 
+	$shasign = '';
+	$shasign_arg = array();
+	ksort($data_post);
+	foreach ($data_post as $key => $value) {
+		if ($value == '') continue;
+		$shasign_arg[] =  $key . '=' . utf8_encode($value);
+	}
+
+	if ($this->sha_method == 0)
+		$shasign = sha1(implode($this->sha_in, $shasign_arg) . $this->sha_in);
+	elseif ($this->sha_method == 1)
+		$shasign = hash('sha256', implode($this->sha_in, $shasign_arg) . $this->sha_in);
+	elseif ($this->sha_method == 2)
+		$shasign = hash('sha512', implode($this->sha_in, $shasign_arg) . $this->sha_in);
+
+	$data_post['SHASIGN'] = $shasign;
+
 
 	$post_string = array();
 	foreach ($data_post as $key => $value) {
@@ -631,7 +680,7 @@ public function process_refund($order_id, $amount = NULL, $reason = '')
 	}
 	$actual_string = '';
 	$actual_string = implode('&', $post_string);
-	$result = wp_remote_post($environment_url, array(
+	$result = wp_safe_remote_post($environment_url, array(
 		'method' => 'POST',
 		'timeout'     => 6,
 		'redirection' => 5,

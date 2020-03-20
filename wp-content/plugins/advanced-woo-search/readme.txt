@@ -4,15 +4,15 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.3
-Stable tag: 1.92
+Stable tag: 1.96
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Advanced AJAX search plugin for WooCommerce
+WooCommerce search plugin. Advanced search features. Support for both AJAX search and search results page.
 
 == Description ==
 
-Advanced Woo Search - powerful live search plugin for WooCommerce. Just start typing and you will immediately see the products that you search.
+Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** search and **search results page** display.
 
 = Main Features =
 
@@ -103,6 +103,28 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 1.96 =
+* Add - Mobile full screen search option
+* Fix - Search form markup
+
+= 1.95 =
+* Fix - Ajax request cache problem
+* Fix - Polylang plugin fix search results page URL
+
+= 1.94 =
+* Update - Ajax function
+* Update - Twenty Twenty theme integration
+* Update - Default settings values. Enable search page support by default
+* Fix - WP AutoTerms plugin conflict
+* Fix - Elementor plugin search page template
+* Fix - Visibility get function for old WooCommerce versions
+
+= 1.93 =
+* Add - Synonyms support for taxonomies search
+* Add - aws_tax_search_data filter
+* Fix - Taxonomies search
+* Fix - Remove potential link from product pricing
 
 = 1.92 =
 * Update - Flatsome theme support

@@ -923,6 +923,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 $visibility = $product->get_catalog_visibility();
             } elseif ( method_exists( $product, 'get_visibility' ) ) {
                 $visibility = $product->get_visibility();
+            } else  {
+                $visibility = $product->visibility;
             }
 
             return $visibility;

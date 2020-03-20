@@ -77,7 +77,8 @@
                     page: d.pageId,
                     tax: d.tax,
                     lang: d.lang,
-                    pageurl: window.location.href
+                    pageurl: window.location.href,
+                    typedata: 'json'
                 };
 
                 requests.push(
@@ -86,9 +87,8 @@
                         type: 'POST',
                         url: ajaxUrl,
                         data: data,
+                        dataType: 'json',
                         success: function( response ) {
-
-                            var response = $.parseJSON( response );
 
                             cachedResponse[searchFor] = response;
 
@@ -250,9 +250,15 @@
             },
 
             onFocus: function( event ) {
+
+                if ( methods.isMobile() && d.mobileScreen && ! $('body').hasClass('aws-overlay') ) {
+                    methods.showMobileLayout();
+                }
+
                 if ( searchFor !== '' ) {
                     methods.showResultsBlock();
                 }
+
             },
 
             hideResults: function( event ) {
@@ -280,7 +286,7 @@
                     var top = 0;
                     var left = 0;
 
-                    if ( bodyPosition === 'relative' || bodyPosition === 'absolute' ) {
+                    if ( bodyPosition === 'relative' || bodyPosition === 'absolute' || bodyPosition === 'fixed' ) {
                         top = offset.top + $(self).innerHeight() - bodyOffset.top;
                         left = offset.left - bodyOffset.left;
                     } else {
@@ -296,6 +302,35 @@
 
                 }
 
+            },
+
+            showMobileLayout: function() {
+                if ( ! methods.isFixed() ) {
+                    self.after('<div class="aws-placement-container"></div>');
+                    self.addClass('aws-mobile-fixed').prepend('<div class="aws-mobile-fixed-close"><svg width="17" height="17" viewBox="1.5 1.5 21 21"><path d="M22.182 3.856c.522-.554.306-1.394-.234-1.938-.54-.543-1.433-.523-1.826-.135C19.73 2.17 11.955 10 11.955 10S4.225 2.154 3.79 1.783c-.438-.371-1.277-.4-1.81.135-.533.537-.628 1.513-.25 1.938.377.424 8.166 8.218 8.166 8.218s-7.85 7.864-8.166 8.219c-.317.354-.34 1.335.25 1.805.59.47 1.24.455 1.81 0 .568-.456 8.166-7.951 8.166-7.951l8.167 7.86c.747.72 1.504.563 1.96.09.456-.471.609-1.268.1-1.804-.508-.537-8.167-8.219-8.167-8.219s7.645-7.665 8.167-8.218z"></path></svg></div>');
+                    $('body').addClass('aws-overlay').append('<div class="aws-overlay-mask"></div>').append( self );
+                    $searchField.focus();
+                }
+            },
+
+            hideMobileLayout: function() {
+                $('.aws-placement-container').after( self ).remove();
+                self.removeClass('aws-mobile-fixed');
+                $('body').removeClass('aws-overlay');
+                $('.aws-mobile-fixed-close').remove();
+                $('.aws-overlay-mask').remove();
+            },
+
+            isFixed: function() {
+                var $checkElements = self.add(self.parents());
+                var isFixed = false;
+                $checkElements.each(function(){
+                    if ($(this).css("position") === "fixed") {
+                        isFixed = true;
+                        return false;
+                    }
+                });
+                return isFixed;
             },
 
             analytics: function( label ) {
@@ -367,6 +402,7 @@
             showMore: ( self.data('show-more') !== undefined ) ? self.data('show-more') : true,
             showPage: ( self.data('show-page') !== undefined ) ? self.data('show-page') : true,
             showClear: ( self.data('show-clear') !== undefined ) ? self.data('show-clear') : false,
+            mobileScreen: ( self.data('mobile-screen') !== undefined ) ? self.data('mobile-screen') : false,
             useAnalytics: ( self.data('use-analytics') !== undefined ) ? self.data('use-analytics') : false,
             instance: instance,
             resultBlock: '#aws-search-result-' + instance,
@@ -451,6 +487,10 @@
         $( d.resultBlock ).on( 'click', '.aws_search_more', function(e) {
             e.preventDefault();
             $searchForm.submit();
+        });
+
+        $( self ).on( 'click', '.aws-mobile-fixed-close', function(e) {
+            methods.hideMobileLayout();
         });
 
 

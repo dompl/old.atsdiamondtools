@@ -76,17 +76,12 @@ class WC_Gateway_PPEC_Plugin {
 		$this->plugin_path   = trailingslashit( plugin_dir_path( $this->file ) );
 		$this->plugin_url    = trailingslashit( plugin_dir_url( $this->file ) );
 		$this->includes_path = $this->plugin_path . trailingslashit( 'includes' );
-
-		// Updates
-		if ( version_compare( $version, get_option( 'wc_ppec_version' ), '>' ) ) {
-			$this->run_updater( $version );
-		}
 	}
 
 	/**
 	 * Handle updates.
-	 * @param  [type] $new_version [description]
-	 * @return [type]              [description]
+	 *
+	 * @param string $new_version The plugin's new version.
 	 */
 	private function run_updater( $new_version ) {
 		// Map old settings to settings API
@@ -133,6 +128,12 @@ class WC_Gateway_PPEC_Plugin {
 			delete_option( 'pp_woo_enabled' );
 		}
 
+		// Check the the WC version on plugin update to determine if we need to display a warning.
+		// The option was added in 1.6.19 so we only need to check stores updating from before that version. Updating from 1.6.19 or greater would already have it set.
+		if ( version_compare( get_option( 'wc_ppec_version' ), '1.6.19', '<' ) && version_compare( WC_VERSION, '3.0', '<' ) ) {
+			update_option( 'wc_ppec_display_wc_3_0_warning', 'true' );
+		}
+
 		update_option( 'wc_ppec_version', $new_version );
 	}
 
@@ -157,6 +158,11 @@ class WC_Gateway_PPEC_Plugin {
 			}
 
 			$this->_check_dependencies();
+
+			if ( $this->needs_update() ) {
+				$this->run_updater( $this->version );
+			}
+
 			$this->_run();
 			$this->_check_credentials();
 
@@ -381,6 +387,15 @@ class WC_Gateway_PPEC_Plugin {
 	}
 
 	/**
+	 * Checks if the plugin needs to record an update.
+	 *
+	 * @return bool Whether the plugin needs to be updated.
+	 */
+	protected function needs_update() {
+		return version_compare( $this->version, get_option( 'wc_ppec_version' ), '>' );
+	}
+
+	/**
 	 * Link to settings screen.
 	 */
 	public function get_admin_setting_link() {
@@ -450,11 +465,10 @@ class WC_Gateway_PPEC_Plugin {
 	 * @return bool
 	 */
 	public static function needs_shipping() {
-		$cart_contents  = WC()->cart->cart_contents;
 		$needs_shipping = false;
 
-		if ( ! empty( $cart_contents ) ) {
-			foreach ( $cart_contents as $cart_item_key => $values ) {
+		if ( ! empty( WC()->cart->cart_contents ) ) {
+			foreach ( WC()->cart->cart_contents as $cart_item_key => $values ) {
 				if ( $values['data']->needs_shipping() ) {
 					$needs_shipping = true;
 					break;

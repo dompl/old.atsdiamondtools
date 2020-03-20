@@ -100,6 +100,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'avada_head_action' ) );
                 }
 
+                // Twenty Twenty theme
+                if (  function_exists( 'twentytwenty_theme_support' ) ) {
+                    add_action( 'wp_head', array( $this, 'twenty_twenty_head_action' ) );
+                }
+
                 // Elementor pro
                 if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                     add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
@@ -480,6 +485,51 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                                 window.setTimeout(function(){
                                     document.querySelector(".fusion-menu .fusion-main-menu-search .aws-search-field, .fusion-flyout-search .aws-search-field").focus();
                                 }, 100);
+                            }, false);
+                        }
+                    }
+
+                }, false);
+
+            </script>
+
+        <?php }
+
+        /*
+         * Twenty Twenty theme
+         */
+        public function twenty_twenty_head_action() { ?>
+
+            <style>
+
+                .search-modal .aws-container {
+                    width: 100%;
+                    margin: 20px 0;
+                }
+
+            </style>
+
+            <script>
+
+                window.addEventListener('load', function() {
+
+                    var awsSearch = document.querySelectorAll("#site-header .search-toggle");
+                    if ( awsSearch ) {
+                        for (var i = 0; i < awsSearch.length; i++) {
+                            awsSearch[i].addEventListener('click', function() {
+                                window.setTimeout(function(){
+                                    document.querySelector(".aws-container .aws-search-field").focus();
+                                    jQuery( '.aws-search-result' ).hide();
+                                }, 100);
+                            }, false);
+                        }
+                    }
+
+                    var searchToggler = document.querySelectorAll('[data-modal-target-string=".search-modal"]');
+                    if ( searchToggler ) {
+                        for (var i = 0; i < searchToggler.length; i++) {
+                            searchToggler[i].addEventListener('toggled', function() {
+                                jQuery( '.aws-search-result' ).hide();
                             }, false);
                         }
                     }

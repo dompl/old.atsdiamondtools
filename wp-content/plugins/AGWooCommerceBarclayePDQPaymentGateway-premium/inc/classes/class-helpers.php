@@ -77,4 +77,19 @@ class AG_ePDQ_Helpers
 		$data_back = implode('', $order_notes);
 		$customer_order->add_order_note($data_back);
 	}
+
+
+	public static function add_disable_to_input() { ?>
+		
+		<script type="text/javascript">
+	
+			jQuery(document).ready( function () { 
+				jQuery('#woocommerce_epdq_checkout_threeds, [for="woocommerce_epdq_checkout_threeds"]').prop('disabled', true).addClass('disabled');
+			});
+	
+		</script>
+
+	<?php }
+
+
 }

@@ -270,6 +270,8 @@ abstract class Order_Document {
 				}
 			}
 		}
+
+		do_action( 'wpo_wcpdf_save_document', $this, $order );
 	}
 
 	public function delete( $order = null ) {
@@ -289,7 +291,7 @@ abstract class Order_Document {
 			WCX_Order::delete_meta_data( $order, "_wcpdf_{$this->slug}_{$data_key}" );
 		}
 
-		do_action( 'wpo_wcpdf_delete_document', $this );
+		do_action( 'wpo_wcpdf_delete_document', $this, $order );
 	}
 
 	public function is_allowed() {
@@ -752,6 +754,12 @@ abstract class Order_Document {
 	 * @return array   $emails       list of all email ids/slugs and names
 	 */
 	public function get_wc_emails() {
+		// only run this in the context of the settings page or setup wizard
+		// prevents WPML language mixups
+		if ( empty( $_GET['page'] ) || !in_array( $_GET['page'], array('wpo-wcpdf-setup','wpo_wcpdf_options_page') ) ) {
+			return array();
+		}
+
 		// get emails from WooCommerce
 		if (function_exists('WC')) {
 			$mailer = WC()->mailer();

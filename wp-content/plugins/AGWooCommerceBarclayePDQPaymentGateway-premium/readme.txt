@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 4.2
 
 == Description ==
@@ -37,6 +37,22 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v3.2.3 - 02/03/20 =
+* Tweak         - Fully disabled new score system.
+* New           - New hook to allow extra parameters to be sent to ePDQ.
+
+= v3.2.1 - 18/02/20 =
+* Tweak         - Generate SHA string in refund request.
+
+= v3.2.0 - 17/02/20 =
+* Feature       - New transaction score system (BETA).
+* New           - Function to dynamically generate tips and information (posts) on welcome page.
+* Dev           - Security improvements.
+* Update        - Update to FS SDK.
+
+= v3.1.6 - 05/12/19 =
+* Tweak         - Fix to unset() doing_wp_cron from SHA_check().
 
 = v3.1.5 - 21/10/19 =
 * New           - Support for Direct HTTP server-to-server request with a fallback to docs to show the setup guide.

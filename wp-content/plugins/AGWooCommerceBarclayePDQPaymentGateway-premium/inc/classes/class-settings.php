@@ -149,6 +149,13 @@ class AG_ePDQ_Settings
                                 'description' => 'Once the save changes button has been clicked two new fields will show which will need to be set to process refunds on the website.',
                                 'desc_tip' => true
                         ),
+                        'threeds' => array(
+                                'title' => __('Enable AG 3Ds score report', 'ag_epdq_checkout'),
+                                'type' => 'checkbox',
+                                'description' => 'This new feature is coming soon.',
+                                'default' => 'no',
+                                'desc_tip' => false
+                        ),
 
                 );
         }
@@ -288,6 +295,13 @@ class AG_ePDQ_Settings
                                 'default' => '',
                                 'description' => 'Once the save changes button has been clicked two new fields will show which will need to be set to process refunds on the website.',
                                 'desc_tip' => true
+                        ),
+                        'threeds' => array(
+                                'title' => __('Enable AG 3Ds score report', 'ag_epdq_checkout'),
+                                'type' => 'checkbox',
+                                'description' => 'This new feature is coming soon.',
+                                'default' => 'no',
+                                'desc_tip' => false
                         ),
                         'api_user' => array(
                                 'title'                => __('API User ID', 'ag_epdq_checkout'),

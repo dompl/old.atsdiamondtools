@@ -452,3 +452,8 @@
 
             .main-card .card-contents .card-body .ag-button:hover { color: #fff; background-color: #543a60;}
 
+            .disabled {
+                color: darkgrey;
+                /* background-color: grey; */
+                pointer-events: none;
+             }

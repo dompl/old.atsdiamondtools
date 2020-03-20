@@ -10,9 +10,9 @@
  * -----
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 3.1.5
+ * Version: 3.2.3
  * WC requires at least: 3.0.0
- * WC tested up to: 3.7
+ * WC tested up to: 3.9 
  * License: GPL3
  */
 
@@ -23,7 +23,7 @@ defined('ABSPATH') or die("No script kiddies please!");
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  3.1.5
+ * @version  3.2.3
  * @category Class
  * @author   We are AG
  */
@@ -36,7 +36,7 @@ class AG_ePDQ_server
 	 *
 	 * @var string
 	 */
-	public static $AGversion = "3.1.5";
+	public static $AGversion = "3.2.3";
 
 
 	/**
@@ -115,12 +115,33 @@ class AG_ePDQ_server
 		require_once AG_ePDQ_class . 'class-helpers.php';
 		require_once AG_ePDQ_class . 'class-settings.php';
 		require_once AG_ePDQ_class . 'class-crypt.php';
+		
+		//require_once AG_ePDQ_class . 'class-epdq-score.php';
+		//require_once AG_ePDQ_class . 'AG_3DS_Score/class-3d-score.php';
+		//require_once AG_ePDQ_class . 'AG_3DS_Score/class-display-3d-score.php';
+
+
+		//ePDQ_3D_score::run_instance(array(
+		//	'parent_slug'   => self::$AG_ePDQ_slug,
+		//	'plugin_short_title'         => 'Barclays ePDQ',
+		//	'plugin_version'       => self::$AGversion,
+		//	'payment_method_id'		=>	'epdq_checkout',
+		//));
+
+		//ePDQ_Display_Score::run_instance(array(
+		//	'plugin_short_title'         => 'Barclays ePDQ',
+		//	'plugin_version'       => self::$AGversion,
+		//	'payment_method_id'		=>	'epdq_checkout',
+		//));
+
 
 		if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
 			require_once AG_ePDQ_class . 'class-wc-subscriptions.php';
 		}
 
 	}
+
+
 
 	/**
 	 * Gateway classes
@@ -204,7 +225,6 @@ class AG_ePDQ_server
 			),
 			'plugin_slug'   => self::$AG_ePDQ_slug,
 		));
-
 
 	}
 

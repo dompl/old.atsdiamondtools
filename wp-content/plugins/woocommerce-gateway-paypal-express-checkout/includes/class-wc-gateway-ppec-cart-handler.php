@@ -86,8 +86,26 @@ class WC_Gateway_PPEC_Cart_Handler {
 			wc_empty_cart();
 
 			if ( $product->is_type( 'variable' ) ) {
-				$attributes = array_map( 'wc_clean', $_POST['attributes'] );
+				$attributes = array();
 
+				foreach ( $product->get_attributes() as $attribute ) {
+					if ( ! $attribute['is_variation'] ) {
+						continue;
+					}
+
+					$attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
+
+					if ( isset( $_POST['attributes'][ $attribute_key ] ) ) {
+						if ( $attribute['is_taxonomy'] ) {
+							// Don't use wc_clean as it destroys sanitized characters.
+							$value = sanitize_title( wp_unslash( $_POST['attributes'][ $attribute_key ] ) );
+						} else {
+							$value = html_entity_decode( wc_clean( wp_unslash( $_POST['attributes'][ $attribute_key ] ) ), ENT_QUOTES, get_bloginfo( 'charset' ) );
+						}
+
+						$attributes[ $attribute_key ] = $value;
+					}
+				}
 
 				if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 					$variation_id = $product->get_matching_variation( $attributes );
@@ -269,9 +287,11 @@ class WC_Gateway_PPEC_Cart_Handler {
 	 * @since 1.4.0
 	 */
 	public function display_paypal_button_product() {
+		global $product;
+
 		$gateways = WC()->payment_gateways->get_available_payment_gateways();
 
-		if ( ! is_product() || ! isset( $gateways['ppec_paypal'] ) ) {
+		if ( ! is_product() || ! isset( $gateways['ppec_paypal'] ) || ! $product->is_in_stock() || $product->is_type( 'external' ) || $product->is_type( 'grouped' ) ) {
 			return;
 		}
 
@@ -351,7 +371,7 @@ class WC_Gateway_PPEC_Cart_Handler {
 		$settings = wc_gateway_ppec()->settings;
 
 		// billing details on checkout page to calculate shipping costs
-		if ( ! isset( $gateways['ppec_paypal'] ) || 'no' === $settings->cart_checkout_enabled ) {
+		if ( ! isset( $gateways['ppec_paypal'] ) || 'no' === $settings->cart_checkout_enabled || 0 === WC()->cart->get_cart_contents_count() || ! WC()->cart->needs_payment() ) {
 			return;
 		}
 		?>

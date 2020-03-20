@@ -427,6 +427,44 @@
     background: #f5f5f5;
 }
 
+/* Mobile form overlay */
+
+body.aws-overlay {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+}
+
+.aws-container.aws-mobile-fixed {
+    position: fixed !important;
+    z-index: 9999999 !important;
+    top: 10px !important;
+    left: 20px !important;
+    width: 100%;
+    width: calc(100% - 40px) !important;
+}
+
+.aws-mobile-fixed-close {
+    padding: 15px;
+    margin-right: -10px;
+    display: inline-block;
+    float: right;
+}
+
+.aws-overlay-mask {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: #fff;
+    z-index: 9999998 !important;
+}
+.aws-overlay .aws-overlay-mask {
+    opacity: 1;
+}
 
 /* Integrations */
 
