@@ -43,7 +43,7 @@
 		<?php if ( is_front_page() ): ?>
 		<?php // get_template_part( 'modules/header/christmas' );?>
 		<?php endif?>
-    <?php get_template_part( 'modules/header/corona' );?>
+		<?php get_template_part( 'modules/header/corona' );?>
 		<?php get_template_part( 'modules/header/top' );?>
 		<?php get_template_part( 'modules/header/middle' );?>
 		<?php get_template_part( 'modules/header/navigation' );?>
