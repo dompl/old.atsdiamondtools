@@ -58,8 +58,17 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          * Reindex plugin table ajax hook
          */
         public function reindex_table_ajax() {
+
             check_ajax_referer( 'aws_admin_ajax_nonce' );
+
+            if ( function_exists( 'wp_raise_memory_limit' ) ) {
+                wp_raise_memory_limit( 'admin' );
+            }
+
+            @set_time_limit( 600 );
+
             $this->reindex_table();
+
         }
 
         /*
@@ -465,22 +474,22 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 $excerpt = apply_filters( 'aws_indexed_excerpt', $excerpt, $data['id'], $product );
 
 
-                $data['terms']['title']    = $this->extract_terms( $title );
-                $data['terms']['content']  = $this->extract_terms( $content );
-                $data['terms']['excerpt']  = $this->extract_terms( $excerpt );
-                $data['terms']['sku']      = $this->extract_terms( $sku );
-                $data['terms']['id']       = $this->extract_terms( $ids );
+                $data['terms']['title']    = $this->extract_terms( $title, 'title' );
+                $data['terms']['content']  = $this->extract_terms( $content, 'content' );
+                $data['terms']['excerpt']  = $this->extract_terms( $excerpt, 'excerpt' );
+                $data['terms']['sku']      = $this->extract_terms( $sku, 'sku' );
+                $data['terms']['id']       = $this->extract_terms( $ids, 'id' );
 
 
                 if ( $cat_array && ! empty( $cat_array ) ) {
                     foreach( $cat_array as $cat_source => $cat_terms ) {
-                        $data['terms'][$cat_source] = $this->extract_terms( $cat_terms );
+                        $data['terms'][$cat_source] = $this->extract_terms( $cat_terms, 'cat' );
                     }
                 }
 
                 if ( $tag_array && ! empty( $tag_array ) ) {
                     foreach( $tag_array as $tag_source => $tag_terms ) {
-                        $data['terms'][$tag_source] = $this->extract_terms( $tag_terms );
+                        $data['terms'][$tag_source] = $this->extract_terms( $tag_terms, 'tag' );
                     }
                 }
 
@@ -518,11 +527,11 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                     $translated_content = AWS_Helpers::strip_shortcodes( $translated_content );
                                     $translated_excerpt = AWS_Helpers::strip_shortcodes( $translated_excerpt );
 
-                                    $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title );
-                                    $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content );
-                                    $translated_post_data['terms']['excerpt'] = $this->extract_terms( $translated_excerpt );
-                                    $translated_post_data['terms']['sku'] = $this->extract_terms( $sku );
-                                    $translated_post_data['terms']['id'] = $this->extract_terms( $translated_post->ID );
+                                    $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title, 'title' );
+                                    $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content, 'content' );
+                                    $translated_post_data['terms']['excerpt'] = $this->extract_terms( $translated_excerpt, 'excerpt' );
+                                    $translated_post_data['terms']['sku'] = $this->extract_terms( $sku, 'sku' );
+                                    $translated_post_data['terms']['id'] = $this->extract_terms( $translated_post->ID, 'id' );
 
                                     
                                     //Insert translated product data into table
@@ -545,7 +554,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
                             if ( $current_lang == $lang ) {
                                 $default_lang_title = qtranxf_use( $current_lang, $product->get_name(), true, true );
-                                $data['terms']['title'] = $this->extract_terms( $default_lang_title );
+                                $data['terms']['title'] = $this->extract_terms( $default_lang_title, 'title' );
                                 continue;
                             }
 
@@ -579,11 +588,11 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                                             $translated_content = AWS_Helpers::strip_shortcodes( $translated_content );
                                             $translated_excerpt = AWS_Helpers::strip_shortcodes( $translated_excerpt );
 
-                                            $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title );
-                                            $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content );
-                                            $translated_post_data['terms']['excerpt'] = $this->extract_terms( $translated_excerpt );
-                                            $translated_post_data['terms']['sku'] = $this->extract_terms( $sku );
-                                            $translated_post_data['terms']['id'] = $this->extract_terms( $ids );
+                                            $translated_post_data['terms']['title'] = $this->extract_terms( $translated_title, 'title' );
+                                            $translated_post_data['terms']['content'] = $this->extract_terms( $translated_content, 'content' );
+                                            $translated_post_data['terms']['excerpt'] = $this->extract_terms( $translated_excerpt, 'excerpt' );
+                                            $translated_post_data['terms']['sku'] = $this->extract_terms( $sku, 'sku' );
+                                            $translated_post_data['terms']['id'] = $this->extract_terms( $ids, 'id' );
 
 
                                             //Insert translated product data into table
@@ -804,7 +813,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         /*
          * Extract terms from content
          */
-        private function extract_terms( $str ) {
+        private function extract_terms( $str, $source = '' ) {
 
             // Avoid single A-Z.
             //$str = preg_replace( '/\b\w{1}\b/i', " ", $str );
@@ -847,8 +856,9 @@ if ( ! class_exists( 'AWS_Table' ) ) :
              * @since 1.44
              *
              * @param string $str String of product content
+             * @param @since 1.97 string $source Terms source
              */
-            $str = apply_filters( 'aws_extracted_string', $str );
+            $str = apply_filters( 'aws_extracted_string', $str, $source );
 
             $str_array = explode( ' ', $str );
             $str_array = AWS_Helpers::filter_stopwords( $str_array );
@@ -860,8 +870,9 @@ if ( ! class_exists( 'AWS_Table' ) ) :
              * @since 1.44
              *
              * @param string $str_array Array of terms
+             * @param @since 1.97 string $source Terms source
              */
-            $str_array = apply_filters( 'aws_extracted_terms', $str_array );
+            $str_array = apply_filters( 'aws_extracted_terms', $str_array, $source );
 
             $str_new_array = array();
 

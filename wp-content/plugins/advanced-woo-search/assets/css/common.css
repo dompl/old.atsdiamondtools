@@ -479,7 +479,7 @@ body.aws-overlay {
     margin: 0 20px 0 0;
 }
 .et_fixed_nav .et-fixed-header .et_search_outer .aws-container {
-    margin-top: 5px;
+    top: 7px;
 }
 .et_pb_menu__search .aws-container {
     width: 100%;

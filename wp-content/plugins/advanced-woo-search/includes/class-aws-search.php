@@ -218,7 +218,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $result_array = array(
                 'tax'      => $custom_tax_array,
-                'products' => $products_array
+                'products' => $products_array,
+                'sql'      => isset( $this->data['sql'] ) ? $this->data['sql'] : ''
             );
 
 
@@ -430,6 +431,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 				LIMIT 0, {$results_num}
 		    ";
 
+            $this->data['sql'] = $sql;
 
             $posts_ids = $this->get_posts_ids( $sql );
 

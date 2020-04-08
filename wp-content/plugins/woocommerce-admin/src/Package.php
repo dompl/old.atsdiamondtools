@@ -26,7 +26,7 @@ class Package {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.2';
+	const VERSION = '1.0.3';
 
 	/**
 	 * Package active.
@@ -48,17 +48,6 @@ class Package {
 	 * Only initialize for WP 5.3 or greater.
 	 */
 	public static function init() {
-		$feature_plugin_instance = FeaturePlugin::instance();
-		$satisfied_dependencies  = $feature_plugin_instance->has_satisfied_dependencies();
-		if ( ! $satisfied_dependencies ) {
-			return;
-		}
-
-		// Indicate to the feature plugin that the core package exists.
-		if ( ! defined( 'WC_ADMIN_PACKAGE_EXISTS' ) ) {
-			define( 'WC_ADMIN_PACKAGE_EXISTS', true );
-		}
-
 		// Avoid double initialization when the feature plugin is in use.
 		if ( defined( 'WC_ADMIN_VERSION_NUMBER' ) ) {
 			self::$active_version = WC_ADMIN_VERSION_NUMBER;
@@ -75,9 +64,23 @@ class Package {
 			return;
 		}
 
+		$feature_plugin_instance = FeaturePlugin::instance();
+		$satisfied_dependencies  = is_callable( array( $feature_plugin_instance, 'has_satisfied_dependencies' ) ) && $feature_plugin_instance->has_satisfied_dependencies();
+		if ( ! $satisfied_dependencies ) {
+			return;
+		}
+
+		// Indicate to the feature plugin that the core package exists.
+		if ( ! defined( 'WC_ADMIN_PACKAGE_EXISTS' ) ) {
+			define( 'WC_ADMIN_PACKAGE_EXISTS', true );
+		}
+
 		self::$package_active = true;
 		self::$active_version = self::VERSION;
 		$feature_plugin_instance->init();
+
+		// Unhook the custom Action Scheduler data store class in active older versions of WC Admin.
+		remove_filter( 'action_scheduler_store_class', array( $feature_plugin_instance, 'replace_actionscheduler_store_class' ) );
 	}
 
 	/**

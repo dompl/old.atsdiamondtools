@@ -88,7 +88,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'et_pb_search_shortcode_output', array( $this, 'divi_builder_search_module' ) );
                 add_filter( 'et_pb_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
                 add_filter( 'et_pb_fullwidth_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
-                add_action( 'wp_head', array( $this, 'head_js_integration' ) );
 
                 // Ocean wp theme
                 if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
@@ -111,6 +110,8 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 }
 
             }
+
+            add_action( 'wp_head', array( $this, 'head_js_integration' ) );
 
             // Wholesale plugin hide certain products
             if ( class_exists( 'WooCommerceWholeSalePrices' ) ) {
@@ -422,6 +423,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     top: -100px;
                 }
 
+                #sidr .aws-container {
+                    margin: 30px 20px 0;
+                }
+
             </style>
 
             <script>
@@ -648,7 +653,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
                 }
 
-                $html = '<style>.et_search_outer .aws-container { float: right;margin-right: 40px;margin-top: 20px; }</style>' . $html;
+                $html = '<style>.et_search_outer .aws-container { position: absolute;right: 40px;top: 20px; }</style>' . $html;
                 $html = trim(preg_replace('/\s\s+/', ' ', $html));
                 $html = preg_replace( $pattern, $form, $html );
 
@@ -712,6 +717,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
                 $selectors[] = '#searchform-header-replace form';
                 $selectors[] = '#searchform-overlay form';
+                $selectors[] = '#sidr .sidr-class-mobile-searchform';
             }
 
             return $selectors;
