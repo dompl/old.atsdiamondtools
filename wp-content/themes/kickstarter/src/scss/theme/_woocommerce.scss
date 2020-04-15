@@ -1,3 +1,11 @@
 .woocommerce {
   padding-bottom: spacer();
 }
+
+body {
+  table.shop_table tbody tr.cart_item td.product-thumbnail a img {
+    max-height: auto !important;
+    width: 100%;
+    max-width: 80px !important;
+  }
+}
