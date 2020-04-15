@@ -221,11 +221,16 @@ class WC_Stripe_Subs_Compat extends WC_Gateway_Stripe {
 		try {
 			if ( $amount * 100 < WC_Stripe_Helper::get_minimum_amount() ) {
 				/* translators: minimum amount */
-				return new WP_Error( 'stripe_error', sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( WC_Stripe_Helper::get_minimum_amount() / 100 ) ) );
+				$message = sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'woocommerce-gateway-stripe' ), wc_price( WC_Stripe_Helper::get_minimum_amount() / 100 ) );
+				throw new WC_Stripe_Exception(
+					'Error while processing renewal order ' . $renewal_order->get_id() . ' : ' . $message,
+					$message
+				);
 			}
 
 			$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $renewal_order->id : $renewal_order->get_id();
 
+			$this->ensure_subscription_has_customer_id( $order_id );
 
 			// Unlike regular off-session subscription payments, early renewals are treated as on-session payments, involving the customer.
 			if ( isset( $_REQUEST['process_early_renewal'] ) ) { // wpcs: csrf ok.
@@ -267,7 +272,10 @@ class WC_Stripe_Subs_Compat extends WC_Gateway_Stripe {
 			$source_object   = $prepared_source->source_object;
 
 			if ( ! $prepared_source->customer ) {
-				return new WP_Error( 'stripe_error', __( 'Customer not found', 'woocommerce-gateway-stripe' ) );
+				throw new WC_Stripe_Exception(
+					'Failed to process renewal for order ' . $renewal_order->get_id() . '. Stripe customer id is missing in the order',
+					__( 'Customer not found', 'woocommerce-gateway-stripe' )
+				);
 			}
 
 			WC_Stripe_Logger::log( "Info: Begin processing subscription payment for order {$order_id} for the amount of {$amount}" );
@@ -487,7 +495,11 @@ class WC_Stripe_Subs_Compat extends WC_Gateway_Stripe {
 		if ( $this->id === $payment_method_id ) {
 
 			if ( ! isset( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) || empty( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) ) {
-				throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'woocommerce-gateway-stripe' ) );
+
+				// Allow empty stripe customer id during subscription renewal. It will be added when processing payment if required.
+				if ( ! isset( $_POST['wc_order_action'] ) || 'wcs_process_renewal' !== $_POST['wc_order_action'] ) {
+					throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'woocommerce-gateway-stripe' ) );
+				}
 			} elseif ( 0 !== strpos( $payment_meta['post_meta']['_stripe_customer_id']['value'], 'cus_' ) ) {
 				throw new Exception( __( 'Invalid customer ID. A valid "Stripe Customer ID" must begin with "cus_".', 'woocommerce-gateway-stripe' ) );
 			}

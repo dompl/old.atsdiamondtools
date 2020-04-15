@@ -646,7 +646,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			$customer->set_id( $customer->create_customer() );
 			$customer_id = $customer->get_id();
 		} else {
-			$customer->update_customer();
+			$customer_id = $customer->update_customer();
 		}
 
 		if ( empty( $source_object ) && ! $is_token ) {
@@ -1248,30 +1248,74 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 * @return obect|bool     Either the intent object or `false`.
 	 */
 	public function get_intent_from_order( $order ) {
-		$order_id = WC_Stripe_Helper::is_wc_lt( '3.0' ) ? $order->id : $order->get_id();
-
 		if ( WC_Stripe_Helper::is_wc_lt( '3.0' ) ) {
-			$intent_id = get_post_meta( $order_id, '_stripe_intent_id', true );
-		} else {
-			$intent_id = $order->get_meta( '_stripe_intent_id' );
+			return $this->pre_3_0_get_intent_from_order( $order );
 		}
 
+		$order_id  = $order->get_id();
+		$intent_id = $order->get_meta( '_stripe_intent_id' );
+
 		if ( $intent_id ) {
-			return WC_Stripe_API::request( array(), "payment_intents/$intent_id", 'GET' );
+			return $this->get_intent( 'payment_intents', $intent_id );
 		}
 
 		// The order doesn't have a payment intent, but it may have a setup intent.
-		if ( WC_Stripe_Helper::is_wc_lt( '3.0' ) ) {
-			$intent_id = get_post_meta( $order_id, '_stripe_setup_intent', true );
-		} else {
-			$intent_id = $order->get_meta( '_stripe_setup_intent' );
-		}
+		$intent_id = $order->get_meta( '_stripe_setup_intent' );
 
 		if ( $intent_id ) {
-			return WC_Stripe_API::request( array(), "setup_intents/$intent_id", 'GET' );
+			return $this->get_intent( 'setup_intents', $intent_id );
 		}
 
 		return false;
+	}
+
+	/**
+	 * Retrieves the payment intent, associated with an order for WooCommerce < 3.0
+	 *
+	 * @param WC_Order $order The order to retrieve an intent for.
+	 * @return obect|bool     Either the intent object or `false`.
+	 */
+	private function pre_3_0_get_intent_from_order( $order ) {
+		$order_id  = $order->id;
+		$intent_id = get_post_meta( $order_id, '_stripe_intent_id', true );
+
+		if ( $intent_id ) {
+			return $this->get_intent( 'payment_intents', $intent_id );
+		}
+
+		// The order doesn't have a payment intent, but it may have a setup intent.
+		$intent_id = get_post_meta( $order_id, '_stripe_setup_intent', true );
+
+		if ( $intent_id ) {
+			return $this->get_intent( 'setup_intents', $intent_id );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Retrieves intent from Stripe API by intent id.
+	 *
+	 * @param string $intent_type 	Either 'payment_intents' or 'setup_intents'.
+	 * @param string $intent_id		Intent id.
+	 * @return object|bool 			Either the intent object or `false`.
+	 * @throws Exception 			Throws exception for unknown $intent_type.
+	 */
+	private function get_intent( $intent_type, $intent_id ) {
+		if ( ! in_array( $intent_type, [ 'payment_intents', 'setup_intents' ] ) ) {
+			throw new Exception( "Failed to get intent of type $intent_type. Type is not allowed" );
+		}
+
+		$response = WC_Stripe_API::request( array(), "$intent_type/$intent_id", 'GET' );
+
+		if ( $response && isset( $response->{ 'error' } ) ) {
+			$error_response_message = print_r( $response, true );
+			WC_Stripe_Logger::log("Failed to get Stripe intent $intent_type/$intent_id.");
+			WC_Stripe_Logger::log("Response: $error_response_message");
+			return false;
+		}
+
+		return $response;
 	}
 
 	/**
@@ -1418,7 +1462,23 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	}
 
 	/**
-	 * Verifies whether a certain ZIP code is valid for the US, incl. 4-digit extensions.
+	 * Checks if subscription has a Stripe customer ID and adds it if doesn't.
+	 *
+	 * Fix renewal for existing subscriptions affected by https://github.com/woocommerce/woocommerce-gateway-stripe/issues/1072.
+	 * @param int $order_id subscription renewal order id.
+	 */
+	public function ensure_subscription_has_customer_id( $order_id ) {
+		$subscriptions_ids = wcs_get_subscriptions_for_order( $order_id, array( 'order_type' => 'any' ) );
+		foreach( $subscriptions_ids as $subscription_id => $subscription ) {
+			if ( ! metadata_exists( 'post', $subscription_id, '_stripe_customer_id' ) ) {
+				$stripe_customer = new WC_Stripe_Customer( $subscription->get_user_id() );
+				update_post_meta( $subscription_id, '_stripe_customer_id', $stripe_customer->get_id() );
+				update_post_meta( $order_id, '_stripe_customer_id', $stripe_customer->get_id() );
+			}
+		}
+	}
+
+	/** Verifies whether a certain ZIP code is valid for the US, incl. 4-digit extensions.
 	 *
 	 * @param string $zip The ZIP code to verify.
 	 * @return boolean
