@@ -8,6 +8,7 @@
     padding: spacer() 0 0;
     @include em('font-size', 14px);
     background: color(gray-lightest);
+
     .footer-item {
         h3 {
             @include em('font-size', 14px);
@@ -15,37 +16,46 @@
             font-weight: bold;
             color: darken(color(brand), 15%);
         }
+
         ul {
             @extend %scut-list-unstyled;
+
             li {
                 &.active {
                     font-weight: bold;
                 }
+
                 a {
-                    padding: 13px 0;
+                    padding: 0 0 10px 0;
                     display: block;
                     color: color(text);
+
                     &:hover {
                         color: color(brand);
                         padding-left: 5px;
                     }
+
                 }
             }
         }
+
         /* Shop categoties */
         &:nth-child(2) {
             ul {
                 @extend %clx;
+
                 li {
                     width: 50%;
                     float: left;
                 }
             }
         }
+
         /* Social Medias */
         &:nth-child(3) {
             ul {
                 @extend %clx;
+
                 li {
                     float: left;
                     width: (100% / 3);
@@ -55,12 +65,14 @@
             }
         }
     }
+
     /* Topography */
     .footer-item {
         @include to(3) {
             ul li a {
                 padding: 4px 0;
             }
+
             &:nth-child(3) {
                 margin: spacer(.5) 0 spacer(.5);
                 padding: spacer(.5) 0 10px;
@@ -69,55 +81,69 @@
                 border-right: none;
                 border-left: none;
                 @include span(12);
+
                 ul {
                     @include container(50%);
+
                     li {
                         text-align: center;
                     }
                 }
             }
+
             @include _first-child() {
                 @include span(5);
             }
+
             &:nth-child(2) {
                 @include span(7);
             }
+
             @include _last-child() {
                 @include span(12);
+
                 img {
                     max-width: 200px;
                     margin: auto;
                     display: block;
-                    width: auto!important;
+                    width: auto !important;
                 }
+
                 p {
                     text-align: center;
                     margin: 10px 0;
                     @include em('font-size', 12px);
                 }
+
                 br {
                     display: none;
                 }
+
                 small {
                     display: block;
                 }
             }
         }
+
         /* Topography */
         @include from(4) {
             @include span(2);
+
             @include _even() {
                 @include span(4);
             }
+
             @include _last-child() {
                 @include pull(12);
             }
+
             @include _first-child() {
                 @include push(4)
             }
         }
     }
 }
+
 /**
  * Copyright
  * ---
@@ -129,41 +155,56 @@
         margin-top: spacer(.5);
         border-top: darken(color(gray-lightest), 10%) 2px solid;
     }
+
     @include em('font-size', 14px);
-    .left, .right {
+
+    .left,
+    .right {
         @include span(6)
     }
+
     .bottom-nav-container {
         display: inline-block;
         margin-left: 20px;
     }
+
     p {
         margin: 0;
         text-align: right;
     }
+
     a {
         color: color(text);
+
         &:hover {
             color: color(brand);
         }
     }
+
     ul {
         @include scut-list-inline(15px);
     }
+
     @include to(3) {
-        .left, .right {
+
+        .left,
+        .right {
             text-align: center;
+
             .bottom-nav-container {
                 display: block;
                 margin: spacer(.25) auto;
             }
+
             * {
                 text-align: center;
             }
+
             @include span(12);
         }
     }
 }
+
 /* Footer signup */
 
 #footer-signup {
@@ -174,12 +215,15 @@
     line-height: $height;
     position: relative;
     text-align: center;
+
     @include from(2) {
         padding-bottom: 45px;
     }
+
     @include from(4) {
         text-align: right;
     }
+
     &:before {
         content: "";
         width: 20000px;
@@ -190,21 +234,25 @@
         background: color(border);
         top: - spacer();
     }
+
     p {
         margin: 0;
         line-height: $height;
         text-transform: uppercase;
         font-weight: bold;
         @include em('font-size', 14px);
+
         @include breakpoint(max-width $xl) {
             line-height: 1.3;
             margin-bottom: 20px;
             clear: both;
         }
     }
+
     label {
         display: none;
     }
+
     input {
         &[type="submit"] {
             float: left;
@@ -217,60 +265,75 @@
             color: color(brand);
             cursor: pointer;
         }
-        &[type="email"], &[type="text"] {
+
+        &[type="email"],
+        &[type="text"] {
             float: left;
             width: calc(100% - 60px);
         }
     }
+
     @include from(4) {
         width: 80%;
         margin-left: auto;
         margin-right: auto;
+
         >div {
             float: left;
             width: 48%;
+
             @include _first-child() {
                 text-align: left;
             }
+
             @include _last-child() {
                 float: right;
             }
         }
     }
+
     #field_1_2 {
         // transform: translateX(-50%);
         // width: calc(100% - 32px);
         line-height: 1.3;
         font-size: 11px;
         text-align: left;
-            width: 50%;
-            position: absolute;
-            bottom: -8px; // left: 50%;
+        width: 50%;
+        position: absolute;
+        bottom: -8px; // left: 50%;
         left: 15px;
+
         @include breakpoint(max-width $lg) {
-             bottom: 0;
+            bottom: 0;
             width: 100%;
         }
+
         a {
             color: #721fa2;
         }
+
         .ginput_container_checkbox {
             margin-bottom: 8px;
         }
-        label, .gfield_description {
+
+        label,
+        .gfield_description {
             display: inline;
             padding: 0;
             font-size: 11px;
             font-weight: 400;
             line-height: 1.1;
         }
+
         .gfield_description {
             transform: translateY(5px);
         }
+
         label.gfield_label {
             display: none;
         }
     }
+
     .email_captcha {
         @include breakpoint(max-width $lg) {
             text-align: center;
@@ -280,10 +343,12 @@
             padding-bottom: 0;
             clear: both;
             text-align: center;
+
             #input_1_3 {
-              display:inline-block;
+                display: inline-block;
             }
         }
+
         @include breakpoint(min-width $lg) {
             position: absolute;
             right: 58px;
