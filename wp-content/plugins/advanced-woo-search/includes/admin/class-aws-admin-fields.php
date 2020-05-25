@@ -89,7 +89,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                             <td>
                                 <?php $textarea_cols = isset( $value['cols'] ) ? $value['cols'] : "55"; ?>
                                 <?php $textarea_rows = isset( $value['rows'] ) ? $value['rows'] : "4"; ?>
-                                <textarea id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" cols="<?php echo $textarea_cols; ?>" rows="<?php echo $textarea_rows; ?>"><?php print stripslashes( $plugin_options[ $value['id'] ] ); ?></textarea>
+                                <?php $textarea_output = isset( $value['allow_tags'] ) ? wp_kses( $plugin_options[ $value['id'] ], AWS_Helpers::get_kses( $value['allow_tags'] ) ) : stripslashes( $plugin_options[ $value['id'] ] ); ?>
+                                <textarea id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" cols="<?php echo $textarea_cols; ?>" rows="<?php echo $textarea_rows; ?>"><?php print $textarea_output; ?></textarea>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
                         </tr>

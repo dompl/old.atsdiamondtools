@@ -46,11 +46,15 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 }
             }
 
+            add_action( 'woocommerce_product_set_stock_status', array( $this, 'stock_status_changes' ), 10, 3 );
+
             add_action( 'updated_postmeta', array( $this, 'updated_custom_tabs' ), 10, 4 );
 
             add_action( 'wp_ajax_aws-reindex', array( $this, 'reindex_table_ajax' ) );
 
             add_action( 'aws_reindex_table', array( $this, 'reindex_table_job' ) );
+
+            add_action( 'aws_reindex_product', array( $this, 'reindex_product_action' ) );
 
         }
 
@@ -761,6 +765,24 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         }
 
         /*
+         * Product stock status changed
+         */
+        public function stock_status_changes( $product_id, $stock_status, $product ) {
+            global $wp_current_filter, $wpdb;
+            if ( ! in_array( 'save_post', $wp_current_filter ) || in_array( 'woocommerce_process_shop_order_meta', $wp_current_filter ) ) {
+                $sync = AWS()->get_settings( 'autoupdates' );
+                if ( AWS_Helpers::is_table_not_exist() ) {
+                    $this->create_table();
+                }
+                if ( $sync !== 'false' ) {
+                    $in_stock = $stock_status === 'instock' ? 1 : 0;
+                    $wpdb->update( $this->table_name, array( 'in_stock' => $in_stock ), array( 'id' => $product_id ) );
+                    do_action('aws_cache_clear');
+                }
+            }
+        }
+
+        /*
          * Custom Tabs was updated
          */
         public function updated_custom_tabs( $meta_id, $object_id, $meta_key, $meta_value ) {
@@ -771,6 +793,13 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             }
 
+        }
+
+        /*
+         * Re-index single product action
+         */
+        public function reindex_product_action( $product_id ) {
+            $this->update_table( $product_id );
         }
 
         /*

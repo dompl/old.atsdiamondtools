@@ -30,6 +30,11 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                         continue;
                     }
 
+                    if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
+                        $default_settings[$values['id']] = (string) addslashes( wp_kses( stripslashes( $values['value'] ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                        continue;
+                    }
+
                     if ( $values['type'] === 'textarea' ) {
                         if ( function_exists('sanitize_textarea_field') ) {
                             $default_settings[ $values['id'] ] = (string) sanitize_textarea_field( $values['value'] );
@@ -83,6 +88,11 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 }
 
                 $new_value = isset( $_POST[ $values['id'] ] ) ? $_POST[ $values['id'] ] : '';
+
+                if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
+                    $update_settings[ $values['id'] ] = (string) addslashes( wp_kses( stripslashes( $new_value ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                    continue;
+                }
 
                 if ( $values['type'] === 'textarea' ) {
                     if ( function_exists('sanitize_textarea_field') ) {
@@ -272,7 +282,8 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Text when there is no search results.", "advanced-woo-search" ),
                 "id"    => "not_found_text",
                 "value" => __( "Nothing found", "advanced-woo-search" ),
-                "type"  => "textarea"
+                "type"  => "textarea",
+                'allow_tags' => array( 'a', 'br', 'em', 'strong', 'b', 'code', 'blockquote', 'p', 'i' )
             );
 
             $options['form'][] = array(

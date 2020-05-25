@@ -609,11 +609,13 @@ abstract class Order_Document {
 	*/
 
 	public function get_pdf() {
+		$pdf = null;
 		if ( $pdf_file = apply_filters( 'wpo_wcpdf_load_pdf_file_path', null, $this ) ) {
 			$pdf = file_get_contents( $pdf_file );
-			if ( !empty( $pdf ) ) {
-				return $pdf;
-			}
+		}
+		$pdf = apply_filters( 'wpo_wcpdf_pdf_data', $pdf, $this );
+		if ( !empty( $pdf ) ) {
+			return $pdf;
 		}
 
 		do_action( 'wpo_wcpdf_before_pdf', $this->get_type(), $this );
@@ -649,7 +651,7 @@ abstract class Order_Document {
 		}
 
 		// clean up special characters
-		if ( function_exists('utf8_decode') && function_exists('mb_convert_encoding') ) {
+		if ( apply_filters( 'wpo_wcpdf_convert_encoding', function_exists('utf8_decode') && function_exists('mb_convert_encoding') ) ) {
 			$html = utf8_decode(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 		}
 

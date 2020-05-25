@@ -17,6 +17,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         private $data = array();
 
         /**
+         * @var AWS_Integrations Current theme name
+         */
+        private $current_theme = '';
+
+        /**
          * @var AWS_Integrations The single instance of the class
          */
         protected static $_instance = null;
@@ -40,6 +45,16 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          * Constructor
          */
         public function __construct() {
+
+            $theme = function_exists( 'wp_get_theme' ) ? wp_get_theme() : false;
+
+            if ( $theme ) {
+                $this->current_theme = $theme->name;
+                $this->child_theme = $theme->name;
+                if ( $theme->parent() ) {
+                    $this->current_theme = $theme->parent();
+                }
+            }
 
             //add_action('woocommerce_product_query', array( $this, 'woocommerce_product_query' ) );
 
@@ -104,6 +119,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'twenty_twenty_head_action' ) );
                 }
 
+                if ( 'Jupiter' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'jupiter_head_action' ) );
+                }
+
                 // Elementor pro
                 if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                     add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
@@ -115,7 +134,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             // Wholesale plugin hide certain products
             if ( class_exists( 'WooCommerceWholeSalePrices' ) ) {
-                add_filter( 'aws_search_results_products', array( $this,'wholesale_hide_products' ) );
+                add_filter( 'aws_search_results_products', array( $this, 'wholesale_hide_products' ) );
+            }
+
+            // Ultimate Member plugin hide certain products
+            if ( class_exists( 'UM_Functions' ) ) {
+                add_filter( 'aws_search_results_products', array( $this, 'um_hide_products' ) );
             }
 
             // Search Exclude plugin
@@ -133,6 +157,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             if ( isset( $_GET['type_aws'] ) && function_exists( 'flatsome_pages_in_search_results' ) ) {
                 remove_action('woocommerce_after_main_content','flatsome_pages_in_search_results', 10);
             }
+
+            // Divi builder dynamic text shortcodes
+            if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) ) {
+                add_filter( 'aws_before_strip_shortcodes', array( $this, 'divi_builder_strip_shortcodes' ) );
+            }
+
+            // WP all import finish
+            add_action( 'pmxi_after_xml_import', array( $this, 'pmxi_after_xml_import' ) );
 
         }
 
@@ -546,6 +578,72 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Jupiter theme
+         */
+        public function jupiter_head_action() { ?>
+
+            <style>
+
+                .mk-fullscreen-search-overlay .aws-container .aws-search-form {
+                    height: 60px;
+                }
+
+                .mk-fullscreen-search-overlay .aws-container .aws-search-field {
+                    width: 800px;
+                    background-color: transparent;
+                    box-shadow: 0 3px 0 0 rgba(255,255,255,.1);
+                    border: none;
+                    font-size: 35px;
+                    color: #fff;
+                    padding-bottom: 20px;
+                    text-align: center;
+                }
+
+                .mk-fullscreen-search-overlay .aws-container .aws-search-form .aws-form-btn {
+                    background-color: transparent;
+                    border: none;
+                    box-shadow: 0 3px 0 0 rgba(255,255,255,.1);
+                }
+
+                .mk-fullscreen-search-overlay .aws-container .aws-search-form .aws-search-btn_icon {
+                    height: 30px;
+                    line-height: 30px;
+                }
+
+                .mk-header .aws-container {
+                    margin: 10px;
+                }
+
+                .mk-header .mk-responsive-wrap {
+                    padding-bottom: 1px;
+                }
+
+            </style>
+
+            <script>
+
+                window.addEventListener('load', function() {
+
+                    var iconSearch = document.querySelectorAll(".mk-fullscreen-trigger");
+                    if ( iconSearch ) {
+                        for (var i = 0; i < iconSearch.length; i++) {
+                            iconSearch[i].addEventListener('click', function() {
+                                window.setTimeout(function(){
+                                    document.querySelector(".mk-fullscreen-search-overlay .aws-container .aws-search-field").focus();
+                                    jQuery( '.aws-search-result' ).hide();
+                                }, 100);
+                            }, false);
+                        }
+                    }
+
+
+                }, false);
+
+            </script>
+
+        <?php }
+
+        /*
          * Elementor popup search form init
          */
         public function elementor_pro_popup() { ?>
@@ -718,6 +816,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '#searchform-header-replace form';
                 $selectors[] = '#searchform-overlay form';
                 $selectors[] = '#sidr .sidr-class-mobile-searchform';
+                $selectors[] = '#mobile-menu-search form';
+            }
+
+            if ( 'Jupiter' === $this->current_theme ) {
+                $selectors[] = '#mk-fullscreen-searchform';
+                $selectors[] = '.responsive-searchform';
             }
 
             return $selectors;
@@ -813,6 +917,59 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Ultimate Member hide products
+         */
+        public function um_hide_products( $products ) {
+
+            foreach( $products as $key => $product ) {
+
+                $um_content_restriction = get_post_meta( $product['id'], 'um_content_restriction', true );
+
+                if ( $um_content_restriction && is_array( $um_content_restriction ) && ! empty( $um_content_restriction ) ) {
+
+                    $um_custom_access_settings = isset( $um_content_restriction['_um_custom_access_settings'] ) ? $um_content_restriction['_um_custom_access_settings'] : false;
+                    $um_access_hide_from_queries = isset( $um_content_restriction['_um_access_hide_from_queries'] ) ? $um_content_restriction['_um_access_hide_from_queries'] : false;
+
+                    if ( $um_custom_access_settings && $um_custom_access_settings === '1' && $um_access_hide_from_queries && $um_access_hide_from_queries === '1' ) {
+
+                        $um_accessible = isset( $um_content_restriction['_um_accessible'] ) ? $um_content_restriction['_um_accessible'] : false;
+
+                        if ( $um_accessible ) {
+
+                            if ( $um_accessible === '1' && is_user_logged_in() ) {
+                                unset( $products[$key] );
+                            }
+                            elseif ( $um_accessible === '2' && ! is_user_logged_in() ) {
+                                unset( $products[$key] );
+                            }
+                            elseif ( $um_accessible === '2' && is_user_logged_in() ) {
+
+                                $um_access_roles = isset( $um_content_restriction['_um_access_roles'] ) ? $um_content_restriction['_um_access_roles'] : false;
+
+                                if ( $um_access_roles && is_array( $um_access_roles ) && ! empty( $um_access_roles ) ) {
+                                    $user = wp_get_current_user();
+                                    $role = ( array ) $user->roles;
+                                    $user_role = $role[0];
+                                    if ( $user_role && $user_role !== 'administrator' && ! isset( $um_access_roles[$user_role] ) ) {
+                                        unset( $products[$key] );
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return $products;
+
+        }
+
+        /*
          * Remove products that was excluded with Search Exclude plugin ( https://wordpress.org/plugins/search-exclude/ )
          */
         public function search_exclude_filter( $products ) {
@@ -846,6 +1003,24 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          */
         public function wc_product_table_posts_per_page( $num ) {
             return 9999;
+        }
+
+        /*
+         * Divi builder remove dynamic text shortcodes
+         */
+        public function divi_builder_strip_shortcodes( $str ) {
+            $str = preg_replace( '#\[et_pb_text.[^\]]*?_dynamic_attributes.*?\]@ET-.*?\[\/et_pb_text\]#', '', $str );
+            return $str;
+        }
+
+        /*
+         * WP all import cron job
+         */
+        public function pmxi_after_xml_import() {
+            $sunc = AWS()->get_settings( 'autoupdates' );
+            if ( $sunc === 'true' ) {
+                wp_schedule_single_event( time() + 1, 'aws_reindex_table' );
+            }
         }
 
     }

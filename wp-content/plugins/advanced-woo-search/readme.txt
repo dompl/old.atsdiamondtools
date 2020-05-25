@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 1.98
+Stable tag: 2.01
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,29 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.01 =
+* Add - Support for Ultimate Member plugin
+* Add - Support for WP all import plugin
+* Add - Allow some html tags for "Nothing found" message
+* Update - Remove Divi builder plugin dynamic text shortcodes from the product content
+* Add - Jupiter theme seamless integration
+* Fix - Bug with not sync product stock status with plugin index table on status change
+* Fix - Quantity ordering for search results page
+* Dev - aws_before_strip_shortcodes filter
+* Dev - aws_search_page_results filter
+* Dev - aws-focus class name when focus on search form
+
+= 2.00 =
+* Update - Search page ordering. Add order by quantity
+* Update - Remove sql query from output
+* Dev - Add aws_products_order filter
+
+= 1.99 =
+* Update - OceanWp theme integration
+* Fix - Bug with product short description search
+* Fix - SKU string translation
+* Dev - Add aws_reindex_product action to re-index single product by its ID
 
 = 1.98 =
 * Update - Add SQL query inside responce

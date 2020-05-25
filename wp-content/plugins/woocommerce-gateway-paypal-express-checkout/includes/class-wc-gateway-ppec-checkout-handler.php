@@ -37,8 +37,6 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		add_action( 'init', array( $this, 'init' ) );
 		add_filter( 'the_title', array( $this, 'endpoint_page_titles' ) );
 		add_action( 'woocommerce_checkout_init', array( $this, 'checkout_init' ) );
-		add_filter( 'woocommerce_default_address_fields', array( $this, 'filter_default_address_fields' ) );
-		add_filter( 'woocommerce_billing_fields', array( $this, 'filter_billing_fields' ) );
 		add_action( 'woocommerce_checkout_process', array( $this, 'copy_checkout_details_to_post' ) );
 
 		add_action( 'wp', array( $this, 'maybe_return_from_paypal' ) );
@@ -101,11 +99,15 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		remove_action( 'woocommerce_checkout_billing', array( $checkout, 'checkout_form_billing' ) );
 		remove_action( 'woocommerce_checkout_shipping', array( $checkout, 'checkout_form_shipping' ) );
 
-		// Lastly, let's add back in 1) displaying customer details from PayPal, 2) allow for
+		// Secondly, let's add back in 1) displaying customer details from PayPal, 2) allow for
 		// account registration and 3) shipping details from PayPal
 		add_action( 'woocommerce_checkout_billing', array( $this, 'paypal_billing_details' ) );
 		add_action( 'woocommerce_checkout_billing', array( $this, 'account_registration' ) );
 		add_action( 'woocommerce_checkout_shipping', array( $this, 'paypal_shipping_details' ) );
+
+		// Lastly make address fields optional depending on PayPal settings.
+		add_filter( 'woocommerce_default_address_fields', array( $this, 'filter_default_address_fields' ) );
+		add_filter( 'woocommerce_billing_fields', array( $this, 'filter_billing_fields' ) );
 	}
 
 	/**
@@ -430,12 +432,11 @@ class WC_Gateway_PPEC_Checkout_Handler {
 			return;
 		}
 
-		if ( empty( $_GET['woo-paypal-return'] ) || empty( $_GET['token'] ) || empty( $_GET['PayerID'] ) ) {
+		if ( empty( $_GET['woo-paypal-return'] ) || empty( $_GET['token'] ) ) {
 			return;
 		}
 
 		$token                    = $_GET['token'];
-		$payer_id                 = $_GET['PayerID'];
 		$create_billing_agreement = ! empty( $_GET['create-billing-agreement'] );
 		$session                  = WC()->session->get( 'paypal' );
 
@@ -446,8 +447,15 @@ class WC_Gateway_PPEC_Checkout_Handler {
 
 		// Store values in session.
 		$session->checkout_completed = true;
-		$session->payer_id           = $payer_id;
 		$session->token              = $token;
+
+		if ( ! empty( $_GET['PayerID'] ) ) {
+			$session->payer_id = $_GET['PayerID'];
+		} elseif ( $create_billing_agreement ) {
+			$session->create_billing_agreement = true;
+		} else {
+			return;
+		}
 
 		// Update customer addresses here from PayPal selection so they can be used to calculate local taxes.
 		$this->update_customer_addresses_from_paypal( $token );
@@ -468,7 +476,11 @@ class WC_Gateway_PPEC_Checkout_Handler {
 				}
 
 				// Complete the payment now.
-				$this->do_payment( $order, $session->token, $session->payer_id );
+				if ( ! empty( $session->payer_id ) ) {
+					$this->do_payment( $order, $session->token, $session->payer_id );
+				} elseif ( $order->get_total() <= 0 ) {
+					$order->payment_complete();
+				}
 
 				// Clear Cart
 				WC()->cart->empty_cart();
@@ -563,7 +575,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		// If the cart total is zero (e.g. because of a coupon), don't allow this gateway.
 		// We do this only if we're on the checkout page (is_checkout), but not on the order-pay page (is_checkout_pay_page)
 		if ( is_cart() || ( is_checkout() && ! is_checkout_pay_page() ) ) {
-			if ( isset( $gateways['ppec_paypal'] ) && ( 0 >= WC()->cart->total ) ) {
+			if ( isset( $gateways['ppec_paypal'] ) && ! WC()->cart->needs_payment() ) {
 				unset( $gateways['ppec_paypal'] );
 			}
 		}
@@ -655,7 +667,7 @@ class WC_Gateway_PPEC_Checkout_Handler {
 		}
 
 		$session = WC()->session->paypal;
-		return ( is_a( $session, 'WC_Gateway_PPEC_Session_Data' ) && $session->payer_id && $session->expiry_time > time() );
+		return ( is_a( $session, 'WC_Gateway_PPEC_Session_Data' ) && ( $session->payer_id || ! empty( $session->create_billing_agreement ) ) && $session->expiry_time > time() );
 	}
 
 	/**

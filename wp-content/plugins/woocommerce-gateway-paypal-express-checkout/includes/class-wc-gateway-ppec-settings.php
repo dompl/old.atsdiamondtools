@@ -120,7 +120,7 @@ class WC_Gateway_PPEC_Settings {
 	 */
 	public function get_live_api_credentials() {
 		if ( $this->api_certificate ) {
-			return new WC_Gateway_PPEC_Client_Credential_Certificate( $this->api_username, $this->api_password, $this->api_certificate, $this->api_subject );
+			return new WC_Gateway_PPEC_Client_Credential_Certificate( $this->api_username, $this->api_password, base64_decode( $this->api_certificate ), $this->api_subject );
 		}
 
 		return new WC_Gateway_PPEC_Client_Credential_Signature( $this->api_username, $this->api_password, $this->api_signature, $this->api_subject );
@@ -133,7 +133,7 @@ class WC_Gateway_PPEC_Settings {
 	 */
 	public function get_sandbox_api_credentials() {
 		if ( $this->sandbox_api_certificate ) {
-			return new WC_Gateway_PPEC_Client_Credential_Certificate( $this->sandbox_api_username, $this->sandbox_api_password, $this->sandbox_api_certificate, $this->sandbox_api_subject );
+			return new WC_Gateway_PPEC_Client_Credential_Certificate( $this->sandbox_api_username, $this->sandbox_api_password, base64_decode( $this->sandbox_api_certificate ), $this->sandbox_api_subject );
 		}
 
 		return new WC_Gateway_PPEC_Client_Credential_Signature( $this->sandbox_api_username, $this->sandbox_api_password, $this->sandbox_api_signature, $this->sandbox_api_subject );
@@ -303,9 +303,21 @@ class WC_Gateway_PPEC_Settings {
 	 */
 	public function get_paypal_locale() {
 		$locale = get_locale();
-		if ( ! in_array( $locale, $this->_supported_locales ) ) {
+
+		// For stores based in the US, we need to do some special mapping so PayPal Credit is allowed.
+		if ( wc_gateway_ppec_is_US_based_store() ) {
+			// PayPal has support for French, Spanish and Chinese languages based in the US. See https://developer.paypal.com/docs/archive/checkout/reference/supported-locales/
+			preg_match('/^(fr|es|zh)_/', $locale, $language_code );
+
+			if ( ! empty( $language_code ) ) {
+				$locale = $language_code[0] . 'US';
+			} else {
+				$locale = 'en_US';
+			}
+		} else if ( ! in_array( $locale, $this->_supported_locales ) ) {
 			$locale = 'en_US';
 		}
+
 		return apply_filters( 'woocommerce_paypal_express_checkout_paypal_locale', $locale );
 	}
 

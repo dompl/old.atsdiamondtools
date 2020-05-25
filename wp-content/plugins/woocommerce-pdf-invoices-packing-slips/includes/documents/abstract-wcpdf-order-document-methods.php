@@ -354,9 +354,9 @@ abstract class Order_Document_Methods extends Order_Document {
 
 			if ( $include_system_notes === false ) {
 				foreach ($notes as $key => $note) {
-            		if ( $note->added_by == 'system' ) {
-            			unset($notes[$key]);
-            		}
+					if ( $note->added_by == 'system' ) {
+						unset($notes[$key]);
+					}
 				}
 			}
 
@@ -599,16 +599,17 @@ abstract class Order_Document_Methods extends Order_Document {
 	 */
 	public function get_tax_rate( $item, $order, $force_calculation = false ) {
 		if ( version_compare( WOOCOMMERCE_VERSION, '3.0', '>=' ) ) {
-	        $tax_data_container = ( $item['type'] == 'line_item' ) ? 'line_tax_data' : 'taxes';
-	        $tax_data_key = ( $item['type'] == 'line_item' ) ? 'subtotal' : 'total';
-	        $line_total_key = ( $item['type'] == 'line_item' ) ? 'line_total' : 'total';
-	        $line_tax_key = ( $item['type'] == 'shipping' ) ? 'total_tax' : 'line_tax';
+			$tax_data_container = ( $item['type'] == 'line_item' ) ? 'line_tax_data' : 'taxes';
+			$tax_data_key = ( $item['type'] == 'line_item' ) ? 'subtotal' : 'total';
+			$line_total_key = ( $item['type'] == 'line_item' ) ? 'line_total' : 'total';
+			$line_tax_key = ( $item['type'] == 'shipping' ) ? 'total_tax' : 'line_tax';
 
 			$tax_class = isset($item['tax_class']) ? $item['tax_class'] : '';
 			$line_tax = $item[$line_tax_key];
-	        $line_total = $item[$line_total_key];
-	        $line_tax_data = $item[$tax_data_container];
+			$line_total = $item[$line_total_key];
+			$line_tax_data = $item[$tax_data_container];
 		} else {
+			$tax_data_key = ( $item['type'] == 'line_item' ) ? 'subtotal' : 'total';
 			$tax_class = $item['tax_class'];
 			$line_total = $item['line_total'];
 			$line_tax = $item['line_tax'];
@@ -858,7 +859,7 @@ abstract class Order_Document_Methods extends Order_Document {
 
 		// WC2.4 fix order_total for refunded orders
 		// not if this is the actual refund!
-		if ( ! $this->is_refund( $this->order ) ) {
+		if ( ! $this->is_refund( $this->order ) && apply_filters( 'wpo_wcpdf_remove_refund_totals', true, $this ) ) {
 			$total_refunded = method_exists($this->order, 'get_total_refunded') ? $this->order->get_total_refunded() : 0;
 			if ( version_compare( WOOCOMMERCE_VERSION, '2.4', '>=' ) && isset($totals['order_total']) && $total_refunded ) {
 				if ( version_compare( WOOCOMMERCE_VERSION, '3.0', '>=' ) ) {

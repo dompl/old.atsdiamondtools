@@ -175,7 +175,7 @@
                         }
 
                         if ( result.sku ) {
-                            html += '<span class="aws_result_sku">' + translate.sku + ': ' + result.sku + '</span>';
+                            html += '<span class="aws_result_sku">' + translate.sku +  result.sku + '</span>';
                         }
 
                         if ( result.excerpt ) {
@@ -428,9 +428,13 @@
 
 
         $searchField.on( 'focus', function (e) {
+            $searchForm.addClass('aws-focus');
             methods.onFocus(e);
         });
 
+        $searchField.on( 'focusout', function (e) {
+            $searchForm.removeClass('aws-focus');
+        });
 
         $searchForm.on( 'keypress', function(e) {
             if ( e.keyCode == 13 && ( ! d.showPage || $searchField.val() === '' ) ) {

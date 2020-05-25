@@ -151,9 +151,16 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 }
             }
 
+            /**
+             * Filter search page results
+             * @since 2.01
+             * @param array $new_posts Posts array
+             * @param object $query Query
+             * @param array $this->data Search results data array
+             */
+            $new_posts = apply_filters( 'aws_search_page_results', $new_posts, $query, $this->data );
 
             $this->posts_by_query[spl_object_hash( $query )] = $new_posts;
-
 
             global $wpdb;
 

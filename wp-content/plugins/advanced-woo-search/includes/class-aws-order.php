@@ -330,7 +330,31 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                     break;
 
+                case 'stock_quantity-asc':
+
+                    if ( isset( $this->products[0]['id'] ) ) {
+                        usort( $this->products, array( $this, 'compare_f_quantity_asc' ) );
+                    }
+
+                    break;
+
+                case 'stock_quantity-desc':
+
+                    if ( isset( $this->products[0]['id'] ) ) {
+                        usort( $this->products, array( $this, 'compare_f_quantity_desc' ) );
+                    }
+
+                    break;
+
             }
+
+            /**
+             * Filter search results after ordering
+             * @since 2.00
+             * @param array $this->products Products
+             * @param string $order_by Order by value
+             */
+            $this->products = apply_filters( 'aws_products_order', $this->products, $order_by );
 
         }
 
@@ -430,6 +454,52 @@ if ( ! class_exists( 'AWS_Order' ) ) :
         private function compare_title( $a, $b ) {
             $res = strcasecmp( $a["title"], $b["title"] );
             return $res;
+        }
+
+        /*
+         * Compare quantity values asc
+         */
+        private function compare_f_quantity_asc( $a, $b ) {
+
+            $product_a = wc_get_product( $a['id'] );
+            $product_b = wc_get_product( $b['id'] );
+
+            if ( ! is_a( $product_a, 'WC_Product' ) || ! is_a( $product_b, 'WC_Product' ) ) {
+                return 0;
+            }
+
+            $a_val = AWS_Helpers::get_quantity( $product_a );
+            $b_val = AWS_Helpers::get_quantity( $product_b );
+
+            if ($a_val == $b_val) {
+                return 0;
+            }
+
+            return ($a_val < $b_val) ? -1 : 1;
+
+        }
+
+        /*
+         * Compare quantity values desc
+         */
+        private function compare_f_quantity_desc( $a, $b ) {
+
+            $product_a = wc_get_product( $a['id'] );
+            $product_b = wc_get_product( $b['id'] );
+
+            if ( ! is_a( $product_a, 'WC_Product' ) || ! is_a( $product_b, 'WC_Product' ) ) {
+                return 0;
+            }
+
+            $a_val = AWS_Helpers::get_quantity( $product_a );
+            $b_val = AWS_Helpers::get_quantity( $product_b );
+
+            if ($a_val == $b_val) {
+                return 0;
+            }
+
+            return ($a_val > $b_val) ? -1 : 1;
+
         }
 
         /*
