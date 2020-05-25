@@ -25,8 +25,10 @@ class WC_Advanced_Notifications {
 
 		include_once( WC()->plugin_path() . '/includes/emails/class-wc-email.php' );
 
-		if ( ! class_exists( 'Emogrifier' ) && class_exists( 'DOMDocument' ) ) {
-			include_once( WC()->plugin_path() . '/includes/libraries/class-emogrifier.php' );
+		if ( version_compare( WC_VERSION, '4.0', '<' ) ) {
+			if ( ! class_exists( 'Emogrifier' ) && class_exists( 'DOMDocument' ) ) {
+					include_once WC()->plugin_path() . '/includes/libraries/class-emogrifier.php';
+			}
 		}
 
 		// Hook emails
@@ -460,7 +462,7 @@ class WC_Advanced_Notifications {
 		global $woocommerce, $wpdb;
 
 		// Get notifications
-		$notifications = $this->get_notifications_for_product( $product, 'out_of_stock' );
+		$notifications = $this->get_notifications_for_product( $product, 'backorders' );
 
 		if ( $notifications ) {
 

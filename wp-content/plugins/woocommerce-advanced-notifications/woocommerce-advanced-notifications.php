@@ -3,13 +3,13 @@
  * Plugin Name: WooCommerce Advanced Notifications
  * Plugin URI: https://woocommerce.com/products/advanced-notifications
  * Description: Add additonal, advanced order and stock notifications to WordPress - ideal for improving store management or for dropshippers.
- * Version: 1.2.20
+ * Version: 1.2.24
  * Author: WooCommerce
  * Author URI: https://woocommerce.com
  * Text Domain: woocommerce-advanced-notifications
  * Domain Path: /languages/
  * WC requires at least: 2.6
- * WC tested up to: 3.9
+ * WC tested up to: 4.1
  * Woo: 18740:112372c44b002fea2640bd6bfafbca27
  *
  * Copyright: © 2020 WooCommerce

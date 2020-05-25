@@ -1,5 +1,17 @@
 *** Advanced Notifications Changelog ***
 
+2020-05-12 - version 1.2.24
+* Fix - Backorder emails not sending. 
+
+2020-04-29 - version 1.2.23
+* Tweak - WC 4.1 compatibility.
+
+2020-03-13 - version 1.2.22
+* Fix - Emogrifier incorrect load path causes cascading errors.
+
+2020-03-05 - version 1.2.21
+* Tweak - WC tested up to 4.0
+
 2020-02-18 - version 1.2.20
 * Tweak - Remove legacy code.
 
