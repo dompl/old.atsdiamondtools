@@ -26,7 +26,18 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
                 foreach ( $section as $values ) {
 
-                    if ( $values['type'] === 'heading' ) {
+                    if ( isset( $values['type'] ) && $values['type'] === 'heading' ) {
+                        continue;
+                    }
+
+                    if ( isset( $values['type'] ) && $values['type'] === 'table' && empty( $values['value'] ) ) {
+                        continue;
+                    }
+
+                    if ( isset( $values['type'] ) && ( $values['type'] === 'checkbox' || $values['type'] === 'table' ) ) {
+                        foreach ( $values['choices'] as $key => $val ) {
+                            $default_settings[ $values['id'] ][$key] = sanitize_text_field( $values['value'][$key] );
+                        }
                         continue;
                     }
 
@@ -69,7 +80,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             foreach ( $options[$current_tab] as $values ) {
 
-                if ( $values['type'] === 'heading' ) {
+                if ( $values['type'] === 'heading' || $values['type'] === 'table' ) {
                     continue;
                 }
 
@@ -206,12 +217,45 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['general'][] = array(
-                "name"  => __( "Search in", "advanced-woo-search" ),
-                "desc"  => __( "Search source: Drag&drop sources to activate or deactivate them.", "advanced-woo-search" ),
-                "id"    => "search_in",
-                "value" => "title,content,sku,excerpt",
-                "choices" => array( "title", "content", "sku", "excerpt", "category", "tag", "id" ),
-                "type"  => "sortable"
+                "name"       => __( "Search in", "advanced-woo-search" ),
+                "desc"       => __( "Click on status icon to enable or disable search source.", "advanced-woo-search" ),
+                "table_head" => __( 'Search Source', 'advanced-woo-search' ),
+                "id"         => "search_in",
+                "value"      => array(
+                    'title'    => 1,
+                    'content'  => 1,
+                    'sku'      => 1,
+                    'excerpt'  => 1,
+                    'category' => 0,
+                    'tag'      => 0,
+                    'id'       => 0,
+                ),
+                "choices" => array(
+                    "title"    => __( "Title", "advanced-woo-search" ),
+                    "content"  => __( "Content", "advanced-woo-search" ),
+                    "sku"      => __( "SKU", "advanced-woo-search" ),
+                    "excerpt"  => __( "Short description", "advanced-woo-search" ),
+                    "category" => __( "Category", "advanced-woo-search" ),
+                    "tag"      => __( "Tag", "advanced-woo-search" ),
+                    "id"       => __( "ID", "advanced-woo-search" ),
+                ),
+                "type"    => "table"
+            );
+
+            $options['general'][] = array(
+                "name"       => __( "Archive pages", "advanced-woo-search" ),
+                "desc"       => __( "Search for taxonomies and displayed their archive pages in search results.", "advanced-woo-search" ),
+                'table_head' => __( 'Archive Pages', 'advanced-woo-search' ),
+                "id"         => "search_archives",
+                "value" => array(
+                    'archive_category' => 0,
+                    'archive_tag'      => 0,
+                ),
+                "choices" => array(
+                    "archive_category" => __( "Category", "advanced-woo-search" ),
+                    "archive_tag"      => __( "Tag", "advanced-woo-search" ),
+                ),
+                "type"    => "table"
             );
 
             $options['general'][] = array(
@@ -467,30 +511,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Show product price for out of stock products.", "advanced-woo-search" ),
                 "id"    => "show_outofstock_price",
                 "value" => 'true',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'  => __( 'On', 'advanced-woo-search' ),
-                    'false' => __( 'Off', 'advanced-woo-search' ),
-                )
-            );
-
-            $options['results'][] = array(
-                "name"  => __( "Show categories archive", "advanced-woo-search" ),
-                "desc"  => __( "Include categories archives pages to search result.", "advanced-woo-search" ),
-                "id"    => "show_cats",
-                "value" => 'false',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'  => __( 'On', 'advanced-woo-search' ),
-                    'false' => __( 'Off', 'advanced-woo-search' ),
-                )
-            );
-
-            $options['results'][] = array(
-                "name"  => __( "Show tags archive", "advanced-woo-search" ),
-                "desc"  => __( "Include tags archives pages to search results.", "advanced-woo-search" ),
-                "id"    => "show_tags",
-                "value" => 'false',
                 "type"  => "radio",
                 'choices' => array(
                     'true'  => __( 'On', 'advanced-woo-search' ),

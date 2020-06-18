@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG Welcome/Account Screen
 /*-----------------------------------------------------------------------------------*/
-defined( 'ABSPATH' ) or die( "No script kiddies please!" );
+defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 if ( class_exists( 'AG_welcome_screen' ) ) {
 	return;
@@ -62,7 +62,8 @@ class AG_welcome_screen {
 	 */
 	public function ag_welcome_screen() {
 
-		add_menu_page(
+		
+		$hook_suffix = add_menu_page(
             'Welcome to AG',
             'AG Plugins',
             'manage_options',
@@ -70,8 +71,13 @@ class AG_welcome_screen {
             array( $this, 'setup_welcome_page' ),
             'dashicons-admin-network'
 		);
+		add_action( "admin_print_styles-{$hook_suffix}", array( $this, 'ePDQ_admin_css') );
 
+	}
 
+	public function ePDQ_admin_css()
+	{
+		wp_enqueue_style('ePDQ_admin', AG_ePDQ_path . 'assets/css/admin-style.css');
 	}
 
 
@@ -80,9 +86,14 @@ class AG_welcome_screen {
 	 */
 	public function setup_welcome_page() {
 
-		$page_title = sprintf( '<div style="padding-bottom: 15px;">%s from <a href="https://weareag.co.uk/?utm_source=%s&utm_medium=insideplugin" target="_blank">We are AG</a> <em style="opacity: 0.6; font-size: 80%%;">(v%s)</em></div>', self::$args['plugin_title'], self::$args['main_slug'], self::$args['plugin_version'] );
+		$page_title = sprintf( '<div style="padding-bottom: 15px;">%s from <a href="https://weareag.co.uk/?utm_source=ePDQ-Direct&utm_medium=insideplugin" target="_blank">We are AG</a> <em style="opacity: 0.6; font-size: 80%%;">(v%s)</em></div>', self::$args['plugin_title'], self::$args['plugin_version'] );
 
-		self::getting_started(); ?>
+		self::getting_started();
+		echo '<div style="display: none">';
+		echo AG_licence::new_install();
+		echo '</div>';
+		
+		?>
 
 		<div class="wrap ag-welcome-wrap">
         <h2><?php echo $page_title; ?></h2>
@@ -97,7 +108,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>License &amp; Billing</h3>
 									<p>Activate or sync your license, cancel your subscription, print invoices, and manage your account information.</p>
-									<a href="<?php echo AG_ePDQ_admin ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-account" class="ag-button">Manage Licence &amp; Billing</a>
+									<a href="<?php echo admin_url(); ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-account" class="ag-button">Manage Licence &amp; Billing</a>
 								</div>
 							</div>
 						</div>
@@ -117,7 +128,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>Affiliate</h3>
 									<p>Become an ambassador for AG and earn 20% commission for each sale!</p>
-									<a href="<?php echo AG_ePDQ_admin ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-affiliation" class="ag-button">Find Out More</a>
+									<a href="<?php echo admin_url(); ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-affiliation" class="ag-button">Find Out More</a>
 								</div>
 							</div>
 						</div>
@@ -130,7 +141,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>Getting Support</h3>
 									<p>Get premium support with a valid licence</p>
-									<a target="_blank" href="https://weareag.co.uk/support?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button">Submit a ticket.</a>
+									<a target="_blank" href="https://weareag.co.uk/support?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button">Submit a ticket</a>
 								</div>
 							</div>
 						</div>
@@ -149,6 +160,15 @@ class AG_welcome_screen {
 									<h3>Feature Request</h3>
 									<p>Have a feature you'd love to be part of the plugin?'.</p>
 									<a target="_blank" href="https://weareag.co.uk/feature-requests?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Submit a feature request</a>
+								</div>
+							</div>
+						</div>
+						<div class="main-card">
+							<div class="card-contents">
+								<div class="card-body">
+									<h3>Setup Wizard</h3>
+									<p>Struggling to get setup?</p>
+									<a target="_blank" href="<?php echo esc_url_raw( admin_url() . '?page='.self::$args['plugin_name'].'-wizard' ); ?>" class="ag-button" target="_blank">Use the wizard</a>
 								</div>
 							</div>
 						</div>
@@ -172,11 +192,7 @@ class AG_welcome_screen {
 
 			</div>
 
-
-
-
 		</div>
-
 		<?php
 	}
 
@@ -200,6 +216,9 @@ class AG_welcome_screen {
 
 					return;
 				}
+
+				
+
 		?>
 			<div class="ag-notice ag-notice--getting-started">
 				<form action="" method="post" class="ag-notice__dismiss">

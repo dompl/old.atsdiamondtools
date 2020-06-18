@@ -4,4 +4,3 @@
  * Requires WooCommerce PDF Invoices & Packing Slips 1.4.13 or higher
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-

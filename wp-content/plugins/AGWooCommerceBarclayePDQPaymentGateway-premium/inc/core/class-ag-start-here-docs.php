@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG Get doc urls
 /*-----------------------------------------------------------------------------------*/
-defined( 'ABSPATH' ) or die( "No script kiddies please!" );
+defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 
 if ( class_exists( 'AG_start_here_docs' ) ) {
@@ -37,65 +37,71 @@ class AG_start_here_docs {
 
     public static function get_doc_links() {
 
+		if (!class_exists('AG_ePDQ_Helpers')) {
+            return;
+		}
+		
 		$return = array();
-		$url    = self::$AG_doc_url . self::$args['start_here'];
-		$transient_name = 'ePDQ_server';
-        
-        
-		$html   = file_get_contents( $url );
+        $url    = self::$AG_doc_url . self::$args['start_here'];
+		$transient_name = self::$args['plugin_slug'] . '_get_doc_links';
+		
+		$docs_got = get_transient( $transient_name );
 
-		if ( ! $html ) {
-			set_transient( $transient_name, $return, 12 * HOUR_IN_SECONDS );
+        if( empty($docs_got)) {
+		
+			$dom = new DOMDocument();
+			libxml_use_internal_errors(true);
 
-			return $return;
-		}
+			$html = wp_remote_retrieve_body(wp_safe_remote_get(esc_url($url)));
+			$dom->loadHTML($html);
+			$docs = $dom->getElementsByTagName( 'ul' );
 
-		$dom = new DOMDocument;
+			foreach ( $docs as $doc ) {
+				$classes = $doc->getAttribute( 'class' );
 
-		@$dom->loadHTML( $html );
+				if ( strpos( $classes, 'articleList' ) === false ) {
+					continue;
+				}
 
-		$lists = $dom->getElementsByTagName( 'ul' );
+				$links = $doc->getElementsByTagName( 'a' );
 
-		if ( empty( $lists ) ) {
-			set_transient( $transient_name, $return, 12 * HOUR_IN_SECONDS );
-
-			return $return;
-		}
-
-		foreach ( $lists as $list ) {
-			$classes = $list->getAttribute( 'class' );
-
-			if ( strpos( $classes, 'articleList' ) === false ) {
-				continue;
+				foreach ( $links as $link ) {
+					$return[] = array(
+						'href'  => AG_ePDQ_Helpers::AG_escape( $link->getAttribute( 'href' ) ),
+						'title' => AG_ePDQ_Helpers::AG_escape( $link->nodeValue, ENT_QUOTES ),
+					);
+				}
 			}
 
-			$links = $list->getElementsByTagName( 'a' );
+			set_transient( $transient_name, $return, 30 * DAY_IN_SECONDS );
 
-			foreach ( $links as $link ) {
-				$return[] = array(
-					'href'  => $link->getAttribute( 'href' ),
-					'title' => $link->nodeValue,
-				);
-			}
 		}
-
-		set_transient( $transient_name, $return, 30 * DAY_IN_SECONDS );
 
 		return $return;
+
 	}
 
 
 	public static function output_doc_links() {
-        $links = self::get_doc_links();
-
-		if ( empty( $links ) ) {
+		
+		if (!class_exists('AG_ePDQ_Helpers')) {
+            return;
+        }
+		
+		$data = self::get_doc_links();
+		if ( !empty( $data ) ) {
 			return;
-		} ?>
+        }
+		
+		$transient_name = self::$args['plugin_slug'] .'_get_doc_links';
+        $links = get_transient( $transient_name );
+		
+		?>
 
 		<ol>
 			<?php foreach ( $links as $link ) { ?>
 				<li>
-					<a href="<?php echo esc_attr( 'https://we-are-ag.helpscoutdocs.com' . $link['href'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank"><?php echo $link['title']; ?></a>
+					<a href="<?php echo esc_attr( 'https://we-are-ag.helpscoutdocs.com' . AG_ePDQ_Helpers::AG_decode( $link['href'] ) ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank"><?php echo AG_ePDQ_Helpers::AG_decode( $link['title'] ); ?></a>
 				</li>
 			<?php } ?>
 		</ol>
@@ -104,7 +110,6 @@ class AG_start_here_docs {
 
 		<p>Want to know more about other Payment options or PCI compliance? have a look at our tips and information section below.</p>
 
-		<p><strong>Need multiple payment gateways for your clients? <a href="https://weareag.co.uk/ag-bundles/?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank">Save over 50% with a AG bundle.</a></strong></p>
 	<?php }
 
 

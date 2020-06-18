@@ -10,20 +10,20 @@
  * -----
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 3.2.3
+ * Version: 4.0.0
  * WC requires at least: 3.0.0
- * WC tested up to: 3.9 
+ * WC tested up to: 4.2
  * License: GPL3
  */
 
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  3.2.3
+ * @version  4.0.0
  * @category Class
  * @author   We are AG
  */
@@ -31,20 +31,12 @@ class AG_ePDQ_server
 {
 
 
-	/**
-	 * Plugin version
-	 *
-	 * @var string
-	 */
-	public static $AGversion = "3.2.3";
 
-
-	/**
-	 * Plugin slug
-	 *
-	 * @var string
-	 */
+	public static $AGversion = "4.0.0";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
+	public static $pluginName = 'AG_ePDQ';
+
+
 
 
 	/**
@@ -56,12 +48,14 @@ class AG_ePDQ_server
 		//load_plugin_textdomain('ag-epdq-server', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 		$this->define_constants();
-		$this->AG_classes();
 
-		add_filter('woocommerce_payment_gateways', array($this, 'woocommerce_add_epdq_gateway'));
 		add_action('plugins_loaded', array($this, 'woocommerce_ag_epdq_init'), 0);
 		add_action('admin_enqueue_scripts', array($this, 'ag_admin_css'));
 		add_action('wp_enqueue_scripts', array($this, 'ag_checkout_css'));
+		add_filter('woocommerce_payment_gateways', array($this, 'woocommerce_add_epdq_gateway'));
+
+
+		$this->AG_classes();
 
 
 		if (!AG_licence::valid_licence()) {
@@ -112,7 +106,6 @@ class AG_ePDQ_server
 		require_once AG_ePDQ_class . 'class-main.php';
 		require_once AG_ePDQ_class . 'class-epdq-error-codes.php';
 		require_once AG_ePDQ_class . 'class-gdpr.php';
-		require_once AG_ePDQ_class . 'class-helpers.php';
 		require_once AG_ePDQ_class . 'class-settings.php';
 		require_once AG_ePDQ_class . 'class-crypt.php';
 		
@@ -134,6 +127,12 @@ class AG_ePDQ_server
 		//	'payment_method_id'		=>	'epdq_checkout',
 		//));
 
+		AG_ePDQ_Wizard::run_instance(array(
+			'plugin_slug'   => self::$AG_ePDQ_slug,
+			'plugin_version' => self::$AGversion,
+			'plugin_name' => self::$pluginName,
+		));
+
 
 		if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
 			require_once AG_ePDQ_class . 'class-wc-subscriptions.php';
@@ -149,12 +148,21 @@ class AG_ePDQ_server
 	private function AG_classes()
 	{
 
+		require_once AG_ePDQ_class . 'class-helpers.php';
+		include_once AG_ePDQ_core  . 'class-ag-welcome.php';
+		include_once AG_ePDQ_core  . 'class-ag-start-here-docs.php';
+		include_once AG_ePDQ_core  . 'class-ag-up-sell.php';
+		include_once AG_ePDQ_core  . 'class-ag-gateway-tips.php';
+		include_once AG_ePDQ_core  . 'class-ag-licence.php';
+		require_once AG_ePDQ_class . 'class-epdq-wizard.php';
+		require_once AG_ePDQ_core  . 'class-setup-wizard.php';
 
-		include_once AG_ePDQ_core . 'class-ag-welcome.php';
-		include_once AG_ePDQ_core . 'class-ag-start-here-docs.php';
-		include_once AG_ePDQ_core . 'class-ag-up-sell.php';
-		include_once AG_ePDQ_core . 'class-ag-gateway-tips.php';
-		include_once AG_ePDQ_core . 'class-ag-licence.php';
+		AG_ePDQ_Wizard_steps::run_instance(array(
+			'plugin_slug'   => self::$AG_ePDQ_slug,
+			'plugin_version' => self::$AGversion,
+			'plugin_name' => self::$pluginName,
+		));
+
 
 		AG_licence::run_instance(array(
 			'basename' => plugin_basename(__FILE__),
@@ -184,11 +192,14 @@ class AG_ePDQ_server
 				),
 			),
 			'update'    => array(
-				'plugin' => 'AGWooCommerceBarclayePDQPaymentGateway-premium/index.php',
+				'plugin' => 'AGWooCommerceBarclayePDQPaymentGateway',
 				'name' => 'Barclays ePDQ payment gateway (Barclaycard) for WooCommerce',
 				'update_notice' => false,
 				'message'	=>	'',
+				'notice_name' => 'ag_new_update_info',
+				'disable_gateway' => false,
 			),
+			'plugin_name' => self::$pluginName,
 		));
 
 		AG_welcome_screen::run_instance(array(
@@ -197,6 +208,7 @@ class AG_ePDQ_server
 			'collection' => '25-barclays-epdq-payment-gateway',
 			'plugin_title'         => 'Barclays ePDQ payment gateway (Barclaycard) for WooCommerce',
 			'plugin_version'       => self::$AGversion,
+			'plugin_name' => self::$pluginName,
 		));
 
 		AG_start_here_docs::run_instance(array(
@@ -217,12 +229,6 @@ class AG_ePDQ_server
 
 
 		AG_gateway_tips::run_instance(array(
-			'tips'   => array(
-				'for_you',
-				'PCI',
-				'payments_101',
-				'luhn',
-			),
 			'plugin_slug'   => self::$AG_ePDQ_slug,
 		));
 

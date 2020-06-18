@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG encrypt functions
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 if (class_exists('ePDQ_crypt')) {
@@ -12,7 +12,7 @@ if (class_exists('ePDQ_crypt')) {
 class ePDQ_crypt
 {
 
-    /**
+        /**
      * ePDQ return hash
      *
      * @param $check_data
@@ -22,22 +22,14 @@ class ePDQ_crypt
      */
 	public static function epdq_hash($check_data, $sha_out, $sha_method) {
 		
-		$data = '';
+        $data = '';
 
 		foreach ($check_data as $key => $value) {
-			if ($value == '')	continue;
+			if ($value === '')	continue;
 			$data .= strtoupper($key) . '=' . $value . $sha_out;
 		}
 
-		if ($sha_method == 0) {
-			$shasign_method = 'sha1';
-		} elseif ($sha_method == 1) {
-			$shasign_method = 'sha256';
-		} elseif ($sha_method == 2) {
-			$shasign_method = 'sha512';
-		}
-
-		return hash($shasign_method, $data);
+		return hash(self::get_sha_method(), $data);
     }
     
 
@@ -48,8 +40,7 @@ class ePDQ_crypt
      */
     public static function encrypt_password_gen()
     {
-        return bin2hex(openssl_random_pseudo_bytes(16));
-        // removed base64_encode()
+        return base64_encode(bin2hex(openssl_random_pseudo_bytes(16)));
     }
 
     /**
@@ -80,7 +71,7 @@ class ePDQ_crypt
      */
     public static function sodium_crypt($message, $secret_key, $block_size = 1)
     {
-        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $nonce = hash('sha256', $secret_key);
         $padded_message = sodium_pad($message, $block_size <= 512 ? $block_size : 512);
         $cipher = base64_encode($nonce . sodium_crypto_secretbox($padded_message, $nonce, $secret_key));
 
@@ -106,4 +97,97 @@ class ePDQ_crypt
 
         return $key . $encrypted;
     }
+
+
+    public static function key_settings() {
+
+        if(defined('secure_ePDQ_PSPID') && defined('secure_ePDQ_SHA_in') && defined('secure_ePDQ_SHA_out') && defined('secure_ePDQ_SHA_method') ) {
+
+            $pspid = secure_ePDQ_PSPID;
+            $shain = secure_ePDQ_SHA_in;
+            $shaout = secure_ePDQ_SHA_out;
+            $shamethod = secure_ePDQ_SHA_method;
+
+            $settings = array(
+                'pspid' => isset($pspid) ? $pspid : '',
+                'shain' => isset($shain) ? $shain : '',
+                'shaout' => isset($shaout) ? $shaout : '',
+                'shamethod' => isset($shamethod) ? $shamethod : '',
+            );
+
+            return $settings;
+
+        } else {
+            
+            $ePDQ_settings = new epdq_checkout();
+
+            $settings = array(
+                'pspid' => isset($ePDQ_settings->access_key) ? $ePDQ_settings->access_key : '',
+                'shain' => isset($ePDQ_settings->sha_in) ? $ePDQ_settings->sha_in : '',
+                'shaout' => isset($ePDQ_settings->sha_out) ? $ePDQ_settings->sha_out : '',
+                'shamethod' => isset($ePDQ_settings->sha_method) ? $ePDQ_settings->sha_method : '',
+            );
+
+            return $settings;
+
+        }
+
+    }
+
+
+    public static function refund_settings() {
+
+        if(defined('secure_ePDQ_PSPID') && defined('secure_ePDQ_SHA_in') && defined('secure_ePDQ_SHA_out') && defined('secure_ePDQ_SHA_method') ) {
+
+            $userid = secure_ePDQ_userid;
+            $pswd = secure_ePDQ_pswd;
+            $refid = secure_ePDQ_refid;
+
+            $settings = array(
+                'USERID' => isset($userid) ? $userid : '',
+                'PSWD' => isset($pswd) ? $pswd : '',
+                'REFID' => isset($refid) ? $refid : '',
+            );
+
+            return $settings;
+
+        } else {
+            
+            $ePDQ_settings = new epdq_checkout();
+
+            $settings = array(
+                'USERID' => isset($ePDQ_settings->api_user) ? $ePDQ_settings->api_user : '',
+                'PSWD' => isset($ePDQ_settings->api_password) ? $ePDQ_settings->api_password : '',
+                'REFID' => isset($ePDQ_settings->api_REFID) ? $ePDQ_settings->api_REFID : '',
+            );
+
+            return $settings;
+
+        }
+
+    }
+
+
+
+    public static function get_sha_method() {
+
+        $settings = self::key_settings();
+        $sha_method = $settings['shamethod'];
+
+        $shasign_method = 'sha512';
+        $sha_method = (int) $sha_method;
+
+        if ($sha_method == 0) {
+			$shasign_method = 'sha1';
+		} elseif ($sha_method == 1) {
+			$shasign_method = 'sha256';
+		} elseif ($sha_method == 2) {
+			$shasign_method = 'sha512';
+        }
+
+        return $shasign_method;
+        
+    }
+
+
 }

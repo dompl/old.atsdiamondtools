@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.3
+Tested up to: 5.4.2
 Stable tag: 4.2
 
 == Description ==
@@ -23,7 +23,7 @@ Ok not a problem, lets see if you can fix it by following these steps.
 2. Process a test transaction using the gateway.
 3. Check the plugins error logs to see if any errors have been logged, if they have follow the steps to fix.
 4. Issue is still not fixed? Check the ePDQ error log in the back office.
-5. Follow the steps in the trouble shooting section of the documentation to fix.
+5. Follow the steps in the troubleshooting section of the documentation to fix.
 6. Still having issues? Send us a support ticket detailing the issue you have, we may ask for screenshots of the ePDQ back office.
 
 = Can I process refunds using this plugin? =
@@ -37,6 +37,36 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.0.0 - 12/06/20 =
+* New           - New setup wizard, the wizard walks you through all steps to get the plugin working in test mode.
+* New           - Two new helper functions to escape and decode returned data.
+* New           - New helper function to store the key settings outside of the WP database (see doc's for more).
+* New           - New get_sha_method() helper function.
+* Change        - Changed pull_AG_posts() to use wp_safe_remote_get() and sanitised data.
+* Change        - Changed output_tips() to use stored data from pull_AG_posts().
+* Change        - Admin CSS clean up, all added to new admin CSS file.
+* Change        - Changed minimum PHP version debug warning to 7.2.
+* Change        - Enabled plugin conflict warning in debug log.
+* Tweak         - Tweak to epdq_hash() function.
+* Tweak         - Tweak to new_install() function to use new key_settings().
+* Tweak         - Tweak to luhn_algorithm_check() function.
+* Tweak         - Tweak to check_response() function to remove some old logic.
+* Tweak         - Change to logic on new_install() function.
+* Tweak         - Notice about new way of storing API keys added to main setup page.
+* Tweak         - Added link to setup wizard in the AG Welcome screen.
+* Tweak         - Extra catch for WOOCS plugin.
+* Dev           - New error log catch, catch all parameters before sending to ePDQ, This is to catch issues with third party plugins adding in parameters to the get_checkout_order_received_url() function.
+* Dev           - Old error log system define removed - AG_ePDQ_debug.
+* Fix           - Fix to stop plugins by pluginus.net (WOOF product filter & WOOCS Currency converter) from breaking the decryption.
+* Fix           - Fix for some users having issues with Direct HTTP server-to-server request.
+* Checking      - Checking support for new WooCommerce version 4.2+ (Changed tested up to notice).
+
+
+= v3.2.4.1 - 01/05/20 =
+* New           - New ePDQ error catch for URLs and data sent back.
+* Tweak         - Removed q parameter from the hash encryption.
+* Checking      - Support for new WooCommerce version 4.1 (working with new version).
 
 = v3.2.3 - 02/03/20 =
 * Tweak         - Fully disabled new score system.

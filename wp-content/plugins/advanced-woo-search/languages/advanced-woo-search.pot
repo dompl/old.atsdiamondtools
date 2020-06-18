@@ -341,22 +341,6 @@ msgstr ""
 msgid "What to show in product description?"
 msgstr ""
 
-#: includes/options.php:117
-msgid "Show categories archive"
-msgstr ""
-
-#: includes/options.php:118
-msgid "Include categories archives pages to search result."
-msgstr ""
-
-#: includes/options.php:129
-msgid "Show tags archive"
-msgstr ""
-
-#: includes/options.php:130
-msgid "Include tags archives pages to search results."
-msgstr ""
-
 #: includes/options.php:141
 msgid "Show sale badge"
 msgstr ""
@@ -395,10 +379,6 @@ msgstr ""
 
 #: includes/options.php:175
 msgid "Search in"
-msgstr ""
-
-#: includes/options.php:176
-msgid "Search source: Drag&drop sources to activate or deactivate them."
 msgstr ""
 
 #: includes/options.php:30
@@ -458,4 +438,43 @@ msgstr ""
 
 #. Author of the plugin
 msgid "ILLID"
+msgstr ""
+
+msgid "Placeholder"
+msgstr ""
+
+msgid "Add placeholder text or leave empty to use default."
+msgstr ""
+
+msgid "Disable this source"
+msgstr ""
+
+msgid "Enable this source"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Click on status icon to enable or disable search source."
+msgstr ""
+
+msgid "Search Source"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Archive pages"
+msgstr ""
+
+msgid "Search for taxonomies and displayed their archive pages in search results."
 msgstr ""

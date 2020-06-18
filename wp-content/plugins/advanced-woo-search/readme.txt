@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 2.01
+Stable tag: 2.03
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,16 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.03 =
+* Add - Seamless integration for Elementor plugin search module
+* Add - Widget for  Elementor plugin
+* Add - Module for Divi Builder plugin
+* Update - Styles for settings page
+
+= 2.02 =
+* Add - German language translation
+* Update - Show re-index table notice only for relevant users
 
 = 2.01 =
 * Add - Support for Ultimate Member plugin

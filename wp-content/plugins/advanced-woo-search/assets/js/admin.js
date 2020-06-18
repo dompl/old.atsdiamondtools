@@ -130,4 +130,47 @@ jQuery(document).ready(function ($) {
     });
 
 
+    // Change option state
+
+    var changingState = false;
+
+    $('[data-change-state]').on( 'click', function(e) {
+
+        e.preventDefault();
+
+        if ( changingState ) {
+            return;
+        } else {
+            changingState = true;
+        }
+
+        var self = $(this);
+        var $parent = self.closest('td');
+        var setting = self.data('setting');
+        var option = self.data('name');
+        var state = self.data('change-state');
+
+        $parent.addClass('loading');
+
+        $.ajax({
+            type: 'POST',
+            url: aws_vars.ajaxurl,
+            data: {
+                action: 'aws-changeState',
+                setting: setting,
+                option: option,
+                state: state,
+                _ajax_nonce: aws_vars.ajax_nonce
+            },
+            dataType: "json",
+            success: function (data) {
+                $parent.removeClass('loading');
+                $parent.toggleClass('active');
+                changingState = false;
+            }
+        });
+
+    });
+
+
 });

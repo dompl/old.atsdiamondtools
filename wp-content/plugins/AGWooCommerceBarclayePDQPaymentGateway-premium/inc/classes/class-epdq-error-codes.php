@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG ePDQ error codes
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 if (class_exists('AG_errors')) {

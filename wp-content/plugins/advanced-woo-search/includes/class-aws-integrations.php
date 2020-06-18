@@ -56,6 +56,8 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 }
             }
 
+            $this->includes();
+
             //add_action('woocommerce_product_query', array( $this, 'woocommerce_product_query' ) );
 
             if ( class_exists( 'BM' ) ) {
@@ -126,6 +128,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 // Elementor pro
                 if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                     add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
+                    add_filter( 'elementor/widget/render_content', array( $this, 'elementor_render_content' ), 10, 2 );
                 }
 
             }
@@ -165,6 +168,23 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             // WP all import finish
             add_action( 'pmxi_after_xml_import', array( $this, 'pmxi_after_xml_import' ) );
+
+        }
+
+        /**
+         * Include files
+         */
+        public function includes() {
+
+            // Elementor plugin widget
+            if ( defined( 'ELEMENTOR_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/elementor-widget/class-elementor-aws-init.php' );
+            }
+
+            // Divi module
+            if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) ) {
+                include_once( AWS_DIR . '/includes/modules/divi/class-divi-aws-module.php' );
+            }
 
         }
 
@@ -663,6 +683,48 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </script>
 
         <?php }
+
+        /*
+         * Elementor replace search form widget
+         */
+        public function elementor_render_content( $content, $widget ) {
+            if ( method_exists( $widget, 'get_name' ) && $widget->get_name() === 'search-form' ) {
+                if ( method_exists( $widget, 'get_settings' )  ) {
+                    $settings = $widget->get_settings();
+                    if ( is_array( $settings ) && isset( $settings['skin'] ) && $settings['skin'] === 'full_screen' ) {
+                        $content = '<style>
+                            .elementor-search-form--skin-full_screen .elementor-search-form__container {
+                                overflow: hidden;
+                            }
+                            .elementor-search-form--full-screen .aws-container {
+                                width: 100%;
+                            }
+                            .elementor-search-form--full-screen .aws-container .aws-search-form {
+                                height: auto !important;
+                            }
+                            .elementor-search-form--full-screen .aws-container .aws-search-form .aws-search-btn.aws-form-btn {
+                                display: none;
+                            }
+                            .elementor-search-form--full-screen .aws-container .aws-search-field {
+                                border-bottom: 1px solid #fff !important;
+                                font-size: 50px !important;
+                                text-align: center !important;
+                                line-height: 1.5 !important;
+                                color: #7a7a7a !important;
+                            }
+                            .elementor-search-form--full-screen .aws-container .aws-search-field:focus {
+                                background-color: transparent !important;
+                            }
+                        </style>' . $content;
+                        $content = str_replace( array( '<form', '</form>' ), array( '<div', '</div>' ), $content );
+                        $content = preg_replace( '/(<input[\S\s]*?elementor-search-form__input[\S\s]*?\>)/i', aws_get_search_form( false ), $content );
+                        return $content;
+                    }
+                }
+                return aws_get_search_form( false );
+            }
+            return $content;
+        }
 
         /*
          * Porto theme seamless integration

@@ -3,14 +3,14 @@
  * Plugin Name: WooCommerce PDF Invoices & Packing Slips
  * Plugin URI: http://www.wpovernight.com
  * Description: Create, print & email PDF invoices & packing slips for WooCommerce orders.
- * Version: 2.4.10
+ * Version: 2.5.1
  * Author: Ewout Fernhout
  * Author URI: http://www.wpovernight.com
  * License: GPLv2 or later
  * License URI: http://www.opensource.org/licenses/gpl-license.php
  * Text Domain: woocommerce-pdf-invoices-packing-slips
  * WC requires at least: 2.2.0
- * WC tested up to: 4.1.0
+ * WC tested up to: 4.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,7 @@ if ( !class_exists( 'WPO_WCPDF' ) ) :
 
 class WPO_WCPDF {
 
-	public $version = '2.4.10';
+	public $version = '2.5.1';
 	public $plugin_basename;
 	public $legacy_mode;
 
@@ -105,39 +105,46 @@ class WPO_WCPDF {
 	 * Maintain backwards compatibility with old translation files
 	 * Uses old .mo file if it exists in any of the override locations
 	 */
-	public function textdomain_fallback( $mofile, $textdomain ) {
+	public function textdomain_fallback( $mo, $textdomain ) {
 		$plugin_domain = 'woocommerce-pdf-invoices-packing-slips';
 		$old_domain = 'wpo_wcpdf';
 
-		if ($textdomain == $old_domain) {
+		if ( $textdomain !== $plugin_domain && $textdomain !== $old_domain ) {
+			return $mo;
+		}
+
+		$mopath = trailingslashit( dirname( $mo ) );
+		$mofile = basename( $mo );
+
+		if ( $textdomain == $old_domain ) {
 			$textdomain = $plugin_domain;
-			$mofile = str_replace( "{$old_domain}-", "{$textdomain}-", $mofile ); // with trailing dash to target file and not folder
+			$mofile = str_replace( $old_domain, $textdomain, $mofile );
 		}
 
 		if ( $textdomain === $plugin_domain ) {
-			$old_mofile = str_replace( "{$textdomain}-", "{$old_domain}-", $mofile ); // with trailing dash to target file and not folder
-			if ( file_exists( $old_mofile ) ) {
+			$old_mofile = str_replace( $textdomain, $old_domain, $mofile );
+			if ( file_exists( $mopath.$old_mofile ) ) {
 				// we have an old override - use it
-				return $old_mofile;
+				return $mopath.$old_mofile;
 			}
 
 			// prevent loading outdated language packs
-			$pofile = str_replace('.mo', '.po', $mofile);
-			if ( file_exists( $pofile ) ) {
+			$pofile = str_replace( '.mo', '.po', $mofile );
+			if ( file_exists( $mopath.$pofile ) ) {
 				// load po file
-				$podata = file_get_contents($pofile);
+				$podata = file_get_contents( $mopath.$pofile );
 				// set revision date threshold
 				$block_before = strtotime( '2017-05-15' );
 				// read revision date
-				preg_match('~PO-Revision-Date: (.*?)\\\n~s',$podata,$matches);
-				if (isset($matches[1])) {
+				preg_match( '~PO-Revision-Date: (.*?)\\\n~s', $podata, $matches );
+				if ( isset( $matches[1] ) ) {
 					$revision_date = $matches[1];
-					if ( $revision_timestamp = strtotime($revision_date) ) {
+					if ( $revision_timestamp = strtotime( $revision_date ) ) {
 						// check if revision is before threshold date
 						if ( $revision_timestamp < $block_before ) {
 							// try bundled
-							$bundled_file = $this->plugin_path() . '/languages/'. basename( $mofile );
-							if (file_exists($bundled_file)) {
+							$bundled_file = $this->plugin_path() . '/languages/'. $mofile;
+							if ( file_exists( $bundled_file ) ) {
 								return $bundled_file;
 							} else {
 								return '';
@@ -151,7 +158,7 @@ class WPO_WCPDF {
 			}
 		}
 
-		return $mofile;
+		return $mopath.$mofile;
 	}
 
 	/**

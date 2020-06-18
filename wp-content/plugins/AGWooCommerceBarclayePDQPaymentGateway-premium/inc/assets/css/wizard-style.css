@@ -1,0 +1,220 @@
+@charset "UTF-8";
+body {
+    margin: 65px auto 24px;
+    box-shadow: none;
+    background: #f1f1f1;
+    padding: 0
+}
+
+.ag_wizard-step__wizard_welcome .ag-logo,  .ag_wizard-step__wizard_welcome .ag_wizard-steps { display: none;}
+
+.ag_wizard-step__wizard_welcome .ag_wizard-content .ag_wizard-step__wizard_welcome-wrapper .ag-logo { display: block;}
+
+.ag-logo {
+    border: 0;
+    margin: 0 0 24px;
+    padding: 0;
+    text-align: center
+}
+
+.ag-logo img {
+    max-width: 20%
+}
+
+.step .ag_wizard-actions,  .activate-wizard_welcome .step,  .ag_wizard-step__wizard_welcome-wrapper p  {
+    text-align: center;
+}
+
+.ag_wizard-step__wizard_welcome-wrapper p {
+    font-size: 1em;
+    line-height: 1.75;
+    color: rgb(102, 102, 102);
+    margin: 20px 0px;
+}
+
+.ag_wizard-steps {
+    color: rgb(204, 204, 204);
+    width: 100%;
+    display: inline-flex;
+    padding: 0px 0px 24px;
+    margin: 0px;
+    list-style: outside none;
+    overflow: hidden;
+}
+
+.ag_wizard-steps li.done {
+    color: rgb(226, 3, 125);
+    border-color: rgb(226, 3, 125);
+}
+
+.ag_wizard-steps li {
+    width: 100%;
+    float: left;
+    text-align: center;
+    position: relative;
+    line-height: 1.4;
+    padding: 0px 0px 0.8em;
+    margin: 0px;
+    border-bottom: 4px solid rgb(204, 204, 204);
+}
+.ag_wizard-steps li::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -6px;
+    margin-bottom: -8px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    border-radius: 100%;
+    background: rgb(255, 255, 255);
+}
+
+.ag_wizard-steps li.done::before {
+    border-color: rgb(226, 3, 125);
+    background: rgb(226, 3, 125);
+}
+
+.ag_wizard-steps li a {
+    color: rgb(226, 3, 125);
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    padding: 1.5em;
+    margin: -1.5em;
+}
+
+.ag_wizard-steps li.active {
+    color: rgb(226, 3, 125);
+    font-weight: 700;
+    border-color: rgb(226, 3, 125);
+}
+.ag_wizard-steps li.active::before {
+    border-color: rgb(226, 3, 125);
+}
+
+.ag_wizard {
+    text-align: center
+}
+
+.ag_wizard-content {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .13);
+    padding: 2em;
+    margin: 0 0 20px;
+    background: #fff;
+    overflow: hidden;
+    zoom: 1;
+    text-align: left;
+}
+
+.callout-yellow {
+    border-left: 5px solid #e7dca4;
+    background: #fffcd5;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 2em;
+    margin-top: 2em;
+    padding: 16px 25px 16px 20px;
+}
+.callout-yellow h3 {
+    font-size: 21px;
+    font-weight: bold !important;
+    line-height: 18px;
+    margin: 0 0 10px;
+    color: #222;
+}
+.callout-yellow p {
+    font-size: 14px;
+    color: #383838;
+    line-height: 1.55em;
+    margin-top: -4px;
+    word-wrap: break-word;
+}
+
+.callout-yellow p a {
+    color: rgb(226, 3, 125);
+}
+
+.step img { 
+    width: 100%;
+    height: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.setup-text a {
+    color: rgb(226, 3, 125);
+}
+.ag_wizard .ag_wizard-actions .button {
+    font-weight: 300;
+    font-size: 16px;
+    box-shadow: none;
+    min-width: 12em;
+    margin-top: 10px;
+    line-height: 1;
+    margin-right: 0.5em;
+    margin-bottom: 2px;
+    height: auto;
+    padding: 1em 2em;
+    border-radius: 4px;
+}
+.ag_wizard .ag_wizard-actions .button-primary {
+    box-shadow: rgba(255, 255, 255, 0.25) 0px 1px 0px inset, rgb(163, 101, 151) 0px 1px 0px;
+    text-shadow: none !important;
+    font-weight: bold !important;
+    background: rgb(226, 3, 125) !important;
+    border-color: rgb(226, 3, 125) !important;
+}
+
+.input-wrap { width: 100%; margin-top: 2em; margin-bottom: 2em; }
+.input-wrap label { font-weight: bold;}
+.input-wrap input {width: 100%; margin-top: 8px;}
+.input-wrap input[type=checkbox] { width: auto; margin-top: 0; margin-left: 8px;}
+.input-wrap select { margin-left: 8px; margin-top: 1px; }
+.setup-text { font-size: 1em;
+    line-height: 1.75;
+    color: rgb(102, 102, 102);
+    margin: 20px 0px;
+}
+.fb-share { width: 76px !important; margin-top:2px !important; margin-left: 8px !important; margin-bottom: 0 !important; }
+
+.step .thumbnail { width: 100%; height: auto; }
+
+.lightbox {
+	display: none;
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+}
+
+.lightbox img {
+	max-width: 90%;
+	max-height: 80%;
+	margin-top: 2%;
+}
+
+.lightbox:target {
+	outline: none;
+	display: block;
+}
+
+.ag-wizard__dismiss button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+}

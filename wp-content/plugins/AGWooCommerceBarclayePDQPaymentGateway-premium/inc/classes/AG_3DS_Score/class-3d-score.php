@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG 3D Secure score
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 if (class_exists('ePDQ_3D_score')) {

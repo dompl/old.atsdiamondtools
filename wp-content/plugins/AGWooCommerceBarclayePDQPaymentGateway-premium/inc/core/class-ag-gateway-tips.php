@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG Gateway tips
 /*-----------------------------------------------------------------------------------*/
-defined( 'ABSPATH' ) or die( "No script kiddies please!" );
+defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 
 if ( class_exists( 'AG_gateway_tips' ) ) {
@@ -11,7 +11,6 @@ if ( class_exists( 'AG_gateway_tips' ) ) {
 
 
 class AG_gateway_tips {
-
 
     public static $instance = null;
     public static $args = array();
@@ -30,70 +29,82 @@ class AG_gateway_tips {
 
     public static function pull_AG_posts() {
 
-        $transient_name = 'AG_post';
+        if (!class_exists('AG_ePDQ_Helpers')) {
+            return;
+        }
+
+        $transient_name = self::$args['plugin_slug'] .'_AG_post';
         $site_posts = array();
         $post_got = array();
-
         $posts_got = get_transient( $transient_name );
-        //wp_die(var_dump($posts_got));
 
+        if( empty($posts_got)) {
 
-        if( isset($posts_got)) {
+            $response = wp_safe_remote_get( 'https://weareag.co.uk/wp-json/wp/v2/posts?per_page=4&_embed');
+             
+            if( !is_wp_error( $response ) && $response['response']['code'] === 200 ) {
+             
+                $posts = json_decode( wp_remote_retrieve_body( $response ) ); 
+                foreach( $posts as $post ) {
 
-
-            $json = file_get_contents('https://weareag.co.uk/wp-json/wp/v2/posts?per_page=4&_embed');
-            $posts = json_decode($json, true);
-            foreach($posts as $post) {
-            
-                $site_posts[] = array(
-                    'title' =>  $post['title']['rendered'],
-                    'tip_url' => $post['link'],
-                    'dec' => $post['excerpt']['rendered'],
-                    'tip_img' => $post['_embedded']['wp:featuredmedia'][0]['source_url']
-                );
+                    $site_posts[] = array(
+                        'title' =>  AG_ePDQ_Helpers::AG_escape( $post->title->rendered ),
+                        'tip_url' => AG_ePDQ_Helpers::AG_escape( $post->link ),
+                        'dec' => AG_ePDQ_Helpers::AG_escape( $post->excerpt->rendered ),
+                        'tip_img' => AG_ePDQ_Helpers::AG_escape( $post->_embedded->{'wp:featuredmedia'}[0]->source_url )
+                    );
+             
+                }
+                set_transient( $transient_name, $site_posts, 12 * HOUR_IN_SECONDS );
 
             }
-            set_transient( $transient_name, $site_posts, 12 * HOUR_IN_SECONDS );
-
-            return $site_posts;
 
        }
+
+       return $site_posts;
 
     }
 
 
+
     public static function output_tips() {
         
+        if (!class_exists('AG_ePDQ_Helpers')) {
+            return;
+        }
+
         $data = self::pull_AG_posts();
-        if ( empty( $data ) ) {
+        if ( !empty( $data ) ) {
 			return;
         }
         
-        $transient_name = 'AG_post';
+        $transient_name = self::$args['plugin_slug'] .'_AG_post';
         $new_tips = get_transient( $transient_name );
-
 
         foreach ( $new_tips as $tip ) { ?>
 
         <div class="tip-card">
             <div class="card-contents">
                 <div class="card-header">
-                    <a href="<?php echo $tip['tip_url']; ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank">
-                        <img class="plugin-logo" src="<?php echo $tip['tip_img']; ?>">
+                    <a href="<?php echo AG_ePDQ_Helpers::AG_decode( $tip['tip_url'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank">
+                        <img class="plugin-logo" src="<?php echo  AG_ePDQ_Helpers::AG_decode( $tip['tip_img'] ); ?>">
                         <div class="ag-watermark">
                             <img src="https://weareag.co.uk/wp/wp-content/themes/AGv5/img/ag-logo.svg">
                         </div>
                     </a>
                 </div>
                 <div class="card-body">
-                    <h3><?php echo $tip['title']; ?></h3>
-                    <?php echo $tip['dec']; ?>
-                    <a href="<?php echo $tip['tip_url']; ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank" class="ag-button">Find out more</a>
+                    <h3><?php echo AG_ePDQ_Helpers::AG_decode( $tip['title'] ); ?></h3>
+                    <?php echo AG_ePDQ_Helpers::AG_decode( $tip['dec'] ); ?>
+                    <a href="<?php echo AG_ePDQ_Helpers::AG_decode( $tip['tip_url'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank" class="ag-button">Find out more</a>
                 </div>
             </div>
         </div>
 
-    <?php } 
+    <?php }
 
-	}
+    }
+    
+
 }
+

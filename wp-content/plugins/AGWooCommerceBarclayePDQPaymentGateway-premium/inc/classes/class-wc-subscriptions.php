@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG ePDQ subscription
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 class epdq_checkout_subscription extends epdq_checkout
 {

@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG ePDQ score functions for 3DS score function
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 if (class_exists('ePDQ_score')) {

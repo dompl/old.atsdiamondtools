@@ -3,7 +3,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG Licence
 /*-----------------------------------------------------------------------------------*/
-defined( 'ABSPATH' ) or die( "No script kiddies please!" );
+defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 if ( class_exists( 'AG_licence' ) ) {
     return;
 }
@@ -43,6 +43,7 @@ class AG_licence
             10,
             2
         );
+        add_action( 'admin_init', array( $this, 'ag_show_wizard' ) );
         add_action( 'admin_notices', array( $this, 'ag_admin_notice' ) );
     }
     
@@ -51,33 +52,37 @@ class AG_licence
         if ( !is_null( self::$freemius ) ) {
             return;
         }
-        require_once self::$args['paths']['plugin'] . 'inc/vendor/freemius/start.php';
-        $menu = array(
-            'slug'        => self::get_fs_arg( 'menu/slug', null ),
-            'contact'     => self::get_fs_arg( 'menu/contact', false ),
-            'support'     => self::get_fs_arg( 'menu/support', false ),
-            'account'     => self::get_fs_arg( 'menu/account', false ),
-            'pricing'     => self::get_fs_arg( 'menu/pricing', false ),
-            'affiliation' => self::get_fs_arg( 'menu/affiliation', false ),
-        );
-        self::$freemius = fs_dynamic_init( array(
-            'id'               => self::get_fs_arg( 'id', null ),
-            'slug'             => self::get_fs_arg( 'slug', null ),
-            'type'             => self::get_fs_arg( 'type', 'plugin' ),
-            'public_key'       => self::get_fs_arg( 'public_key', null ),
-            'is_premium'       => true,
-            'is_premium_only'  => self::get_fs_arg( 'is_premium_only', true ),
-            'has_paid_plans'   => self::get_fs_arg( 'has_paid_plans', true ),
-            'has_addons'       => self::get_fs_arg( 'has_addons', false ),
-            'is_org_compliant' => self::get_fs_arg( 'is_org_compliant', false ),
-            'trial'            => array(
-            'days'               => self::get_fs_arg( 'trial/days', 7 ),
-            'is_require_payment' => self::get_fs_arg( 'trial/is_require_payment', true ),
-        ),
-            'has_affiliation'  => self::get_fs_arg( 'has_affiliation', true ),
-            'menu'             => $menu,
-            'is_live'          => true,
-        ) );
+        
+        if ( !isset( self::$freemius ) ) {
+            require_once self::$args['paths']['plugin'] . 'inc/vendor/freemius/start.php';
+            $menu = array(
+                'slug'        => self::get_fs_arg( 'menu/slug', null ),
+                'contact'     => self::get_fs_arg( 'menu/contact', false ),
+                'support'     => self::get_fs_arg( 'menu/support', false ),
+                'account'     => self::get_fs_arg( 'menu/account', false ),
+                'pricing'     => self::get_fs_arg( 'menu/pricing', false ),
+                'affiliation' => self::get_fs_arg( 'menu/affiliation', false ),
+            );
+            self::$freemius = fs_dynamic_init( array(
+                'id'               => self::get_fs_arg( 'id', null ),
+                'slug'             => self::get_fs_arg( 'slug', null ),
+                'type'             => self::get_fs_arg( 'type', 'plugin' ),
+                'public_key'       => self::get_fs_arg( 'public_key', null ),
+                'is_premium'       => true,
+                'is_premium_only'  => self::get_fs_arg( 'is_premium_only', true ),
+                'has_paid_plans'   => self::get_fs_arg( 'has_paid_plans', true ),
+                'has_addons'       => self::get_fs_arg( 'has_addons', false ),
+                'is_org_compliant' => self::get_fs_arg( 'is_org_compliant', false ),
+                'trial'            => array(
+                'days'               => self::get_fs_arg( 'trial/days', 7 ),
+                'is_require_payment' => self::get_fs_arg( 'trial/is_require_payment', true ),
+            ),
+                'has_affiliation'  => self::get_fs_arg( 'has_affiliation', true ),
+                'menu'             => $menu,
+                'is_live'          => true,
+            ) );
+        }
+    
     }
     
     public static function get_fs_arg( $keys, $default )
@@ -130,6 +135,24 @@ class AG_licence
         return false;
     }
     
+    public static function new_install()
+    {
+        if ( !class_exists( 'ePDQ_crypt' ) ) {
+            return;
+        }
+        $settings = ePDQ_crypt::key_settings();
+        $name = 'ag_dismiss_warning';
+        
+        if ( empty($settings['pspid']) && empty($settings['userid']) && empty($settings['pswd']) && empty($settings['shain']) && empty($settings['shaout']) ) {
+            update_option( $name, false );
+            return false;
+        } else {
+            update_option( $name, true );
+            return true;
+        }
+    
+    }
+    
     public static function welcome_link( $html = '' )
     {
         return $html . sprintf( '<a href="%s" class="button button-secondary">&larr; %s</a>', self::$args['urls']['welcome'], __( 'Back to Welcome page' ) );
@@ -138,7 +161,14 @@ class AG_licence
     public function ag_available_checkout( $available_gateways )
     {
         if ( !self::$freemius->can_use_premium_code() ) {
-            unset( $available_gateways['epdq_checkout'] );
+            unset( $available_gateways['ag_epdq_checkout'] );
+        }
+        $new = AG_licence::new_install();
+        $gateway_notice = self::$args['update']['disable_gateway'];
+        $name = 'ag_dismiss_warning';
+        $dismissed = get_option( $name, false );
+        if ( $gateway_notice === true && $new && $dismissed != '1' ) {
+            unset( $available_gateways['ag_epdq_checkout'] );
         }
         return $available_gateways;
     }
@@ -148,27 +178,61 @@ class AG_licence
         if ( !self::$args['update']['update_notice'] ) {
             return;
         }
-        printf( '<br /><br /><strong>%s</strong>', __( self::$args['update']['message'], 'epdq_checkout' ) );
+        printf( '<br /><br /><strong>%s</strong>', __( self::$args['update']['message'], 'ag_epdq_checkout' ) );
     }
     
     public function ag_admin_notice()
     {
-        $payment_gateway = WC()->payment_gateways->payment_gateways()['epdq_checkout'];
+        $new = AG_licence::new_install();
+        $screen = get_current_screen();
         
-        if ( empty($payment_gateway->sha_in) ) {
+        if ( $new && $screen->id == 'toplevel_page_' . self::$args['freemius']['slug'] ) {
             if ( !self::$args['update']['update_notice'] ) {
                 return;
             }
+            $option_name = 'ag_dismiss_warning';
+            $dismissed = get_option( $option_name, false );
+            if ( $dismissed ) {
+                return;
+            }
+            $dismiss = filter_input( INPUT_POST, $option_name );
+            
+            if ( $dismiss ) {
+                update_option( $option_name, true );
+                return;
+            }
+            
             ?>
-            <div class="notice notice-warning is-dismissible">
+            <div class="ag-notice ag-notice--getting-started">
+            <form action="" method="post" class="ag-notice__dismiss">
+					<input type="hidden" name="ag_dismiss_warning" value="1">
+					<button title="Dismiss" class="is-dismissible">
+						Hide <span class="dashicons dashicons-dismiss"></span></button>
+				</form>
                 <p><strong><?php 
-            _e( self::$args['update']['name'], 'epdq_checkout' );
+            _e( self::$args['update']['name'], 'ag_epdq_checkout' );
             ?></strong></p>
                 <p><?php 
-            _e( self::$args['update']['message'], 'epdq_checkout' );
+            _e( self::$args['update']['message'], 'ag_epdq_checkout' );
             ?></p>
             </div>
+
         <?php 
+        }
+    
+    }
+    
+    public function ag_show_wizard()
+    {
+        $new = AG_licence::new_install();
+        $prem = self::valid_licence();
+        $url = AG_ePDQ_Helpers::AG_escape( $_SERVER['REQUEST_URI'] );
+        $option_name = 'AG_epdq_setup_wizard_shown';
+        $shown = get_option( $option_name, false );
+        
+        if ( !$new && !$shown && $url != '/wp-admin/?page=AG_ePDQ-wizard' && $prem ) {
+            wp_redirect( admin_url() . '?page=' . self::$args['plugin_name'] . '-wizard' );
+            exit;
         }
     
     }

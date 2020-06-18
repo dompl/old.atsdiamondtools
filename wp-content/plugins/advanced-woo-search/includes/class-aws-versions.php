@@ -43,11 +43,11 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
             $current_version = get_option( 'aws_plugin_ver' );
             $reindex_version = get_option( 'aws_reindex_version' );
 
-            if ( ! ( $reindex_version ) ) {
+            if ( ! ( $reindex_version ) && current_user_can( 'manage_options' ) ) {
                 add_action( 'admin_notices', array( $this, 'admin_notice_no_index' ) );
             }
 
-            if ( $reindex_version && version_compare( $reindex_version, '1.23', '<' ) ) {
+            if ( $reindex_version && version_compare( $reindex_version, '1.23', '<' ) && current_user_can( 'manage_options' ) ) {
                 add_action( 'admin_notices', array( $this, 'admin_notice_reindex' ) );
             }
 
@@ -306,6 +306,40 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
                             $settings['mobile_overlay'] = 'false';
                             update_option( 'aws_settings', $settings );
                         }
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '2.03', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+
+                        if ( isset( $settings['search_in'] ) && is_string( $settings['search_in'] ) ) {
+                            $current_search_in = explode( ',', $settings['search_in'] );
+                            $new_search_in = array();
+                            $options_array = AWS_Admin_Options::include_options();
+                            foreach( $options_array['general'] as $def_option ) {
+                                if ( isset( $def_option['id'] ) && $def_option['id'] === 'search_in' && isset( $def_option['choices'] ) ) {
+                                    foreach( $def_option['choices'] as $choice_key => $choice_label ) {
+                                        $new_search_in[$choice_key] = in_array( $choice_key, $current_search_in ) ? 1 : 0;
+                                    }
+                                    $settings['search_in'] = $new_search_in;
+                                    break;
+                                }
+                            }
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                        if ( ! isset( $settings['search_archives'] ) ) {
+                            $new_search_archives = array();
+                            $new_search_archives['archive_category'] = ( isset( $settings['show_cats'] ) && $settings['show_cats'] === 'true' ) ? 1 : 0;
+                            $new_search_archives['archive_tag'] = ( isset( $settings['show_tags'] ) && $settings['show_tags'] === 'true' ) ? 1 : 0;
+                            $settings['search_archives'] = $new_search_archives;
+                            update_option( 'aws_settings', $settings );
+                        }
+
                     }
 
                 }

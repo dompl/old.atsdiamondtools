@@ -121,13 +121,22 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 }
             }
 
-            $show_cats     = AWS()->get_settings( 'show_cats' );
-            $show_tags     = AWS()->get_settings( 'show_tags' );
-            $results_num   = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
-            $search_in     = AWS()->get_settings( 'search_in' );
-            $outofstock    = AWS()->get_settings( 'outofstock' );
+            $search_archives = AWS()->get_settings( 'search_archives' );
+            $show_cats       = ( isset( $search_archives['archive_category'] ) && $search_archives['archive_category'] ) ? 'true' : 'false';
+            $show_tags       = ( isset( $search_archives['archive_tag'] ) && $search_archives['archive_tag'] ) ? 'true' : 'false';
+            $results_num     = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
+            $search_in       = AWS()->get_settings( 'search_in' );
+            $outofstock      = AWS()->get_settings( 'outofstock' );
 
-            $search_in_arr = explode( ',',  AWS()->get_settings( 'search_in' ) );
+            if ( is_array( $search_in ) ) {
+                foreach( $search_in as $search_in_source => $search_in_active ) {
+                    if ( $search_in_active ) {
+                        $search_in_arr[] = $search_in_source;
+                    }
+                }
+            } else {
+                $search_in_arr = explode( ',',  $search_in );
+            }
 
             // Search in title if all options is disabled
             if ( ! $search_in ) {

@@ -259,6 +259,65 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         </tr>
                         <?php break;
 
+                    case 'table': ?>
+
+                        <?php
+                        $table_head = isset( $value['table_head'] ) && $value['table_head'] ? $value['table_head'] : '';
+                        ?>
+
+                        <tr valign="top">
+
+                            <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
+
+                            <td>
+
+                                <span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span><br><br>
+
+                                <table class="aws-table aws-table-sources widefat" cellspacing="0">
+
+                                    <thead>
+                                    <tr>
+                                        <th class="aws-name"><?php echo esc_html( $table_head ); ?></th>
+                                        <th class="aws-actions"></th>
+                                        <th class="aws-active"></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    <?php $table_options = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : array(); ?>
+
+                                    <?php if ( is_array( $table_options ) ) { ?>
+
+                                        <?php foreach ( $value['choices'] as $val => $fchoices ) { ?>
+
+                                            <?php
+                                            $active_class = isset( $table_options[$val] ) && $table_options[$val] ? 'active' : '';
+                                            $label = is_array( $fchoices ) ? $fchoices['label'] : $fchoices;
+                                            ?>
+
+                                            <tr>
+                                                <td class="aws-name"><?php echo esc_html( $label ); ?></td>
+                                                <td class="aws-actions"></td>
+                                                <td class="aws-active <?php echo $active_class; ?>">
+                                                    <span data-change-state="1" data-setting="<?php echo esc_attr( $value['id'] ); ?>" data-name="<?php echo esc_attr( $val ); ?>" class="aws-yes" title="<?php echo esc_attr__( 'Disable this source', 'advanced-woo-search' ); ?>"><?php echo esc_html__( 'Yes', 'advanced-woo-search' ); ?></span>
+                                                    <span data-change-state="0" data-setting="<?php echo esc_attr( $value['id'] ); ?>" data-name="<?php echo esc_attr( $val ); ?>" class="aws-no" title="<?php echo esc_attr__( 'Enable this source', 'advanced-woo-search' ); ?>"><?php echo esc_html__( 'No', 'advanced-woo-search' ); ?></span>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+
+                                    <?php } ?>
+
+                                    </tbody>
+
+                                </table>
+
+                            </td>
+
+                        </tr>
+
+                        <?php break;
+
                     case 'heading': ?>
                         <tr valign="top">
                             <th scope="row"><h3 class="aws-heading"><?php echo esc_html( $value['name'] ); ?></h3></th>

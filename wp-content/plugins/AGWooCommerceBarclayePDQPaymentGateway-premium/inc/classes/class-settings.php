@@ -2,7 +2,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*	AG ePDQ settings
 /*-----------------------------------------------------------------------------------*/
-defined('ABSPATH') or die("No script kiddies please!");
+defined('ABSPATH') || die("No script kiddies please!");
 
 
 if (class_exists('AG_ePDQ_Settings')) {
@@ -86,6 +86,11 @@ class AG_ePDQ_Settings
                                 'description' => __('Sha encryption method - this needs to match what you have set in the ePDQ back office.', 'ag_epdq_checkout'),
                                 'default' => '',
                                 'desc_tip'      => true,
+                        ),
+                        'tip' => array(
+                                'title'              => __('Tip', 'ag_epdq_checkout'),
+                                'type'               => 'hidden',
+                                'description'        => __('Want to store your API details in a more secure way, read through our doc <a href="https://we-are-ag.helpscoutdocs.com/article/161-storing-strong-api-credentials" target="_blank">here</a>', 'ag_epdq_checkout'),
                         ),
                         'template' => array(
                                 'title' => __('Dynamic template URL', 'ag_epdq_checkout'),
@@ -233,6 +238,11 @@ class AG_ePDQ_Settings
                                 'description' => __('Sha encryption method - this needs to match what you have set in the epdq back office.', 'ag_epdq_checkout'),
                                 'default' => '',
                                 'desc_tip'      => true,
+                        ),
+                        'tip' => array(
+                                'title'              => __('Tip', 'ag_epdq_checkout'),
+                                'type'               => 'hidden',
+                                'description'        => __('Want to store your API details in a more secure way, read through our doc <a href="https://we-are-ag.helpscoutdocs.com/article/161-storing-strong-api-credentials" target="_blank">here</a>', 'ag_epdq_checkout'),
                         ),
                         'template' => array(
                                 'title' => __('Dynamic template URL', 'ag_epdq_checkout'),

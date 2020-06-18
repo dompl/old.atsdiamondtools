@@ -138,7 +138,10 @@ abstract class Order_Document {
 		// get historical settings if enabled
 		if ( !empty( $this->order ) && $this->use_historical_settings() == true ) {
 			$order_settings = WCX_Order::get_meta( $this->order, "_wcpdf_{$this->slug}_settings" );
-			if (!empty($order_settings)) {
+			if (!empty($order_settings) && !is_array($order_settings)) {
+				$order_settings = maybe_unserialize( $order_settings );
+			}
+			if (!empty($order_settings) && is_array($order_settings)) {
 				// not sure what happens if combining with current settings will have unwanted side effects
 				// like unchecked options being enabled because missing = unchecked in historical - disabled for now
 				// $settings = (array) $order_settings + (array) $settings;
@@ -294,9 +297,38 @@ abstract class Order_Document {
 		do_action( 'wpo_wcpdf_delete_document', $this, $order );
 	}
 
+	public function regenerate( $order = null ) {
+		$order = empty( $order ) ? $this->order : $order;
+		if ( empty( $order ) ) {
+			return; //Nothing to update
+		}
+
+		//Get most current settings
+		$common_settings = WPO_WCPDF()->settings->get_common_document_settings();
+		$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
+		$settings = (array) $document_settings + (array) $common_settings;
+		//Update document settings in meta
+		WCX_Order::update_meta_data( $this->order, "_wcpdf_{$this->slug}_settings", $settings );
+
+		//Use most current settings from here on
+		$this->settings = $this->get_settings( true ); 
+
+		//Add order note
+		$parent_order = $refund_id = false;
+		// If credit note
+		if ( $this->get_type() == 'credit-note' ) {
+			$refund_id = $order->get_id();
+			$parent_order = wc_get_order( $order->get_parent_id() );
+		}
+		$note = $refund_id ? sprintf( __( '%s (refund #%s) was regenerated.', 'wpo_wcpdf_pro' ), ucfirst( $this->get_title() ), $refund_id ) : sprintf( __( '%s was regenerated', 'wpo_wcpdf_pro' ), ucfirst( $this->get_title() ) );
+		$parent_order ? $parent_order->add_order_note( $note ) : $order->add_order_note( $note );
+
+		do_action( 'wpo_wcpdf_regenerate_document', $this );
+	}
+
 	public function is_allowed() {
 		$allowed = true;
-		if ( !empty( $this->settings['disable_for_statuses'] ) && !empty( $this->order ) && is_callable( array( $this->order, 'get_status' ) ) ) {
+		if ( !$this->exists() && !empty( $this->settings['disable_for_statuses'] ) && !empty( $this->order ) && is_callable( array( $this->order, 'get_status' ) ) ) {
 			$status = $this->order->get_status();
 
 			$disabled_statuses = array_map( function($status){
@@ -429,6 +461,8 @@ abstract class Order_Document {
 	public function set_number( $value, $order = null ) {
 		$order = empty( $order ) ? $this->order : $order;
 
+		$value = maybe_unserialize( $value ); // fix incorrectly stored meta
+
 		if ( is_array( $value ) ) {
 			$filtered_value = array_filter( $value );
 		}
@@ -495,6 +529,15 @@ abstract class Order_Document {
 	}
 
 	/**
+	 * Return logo height
+	 */
+	public function get_header_logo_height() {
+		if ( !empty( $this->settings['header_logo_height'] ) ) {
+			return apply_filters( 'wpo_wcpdf_header_logo_height', str_replace( ' ', '', $this->settings['header_logo_height'] ), $this );
+		}
+	}
+
+	/**
 	 * Show logo html
 	 */
 	public function header_logo() {
@@ -503,12 +546,14 @@ abstract class Order_Document {
 			$company = $this->get_shop_name();
 			if( $attachment_id ) {
 				$attachment = wp_get_attachment_image_src( $attachment_id, 'full', false );
+				$attachment_path = get_attached_file( $attachment_id );
+				if ( empty( $attachment ) || empty( $attachment_path ) ) {
+					return;
+				}
 				
 				$attachment_src = $attachment[0];
 				$attachment_width = $attachment[1];
 				$attachment_height = $attachment[2];
-
-				$attachment_path = get_attached_file( $attachment_id );
 
 				if ( apply_filters('wpo_wcpdf_use_path', true) && file_exists($attachment_path) ) {
 					$src = $attachment_path;
