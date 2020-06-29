@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 2.03
+Stable tag: 2.04
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,7 @@ Additional features available only in PRO plugin version.
 * Product **attributes** search ( including custom attributes)
 * Product **custom taxonomies** search
 * Product **custom fields** search
+* **Users** search
 * **Advanced settings page** with lot of options
 * **Exclude/include** spicific products by its ids, taxonomies or attributes from search results
 * Ability to specify **source of image** for search results: featured image, gallery, product content, product short description or set default image if there is no other images
@@ -103,6 +104,12 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.04 =
+* Add - Add BeRocket WooCommerce AJAX Products Filter plugin support
+* Add - Add WCFM - WooCommerce Multivendor Marketplace plugin support for users search
+* Dev - Add aws_products_search_page_filtered filter
+* Dev - Add aws_search_page_filters filter
 
 = 2.03 =
 * Add - Seamless integration for Elementor plugin search module

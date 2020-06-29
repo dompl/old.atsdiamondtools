@@ -609,6 +609,9 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $f_reviews = $product->get_review_count();
                     }
 
+                    $f_stock = $product->is_in_stock();
+                    $f_sale  = $product->is_on_sale();
+
 //                    $categories = $product->get_categories( ',' );
 //                    $tags = $product->get_tags( ',' );
 
@@ -635,6 +638,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         'f_price'      => $f_price,
                         'f_rating'     => $f_rating,
                         'f_reviews'    => $f_reviews,
+                        'f_stock'      => $f_stock,
+                        'f_sale'       => $f_sale,
                         'post_data'    => $post_data
                     );
 

@@ -10,7 +10,7 @@
  * -----
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 4.0.0
+ * Version: 4.0.1
  * WC requires at least: 3.0.0
  * WC tested up to: 4.2
  * License: GPL3
@@ -23,7 +23,7 @@ defined('ABSPATH') || die("No script kiddies please!");
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  4.0.0
+ * @version  4.0.1
  * @category Class
  * @author   We are AG
  */
@@ -32,7 +32,7 @@ class AG_ePDQ_server
 
 
 
-	public static $AGversion = "4.0.0";
+	public static $AGversion = "4.0.1";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -68,12 +68,7 @@ class AG_ePDQ_server
 	 */
 	public function woocommerce_add_epdq_gateway($methods)
 	{
-
-		if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
-			$methods[] = 'epdq_checkout_subscription';
-		} else {
-			$methods[] = 'epdq_checkout';
-		}
+		$methods[] = 'epdq_checkout';
 
 		return $methods;
 	}
@@ -134,9 +129,9 @@ class AG_ePDQ_server
 		));
 
 
-		if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
-			require_once AG_ePDQ_class . 'class-wc-subscriptions.php';
-		}
+		//if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
+		//	require_once AG_ePDQ_class . 'class-wc-subscriptions.php';
+		//}
 
 	}
 

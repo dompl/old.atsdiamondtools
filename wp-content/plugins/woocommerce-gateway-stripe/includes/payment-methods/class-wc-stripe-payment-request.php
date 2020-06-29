@@ -593,11 +593,8 @@ class WC_Stripe_Payment_Request {
 
 		if ( is_product() && ! $this->should_show_payment_button_on_product_page() ) {
 			return;
-		} else {
-			if ( ! $this->allowed_items_in_cart() ) {
-				WC_Stripe_Logger::log( 'Items in the cart has unsupported product type ( Payment Request button disabled )' );
-				return;
-			}
+		} else if ( ! $this->should_show_payment_button_on_cart() ) {
+			return;
 		}
 		?>
 		<div id="wc-stripe-payment-request-wrapper" style="clear:both;padding-top:1.5em;display:none;">
@@ -641,11 +638,8 @@ class WC_Stripe_Payment_Request {
 
 		if ( is_product() && ! $this->should_show_payment_button_on_product_page() ) {
 			return;
-		} else {
-			if ( ! $this->allowed_items_in_cart() ) {
-				WC_Stripe_Logger::log( 'Items in the cart has unsupported product type ( Payment Request button disabled )' );
-				return;
-			}
+		} else if ( ! $this->should_show_payment_button_on_cart() ) {
+			return;
 		}
 		?>
 		<p id="wc-stripe-payment-request-button-separator" style="margin-top:1.5em;text-align:center;display:none;">&mdash; <?php esc_html_e( 'OR', 'woocommerce-gateway-stripe' ); ?> &mdash;</p>
@@ -653,11 +647,27 @@ class WC_Stripe_Payment_Request {
 	}
 
 	/**
+	 * Whether payment button html should be rendered on the Cart
+	 *
+	 * @since 4.4.1
+	 *
+	 * @return bool
+	 */
+	private function should_show_payment_button_on_cart() {
+		if ( ! apply_filters( 'wc_stripe_show_payment_request_on_cart', true ) ) {
+			return false;
+		}
+		if ( ! $this->allowed_items_in_cart() ) {
+			WC_Stripe_Logger::log( 'Items in the cart has unsupported product type ( Payment Request button disabled )' );
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Whether payment button html should be rendered
 	 *
 	 * @since 4.3.2
-	 *
-	 * @param object $post
 	 *
 	 * @return bool
 	 */
@@ -776,8 +786,10 @@ class WC_Stripe_Payment_Request {
 				'address_2' => FILTER_SANITIZE_STRING,
 			)
 		);
+		$product_view_options      = filter_input_array( INPUT_POST, [ 'is_product_page' => FILTER_SANITIZE_STRING ] );
+		$should_show_itemized_view = ! isset( $product_view_options['is_product_page'] ) ?: filter_var( $product_view_options['is_product_page'], FILTER_VALIDATE_BOOLEAN );
 
-		$data = $this->get_shipping_options( $shipping_address );
+		$data = $this->get_shipping_options( $shipping_address, $should_show_itemized_view );
 		wp_send_json( $data );
 	}
 
@@ -785,11 +797,12 @@ class WC_Stripe_Payment_Request {
 	 * Gets shipping options available for specified shipping address
 	 *
 	 * @param array $shipping_address Shipping address.
+	 * @param bool  $itemized_display_items Indicates whether to show subtotals or itemized views.
 	 *
 	 * @return array Shipping options data.
 	 * phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
 	 */
-	public function get_shipping_options( $shipping_address ) {
+	public function get_shipping_options( $shipping_address, $itemized_display_items = false ) {
 		try {
 			// Set the shipping options.
 			$data = array();
@@ -845,10 +858,10 @@ class WC_Stripe_Payment_Request {
 
 			WC()->cart->calculate_totals();
 
-			$data          += $this->build_display_items();
+			$data          += $this->build_display_items( $itemized_display_items );
 			$data['result'] = 'success';
 		} catch ( Exception $e ) {
-			$data          += $this->build_display_items();
+			$data          += $this->build_display_items( $itemized_display_items );
 			$data['result'] = 'invalid_shipping_address';
 		}
 
@@ -870,8 +883,11 @@ class WC_Stripe_Payment_Request {
 
 		WC()->cart->calculate_totals();
 
+		$product_view_options      = filter_input_array( INPUT_POST, [ 'is_product_page' => FILTER_SANITIZE_STRING ] );
+		$should_show_itemized_view = ! isset( $product_view_options['is_product_page'] ) ?: filter_var( $product_view_options['is_product_page'], FILTER_VALIDATE_BOOLEAN );
+
 		$data           = array();
-		$data          += $this->build_display_items();
+		$data          += $this->build_display_items( $should_show_itemized_view );
 		$data['result'] = 'success';
 
 		wp_send_json( $data );
@@ -1196,7 +1212,7 @@ class WC_Stripe_Payment_Request {
 	 * @since 3.1.0
 	 * @version 4.0.0
 	 */
-	protected function build_display_items() {
+	protected function build_display_items( $itemized_display_items = false ) {
 		if ( ! defined( 'WOOCOMMERCE_CART' ) ) {
 			define( 'WOOCOMMERCE_CART', true );
 		}
@@ -1206,7 +1222,7 @@ class WC_Stripe_Payment_Request {
 		$discounts = 0;
 
 		// Default show only subtotal instead of itemization.
-		if ( ! apply_filters( 'wc_stripe_payment_request_hide_itemization', true ) ) {
+		if ( ! apply_filters( 'wc_stripe_payment_request_hide_itemization', true ) || $itemized_display_items ) {
 			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 				$amount         = $cart_item['line_subtotal'];
 				$subtotal      += $cart_item['line_subtotal'];

@@ -261,7 +261,7 @@ function init_ag_epdq() {
 			'TITLE' => '',
 		);
 
-		if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription($order)) {
+		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order)) {
 			//$price_per_period = WC_Subscription::get_total();
 			$billing_period = WC_Subscriptions_Order::get_subscription_period($order);
 			switch (strtolower($billing_period)) {

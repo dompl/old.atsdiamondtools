@@ -823,6 +823,59 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
+        /**
+         * Filter search page results by taxonomies
+         * @param array $product_terms Available product terms
+         * @param array $filter_terms Filter terms
+         * @param string $operator Operator
+         * @return bool $skip
+         */
+        static public function page_filter_tax( $product_terms, $filter_terms, $operator = 'OR' ) {
+
+            $skip = true;
+
+            if ( $filter_terms && is_array( $filter_terms ) && ! empty( $filter_terms ) ) {
+
+                if ( $operator === 'AND' ) {
+
+                    $has_all = true;
+
+                    foreach( $filter_terms as $term ) {
+                        if ( array_search( $term, $product_terms ) === false ) {
+                            $has_all = false;
+                            break;
+                        }
+                    }
+
+                    if ( $has_all ) {
+                        $skip = false;
+                    }
+
+                }
+
+                if ( $operator === 'IN' || $operator === 'OR' ) {
+
+                    $has_all = false;
+
+                    foreach( $filter_terms as $term ) {
+                        if ( array_search( $term, $product_terms ) !== false ) {
+                            $has_all = true;
+                            break;
+                        }
+                    }
+
+                    if ( $has_all ) {
+                        $skip = false;
+                    }
+
+                }
+
+            }
+
+            return $skip;
+
+        }
+
     }
 
 endif;

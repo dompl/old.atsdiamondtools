@@ -39,12 +39,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
         private function filter_results( $query ) {
 
             $new_products = array();
-
-            $price_min = false;
-            $price_max = false;
-            $rating = false;
-            $brand = false;
-
+            $filters = array();
             $attr_filter = array();
 
             if ( isset( $query->query_vars['meta_query'] ) ) {
@@ -53,27 +48,27 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 if ( isset( $meta_query['price_filter'] ) && isset( $meta_query['price_filter']['value'] ) ) {
                     $price_values = $meta_query['price_filter']['value'];
                     if ( isset( $price_values[0] ) && isset( $price_values[1] ) ) {
-                        $price_min = $price_values[0];
-                        $price_max = $price_values[1];
+                        $filters['price_min'] = $price_values[0];
+                        $filters['price_max'] = $price_values[1];
                     }
                 }
 
             }
 
-            if ( ! $price_min && isset( $_GET['min_price'] ) ) {
-                $price_min = sanitize_text_field( $_GET['min_price'] );
+            if ( ! isset( $filters['price_min'] ) && isset( $_GET['min_price'] ) ) {
+                $filters['price_min'] = sanitize_text_field( $_GET['min_price'] );
             }
 
-            if ( ! $price_max && isset( $_GET['max_price'] ) ) {
-                $price_max = sanitize_text_field( $_GET['max_price'] );
+            if ( ! isset( $filters['price_max'] ) && isset( $_GET['max_price'] ) ) {
+                $filters['price_max'] = sanitize_text_field( $_GET['max_price'] );
             }
 
             if ( isset( $_GET['rating_filter'] ) && $_GET['rating_filter'] ) {
-                $rating = explode( ',', sanitize_text_field( $_GET['rating_filter'] ) );
+                $filters['rating'] = explode( ',', sanitize_text_field( $_GET['rating_filter'] ) );
             }
 
             if ( isset( $_GET['filtering'] ) && $_GET['filtering'] && isset( $_GET['filter_product_brand'] ) ) {
-                $brand = explode( ',', sanitize_text_field( $_GET['filter_product_brand'] ) );
+                $filters['brand'] = explode( ',', sanitize_text_field( $_GET['filter_product_brand'] ) );
             }
 
             if ( isset( $query->query_vars['tax_query'] ) ) {
@@ -92,32 +87,53 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             }
 
+
+            /**
+             * Filter available search page filters before apply
+             * @since 2.04
+             * @param array $filters Filters
+             */
+            $filters = apply_filters( 'aws_search_page_filters', $filters );
+
+
             foreach( $this->products as $post_array ) {
 
-                if ( ( $price_min || $price_min == '0' ) && $price_max ) {
+                if ( isset( $filters['in_status'] ) ) {
+                    if ( $post_array['f_stock'] !== $filters['in_status'] ) {
+                        continue;
+                    }
+                }
+
+                if ( isset( $filters['on_sale'] ) ) {
+                    if ( $post_array['f_sale'] !== $filters['on_sale'] ) {
+                        continue;
+                    }
+                }
+
+                if ( isset( $filters['price_min'] ) && isset( $filters['price_max'] ) ) {
                     if ( isset( $post_array['f_price'] ) && $post_array['f_price'] ) {
-                        if ( $post_array['f_price'] > $price_max || $post_array['f_price'] < $price_min ) {
+                        if ( $post_array['f_price'] > $filters['price_max'] || $post_array['f_price'] < $filters['price_min'] ) {
                             continue;
                         }
                     }
                 }
 
-                if ( $rating && is_array( $rating ) ) {
+                if ( isset( $filters['rating'] ) && is_array( $filters['rating'] ) ) {
                     if ( isset( $post_array['f_rating'] ) ) {
-                        if ( array_search( floor( $post_array['f_rating'] ), $rating ) === false ) {
+                        if ( array_search( floor( $post_array['f_rating'] ), $filters['rating'] ) === false ) {
                             continue;
                         }
                     }
                 }
 
-                if ( $brand && is_array( $brand ) ) {
+                if ( isset( $filters['brand'] ) && is_array( $filters['brand'] ) ) {
 
                     $skip = true;
                     $p_brands = get_the_terms( $post_array['id'], 'product_brand' );
 
                     if ( ! is_wp_error( $p_brands ) && ! empty( $p_brands ) ) {
                         foreach ( $p_brands as $p_brand ) {
-                            if ( in_array( $p_brand->term_id,  $brand ) ) {
+                            if ( in_array( $p_brand->term_id,  $filters['brand'] ) ) {
                                 $skip = false;
                                 break;
                             }
@@ -130,7 +146,44 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 }
 
-                if ( $attr_filter && ! empty( $attr_filter ) ) {
+                if ( isset( $filters['tax'] ) && is_array( $filters['tax'] ) ) {
+
+                    $skip = true;
+
+                    foreach( $filters['tax'] as $taxonomy => $taxonomy_terms ) {
+
+                        $terms = get_the_terms( $post_array['id'], $taxonomy );
+                        $operator = isset( $taxonomy_terms['operator'] ) ? $taxonomy_terms['operator'] : 'OR';
+                        $term_arr = array();
+
+                        if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+                            foreach ( $terms as $term ) {
+                                $term_arr[] = $term->term_id;
+                            }
+                        } elseif( strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                            $terms = get_the_terms( $post_array['id'], 'pa_' . $taxonomy );
+                            if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+                                foreach ( $terms as $term ) {
+                                    $term_arr[] = $term->term_id;
+                                }
+                            }
+                        }
+
+                        $skip = AWS_Helpers::page_filter_tax( $term_arr, $taxonomy_terms['terms'], $operator );
+
+                        if ( $skip ) {
+                            break;
+                        }
+
+                    }
+
+                    if ( $skip ) {
+                        continue;
+                    }
+
+                }
+
+                if ( $attr_filter && ! empty( $attr_filter ) && is_array( $attr_filter ) ) {
 
                     $product = wc_get_product( $post_array['id'] );
                     $attributes = $product->get_attributes();
@@ -149,7 +202,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                                         if ( ! is_wp_error( $product_terms ) && ! empty( $product_terms ) ) {
                                             foreach ( $product_terms as $product_term ) {
-                                                $product_terms_array[$product_term->slug] = $product_term->slug;
+                                                $product_terms_array[] = $product_term->slug;
                                             }
                                         }
 
@@ -160,52 +213,16 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                         if ( $product_terms_array ) {
 
+
                             foreach( $attr_filter as $attr_filter_name => $attr_filter_object ) {
 
-                                $skip = true;
-                                $attr_filter_operator = $attr_filter_object['operator'];
+                                $operator = $attr_filter_object['operator'];
                                 $attr_filter_terms = $attr_filter_object['terms'];
 
-                                if ( $attr_filter_terms && is_array( $attr_filter_terms ) && ! empty( $attr_filter_terms ) ) {
+                                $skip = AWS_Helpers::page_filter_tax( $product_terms_array, $attr_filter_terms, $operator );
 
-                                    if ( $attr_filter_operator === 'AND' ) {
-
-                                        $has_all = true;
-
-                                        foreach( $attr_filter_terms as $term ) {
-                                            if ( ! isset( $product_terms_array[$term] ) ) {
-                                                $has_all = false;
-                                                break;
-                                            }
-                                        }
-
-                                        if ( $has_all ) {
-                                            $skip = false;
-                                        }
-
-                                    }
-
-                                    if ( $attr_filter_operator === 'IN' || $attr_filter_operator === 'OR' ) {
-
-                                        $has_all = false;
-
-                                        foreach( $attr_filter_terms as $term ) {
-                                            if ( isset( $product_terms_array[$term] ) ) {
-                                                $has_all = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if ( $has_all ) {
-                                            $skip = false;
-                                        }
-
-                                    }
-
-                                    if ( $skip ) {
-                                        break;
-                                    }
-
+                                if ( $skip ) {
+                                    break;
                                 }
 
                             }
@@ -224,7 +241,12 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             }
 
-            $this->products = $new_products;
+            /**
+             * Filter search results after search page filters applied
+             * @since 2.04
+             * @param array $new_products Products
+             */
+            $this->products = apply_filters( 'aws_products_search_page_filtered', $new_products );
 
         }
 

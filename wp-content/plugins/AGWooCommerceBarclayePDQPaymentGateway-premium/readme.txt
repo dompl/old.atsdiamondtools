@@ -38,6 +38,10 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.0.1 - 18/06/20 =
+* Fix           - Fixes for subscription payments.
+
+
 = v4.0.0 - 12/06/20 =
 * New           - New setup wizard, the wizard walks you through all steps to get the plugin working in test mode.
 * New           - Two new helper functions to escape and decode returned data.

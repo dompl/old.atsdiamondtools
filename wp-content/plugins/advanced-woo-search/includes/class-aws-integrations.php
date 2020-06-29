@@ -169,6 +169,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WP all import finish
             add_action( 'pmxi_after_xml_import', array( $this, 'pmxi_after_xml_import' ) );
 
+            // BeRocket WooCommerce AJAX Products Filter
+            if ( defined( 'BeRocket_AJAX_filters_version' ) ) {
+                add_filter( 'aws_search_page_filters', array( $this, 'berocket_search_page_filters' ) );
+            }
+
         }
 
         /**
@@ -1083,6 +1088,43 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             if ( $sunc === 'true' ) {
                 wp_schedule_single_event( time() + 1, 'aws_reindex_table' );
             }
+        }
+
+        /*
+         * BeRocket WooCommerce AJAX Products Filter
+         */
+        public function berocket_search_page_filters( $filters ) {
+
+            if ( isset( $_GET['filters'] ) ) {
+
+                $get_filters = explode( '|', $_GET['filters'] );
+
+                foreach( $get_filters as $get_filter ) {
+
+                    if ( $get_filter === '_stock_status[1]' ) {
+                        $filters['in_status'] = true;
+                    } elseif ( $get_filter === '_stock_status[2]' ) {
+                        $filters['in_status'] = false;
+                    } elseif ( $get_filter === '_sale[1]' ) {
+                        $filters['on_sale'] = true;
+                    } elseif ( $get_filter === '_sale[2]' ) {
+                        $filters['on_sale'] = false;
+                    } elseif( preg_match( '/([\w]+)\[(.+?)\]/', $get_filter, $matches ) ) {
+                        $taxonomy = $matches[1];
+                        $operator = strpos( $matches[2], '-' ) !== false ? 'OR' : 'AND';
+                        $explode_char = strpos( $matches[2], '-' ) !== false ? '-' : '+';
+                        $filters['tax'][$taxonomy] = array(
+                            'terms' => explode( $explode_char, $matches[2] ),
+                            'operator' => $operator
+                        );
+                    }
+
+                }
+
+            }
+
+            return $filters;
+
         }
 
     }
