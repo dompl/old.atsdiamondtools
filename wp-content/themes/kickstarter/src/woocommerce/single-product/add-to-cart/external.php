@@ -10,19 +10,19 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://docs.woocommerce.com/document/template-structure/
- * @author 		WooThemes
- * @package 	WooCommerce/Templates
- * @version     2.1.0
+ * @see         https://docs.woocommerce.com/document/template-structure/
+ * @author         WooThemes
+ * @package     WooCommerce/Templates
+ * @version     3.4.0
  */
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( !  defined( 'ABSPATH' ) ) {
+    exit;
 }
 
-do_action( 'woocommerce_before_add_to_cart_button' ); ?>
+do_action( 'woocommerce_before_add_to_cart_button' );?>
 
 <p class="cart">
 	<a href="<?php echo esc_url( $product_url ); ?>" rel="nofollow" class="single_add_to_cart_button button alt"><?php echo esc_html( $button_text ); ?></a>
 </p>
 
-<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+<?php do_action( 'woocommerce_after_add_to_cart_button' );?>
