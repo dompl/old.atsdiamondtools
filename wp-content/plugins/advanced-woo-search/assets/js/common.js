@@ -1,3 +1,7 @@
+// Hooks
+var AwsHooks = AwsHooks || {};
+AwsHooks.filters = AwsHooks.filters || {};
+
 (function($){
     "use strict";
 
@@ -9,6 +13,42 @@
         sku       : aws_vars.sku,
         showmore  : aws_vars.showmore,
         noresults : aws_vars.noresults
+    };
+
+    AwsHooks.add_filter = function( tag, callback, priority ) {
+
+        if( typeof priority === "undefined" ) {
+            priority = 10;
+        }
+
+        AwsHooks.filters[ tag ] = AwsHooks.filters[ tag ] || [];
+        AwsHooks.filters[ tag ].push( { priority: priority, callback: callback } );
+
+    };
+
+    AwsHooks.apply_filters = function( tag, value, options ) {
+
+        var filters = [];
+
+        if( typeof AwsHooks.filters[ tag ] !== "undefined" && AwsHooks.filters[ tag ].length > 0 ) {
+
+            AwsHooks.filters[ tag ].forEach( function( hook ) {
+
+                filters[ hook.priority ] = filters[ hook.priority ] || [];
+                filters[ hook.priority ].push( hook.callback );
+            } );
+
+            filters.forEach( function( AwsHooks ) {
+
+                AwsHooks.forEach( function( callback ) {
+                    value = callback( value, options );
+                } );
+
+            } );
+        }
+
+        return value;
+
     };
 
     $.fn.aws_search = function( options ) {
@@ -214,6 +254,10 @@
 
                 html += '</ul>';
 
+                // @since 2.05
+                html = AwsHooks.apply_filters( 'aws_results_html', html, { response: response, data: d } );
+
+
                 methods.hideLoader();
 
                 $(d.resultBlock).html( html );
@@ -276,9 +320,13 @@
             },
 
             resultLayout: function () {
+
+                var $resultsBlock = $( d.resultBlock );
                 var offset = self.offset();
                 var bodyOffset = $('body').offset();
                 var bodyPosition = $('body').css('position');
+                var bodyHeight = $('body').height();
+                var resultsHeight = $resultsBlock.height();
 
                 if ( offset && bodyOffset  ) {
 
@@ -294,13 +342,40 @@
                         left = offset.left;
                     }
 
-                    $( d.resultBlock ).css({
+                    if ( bodyHeight - offset.top < 500 ) {
+                        resultsHeight = methods.getResultsBlockHeight();
+                        if ( bodyHeight - offset.top < resultsHeight ) {
+                            top = top - resultsHeight - $(self).innerHeight();
+                        }
+                    }
+
+                    $resultsBlock.css({
                         width : width,
                         top : top,
                         left: left
                     });
 
                 }
+
+            },
+
+            getResultsBlockHeight: function() {
+
+                var $resultsBlock = $( d.resultBlock );
+                var resultsHeight = $resultsBlock.height();
+
+                if ( resultsHeight === 0 ) {
+                    var copied_elem = $resultsBlock.clone()
+                        .attr("id", false)
+                        .css({visibility:"hidden", display:"block",
+                            position:"absolute"});
+                    $("body").append(copied_elem);
+                    //copied_elem.find('.mCSB_outside').attr('style', '');
+                    resultsHeight = copied_elem.height();
+                    copied_elem.remove();
+                }
+
+                return resultsHeight;
 
             },
 

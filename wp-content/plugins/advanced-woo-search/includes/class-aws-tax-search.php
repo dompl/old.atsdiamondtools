@@ -189,6 +189,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                     $new_result = array(
                         'name'     => $result->name,
+                        'id'       => $result->term_id,
                         'count'    => ( $result->count > 0 ) ? $result->count : '',
                         'link'     => $term_link
                     );

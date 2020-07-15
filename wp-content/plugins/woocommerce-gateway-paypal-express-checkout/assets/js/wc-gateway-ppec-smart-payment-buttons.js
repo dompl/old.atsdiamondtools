@@ -141,10 +141,12 @@
 					if ( ! wc_ppec_context.use_checkout_js ) {
 						return fetch( wc_ppec_context.start_checkout_url, {
 							method: 'post',
+							cache: 'no-cache',
+							credentials: 'same-origin',
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded',
 							},
-							body: data,
+							body: data
 						} ).then( function ( response ) {
 							return response.json();
 						} ).then( request_callback );
@@ -177,7 +179,7 @@
 			},
 
 			onCancel: function( data, actions ) {
-				if ( 'orderID' in data ) {
+				if ( cancel_url && 'orderID' in data ) {
 					const query_args = '?woo-paypal-cancel=true&token=' + data.orderID;
 					return actions.redirect( cancel_url + query_args );
 				}
@@ -222,7 +224,7 @@
 						onError:       button_args.onError,
 						onCancel:      button_args.onCancel,
 						fundingSource: fundingSource,
-						style:         ( paypal.FUNDING.PAYPAL === fundingSource ) ? button_args.style : {}
+						style:         ( paypal.FUNDING.PAYPAL === fundingSource ) ? button_args.style : { layout: button_args.style.layout }
 					};
 
 					var button = paypal.Buttons( buttonSettings );

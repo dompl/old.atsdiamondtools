@@ -2,9 +2,9 @@
 Contributors: automattic
 Tags: ecommerce, e-commerce, store, sales, reports, analytics, dashboard, activity, notices, insights, stats, woo commerce, woocommerce
 Requires at least: 5.3.0
-Tested up to: 5.3.2
+Tested up to: 5.4.1
 Requires PHP: 5.6.20
-Stable tag: 1.2.4
+Stable tag: 1.3.0
 License: GPLv3
 License URI: https://github.com/woocommerce/woocommerce-admin/blob/master/license.txt
 
@@ -71,6 +71,48 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 
 == Changelog ==
 
+= 1.3.0 2020-07-08 =
+- Enhancement: Add Jetpack stats to performance indicatorts / homepage #4291
+- Enhancement: New "Store Management" quick links card on WooCommerce home screen. #4350
+- Enhancement: Inbox notifications layout updates #4218
+- Enhancement: New Home Screen #4303
+- Enhancement: Use WordPress Core colors for styling accents. #4558
+- Dev: Add jest-dom eslint plugin. #4327
+- Dev: Migrate onboarding data store to wp.data #4433
+- Dev: Remove use of `IconButton` in favor of `Button` #4415
+- Dev: Fix error handling for plugins on server error #4462
+- Dev: update @wordpress/components and @wordpress/base-styles #4427
+- Dev: Migrate user store to wp.data #4505
+- Dev: Add options data store to wp.data #4144
+- Dev: Runtime feature config override #4523
+- Fix: misaligned 'required' text on selects #4307
+- Fix: exception when opening dashboard after selecting extensions to purchase #4357
+- Fix: REST API collections schema #4377
+- Fix: Monetary Advanced Filters in Customers Report with correct currency object prop. #4356
+- Fix: In App purchase "back link" #4301
+- Fix: Search results selectable by clicking on item text or icon #4474
+- Fix: Filters' static query parameters #4458
+- Fix: The WCPay method not appearing as recommended sometimes #4345
+- Fix: Removed URLSearchParams method #4501
+- Fix: REST API collections schema. #4484
+- Fix: null issue in wpNavMenuClassChange #4513 🎉 @gradosevic 
+- Fix: RTL stylesheet loading for split code chunks. #4542
+- Fix: Don't show store location step in tax and shipping tasks if the address has already been provided #4507
+- Fix: Check for enabled methods before payment task completion #4530
+- Fix: Solved a problem with the method onChoose in the last onboarding step. #4583
+- Fix: Only mark purchase task as complete when products exist #4574
+- Fix: Remove unnecessary rest_api_init action that caused incompatibility issues with other plugins. #4691
+- Tweak: make revenue report total sales column optional #4397
+- Tweak: Adjustments to WooCommerce Payments setup task #4373
+- Tweak: Handling of plugin installs in OBW #4411
+- Tweak: Update design of Setup Checklist #4434
+- Tweak: Add scrollable styling to left side of Table, and keep updated #4179
+- Tweak - Add custom autocompleter support to Search componen #4518
+- Tweak: reduce asset filename length. #4535
+- Tweak: Use single dash for country/state dropdown options #4553
+- Tweak: Use label tag for toggleable shipping zones #4554
+- Tweak: Tweak - Make it easier to add submenu items to the Marketing menu #4561
+
 = 1.2.4 2020-06-11 =
 - Tweak: reduce asset filename length and remove tilde characters. #4535
 - Fix: RTL stylesheet loading for split code chunks. #4542
@@ -82,7 +124,7 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 - Fix: Respect tracking opt-in before new page load. #4368
 - Enhancement: Add Jetpack connection to plugin benefits step #4374
 
-= 1.2.0 2020-05-08 =
+= 1.2.0 2020-05-18 =
 - Enhancement: Add onboarding payments note #4157 
 - Enhancement: Marketing Inbox Note #4030
 - Performance: Use Route based code splitting to reduce bundle size #4094
@@ -169,6 +211,7 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 - Tweak: business details step: increase max-height on competitors listbox #4111
 - Fix: OBW: Allow CBD only for US stores #4117
 
+
 = 1.0.3 2020-03-22 =
 
 - Fix: Stop calling protected has_satisfied_dependencies() on outdated plugin. #3938
@@ -182,7 +225,7 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 - Tweak: create database tables on an earlier hook to avoid conflicts with core WooCommerce. #3896 
 - Fix - Made the admin note loading more resilient to prevent failures when loading notes with invalid content_data. #3926
 
-= 1.0.1 2020-03-16 =
+= 1.0.1 2020-03-12 =
 
 - Fix: Add Report Extension Example: Add default props to ReportFilters
 - Fix: Product report sorting by SKU when some products don't have SKUs
@@ -194,7 +237,7 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 - Dev: Fix failing tests after WC core merge.
 - Dev: Bump WooCommerce tested up to tag
 
-= 1.0.0 2020-03-06 =
+= 1.0.0 2020-03-5 =
 
 - Fix: Customers Report: fix missing report param in search #3778
 - Fix: OBW Connect: Fix requesting state #3786
