@@ -310,3 +310,26 @@ function kcr_remove_dashboard_widgets()
 }
 
 add_action( 'wp_dashboard_setup', 'kcr_remove_dashboard_widgets' );
+
+/* Allow editing woocommerce refund custom amount  */
+
+/**
+ * @return null
+ */
+function remove_restriction_from_refund()
+{
+    $currentPostType = get_post_type();
+    if ( $currentPostType != 'shop_order' ) {
+        return;
+    }
+
+    ?>
+<script>
+(function($) {
+	$(document).ready(function() {
+		$('#refund_amount').removeAttr('readonly');
+	});
+})(jQuery);
+</script>
+<?php }
+add_action( 'admin_footer', 'remove_restriction_from_refund' );
