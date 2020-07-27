@@ -439,6 +439,13 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 				LIMIT 0, {$results_num}
 		    ";
 
+            /**
+             * Filter search query string
+             * @since 2.06
+             * @param array $query Query string
+             */
+            $sql = apply_filters( 'aws_search_query_string', $sql );
+
             $this->data['sql'] = $sql;
 
             $posts_ids = $this->get_posts_ids( $sql );
@@ -570,9 +577,20 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     }
 
                     if ( $show_image === 'true' ) {
+
                         $image_id = $product->get_image_id();
-                        $image_attributes = wp_get_attachment_image_src( $image_id );
+                        $image_size = 'thumbnail';
+
+                        /**
+                         * Filter products images size
+                         * @since 2.06
+                         * @param string $image_size Image size
+                         */
+                        $image_size = apply_filters( 'aws_image_size', $image_size );
+
+                        $image_attributes = wp_get_attachment_image_src( $image_id, $image_size );
                         $image = $image_attributes[0];
+
                     }
 
                     if ( $show_sku === 'true' ) {

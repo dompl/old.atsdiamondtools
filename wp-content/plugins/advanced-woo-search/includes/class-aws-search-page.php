@@ -95,7 +95,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             $new_posts = array();
 
-            $search_query = $query->query_vars['s'];
+            $search_query = $query->query_vars['s'] ? $query->query_vars['s'] : $_GET['s'];
             $search_res = $this->search( $search_query, $query );
             $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
 

@@ -325,7 +325,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                 var offset = self.offset();
                 var bodyOffset = $('body').offset();
                 var bodyPosition = $('body').css('position');
-                var bodyHeight = $('body').height();
+                var bodyHeight = $(document).height();
                 var resultsHeight = $resultsBlock.height();
 
                 if ( offset && bodyOffset  ) {
@@ -344,7 +344,7 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                     if ( bodyHeight - offset.top < 500 ) {
                         resultsHeight = methods.getResultsBlockHeight();
-                        if ( bodyHeight - offset.top < resultsHeight ) {
+                        if ( ( bodyHeight - offset.top < resultsHeight ) && ( offset.top >= resultsHeight ) ) {
                             top = top - resultsHeight - $(self).innerHeight();
                         }
                     }

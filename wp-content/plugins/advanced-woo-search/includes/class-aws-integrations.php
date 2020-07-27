@@ -959,6 +959,17 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $all_registered_wholesale_roles = array();
             }
 
+            $product_cat_wholesale_role_filter = get_option( 'wwpp_option_product_cat_wholesale_role_filter' );
+            $categories_exclude_list = array();
+
+            if ( is_array( $product_cat_wholesale_role_filter ) && ! empty( $product_cat_wholesale_role_filter ) && $user_role !== 'administrator' ) {
+                foreach( $product_cat_wholesale_role_filter as $term_id => $term_roles ) {
+                    if ( array_search( $user_role, $term_roles ) === false ) {
+                        $categories_exclude_list[] = $term_id;
+                    }
+                }
+            }
+
             $new_products_array = array();
 
             foreach( $products as $product ) {
@@ -973,6 +984,17 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 if ( is_user_logged_in() && !empty( $all_registered_wholesale_roles ) && isset( $all_registered_wholesale_roles[$user_role] )
                     && get_option( 'wwpp_settings_only_show_wholesale_products_to_wholesale_users', false ) === 'yes' && ! $custom_price ) {
                     continue;
+                }
+
+                if ( ! empty( $categories_exclude_list ) ) {
+                    $terms = wp_get_object_terms( $product['id'], 'product_cat' );
+                    if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+                        foreach ( $terms as $term ) {
+                            if ( array_search( $term->term_id, $categories_exclude_list ) !== false ) {
+                                continue 2;
+                            }
+                        }
+                    }
                 }
 
                 $new_products_array[] = $product;

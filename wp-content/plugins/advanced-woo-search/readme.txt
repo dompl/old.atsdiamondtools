@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 2.05
+Stable tag: 2.06
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,12 @@ Additional features available only in PRO plugin version.
 
 [Features list](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
+= More Plugins From Us =
+
+Here are some additional plugins that were made with love.
+
+* [Advanced Woo Labels](https://wordpress.org/plugins/advanced-woo-labels/)
+
 == Installation ==
 
 1. Upload advanced-woo-search to the /wp-content/plugins/ directory
@@ -104,6 +110,13 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.06 =
+* Fix - Search results layout positions
+* Fix - Search results page query
+* Update - Wholesale plugin support. Add categories excluding
+* Dev - Add aws_search_query_string filter
+* Dev - Add aws_image_size filter
 
 = 2.05 =
 * Add - Support for Perfect Brands for WooCommerce plugin
