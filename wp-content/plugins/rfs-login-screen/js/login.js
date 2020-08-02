@@ -1,2 +1,0 @@
-!function(t){t(function(){t("input#rememberme").on("click",function(){t(this).parent().toggleClass("checked")}),t(".pw-weak label").toggle(function(){t(this).addClass("checked"),t(this).find("input").attr("checked",!0),t('input[name="wp-submit"]').attr("disabled",!1)},function(){t(this).removeClass("checked"),t(this).find("input").attr("checked",!1),t('input[name="wp-submit"]').attr("disabled",!0)})})}(jQuery);
-//# sourceMappingURL=login.js.map

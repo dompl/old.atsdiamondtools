@@ -47,8 +47,5 @@ defined( 'TEXT_DOMAIN' ) || define( 'TEXT_DOMAIN', 'THEME_TEXT_DOMAIN' );
  *  ********************************************************
  */
 
-// Activate custom login screen
-defined( 'VOIDX_CUSTOMISE_WP_LOGIN_SCREEN' ) || define( 'VOIDX_CUSTOMISE_WP_LOGIN_SCREEN', true );
-
 // Add re-captach to login form
 defined( 'VOIDX_ADD_RECAPTCHA_ON_LOGIN' ) || define( 'VOIDX_ADD_RECAPTCHA_ON_LOGIN', false );

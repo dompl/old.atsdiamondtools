@@ -61,7 +61,6 @@ module.exports = {
     scripts: {
         bundles: { // Bundles are defined by a name and an array of chunks (below) to concatenate; warning: this method offers no dependency management!
             footer: ['footer'],
-            admin: ['admin'],
             singleproduct: ['singleproduct'],
         },
         chunks: { // Chunks are arrays of paths or globs matching a set of source files; this way you can organize a bunch of scripts that go together into pieces that can then be bundled (above)
@@ -79,9 +78,6 @@ module.exports = {
                 woojs + 'listing/sorting.js',
                 src + 'js/footer.js',
                 src + 'js/header.js',
-            ],
-            admin: [ // Header Scripts
-                src + 'js/admin.js'
             ],
             singleproduct: [ // Single product scripts
                 modules + 'lightbox2/src/js/lightbox.js',
