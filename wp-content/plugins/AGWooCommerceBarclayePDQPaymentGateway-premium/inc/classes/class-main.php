@@ -51,6 +51,8 @@ function init_ag_epdq() {
 
 			$this->test_url 	= 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
 			$this->live_url 	= 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
+			$this->refund_test 	= 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
+			$this->refund_live	= 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
 
 			// Turn settings into variables we can use
 			foreach ($this->settings as $setting_key => $value) {
@@ -119,8 +121,8 @@ function init_ag_epdq() {
 		*/
 		public function display_redirect_message() {
 			
-			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>' ), AG_ePDQ_server_path . 'img/AG-ePDQ-redirect.png' );
-			$input .= '<p class="AG-redirect-notice">After clicking "Place order", you will be redirected to Barclays to complete your purchase securely.</p>';
+			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>', 'ag_epdq_checkout'), AG_ePDQ_server_path . 'img/AG-ePDQ-redirect.png' );
+			$input .= __('<p class="AG-redirect-notice">After clicking "Place order", you will be redirected to Barclays to complete your purchase securely.</p>', 'ag_epdq_checkout');
 			return $input;
 
 		}
@@ -182,9 +184,9 @@ function init_ag_epdq() {
 		{
 			?>
 
-		<h3><?php _e('AG ePDQ Checkout Settings', 'ag_epdq_checkout'); ?></h3>
-		<p><?php _e('This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to the provided links based on the status of their transaction.', 'ag_epdq_checkout') ?></p>
-
+		<h3><?php echo __('AG ePDQ Checkout Settings', 'ag_epdq_checkout'); ?></h3>
+		<p><?php echo __('This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_checkout') ?></p>
+		<p><i><?php echo __('Having issues setting up the plugin? Why not try the setup wizard here.', 'ag_epdq_checkout') ?></i></p>
 		<table class="form-table">
 			<?php $this->generate_settings_html(); ?>
 		</table>
@@ -233,20 +235,53 @@ function init_ag_epdq() {
 
 		$fullName = remove_accents($order->get_billing_first_name() . ' ' . str_replace("'", "", $order->get_billing_last_name()));
 
+		// Currency
 		if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
 			$PSPID = ePDQ_PSPID;
 		} else {
 			$PSPID = $settings['pspid'];
 		}
 
+		// Products
+		$order_item = $order->get_items();
+		foreach ($order_item as $product) {
+			$prodct_name[] = $product['name'] . " x" . $product['qty'];
+		}
+		$product_list_string = implode(',', $prodct_name);
+
+		// If the items in the cart add to more than the character limit set by ePDQ then switch to product id.
+		if (strlen($product_list_string) < 99) {
+			$product_list = $product_list_string;
+		} else {
+			foreach ($order_item as $product) {
+				$prodct_names[] = str_replace('&', 'and', $product['product_id']) . " x" . $product['qty'];
+			}
+			$product_list = implode(',', $prodct_names);
+		}
+
+		// Custom product data - this could be for custom meta data
+		if(defined('ePDQ_custom_product_data')) {
+			$com = apply_filters('ePDQ_custom_product_data', $order);
+		} else {	
+			$com = substr(preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', ' ', $product_list), 0, 99);
+		}
+
+		// Custom Mertchant Ref - this could be for custom meta data
+		if(defined('ePDQ_custom_order_id')) {
+			$orderID = apply_filters('ePDQ_custom_order_id', $order);
+		} else {	
+			$orderID = $order->get_order_number();
+		}
+
 		$fields = array(
 			'PSPID' => $PSPID,
-			'ORDERID' => $order->get_order_number(),
+			'ORDERID' => $orderID,
 			'AMOUNT' => $order->get_total() * 100,
 			'COMPLUS' => $encrypted_string,
 			'CURRENCY' => get_woocommerce_currency(),
-			'LANGUAGE' => get_bloginfo('language'),
+			'LANGUAGE' => str_replace('-', '_', get_bloginfo('language')),
 			'CN' => $fullName,
+			'COM' => $com,
 			'EMAIL' => $order->get_billing_email(),
 			'OWNERZIP' => preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_postcode()),
 			'OWNERADDRESS' => substr(preg_replace('/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_1()), 0, 34),
@@ -340,7 +375,7 @@ function init_ag_epdq() {
 
 		wc_enqueue_js('
 				jQuery("body").block({
-						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag-epdq') . '",
+						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_checkout') . '",
 						overlayCSS:
 						{
 							background: "#fff",
@@ -402,7 +437,7 @@ function init_ag_epdq() {
 		}
 	
 	
-		if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription( $check_data['orderID'] ) ) {
+		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order) ) {
 			//$check_data['SUBSCRIPTION_ID'] = isset($check_data['subscription_id']) ? $check_data['subscription_id'] : '';
 			//$check_data['CREATION_STATUS'] = isset($check_data['creation_status']) ? $check_data['creation_status'] : '';
 		}
@@ -410,7 +445,7 @@ function init_ag_epdq() {
 	
 
 		// Hash
-		$hash_fields = array($settings['pspid'], date('Y:m:d'), AG_ePDQ_Helpers::AG_get_request('orderID'), $settings['shain']);
+		$hash_fields = array($settings['pspid'], date('Y:m:d'), AG_ePDQ_Helpers::AG_get_request('idOrder'), $settings['shain']);
 		$encrypted_string = ePDQ_crypt::ripemd_crypt(implode($hash_fields), $settings['shain']);
 
 		if (null !== AG_ePDQ_Helpers::AG_get_request('STATUS')) {
@@ -458,6 +493,7 @@ function init_ag_epdq() {
 		$settings = ePDQ_crypt::key_settings();
 		$SHA_out = $settings['shaout'];
 		$origsig = $datatocheck['SHASIGN'];
+
 		unset($datatocheck['SHASIGN']);
 		unset($datatocheck['wc-api']);
 		unset($datatocheck['idOrder']);
@@ -549,7 +585,7 @@ function init_ag_epdq() {
 			'AAV Result For Postcode             : ' => $args['AAVZIP']     = $args['AAVZIP'] ?? '',
 		);
 
-		if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription($order)) {
+		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order)) {
 			$order_notes['Subscription ID: '] = isset($args['subscription_id']) ? $args['subscription_id'] : '';
 			$order_notes['Subscription status: '] = isset($args['creation_status']) ? $args['creation_status'] : '';
 		}
@@ -567,7 +603,7 @@ function init_ag_epdq() {
 			$order_data[$key] = $value;
 		}
 
-		if (class_exists('WC_Subscriptions_Order') && epdq_checkout_subscription::order_contains_subscription($order)) {
+		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order)) {
 			$order_data['SUBSCRIPTION_ID'] = isset($args['subscription_id']) ? $args['subscription_id'] : '';
 			$order_data['CREATION_STATUS'] = isset($args['creation_status']) ? $args['creation_status'] : '';
 		}
@@ -577,7 +613,7 @@ function init_ag_epdq() {
 		switch ($STATUS): case '4':
 			case '5':
 			case '9':
-				$noteTitle = 'Barclays ePDQ transaction is confirmed.';
+				$noteTitle = __('Barclays ePDQ transaction is confirmed.', 'ag_epdq_checkout');
 				AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed. No issues to report.', 'debug', $this->debug);
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($note);
@@ -587,7 +623,7 @@ function init_ag_epdq() {
 			case '41':
 			case '51':
 			case '91':
-				$noteTitle = 'Barclays ePDQ transaction is awaiting for confirmation.';
+				$noteTitle = __('Barclays ePDQ transaction is awaiting for confirmation.', 'ag_epdq_checkout');
 				AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is awaiting for confirmation. No issues to report.', 'debug', $this->debug);
 				$order->add_order_note($noteTitle);
 				$order->update_status('on-hold', $note);
@@ -595,7 +631,7 @@ function init_ag_epdq() {
 
 			case '2':
 			case '93':
-				$noteTitle = 'Barclays ePDQ transaction was refused.';
+				$noteTitle = __('Barclays ePDQ transaction was refused.', 'ag_epdq_checkout');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				AG_ePDQ_Helpers::ag_log('The authorisation has been refused by the financial institution. The customer can retry the authorisation process after selecting another card or another payment method.', 'notice', $this->debug);
@@ -605,7 +641,7 @@ function init_ag_epdq() {
 
 			case '52':
 			case '92':
-				$noteTitle = 'Barclays ePDQ payment uncertain.';
+				$noteTitle = __('Barclays ePDQ payment uncertain.', 'ag_epdq_checkout');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				AG_ePDQ_Helpers::ag_log('A technical problem arose during the authorisation/payment process, giving an unpredictable result.', 'notice', $this->debug);
@@ -614,7 +650,7 @@ function init_ag_epdq() {
 				break;
 
 			case '1':
-				$noteTitle = 'The customer has cancelled the transaction';
+				$noteTitle = __('The customer has cancelled the transaction', 'ag_epdq_checkout');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				$order->update_status('failed', $note);
@@ -622,7 +658,7 @@ function init_ag_epdq() {
 				break;
 
 			case '0':
-				$noteTitle = 'Incomplete or invalid';
+				$noteTitle = __('Incomplete or invalid', 'ag_epdq_checkout');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				$order->update_status('failed', $note);
@@ -653,8 +689,8 @@ function init_ag_epdq() {
 		$refund_amount  = $amount * 100;
 		$transaction_id = get_post_meta($order_id, 'PAYID', true);
 
-		if ($this->status == 'test')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-		if ($this->status == 'live')	$environment_url = 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
+		if ($this->status == 'test')	$environment_url = $this->refund_test;
+		if ($this->status == 'live')	$environment_url = $this->refund_live;
 
 		if (!$transaction_id) {
 			AG_ePDQ_Helpers::ag_log('Refund failed: Transaction ID not found.', 'debug', $this->debug);
@@ -699,7 +735,6 @@ function init_ag_epdq() {
 			$data_post['SHASIGN'] = $SHAsig;
 
 		}
-
 
 		$post_string = array();
 		foreach ($data_post as $key => $value) {

@@ -56,6 +56,7 @@ class AG_start_here_docs {
 			$dom->loadHTML($html);
 			$docs = $dom->getElementsByTagName( 'ul' );
 
+
 			foreach ( $docs as $doc ) {
 				$classes = $doc->getAttribute( 'class' );
 
@@ -73,9 +74,12 @@ class AG_start_here_docs {
 				}
 			}
 
+
+
 			set_transient( $transient_name, $return, 30 * DAY_IN_SECONDS );
 
 		}
+		
 
 		return $return;
 
@@ -89,17 +93,13 @@ class AG_start_here_docs {
         }
 		
 		$data = self::get_doc_links();
-		if ( !empty( $data ) ) {
-			return;
-        }
-		
 		$transient_name = self::$args['plugin_slug'] .'_get_doc_links';
-        $links = get_transient( $transient_name );
+		$transient = get_transient( $transient_name );
 		
 		?>
 
 		<ol>
-			<?php foreach ( $links as $link ) { ?>
+			<?php foreach ( $transient as $link ) { ?>
 				<li>
 					<a href="<?php echo esc_attr( 'https://we-are-ag.helpscoutdocs.com' . AG_ePDQ_Helpers::AG_decode( $link['href'] ) ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank"><?php echo AG_ePDQ_Helpers::AG_decode( $link['title'] ); ?></a>
 				</li>

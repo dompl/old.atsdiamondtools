@@ -89,9 +89,6 @@ class AG_welcome_screen {
 		$page_title = sprintf( '<div style="padding-bottom: 15px;">%s from <a href="https://weareag.co.uk/?utm_source=ePDQ-Direct&utm_medium=insideplugin" target="_blank">We are AG</a> <em style="opacity: 0.6; font-size: 80%%;">(v%s)</em></div>', self::$args['plugin_title'], self::$args['plugin_version'] );
 
 		self::getting_started();
-		echo '<div style="display: none">';
-		echo AG_licence::new_install();
-		echo '</div>';
 		
 		?>
 
@@ -228,11 +225,7 @@ class AG_welcome_screen {
 				</form>
 				<h2><img height="35" style="display: inline-block; vertical-align: text-bottom; margin: 0 8px 0 0" src="<?php echo esc_attr(self::$ag_svg); ?>">Welcome to <?php echo self::$args['plugin_title']; ?>!</h2>
 				<p>Thank you for choosing We are AG as your payment gateway partner.<br />Below are some useful links to help you get started:</p>
-
-				<h3>Start here</h3>
-
-
-				<?php AG_start_here_docs::output_doc_links() ?>
+				<?php $docLinks = AG_start_here_docs::output_doc_links(); ?>
 
 			</div>
 		<?php

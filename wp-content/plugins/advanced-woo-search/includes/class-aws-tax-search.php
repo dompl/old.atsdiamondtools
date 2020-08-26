@@ -68,7 +68,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             $filtered_terms_full = $wpdb->prepare( '( name LIKE %s )',  '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
 
-            $search_array = array_map( array( $this, 'singularize' ), $this->search_terms  );
+            $search_array = array_map( array( 'AWS_Helpers', 'singularize' ), $this->search_terms  );
             $search_array = $this->synonyms( $search_array );
             $search_array = $this->get_search_array( $search_array );
 
@@ -375,24 +375,6 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
         }
 
         /*
-         * Singularize terms
-         * @param string $search_term Search term
-         * @return string Singularized search term
-         */
-        private function singularize( $search_term ) {
-
-            $search_term_len = strlen( $search_term );
-            $search_term_norm = AWS_Plurals::singularize( $search_term );
-
-            if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
-                $search_term = $search_term_norm;
-            }
-
-            return $search_term;
-
-        }
-
-        /*
          * Add synonyms
          * @param array $search_terms Search term
          * @return array Search term with synonyms
@@ -407,7 +389,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                     $new_search_terms[$search_term] = 1;
                 }
 
-                $new_search_terms = AWS_Helpers::get_synonyms( $new_search_terms );
+                $new_search_terms = AWS_Helpers::get_synonyms( $new_search_terms, true );
 
                 return array_keys( $new_search_terms );
 

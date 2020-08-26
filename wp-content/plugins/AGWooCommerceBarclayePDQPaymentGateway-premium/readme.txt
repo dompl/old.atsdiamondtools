@@ -38,6 +38,20 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.1.0 - 23/08/20 =
+* Fix           - Fixes for subscriptions.
+* Fix           - Fix for some users getting stuck in a redirect loop for new installs.
+* Fix           - New define to bypass logic if user gets stuck in redirect loop ('AG_redirect_bypass').
+* Fix           - Language parameter sent to ePDQ fixed, changed format of data sent.
+* Fix           - Typo fixed in plugin setting tooltip.
+* Fix           - Fixed transient issue when first loading tips and doc links in welcome screen for new users.
+* Feature       - Pass product information to ePDQ - Product title is used, if name is longer than 99 characters than product ID is used.
+* New           - New filter (' ePDQ_custom_product_data ') to allow users to pass other data other than product title/ID Useful if users want to pass over invoice number or other custom data.
+* New           - New filter (' ePDQ_custom_order_id ') to allow users to pass other data other than order ID, Useful if users want to pass over invoice number or other custom data.
+* Dev           - Getting ready for language localisation.
+* Change        - Changed plugin name in wizard welcome screen.
+* Update        - Update for FS SDK.
+
 = v4.0.1 - 18/06/20 =
 * Fix           - Fixes for subscription payments.
 

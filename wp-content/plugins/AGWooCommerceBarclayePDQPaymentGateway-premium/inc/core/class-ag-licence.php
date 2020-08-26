@@ -143,7 +143,7 @@ class AG_licence
         $settings = ePDQ_crypt::key_settings();
         $name = 'ag_dismiss_warning';
         
-        if ( empty($settings['pspid']) && empty($settings['userid']) && empty($settings['pswd']) && empty($settings['shain']) && empty($settings['shaout']) ) {
+        if ( empty($settings['pspid']) ) {
             update_option( $name, false );
             return false;
         } else {
@@ -224,14 +224,19 @@ class AG_licence
     
     public function ag_show_wizard()
     {
-        $new = AG_licence::new_install();
+        // Bypass redirect loop if someone is stuck.
+        if ( defined( 'AG_redirect_bypass' ) ) {
+            return;
+        }
+        $new = self::new_install();
         $prem = self::valid_licence();
         $url = AG_ePDQ_Helpers::AG_escape( $_SERVER['REQUEST_URI'] );
         $option_name = 'AG_epdq_setup_wizard_shown';
         $shown = get_option( $option_name, false );
+        $wizardURL = 'AG_ePDQ-wizard';
         
-        if ( !$new && !$shown && $url != '/wp-admin/?page=AG_ePDQ-wizard' && $prem ) {
-            wp_redirect( admin_url() . '?page=' . self::$args['plugin_name'] . '-wizard' );
+        if ( !$shown && !$new && !substr_count( $url, 'AG_ePDQ-wizard' ) && $prem ) {
+            wp_safe_redirect( admin_url( '?page=' . $wizardURL ) );
             exit;
         }
     

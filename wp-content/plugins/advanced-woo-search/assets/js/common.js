@@ -114,8 +114,8 @@ AwsHooks.filters = AwsHooks.filters || {};
                 var data = {
                     action: 'aws_action',
                     keyword : searchFor,
-                    page: d.pageId,
-                    tax: d.tax,
+                    aws_page: d.pageId,
+                    aws_tax: d.tax,
                     lang: d.lang,
                     pageurl: window.location.href,
                     typedata: 'json'

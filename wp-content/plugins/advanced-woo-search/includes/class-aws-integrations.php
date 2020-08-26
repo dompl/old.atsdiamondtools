@@ -125,6 +125,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'jupiter_head_action' ) );
                 }
 
+                if ( 'Woodmart' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'woodmart_head_action' ) );
+                }
+
                 // Elementor pro
                 if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                     add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
@@ -669,6 +673,40 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Woodmart theme
+         */
+        public function woodmart_head_action() { ?>
+
+             <style>
+
+                 .woodmart-search-full-screen .aws-container .aws-search-form {
+                     padding-top: 0;
+                     padding-right: 0;
+                     padding-bottom: 0;
+                     padding-left: 0;
+                     height: 110px;
+                     border: none;
+                     background-color: transparent;
+                     box-shadow: none;
+                 }
+
+                 .woodmart-search-full-screen .aws-container .aws-search-field {
+                     color: #333;
+                     text-align: center;
+                     font-weight: 600;
+                     font-size: 48px;
+                 }
+
+                 .woodmart-search-full-screen .aws-container .aws-search-form .aws-form-btn,
+                 .woodmart-search-full-screen .aws-container .aws-search-form.aws-show-clear.aws-form-active .aws-search-clear {
+                     display: none !important;
+                 }
+
+             </style>
+
+        <?php }
+
+        /*
          * Elementor popup search form init
          */
         public function elementor_pro_popup() { ?>
@@ -889,6 +927,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             if ( 'Jupiter' === $this->current_theme ) {
                 $selectors[] = '#mk-fullscreen-searchform';
                 $selectors[] = '.responsive-searchform';
+            }
+
+            if ( 'Woodmart' === $this->current_theme ) {
+                $selectors[] = '.woodmart-search-form form, form.woodmart-ajax-search';
             }
 
             return $selectors;

@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 2.06
+Tested up to: 5.5
+Stable tag: 2.09
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,6 +110,18 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.09 ( 2020-08-23 ) =
+* Update - Support for latest WooCommerce version
+* Update - AJAX request fix
+
+= 2.08 ( 2020-08-17 ) =
+* Update - Strip some new special characters form search query
+
+= 2.07 =
+* Add - Seamless integration for Woodmart theme
+* Update - Admin ajax requests
+* Fix - Synonyms search for taxonomies archives
 
 = 2.06 =
 * Fix - Search results layout positions

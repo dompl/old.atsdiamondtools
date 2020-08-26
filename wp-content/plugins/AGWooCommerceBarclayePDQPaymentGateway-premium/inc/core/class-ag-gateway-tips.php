@@ -74,10 +74,6 @@ class AG_gateway_tips {
         }
 
         $data = self::pull_AG_posts();
-        if ( !empty( $data ) ) {
-			return;
-        }
-        
         $transient_name = self::$args['plugin_slug'] .'_AG_post';
         $new_tips = get_transient( $transient_name );
 

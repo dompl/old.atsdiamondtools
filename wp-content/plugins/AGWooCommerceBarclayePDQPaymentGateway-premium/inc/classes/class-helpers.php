@@ -163,8 +163,7 @@ class AG_ePDQ_Helpers
 	<?php }
 
 
-	public static function order_contains_subscription($order_id)
-	{
+	public static function order_contains_subscription($order_id) {
 
 		return function_exists('wcs_order_contains_subscription') && (wcs_order_contains_subscription($order_id) || wcs_order_contains_renewal($order_id));
 	}

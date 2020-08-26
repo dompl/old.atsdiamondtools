@@ -39,7 +39,7 @@ if ( ! class_exists( 'AWS_Admin_Ajax' ) ) :
 
             do_action( 'aws_cache_clear' );
 
-            die;
+            wp_send_json_success( '1' );
 
         }
 

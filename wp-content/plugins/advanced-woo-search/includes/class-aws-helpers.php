@@ -146,6 +146,10 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 '&#37;', //percent sign
                 '&#38;', //ampersand
                 '&amp;', //ampersand
+                '&lsquo;', //opening single quote
+                '&rsquo;', //closing single quote & apostrophe
+                '&ldquo;', //opening double quote
+                '&rdquo;', //closing double quote
                 '&#39;', //single quote
                 '&#039;', //single quote
                 '&#40;', //opening parenthesis
@@ -487,9 +491,27 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Singularize terms
+         * @param string $search_term Search term
+         * @return string Singularized search term
+         */
+        static public function singularize( $search_term ) {
+
+            $search_term_len = strlen( $search_term );
+            $search_term_norm = AWS_Plurals::singularize( $search_term );
+
+            if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
+                $search_term = $search_term_norm;
+            }
+
+            return $search_term;
+
+        }
+
+        /*
          * Add synonyms
          */
-        static public function get_synonyms( $str_array ) {
+        static public function get_synonyms( $str_array, $singular = false ) {
 
             $synonyms = AWS()->get_settings( 'synonyms' );
             $synonyms_array = array();
@@ -517,7 +539,12 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                         $synonym_array = explode( ',', $synonyms_string );
 
                         if ( $synonym_array && ! empty( $synonym_array ) ) {
+
                             $synonym_array = array_map( array( 'AWS_Helpers', 'normalize_string' ), $synonym_array );
+                            if ( $singular ) {
+                                $synonym_array = array_map( array( 'AWS_Helpers', 'singularize' ), $synonym_array );
+                            }
+
                             foreach ( $synonym_array as $synonym_item ) {
 
                                 if ( $synonym_item && isset( $str_array[$synonym_item] ) ) {

@@ -41,37 +41,37 @@ class AG_ePDQ_Wizard_steps
 				'handler' => '',
 			),
 			'step_one'    => array(
-				'name'    => __( 'Step One', 'AG_ePDQ' ),
+				'name'    => __( 'Step One', 'ag_epdq_checkout' ),
 				'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_one' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_one_save' ),
 			),
             'step_two'    => array(
-				'name'    => __( 'Step Two', 'AG_ePDQ' ),
+				'name'    => __( 'Step Two', 'ag_epdq_checkout' ),
 				'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_two' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_two_save' ),
             ),
             'step_three'    => array(
-				'name'    => __( 'Step Three', 'AG_ePDQ' ),
+				'name'    => __( 'Step Three', 'ag_epdq_checkout' ),
 				'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_three' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_three_save' ),
 			),
 			'step_four'     => array(
-				'name'    => __( 'Step Four', 'AG_ePDQ' ),
+				'name'    => __( 'Step Four', 'ag_epdq_checkout' ),
                 'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_four' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_four_save' ),
             ),
             'step_five'     => array(
-				'name'    => __( 'Step Five', 'AG_ePDQ' ),
+				'name'    => __( 'Step Five', 'ag_epdq_checkout' ),
                 'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_five' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_five_save' ),
             ),
             'step_six'     => array(
-				'name'    => __( 'Step Six', 'AG_ePDQ' ),
+				'name'    => __( 'Step Six', 'ag_epdq_checkout' ),
                 'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_six' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_step_six_save' ),
             ),
             'step_finish'     => array(
-				'name'    => __( 'Finish', 'AG_ePDQ' ),
+				'name'    => __( 'Finish', 'ag_epdq_checkout' ),
                 'view'    => array( 'AG_ePDQ_Wizard_steps', 'wizard_epdq_step_finish' ),
 				'handler' => array( 'AG_ePDQ_Wizard_steps', 'wizard_epdq_step_finish_save' ),
 			),
@@ -85,8 +85,8 @@ class AG_ePDQ_Wizard_steps
         update_option( 'AG_epdq_setup_wizard_shown', true ); ?>
             <div class="ag_wizard-step__wizard_welcome-wrapper">
                 <h1 class="ag-logo"><a href="https://weareag.co.uk/"><img src="<?php echo esc_attr(self::$ag_svg); ?>" /></a></h1>
-                <p class="ag_wizard-step__wizard_welcome-welcome">Welcome to our setup wizard for <?php echo self::$args['plugin_name']; ?></p>
-                <p>Get your payment gateway up and running in no time. Go grab a cuppa and click the button when you are ready.</p>
+                <p class="ag_wizard-step__wizard_welcome-welcome"><?php echo __('Welcome to our setup wizard for AG ePDQ', 'ag_epdq_checkout'); ?></p>
+                <p><?php echo __('Get your payment gateway up and running in no time. Go grab a cuppa and click the button when you are ready.', 'ag_epdq_checkout'); ?></p>
     
                 <form method="post" class="activate-wizard_welcome">
                     <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
@@ -107,20 +107,20 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_one" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 1</h1>
+            <h1><?php echo __('Step 1', 'ag_epdq_checkout') ?></h1>
 			<p class="setup-text">
-                The ePDQ team will supply you with two logins, one for test and the other for live.<br/>
-                It is always best practice when setting up a payment gateway to do this in test mode first and run several orders before switching to live mode.
+            <?php echo __('The ePDQ team will supply you with two logins, one for test and the other for live.<br/>
+                It is always best practice when setting up a payment gateway to do this in test mode first and run several orders before switching to live mode.', 'ag_epdq_checkout'); ?>
             </p>
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>You must first do a test transaction using the test ePDQ account.</p>
-                <p>Whatever changes to make in the ePDQ test account you must match in the ePDQ live account.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('You must first do a test transaction using the test ePDQ account.', 'ag_epdq_checkout'); ?></p>
+                <p><?php echo __('Whatever changes to make in the ePDQ test account you must match in the ePDQ live account.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="setup-text">
-            We now need to make changes to your test ePDQ account, you can login to the test account <a target="_blank" href="https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/">here</a>.<br /><br /> 
-            Once logged in you will see something like below. 
+            <?php echo __('We now need to make changes to your test ePDQ account, you can login to the test account <a target="_blank" href="https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/">here</a>.<br /><br /> 
+            Once logged in you will see something like below.', 'ag_epdq_checkout'); ?> 
             </p>
 
             <a href="#img1">
@@ -131,12 +131,12 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>As mentioned above its important to make sure you use the plugin in test mode and use the ePDQ test account, linking the plugin in test mode to the live ePDQ account will not work.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('As mentioned above its important to make sure you use the plugin in test mode and use the ePDQ test account, linking the plugin in test mode to the live ePDQ account will not work.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="setup-text">
-                How to know if you are using the ePDQ test account? When you have logged in look to the Barclaycard logo, to the right of it you will see TEST in red like this:
+            <?php echo __('How to know if you are using the ePDQ test account? When you have logged in look to the Barclaycard logo, to the right of it you will see TEST in red like this:', 'ag_epdq_checkout'); ?>
             </p>
 
                 <img src="https://d33v4339jhl8k0.cloudfront.net/docs/assets/5bc91552042863158cc79df7/images/5d163d7f2c7d3a6ebd22b551/file-Ye1qV2nsp7.png" class="thumbnail" style="max-width: 250px;" />
@@ -144,12 +144,12 @@ class AG_ePDQ_Wizard_steps
 
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>If you don’t have access to the test account, you/your client will need to email the ePDQ team here: <a href="mailto:epdqsupport@barclaycard.co.uk">epdqsupport@barclaycard.co.uk</a> and ask for logins again. Its also important to note that if the ePDQ account is new you won’t be able to switch to live mode until you have done several test orders and applied to go live (You will see the option the main ePDQ Home screen).</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('If you don’t have access to the test account, you/your client will need to email the ePDQ team here: <a href="mailto:epdqsupport@barclaycard.co.uk">epdqsupport@barclaycard.co.uk</a> and ask for logins again. Its also important to note that if the ePDQ account is new you won’t be able to switch to live mode until you have done several test orders and applied to go live (You will see the option the main ePDQ Home screen).', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="setup-text">
-                Lets start with your PSPID, this is your ePDQ login ID.
+            <?php echo __('Lets start with your PSPID, this is your ePDQ login ID.', 'ag_epdq_checkout'); ?>
             </p>
 
             <div class="input-wrap">
@@ -190,10 +190,10 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_two" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 2</h1>
+            <h1><?php echo __('Step 2', 'ag_epdq_checkout'); ?></h1>
 			<p class="setup-text">
-                In this section, we pick and match the SHA encryption method we set in the plugin settings.<br/>
-                Technical information > Global transaction parameters to set this in the ePDQ back office.
+            <?php echo __('In this section, we pick and match the SHA encryption method we set in the plugin settings.<br/>
+                Technical information > Global transaction parameters to set this in the ePDQ back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img3">
@@ -204,17 +204,17 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <p class="setup-text">
-             Based on these two steps, you can choose between two default operation codes:
+            <?php echo __('Based on these two steps, you can choose between two default operation codes:', 'ag_epdq_checkout'); ?>
             </p>
 
             <ol> 
-                <li><strong>Authorisation</strong>:&nbsp;our system will only ask for an authorisation, in order to have the authorisation and data capture (payment request) steps performed separately at different times (the money remains in the customer’s account until a data capture (payment request) has been performed).</li> 
-                <li><strong>Sale</strong>:&nbsp;our system automatically requests the payment (transfer of the amount) immediately after a successful authorisation. This procedure is often used for goods/services delivered online.</li>
+                <li><?php echo __('<strong>Authorisation</strong>:&nbsp;our system will only ask for an authorisation, in order to have the authorisation and data capture (payment request) steps performed separately at different times (the money remains in the customer’s account until a data capture (payment request) has been performed).', 'ag_epdq_checkout'); ?></li> 
+                <?php echo __('<li><strong>Sale</strong>:&nbsp;our system automatically requests the payment (transfer of the amount) immediately after a successful authorisation. This procedure is often used for goods/services delivered online.', 'ag_epdq_checkout'); ?></li>
             </ol>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>If you are unsure what to enable ask your client what they have been using, most users enable the sale method but it is down to how the business operates.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('If you are unsure what to enable ask your client what they have been using, most users enable the sale method but it is down to how the business operates.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="ag_wizard-actions step">
@@ -254,10 +254,10 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_three" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 3</h1>
+            <h1><?php echo __('Step 3', 'ag_epdq_checkout'); ?></h1>
 			<p class="setup-text">
-                Next we are going to pick the SHA encryption method.<br />
-                Technical information > Global security parameters to set this in the ePDQ back office.
+            <?php echo __('Next we are going to pick the SHA encryption method.<br />
+                Technical information > Global security parameters to set this in the ePDQ back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img5">
@@ -268,16 +268,16 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>We recommend using SHA-256 or SHA-512.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('We recommend using SHA-256 or SHA-512.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <div class="input-wrap">
-                <label for="sha_method">SHA encryption method</label>
+                <label for="sha_method"><?php echo __('SHA encryption method', 'ag_epdq_checkout'); ?></label>
                 <select class="select " name="sha_method" id="sha_method">
                     <?php 
                     $sha_method = isset($saved_settings['sha_method']) ? $saved_settings['sha_method'] : '0';
-                    echo '<option value="" disabled>Select One</option>
+                    echo '<option value="" disabled>'. __('Select One', 'ag_epdq_checkout') .'</option>
                     <option value="" disabled>----------------</option>
                     <option value="0" ' . ($sha_method == '0' ? 'selected' : '') . '>SHA-1</option>
                     <option value="1" ' . ($sha_method == '1' ? 'selected' : '') . '>SHA-256</option>
@@ -319,18 +319,18 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_four" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 4</h1>
+            <h1><?php echo __('Step 4', 'ag_epdq_checkout'); ?></h1>
 			<p class="setup-text">
-                Next we are going to set the SHA-IN pass phrase and the URL of the merchant page.<br />
-                Technical information > Data and origin verification to set this in the ePDQ back office.
+            <?php echo __('Next we are going to set the SHA-IN pass phrase and the URL of the merchant page.<br />
+                Technical information > Data and origin verification to set this in the ePDQ back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <p class="setup-text">
-                The first item is setting the payment page URL, this is the last URL on the website before the customer is sent to the ePDQ servers to make the payment, It normally looks like the following: <strong><?php echo wc_get_checkout_url() . 'order-pay/'; ?></strong>
+            <?php echo __('The first item is setting the payment page URL, this is the last URL on the website before the customer is sent to the ePDQ servers to make the payment, It normally looks like the following:', 'ag_epdq_checkout'); ?> <strong><?php echo wc_get_checkout_url() . 'order-pay/'; ?></strong>
             </p>
 
             <p class="setup-text">
-            without this set correctly the payment gateway will not work, it is possible to have multiple domains/websites in this field also. Simply add a ; between the URL's as shown.
+            <?php echo __('without this set correctly the payment gateway will not work, it is possible to have multiple domains/websites in this field also. Simply add a ; between the URLs as shown.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img6">
@@ -341,7 +341,7 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <p class="setup-text">
-                Next item here is the SHA-IN (this is a basically a password), this must match what you have in the plugin settings, We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters.
+            <?php echo __('Next item here is the SHA-IN (this is a basically a password), this must match what you have in the plugin settings, We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#imgsha">
@@ -353,9 +353,9 @@ class AG_ePDQ_Wizard_steps
 
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>You only need to edit the top two fields 'URL of the merchant page containing the payment form that will call the page...' and the 'SHA-IN pass phrase'.<br />
-                <strong>Do not</strong> place the SHA-IN pass phrase on the fields under the 'Checks For Barclaycard Direct Link' as this may cause your payments to not go through.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('You only need to edit the top two fields "URL of the merchant page containing the payment form that will call the page..." and the "SHA-IN pass phrase".<br />
+                <strong>Do not</strong> place the SHA-IN pass phrase on the fields under the "Checks For Barclaycard Direct Link" as this may cause your payments to not go through.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <div class="input-wrap">
@@ -395,10 +395,10 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_five" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 5</h1>
+            <h1><?php echo __('Step 5', 'ag_epdq_checkout'); ?></h1>
 			<p class="setup-text">
-                Next we we have a few settings to set in the transaction feedback section.<br />
-                Technical information > Transaction feedback to set this in the ePDQ back office.
+            <?php echo __('Next we we have a few settings to set in the transaction feedback section.<br />
+                Technical information > Transaction feedback to set this in the ePDQ back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img7">
@@ -409,22 +409,22 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <p class="setup-text">
-                First we need to make sure that the tick box labelled "I would like to receive transaction feedback parameters on the redirection URLs." is ticked.
+            <?php echo __('First we need to make sure that the tick box labelled "I would like to receive transaction feedback parameters on the redirection URLs." is ticked.', 'ag_epdq_checkout'); ?>
             </p>
 
             <div class="input-wrap">
-                <label for="ePDQ_redirect">I have ticked the checkbox in the ePDQ back office.</label>
+                <label for="ePDQ_redirect"><?php echo __('I have ticked the checkbox in the ePDQ back office.', 'ag_epdq_checkout'); ?></label>
                 <input  type="checkbox" name="ePDQ_redirect" id="ePDQ_redirect"  value="1" <?php if (get_option('ag_ePDQ_redirect') == 1) { echo "checked='checked'"; } ?> required>
             </div>
 
             <section class="callout-yellow" style="margin-top: 20px;">
-                <h3>Note</h3>
-                <p>Without this ticked the ePDQ system won't send data back to the website. This means you will get orders with pending payment and then fail.</p>
-                <p>There should be nothing in the four fields above this tick box, the plugin will do all the hard work of setting these URLs on its own.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('Without this ticked the ePDQ system wont send data back to the website. This means you will get orders with pending payment and then fail.', 'ag_epdq_checkout'); ?></p>
+                <p><?php echo __('There should be nothing in the four fields above this tick box, the plugin will do all the hard work of setting these URLs on its own.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="setup-text">
-                Next we are going to set the SHA-OUT, you will need to scroll down a little to see the option.
+            <?php echo __('Next we are going to set the SHA-OUT, you will need to scroll down a little to see the option.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img8">
@@ -435,8 +435,8 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <div class="input-wrap">
@@ -445,8 +445,8 @@ class AG_ePDQ_Wizard_steps
             </div>
 
             <p class="setup-text">
-                The final item in this step is setting the parameters which will be sent back to the website.<br />
-                This is in the Dynamic e-Commerce parameters section.
+            <?php echo __('The final item in this step is setting the parameters which will be sent back to the website.<br />
+                This is in the Dynamic e-Commerce parameters section.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img9">
@@ -457,7 +457,7 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <p class="setup-text">
-                You <strong>only</strong> want the following in the selected section:<br />
+            <?php echo __('You <strong>only</strong> want the following in the selected section:<br />', 'ag_epdq_checkout'); ?>
                 AAVADDRESS<br />
                 ACCEPTANCE<br />
                 COMPLUS<br />
@@ -468,13 +468,13 @@ class AG_ePDQ_Wizard_steps
             </p>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>On PC/Windows you can select multiple by holding CTRL and clicking the items you want.</p>
-                <p>On Mac you can select multiple by holding Command key and clicking the items you want.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('On PC/Windows you can select multiple by holding CTRL and clicking the items you want.', 'ag_epdq_checkout'); ?></p>
+                <p><?php echo __('On Mac you can select multiple by holding Command key and clicking the items you want.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <div class="input-wrap">
-                <label for="ePDQ_pram">I have set the correct parameters in the ePDQ back office.</label>
+                <label for="ePDQ_pram"><?php echo __('I have set the correct parameters in the ePDQ back office.', 'ag_epdq_checkout'); ?></label>
                 <input  type="checkbox" name="ePDQ_pram" id="ePDQ_pram"  value="1" <?php if (get_option('ag_ePDQ_pram') == 1) { echo "checked='checked'"; } ?> required>
             </div>
 
@@ -517,13 +517,13 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_six" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Step 6</h1>
+            <h1><?php echo __('Step 6', 'ag_epdq_checkout'); ?></h1>
             <p class="setup-text">
-                We are almost done now, well done!
+            <?php echo __(' We are almost done now, well done!', 'ag_epdq_checkout'); ?>
             </p>
 			<p class="setup-text">
-                We now need to make sure that we have 3D Secure enabled.<br />
-                Advanced > Fraud detection to set this in the ePDQ back office.
+            <?php echo __('We now need to make sure that we have 3D Secure enabled.<br />
+                Advanced > Fraud detection to set this in the ePDQ back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="#img10">
@@ -534,37 +534,37 @@ class AG_ePDQ_Wizard_steps
             </a>
 
             <p class="setup-text">
-                The key here is to make sure that 3D secure is active on the card brands you wish to use on the website.
+            <?php echo __('The key here is to make sure that 3D secure is active on the card brands you wish to use on the website.', 'ag_epdq_checkout'); ?>
             </p>
 
             <div class="input-wrap">
-                <label for="3dsecure">I have 3D Secure enabled in the ePDQ back office.</label>
+                <label for="3dsecure"><?php echo __('I have 3D Secure enabled in the ePDQ back office.', 'ag_epdq_checkout'); ?></label>
                 <input  type="checkbox" name="3dsecure" id="3dsecure"  value="1" <?php if (get_option('ag_3dsecure') == 1) { echo "checked='checked'"; } ?> required>
             </div>
 
             <p class="setup-text">
-                Now the important thing to do is test the payment gateway a few times before going live.<br /><br/>
-                If you have any errors/issues you first want to check the ePDQ error log section in the back office.
+            <?php echo __('Now the important thing to do is test the payment gateway a few times before going live.<br /><br/>
+                If you have any errors/issues you first want to check the ePDQ error log section in the back office.', 'ag_epdq_checkout'); ?>
             </p>
 
             <section class="callout-yellow">
-                <h3>Note</h3>
-                <p>In the description field, you will most likely find an error code, something like <strong>unknown order/1/r</strong> if you do you can have a look <a href="https://we-are-ag.helpscoutdocs.com/article/41-error-codes" target="_blank">here</a> at the troubleshooting error codes. There you will find out what the issues is and what is needed to fix it.</p>
+                <h3><?php echo __('Note', 'ag_epdq_checkout'); ?></h3>
+                <p><?php echo __('In the description field, you will most likely find an error code, something like <strong>unknown order/1/r</strong> if you do you can have a look <a href="https://we-are-ag.helpscoutdocs.com/article/41-error-codes" target="_blank">here</a> at the troubleshooting error codes. There you will find out what the issues is and what is needed to fix it.', 'ag_epdq_checkout'); ?></p>
             </section>
 
             <p class="setup-text">
-                The plugin has a debug log system that catches most errors or issues, this is a good starting point should you have any issues.
+            <?php echo __('The plugin has a debug log system that catches most errors or issues, this is a good starting point should you have any issues.', 'ag_epdq_checkout'); ?>
             </p>
 
             <div class="input-wrap">
-                <label for="debug">I would like to enable the plugins error log.</label>
+                <label for="debug"><?php echo __('I would like to enable the plugins error log.', 'ag_epdq_checkout'); ?></label>
                 <input type="checkbox" name="debug" id="debug" <?php 
                 $debug = isset($saved_settings['debug']) ? $saved_settings['debug'] : 'no';
                 if ($debug == 'yes') { echo "checked='checked'"; } ?> value="yes">
             </div>
 
             <div class="input-wrap">
-                <label for="product">I would like to add a test product.</label>
+                <label for="product"><?php echo __('I would like to add a test product.', 'ag_epdq_checkout'); ?></label>
                 <input  type="checkbox" name="product" id="product"  <?php if (get_option('ag_product_added') == 'yes') { echo "checked='checked'"; } ?> value="yes">
             </div>
 
@@ -625,10 +625,10 @@ class AG_ePDQ_Wizard_steps
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_finish" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1>Congratulations!</h1>
+            <h1><?php echo __('Congratulations!', 'ag_epdq_checkout'); ?></h1>
             <p class="setup-text">
-                The plugin has been setup and your gateways is ready.<br />
-                Tell the world how easy this setup was!
+            <?php echo __('The plugin has been setup and your gateways is ready.<br />
+                Tell the world how easy this setup was!', 'ag_epdq_checkout'); ?>
             </p>
 
             <a href="https://twitter.com/share" class="twitter-share-button"
@@ -658,31 +658,31 @@ class AG_ePDQ_Wizard_steps
             </a>                
 
 			<p class="setup-text">
-                Please come back and <a href="https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/" target="_blank">leave a 5-star rating</a> if you are happy with this plugin.
+            <?php echo __('Please come back and <a href="https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/" target="_blank">leave a 5-star rating</a> if you are happy with this plugin.', 'ag_epdq_checkout'); ?>
             </p>
 
 
 
-            <h2>More Resources</h2>
+            <h2><?php echo __('More Resources', 'ag_epdq_checkout'); ?></h2>
 				<ul>
                     <li class="documentation">
                         <a href="https://we-are-ag.helpscoutdocs.com/article/45-setup" target="_blank">
-                            Read the Documentation
+                        <?php echo __('Read the Documentation', 'ag_epdq_checkout'); ?>
                         </a>
                     </li>
                     <li class="troubleshooting">
                         <a href="https://we-are-ag.helpscoutdocs.com/category/33-category" target="_blank">
-                            See the troubleshooting section
+                        <?php echo __('See the troubleshooting section', 'ag_epdq_checkout'); ?>
                         </a>
 					</li>
                     <li class="rating">
                         <a href="https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/" target="_blank">
-                            Leave a review
+                        <?php echo __('Leave a review', 'ag_epdq_checkout'); ?>
                         </a>
                     </li>
                     <li class="support">
                         <a href="https://weareag.co.uk/support/" target="_blank">
-                            Get Help and Support
+                        <?php echo __('Get Help and Support', 'ag_epdq_checkout'); ?>
                         </a>
                     </li>
                 </ul>

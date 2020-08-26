@@ -135,7 +135,7 @@ class AG_ePDQ_Settings
                         'notice' => array(
                                 'title' => __('Enable the redirect notice', 'ag_epdq_checkout'),
                                 'type' => 'checkbox',
-                                'label' => __('Show customers a notice at checkout that they will be redirected to Barclays server to complete the payment securly', 'ag_epdq_checkout'),
+                                'label' => __('Show customers a notice at checkout that they will be redirected to Barclays server to complete the payment securely', 'ag_epdq_checkout'),
                                 'default' => 'no'
                         ),
                         'debug' => array(
@@ -287,7 +287,7 @@ class AG_ePDQ_Settings
                         'notice' => array(
                                 'title' => __('Enable the redirect notice', 'ag_epdq_checkout'),
                                 'type' => 'checkbox',
-                                'label' => __('Show customers a notice at checkout that they will be redirected to Barclays server to complete the payment securly', 'ag_epdq_checkout'),
+                                'label' => __('Show customers a notice at checkout that they will be redirected to Barclays server to complete the payment securely', 'ag_epdq_checkout'),
                                 'default' => 'no'
                         ),
                         'debug' => array(
