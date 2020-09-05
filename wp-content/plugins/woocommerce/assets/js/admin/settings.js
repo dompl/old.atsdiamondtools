@@ -72,11 +72,16 @@
 			var changed = false;
 
 			$( 'input, textarea, select, checkbox' ).change( function() {
-				if ( ! changed ) {
+				changed = true;
+			});
+
+			$( '.woo-nav-tab-wrapper a' ).click( function() {
+				if ( changed ) {
 					window.onbeforeunload = function() {
 						return params.i18n_nav_warning;
 					};
-					changed = true;
+				} else {
+					window.onbeforeunload = '';
 				}
 			});
 

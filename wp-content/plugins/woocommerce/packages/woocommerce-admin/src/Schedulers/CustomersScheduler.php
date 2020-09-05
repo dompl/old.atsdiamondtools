@@ -1,6 +1,8 @@
 <?php
 /**
  * Customer syncing related functions and actions.
+ *
+ * @package WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\Schedulers;

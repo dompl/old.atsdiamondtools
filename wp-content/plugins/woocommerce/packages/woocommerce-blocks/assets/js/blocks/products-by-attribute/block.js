@@ -2,8 +2,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { ServerSideRender } from '@wordpress/editor';
+import {
+	BlockControls,
+	InspectorControls,
+	ServerSideRender,
+} from '@wordpress/editor';
 import {
 	Button,
 	Disabled,
@@ -13,7 +16,7 @@ import {
 	withSpokenMessages,
 } from '@wordpress/components';
 import { Component, Fragment } from '@wordpress/element';
-import { Icon, tags } from '@woocommerce/icons';
+import Gridicon from 'gridicons';
 import PropTypes from 'prop-types';
 import GridContentControl from '@woocommerce/block-components/grid-content-control';
 import GridLayoutControl from '@woocommerce/block-components/grid-layout-control';
@@ -115,7 +118,7 @@ class ProductsByAttributeBlock extends Component {
 
 		return (
 			<Placeholder
-				icon={ <Icon srcElement={ tags } /> }
+				icon={ <Gridicon icon="custom-post-type" /> }
 				label={ __(
 					'Products by Attribute',
 					'woocommerce'
@@ -145,7 +148,7 @@ class ProductsByAttributeBlock extends Component {
 							setAttributes( { attrOperator: value } )
 						}
 					/>
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 				</div>

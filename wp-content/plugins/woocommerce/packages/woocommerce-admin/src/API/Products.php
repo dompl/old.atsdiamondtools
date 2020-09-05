@@ -3,6 +3,8 @@
  * REST API Products Controller
  *
  * Handles requests to /products/*
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API;
@@ -12,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Products controller.
  *
+ * @package WooCommerce Admin/API
  * @extends WC_REST_Products_Controller
  */
 class Products extends \WC_REST_Products_Controller {

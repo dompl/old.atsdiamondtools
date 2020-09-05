@@ -1,8 +1,7 @@
 /**
- * External dependencies
+ * Internal dependencies
  */
-import { getBlockMap } from '@woocommerce/atomic-utils';
-import { Suspense } from '@wordpress/element';
+import { getBlockMap } from '../../../blocks/products/base-utils';
 
 /**
  * Maps a layout config into atomic components.
@@ -46,16 +45,12 @@ export const renderProductLayout = (
 		const keyParts = [ 'layout', name, index, componentId, productID ];
 
 		return (
-			<Suspense
+			<LayoutComponent
 				key={ keyParts.join( '_' ) }
-				fallback={ <div className="wc-block-placeholder" /> }
-			>
-				<LayoutComponent
-					{ ...props }
-					children={ children }
-					product={ product }
-				/>
-			</Suspense>
+				{ ...props }
+				children={ children }
+				product={ product }
+			/>
 		);
 	} );
 };

@@ -1,12 +1,8 @@
 /**
- * External dependencies
- */
-import { renderFrontend } from '@woocommerce/base-utils';
-
-/**
  * Internal dependencies
  */
 import FrontendContainerBlock from './frontend-container-block.js';
+import renderFrontend from '../../utils/render-frontend.js';
 
 const selector = `
 	.wp-block-woocommerce-all-reviews,
@@ -27,4 +23,4 @@ const getProps = ( el ) => {
 	};
 };
 
-renderFrontend( { selector, Block: FrontendContainerBlock, getProps } );
+renderFrontend( selector, FrontendContainerBlock, getProps );

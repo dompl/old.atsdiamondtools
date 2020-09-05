@@ -11,9 +11,9 @@ import isShallowEqual from '@wordpress/is-shallow-equal';
  * This is particularly useful when non-primitive types are used as
  * dependencies for react hooks.
  *
- * @param {*} value Value to keep the same if satisfies shallow equality.
+ * @param {mixed} value Value to keep the same if satisfies shallow equality.
  *
- * @return {*} The previous cached instance of the value if the current has
+ * @return {mixed} The previous cached instance of the value if the current has
  *                 shallow equality with it.
  */
 export const useShallowEqual = ( value ) => {

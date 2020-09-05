@@ -5,8 +5,7 @@ import { ATTRIBUTES } from '@woocommerce/block-settings';
 
 /**
  * Format an attribute from the settings into an object with standardized keys.
- *
- * @param {Object} attribute The attribute object.
+ * @param {Object} The attribute object.
  */
 const attributeSettingToObject = ( attribute ) => {
 	if ( ! attribute || ! attribute.attribute_name ) {

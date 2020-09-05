@@ -100,7 +100,6 @@
 				var srcElement = source.querySelector('img');
 				if (srcElement) {
 					settings.url = srcElement.getAttribute('data-src') || srcElement.currentSrc || srcElement.src;
-					settings.alt = srcElement.getAttribute('data-alt') || srcElement.alt;
 				}
 				if (!settings.url) {
 					return;
@@ -228,7 +227,7 @@
 			};
 
 			img.setAttribute('role', 'presentation');
-			img.alt = settings.alt || '';
+			img.alt = '';
 			img.src = settings.url;
 		});
 	};

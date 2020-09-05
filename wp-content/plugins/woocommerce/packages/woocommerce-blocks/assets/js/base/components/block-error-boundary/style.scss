@@ -1,4 +1,4 @@
-.wc-block-components-error {
+.wc-block-error {
 	display: flex;
 	background-color: #f3f3f4;
 	border-left: 4px solid #6d6d6d;
@@ -8,29 +8,23 @@
 	flex-direction: column;
 }
 
-.wc-block-components-error__header {
-	@include font-size(larger);
+.wc-block-error__header {
+	font-size: 2em;
 	font-weight: bold;
 	margin: 0;
 }
 
-.wc-block-components-error__image {
-	max-width: 25%;
-}
-.wc-block-components-error__text {
+.wc-block-error__text,
+.wc-block-error__message {
 	margin: 0;
-}
-.wc-block-components-error__message {
-	margin: 1em 0 0 0;
-	font-style: italic;
 }
 
 @include breakpoint( ">480px" ) {
-	.wc-block-components-error {
+	.wc-block-error {
 		flex-direction: row;
 	}
 
-	.wc-block-components-error__image + .wc-block-components-error__content {
-		margin-left: $gap-large;
+	.wc-block-error__image + .wc-block-error__content {
+		margin-left: $gap;
 	}
 }

@@ -3,25 +3,23 @@
  */
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useInnerBlockLayoutContext } from '@woocommerce/shared-context';
-import { withInstanceId } from '@woocommerce/base-hocs/with-instance-id';
+import { useInnerBlockConfigurationContext } from '@woocommerce/base-context/inner-block-configuration-context';
+import { useProductLayoutContext } from '@woocommerce/base-context/product-layout-context';
+import withComponentId from '@woocommerce/base-hocs/with-component-id';
 
 /**
  * Internal dependencies
  */
 import { renderProductLayout } from './utils';
 
-const ProductListItem = ( { product, attributes, instanceId } ) => {
+const ProductListItem = ( { product, attributes, componentId } ) => {
 	const { layoutConfig } = attributes;
-	const { parentClassName, parentName } = useInnerBlockLayoutContext();
-	const isLoading = Object.keys( product ).length === 0;
-	const classes = classnames(
-		`${ parentClassName }__product`,
-		'wc-block-layout',
-		{
-			'is-loading': isLoading,
-		}
-	);
+	const { parentName } = useInnerBlockConfigurationContext();
+	const { layoutStyleClassPrefix } = useProductLayoutContext();
+	const isLoading = ! Object.keys( product ).length > 0;
+	const classes = classnames( `${ layoutStyleClassPrefix }__product`, {
+		'is-loading': isLoading,
+	} );
 
 	return (
 		<li className={ classes } aria-hidden={ isLoading }>
@@ -29,7 +27,7 @@ const ProductListItem = ( { product, attributes, instanceId } ) => {
 				parentName,
 				product,
 				layoutConfig,
-				instanceId
+				componentId
 			) }
 		</li>
 	);
@@ -38,8 +36,8 @@ const ProductListItem = ( { product, attributes, instanceId } ) => {
 ProductListItem.propTypes = {
 	attributes: PropTypes.object.isRequired,
 	product: PropTypes.object,
-	// from withInstanceId
-	instanceId: PropTypes.number.isRequired,
+	// from withComponentId
+	componentId: PropTypes.number.isRequired,
 };
 
-export default withInstanceId( ProductListItem );
+export default withComponentId( ProductListItem );

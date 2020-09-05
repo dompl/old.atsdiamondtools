@@ -1,32 +1,16 @@
 /**
  * External dependencies
  */
-import { select, dispatch } from '@wordpress/data-controls';
+import { select } from '@wordpress/data-controls';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
  */
-import { receiveCollection, receiveCollectionError } from './actions';
+import { receiveCollection, DEFAULT_EMPTY_ARRAY } from './actions';
 import { STORE_KEY as SCHEMA_STORE_KEY } from '../schema/constants';
-import { STORE_KEY, DEFAULT_EMPTY_ARRAY } from './constants';
-import { apiFetchWithHeaders } from '../shared-controls';
-
-/**
- * Check if the store needs invalidating due to a change in last modified headers.
- *
- * @param {number} timestamp Last update timestamp.
- */
-function* invalidateModifiedCollection( timestamp ) {
-	const lastModified = yield select( STORE_KEY, 'getCollectionLastModified' );
-
-	if ( ! lastModified ) {
-		yield dispatch( STORE_KEY, 'receiveLastModified', timestamp );
-	} else if ( timestamp > lastModified ) {
-		yield dispatch( STORE_KEY, 'invalidateResolutionForStore' );
-		yield dispatch( STORE_KEY, 'receiveLastModified', timestamp );
-	}
-}
+import { STORE_KEY } from './constants';
+import { apiFetchWithHeaders } from './controls';
 
 /**
  * Resolver for retrieving a collection via a api route.
@@ -49,36 +33,14 @@ export function* getCollection( namespace, resourceName, query, ids ) {
 		yield receiveCollection( namespace, resourceName, queryString, ids );
 		return;
 	}
-
-	try {
-		const {
-			response = DEFAULT_EMPTY_ARRAY,
-			headers,
-		} = yield apiFetchWithHeaders( { path: route + queryString } );
-
-		if ( headers && headers.get && headers.has( 'last-modified' ) ) {
-			// Do any invalidation before the collection is received to prevent
-			// this query running again.
-			yield invalidateModifiedCollection(
-				parseInt( headers.get( 'last-modified' ), 10 )
-			);
-		}
-
-		yield receiveCollection( namespace, resourceName, queryString, ids, {
-			items: response,
-			headers,
-		} );
-	} catch ( error ) {
-		yield receiveCollectionError(
-			namespace,
-			resourceName,
-			queryString,
-			ids,
-			error
-		);
-	}
+	const { items = DEFAULT_EMPTY_ARRAY, headers } = yield apiFetchWithHeaders(
+		route + queryString
+	);
+	yield receiveCollection( namespace, resourceName, queryString, ids, {
+		items,
+		headers,
+	} );
 }
-
 /**
  * Resolver for retrieving a specific collection header for the given arguments
  *

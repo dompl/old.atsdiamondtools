@@ -101,12 +101,6 @@ jQuery( function( $ ) {
 						field.show();
 					}
 				}
-
-				// Class changes.
-				if ( Array.isArray( fieldLocale.class ) ) {
-					field.removeClass( 'form-row-first form-row-last form-row-wide' );
-					field.addClass( fieldLocale.class.join( ' ' ) );
-				}
 			});
 
 			var fieldsets = $(

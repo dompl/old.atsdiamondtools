@@ -3,6 +3,8 @@
  * PluginsHelper
  *
  * Helper class for the site's plugins.
+ *
+ * @package Woocommerce Admin
  */
 
 namespace Automattic\WooCommerce\Admin;

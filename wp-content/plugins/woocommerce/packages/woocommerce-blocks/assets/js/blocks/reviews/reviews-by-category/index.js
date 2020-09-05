@@ -3,11 +3,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { Icon, review } from '@woocommerce/icons';
+import { IconReviewsByCategory } from '@woocommerce/block-components/icons';
 
 /**
  * Internal dependencies
  */
+import '../editor.scss';
 import Editor from './edit';
 import sharedAttributes from '../attributes';
 import save from '../save.js';
@@ -19,7 +20,7 @@ import { example } from '../example';
 registerBlockType( 'woocommerce/reviews-by-category', {
 	title: __( 'Reviews by Category', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ review } />,
+		src: <IconReviewsByCategory />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
@@ -28,9 +29,6 @@ registerBlockType( 'woocommerce/reviews-by-category', {
 		'Show product reviews from specific categories.',
 		'woocommerce'
 	),
-	supports: {
-		html: false,
-	},
 	example: {
 		...example,
 		attributes: {
@@ -59,8 +57,6 @@ registerBlockType( 'woocommerce/reviews-by-category', {
 
 	/**
 	 * Renders and manages the block.
-	 *
-	 * @param {Object} props Props to pass to block.
 	 */
 	edit( props ) {
 		return <Editor { ...props } />;

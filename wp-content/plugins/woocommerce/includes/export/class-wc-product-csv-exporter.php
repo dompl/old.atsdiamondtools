@@ -268,13 +268,7 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
 			'publish' => 1,
 		);
 
-		// Fix display for variations when parent product is a draft.
-		if ( 'variation' === $product->get_type() ) {
-			$parent = $product->get_parent_data();
-			$status = 'draft' === $parent['status'] ? $parent['status'] : $product->get_status( 'edit' );
-		} else {
-			$status = $product->get_status( 'edit' );
-		}
+		$status = $product->get_status( 'edit' );
 
 		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : -1;
 	}
@@ -662,10 +656,10 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
 
 						if ( 0 === strpos( $attribute_name, 'pa_' ) ) {
 							$option_term = get_term_by( 'slug', $attribute, $attribute_name ); // @codingStandardsIgnoreLine.
-							$row[ 'attributes:value' . $i ]    = $option_term && ! is_wp_error( $option_term ) ? str_replace( ',', '\\,', $option_term->name ) : str_replace( ',', '\\,', $attribute );
+							$row[ 'attributes:value' . $i ]    = $option_term && ! is_wp_error( $option_term ) ? str_replace( ',', '\\,', $option_term->name ) : $attribute;
 							$row[ 'attributes:taxonomy' . $i ] = 1;
 						} else {
-							$row[ 'attributes:value' . $i ]    = str_replace( ',', '\\,', $attribute );
+							$row[ 'attributes:value' . $i ]    = $attribute;
 							$row[ 'attributes:taxonomy' . $i ] = 0;
 						}
 

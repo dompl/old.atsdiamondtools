@@ -38,39 +38,42 @@ export const getSharedListControls = ( attributes, setAttributes ) => {
 			options={ [
 				{
 					label: __(
-						'Default sorting (menu order)',
+						'Newness - newest first',
 						'woocommerce'
 					),
-					value: 'menu_order',
-				},
-				{
-					label: __( 'Popularity', 'woocommerce' ),
-					value: 'popularity',
-				},
-				{
-					label: __(
-						'Average rating',
-						'woocommerce'
-					),
-					value: 'rating',
-				},
-				{
-					label: __( 'Latest', 'woocommerce' ),
 					value: 'date',
 				},
 				{
 					label: __(
-						'Price: low to high',
+						'Price - low to high',
 						'woocommerce'
 					),
 					value: 'price',
 				},
 				{
 					label: __(
-						'Price: high to low',
+						'Price - high to low',
 						'woocommerce'
 					),
 					value: 'price-desc',
+				},
+				{
+					label: __(
+						'Rating - highest first',
+						'woocommerce'
+					),
+					value: 'rating',
+				},
+				{
+					label: __(
+						'Sales - most first',
+						'woocommerce'
+					),
+					value: 'popularity',
+				},
+				{
+					label: __( 'Menu Order', 'woocommerce' ),
+					value: 'menu_order',
 				},
 			] }
 			onChange={ ( orderby ) => setAttributes( { orderby } ) }

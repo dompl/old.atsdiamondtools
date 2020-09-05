@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$order = wc_get_order( $order_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+$order = wc_get_order( $order_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.OverrideProhibited
 
 if ( ! $order ) {
 	return;

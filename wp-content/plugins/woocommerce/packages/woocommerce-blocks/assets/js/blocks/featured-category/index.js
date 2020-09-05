@@ -2,10 +2,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks } from '@wordpress/editor';
 import { registerBlockType } from '@wordpress/blocks';
 import { DEFAULT_HEIGHT } from '@woocommerce/block-settings';
-import { Icon, folderStarred } from '@woocommerce/icons';
+import { IconFolderStar } from '@woocommerce/block-components/icons';
 
 /**
  * Internal dependencies
@@ -21,7 +21,7 @@ import { example } from './example';
 registerBlockType( 'woocommerce/featured-category', {
 	title: __( 'Featured Category', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ folderStarred } />,
+		src: <IconFolderStar />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
@@ -139,8 +139,6 @@ registerBlockType( 'woocommerce/featured-category', {
 
 	/**
 	 * Renders and manages the block.
-	 *
-	 * @param {Object} props Props to pass to block.
 	 */
 	edit( props ) {
 		return <Block { ...props } />;

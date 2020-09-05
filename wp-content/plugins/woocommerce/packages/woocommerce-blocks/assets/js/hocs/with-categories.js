@@ -10,11 +10,6 @@ import { getCategories } from '@woocommerce/block-components/utils';
  */
 import { formatError } from '../base/utils/errors.js';
 
-/**
- * HOC that queries categories for a component.
- *
- * @param {Function} OriginalComponent Component being wrapped.
- */
 const withCategories = createHigherOrderComponent( ( OriginalComponent ) => {
 	return class WrappedComponent extends Component {
 		constructor() {
@@ -34,7 +29,9 @@ const withCategories = createHigherOrderComponent( ( OriginalComponent ) => {
 		loadCategories() {
 			this.setState( { loading: true } );
 
-			getCategories()
+			getCategories( {
+				show_review_count: this.props.showReviewCount || false,
+			} )
 				.then( ( categories ) => {
 					this.setState( {
 						categories,

@@ -1,6 +1,8 @@
 <?php
 /**
  * Theme upgrader skin used in REST API response.
+ *
+ * @package WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\Overrides;
@@ -11,13 +13,6 @@ defined( 'ABSPATH' ) || exit;
  * Admin\Overrides\ThemeUpgraderSkin Class.
  */
 class ThemeUpgraderSkin extends \Theme_Upgrader_Skin {
-	/**
-	 * Avoid undefined property error from \Theme_Upgrader::check_parent_theme_filter().
-	 *
-	 * @var array
-	 */
-	public $api;
-
 	/**
 	 * Hide the skin header display.
 	 */
@@ -32,9 +27,8 @@ class ThemeUpgraderSkin extends \Theme_Upgrader_Skin {
 	 * Hide the skin feedback display.
 	 *
 	 * @param string $string String to display.
-	 * @param mixed  ...$args Optional text replacements.
 	 */
-	public function feedback( $string, ...$args ) {}
+	public function feedback( $string ) {}
 
 	/**
 	 * Hide the skin after display.

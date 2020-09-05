@@ -3,6 +3,8 @@
  * REST API Leaderboards Controller
  *
  * Handles requests to /leaderboards
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API;
@@ -17,6 +19,7 @@ use \Automattic\WooCommerce\Admin\API\Reports\Products\DataStore as ProductsData
 /**
  * Leaderboards controller.
  *
+ * @package WooCommerce Admin/API
  * @extends WC_REST_Data_Controller
  */
 class Leaderboards extends \WC_REST_Data_Controller {

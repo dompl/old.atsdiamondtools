@@ -2,8 +2,10 @@
 /**
  * Setup customize items.
  *
- * @package WooCommerce\Admin\Customize
- * @version 3.1.0
+ * @author   WooCommerce
+ * @category Admin
+ * @package  WooCommerce/Admin/Customize
+ * @version  3.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

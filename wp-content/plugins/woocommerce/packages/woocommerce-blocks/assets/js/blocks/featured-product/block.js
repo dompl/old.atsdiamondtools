@@ -12,8 +12,7 @@ import {
 	PanelColorSettings,
 	withColors,
 	RichText,
-} from '@wordpress/block-editor';
-import { withSelect } from '@wordpress/data';
+} from '@wordpress/editor';
 import {
 	Button,
 	FocalPointPicker,
@@ -28,15 +27,14 @@ import {
 	withSpokenMessages,
 } from '@wordpress/components';
 import classnames from 'classnames';
-import { Fragment, Component } from '@wordpress/element';
-import { compose, createHigherOrderComponent } from '@wordpress/compose';
+import { Fragment } from '@wordpress/element';
+import { compose } from '@wordpress/compose';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import { MIN_HEIGHT } from '@woocommerce/block-settings';
 import ProductControl from '@woocommerce/block-components/product-control';
 import ErrorPlaceholder from '@woocommerce/block-components/error-placeholder';
 import { withProduct } from '@woocommerce/block-hocs';
-import { Icon, star } from '@woocommerce/icons';
 
 /**
  * Internal dependencies
@@ -61,7 +59,6 @@ const FeaturedProduct = ( {
 	product,
 	setAttributes,
 	setOverlayColor,
-	triggerUrlUpdate = () => void null,
 } ) => {
 	const renderApiError = () => (
 		<ErrorPlaceholder
@@ -87,7 +84,7 @@ const FeaturedProduct = ( {
 			<Fragment>
 				{ getBlockControls() }
 				<Placeholder
-					icon={ <Icon srcElement={ star } /> }
+					icon="star-filled"
 					label={ __(
 						'Featured Product',
 						'woocommerce'
@@ -109,10 +106,9 @@ const FeaturedProduct = ( {
 									mediaId: 0,
 									mediaSrc: '',
 								} );
-								triggerUrlUpdate();
 							} }
 						/>
-						<Button isPrimary onClick={ onDone }>
+						<Button isDefault onClick={ onDone }>
 							{ __( 'Done', 'woocommerce' ) }
 						</Button>
 					</div>
@@ -288,7 +284,7 @@ const FeaturedProduct = ( {
 		}
 
 		const onResizeStop = ( event, direction, elt ) => {
-			setAttributes( { height: parseInt( elt.style.height, 10 ) } );
+			setAttributes( { height: parseInt( elt.style.height ) } );
 		};
 
 		return (
@@ -319,7 +315,7 @@ const FeaturedProduct = ( {
 						<div
 							className="wc-block-featured-product__description"
 							dangerouslySetInnerHTML={ {
-								__html: product.short_description,
+								__html: product.description,
 							} }
 						/>
 					) }
@@ -356,11 +352,11 @@ const FeaturedProduct = ( {
 				<RichText.Content
 					tagName="a"
 					className={ buttonClasses }
-					href={ product.permalink }
+					href={ product.url }
 					title={ attributes.linkText }
 					style={ buttonStyle }
 					value={ attributes.linkText }
-					target={ product.permalink }
+					target={ product.url }
 				/>
 			</div>
 		) : (
@@ -386,7 +382,7 @@ const FeaturedProduct = ( {
 	const renderNoProduct = () => (
 		<Placeholder
 			className="wc-block-featured-product"
-			icon={ <Icon srcElement={ star } /> }
+			icon="star-filled"
 			label={ __( 'Featured Product', 'woocommerce' ) }
 		>
 			{ isLoading ? (
@@ -449,66 +445,10 @@ FeaturedProduct.propTypes = {
 	setOverlayColor: PropTypes.func.isRequired,
 	// from withSpokenMessages
 	debouncedSpeak: PropTypes.func.isRequired,
-	triggerUrlUpdate: PropTypes.func,
 };
 
 export default compose( [
 	withProduct,
 	withColors( { overlayColor: 'background-color' } ),
 	withSpokenMessages,
-	withSelect( ( select, { clientId }, { dispatch } ) => {
-		const Block = select( 'core/block-editor' ).getBlock( clientId );
-		const buttonBlockId = Block?.innerBlocks[ 0 ]?.clientId || '';
-		const currentButtonAttributes =
-			Block?.innerBlocks[ 0 ]?.attributes || {};
-		const updateBlockAttributes = ( attributes ) => {
-			if ( buttonBlockId ) {
-				dispatch( 'core/block-editor' ).updateBlockAttributes(
-					buttonBlockId,
-					attributes
-				);
-			}
-		};
-		return { updateBlockAttributes, currentButtonAttributes };
-	} ),
-	createHigherOrderComponent( ( ProductComponent ) => {
-		class WrappedComponent extends Component {
-			state = {
-				doUrlUpdate: false,
-			};
-			componentDidUpdate() {
-				const {
-					attributes,
-					updateBlockAttributes,
-					currentButtonAttributes,
-					product,
-				} = this.props;
-				if (
-					this.state.doUrlUpdate &&
-					! attributes.editMode &&
-					product?.permalink &&
-					currentButtonAttributes?.url &&
-					product.permalink !== currentButtonAttributes.url
-				) {
-					updateBlockAttributes( {
-						...currentButtonAttributes,
-						url: product.permalink,
-					} );
-					this.setState( { doUrlUpdate: false } );
-				}
-			}
-			triggerUrlUpdate = () => {
-				this.setState( { doUrlUpdate: true } );
-			};
-			render() {
-				return (
-					<ProductComponent
-						triggerUrlUpdate={ this.triggerUrlUpdate }
-						{ ...this.props }
-					/>
-				);
-			}
-		}
-		return WrappedComponent;
-	}, 'withUpdateButtonAttributes' ),
 ] )( FeaturedProduct );

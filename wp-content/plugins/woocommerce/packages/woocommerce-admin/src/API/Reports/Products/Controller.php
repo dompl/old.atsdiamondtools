@@ -3,6 +3,8 @@
  * REST API Reports products controller
  *
  * Handles requests to the /reports/products endpoint.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Products;
@@ -14,6 +16,7 @@ use \Automattic\WooCommerce\Admin\API\Reports\ExportableInterface;
 /**
  * REST API Reports products controller class.
  *
+ * @package WooCommerce/API
  * @extends WC_REST_Reports_Controller
  */
 class Controller extends \WC_REST_Reports_Controller implements ExportableInterface {

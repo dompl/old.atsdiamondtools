@@ -3,7 +3,7 @@
  * WC Order Item Shipping Data Store
  *
  * @version 3.0.0
- * @package WooCommerce\DataStores
+ * @package data-stores
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

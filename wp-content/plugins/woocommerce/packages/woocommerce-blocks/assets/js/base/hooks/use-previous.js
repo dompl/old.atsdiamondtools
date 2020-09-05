@@ -5,8 +5,7 @@ import { useRef, useEffect } from 'react';
 
 /**
  * Use Previous based on https://usehooks.com/usePrevious/.
- *
- * @param {*}    value
+ * @param {mixed}    value
  * @param {Function} [validation] Function that needs to validate for the value
  *                                to be updated.
  */

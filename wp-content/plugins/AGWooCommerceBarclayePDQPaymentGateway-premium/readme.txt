@@ -38,6 +38,9 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.1.1 - 25/08/20 =
+* Fix           - Fixes for some users having issues with orderID and the hash_fields array.
+
 = v4.1.0 - 23/08/20 =
 * Fix           - Fixes for subscriptions.
 * Fix           - Fix for some users getting stuck in a redirect loop for new installs.

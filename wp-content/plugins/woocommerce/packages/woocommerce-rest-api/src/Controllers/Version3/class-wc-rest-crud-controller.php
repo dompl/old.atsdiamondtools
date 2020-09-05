@@ -584,7 +584,6 @@ abstract class WC_REST_CRUD_Controller extends WC_REST_Posts_Controller {
 				'include',
 				'title',
 				'slug',
-				'modified',
 			),
 			'validate_callback'  => 'rest_validate_request_arg',
 		);

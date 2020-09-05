@@ -1,6 +1,8 @@
 <?php
 /**
  * Handles reports CSV export.
+ *
+ * @package WooCommerce/Export
  */
 
 namespace Automattic\WooCommerce\Admin;

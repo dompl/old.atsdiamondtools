@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { Icon, notice } from '@woocommerce/icons';
+import Gridicon from 'gridicons';
 import classNames from 'classnames';
 import { Button, Placeholder, Spinner } from '@wordpress/components';
 
@@ -12,11 +12,11 @@ import { Button, Placeholder, Spinner } from '@wordpress/components';
  * Internal dependencies
  */
 import ErrorMessage from './error-message.js';
-import './editor.scss';
+import './style.scss';
 
 const ErrorPlaceholder = ( { className, error, isLoading, onRetry } ) => (
 	<Placeholder
-		icon={ <Icon srcElement={ notice } /> }
+		icon={ <Gridicon icon="notice" /> }
 		label={ __(
 			'Sorry, an error occurred',
 			'woocommerce'

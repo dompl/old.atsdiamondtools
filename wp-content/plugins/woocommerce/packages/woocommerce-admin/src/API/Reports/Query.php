@@ -1,6 +1,8 @@
 <?php
 /**
  * Class for parameter-based Reports querying
+ *
+ * @package  WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports;

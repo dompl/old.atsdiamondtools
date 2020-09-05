@@ -1,6 +1,8 @@
 <?php
 /**
  * Class for time interval and numeric range handling for reports.
+ *
+ * @package  WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports;

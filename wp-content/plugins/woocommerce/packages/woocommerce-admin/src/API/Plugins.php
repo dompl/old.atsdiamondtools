@@ -3,6 +3,8 @@
  * REST API Plugins Controller
  *
  * Handles requests to install and activate depedent plugins.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API;
@@ -16,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plugins Controller.
  *
+ * @package WooCommerce Admin/API
  * @extends WC_REST_Data_Controller
  */
 class Plugins extends \WC_REST_Data_Controller {
@@ -43,7 +46,7 @@ class Plugins extends \WC_REST_Data_Controller {
 			array(
 				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'install_plugins' ),
+					'callback'            => array( $this, 'install_plugin' ),
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 				),
 				'schema' => array( $this, 'get_item_schema' ),
@@ -189,145 +192,105 @@ class Plugins extends \WC_REST_Data_Controller {
 	 * @param string $slug The slug of the plugin being installed.
 	 */
 	private function create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug ) {
-		// Exit early if we're not installing the Jetpack or the WooCommerce Services plugins.
-		if ( 'jetpack' !== $slug && 'woocommerce-services' !== $slug ) {
-			return;
-		}
-
-		WC_Admin_Notes_Install_JP_And_WCS_Plugins::possibly_add_note();
+		WC_Admin_Notes_Install_JP_And_WCS_Plugins::possibly_add_install_jp_and_wcs_note( $slug );
 	}
 
 	/**
-	 * Install the requested plugin.
+	 * Installs the requested plugin.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|array Plugin Status
 	 */
 	public function install_plugin( $request ) {
-		wc_deprecated_function( 'install_plugin', '4.3', '\Automattic\WooCommerce\Admin\API\Plugins()->install_plugins' );
-		// This method expects a `plugin` argument to be sent, install plugins requires plugins.
-		$request['plugins'] = $request['plugin'];
-		return self::install_plugins( $request );
-	}
-
-	/**
-	 * Installs the requested plugins.
-	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|array Plugin Status
-	 */
-	public function install_plugins( $request ) {
 		$allowed_plugins = self::get_allowed_plugins();
-		$plugins         = explode( ',', $request['plugins'] );
-
-		if ( empty( $request['plugins'] ) || ! is_array( $plugins ) ) {
-			return new \WP_Error( 'woocommerce_rest_invalid_plugins', __( 'Plugins must be a non-empty array.', 'woocommerce' ), 404 );
+		$plugin          = sanitize_title_with_dashes( $request['plugin'] );
+		if ( ! in_array( $plugin, array_keys( $allowed_plugins ), true ) ) {
+			return new \WP_Error( 'woocommerce_rest_invalid_plugin', __( 'Invalid plugin.', 'woocommerce' ), 404 );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		$path              = $allowed_plugins[ $plugin ];
+		$slug              = sanitize_key( $plugin );
+		$installed_plugins = get_plugins();
+
+		if ( in_array( $path, array_keys( $installed_plugins ), true ) ) {
+			return( array(
+				'slug'   => $slug,
+				'name'   => $installed_plugins[ $path ]['Name'],
+				'status' => 'success',
+			) );
+		}
+
 		include_once ABSPATH . '/wp-admin/includes/admin.php';
 		include_once ABSPATH . '/wp-admin/includes/plugin-install.php';
 		include_once ABSPATH . '/wp-admin/includes/plugin.php';
 		include_once ABSPATH . '/wp-admin/includes/class-wp-upgrader.php';
 		include_once ABSPATH . '/wp-admin/includes/class-plugin-upgrader.php';
 
-		$existing_plugins  = get_plugins();
-		$installed_plugins = array();
-		$results           = array();
-		$errors            = new \WP_Error();
+		$api = plugins_api(
+			'plugin_information',
+			array(
+				'slug'   => $slug,
+				'fields' => array(
+					'sections' => false,
+				),
+			)
+		);
 
-		foreach ( $plugins as $plugin ) {
-			$slug = sanitize_key( $plugin );
-			$path = isset( $allowed_plugins[ $slug ] ) ? $allowed_plugins[ $slug ] : false;
-
-			if ( ! $path ) {
-				$errors->add(
-					$plugin,
-					/* translators: %s: plugin slug (example: woocommerce-services) */
-					sprintf( __( 'The requested plugin `%s` is not in the list of allowed plugins.', 'woocommerce' ), $slug )
-				);
-				continue;
-			}
-
-			if ( in_array( $path, array_keys( $existing_plugins ), true ) ) {
-				$installed_plugins[] = $plugin;
-				continue;
-			}
-
-			$api = plugins_api(
-				'plugin_information',
-				array(
-					'slug'   => $slug,
-					'fields' => array(
-						'sections' => false,
-					),
-				)
+		if ( is_wp_error( $api ) ) {
+			$properties = array(
+				/* translators: %s: plugin slug (example: woocommerce-services) */
+				'error_message' => __( 'The requested plugin `%s` could not be installed. Plugin API call failed.', 'woocommerce' ),
+				'api'           => $api,
+				'slug'          => $slug,
 			);
+			wc_admin_record_tracks_event( 'install_plugin_error', $properties );
 
-			if ( is_wp_error( $api ) ) {
-				$properties = array(
+			$this->create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug );
+
+			return new \WP_Error(
+				'woocommerce_rest_plugin_install',
+				sprintf(
 					/* translators: %s: plugin slug (example: woocommerce-services) */
-					'error_message' => __( 'The requested plugin `%s` could not be installed. Plugin API call failed.', 'woocommerce' ),
-					'api'           => $api,
-					'slug'          => $slug,
-				);
-				wc_admin_record_tracks_event( 'install_plugin_error', $properties );
+					__( 'The requested plugin `%s` could not be installed. Plugin API call failed.', 'woocommerce' ),
+					$slug
+				),
+				500
+			);
+		}
 
-				$this->create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug );
+		$upgrader = new \Plugin_Upgrader( new \Automatic_Upgrader_Skin() );
+		$result   = $upgrader->install( $api->download_link );
 
-				$errors->add(
-					$plugin,
-					sprintf(
-						/* translators: %s: plugin slug (example: woocommerce-services) */
-						__( 'The requested plugin `%s` could not be installed. Plugin API call failed.', 'woocommerce' ),
-						$slug
-					)
-				);
+		if ( is_wp_error( $result ) || is_null( $result ) ) {
+			$properties = array(
+				/* translators: %s: plugin slug (example: woocommerce-services) */
+				'error_message' => __( 'The requested plugin `%s` could not be installed.', 'woocommerce' ),
+				'slug'          => $slug,
+				'api'           => $api,
+				'upgrader'      => $upgrader,
+				'result'        => $result,
+			);
+			wc_admin_record_tracks_event( 'install_plugin_error', $properties );
 
-				continue;
-			}
+			$this->create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug );
 
-			$upgrader           = new \Plugin_Upgrader( new \Automatic_Upgrader_Skin() );
-			$result             = $upgrader->install( $api->download_link );
-			$results[ $plugin ] = $result;
-
-			if ( is_wp_error( $result ) || is_null( $result ) ) {
-				$properties = array(
+			return new \WP_Error(
+				'woocommerce_rest_plugin_install',
+				sprintf(
 					/* translators: %s: plugin slug (example: woocommerce-services) */
-					'error_message' => __( 'The requested plugin `%s` could not be installed.', 'woocommerce' ),
-					'slug'          => $slug,
-					'api'           => $api,
-					'upgrader'      => $upgrader,
-					'result'        => $result,
-				);
-				wc_admin_record_tracks_event( 'install_plugin_error', $properties );
-
-				$this->create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug );
-
-				$errors->add(
-					$plugin,
-					sprintf(
-						/* translators: %s: plugin slug (example: woocommerce-services) */
-						__( 'The requested plugin `%s` could not be installed.  Upgrader install failed.', 'woocommerce' ),
-						$slug
-					)
-				);
-				continue;
-			}
-
-			$installed_plugins[] = $plugin;
+					__( 'The requested plugin `%s` could not be installed.', 'woocommerce' ),
+					$slug
+				),
+				500
+			);
 		}
 
 		return array(
-			'data'    => array(
-				'installed' => $installed_plugins,
-				'results'   => $results,
-			),
-			'errors'  => $errors,
-			'success' => count( $errors->errors ) === 0,
-			'message' => count( $errors->errors ) === 0
-				? __( 'Plugins were successfully installed.', 'woocommerce' )
-				: __( 'There was a problem installing some of the requested plugins.', 'woocommerce' ),
+			'slug'   => $slug,
+			'name'   => $api->name,
+			'status' => 'success',
 		);
 	}
 
@@ -380,64 +343,37 @@ class Plugins extends \WC_REST_Data_Controller {
 	 * @return WP_Error|array Plugin Status
 	 */
 	public function activate_plugins( $request ) {
-		$allowed_plugins   = self::get_allowed_plugins();
-		$plugins           = explode( ',', $request['plugins'] );
-		$errors            = new \WP_Error();
-		$activated_plugins = array();
+		$allowed_plugins = self::get_allowed_plugins();
+		$_plugins        = explode( ',', $request['plugins'] );
+		$plugins         = array_intersect( array_keys( $allowed_plugins ), $_plugins );
 
-		if ( empty( $request['plugins'] ) || ! is_array( $plugins ) ) {
-			return new \WP_Error( 'woocommerce_rest_invalid_plugins', __( 'Plugins must be a non-empty array.', 'woocommerce' ), 404 );
+		if ( empty( $plugins ) || ! is_array( $plugins ) ) {
+			return new \WP_Error( 'woocommerce_rest_invalid_plugins', __( 'Invalid plugins.', 'woocommerce' ), 404 );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		foreach ( $plugins as $plugin ) {
 			$slug = $plugin;
-			$path = isset( $allowed_plugins[ $slug ] ) ? $allowed_plugins[ $slug ] : false;
-
-			if ( ! $path ) {
-				$errors->add(
-					$plugin,
-					/* translators: %s: plugin slug (example: woocommerce-services) */
-					sprintf( __( 'The requested plugin `%s`. is not in the list of allowed plugins.', 'woocommerce' ), $slug )
-				);
-				continue;
-			}
+			$path = $allowed_plugins[ $slug ];
 
 			if ( ! PluginsHelper::is_plugin_installed( $path ) ) {
-				$errors->add(
-					$plugin,
-					/* translators: %s: plugin slug (example: woocommerce-services) */
-					sprintf( __( 'The requested plugin `%s`. is not yet installed.', 'woocommerce' ), $slug )
-				);
-				continue;
+				/* translators: %s: plugin slug (example: woocommerce-services) */
+				return new \WP_Error( 'woocommerce_rest_invalid_plugin', sprintf( __( 'Invalid plugin %s.', 'woocommerce' ), $slug ), 404 );
 			}
 
 			$result = activate_plugin( $path );
 			if ( ! is_null( $result ) ) {
 				$this->create_install_plugin_error_inbox_notification_for_jetpack_installs( $slug );
 
-				$errors->add(
-					$plugin,
-					/* translators: %s: plugin slug (example: woocommerce-services) */
-					sprintf( __( 'The requested plugin `%s` could not be activated.', 'woocommerce' ), $slug )
-				);
-				continue;
+				return new \WP_Error( 'woocommerce_rest_invalid_plugin', sprintf( __( 'The requested plugins could not be activated.', 'woocommerce' ), $slug ), 500 );
 			}
-
-			$activated_plugins[] = $plugin;
 		}
 
 		return( array(
-			'data'    => array(
-				'activated' => $activated_plugins,
-				'active'    => self::get_active_plugins(),
-			),
-			'errors'  => $errors,
-			'success' => count( $errors->errors ) === 0,
-			'message' => count( $errors->errors ) === 0
-				? __( 'Plugins were successfully activated.', 'woocommerce' )
-				: __( 'There was a problem activating some of the requested plugins.', 'woocommerce' ),
+			'activatedPlugins' => array_values( $plugins ),
+			'active'           => self::get_active_plugins(),
+			'status'           => 'success',
 		) );
 	}
 

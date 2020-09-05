@@ -3,6 +3,8 @@
  * WooCommerce Admin (Dashboard) Order Milestones Note Provider.
  *
  * Adds a note to the merchant's inbox when certain order milestones are reached.
+ *
+ * @package WooCommerce Admin
  */
 
 namespace Automattic\WooCommerce\Admin\Notes;
@@ -16,7 +18,7 @@ class WC_Admin_Notes_Order_Milestones {
 	/**
 	 * Name of the "other milestones" note.
 	 */
-	const NOTE_NAME = 'wc-admin-orders-milestone';
+	const ORDERS_MILESTONE_NOTE_NAME = 'wc-admin-orders-milestone';
 
 	/**
 	 * Option key name to store last order milestone.
@@ -179,7 +181,7 @@ class WC_Admin_Notes_Order_Milestones {
 	public function get_note_title_for_milestone( $milestone ) {
 		switch ( $milestone ) {
 			case 1:
-				return __( 'First order received', 'woocommerce' );
+				return __( 'First order', 'woocommerce' );
 			case 10:
 			case 100:
 			case 250:
@@ -208,7 +210,7 @@ class WC_Admin_Notes_Order_Milestones {
 	public function get_note_content_for_milestone( $milestone ) {
 		switch ( $milestone ) {
 			case 1:
-				return __( 'Congratulations on getting your first order! Now is a great time to learn how to manage your orders.', 'woocommerce' );
+				return __( 'Congratulations on getting your first order from a customer! Learn how to manage your orders.', 'woocommerce' );
 			case 10:
 				return __( "You've hit the 10 orders milestone! Look at you go. Browse some WooCommerce success stories for inspiration.", 'woocommerce' );
 			case 100:
@@ -237,13 +239,13 @@ class WC_Admin_Notes_Order_Milestones {
 				return array(
 					'name'  => 'learn-more',
 					'label' => __( 'Learn more', 'woocommerce' ),
-					'query' => 'https://docs.woocommerce.com/document/managing-orders/?utm_source=inbox',
+					'query' => 'https://docs.woocommerce.com/document/managing-orders/',
 				);
 			case 10:
 				return array(
 					'name'  => 'browse',
 					'label' => __( 'Browse', 'woocommerce' ),
-					'query' => 'https://woocommerce.com/success-stories/?utm_source=inbox',
+					'query' => 'https://woocommerce.com/success-stories/',
 				);
 			case 100:
 			case 250:
@@ -304,7 +306,7 @@ class WC_Admin_Notes_Order_Milestones {
 		$this->set_last_milestone( $current_milestone );
 
 		// We only want one milestone note at any time.
-		WC_Admin_Notes::delete_notes_with_name( self::NOTE_NAME );
+		WC_Admin_Notes::delete_notes_with_name( self::ORDERS_MILESTONE_NOTE_NAME );
 
 		// Add the milestone note.
 		$note = new WC_Admin_Note();
@@ -313,7 +315,8 @@ class WC_Admin_Notes_Order_Milestones {
 		$note_action = $this->get_note_action_for_milestone( $current_milestone );
 		$note->add_action( $note_action['name'], $note_action['label'], $note_action['query'] );
 		$note->set_type( WC_Admin_Note::E_WC_ADMIN_NOTE_INFORMATIONAL );
-		$note->set_name( self::NOTE_NAME );
+		$note->set_icon( 'trophy' );
+		$note->set_name( self::ORDERS_MILESTONE_NOTE_NAME );
 		$note->set_source( 'woocommerce-admin' );
 		$note->save();
 	}

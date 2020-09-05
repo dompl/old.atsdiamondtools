@@ -3,6 +3,8 @@
  * REST API Themes Controller
  *
  * Handles requests to /themes
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API;
@@ -15,6 +17,7 @@ use Automattic\WooCommerce\Admin\Overrides\ThemeUpgraderSkin;
 /**
  * Themes controller.
  *
+ * @package WooCommerce Admin/API
  * @extends WC_REST_Data_Controller
  */
 class Themes extends \WC_REST_Data_Controller {
@@ -78,11 +81,7 @@ class Themes extends \WC_REST_Data_Controller {
 		}
 
 		include_once ABSPATH . 'wp-admin/includes/file.php';
-		include_once ABSPATH . '/wp-admin/includes/admin.php';
-		include_once ABSPATH . '/wp-admin/includes/theme-install.php';
-		include_once ABSPATH . '/wp-admin/includes/theme.php';
-		include_once ABSPATH . '/wp-admin/includes/class-wp-upgrader.php';
-		include_once ABSPATH . '/wp-admin/includes/class-theme-upgrader.php';
+		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 		$_GET['package'] = true;
 		$file_upload     = new \File_Upload_Upgrader( 'pluginzip', 'package' );

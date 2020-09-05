@@ -3,18 +3,13 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Placeholder } from '@wordpress/components';
-import { Icon, discussion } from '@woocommerce/icons';
+import { IconAllReviews } from '@woocommerce/block-components/icons';
 
 const NoCategoryReviewsPlaceholder = () => {
 	return (
 		<Placeholder
 			className="wc-block-all-reviews"
-			icon={
-				<Icon
-					srcElement={ discussion }
-					className="block-editor-block-icon"
-				/>
-			}
+			icon={ <IconAllReviews className="block-editor-block-icon" /> }
 			label={ __( 'All Reviews', 'woocommerce' ) }
 		>
 			{ __(

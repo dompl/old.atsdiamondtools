@@ -2,8 +2,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { ServerSideRender } from '@wordpress/editor';
+import {
+	BlockControls,
+	InspectorControls,
+	ServerSideRender,
+} from '@wordpress/editor';
 import {
 	Button,
 	Disabled,
@@ -19,7 +22,7 @@ import GridContentControl from '@woocommerce/block-components/grid-content-contr
 import GridLayoutControl from '@woocommerce/block-components/grid-layout-control';
 import ProductTagControl from '@woocommerce/block-components/product-tag-control';
 import ProductOrderbyControl from '@woocommerce/block-components/product-orderby-control';
-import { Icon, more } from '@woocommerce/icons';
+import { IconProductTag } from '@woocommerce/block-components/icons';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
 
 /**
@@ -174,12 +177,7 @@ class ProductsByTagBlock extends Component {
 
 		return (
 			<Placeholder
-				icon={
-					<Icon
-						srcElement={ more }
-						className="block-editor-block-icon"
-					/>
-				}
+				icon={ <IconProductTag className="block-editor-block-icon" /> }
 				label={ __(
 					'Products by Tag',
 					'woocommerce'
@@ -202,7 +200,7 @@ class ProductsByTagBlock extends Component {
 							this.setChangedAttributes( { tagOperator: value } )
 						}
 					/>
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 					<Button
@@ -231,10 +229,7 @@ class ProductsByTagBlock extends Component {
 				) : (
 					<Placeholder
 						icon={
-							<Icon
-								icon={ more }
-								className="block-editor-block-icon"
-							/>
+							<IconProductTag className="block-editor-block-icon" />
 						}
 						label={ __(
 							'Products by Tag',
@@ -287,10 +282,7 @@ class ProductsByTagBlock extends Component {
 				) : (
 					<Placeholder
 						icon={
-							<Icon
-								icon={ more }
-								className="block-editor-block-icon"
-							/>
+							<IconProductTag className="block-editor-block-icon" />
 						}
 						label={ __(
 							'Products by Tag',

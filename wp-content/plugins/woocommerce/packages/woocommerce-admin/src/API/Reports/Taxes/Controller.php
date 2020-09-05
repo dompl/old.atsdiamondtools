@@ -3,6 +3,8 @@
  * REST API Reports taxes controller
  *
  * Handles requests to the /reports/taxes endpoint.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Taxes;
@@ -15,6 +17,7 @@ use \Automattic\WooCommerce\Admin\API\Reports\ExportableTraits;
 /**
  * REST API Reports taxes controller class.
  *
+ * @package WooCommerce/API
  * @extends WC_REST_Reports_Controller
  */
 class Controller extends \WC_REST_Reports_Controller implements ExportableInterface {

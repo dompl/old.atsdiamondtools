@@ -89,15 +89,19 @@ class WC_Notes_Run_Db_Update {
 	 *  - actions are set up for the first 'Update database' notice, and
 	 *  - URL for note's action is equal to the given URL (to check for potential nonce update).
 	 *
-	 * @param WC_Admin_Note      $note            Note to check.
-	 * @param string             $update_url      URL to check the note against.
-	 * @param array<int, string> $current_actions List of actions to check for.
+	 * @param WC_Admin_Note   $note            Note to check.
+	 * @param string          $update_url      URL to check the note against.
+	 * @param array( string ) $current_actions List of actions to check for.
 	 * @return bool
 	 */
 	private static function note_up_to_date( $note, $update_url, $current_actions ) {
 		$actions = $note->get_actions();
-		return count( $current_actions ) === count( array_intersect( wp_list_pluck( $actions, 'name' ), $current_actions ) )
-			&& in_array( $update_url, wp_list_pluck( $actions, 'query' ), true );
+		if ( count( $current_actions ) === count( array_intersect( wp_list_pluck( $actions, 'name' ), $current_actions ) )
+			&& in_array( $update_url, wp_list_pluck( $actions, 'query' ), true ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -111,7 +115,7 @@ class WC_Notes_Run_Db_Update {
 	private static function update_needed_notice( $note_id = null ) {
 		$update_url = html_entity_decode(
 			wp_nonce_url(
-				add_query_arg( 'do_update_woocommerce', 'true', wc_get_current_admin_url() ? wc_get_current_admin_url() : admin_url( 'admin.php?page=wc-settings' ) ),
+				add_query_arg( 'do_update_woocommerce', 'true', admin_url( 'admin.php?page=wc-settings' ) ),
 				'wc_db_update',
 				'wc_db_update_nonce'
 			)
@@ -152,6 +156,7 @@ class WC_Notes_Run_Db_Update {
 			. sprintf( ' ' . esc_html__( 'The database update process runs in the background and may take a little while, so please be patient. Advanced users can alternatively update via %1$sWP CLI%2$s.', 'woocommerce' ), '<a href="https://github.com/woocommerce/woocommerce/wiki/Upgrading-the-database-using-WP-CLI">', '</a>' )
 		);
 		$note->set_type( WC_Admin_Note::E_WC_ADMIN_NOTE_UPDATE );
+		$note->set_icon( 'info' );
 		$note->set_name( self::NOTE_NAME );
 		$note->set_content_data( (object) array() );
 		$note->set_source( 'woocommerce-core' );
@@ -210,7 +215,7 @@ class WC_Notes_Run_Db_Update {
 				add_query_arg(
 					'wc-hide-notice',
 					'update',
-					wc_get_current_admin_url() ? wc_get_current_admin_url() : admin_url( 'admin.php?page=wc-settings' )
+					admin_url( 'admin.php?page=wc-settings' )
 				),
 				'woocommerce_hide_notices_nonce',
 				'_wc_notice_nonce'

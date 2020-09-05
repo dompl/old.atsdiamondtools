@@ -51,7 +51,7 @@ function wc_get_attribute_taxonomies() {
 	$cache_key   = $prefix . 'attributes';
 	$cache_value = wp_cache_get( $cache_key, 'woocommerce-attributes' );
 
-	if ( false !== $cache_value ) {
+	if ( $cache_value ) {
 		return $cache_value;
 	}
 

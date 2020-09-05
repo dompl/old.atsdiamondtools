@@ -1,6 +1,8 @@
 <?php
 /**
  * API\Reports\Customers\Stats\DataStore class file.
+ *
+ * @package WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Customers\Stats;

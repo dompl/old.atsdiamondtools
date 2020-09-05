@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { DEFAULT_COLUMNS } from '@woocommerce/block-settings';
-import { Icon, widgets } from '@woocommerce/icons';
+import { IconWidgets } from '@woocommerce/block-components/icons';
 
 /**
  * Internal dependencies
@@ -16,14 +16,11 @@ import { deprecatedConvertToShortcode } from '../../utils/deprecations';
 registerBlockType( 'woocommerce/handpicked-products', {
 	title: __( 'Hand-picked Products', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ widgets } />,
+		src: <IconWidgets />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
-	keywords: [
-		__( 'Handpicked Products', 'woocommerce' ),
-		__( 'WooCommerce', 'woocommerce' ),
-	],
+	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
 	description: __(
 		'Display a selection of hand-picked products in a grid.',
 		'woocommerce'
@@ -148,8 +145,6 @@ registerBlockType( 'woocommerce/handpicked-products', {
 
 	/**
 	 * Renders and manages the block.
-	 *
-	 * @param {Object} props Props to pass to block.
 	 */
 	edit( props ) {
 		return <Block { ...props } />;

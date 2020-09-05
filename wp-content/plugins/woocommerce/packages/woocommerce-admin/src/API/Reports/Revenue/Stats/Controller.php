@@ -3,6 +3,8 @@
  * REST API Reports revenue stats controller
  *
  * Handles requests to the /reports/revenue/stats endpoint.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Revenue\Stats;
@@ -17,6 +19,7 @@ use \Automattic\WooCommerce\Admin\API\Reports\ParameterException;
 /**
  * REST API Reports revenue stats controller class.
  *
+ * @package WooCommerce/API
  * @extends WC_REST_Reports_Controller
  */
 class Controller extends \WC_REST_Reports_Controller implements ExportableInterface {

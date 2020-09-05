@@ -2,7 +2,7 @@
 /**
  * WC Admin Uninstall
  *
- * @package WooCommerce\Admin\Uninstaller
+ * @package WC_Admin\Uninstaller
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;

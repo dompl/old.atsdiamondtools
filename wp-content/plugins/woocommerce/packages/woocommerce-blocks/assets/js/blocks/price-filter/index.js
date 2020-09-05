@@ -4,27 +4,26 @@
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import classNames from 'classnames';
-import { Icon, bill } from '@woocommerce/icons';
 
 /**
  * Internal dependencies
  */
 import edit from './edit.js';
+import { IconMoney } from '../../components/icons';
 
 registerBlockType( 'woocommerce/price-filter', {
 	title: __( 'Filter Products by Price', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ bill } />,
+		src: <IconMoney />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
 	description: __(
-		'Allow customers to filter the products by choosing a lower or upper price limit. Works in combination with the All Products block.',
+		'Display a slider to filter products in your store by price.',
 		'woocommerce'
 	),
 	supports: {
-		html: false,
 		multiple: false,
 	},
 	example: {},

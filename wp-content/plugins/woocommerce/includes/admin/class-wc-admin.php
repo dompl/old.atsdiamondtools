@@ -331,11 +331,6 @@ class WC_Admin {
 			$classes .= ' wc-wp-version-gte-53';
 		}
 
-		// Add WP 5.5+ compatibility class.
-		if ( $raw_version && version_compare( $version, '5.5', '>=' ) ) {
-			$classes .= ' wc-wp-version-gte-55';
-		}
-
 		return $classes;
 	}
 }

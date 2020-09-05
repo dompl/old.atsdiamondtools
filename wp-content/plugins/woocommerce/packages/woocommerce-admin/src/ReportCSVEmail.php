@@ -1,6 +1,8 @@
 <?php
 /**
  * Handles emailing users CSV Export download links.
+ *
+ * @package WooCommerce/Export
  */
 
 namespace Automattic\WooCommerce\Admin;

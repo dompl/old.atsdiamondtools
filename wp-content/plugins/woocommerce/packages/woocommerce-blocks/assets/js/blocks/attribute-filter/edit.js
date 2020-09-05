@@ -13,7 +13,7 @@ import {
 	Toolbar,
 	withSpokenMessages,
 } from '@wordpress/components';
-import { Icon, server, external } from '@woocommerce/icons';
+import Gridicon from 'gridicons';
 import { SearchListControl } from '@woocommerce/components';
 import { mapValues, toArray, sortBy, find } from 'lodash';
 import { ATTRIBUTES } from '@woocommerce/block-settings';
@@ -26,19 +26,18 @@ import BlockTitle from '@woocommerce/block-components/block-title';
  */
 import Block from './block.js';
 import './editor.scss';
+import { IconExternal } from '../../components/icons';
 import ToggleButtonControl from '../../components/toggle-button-control';
 
 const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 	const {
 		attributeId,
 		className,
-		displayStyle,
 		heading,
 		headingLevel,
 		isPreview,
 		queryType,
 		showCounts,
-		showFilterButton,
 	} = attributes;
 
 	const [ isEditing, setIsEditing ] = useState(
@@ -76,11 +75,11 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 						help={
 							showCounts
 								? __(
-										'Product count is visible.',
+										'Product counts are visible.',
 										'woocommerce'
 								  )
 								: __(
-										'Product count is hidden.',
+										'Product counts are hidden.',
 										'woocommerce'
 								  )
 						}
@@ -152,57 +151,6 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 							} )
 						}
 					/>
-					<ToggleButtonControl
-						label={ __(
-							'Display Style',
-							'woocommerce'
-						) }
-						value={ displayStyle }
-						options={ [
-							{
-								label: __(
-									'List',
-									'woocommerce'
-								),
-								value: 'list',
-							},
-							{
-								label: __(
-									'Dropdown',
-									'woocommerce'
-								),
-								value: 'dropdown',
-							},
-						] }
-						onChange={ ( value ) =>
-							setAttributes( {
-								displayStyle: value,
-							} )
-						}
-					/>
-					<ToggleControl
-						label={ __(
-							'Filter button',
-							'woocommerce'
-						) }
-						help={
-							showFilterButton
-								? __(
-										'Products will only update when the button is pressed.',
-										'woocommerce'
-								  )
-								: __(
-										'Products will update as options are selected.',
-										'woocommerce'
-								  )
-						}
-						checked={ showFilterButton }
-						onChange={ ( value ) =>
-							setAttributes( {
-								showFilterButton: value,
-							} )
-						}
-					/>
 				</PanelBody>
 				<PanelBody
 					title={ __(
@@ -220,7 +168,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 	const noAttributesPlaceholder = () => (
 		<Placeholder
 			className="wc-block-attribute-filter"
-			icon={ <Icon srcElement={ server } /> }
+			icon={ <Gridicon icon="menus" /> }
 			label={ __(
 				'Filter Products by Attribute',
 				'woocommerce'
@@ -237,7 +185,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 				) }
 			</p>
 			<Button
-				className="wc-block-attribute-filter__add-attribute-button"
+				className="wc-block-attribute-filter__add_attribute_button"
 				isDefault
 				isLarge
 				href={ getAdminLink(
@@ -246,7 +194,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 			>
 				{ __( 'Add new attribute', 'woocommerce' ) +
 					' ' }
-				<Icon srcElement={ external } />
+				<IconExternal />
 			</Button>
 			<Button
 				className="wc-block-attribute-filter__read_more_button"
@@ -262,7 +210,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 		setIsEditing( false );
 		debouncedSpeak(
 			__(
-				'Showing Filter Products by Attribute block preview.',
+				'Showing attribute filter block preview.',
 				'woocommerce'
 			)
 		);
@@ -357,7 +305,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 		return (
 			<Placeholder
 				className="wc-block-attribute-filter"
-				icon={ <Icon srcElement={ server } /> }
+				icon={ <Gridicon icon="menus" /> }
 				label={ __(
 					'Filter Products by Attribute',
 					'woocommerce'
@@ -369,7 +317,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 			>
 				<div className="wc-block-attribute-filter__selection">
 					{ renderAttributeControl() }
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 				</div>

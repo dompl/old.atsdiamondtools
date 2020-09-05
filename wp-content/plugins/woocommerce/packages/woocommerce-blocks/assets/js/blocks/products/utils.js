@@ -5,17 +5,17 @@ import { __ } from '@wordpress/i18n';
 import { Button, Placeholder } from '@wordpress/components';
 import classNames from 'classnames';
 import { adminUrl } from '@woocommerce/settings';
-import { Icon, external } from '@woocommerce/icons';
+import { IconExternal } from '@woocommerce/block-components/icons';
 
 export const getBlockClassName = ( blockClassName, attributes ) => {
 	const { className, contentVisibility } = attributes;
 
 	return classNames( blockClassName, className, {
-		'has-image': contentVisibility && contentVisibility.image,
-		'has-title': contentVisibility && contentVisibility.title,
-		'has-rating': contentVisibility && contentVisibility.rating,
-		'has-price': contentVisibility && contentVisibility.price,
-		'has-button': contentVisibility && contentVisibility.button,
+		'has-image': contentVisibility.image,
+		'has-title': contentVisibility.title,
+		'has-rating': contentVisibility.rating,
+		'has-price': contentVisibility.price,
+		'has-button': contentVisibility.button,
 	} );
 };
 
@@ -32,13 +32,13 @@ export const renderNoProductsPlaceholder = ( blockTitle, blockIcon ) => (
 			) }
 		</p>
 		<Button
-			className="wc-block-products__add-product-button"
+			className="wc-block-products__add_product_button"
 			isDefault
 			isLarge
 			href={ adminUrl + 'post-new.php?post_type=product' }
 		>
 			{ __( 'Add new product', 'woocommerce' ) + ' ' }
-			<Icon srcElement={ external } />
+			<IconExternal />
 		</Button>
 		<Button
 			className="wc-block-products__read_more_button"

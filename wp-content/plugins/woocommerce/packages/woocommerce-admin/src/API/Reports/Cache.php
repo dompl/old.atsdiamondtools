@@ -3,6 +3,8 @@
  * REST API Reports Cache.
  *
  * Handles report data object caching.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports;
@@ -11,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * REST API Reports Cache class.
+ *
+ * @package WooCommerce Admin/API
  */
 class Cache {
 	/**

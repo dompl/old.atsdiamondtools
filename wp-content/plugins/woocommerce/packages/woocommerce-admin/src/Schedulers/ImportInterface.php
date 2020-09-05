@@ -1,6 +1,8 @@
 <?php
 /**
  * Import related abstract functions.
+ *
+ * @package WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\Schedulers;

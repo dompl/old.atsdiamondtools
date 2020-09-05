@@ -445,7 +445,11 @@ function init_ag_epdq() {
 	
 
 		// Hash
-		$hash_fields = array($settings['pspid'], date('Y:m:d'), AG_ePDQ_Helpers::AG_get_request('idOrder'), $settings['shain']);
+		if(defined('ePDQ_custom_order_id')) {
+			$hash_fields = array($settings['pspid'], date('Y:m:d'), AG_ePDQ_Helpers::AG_get_request('idOrder'), $settings['shain']);
+		} else {
+			$hash_fields = array($settings['pspid'], date('Y:m:d'), AG_ePDQ_Helpers::AG_get_request('orderID'), $settings['shain']);
+		}
 		$encrypted_string = ePDQ_crypt::ripemd_crypt(implode($hash_fields), $settings['shain']);
 
 		if (null !== AG_ePDQ_Helpers::AG_get_request('STATUS')) {

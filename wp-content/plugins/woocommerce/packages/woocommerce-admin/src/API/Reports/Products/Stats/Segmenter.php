@@ -1,6 +1,8 @@
 <?php
 /**
  * Class for adding segmenting support without cluttering the data stores.
+ *
+ * @package  WooCommerce Admin/Classes
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Products\Stats;
@@ -188,8 +190,7 @@ class Segmenter extends ReportsSegmenter {
 			$this->report_columns      = $product_level_columns;
 			$segmenting_from           = "
 			LEFT JOIN {$wpdb->term_relationships} ON {$product_segmenting_table}.product_id = {$wpdb->term_relationships}.object_id
-			JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_taxonomy}.term_taxonomy_id = {$wpdb->term_relationships}.term_taxonomy_id
-			LEFT JOIN {$wpdb->wc_category_lookup} ON {$wpdb->term_taxonomy}.term_id = {$wpdb->wc_category_lookup}.category_id
+			LEFT JOIN {$wpdb->wc_category_lookup} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->wc_category_lookup}.category_id
 			";
 			$segmenting_where          = " AND {$wpdb->wc_category_lookup}.category_tree_id IS NOT NULL";
 			$segmenting_groupby        = "{$wpdb->wc_category_lookup}.category_tree_id";

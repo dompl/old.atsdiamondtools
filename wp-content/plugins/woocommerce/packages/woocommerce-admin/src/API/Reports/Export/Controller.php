@@ -5,6 +5,8 @@
  * Handles requests to:
  * - /reports/[report]/export
  * - /reports/[report]/export/[id]/status
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports\Export;
@@ -16,6 +18,7 @@ use \Automattic\WooCommerce\Admin\ReportExporter;
 /**
  * Reports Export controller.
  *
+ * @package WooCommerce Admin/API
  * @extends \Automattic\WooCommerce\Admin\API\Reports\Controller
  */
 class Controller extends \Automattic\WooCommerce\Admin\API\Reports\Controller {

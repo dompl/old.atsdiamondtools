@@ -3,7 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { Icon, search } from '@woocommerce/icons';
+import { IconProductSearch } from '@woocommerce/block-components/icons';
+
 /**
  * Internal dependencies
  */
@@ -15,13 +16,13 @@ import edit from './edit.js';
 registerBlockType( 'woocommerce/product-search', {
 	title: __( 'Product Search', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ search } />,
+		src: <IconProductSearch />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
 	description: __(
-		'A search box to allow customers to search for products by keyword.',
+		'Help visitors find your products.',
 		'woocommerce'
 	),
 	supports: {
@@ -56,7 +57,7 @@ registerBlockType( 'woocommerce/product-search', {
 		 */
 		placeholder: {
 			type: 'string',
-			default: __( 'Search products…', 'woocommerce' ),
+			default: __( 'Search products...', 'woocommerce' ),
 			source: 'attribute',
 			selector: 'input.wc-block-product-search__field',
 			attribute: 'placeholder',
@@ -75,8 +76,6 @@ registerBlockType( 'woocommerce/product-search', {
 
 	/**
 	 * Save the props to post content.
-	 *
-	 * @param {Object} attributes Props to pass to block.
 	 */
 	save( attributes ) {
 		return (

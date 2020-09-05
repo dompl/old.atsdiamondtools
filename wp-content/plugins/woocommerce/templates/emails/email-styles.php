@@ -164,7 +164,7 @@ body {
 }
 
 .link {
-	color: <?php echo esc_attr( $link_color ); ?>;
+	color: <?php echo esc_attr( $base ); ?>;
 }
 
 #header_wrapper {

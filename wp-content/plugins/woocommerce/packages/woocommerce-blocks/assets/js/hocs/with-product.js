@@ -10,11 +10,6 @@ import { getProduct } from '@woocommerce/block-components/utils';
  */
 import { formatError } from '../base/utils/errors.js';
 
-/**
- * HOC that queries a product for a component.
- *
- * @param {Function} OriginalComponent Component being wrapped.
- */
 const withProduct = createHigherOrderComponent( ( OriginalComponent ) => {
 	return class WrappedComponent extends Component {
 		state = {

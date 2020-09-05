@@ -2,7 +2,6 @@ module.exports = {
 	stories: [
 		// WooCommerce Admin / @woocommerce/components components
 		'../packages/components/src/**/stories/*.js',
-		'../client/**/stories/*.js',
 	],
 	addons: [
 		{

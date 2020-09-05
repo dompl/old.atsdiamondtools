@@ -3,6 +3,8 @@
  * REST API Onboarding Themes Controller
  *
  * Handles requests to install and activate themes.
+ *
+ * @package WooCommerce Admin/API
  */
 
 namespace Automattic\WooCommerce\Admin\API;
@@ -14,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Onboarding Themes Controller.
  *
+ * @package WooCommerce Admin/API
  * @extends WC_REST_Data_Controller
  */
 class OnboardingThemes extends \WC_REST_Data_Controller {
@@ -83,18 +86,19 @@ class OnboardingThemes extends \WC_REST_Data_Controller {
 	 */
 	public function install_theme( $request ) {
 		$allowed_themes = Onboarding::get_allowed_themes();
-		$theme          = sanitize_text_field( $request['theme'] );
+		$theme          = sanitize_title_with_dashes( $request['theme'] );
 
 		if ( ! in_array( $theme, $allowed_themes, true ) ) {
 			return new \WP_Error( 'woocommerce_rest_invalid_theme', __( 'Invalid theme.', 'woocommerce' ), 404 );
 		}
 
+		$slug             = sanitize_key( $theme );
 		$installed_themes = wp_get_themes();
 
-		if ( in_array( $theme, array_keys( $installed_themes ), true ) ) {
+		if ( in_array( $slug, array_keys( $installed_themes ), true ) ) {
 			return( array(
-				'slug'   => $theme,
-				'name'   => $installed_themes[ $theme ]->get( 'Name' ),
+				'slug'   => $slug,
+				'name'   => $installed_themes[ $slug ]->get( 'Name' ),
 				'status' => 'success',
 			) );
 		}
@@ -108,7 +112,7 @@ class OnboardingThemes extends \WC_REST_Data_Controller {
 		$api = themes_api(
 			'theme_information',
 			array(
-				'slug'   => $theme,
+				'slug'   => $slug,
 				'fields' => array(
 					'sections' => false,
 				),
@@ -121,7 +125,7 @@ class OnboardingThemes extends \WC_REST_Data_Controller {
 				sprintf(
 					/* translators: %s: theme slug (example: woocommerce-services) */
 					__( 'The requested theme `%s` could not be installed. Theme API call failed.', 'woocommerce' ),
-					$theme
+					$slug
 				),
 				500
 			);
@@ -136,14 +140,14 @@ class OnboardingThemes extends \WC_REST_Data_Controller {
 				sprintf(
 					/* translators: %s: theme slug (example: woocommerce-services) */
 					__( 'The requested theme `%s` could not be installed.', 'woocommerce' ),
-					$theme
+					$slug
 				),
 				500
 			);
 		}
 
 		return array(
-			'slug'   => $theme,
+			'slug'   => $slug,
 			'name'   => $api->name,
 			'status' => 'success',
 		);
@@ -157,23 +161,24 @@ class OnboardingThemes extends \WC_REST_Data_Controller {
 	 */
 	public function activate_theme( $request ) {
 		$allowed_themes = Onboarding::get_allowed_themes();
-		$theme          = sanitize_text_field( $request['theme'] );
+		$theme          = sanitize_title_with_dashes( $request['theme'] );
 		if ( ! in_array( $theme, $allowed_themes, true ) ) {
 			return new \WP_Error( 'woocommerce_rest_invalid_theme', __( 'Invalid theme.', 'woocommerce' ), 404 );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/theme.php';
 
+		$slug             = sanitize_key( $theme );
 		$installed_themes = wp_get_themes();
 
 		if ( ! in_array( $theme, array_keys( $installed_themes ), true ) ) {
 			/* translators: %s: theme slug (example: woocommerce-services) */
-			return new \WP_Error( 'woocommerce_rest_invalid_theme', sprintf( __( 'Invalid theme %s.', 'woocommerce' ), $theme ), 404 );
+			return new \WP_Error( 'woocommerce_rest_invalid_theme', sprintf( __( 'Invalid theme %s.', 'woocommerce' ), $slug ), 404 );
 		}
 
 		$result = switch_theme( $theme );
 		if ( ! is_null( $result ) ) {
-			return new \WP_Error( 'woocommerce_rest_invalid_theme', sprintf( __( 'The requested theme could not be activated.', 'woocommerce' ), $theme ), 500 );
+			return new \WP_Error( 'woocommerce_rest_invalid_theme', sprintf( __( 'The requested theme could not be activated.', 'woocommerce' ), $slug ), 500 );
 		}
 
 		return( array(

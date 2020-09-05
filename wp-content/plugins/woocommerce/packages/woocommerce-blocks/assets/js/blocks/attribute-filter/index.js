@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { Icon, server } from '@woocommerce/icons';
+import Gridicon from 'gridicons';
 import classNames from 'classnames';
 
 /**
@@ -14,18 +14,16 @@ import edit from './edit.js';
 registerBlockType( 'woocommerce/attribute-filter', {
 	title: __( 'Filter Products by Attribute', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ server } />,
+		src: <Gridicon icon="menus" />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
 	description: __(
-		'Allow customers to filter the grid by product attribute, such as color. Works in combination with the All Products block.',
+		'Display a list of filters based on a chosen product attribute.',
 		'woocommerce'
 	),
-	supports: {
-		html: false,
-	},
+	supports: {},
 	example: {
 		attributes: {
 			isPreview: true,
@@ -55,14 +53,6 @@ registerBlockType( 'woocommerce/attribute-filter', {
 			type: 'number',
 			default: 3,
 		},
-		displayStyle: {
-			type: 'string',
-			default: 'list',
-		},
-		showFilterButton: {
-			type: 'boolean',
-			default: false,
-		},
 		/**
 		 * Are we previewing?
 		 */
@@ -83,8 +73,6 @@ registerBlockType( 'woocommerce/attribute-filter', {
 			attributeId,
 			heading,
 			headingLevel,
-			displayStyle,
-			showFilterButton,
 		} = attributes;
 		const data = {
 			'data-attribute-id': attributeId,
@@ -93,12 +81,6 @@ registerBlockType( 'woocommerce/attribute-filter', {
 			'data-heading': heading,
 			'data-heading-level': headingLevel,
 		};
-		if ( displayStyle !== 'list' ) {
-			data[ 'data-display-style' ] = displayStyle;
-		}
-		if ( showFilterButton ) {
-			data[ 'data-show-filter-button' ] = showFilterButton;
-		}
 		return (
 			<div
 				className={ classNames( 'is-loading', className ) }

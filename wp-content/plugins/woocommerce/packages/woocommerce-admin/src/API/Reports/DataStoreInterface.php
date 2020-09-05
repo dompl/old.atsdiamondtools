@@ -1,6 +1,8 @@
 <?php
 /**
  * Reports Data Store Interface
+ *
+ * @package  WooCommerce Admin/Interface
  */
 
 namespace Automattic\WooCommerce\Admin\API\Reports;

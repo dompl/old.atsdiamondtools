@@ -4,7 +4,6 @@
 import { __ } from '@wordpress/i18n';
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { without } from 'lodash';
-import { Icon, folder } from '@woocommerce/icons';
 
 /**
  * Internal dependencies
@@ -22,7 +21,7 @@ import sharedAttributes, {
 registerBlockType( 'woocommerce/product-category', {
 	title: __( 'Products by Category', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ folder } />,
+		src: 'category',
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
@@ -99,8 +98,6 @@ registerBlockType( 'woocommerce/product-category', {
 
 	/**
 	 * Renders and manages the block.
-	 *
-	 * @param {Object} props Props to pass to block.
 	 */
 	edit( props ) {
 		return <Block { ...props } />;

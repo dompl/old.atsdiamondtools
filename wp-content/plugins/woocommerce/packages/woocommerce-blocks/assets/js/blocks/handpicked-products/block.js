@@ -2,8 +2,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { ServerSideRender } from '@wordpress/editor';
+import {
+	BlockControls,
+	InspectorControls,
+	ServerSideRender,
+} from '@wordpress/editor';
 import {
 	Button,
 	Disabled,
@@ -18,10 +21,10 @@ import { Component, Fragment } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import { MAX_COLUMNS, MIN_COLUMNS } from '@woocommerce/block-settings';
 import GridContentControl from '@woocommerce/block-components/grid-content-control';
+import { IconWidgets } from '@woocommerce/block-components/icons';
 import ProductsControl from '@woocommerce/block-components/products-control';
 import ProductOrderbyControl from '@woocommerce/block-components/product-orderby-control';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
-import { Icon, widgets } from '@woocommerce/icons';
 
 /**
  * Component to handle edit mode of "Hand-picked Products".
@@ -126,7 +129,7 @@ class ProductsBlock extends Component {
 
 		return (
 			<Placeholder
-				icon={ <Icon srcElement={ widgets } /> }
+				icon={ <IconWidgets /> }
 				label={ __(
 					'Hand-picked Products',
 					'woocommerce'
@@ -145,7 +148,7 @@ class ProductsBlock extends Component {
 							setAttributes( { products: ids } );
 						} }
 					/>
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 				</div>

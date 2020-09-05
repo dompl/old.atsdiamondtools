@@ -12,11 +12,6 @@ import { getProductVariations } from '@woocommerce/block-components/utils';
  */
 import { formatError } from '../base/utils/errors.js';
 
-/**
- * HOC that queries variations for a component.
- *
- * @param {Function} OriginalComponent Component being wrapped.
- */
 const withProductVariations = createHigherOrderComponent(
 	( OriginalComponent ) => {
 		class WrappedComponent extends Component {
@@ -121,8 +116,7 @@ const withProductVariations = createHigherOrderComponent(
 				const { products } = this.props;
 				const parentProduct = products.filter(
 					( p ) =>
-						p.variations &&
-						p.variations.find( ( { id } ) => id === variationId )
+						p.variations && p.variations.includes( variationId )
 				);
 				return parentProduct[ 0 ].id;
 			}

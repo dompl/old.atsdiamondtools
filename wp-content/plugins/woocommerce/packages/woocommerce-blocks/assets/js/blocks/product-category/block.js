@@ -2,8 +2,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { ServerSideRender } from '@wordpress/editor';
+import {
+	BlockControls,
+	InspectorControls,
+	ServerSideRender,
+} from '@wordpress/editor';
 import {
 	Button,
 	Disabled,
@@ -19,7 +22,6 @@ import GridLayoutControl from '@woocommerce/block-components/grid-layout-control
 import ProductCategoryControl from '@woocommerce/block-components/product-category-control';
 import ProductOrderbyControl from '@woocommerce/block-components/product-orderby-control';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
-import { Icon, folder } from '@woocommerce/icons';
 
 /**
  * Component to handle edit mode of "Products by Category".
@@ -71,11 +73,6 @@ class ProductByCategoryBlock extends Component {
 		} );
 	};
 
-	/**
-	 * Set changed attributes to state.
-	 *
-	 * @param {Object} attributes List of attributes to set.
-	 */
 	setChangedAttributes = ( attributes ) => {
 		this.setState( ( prevState ) => {
 			return {
@@ -196,7 +193,7 @@ class ProductByCategoryBlock extends Component {
 
 		return (
 			<Placeholder
-				icon={ <Icon srcElement={ folder } /> }
+				icon="category"
 				label={ __(
 					'Products by Category',
 					'woocommerce'
@@ -219,7 +216,7 @@ class ProductByCategoryBlock extends Component {
 							this.setChangedAttributes( { catOperator: value } )
 						}
 					/>
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 					<Button
@@ -246,7 +243,7 @@ class ProductByCategoryBlock extends Component {
 						attributes={ attributes }
 						EmptyResponsePlaceholder={ () => (
 							<Placeholder
-								icon={ <Icon srcElement={ folder } /> }
+								icon="category"
 								label={ __(
 									'Products by Category',
 									'woocommerce'

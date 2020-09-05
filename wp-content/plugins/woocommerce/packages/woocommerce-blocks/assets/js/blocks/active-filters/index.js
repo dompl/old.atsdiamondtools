@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { Icon, toggle } from '@woocommerce/icons';
+import Gridicon from 'gridicons';
 import classNames from 'classnames';
 
 /**
@@ -14,17 +14,16 @@ import edit from './edit.js';
 registerBlockType( 'woocommerce/active-filters', {
 	title: __( 'Active Product Filters', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ toggle } />,
+		src: <Gridicon icon="list-checkmark" />,
 		foreground: '#96588a',
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
 	description: __(
-		'Show the currently active product filters. Works in combination with the All Products and filters blocks.',
+		'Display a list of active product filters.',
 		'woocommerce'
 	),
 	supports: {
-		html: false,
 		multiple: false,
 	},
 	example: {

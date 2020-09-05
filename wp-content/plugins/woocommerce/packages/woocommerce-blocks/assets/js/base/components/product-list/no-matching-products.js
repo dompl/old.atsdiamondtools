@@ -2,23 +2,26 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useInnerBlockLayoutContext } from '@woocommerce/shared-context';
-import { Icon, search } from '@woocommerce/icons';
+import { WC_BLOCKS_ASSET_URL } from '@woocommerce/block-settings';
+import { useProductLayoutContext } from '@woocommerce/base-context/product-layout-context';
 
 const NoMatchingProducts = ( { resetCallback = () => {} } ) => {
-	const { parentClassName } = useInnerBlockLayoutContext();
+	const { layoutStyleClassPrefix } = useProductLayoutContext();
 	return (
-		<div className={ `${ parentClassName }__no-products` }>
-			<Icon
-				className={ `${ parentClassName }__no-products-image` }
-				alt=""
-				srcElement={ search }
-				size={ 100 }
+		<div className={ `${ layoutStyleClassPrefix }__no-products` }>
+			<img
+				src={ WC_BLOCKS_ASSET_URL + 'img/no-matching-products.svg' }
+				alt={ __( 'No products', 'woocommerce' ) }
+				className={ `${ layoutStyleClassPrefix }__no-products-image` }
 			/>
-			<strong className={ `${ parentClassName }__no-products-title` }>
+			<strong
+				className={ `${ layoutStyleClassPrefix }__no-products-title` }
+			>
 				{ __( 'No products found', 'woocommerce' ) }
 			</strong>
-			<p className={ `${ parentClassName }__no-products-description` }>
+			<p
+				className={ `${ layoutStyleClassPrefix }__no-products-description` }
+			>
 				{ __(
 					'We were unable to find any results based on your search.',
 					'woocommerce'

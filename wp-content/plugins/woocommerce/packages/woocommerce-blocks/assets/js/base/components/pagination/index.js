@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Label from '@woocommerce/base-components/label';
@@ -49,7 +49,7 @@ const Pagination = ( {
 	}
 
 	return (
-		<div className="wc-block-pagination wc-block-components-pagination">
+		<div className="wc-block-pagination">
 			<Label
 				screenReaderLabel={ __(
 					'Navigate to another page',
@@ -58,7 +58,7 @@ const Pagination = ( {
 			/>
 			{ displayNextAndPreviousArrows && (
 				<button
-					className="wc-block-pagination-page wc-block-components-pagination__page"
+					className="wc-block-pagination-page"
 					onClick={ () => onPageChange( currentPage - 1 ) }
 					title={ __(
 						'Previous page',
@@ -77,32 +77,18 @@ const Pagination = ( {
 			) }
 			{ showFirstPage && (
 				<button
-					className={ classNames(
-						'wc-block-pagination-page',
-						'wc-block-components-pagination__page',
-						{
-							'wc-block-pagination-page--active':
-								currentPage === 1,
-							'wc-block-components-pagination__page--active':
-								currentPage === 1,
-						}
-					) }
+					className={ classNames( 'wc-block-pagination-page', {
+						'wc-block-pagination-page--active': currentPage === 1,
+					} ) }
 					onClick={ () => onPageChange( 1 ) }
 					disabled={ currentPage === 1 }
 				>
-					<Label
-						label={ 1 }
-						screenReaderLabel={ sprintf(
-							/* translators: %d is the page number (1, 2, 3...). */
-							__( 'Page %d', 'woocommerce' ),
-							1
-						) }
-					/>
+					1
 				</button>
 			) }
 			{ showFirstPageEllipsis && (
 				<span
-					className="wc-block-pagination-ellipsis wc-block-components-pagination__ellipsis"
+					className="wc-block-pagination-ellipsis"
 					aria-hidden="true"
 				>
 					{ __( '…', 'woocommerce' ) }
@@ -112,16 +98,10 @@ const Pagination = ( {
 				return (
 					<button
 						key={ page }
-						className={ classNames(
-							'wc-block-pagination-page',
-							'wc-block-components-pagination__page',
-							{
-								'wc-block-pagination-page--active':
-									currentPage === page,
-								'wc-block-components-pagination__page--active':
-									currentPage === page,
-							}
-						) }
+						className={ classNames( 'wc-block-pagination-page', {
+							'wc-block-pagination-page--active':
+								currentPage === page,
+						} ) }
 						onClick={
 							currentPage === page
 								? null
@@ -129,20 +109,13 @@ const Pagination = ( {
 						}
 						disabled={ currentPage === page }
 					>
-						<Label
-							label={ page }
-							screenReaderLabel={ sprintf(
-								/* translators: %d is the page number (1, 2, 3...). */
-								__( 'Page %d', 'woocommerce' ),
-								page
-							) }
-						/>
+						{ page }
 					</button>
 				);
 			} ) }
 			{ showLastPageEllipsis && (
 				<span
-					className="wc-block-pagination-ellipsis wc-block-components-pagination__ellipsis"
+					className="wc-block-pagination-ellipsis"
 					aria-hidden="true"
 				>
 					{ __( '…', 'woocommerce' ) }
@@ -150,32 +123,19 @@ const Pagination = ( {
 			) }
 			{ showLastPage && (
 				<button
-					className={ classNames(
-						'wc-block-pagination-page',
-						'wc-block-components-pagination__page',
-						{
-							'wc-block-pagination-page--active':
-								currentPage === totalPages,
-							'wc-block-components-pagination__page--active':
-								currentPage === totalPages,
-						}
-					) }
+					className={ classNames( 'wc-block-pagination-page', {
+						'wc-block-pagination-page--active':
+							currentPage === totalPages,
+					} ) }
 					onClick={ () => onPageChange( totalPages ) }
 					disabled={ currentPage === totalPages }
 				>
-					<Label
-						label={ totalPages }
-						screenReaderLabel={ sprintf(
-							/* translators: %d is the page number (1, 2, 3...). */
-							__( 'Page %d', 'woocommerce' ),
-							totalPages
-						) }
-					/>
+					{ totalPages }
 				</button>
 			) }
 			{ displayNextAndPreviousArrows && (
 				<button
-					className="wc-block-pagination-page wc-block-components-pagination__page"
+					className="wc-block-pagination-page"
 					onClick={ () => onPageChange( currentPage + 1 ) }
 					title={ __( 'Next page', 'woocommerce' ) }
 					disabled={ currentPage >= totalPages }

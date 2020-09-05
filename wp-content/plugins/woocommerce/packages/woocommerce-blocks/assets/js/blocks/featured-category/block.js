@@ -12,7 +12,7 @@ import {
 	PanelColorSettings,
 	withColors,
 	RichText,
-} from '@wordpress/block-editor';
+} from '@wordpress/editor';
 import {
 	Button,
 	FocalPointPicker,
@@ -31,7 +31,7 @@ import { Fragment } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import PropTypes from 'prop-types';
 import { MIN_HEIGHT } from '@woocommerce/block-settings';
-import { Icon, folderStarred } from '@woocommerce/icons';
+import { IconFolderStar } from '@woocommerce/block-components/icons';
 import ProductCategoryControl from '@woocommerce/block-components/product-category-control';
 import ErrorPlaceholder from '@woocommerce/block-components/error-placeholder';
 
@@ -190,7 +190,7 @@ const FeaturedCategory = ( {
 
 		return (
 			<Placeholder
-				icon={ <Icon srcElement={ folderStarred } /> }
+				icon={ <IconFolderStar /> }
 				label={ __(
 					'Featured Category',
 					'woocommerce'
@@ -214,7 +214,7 @@ const FeaturedCategory = ( {
 						} }
 						isSingle
 					/>
-					<Button isPrimary onClick={ onDone }>
+					<Button isDefault onClick={ onDone }>
 						{ __( 'Done', 'woocommerce' ) }
 					</Button>
 				</div>
@@ -299,7 +299,7 @@ const FeaturedCategory = ( {
 		}
 
 		const onResizeStop = ( event, direction, elt ) => {
-			setAttributes( { height: parseInt( elt.style.height, 10 ) } );
+			setAttributes( { height: parseInt( elt.style.height ) } );
 		};
 
 		return (
@@ -337,7 +337,7 @@ const FeaturedCategory = ( {
 	const renderNoCategory = () => (
 		<Placeholder
 			className="wc-block-featured-category"
-			icon={ <Icon srcElement={ folderStarred } /> }
+			icon={ <IconFolderStar /> }
 			label={ __( 'Featured Category', 'woocommerce' ) }
 		>
 			{ isLoading ? (

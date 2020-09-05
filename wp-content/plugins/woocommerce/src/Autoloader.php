@@ -36,12 +36,7 @@ class Autoloader {
 			return false;
 		}
 
-		$autoloader_result = require $autoloader;
-		if ( ! $autoloader_result ) {
-			return false;
-		}
-
-		return $autoloader_result;
+		return require $autoloader;
 	}
 
 	/**
