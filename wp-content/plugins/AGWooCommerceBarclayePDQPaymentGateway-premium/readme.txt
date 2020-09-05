@@ -38,8 +38,12 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.1.2 - 02/09/20 =
+* Fix           - Added "somdn_error_logs_export_errors" to unset() list in SHA_check().
+* Fix           - Remove special characters from product names.
+
 = v4.1.1 - 25/08/20 =
-* Fix           - Fixes for some users having issues with orderID and the hash_fields array.
+* Fix           - Fix for some users having issues with orderID and the hash_fields array.
 
 = v4.1.0 - 23/08/20 =
 * Fix           - Fixes for subscriptions.

@@ -186,13 +186,13 @@ function init_ag_epdq() {
 
 		<h3><?php echo __('AG ePDQ Checkout Settings', 'ag_epdq_checkout'); ?></h3>
 		<p><?php echo __('This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_checkout') ?></p>
-		<p><i><?php echo __('Having issues setting up the plugin? Why not try the setup wizard here.', 'ag_epdq_checkout') ?></i></p>
+		<p><i><?php echo __('Having issues setting up the plugin? Why not try the setup wizard <a href="'. admin_url('?page=AG_ePDQ-wizard') .'">here</a>.', 'ag_epdq_checkout') ?></i></p>
 		<table class="form-table">
 			<?php $this->generate_settings_html(); ?>
 		</table>
 		<!--/.form-table-->
 
-		<p><strong>Need some help setting up this plugin?</strong> <a href="<?php echo admin_url(); ?>admin.php?page=AGWooCommerceBarclayePDQPaymentGateway">Click here</a></p>
+		<p><strong>Need some help setting up this plugin?</strong> <a href="<?php echo admin_url('admin.php?page=AGWooCommerceBarclayePDQPaymentGateway'); ?>">Click here</a></p>
 
 	<?php
 
@@ -245,7 +245,7 @@ function init_ag_epdq() {
 		// Products
 		$order_item = $order->get_items();
 		foreach ($order_item as $product) {
-			$prodct_name[] = $product['name'] . " x" . $product['qty'];
+			$prodct_name[] = preg_replace("/[^a-zA-Z0-9\s]/", "", str_replace(array("-", " "), "", $product['name'])) . " x" . $product['qty'];
 		}
 		$product_list_string = implode(',', $prodct_name);
 
@@ -506,6 +506,8 @@ function init_ag_epdq() {
 		unset($datatocheck['doing_wp_cron']);
 		unset($datatocheck['woocs_order_emails_is_sending']); // This is a fix to stop WOOCS plugin from taking over the decryption
 		unset($datatocheck['q']);
+		unset($datatocheck['somdn_error_logs_export_errors']); 
+
 
 		// 3D score check
 		if($this->threeds != 'yes' && isset($datatocheck['SCORING'])){
