@@ -347,6 +347,9 @@ wpimage( 'img=' . array( 'id' ) . '&w=&h=&crop=false&retina=false&upscale=true' 
 function img_figure( $image_id = null, $width = 150, $height = 100, $crop = false, $upscale = true, $retina = false )
 {
 
+    $data   = wp_get_attachment_metadata( $image_id );
+    $width  = $data['width'] < $width ? $data['width'] : $width;
+    $height = $data['height'] < $height ? $data['height'] : $height;
     if ( $crop === false ) {
         $upscale = false;
     }
