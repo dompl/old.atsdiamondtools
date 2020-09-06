@@ -68,23 +68,22 @@ function ats_single_product_image_gallery()
         }
         $gallery .= '</div>';
 
-        /* Tbumbnails */
+        /* Thumbnails */
         $gallery .= '<div class="product__slider-thmb">';
         if ( has_post_thumbnail() ) {
             $image_id        = get_post_thumbnail_id( $id );
             $full_size_image = $attachment->guid;
-            $image           = image_array( $image_id, '', 70, 70, true );
+            $image           = wpimage( 'img=' . $image_id . '&w=70&h=70&crop=true&retina=false&upscale=true' );
             $gallery .= '<div class="slide">';
-            $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';
+            $gallery .= '<img src="' . $image . '" alt="' . get_post_meta( $image_id, '_wp_attachment_image_alt', true ) . '" class="img-responsive">';
             $gallery .= '</div>';
         }
         foreach ( $image_ids as $image_id ) {
             $attachment      = get_post( $image_id );
             $full_size_image = $attachment->guid;
-            $image           = image_array( $image_id, '', 70, 70, true );
-
+            $image           = wpimage( 'img=' . $image_id . '&w=70&h=70&crop=true&retina=false&upscale=true' );
             $gallery .= '<div class="slide">';
-            $gallery .= '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '" class="img-responsive">';
+            $gallery .= '<img src="' . $image . '" alt="' . get_post_meta( $image_id, '_wp_attachment_image_alt', true ) . '" class="img-responsive">';
             $gallery .= '</div>';
         }
         $gallery .= '</div>';

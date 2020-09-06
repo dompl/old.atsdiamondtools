@@ -233,7 +233,7 @@ if ( !  function_exists( 'home_content_banner' ) && class_exists( 'acf' ) ) {
         <div class="container">%s%s%s</div>
       </section>
       ',
-                $banner_image && function_exists( 'image_array' ) ? image_array( $banner_image, '', 1999, 500, false )['url'] : '',
+                $banner_image && function_exists( 'wpimage' ) ? wpimage( 'img=' . $banner_image . '&w=1999&h=500&crop=true&retina=false&upscale=true' ) : '',
                 $banner_title ? '<h3 class="banner-title">' . $banner_title . '</h3>' : '',
                 $banner_cotnent,
                 $banner_link ? '<div class="banner-link"><a href="' . esc_url( $banner_link ) . '">' . ( $banner_link_text ? $banner_link_text : __( 'DISCOVER MORE', 'TEXT_DOMAIN' ) ) . '</a></div>' : ''
