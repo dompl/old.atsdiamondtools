@@ -518,6 +518,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     }
 
                     $post_id = method_exists( $product, 'get_id' ) ? $product->get_id() : $post_item;
+                    $parent_id = $product->is_type( 'variation' ) && method_exists( $product, 'get_parent_id' ) ? $product->get_parent_id() : $post_id;
 
                     /**
                      * Filter additional product data
@@ -588,8 +589,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                          */
                         $image_size = apply_filters( 'aws_image_size', $image_size );
 
-                        $image_attributes = wp_get_attachment_image_src( $image_id, $image_size );
-                        $image = $image_attributes[0];
+                        if ( $image_id ) {
+                            $image_attributes = wp_get_attachment_image_src( $image_id, $image_size );
+                            $image = $image_attributes ? $image_attributes[0] : '';
+                        }
 
                     }
 
@@ -644,6 +647,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     $new_result = array(
                         'id'           => $post_id,
+                        'parent_id'    => $parent_id,
                         'title'        => $title,
                         'excerpt'      => $excerpt,
                         'link'         => get_permalink( $post_id ),

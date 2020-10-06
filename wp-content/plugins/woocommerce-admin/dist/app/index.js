@@ -35,7 +35,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["app"] =
 /******/
 /******/ 	// object to store loaded CSS chunks
 /******/ 	var installedCssChunks = {
-/******/ 		23: 0
+/******/ 		22: 0
 /******/ 	}
 /******/ 	var isCssRtlEnabled = function() {
 /******/ 		return document.dir === 'rtl';
@@ -45,14 +45,14 @@ this["wc"] = this["wc"] || {}; this["wc"]["app"] =
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		23: 0
+/******/ 		22: 0
 /******/ 	};
 /******/
 /******/
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "chunks/" + chunkId + "." + {"0":"c8452721bca81bd851ae","1":"4c5f3a9f3d2bd068fc6d","2":"b11d4cf0dec19fd9f0e6","3":"e67e2d439872e8decf5e","4":"6eab7b1e8d46171fef9a","5":"611a9c04266cfb776f7b","6":"87f4e7e8f3245cfb29c1","7":"f17130e2641abf3cd016","8":"46ec1f52d28485795ce0","9":"f09a1380fc1c0b03c0d8","10":"7bf713d572ef1de24f84","11":"3e85cd2e76cc8aeb3e3f","12":"84216d2c32d675753560","13":"cca4d83e5dbf1ca4005c","14":"68b3dadffd1cc4b0a2a0","15":"0dc5162a27e4dca31b7e","16":"787c1f9af0839717386c","17":"36eb07ef43a44b4b40da","18":"bc48f13417b765ec08ef","19":"e560ed3a98b960791a7c","20":"dbc2abed3165d6c929ba","21":"f95723923635672f927b","22":"7009e9b5dfa7bd08518f","27":"81bec8245cabf6a35ade","28":"ceb58b4426a63286c301","29":"e4a8b26907da5f130e16","32":"6d3e1dde339ba17062ae","33":"cb071961fc49712b4a3a","35":"ecd46c45a0243244014b","37":"69f982dd979949e93fb8","45":"70c2b8bd61e33438583c","46":"9859831f2290ca3c1022","47":"30311e86842714f654e0","48":"065d88f8e2f395082e30","49":"ee48201c410a550f69df","50":"9ac21ea893ae6b65ed1c","51":"11fff3c9fcde6c700c0d","52":"56527c0bd48f8b266baa"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "chunks/" + chunkId + "." + {"0":"a16fa5fc7e7d36bc83d2","1":"0ef281da77ce529e80cc","2":"42a1ddb6e24f480bfd7b","3":"19c729c03f3f16a2a8d2","4":"50980feefadc821d3dd2","5":"7814c975d46e04f5add5","6":"cede49d4cfcf577e7ed6","7":"52f107be25af3a1a6337","8":"12292a4c2685be81bff0","9":"687f69571a60b6499ac8","10":"c582724694ae773a79e7","11":"e2250344b5d7d08f2832","12":"9ec7e925a697e80cfdfe","13":"c84d71d2ec4d0adb6bc0","14":"96de0d037245332c04c0","15":"1db5f1f05c6f7004ef2b","16":"749a2ed260386272d24a","17":"e42861f9e6606a73c9a3","18":"b96b4553c75c2fb07530","19":"6cd8b4c89d8276f0ec9f","20":"9d60eba5cd1db332bde0","21":"595171a7cf0a4a8ea74e","26":"282a3721b54f1376835b","27":"88b1a28025c87b9523d1","28":"d5d4492c3916f4f98b70","31":"2e67bb306b735ffa9cb6","32":"4f41aa87213021e586fa","34":"1de0730e789a122ad725","36":"5ffb5a31d8c7b032e377","44":"dbb362d2ed86bc7d3931","45":"9b3f003e2681728fcfec","46":"fac45dfb6179b13fee49","47":"beecc03c8f2826f341f0","48":"000d898e8da21003aacb","49":"166a2b1532616d14c7b2","50":"5594fa9d2ec0b61a5f16","51":"ece3e9333c60abc30a08"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -86,7 +86,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["app"] =
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"0":1,"8":1,"9":1,"10":1,"11":1,"12":1,"17":1,"22":1,"28":1,"29":1,"32":1,"33":1,"35":1,"37":1,"45":1,"46":1,"47":1,"48":1};
+/******/ 		var cssChunks = {"0":1,"7":1,"8":1,"9":1,"10":1,"11":1,"16":1,"21":1,"27":1,"28":1,"31":1,"32":1,"34":1,"36":1,"44":1,"45":1,"46":1,"47":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
@@ -247,7 +247,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["app"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 446);
+/******/ 	return __webpack_require__(__webpack_require__.s = 444);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -272,45 +272,16 @@ this["wc"] = this["wc"] || {}; this["wc"]["app"] =
 if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(117)();
+  module.exports = __webpack_require__(127)();
 }
 
 
 /***/ }),
 
 /***/ 10:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _inherits; });
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
-}
+(function() { module.exports = this["React"]; }());
 
 /***/ }),
 
@@ -318,17 +289,17 @@ function _inherits(subClass, superClass) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _popover__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(83);
-/* harmony import */ var _shortcut__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(91);
+/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
+/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(72);
+/* harmony import */ var _wordpress_keycodes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(54);
+/* harmony import */ var _wordpress_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(65);
 
 
 
@@ -336,7 +307,116 @@ function _inherits(subClass, superClass) {
 
 
 
-function _createSuper(Derived) { return function () { var Super = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(this, result); }; }
+
+function _createSuper(Derived) { return function () { var Super = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+var withConstrainedTabbing = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(function (WrappedComponent) {
+  return /*#__PURE__*/function (_Component) {
+    Object(_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(_class, _Component);
+
+    var _super = _createSuper(_class);
+
+    function _class() {
+      var _this;
+
+      Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this, _class);
+
+      _this = _super.apply(this, arguments);
+      _this.focusContainRef = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createRef"])();
+      _this.handleTabBehaviour = _this.handleTabBehaviour.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_this));
+      return _this;
+    }
+
+    Object(_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_class, [{
+      key: "handleTabBehaviour",
+      value: function handleTabBehaviour(event) {
+        if (event.keyCode !== _wordpress_keycodes__WEBPACK_IMPORTED_MODULE_8__[/* TAB */ "e"]) {
+          return;
+        }
+
+        var tabbables = _wordpress_dom__WEBPACK_IMPORTED_MODULE_9__[/* focus */ "a"].tabbable.find(this.focusContainRef.current);
+
+        if (!tabbables.length) {
+          return;
+        }
+
+        var firstTabbable = tabbables[0];
+        var lastTabbable = tabbables[tabbables.length - 1];
+
+        if (event.shiftKey && event.target === firstTabbable) {
+          event.preventDefault();
+          lastTabbable.focus();
+        } else if (!event.shiftKey && event.target === lastTabbable) {
+          event.preventDefault();
+          firstTabbable.focus();
+          /*
+           * When pressing Tab and none of the tabbables has focus, the keydown
+           * event happens on the wrapper div: move focus on the first tabbable.
+           */
+        } else if (!tabbables.includes(event.target)) {
+          event.preventDefault();
+          firstTabbable.focus();
+        }
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        // Disable reason: this component is non-interactive, but must capture
+        // events from the wrapped component to determine when the Tab key is used.
+
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])("div", {
+          onKeyDown: this.handleTabBehaviour,
+          ref: this.focusContainRef,
+          tabIndex: "-1"
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])(WrappedComponent, this.props));
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+      }
+    }]);
+
+    return _class;
+  }(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["Component"]);
+}, 'withConstrainedTabbing');
+/* harmony default export */ __webpack_exports__["a"] = (withConstrainedTabbing);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 101:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
+/* harmony import */ var _babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(18);
+/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
+/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(22);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(72);
+
+
+
+
+
+
+
+
+
+function _createSuper(Derived) { return function () { var Super = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -349,204 +429,156 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
  */
 
 
-/**
- * Internal dependencies
- */
-
-
 
 /**
- * Time over children to wait before showing tooltip
+ * Input types which are classified as button types, for use in considering
+ * whether element is a (focus-normalized) button.
  *
- * @type {number}
+ * @type {string[]}
  */
 
-var TOOLTIP_DELAY = 700;
+var INPUT_BUTTON_TYPES = ['button', 'submit'];
+/**
+ * Returns true if the given element is a button element subject to focus
+ * normalization, or false otherwise.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
+ *
+ * @param {Element} element Element to test.
+ *
+ * @return {boolean} Whether element is a button.
+ */
 
-var Tooltip = /*#__PURE__*/function (_Component) {
-  Object(_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(Tooltip, _Component);
+function isFocusNormalizedButton(element) {
+  switch (element.nodeName) {
+    case 'A':
+    case 'BUTTON':
+      return true;
 
-  var _super = _createSuper(Tooltip);
-
-  function Tooltip() {
-    var _this;
-
-    Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this, Tooltip);
-
-    _this = _super.apply(this, arguments);
-    _this.delayedSetIsOver = Object(lodash__WEBPACK_IMPORTED_MODULE_6__["debounce"])(function (isOver) {
-      return _this.setState({
-        isOver: isOver
-      });
-    }, TOOLTIP_DELAY);
-    /**
-     * Prebound `isInMouseDown` handler, created as a constant reference to
-     * assure ability to remove in component unmount.
-     *
-     * @type {Function}
-     */
-
-    _this.cancelIsMouseDown = _this.createSetIsMouseDown(false);
-    /**
-     * Whether a the mouse is currently pressed, used in determining whether
-     * to handle a focus event as displaying the tooltip immediately.
-     *
-     * @type {boolean}
-     */
-
-    _this.isInMouseDown = false;
-    _this.state = {
-      isOver: false
-    };
-    return _this;
+    case 'INPUT':
+      return Object(lodash__WEBPACK_IMPORTED_MODULE_8__["includes"])(INPUT_BUTTON_TYPES, element.type);
   }
 
-  Object(_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(Tooltip, [{
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.delayedSetIsOver.cancel();
-      document.removeEventListener('mouseup', this.cancelIsMouseDown);
+  return false;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])(function (WrappedComponent) {
+  return /*#__PURE__*/function (_Component) {
+    Object(_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(_class, _Component);
+
+    var _super = _createSuper(_class);
+
+    function _class() {
+      var _this;
+
+      Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(this, _class);
+
+      _this = _super.apply(this, arguments);
+      _this.bindNode = _this.bindNode.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
+      _this.cancelBlurCheck = _this.cancelBlurCheck.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
+      _this.queueBlurCheck = _this.queueBlurCheck.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
+      _this.normalizeButtonFocus = _this.normalizeButtonFocus.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
+      return _this;
     }
-  }, {
-    key: "emitToChild",
-    value: function emitToChild(eventName, event) {
-      var children = this.props.children;
 
-      if (_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Children"].count(children) !== 1) {
-        return;
+    Object(_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_class, [{
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        this.cancelBlurCheck();
       }
-
-      var child = _wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Children"].only(children);
-
-      if (typeof child.props[eventName] === 'function') {
-        child.props[eventName](event);
-      }
-    }
-  }, {
-    key: "createToggleIsOver",
-    value: function createToggleIsOver(eventName, isDelayed) {
-      var _this2 = this;
-
-      return function (event) {
-        // Preserve original child callback behavior
-        _this2.emitToChild(eventName, event); // Mouse events behave unreliably in React for disabled elements,
-        // firing on mouseenter but not mouseleave.  Further, the default
-        // behavior for disabled elements in some browsers is to ignore
-        // mouse events. Don't bother trying to to handle them.
-        //
-        // See: https://github.com/facebook/react/issues/4251
-
-
-        if (event.currentTarget.disabled) {
-          return;
-        } // A focus event will occur as a result of a mouse click, but it
-        // should be disambiguated between interacting with the button and
-        // using an explicit focus shift as a cue to display the tooltip.
-
-
-        if ('focus' === event.type && _this2.isInMouseDown) {
-          return;
-        } // Needed in case unsetting is over while delayed set pending, i.e.
-        // quickly blur/mouseleave before delayedSetIsOver is called
-
-
-        _this2.delayedSetIsOver.cancel();
-
-        var isOver = Object(lodash__WEBPACK_IMPORTED_MODULE_6__["includes"])(['focus', 'mouseenter'], event.type);
-
-        if (isOver === _this2.state.isOver) {
-          return;
-        }
-
-        if (isDelayed) {
-          _this2.delayedSetIsOver(isOver);
+    }, {
+      key: "bindNode",
+      value: function bindNode(node) {
+        if (node) {
+          this.node = node;
         } else {
-          _this2.setState({
-            isOver: isOver
-          });
+          delete this.node;
+          this.cancelBlurCheck();
         }
-      };
-    }
-    /**
-     * Creates an event callback to handle assignment of the `isInMouseDown`
-     * instance property in response to a `mousedown` or `mouseup` event.
-     *
-     * @param {boolean} isMouseDown Whether handler is to be created for the
-     *                              `mousedown` event, as opposed to `mouseup`.
-     *
-     * @return {Function} Event callback handler.
-     */
-
-  }, {
-    key: "createSetIsMouseDown",
-    value: function createSetIsMouseDown(isMouseDown) {
-      var _this3 = this;
-
-      return function (event) {
-        // Preserve original child callback behavior
-        _this3.emitToChild(isMouseDown ? 'onMouseDown' : 'onMouseUp', event); // On mouse down, the next `mouseup` should revert the value of the
-        // instance property and remove its own event handler. The bind is
-        // made on the document since the `mouseup` might not occur within
-        // the bounds of the element.
-
-
-        document[isMouseDown ? 'addEventListener' : 'removeEventListener']('mouseup', _this3.cancelIsMouseDown);
-        _this3.isInMouseDown = isMouseDown;
-      };
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          children = _this$props.children,
-          position = _this$props.position,
-          text = _this$props.text,
-          shortcut = _this$props.shortcut;
-
-      if (_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Children"].count(children) !== 1) {
-        if (false) {}
-
-        return children;
       }
+    }, {
+      key: "queueBlurCheck",
+      value: function queueBlurCheck(event) {
+        var _this2 = this;
 
-      var child = _wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Children"].only(children);
-      var isOver = this.state.isOver;
-      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["cloneElement"])(child, {
-        onMouseEnter: this.createToggleIsOver('onMouseEnter', true),
-        onMouseLeave: this.createToggleIsOver('onMouseLeave'),
-        onClick: this.createToggleIsOver('onClick'),
-        onFocus: this.createToggleIsOver('onFocus'),
-        onBlur: this.createToggleIsOver('onBlur'),
-        onMouseDown: this.createSetIsMouseDown(true),
-        children: Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["concatChildren"])(child.props.children, isOver && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_popover__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], {
-          focusOnMount: false,
-          position: position,
-          className: "components-tooltip",
-          "aria-hidden": "true",
-          animate: false,
-          noArrow: true
-        }, text, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["createElement"])(_shortcut__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], {
-          className: "components-tooltip__shortcut",
-          shortcut: shortcut
-        })))
-      });
-    }
-  }]);
+        // React does not allow using an event reference asynchronously
+        // due to recycling behavior, except when explicitly persisted.
+        event.persist(); // Skip blur check if clicking button. See `normalizeButtonFocus`.
 
-  return Tooltip;
-}(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__["Component"]);
+        if (this.preventBlurCheck) {
+          return;
+        }
 
-/* harmony default export */ __webpack_exports__["a"] = (Tooltip);
+        this.blurCheckTimeout = setTimeout(function () {
+          // If document is not focused then focus should remain
+          // inside the wrapped component and therefore we cancel
+          // this blur event thereby leaving focus in place.
+          // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasFocus.
+          if (!document.hasFocus()) {
+            event.preventDefault();
+            return;
+          }
+
+          if ('function' === typeof _this2.node.handleFocusOutside) {
+            _this2.node.handleFocusOutside(event);
+          }
+        }, 0);
+      }
+    }, {
+      key: "cancelBlurCheck",
+      value: function cancelBlurCheck() {
+        clearTimeout(this.blurCheckTimeout);
+      }
+      /**
+       * Handles a mousedown or mouseup event to respectively assign and
+       * unassign a flag for preventing blur check on button elements. Some
+       * browsers, namely Firefox and Safari, do not emit a focus event on
+       * button elements when clicked, while others do. The logic here
+       * intends to normalize this as treating click on buttons as focus.
+       *
+       * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
+       *
+       * @param {MouseEvent} event Event for mousedown or mouseup.
+       */
+
+    }, {
+      key: "normalizeButtonFocus",
+      value: function normalizeButtonFocus(event) {
+        var type = event.type,
+            target = event.target;
+        var isInteractionEnd = Object(lodash__WEBPACK_IMPORTED_MODULE_8__["includes"])(['mouseup', 'touchend'], type);
+
+        if (isInteractionEnd) {
+          this.preventBlurCheck = false;
+        } else if (isFocusNormalizedButton(target)) {
+          this.preventBlurCheck = true;
+        }
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        // Disable reason: See `normalizeButtonFocus` for browser-specific
+        // focus event normalization.
+
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])("div", {
+          onFocus: this.cancelBlurCheck,
+          onMouseDown: this.normalizeButtonFocus,
+          onMouseUp: this.normalizeButtonFocus,
+          onTouchStart: this.normalizeButtonFocus,
+          onTouchEnd: this.normalizeButtonFocus,
+          onBlur: this.queueBlurCheck
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(WrappedComponent, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+          ref: this.bindNode
+        }, this.props)));
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+      }
+    }]);
+
+    return _class;
+  }(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["Component"]);
+}, 'withFocusOutside'));
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 101:
-/***/ (function(module, exports, __webpack_require__) {
-
-var e=__webpack_require__(13),n={display:"block",opacity:0,position:"absolute",top:0,left:0,height:"100%",width:"100%",overflow:"hidden",pointerEvents:"none",zIndex:-1},t=function(t){var r=t.onResize,u=e.useRef();return function(n,t){var r=function(){return n.current&&n.current.contentDocument&&n.current.contentDocument.defaultView};function u(){t();var e=r();e&&e.addEventListener("resize",t)}e.useEffect((function(){return r()?u():n.current&&n.current.addEventListener&&n.current.addEventListener("load",u),function(){var e=r();e&&"function"==typeof e.removeEventListener&&e.removeEventListener("resize",t)}}),[])}(u,(function(){return r(u)})),e.createElement("iframe",{style:n,src:"about:blank",ref:u,"aria-hidden":!0,tabIndex:-1,frameBorder:0})},r=function(e){return{width:null!=e?e.offsetWidth:null,height:null!=e?e.offsetHeight:null}};module.exports=function(n){void 0===n&&(n=r);var u=e.useState(n(null)),o=u[0],i=u[1],c=e.useCallback((function(e){return i(n(e.current))}),[n]);return[e.useMemo((function(){return e.createElement(t,{onResize:c})}),[c]),o]};
-//# sourceMappingURL=index.js.map
-
 
 /***/ }),
 
@@ -554,1058 +586,325 @@ var e=__webpack_require__(13),n={display:"block",opacity:0,position:"absolute",t
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ createBrowserHistory; });
-__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ createMemoryHistory; });
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ createLocation; });
-__webpack_require__.d(__webpack_exports__, "e", function() { return /* binding */ locationsAreEqual; });
-__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ createPath; });
-
-// UNUSED EXPORTS: createHashHistory, parsePath
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(12);
-
-// CONCATENATED MODULE: ./node_modules/resolve-pathname/esm/resolve-pathname.js
-function isAbsolute(pathname) {
-  return pathname.charAt(0) === '/';
-}
-
-// About 1.5x faster than the two-arg version of Array#splice()
-function spliceOne(list, index) {
-  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
-    list[i] = list[k];
-  }
-
-  list.pop();
-}
-
-// This implementation is based heavily on node's url.parse
-function resolvePathname(to, from) {
-  if (from === undefined) from = '';
-
-  var toParts = (to && to.split('/')) || [];
-  var fromParts = (from && from.split('/')) || [];
-
-  var isToAbs = to && isAbsolute(to);
-  var isFromAbs = from && isAbsolute(from);
-  var mustEndAbs = isToAbs || isFromAbs;
-
-  if (to && isAbsolute(to)) {
-    // to is absolute
-    fromParts = toParts;
-  } else if (toParts.length) {
-    // to is relative, drop the filename
-    fromParts.pop();
-    fromParts = fromParts.concat(toParts);
-  }
-
-  if (!fromParts.length) return '/';
-
-  var hasTrailingSlash;
-  if (fromParts.length) {
-    var last = fromParts[fromParts.length - 1];
-    hasTrailingSlash = last === '.' || last === '..' || last === '';
-  } else {
-    hasTrailingSlash = false;
-  }
-
-  var up = 0;
-  for (var i = fromParts.length; i >= 0; i--) {
-    var part = fromParts[i];
-
-    if (part === '.') {
-      spliceOne(fromParts, i);
-    } else if (part === '..') {
-      spliceOne(fromParts, i);
-      up++;
-    } else if (up) {
-      spliceOne(fromParts, i);
-      up--;
-    }
-  }
-
-  if (!mustEndAbs) for (; up--; up) fromParts.unshift('..');
-
-  if (
-    mustEndAbs &&
-    fromParts[0] !== '' &&
-    (!fromParts[0] || !isAbsolute(fromParts[0]))
-  )
-    fromParts.unshift('');
-
-  var result = fromParts.join('/');
-
-  if (hasTrailingSlash && result.substr(-1) !== '/') result += '/';
-
-  return result;
-}
-
-/* harmony default export */ var resolve_pathname = (resolvePathname);
-
-// CONCATENATED MODULE: ./node_modules/value-equal/esm/value-equal.js
-function value_equal_valueOf(obj) {
-  return obj.valueOf ? obj.valueOf() : Object.prototype.valueOf.call(obj);
-}
-
-function valueEqual(a, b) {
-  // Test for strict equality first.
-  if (a === b) return true;
-
-  // Otherwise, if either of them == null they are not equal.
-  if (a == null || b == null) return false;
-
-  if (Array.isArray(a)) {
-    return (
-      Array.isArray(b) &&
-      a.length === b.length &&
-      a.every(function(item, index) {
-        return valueEqual(item, b[index]);
-      })
-    );
-  }
-
-  if (typeof a === 'object' || typeof b === 'object') {
-    var aValue = value_equal_valueOf(a);
-    var bValue = value_equal_valueOf(b);
-
-    if (aValue !== a || bValue !== b) return valueEqual(aValue, bValue);
-
-    return Object.keys(Object.assign({}, a, b)).every(function(key) {
-      return valueEqual(a[key], b[key]);
-    });
-  }
-
-  return false;
-}
-
-/* harmony default export */ var value_equal = (valueEqual);
-
-// EXTERNAL MODULE: ./node_modules/tiny-invariant/dist/tiny-invariant.esm.js
-var tiny_invariant_esm = __webpack_require__(81);
-
-// CONCATENATED MODULE: ./node_modules/history/esm/history.js
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
 
-
-
-function addLeadingSlash(path) {
-  return path.charAt(0) === '/' ? path : '/' + path;
-}
-function stripLeadingSlash(path) {
-  return path.charAt(0) === '/' ? path.substr(1) : path;
-}
-function hasBasename(path, prefix) {
-  return path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 && '/?#'.indexOf(path.charAt(prefix.length)) !== -1;
-}
-function stripBasename(path, prefix) {
-  return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
-}
-function stripTrailingSlash(path) {
-  return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
-}
-function parsePath(path) {
-  var pathname = path || '/';
-  var search = '';
-  var hash = '';
-  var hashIndex = pathname.indexOf('#');
-
-  if (hashIndex !== -1) {
-    hash = pathname.substr(hashIndex);
-    pathname = pathname.substr(0, hashIndex);
-  }
-
-  var searchIndex = pathname.indexOf('?');
-
-  if (searchIndex !== -1) {
-    search = pathname.substr(searchIndex);
-    pathname = pathname.substr(0, searchIndex);
-  }
-
-  return {
-    pathname: pathname,
-    search: search === '?' ? '' : search,
-    hash: hash === '#' ? '' : hash
-  };
-}
-function createPath(location) {
-  var pathname = location.pathname,
-      search = location.search,
-      hash = location.hash;
-  var path = pathname || '/';
-  if (search && search !== '?') path += search.charAt(0) === '?' ? search : "?" + search;
-  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : "#" + hash;
-  return path;
-}
-
-function createLocation(path, state, key, currentLocation) {
-  var location;
-
-  if (typeof path === 'string') {
-    // Two-arg form: push(path, state)
-    location = parsePath(path);
-    location.state = state;
-  } else {
-    // One-arg form: push(location)
-    location = Object(esm_extends["a" /* default */])({}, path);
-    if (location.pathname === undefined) location.pathname = '';
-
-    if (location.search) {
-      if (location.search.charAt(0) !== '?') location.search = '?' + location.search;
-    } else {
-      location.search = '';
-    }
-
-    if (location.hash) {
-      if (location.hash.charAt(0) !== '#') location.hash = '#' + location.hash;
-    } else {
-      location.hash = '';
-    }
-
-    if (state !== undefined && location.state === undefined) location.state = state;
-  }
-
-  try {
-    location.pathname = decodeURI(location.pathname);
-  } catch (e) {
-    if (e instanceof URIError) {
-      throw new URIError('Pathname "' + location.pathname + '" could not be decoded. ' + 'This is likely caused by an invalid percent-encoding.');
-    } else {
-      throw e;
-    }
-  }
-
-  if (key) location.key = key;
-
-  if (currentLocation) {
-    // Resolve incomplete/relative pathname relative to current location.
-    if (!location.pathname) {
-      location.pathname = currentLocation.pathname;
-    } else if (location.pathname.charAt(0) !== '/') {
-      location.pathname = resolve_pathname(location.pathname, currentLocation.pathname);
-    }
-  } else {
-    // When there is no prior location and pathname is empty, set it to /
-    if (!location.pathname) {
-      location.pathname = '/';
-    }
-  }
-
-  return location;
-}
-function locationsAreEqual(a, b) {
-  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && value_equal(a.state, b.state);
-}
-
-function createTransitionManager() {
-  var prompt = null;
-
-  function setPrompt(nextPrompt) {
-     false ? undefined : void 0;
-    prompt = nextPrompt;
-    return function () {
-      if (prompt === nextPrompt) prompt = null;
-    };
-  }
-
-  function confirmTransitionTo(location, action, getUserConfirmation, callback) {
-    // TODO: If another transition starts while we're still confirming
-    // the previous one, we may end up in a weird state. Figure out the
-    // best way to handle this.
-    if (prompt != null) {
-      var result = typeof prompt === 'function' ? prompt(location, action) : prompt;
-
-      if (typeof result === 'string') {
-        if (typeof getUserConfirmation === 'function') {
-          getUserConfirmation(result, callback);
-        } else {
-           false ? undefined : void 0;
-          callback(true);
-        }
-      } else {
-        // Return false from a transition hook to cancel the transition.
-        callback(result !== false);
-      }
-    } else {
-      callback(true);
-    }
-  }
-
-  var listeners = [];
-
-  function appendListener(fn) {
-    var isActive = true;
-
-    function listener() {
-      if (isActive) fn.apply(void 0, arguments);
-    }
-
-    listeners.push(listener);
-    return function () {
-      isActive = false;
-      listeners = listeners.filter(function (item) {
-        return item !== listener;
-      });
-    };
-  }
-
-  function notifyListeners() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    listeners.forEach(function (listener) {
-      return listener.apply(void 0, args);
-    });
-  }
-
-  return {
-    setPrompt: setPrompt,
-    confirmTransitionTo: confirmTransitionTo,
-    appendListener: appendListener,
-    notifyListeners: notifyListeners
-  };
-}
-
-var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-function getConfirmation(message, callback) {
-  callback(window.confirm(message)); // eslint-disable-line no-alert
-}
 /**
- * Returns true if the HTML5 history API is supported. Taken from Modernizr.
+ * WordPress dependencies
+ */
+
+
+function stopPropagation(event) {
+  event.stopPropagation();
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["forwardRef"])(function (_ref, ref) {
+  var children = _ref.children,
+      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["children"]);
+
+  // Disable reason: this stops certain events from propagating outside of the component.
+  //   - onMouseDown is disabled as this can cause interactions with other DOM elements
+
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
+    ref: ref,
+    onMouseDown: stopPropagation
+  }), children);
+  /* eslint-enable jsx-a11y/no-static-element-interactions */
+}));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 103:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// UNUSED EXPORTS: Provider
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
+var toConsumableArray = __webpack_require__(27);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(23);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
+var inherits = __webpack_require__(22);
+
+// EXTERNAL MODULE: external {"this":["wp","element"]}
+var external_this_wp_element_ = __webpack_require__(0);
+
+// EXTERNAL MODULE: external "lodash"
+var external_lodash_ = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/utils/create-higher-order-component/index.js
+var create_higher_order_component = __webpack_require__(72);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+var assertThisInitialized = __webpack_require__(18);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/context.js
+
+
+
+
+
+
+
+
+
+function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+var _createContext = Object(external_this_wp_element_["createContext"])({
+  focusHistory: []
+}),
+    Provider = _createContext.Provider,
+    Consumer = _createContext.Consumer;
+
+Provider.displayName = 'FocusReturnProvider';
+Consumer.displayName = 'FocusReturnConsumer';
+/**
+ * The maximum history length to capture for the focus stack. When exceeded,
+ * items should be shifted from the stack for each consecutive push.
  *
- * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
- * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
- * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
+ * @type {number}
  */
 
-function supportsHistory() {
-  var ua = window.navigator.userAgent;
-  if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
-  return window.history && 'pushState' in window.history;
-}
-/**
- * Returns true if browser fires popstate on hash change.
- * IE10 and IE11 do not.
- */
+var MAX_STACK_LENGTH = 100;
 
-function supportsPopStateOnHashChange() {
-  return window.navigator.userAgent.indexOf('Trident') === -1;
-}
-/**
- * Returns false if using go(n) with hash history causes a full page reload.
- */
+var context_FocusReturnProvider = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(FocusReturnProvider, _Component);
 
-function supportsGoWithoutReloadUsingHash() {
-  return window.navigator.userAgent.indexOf('Firefox') === -1;
-}
-/**
- * Returns true if a given popstate event is an extraneous WebKit event.
- * Accounts for the fact that Chrome on iOS fires real popstate events
- * containing undefined state when pressing the back button.
- */
+  var _super = _createSuper(FocusReturnProvider);
 
-function isExtraneousPopstateEvent(event) {
-  return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
-}
+  function FocusReturnProvider() {
+    var _this;
 
-var PopStateEvent = 'popstate';
-var HashChangeEvent = 'hashchange';
+    Object(classCallCheck["a" /* default */])(this, FocusReturnProvider);
 
-function getHistoryState() {
-  try {
-    return window.history.state || {};
-  } catch (e) {
-    // IE 11 sometimes throws when accessing window.history.state
-    // See https://github.com/ReactTraining/history/pull/289
-    return {};
-  }
-}
-/**
- * Creates a history object that uses the HTML5 history API including
- * pushState, replaceState, and the popstate event.
- */
-
-
-function createBrowserHistory(props) {
-  if (props === void 0) {
-    props = {};
+    _this = _super.apply(this, arguments);
+    _this.onFocus = _this.onFocus.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.state = {
+      focusHistory: []
+    };
+    return _this;
   }
 
-  !canUseDOM ?  false ? undefined : Object(tiny_invariant_esm["a" /* default */])(false) : void 0;
-  var globalHistory = window.history;
-  var canUseHistory = supportsHistory();
-  var needsHashChangeListener = !supportsPopStateOnHashChange();
-  var _props = props,
-      _props$forceRefresh = _props.forceRefresh,
-      forceRefresh = _props$forceRefresh === void 0 ? false : _props$forceRefresh,
-      _props$getUserConfirm = _props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
-  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
+  Object(createClass["a" /* default */])(FocusReturnProvider, [{
+    key: "onFocus",
+    value: function onFocus(event) {
+      var focusHistory = this.state.focusHistory; // Push the focused element to the history stack, keeping only unique
+      // members but preferring the _last_ occurrence of any duplicates.
+      // Lodash's `uniq` behavior favors the first occurrence, so the array
+      // is temporarily reversed prior to it being called upon. Uniqueness
+      // helps avoid situations where, such as in a constrained tabbing area,
+      // the user changes focus enough within a transient element that the
+      // stack may otherwise only consist of members pending destruction, at
+      // which point focus might have been lost.
 
-  function getDOMLocation(historyState) {
-    var _ref = historyState || {},
-        key = _ref.key,
-        state = _ref.state;
-
-    var _window$location = window.location,
-        pathname = _window$location.pathname,
-        search = _window$location.search,
-        hash = _window$location.hash;
-    var path = pathname + search + hash;
-     false ? undefined : void 0;
-    if (basename) path = stripBasename(path, basename);
-    return createLocation(path, state, key);
-  }
-
-  function createKey() {
-    return Math.random().toString(36).substr(2, keyLength);
-  }
-
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    Object(esm_extends["a" /* default */])(history, nextState);
-
-    history.length = globalHistory.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
-
-  function handlePopState(event) {
-    // Ignore extraneous popstate events in WebKit.
-    if (isExtraneousPopstateEvent(event)) return;
-    handlePop(getDOMLocation(event.state));
-  }
-
-  function handleHashChange() {
-    handlePop(getDOMLocation(getHistoryState()));
-  }
-
-  var forceNextPop = false;
-
-  function handlePop(location) {
-    if (forceNextPop) {
-      forceNextPop = false;
-      setState();
-    } else {
-      var action = 'POP';
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-        if (ok) {
-          setState({
-            action: action,
-            location: location
-          });
-        } else {
-          revertPop(location);
-        }
+      var nextFocusHistory = Object(external_lodash_["uniq"])([].concat(Object(toConsumableArray["a" /* default */])(focusHistory), [event.target]).slice(-1 * MAX_STACK_LENGTH).reverse()).reverse();
+      this.setState({
+        focusHistory: nextFocusHistory
       });
     }
-  }
-
-  function revertPop(fromLocation) {
-    var toLocation = history.location; // TODO: We could probably make this more reliable by
-    // keeping a list of keys we've seen in sessionStorage.
-    // Instead, we just default to 0 for keys we don't know.
-
-    var toIndex = allKeys.indexOf(toLocation.key);
-    if (toIndex === -1) toIndex = 0;
-    var fromIndex = allKeys.indexOf(fromLocation.key);
-    if (fromIndex === -1) fromIndex = 0;
-    var delta = toIndex - fromIndex;
-
-    if (delta) {
-      forceNextPop = true;
-      go(delta);
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          children = _this$props.children,
+          className = _this$props.className;
+      return Object(external_this_wp_element_["createElement"])(Provider, {
+        value: this.state
+      }, Object(external_this_wp_element_["createElement"])("div", {
+        onFocus: this.onFocus,
+        className: className
+      }, children));
     }
+  }]);
+
+  return FocusReturnProvider;
+}(external_this_wp_element_["Component"]);
+
+/* harmony default export */ var with_focus_return_context = (context_FocusReturnProvider);
+
+//# sourceMappingURL=context.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/index.js
+
+
+
+
+
+
+
+
+function with_focus_return_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (with_focus_return_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function with_focus_return_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Returns true if the given object is component-like. An object is component-
+ * like if it is an instance of wp.element.Component, or is a function.
+ *
+ * @param {*} object Object to test.
+ *
+ * @return {boolean} Whether object is component-like.
+ */
+
+function isComponentLike(object) {
+  return object instanceof external_this_wp_element_["Component"] || typeof object === 'function';
+}
+/**
+ * Higher Order Component used to be used to wrap disposable elements like
+ * sidebars, modals, dropdowns. When mounting the wrapped component, we track a
+ * reference to the current active element so we know where to restore focus
+ * when the component is unmounted.
+ *
+ * @param {(WPComponent|Object)} options The component to be enhanced with
+ *                                      focus return behavior, or an object
+ *                                      describing the component and the
+ *                                      focus return characteristics.
+ *
+ * @return {WPComponent} Component with the focus restauration behaviour.
+ */
+
+
+function withFocusReturn(options) {
+  // Normalize as overloaded form `withFocusReturn( options )( Component )`
+  // or as `withFocusReturn( Component )`.
+  if (isComponentLike(options)) {
+    var WrappedComponent = options;
+    return withFocusReturn({})(WrappedComponent);
   }
 
-  var initialLocation = getDOMLocation(getHistoryState());
-  var allKeys = [initialLocation.key]; // Public interface
+  var _options$onFocusRetur = options.onFocusReturn,
+      onFocusReturn = _options$onFocusRetur === void 0 ? external_lodash_["stubTrue"] : _options$onFocusRetur;
+  return function (WrappedComponent) {
+    var FocusReturn = /*#__PURE__*/function (_Component) {
+      Object(inherits["a" /* default */])(FocusReturn, _Component);
 
-  function createHref(location) {
-    return basename + createPath(location);
-  }
+      var _super = with_focus_return_createSuper(FocusReturn);
 
-  function push(path, state) {
-     false ? undefined : void 0;
-    var action = 'PUSH';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var href = createHref(location);
-      var key = location.key,
-          state = location.state;
+      function FocusReturn() {
+        var _this;
 
-      if (canUseHistory) {
-        globalHistory.pushState({
-          key: key,
-          state: state
-        }, null, href);
+        Object(classCallCheck["a" /* default */])(this, FocusReturn);
 
-        if (forceRefresh) {
-          window.location.href = href;
-        } else {
-          var prevIndex = allKeys.indexOf(history.location.key);
-          var nextKeys = allKeys.slice(0, prevIndex + 1);
-          nextKeys.push(location.key);
-          allKeys = nextKeys;
-          setState({
-            action: action,
-            location: location
-          });
-        }
-      } else {
-         false ? undefined : void 0;
-        window.location.href = href;
-      }
-    });
-  }
+        _this = _super.apply(this, arguments);
+        _this.ownFocusedElements = new Set();
+        _this.activeElementOnMount = document.activeElement;
 
-  function replace(path, state) {
-     false ? undefined : void 0;
-    var action = 'REPLACE';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var href = createHref(location);
-      var key = location.key,
-          state = location.state;
+        _this.setIsFocusedFalse = function () {
+          return _this.isFocused = false;
+        };
 
-      if (canUseHistory) {
-        globalHistory.replaceState({
-          key: key,
-          state: state
-        }, null, href);
+        _this.setIsFocusedTrue = function (event) {
+          _this.ownFocusedElements.add(event.target);
 
-        if (forceRefresh) {
-          window.location.replace(href);
-        } else {
-          var prevIndex = allKeys.indexOf(history.location.key);
-          if (prevIndex !== -1) allKeys[prevIndex] = location.key;
-          setState({
-            action: action,
-            location: location
-          });
-        }
-      } else {
-         false ? undefined : void 0;
-        window.location.replace(href);
-      }
-    });
-  }
+          _this.isFocused = true;
+        };
 
-  function go(n) {
-    globalHistory.go(n);
-  }
-
-  function goBack() {
-    go(-1);
-  }
-
-  function goForward() {
-    go(1);
-  }
-
-  var listenerCount = 0;
-
-  function checkDOMListeners(delta) {
-    listenerCount += delta;
-
-    if (listenerCount === 1 && delta === 1) {
-      window.addEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.addEventListener(HashChangeEvent, handleHashChange);
-    } else if (listenerCount === 0) {
-      window.removeEventListener(PopStateEvent, handlePopState);
-      if (needsHashChangeListener) window.removeEventListener(HashChangeEvent, handleHashChange);
-    }
-  }
-
-  var isBlocked = false;
-
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
-    var unblock = transitionManager.setPrompt(prompt);
-
-    if (!isBlocked) {
-      checkDOMListeners(1);
-      isBlocked = true;
-    }
-
-    return function () {
-      if (isBlocked) {
-        isBlocked = false;
-        checkDOMListeners(-1);
+        return _this;
       }
 
-      return unblock();
-    };
-  }
+      Object(createClass["a" /* default */])(FocusReturn, [{
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+          var activeElementOnMount = this.activeElementOnMount,
+              isFocused = this.isFocused,
+              ownFocusedElements = this.ownFocusedElements;
 
-  function listen(listener) {
-    var unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
-    return function () {
-      checkDOMListeners(-1);
-      unlisten();
-    };
-  }
+          if (!isFocused) {
+            return;
+          } // Defer to the component's own explicit focus return behavior,
+          // if specified. The function should return `false` to prevent
+          // the default behavior otherwise occurring here. This allows
+          // for support that the `onFocusReturn` decides to allow the
+          // default behavior to occur under some conditions.
 
-  var history = {
-    length: globalHistory.length,
-    action: 'POP',
-    location: initialLocation,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    block: block,
-    listen: listen
-  };
-  return history;
-}
 
-var HashChangeEvent$1 = 'hashchange';
-var HashPathCoders = {
-  hashbang: {
-    encodePath: function encodePath(path) {
-      return path.charAt(0) === '!' ? path : '!/' + stripLeadingSlash(path);
-    },
-    decodePath: function decodePath(path) {
-      return path.charAt(0) === '!' ? path.substr(1) : path;
-    }
-  },
-  noslash: {
-    encodePath: stripLeadingSlash,
-    decodePath: addLeadingSlash
-  },
-  slash: {
-    encodePath: addLeadingSlash,
-    decodePath: addLeadingSlash
-  }
-};
+          if (onFocusReturn() === false) {
+            return;
+          }
 
-function stripHash(url) {
-  var hashIndex = url.indexOf('#');
-  return hashIndex === -1 ? url : url.slice(0, hashIndex);
-}
+          var stack = [].concat(Object(toConsumableArray["a" /* default */])(external_lodash_["without"].apply(void 0, [this.props.focus.focusHistory].concat(Object(toConsumableArray["a" /* default */])(ownFocusedElements)))), [activeElementOnMount]);
+          var candidate;
 
-function getHashPath() {
-  // We can't use window.location.hash here because it's not
-  // consistent across browsers - Firefox will pre-decode it!
-  var href = window.location.href;
-  var hashIndex = href.indexOf('#');
-  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
-}
-
-function pushHashPath(path) {
-  window.location.hash = path;
-}
-
-function replaceHashPath(path) {
-  window.location.replace(stripHash(window.location.href) + '#' + path);
-}
-
-function createHashHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  !canUseDOM ?  false ? undefined : Object(tiny_invariant_esm["a" /* default */])(false) : void 0;
-  var globalHistory = window.history;
-  var canGoWithoutReload = supportsGoWithoutReloadUsingHash();
-  var _props = props,
-      _props$getUserConfirm = _props.getUserConfirmation,
-      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
-      _props$hashType = _props.hashType,
-      hashType = _props$hashType === void 0 ? 'slash' : _props$hashType;
-  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
-  var _HashPathCoders$hashT = HashPathCoders[hashType],
-      encodePath = _HashPathCoders$hashT.encodePath,
-      decodePath = _HashPathCoders$hashT.decodePath;
-
-  function getDOMLocation() {
-    var path = decodePath(getHashPath());
-     false ? undefined : void 0;
-    if (basename) path = stripBasename(path, basename);
-    return createLocation(path);
-  }
-
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    Object(esm_extends["a" /* default */])(history, nextState);
-
-    history.length = globalHistory.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
-
-  var forceNextPop = false;
-  var ignorePath = null;
-
-  function locationsAreEqual$$1(a, b) {
-    return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash;
-  }
-
-  function handleHashChange() {
-    var path = getHashPath();
-    var encodedPath = encodePath(path);
-
-    if (path !== encodedPath) {
-      // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath);
-    } else {
-      var location = getDOMLocation();
-      var prevLocation = history.location;
-      if (!forceNextPop && locationsAreEqual$$1(prevLocation, location)) return; // A hashchange doesn't always == location change.
-
-      if (ignorePath === createPath(location)) return; // Ignore this change; we already setState in push/replace.
-
-      ignorePath = null;
-      handlePop(location);
-    }
-  }
-
-  function handlePop(location) {
-    if (forceNextPop) {
-      forceNextPop = false;
-      setState();
-    } else {
-      var action = 'POP';
-      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-        if (ok) {
-          setState({
-            action: action,
-            location: location
-          });
-        } else {
-          revertPop(location);
+          while (candidate = stack.pop()) {
+            if (document.body.contains(candidate)) {
+              candidate.focus();
+              return;
+            }
+          }
         }
-      });
-    }
-  }
+      }, {
+        key: "render",
+        value: function render() {
+          return Object(external_this_wp_element_["createElement"])("div", {
+            onFocus: this.setIsFocusedTrue,
+            onBlur: this.setIsFocusedFalse
+          }, Object(external_this_wp_element_["createElement"])(WrappedComponent, this.props.childProps));
+        }
+      }]);
 
-  function revertPop(fromLocation) {
-    var toLocation = history.location; // TODO: We could probably make this more reliable by
-    // keeping a list of paths we've seen in sessionStorage.
-    // Instead, we just default to 0 for paths we don't know.
+      return FocusReturn;
+    }(external_this_wp_element_["Component"]);
 
-    var toIndex = allPaths.lastIndexOf(createPath(toLocation));
-    if (toIndex === -1) toIndex = 0;
-    var fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
-    if (fromIndex === -1) fromIndex = 0;
-    var delta = toIndex - fromIndex;
-
-    if (delta) {
-      forceNextPop = true;
-      go(delta);
-    }
-  } // Ensure the hash is encoded properly before doing anything else.
-
-
-  var path = getHashPath();
-  var encodedPath = encodePath(path);
-  if (path !== encodedPath) replaceHashPath(encodedPath);
-  var initialLocation = getDOMLocation();
-  var allPaths = [createPath(initialLocation)]; // Public interface
-
-  function createHref(location) {
-    var baseTag = document.querySelector('base');
-    var href = '';
-
-    if (baseTag && baseTag.getAttribute('href')) {
-      href = stripHash(window.location.href);
-    }
-
-    return href + '#' + encodePath(basename + createPath(location));
-  }
-
-  function push(path, state) {
-     false ? undefined : void 0;
-    var action = 'PUSH';
-    var location = createLocation(path, undefined, undefined, history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var path = createPath(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a PUSH, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        pushHashPath(encodedPath);
-        var prevIndex = allPaths.lastIndexOf(createPath(history.location));
-        var nextPaths = allPaths.slice(0, prevIndex + 1);
-        nextPaths.push(path);
-        allPaths = nextPaths;
-        setState({
-          action: action,
-          location: location
+    return function (props) {
+      return Object(external_this_wp_element_["createElement"])(Consumer, null, function (context) {
+        return Object(external_this_wp_element_["createElement"])(FocusReturn, {
+          childProps: props,
+          focus: context
         });
-      } else {
-         false ? undefined : void 0;
-        setState();
-      }
-    });
-  }
-
-  function replace(path, state) {
-     false ? undefined : void 0;
-    var action = 'REPLACE';
-    var location = createLocation(path, undefined, undefined, history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var path = createPath(location);
-      var encodedPath = encodePath(basename + path);
-      var hashChanged = getHashPath() !== encodedPath;
-
-      if (hashChanged) {
-        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
-        // rather setState here and ignore the hashchange. The caveat here
-        // is that other hash histories in the page will consider it a POP.
-        ignorePath = path;
-        replaceHashPath(encodedPath);
-      }
-
-      var prevIndex = allPaths.indexOf(createPath(history.location));
-      if (prevIndex !== -1) allPaths[prevIndex] = path;
-      setState({
-        action: action,
-        location: location
       });
-    });
-  }
-
-  function go(n) {
-     false ? undefined : void 0;
-    globalHistory.go(n);
-  }
-
-  function goBack() {
-    go(-1);
-  }
-
-  function goForward() {
-    go(1);
-  }
-
-  var listenerCount = 0;
-
-  function checkDOMListeners(delta) {
-    listenerCount += delta;
-
-    if (listenerCount === 1 && delta === 1) {
-      window.addEventListener(HashChangeEvent$1, handleHashChange);
-    } else if (listenerCount === 0) {
-      window.removeEventListener(HashChangeEvent$1, handleHashChange);
-    }
-  }
-
-  var isBlocked = false;
-
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
-    var unblock = transitionManager.setPrompt(prompt);
-
-    if (!isBlocked) {
-      checkDOMListeners(1);
-      isBlocked = true;
-    }
-
-    return function () {
-      if (isBlocked) {
-        isBlocked = false;
-        checkDOMListeners(-1);
-      }
-
-      return unblock();
     };
-  }
-
-  function listen(listener) {
-    var unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
-    return function () {
-      checkDOMListeners(-1);
-      unlisten();
-    };
-  }
-
-  var history = {
-    length: globalHistory.length,
-    action: 'POP',
-    location: initialLocation,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    block: block,
-    listen: listen
   };
-  return history;
 }
 
-function clamp(n, lowerBound, upperBound) {
-  return Math.min(Math.max(n, lowerBound), upperBound);
-}
-/**
- * Creates a history object that stores locations in memory.
- */
+/* harmony default export */ var with_focus_return = __webpack_exports__["a"] = (Object(create_higher_order_component["a" /* default */])(withFocusReturn, 'withFocusReturn'));
 
-
-function createMemoryHistory(props) {
-  if (props === void 0) {
-    props = {};
-  }
-
-  var _props = props,
-      getUserConfirmation = _props.getUserConfirmation,
-      _props$initialEntries = _props.initialEntries,
-      initialEntries = _props$initialEntries === void 0 ? ['/'] : _props$initialEntries,
-      _props$initialIndex = _props.initialIndex,
-      initialIndex = _props$initialIndex === void 0 ? 0 : _props$initialIndex,
-      _props$keyLength = _props.keyLength,
-      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
-  var transitionManager = createTransitionManager();
-
-  function setState(nextState) {
-    Object(esm_extends["a" /* default */])(history, nextState);
-
-    history.length = history.entries.length;
-    transitionManager.notifyListeners(history.location, history.action);
-  }
-
-  function createKey() {
-    return Math.random().toString(36).substr(2, keyLength);
-  }
-
-  var index = clamp(initialIndex, 0, initialEntries.length - 1);
-  var entries = initialEntries.map(function (entry) {
-    return typeof entry === 'string' ? createLocation(entry, undefined, createKey()) : createLocation(entry, undefined, entry.key || createKey());
-  }); // Public interface
-
-  var createHref = createPath;
-
-  function push(path, state) {
-     false ? undefined : void 0;
-    var action = 'PUSH';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      var prevIndex = history.index;
-      var nextIndex = prevIndex + 1;
-      var nextEntries = history.entries.slice(0);
-
-      if (nextEntries.length > nextIndex) {
-        nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location);
-      } else {
-        nextEntries.push(location);
-      }
-
-      setState({
-        action: action,
-        location: location,
-        index: nextIndex,
-        entries: nextEntries
-      });
-    });
-  }
-
-  function replace(path, state) {
-     false ? undefined : void 0;
-    var action = 'REPLACE';
-    var location = createLocation(path, state, createKey(), history.location);
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (!ok) return;
-      history.entries[history.index] = location;
-      setState({
-        action: action,
-        location: location
-      });
-    });
-  }
-
-  function go(n) {
-    var nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
-    var action = 'POP';
-    var location = history.entries[nextIndex];
-    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
-      if (ok) {
-        setState({
-          action: action,
-          location: location,
-          index: nextIndex
-        });
-      } else {
-        // Mimic the behavior of DOM histories by
-        // causing a render after a cancelled POP.
-        setState();
-      }
-    });
-  }
-
-  function goBack() {
-    go(-1);
-  }
-
-  function goForward() {
-    go(1);
-  }
-
-  function canGo(n) {
-    var nextIndex = history.index + n;
-    return nextIndex >= 0 && nextIndex < history.entries.length;
-  }
-
-  function block(prompt) {
-    if (prompt === void 0) {
-      prompt = false;
-    }
-
-    return transitionManager.setPrompt(prompt);
-  }
-
-  function listen(listener) {
-    return transitionManager.appendListener(listener);
-  }
-
-  var history = {
-    length: entries.length,
-    action: 'POP',
-    location: entries[index],
-    index: index,
-    entries: entries,
-    createHref: createHref,
-    push: push,
-    replace: replace,
-    go: go,
-    goBack: goBack,
-    goForward: goForward,
-    canGo: canGo,
-    block: block,
-    listen: listen
-  };
-  return history;
-}
-
-
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -1613,28 +912,28 @@ function createMemoryHistory(props) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(78);
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
 /* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(65);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(47);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(15);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _wordpress_is_shallow_equal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(58);
+/* harmony import */ var _wordpress_is_shallow_equal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(57);
 /* harmony import */ var _wordpress_is_shallow_equal__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_is_shallow_equal__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(57);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(19);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(72);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(24);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_11__);
 
 
@@ -1884,30 +1183,823 @@ var withSelect = function withSelect(mapSelectToProps) {
 
 /***/ }),
 
+/***/ 105:
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      define(prototype, method, function(arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  define(Gp, toStringTagSymbol, "Generator");
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
+
+
+/***/ }),
+
+/***/ 106:
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayLikeToArray = __webpack_require__(73);
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return arrayLikeToArray(arr);
+}
+
+module.exports = _arrayWithoutHoles;
+
+/***/ }),
+
+/***/ 107:
+/***/ (function(module, exports) {
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+module.exports = _iterableToArray;
+
+/***/ }),
+
+/***/ 108:
+/***/ (function(module, exports) {
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableSpread;
+
+/***/ }),
+
 /***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _possibleConstructorReturn; });
-/* harmony import */ var _helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
-/* harmony import */ var _assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (Object(_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(call) === "object" || typeof call === "function")) {
-    return call;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
   }
 
-  return Object(_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(self);
+  return obj;
 }
 
 /***/ }),
 
-/***/ 111:
+/***/ 115:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _woocommerce_date__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
+/* harmony import */ var _woocommerce_date__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
 /* harmony import */ var _woocommerce_date__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_date__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "k", function() { return _woocommerce_date__WEBPACK_IMPORTED_MODULE_0__["isoDateFormat"]; });
 
@@ -1948,7 +2040,7 @@ function _possibleConstructorReturn(self, call) {
 
 /***/ }),
 
-/***/ 114:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1991,14 +2083,3056 @@ module.exports = emptyFunction;
 
 /***/ }),
 
-/***/ 116:
+/***/ 119:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export isHorizontalEdge */
+/* unused harmony export isVerticalEdge */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRectangleFromRange; });
+/* unused harmony export computeCaretRect */
+/* unused harmony export placeCaretAtHorizontalEdge */
+/* unused harmony export placeCaretAtVerticalEdge */
+/* unused harmony export isTextField */
+/* unused harmony export isNumberInput */
+/* unused harmony export documentHasTextSelection */
+/* unused harmony export documentHasUncollapsedSelection */
+/* unused harmony export documentHasSelection */
+/* unused harmony export isEntirelySelected */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getScrollContainer; });
+/* unused harmony export getOffsetParent */
+/* unused harmony export replace */
+/* unused harmony export remove */
+/* unused harmony export insertAfter */
+/* unused harmony export unwrap */
+/* unused harmony export replaceTag */
+/* unused harmony export wrap */
+/* unused harmony export __unstableStripHTML */
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * External dependencies
+ */
+
+/**
+ * Browser dependencies
+ */
+
+var _window = window,
+    DOMParser = _window.DOMParser,
+    getComputedStyle = _window.getComputedStyle;
+var _window$Node = window.Node,
+    TEXT_NODE = _window$Node.TEXT_NODE,
+    ELEMENT_NODE = _window$Node.ELEMENT_NODE,
+    DOCUMENT_POSITION_PRECEDING = _window$Node.DOCUMENT_POSITION_PRECEDING,
+    DOCUMENT_POSITION_FOLLOWING = _window$Node.DOCUMENT_POSITION_FOLLOWING;
+/**
+ * Returns true if the given selection object is in the forward direction, or
+ * false otherwise.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+ *
+ * @param {Selection} selection Selection object to check.
+ *
+ * @return {boolean} Whether the selection is forward.
+ */
+
+function isSelectionForward(selection) {
+  var anchorNode = selection.anchorNode,
+      focusNode = selection.focusNode,
+      anchorOffset = selection.anchorOffset,
+      focusOffset = selection.focusOffset;
+  var position = anchorNode.compareDocumentPosition(focusNode); // Disable reason: `Node#compareDocumentPosition` returns a bitmask value,
+  // so bitwise operators are intended.
+
+  /* eslint-disable no-bitwise */
+  // Compare whether anchor node precedes focus node. If focus node (where
+  // end of selection occurs) is after the anchor node, it is forward.
+
+  if (position & DOCUMENT_POSITION_PRECEDING) {
+    return false;
+  }
+
+  if (position & DOCUMENT_POSITION_FOLLOWING) {
+    return true;
+  }
+  /* eslint-enable no-bitwise */
+  // `compareDocumentPosition` returns 0 when passed the same node, in which
+  // case compare offsets.
+
+
+  if (position === 0) {
+    return anchorOffset <= focusOffset;
+  } // This should never be reached, but return true as default case.
+
+
+  return true;
+}
+/**
+ * Check whether the selection is at the edge of the container. Checks for
+ * horizontal position by default. Set `onlyVertical` to true to check only
+ * vertically.
+ *
+ * @param {Element} container    Focusable element.
+ * @param {boolean} isReverse    Set to true to check left, false to check right.
+ * @param {boolean} onlyVertical Set to true to check only vertical position.
+ *
+ * @return {boolean} True if at the edge, false if not.
+ */
+
+
+function isEdge(container, isReverse, onlyVertical) {
+  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], container.tagName)) {
+    if (container.selectionStart !== container.selectionEnd) {
+      return false;
+    }
+
+    if (isReverse) {
+      return container.selectionStart === 0;
+    }
+
+    return container.value.length === container.selectionStart;
+  }
+
+  if (!container.isContentEditable) {
+    return true;
+  }
+
+  var selection = window.getSelection();
+
+  if (!selection.rangeCount) {
+    return false;
+  }
+
+  var originalRange = selection.getRangeAt(0);
+  var range = originalRange.cloneRange();
+  var isForward = isSelectionForward(selection);
+  var isCollapsed = selection.isCollapsed; // Collapse in direction of selection.
+
+  if (!isCollapsed) {
+    range.collapse(!isForward);
+  }
+
+  var rangeRect = getRectangleFromRange(range);
+
+  if (!rangeRect) {
+    return false;
+  }
+
+  var computedStyle = window.getComputedStyle(container);
+  var lineHeight = parseInt(computedStyle.lineHeight, 10) || 0; // Only consider the multiline selection at the edge if the direction is
+  // towards the edge.
+
+  if (!isCollapsed && rangeRect.height > lineHeight && isForward === isReverse) {
+    return false;
+  }
+
+  var padding = parseInt(computedStyle["padding".concat(isReverse ? 'Top' : 'Bottom')], 10) || 0; // Calculate a buffer that is half the line height. In some browsers, the
+  // selection rectangle may not fill the entire height of the line, so we add
+  // 3/4 the line height to the selection rectangle to ensure that it is well
+  // over its line boundary.
+
+  var buffer = 3 * parseInt(lineHeight, 10) / 4;
+  var containerRect = container.getBoundingClientRect();
+  var originalRangeRect = getRectangleFromRange(originalRange);
+  var verticalEdge = isReverse ? containerRect.top + padding > originalRangeRect.top - buffer : containerRect.bottom - padding < originalRangeRect.bottom + buffer;
+
+  if (!verticalEdge) {
+    return false;
+  }
+
+  if (onlyVertical) {
+    return true;
+  } // In the case of RTL scripts, the horizontal edge is at the opposite side.
+
+
+  var direction = computedStyle.direction;
+  var isReverseDir = direction === 'rtl' ? !isReverse : isReverse; // To calculate the horizontal position, we insert a test range and see if
+  // this test range has the same horizontal position. This method proves to
+  // be better than a DOM-based calculation, because it ignores empty text
+  // nodes and a trailing line break element. In other words, we need to check
+  // visual positioning, not DOM positioning.
+
+  var x = isReverseDir ? containerRect.left + 1 : containerRect.right - 1;
+  var y = isReverse ? containerRect.top + buffer : containerRect.bottom - buffer;
+  var testRange = hiddenCaretRangeFromPoint(document, x, y, container);
+
+  if (!testRange) {
+    return false;
+  }
+
+  var side = isReverseDir ? 'left' : 'right';
+  var testRect = getRectangleFromRange(testRange); // Allow the position to be 1px off.
+
+  return Math.abs(testRect[side] - rangeRect[side]) <= 1;
+}
+/**
+ * Check whether the selection is horizontally at the edge of the container.
+ *
+ * @param {Element} container Focusable element.
+ * @param {boolean} isReverse Set to true to check left, false for right.
+ *
+ * @return {boolean} True if at the horizontal edge, false if not.
+ */
+
+
+function isHorizontalEdge(container, isReverse) {
+  return isEdge(container, isReverse);
+}
+/**
+ * Check whether the selection is vertically at the edge of the container.
+ *
+ * @param {Element} container Focusable element.
+ * @param {boolean} isReverse Set to true to check top, false for bottom.
+ *
+ * @return {boolean} True if at the vertical edge, false if not.
+ */
+
+function isVerticalEdge(container, isReverse) {
+  return isEdge(container, isReverse, true);
+}
+/**
+ * Get the rectangle of a given Range.
+ *
+ * @param {Range} range The range.
+ *
+ * @return {DOMRect} The rectangle.
+ */
+
+function getRectangleFromRange(range) {
+  // For uncollapsed ranges, get the rectangle that bounds the contents of the
+  // range; this a rectangle enclosing the union of the bounding rectangles
+  // for all the elements in the range.
+  if (!range.collapsed) {
+    return range.getBoundingClientRect();
+  }
+
+  var _range = range,
+      startContainer = _range.startContainer; // Correct invalid "BR" ranges. The cannot contain any children.
+
+  if (startContainer.nodeName === 'BR') {
+    var parentNode = startContainer.parentNode;
+    var index = Array.from(parentNode.childNodes).indexOf(startContainer);
+    range = document.createRange();
+    range.setStart(parentNode, index);
+    range.setEnd(parentNode, index);
+  }
+
+  var rect = range.getClientRects()[0]; // If the collapsed range starts (and therefore ends) at an element node,
+  // `getClientRects` can be empty in some browsers. This can be resolved
+  // by adding a temporary text node with zero-width space to the range.
+  //
+  // See: https://stackoverflow.com/a/6847328/995445
+
+  if (!rect) {
+    var padNode = document.createTextNode("\u200B"); // Do not modify the live range.
+
+    range = range.cloneRange();
+    range.insertNode(padNode);
+    rect = range.getClientRects()[0];
+    padNode.parentNode.removeChild(padNode);
+  }
+
+  return rect;
+}
+/**
+ * Get the rectangle for the selection in a container.
+ *
+ * @return {?DOMRect} The rectangle.
+ */
+
+function computeCaretRect() {
+  var selection = window.getSelection();
+  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
+
+  if (!range) {
+    return;
+  }
+
+  return getRectangleFromRange(range);
+}
+/**
+ * Places the caret at start or end of a given element.
+ *
+ * @param {Element} container Focusable element.
+ * @param {boolean} isReverse True for end, false for start.
+ */
+
+function placeCaretAtHorizontalEdge(container, isReverse) {
+  if (!container) {
+    return;
+  }
+
+  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], container.tagName)) {
+    container.focus();
+
+    if (isReverse) {
+      container.selectionStart = container.value.length;
+      container.selectionEnd = container.value.length;
+    } else {
+      container.selectionStart = 0;
+      container.selectionEnd = 0;
+    }
+
+    return;
+  }
+
+  container.focus();
+
+  if (!container.isContentEditable) {
+    return;
+  } // Select on extent child of the container, not the container itself. This
+  // avoids the selection always being `endOffset` of 1 when placed at end,
+  // where `startContainer`, `endContainer` would always be container itself.
+
+
+  var rangeTarget = container[isReverse ? 'lastChild' : 'firstChild']; // If no range target, it implies that the container is empty. Focusing is
+  // sufficient for caret to be placed correctly.
+
+  if (!rangeTarget) {
+    return;
+  }
+
+  var selection = window.getSelection();
+  var range = document.createRange();
+  range.selectNodeContents(rangeTarget);
+  range.collapse(!isReverse);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+/**
+ * Polyfill.
+ * Get a collapsed range for a given point.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
+ *
+ * @param {Document} doc The document of the range.
+ * @param {number}    x   Horizontal position within the current viewport.
+ * @param {number}    y   Vertical position within the current viewport.
+ *
+ * @return {?Range} The best range for the given point.
+ */
+
+function caretRangeFromPoint(doc, x, y) {
+  if (doc.caretRangeFromPoint) {
+    return doc.caretRangeFromPoint(x, y);
+  }
+
+  if (!doc.caretPositionFromPoint) {
+    return null;
+  }
+
+  var point = doc.caretPositionFromPoint(x, y); // If x or y are negative, outside viewport, or there is no text entry node.
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
+
+  if (!point) {
+    return null;
+  }
+
+  var range = doc.createRange();
+  range.setStart(point.offsetNode, point.offset);
+  range.collapse(true);
+  return range;
+}
+/**
+ * Get a collapsed range for a given point.
+ * Gives the container a temporary high z-index (above any UI).
+ * This is preferred over getting the UI nodes and set styles there.
+ *
+ * @param {Document} doc       The document of the range.
+ * @param {number}    x         Horizontal position within the current viewport.
+ * @param {number}    y         Vertical position within the current viewport.
+ * @param {Element}  container Container in which the range is expected to be found.
+ *
+ * @return {?Range} The best range for the given point.
+ */
+
+
+function hiddenCaretRangeFromPoint(doc, x, y, container) {
+  var originalZIndex = container.style.zIndex;
+  var originalPosition = container.style.position; // A z-index only works if the element position is not static.
+
+  container.style.zIndex = '10000';
+  container.style.position = 'relative';
+  var range = caretRangeFromPoint(doc, x, y);
+  container.style.zIndex = originalZIndex;
+  container.style.position = originalPosition;
+  return range;
+}
+/**
+ * Places the caret at the top or bottom of a given element.
+ *
+ * @param {Element} container           Focusable element.
+ * @param {boolean} isReverse           True for bottom, false for top.
+ * @param {DOMRect} [rect]              The rectangle to position the caret with.
+ * @param {boolean} [mayUseScroll=true] True to allow scrolling, false to disallow.
+ */
+
+
+function placeCaretAtVerticalEdge(container, isReverse, rect) {
+  var mayUseScroll = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
+  if (!container) {
+    return;
+  }
+
+  if (!rect || !container.isContentEditable) {
+    placeCaretAtHorizontalEdge(container, isReverse);
+    return;
+  } // Offset by a buffer half the height of the caret rect. This is needed
+  // because caretRangeFromPoint may default to the end of the selection if
+  // offset is too close to the edge. It's unclear how to precisely calculate
+  // this threshold; it may be the padded area of some combination of line
+  // height, caret height, and font size. The buffer offset is effectively
+  // equivalent to a point at half the height of a line of text.
+
+
+  var buffer = rect.height / 2;
+  var editableRect = container.getBoundingClientRect();
+  var x = rect.left;
+  var y = isReverse ? editableRect.bottom - buffer : editableRect.top + buffer;
+  var range = hiddenCaretRangeFromPoint(document, x, y, container);
+
+  if (!range || !container.contains(range.startContainer)) {
+    if (mayUseScroll && (!range || !range.startContainer || !range.startContainer.contains(container))) {
+      // Might be out of view.
+      // Easier than attempting to calculate manually.
+      container.scrollIntoView(isReverse);
+      placeCaretAtVerticalEdge(container, isReverse, rect, false);
+      return;
+    }
+
+    placeCaretAtHorizontalEdge(container, isReverse);
+    return;
+  }
+
+  var selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  container.focus(); // Editable was already focussed, it goes back to old range...
+  // This fixes it.
+
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+/**
+ * Check whether the given element is a text field, where text field is defined
+ * by the ability to select within the input, or that it is contenteditable.
+ *
+ * See: https://html.spec.whatwg.org/#textFieldSelection
+ *
+ * @param {HTMLElement} element The HTML element.
+ *
+ * @return {boolean} True if the element is an text field, false if not.
+ */
+
+function isTextField(element) {
+  var nodeName = element.nodeName,
+      contentEditable = element.contentEditable;
+  var nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number'];
+  return nodeName === 'INPUT' && !nonTextInputs.includes(element.type) || nodeName === 'TEXTAREA' || contentEditable === 'true';
+}
+/**
+ * Check whether the given element is an input field of type number
+ * and has a valueAsNumber
+ *
+ * @param {HTMLElement} element The HTML element.
+ *
+ * @return {boolean} True if the element is input and holds a number.
+ */
+
+function isNumberInput(element) {
+  var nodeName = element.nodeName,
+      type = element.type,
+      valueAsNumber = element.valueAsNumber;
+  return nodeName === 'INPUT' && type === 'number' && !!valueAsNumber;
+}
+/**
+ * Check whether the current document has selected text. This applies to ranges
+ * of text in the document, and not selection inside <input> and <textarea>
+ * elements.
+ *
+ * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
+ *
+ * @return {boolean} True if there is selection, false if not.
+ */
+
+function documentHasTextSelection() {
+  var selection = window.getSelection();
+  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
+  return range && !range.collapsed;
+}
+/**
+ * Check whether the given element, assumed an input field or textarea,
+ * contains a (uncollapsed) selection of text.
+ *
+ * Note: this is perhaps an abuse of the term "selection", since these elements
+ * manage selection differently and aren't covered by Selection#collapsed.
+ *
+ * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
+ *
+ * @param {HTMLElement} element The HTML element.
+ *
+ * @return {boolean} Whether the input/textareaa element has some "selection".
+ */
+
+function inputFieldHasUncollapsedSelection(element) {
+  if (!isTextField(element) && !isNumberInput(element)) {
+    return false;
+  }
+
+  try {
+    var selectionStart = element.selectionStart,
+        selectionEnd = element.selectionEnd;
+    return selectionStart !== null && selectionStart !== selectionEnd;
+  } catch (error) {
+    // Safari throws an exception when trying to get `selectionStart`
+    // on non-text <input> elements (which, understandably, don't
+    // have the text selection API). We catch this via a try/catch
+    // block, as opposed to a more explicit check of the element's
+    // input types, because of Safari's non-standard behavior. This
+    // also means we don't have to worry about the list of input
+    // types that support `selectionStart` changing as the HTML spec
+    // evolves over time.
+    return false;
+  }
+}
+/**
+ * Check whether the current document has any sort of selection. This includes
+ * ranges of text across elements and any selection inside <input> and
+ * <textarea> elements.
+ *
+ * @return {boolean} Whether there is any sort of "selection" in the document.
+ */
+
+
+function documentHasUncollapsedSelection() {
+  return documentHasTextSelection() || inputFieldHasUncollapsedSelection(document.activeElement);
+}
+/**
+ * Check whether the current document has a selection. This checks for both
+ * focus in an input field and general text selection.
+ *
+ * @return {boolean} True if there is selection, false if not.
+ */
+
+function documentHasSelection() {
+  return isTextField(document.activeElement) || isNumberInput(document.activeElement) || documentHasTextSelection();
+}
+/**
+ * Check whether the contents of the element have been entirely selected.
+ * Returns true if there is no possibility of selection.
+ *
+ * @param {Element} element The element to check.
+ *
+ * @return {boolean} True if entirely selected, false if not.
+ */
+
+function isEntirelySelected(element) {
+  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], element.nodeName)) {
+    return element.selectionStart === 0 && element.value.length === element.selectionEnd;
+  }
+
+  if (!element.isContentEditable) {
+    return true;
+  }
+
+  var selection = window.getSelection();
+  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
+
+  if (!range) {
+    return true;
+  }
+
+  var startContainer = range.startContainer,
+      endContainer = range.endContainer,
+      startOffset = range.startOffset,
+      endOffset = range.endOffset;
+
+  if (startContainer === element && endContainer === element && startOffset === 0 && endOffset === element.childNodes.length) {
+    return true;
+  }
+
+  var lastChild = element.lastChild;
+  var lastChildContentLength = lastChild.nodeType === TEXT_NODE ? lastChild.data.length : lastChild.childNodes.length;
+  return startContainer === element.firstChild && endContainer === element.lastChild && startOffset === 0 && endOffset === lastChildContentLength;
+}
+/**
+ * Given a DOM node, finds the closest scrollable container node.
+ *
+ * @param {Element} node Node from which to start.
+ *
+ * @return {?Element} Scrollable container node, if found.
+ */
+
+function getScrollContainer(node) {
+  if (!node) {
+    return;
+  } // Scrollable if scrollable height exceeds displayed...
+
+
+  if (node.scrollHeight > node.clientHeight) {
+    // ...except when overflow is defined to be hidden or visible
+    var _window$getComputedSt = window.getComputedStyle(node),
+        overflowY = _window$getComputedSt.overflowY;
+
+    if (/(auto|scroll)/.test(overflowY)) {
+      return node;
+    }
+  } // Continue traversing
+
+
+  return getScrollContainer(node.parentNode);
+}
+/**
+ * Returns the closest positioned element, or null under any of the conditions
+ * of the offsetParent specification. Unlike offsetParent, this function is not
+ * limited to HTMLElement and accepts any Node (e.g. Node.TEXT_NODE).
+ *
+ * @see https://drafts.csswg.org/cssom-view/#dom-htmlelement-offsetparent
+ *
+ * @param {Node} node Node from which to find offset parent.
+ *
+ * @return {?Node} Offset parent.
+ */
+
+function getOffsetParent(node) {
+  // Cannot retrieve computed style or offset parent only anything other than
+  // an element node, so find the closest element node.
+  var closestElement;
+
+  while (closestElement = node.parentNode) {
+    if (closestElement.nodeType === ELEMENT_NODE) {
+      break;
+    }
+  }
+
+  if (!closestElement) {
+    return null;
+  } // If the closest element is already positioned, return it, as offsetParent
+  // does not otherwise consider the node itself.
+
+
+  if (getComputedStyle(closestElement).position !== 'static') {
+    return closestElement;
+  }
+
+  return closestElement.offsetParent;
+}
+/**
+ * Given two DOM nodes, replaces the former with the latter in the DOM.
+ *
+ * @param {Element} processedNode Node to be removed.
+ * @param {Element} newNode       Node to be inserted in its place.
+ * @return {void}
+ */
+
+function replace(processedNode, newNode) {
+  insertAfter(newNode, processedNode.parentNode);
+  remove(processedNode);
+}
+/**
+ * Given a DOM node, removes it from the DOM.
+ *
+ * @param {Element} node Node to be removed.
+ * @return {void}
+ */
+
+function remove(node) {
+  node.parentNode.removeChild(node);
+}
+/**
+ * Given two DOM nodes, inserts the former in the DOM as the next sibling of
+ * the latter.
+ *
+ * @param {Element} newNode       Node to be inserted.
+ * @param {Element} referenceNode Node after which to perform the insertion.
+ * @return {void}
+ */
+
+function insertAfter(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+/**
+ * Unwrap the given node. This means any child nodes are moved to the parent.
+ *
+ * @param {Node} node The node to unwrap.
+ *
+ * @return {void}
+ */
+
+function unwrap(node) {
+  var parent = node.parentNode;
+
+  while (node.firstChild) {
+    parent.insertBefore(node.firstChild, node);
+  }
+
+  parent.removeChild(node);
+}
+/**
+ * Replaces the given node with a new node with the given tag name.
+ *
+ * @param {Element}  node    The node to replace
+ * @param {string}   tagName The new tag name.
+ *
+ * @return {Element} The new node.
+ */
+
+function replaceTag(node, tagName) {
+  var newNode = node.ownerDocument.createElement(tagName);
+
+  while (node.firstChild) {
+    newNode.appendChild(node.firstChild);
+  }
+
+  node.parentNode.replaceChild(newNode, node);
+  return newNode;
+}
+/**
+ * Wraps the given node with a new node with the given tag name.
+ *
+ * @param {Element} newNode       The node to insert.
+ * @param {Element} referenceNode The node to wrap.
+ */
+
+function wrap(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode);
+  newNode.appendChild(referenceNode);
+}
+/**
+ * Removes any HTML tags from the provided string.
+ *
+ * @param {string} html The string containing html.
+ *
+ * @return {string} The text content with any html removed.
+ */
+
+function __unstableStripHTML(html) {
+  var document = new DOMParser().parseFromString(html, 'text/html');
+  return document.body.textContent || '';
+}
+//# sourceMappingURL=dom.js.map
+
+/***/ }),
+
+/***/ 12:
+/***/ (function(module, exports) {
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+
+/***/ }),
+
+/***/ 121:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
+var slicedToArray = __webpack_require__(26);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(19);
+
+// EXTERNAL MODULE: external {"this":["wp","element"]}
+var external_this_wp_element_ = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/classnames/index.js
+var classnames = __webpack_require__(4);
+var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/dom.js
+var dom = __webpack_require__(119);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/index.js + 2 modules
+var build_module = __webpack_require__(65);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/keycodes/build-module/index.js + 1 modules
+var keycodes_build_module = __webpack_require__(54);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/deprecated/build-module/index.js
+var deprecated_build_module = __webpack_require__(56);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/hooks/use-viewport-match/index.js
+var use_viewport_match = __webpack_require__(226);
+
+// EXTERNAL MODULE: ./node_modules/react-resize-aware/dist/index.js
+var dist = __webpack_require__(93);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/compose/build-module/hooks/use-resize-observer/index.js
+/**
+ * External dependencies
+ */
+
+/**
+ * Hook which allows to listen the resize event of any target element when it changes sizes.
+ * _Note: `useResizeObserver` will report `null` until after first render_
+ *
+ * @return {Array} An array of {Element} `resizeListener` and {?Object} `sizes` with properties `width` and `height`
+ *
+ * @example
+ *
+ * ```js
+ * const App = () => {
+ * 	const [ resizeListener, sizes ] = useResizeObserver();
+ *
+ * 	return (
+ * 		<div>
+ * 			{ resizeListener }
+ * 			Your content here
+ * 		</div>
+ * 	);
+ * };
+ * ```
+ *
+ */
+
+/* harmony default export */ var use_resize_observer = (dist_default.a);
+//# sourceMappingURL=index.js.map
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/icons/build-module/library/close.js
+var library_close = __webpack_require__(297);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(11);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/utils.js
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Module constants
+ */
+
+var HEIGHT_OFFSET = 10; // used by the arrow and a bit of empty space
+
+/**
+ * Utility used to compute the popover position over the xAxis
+ *
+ * @param {Object}  anchorRect      Anchor Rect.
+ * @param {Object}  contentSize     Content Size.
+ * @param {string}  xAxis           Desired xAxis.
+ * @param {string}  corner          Desired corner.
+ * @param {boolean} sticky          Whether or not to stick the popover to the
+ *                                  scroll container edge when part of the anchor
+ *                                  leaves view.
+ * @param {string}  chosenYAxis     yAxis to be used.
+ * @param {Element} boundaryElement Boundary element.
+ *
+ * @return {Object} Popover xAxis position and constraints.
+ */
+
+function computePopoverXAxisPosition(anchorRect, contentSize, xAxis, corner, sticky, chosenYAxis, boundaryElement) {
+  var width = contentSize.width;
+  var isRTL = document.documentElement.dir === 'rtl'; // Correct xAxis for RTL support
+
+  if (xAxis === 'left' && isRTL) {
+    xAxis = 'right';
+  } else if (xAxis === 'right' && isRTL) {
+    xAxis = 'left';
+  }
+
+  if (corner === 'left' && isRTL) {
+    corner = 'right';
+  } else if (corner === 'right' && isRTL) {
+    corner = 'left';
+  } // x axis alignment choices
+
+
+  var anchorMidPoint = Math.round(anchorRect.left + anchorRect.width / 2);
+  var centerAlignment = {
+    popoverLeft: anchorMidPoint,
+    contentWidth: (anchorMidPoint - width / 2 > 0 ? width / 2 : anchorMidPoint) + (anchorMidPoint + width / 2 > window.innerWidth ? window.innerWidth - anchorMidPoint : width / 2)
+  };
+  var leftAlignmentX = anchorRect.left;
+
+  if (corner === 'right') {
+    leftAlignmentX = anchorRect.right;
+  } else if (chosenYAxis !== 'middle') {
+    leftAlignmentX = anchorMidPoint;
+  }
+
+  var rightAlignmentX = anchorRect.right;
+
+  if (corner === 'left') {
+    rightAlignmentX = anchorRect.left;
+  } else if (chosenYAxis !== 'middle') {
+    rightAlignmentX = anchorMidPoint;
+  }
+
+  var leftAlignment = {
+    popoverLeft: leftAlignmentX,
+    contentWidth: leftAlignmentX - width > 0 ? width : leftAlignmentX
+  };
+  var rightAlignment = {
+    popoverLeft: rightAlignmentX,
+    contentWidth: rightAlignmentX + width > window.innerWidth ? window.innerWidth - rightAlignmentX : width
+  }; // Choosing the x axis
+
+  var chosenXAxis = xAxis;
+  var contentWidth = null;
+
+  if (!sticky) {
+    if (xAxis === 'center' && centerAlignment.contentWidth === width) {
+      chosenXAxis = 'center';
+    } else if (xAxis === 'left' && leftAlignment.contentWidth === width) {
+      chosenXAxis = 'left';
+    } else if (xAxis === 'right' && rightAlignment.contentWidth === width) {
+      chosenXAxis = 'right';
+    } else {
+      chosenXAxis = leftAlignment.contentWidth > rightAlignment.contentWidth ? 'left' : 'right';
+      var chosenWidth = chosenXAxis === 'left' ? leftAlignment.contentWidth : rightAlignment.contentWidth;
+      contentWidth = chosenWidth !== width ? chosenWidth : null;
+    }
+  }
+
+  var popoverLeft;
+
+  if (chosenXAxis === 'center') {
+    popoverLeft = centerAlignment.popoverLeft;
+  } else if (chosenXAxis === 'left') {
+    popoverLeft = leftAlignment.popoverLeft;
+  } else {
+    popoverLeft = rightAlignment.popoverLeft;
+  }
+
+  if (boundaryElement) {
+    var boundaryRect = boundaryElement.getBoundingClientRect();
+    popoverLeft = Math.min(popoverLeft, boundaryRect.right - width);
+  }
+
+  return {
+    xAxis: chosenXAxis,
+    popoverLeft: popoverLeft,
+    contentWidth: contentWidth
+  };
+}
+/**
+ * Utility used to compute the popover position over the yAxis
+ *
+ * @param {Object}  anchorRect        Anchor Rect.
+ * @param {Object}  contentSize       Content Size.
+ * @param {string}  yAxis             Desired yAxis.
+ * @param {string}  corner            Desired corner.
+ * @param {boolean} sticky            Whether or not to stick the popover to the
+ *                                    scroll container edge when part of the
+ *                                    anchor leaves view.
+ * @param {Element} anchorRef         The anchor element.
+ * @param {Element} relativeOffsetTop If applicable, top offset of the relative
+ *                                    positioned parent container.
+ *
+ * @return {Object} Popover xAxis position and constraints.
+ */
+
+function computePopoverYAxisPosition(anchorRect, contentSize, yAxis, corner, sticky, anchorRef, relativeOffsetTop) {
+  var height = contentSize.height;
+
+  if (sticky) {
+    var scrollContainerEl = Object(dom["b" /* getScrollContainer */])(anchorRef) || document.body;
+    var scrollRect = scrollContainerEl.getBoundingClientRect();
+    var stickyPosition = scrollRect.top + height - relativeOffsetTop;
+
+    if (anchorRect.top <= stickyPosition) {
+      return {
+        yAxis: yAxis,
+        popoverTop: Math.min(anchorRect.bottom, stickyPosition)
+      };
+    }
+  } // y axis alignment choices
+
+
+  var anchorMidPoint = anchorRect.top + anchorRect.height / 2;
+
+  if (corner === 'bottom') {
+    anchorMidPoint = anchorRect.bottom;
+  } else if (corner === 'top') {
+    anchorMidPoint = anchorRect.top;
+  }
+
+  var middleAlignment = {
+    popoverTop: anchorMidPoint,
+    contentHeight: (anchorMidPoint - height / 2 > 0 ? height / 2 : anchorMidPoint) + (anchorMidPoint + height / 2 > window.innerHeight ? window.innerHeight - anchorMidPoint : height / 2)
+  };
+  var topAlignment = {
+    popoverTop: anchorRect.top,
+    contentHeight: anchorRect.top - HEIGHT_OFFSET - height > 0 ? height : anchorRect.top - HEIGHT_OFFSET
+  };
+  var bottomAlignment = {
+    popoverTop: anchorRect.bottom,
+    contentHeight: anchorRect.bottom + HEIGHT_OFFSET + height > window.innerHeight ? window.innerHeight - HEIGHT_OFFSET - anchorRect.bottom : height
+  }; // Choosing the y axis
+
+  var chosenYAxis = yAxis;
+  var contentHeight = null;
+
+  if (!sticky) {
+    if (yAxis === 'middle' && middleAlignment.contentHeight === height) {
+      chosenYAxis = 'middle';
+    } else if (yAxis === 'top' && topAlignment.contentHeight === height) {
+      chosenYAxis = 'top';
+    } else if (yAxis === 'bottom' && bottomAlignment.contentHeight === height) {
+      chosenYAxis = 'bottom';
+    } else {
+      chosenYAxis = topAlignment.contentHeight > bottomAlignment.contentHeight ? 'top' : 'bottom';
+      var chosenHeight = chosenYAxis === 'top' ? topAlignment.contentHeight : bottomAlignment.contentHeight;
+      contentHeight = chosenHeight !== height ? chosenHeight : null;
+    }
+  }
+
+  var popoverTop;
+
+  if (chosenYAxis === 'middle') {
+    popoverTop = middleAlignment.popoverTop;
+  } else if (chosenYAxis === 'top') {
+    popoverTop = topAlignment.popoverTop;
+  } else {
+    popoverTop = bottomAlignment.popoverTop;
+  }
+
+  return {
+    yAxis: chosenYAxis,
+    popoverTop: popoverTop,
+    contentHeight: contentHeight
+  };
+}
+/**
+ * Utility used to compute the popover position and the content max width/height
+ * for a popover given its anchor rect and its content size.
+ *
+ * @param {Object}  anchorRect        Anchor Rect.
+ * @param {Object}  contentSize       Content Size.
+ * @param {string}  position          Position.
+ * @param {boolean} sticky            Whether or not to stick the popover to the
+ *                                    scroll container edge when part of the
+ *                                    anchor leaves view.
+ * @param {Element} anchorRef         The anchor element.
+ * @param {number}  relativeOffsetTop If applicable, top offset of the relative
+ *                                    positioned parent container.
+ * @param {Element} boundaryElement   Boundary element.
+ *
+ * @return {Object} Popover position and constraints.
+ */
+
+function computePopoverPosition(anchorRect, contentSize) {
+  var position = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'top';
+  var sticky = arguments.length > 3 ? arguments[3] : undefined;
+  var anchorRef = arguments.length > 4 ? arguments[4] : undefined;
+  var relativeOffsetTop = arguments.length > 5 ? arguments[5] : undefined;
+  var boundaryElement = arguments.length > 6 ? arguments[6] : undefined;
+
+  var _position$split = position.split(' '),
+      _position$split2 = Object(slicedToArray["a" /* default */])(_position$split, 3),
+      yAxis = _position$split2[0],
+      _position$split2$ = _position$split2[1],
+      xAxis = _position$split2$ === void 0 ? 'center' : _position$split2$,
+      corner = _position$split2[2];
+
+  var yAxisPosition = computePopoverYAxisPosition(anchorRect, contentSize, yAxis, corner, sticky, anchorRef, relativeOffsetTop);
+  var xAxisPosition = computePopoverXAxisPosition(anchorRect, contentSize, xAxis, corner, sticky, yAxisPosition.yAxis, boundaryElement);
+  return _objectSpread({}, xAxisPosition, {}, yAxisPosition);
+}
+//# sourceMappingURL=utils.js.map
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/index.js + 1 modules
+var with_focus_return = __webpack_require__(103);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-constrained-tabbing/index.js
+var with_constrained_tabbing = __webpack_require__(100);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(23);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
+var inherits = __webpack_require__(22);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-outside/index.js
+var with_focus_outside = __webpack_require__(101);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/detect-outside.js
+
+
+
+
+
+
+function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+var detect_outside_PopoverDetectOutside = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(PopoverDetectOutside, _Component);
+
+  var _super = _createSuper(PopoverDetectOutside);
+
+  function PopoverDetectOutside() {
+    Object(classCallCheck["a" /* default */])(this, PopoverDetectOutside);
+
+    return _super.apply(this, arguments);
+  }
+
+  Object(createClass["a" /* default */])(PopoverDetectOutside, [{
+    key: "handleFocusOutside",
+    value: function handleFocusOutside(event) {
+      this.props.onFocusOutside(event);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return this.props.children;
+    }
+  }]);
+
+  return PopoverDetectOutside;
+}(external_this_wp_element_["Component"]);
+
+/* harmony default export */ var detect_outside = (Object(with_focus_outside["a" /* default */])(detect_outside_PopoverDetectOutside));
+//# sourceMappingURL=detect-outside.js.map
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/button/index.js
+var build_module_button = __webpack_require__(90);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/scroll-lock/index.js
+
+
+
+
+
+
+function scroll_lock_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (scroll_lock_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function scroll_lock_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Creates a ScrollLock component bound to the specified document.
+ *
+ * This function creates a ScrollLock component for the specified document
+ * and is exposed so we can create an isolated component for unit testing.
+ *
+ * @param {Object} args Keyword args.
+ * @param {HTMLDocument} args.htmlDocument The document to lock the scroll for.
+ * @param {string} args.className The name of the class used to lock scrolling.
+ * @return {WPComponent} The bound ScrollLock component.
+ */
+
+function createScrollLockComponent() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$htmlDocument = _ref.htmlDocument,
+      htmlDocument = _ref$htmlDocument === void 0 ? document : _ref$htmlDocument,
+      _ref$className = _ref.className,
+      className = _ref$className === void 0 ? 'lockscroll' : _ref$className;
+
+  var lockCounter = 0;
+  /*
+   * Setting `overflow: hidden` on html and body elements resets body scroll in iOS.
+   * Save scroll top so we can restore it after locking scroll.
+   *
+   * NOTE: It would be cleaner and possibly safer to find a localized solution such
+   * as preventing default on certain touchmove events.
+   */
+
+  var previousScrollTop = 0;
+  /**
+   * Locks and unlocks scroll depending on the boolean argument.
+   *
+   * @param {boolean} locked Whether or not scroll should be locked.
+   */
+
+  function setLocked(locked) {
+    var scrollingElement = htmlDocument.scrollingElement || htmlDocument.body;
+
+    if (locked) {
+      previousScrollTop = scrollingElement.scrollTop;
+    }
+
+    var methodName = locked ? 'add' : 'remove';
+    scrollingElement.classList[methodName](className); // Adding the class to the document element seems to be necessary in iOS.
+
+    htmlDocument.documentElement.classList[methodName](className);
+
+    if (!locked) {
+      scrollingElement.scrollTop = previousScrollTop;
+    }
+  }
+  /**
+   * Requests scroll lock.
+   *
+   * This function tracks requests for scroll lock. It locks scroll on the first
+   * request and counts each request so `releaseLock` can unlock scroll when
+   * all requests have been released.
+   */
+
+
+  function requestLock() {
+    if (lockCounter === 0) {
+      setLocked(true);
+    }
+
+    ++lockCounter;
+  }
+  /**
+   * Releases a request for scroll lock.
+   *
+   * This function tracks released requests for scroll lock. When all requests
+   * have been released, it unlocks scroll.
+   */
+
+
+  function releaseLock() {
+    if (lockCounter === 1) {
+      setLocked(false);
+    }
+
+    --lockCounter;
+  }
+
+  return /*#__PURE__*/function (_Component) {
+    Object(inherits["a" /* default */])(ScrollLock, _Component);
+
+    var _super = scroll_lock_createSuper(ScrollLock);
+
+    function ScrollLock() {
+      Object(classCallCheck["a" /* default */])(this, ScrollLock);
+
+      return _super.apply(this, arguments);
+    }
+
+    Object(createClass["a" /* default */])(ScrollLock, [{
+      key: "componentDidMount",
+
+      /**
+       * Requests scroll lock on mount.
+       */
+      value: function componentDidMount() {
+        requestLock();
+      }
+      /**
+       * Releases scroll lock before unmount.
+       */
+
+    }, {
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        releaseLock();
+      }
+      /**
+       * Render nothing as this component is merely a way to declare scroll lock.
+       *
+       * @return {null} Render nothing by returning `null`.
+       */
+
+    }, {
+      key: "render",
+      value: function render() {
+        return null;
+      }
+    }]);
+
+    return ScrollLock;
+  }(external_this_wp_element_["Component"]);
+}
+/* harmony default export */ var scroll_lock = (createScrollLockComponent());
+//# sourceMappingURL=index.js.map
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/isolated-event-container/index.js
+var isolated_event_container = __webpack_require__(102);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot-fill-context.js
+var slot_fill_context = __webpack_require__(66);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/use-slot.js
+
+
+function use_slot_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function use_slot_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { use_slot_ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { use_slot_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+function use_slot_useSlot(name) {
+  var registry = Object(external_this_wp_element_["useContext"])(slot_fill_context["a" /* default */]);
+  var slot = registry.slots[name] || {};
+  var slotFills = registry.fills[name];
+  var fills = Object(external_this_wp_element_["useMemo"])(function () {
+    return slotFills || [];
+  }, [slotFills]);
+  var updateSlot = Object(external_this_wp_element_["useCallback"])(function (fillProps) {
+    registry.updateSlot(name, fillProps);
+  }, [name, registry.updateSlot]);
+  var unregisterSlot = Object(external_this_wp_element_["useCallback"])(function (slotRef) {
+    registry.unregisterSlot(name, slotRef);
+  }, [name, registry.unregisterSlot]);
+  var registerFill = Object(external_this_wp_element_["useCallback"])(function (fillRef) {
+    registry.registerFill(name, fillRef);
+  }, [name, registry.registerFill]);
+  var unregisterFill = Object(external_this_wp_element_["useCallback"])(function (fillRef) {
+    registry.unregisterFill(name, fillRef);
+  }, [name, registry.unregisterFill]);
+  return use_slot_objectSpread({}, slot, {
+    updateSlot: updateSlot,
+    unregisterSlot: unregisterSlot,
+    fills: fills,
+    registerFill: registerFill,
+    unregisterFill: unregisterFill
+  });
+}
+//# sourceMappingURL=use-slot.js.map
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+var assertThisInitialized = __webpack_require__(18);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/get.js + 1 modules
+var get = __webpack_require__(94);
+
+// EXTERNAL MODULE: external "lodash"
+var external_lodash_ = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
+var toConsumableArray = __webpack_require__(27);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__(50);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/is-shallow-equal/lib/index.js
+var lib = __webpack_require__(57);
+var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot-fill-provider.js
+
+
+
+
+
+
+
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return Object(esm_typeof["a" /* default */])(key) === "symbol" ? key : String(key); }
+
+function _toPrimitive(input, hint) { if (Object(esm_typeof["a" /* default */])(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (Object(esm_typeof["a" /* default */])(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+function slot_fill_provider_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function slot_fill_provider_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { slot_fill_provider_ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { slot_fill_provider_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function useSlotRegistry() {
+  var _useState = Object(external_this_wp_element_["useState"])({}),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      slots = _useState2[0],
+      setSlots = _useState2[1];
+
+  var _useState3 = Object(external_this_wp_element_["useState"])({}),
+      _useState4 = Object(slicedToArray["a" /* default */])(_useState3, 2),
+      fills = _useState4[0],
+      setFills = _useState4[1];
+
+  var registerSlot = Object(external_this_wp_element_["useCallback"])(function (name, ref, fillProps) {
+    setSlots(function (prevSlots) {
+      var slot = prevSlots[name] || {};
+      return slot_fill_provider_objectSpread({}, prevSlots, Object(defineProperty["a" /* default */])({}, name, slot_fill_provider_objectSpread({}, slot, {
+        ref: ref || slot.ref,
+        fillProps: fillProps || slot.fillProps || {}
+      })));
+    });
+  }, []);
+  var unregisterSlot = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
+    setSlots(function (prevSlots) {
+      var slot = prevSlots[name],
+          nextSlots = Object(objectWithoutProperties["a" /* default */])(prevSlots, [name].map(_toPropertyKey)); // Make sure we're not unregistering a slot registered by another element
+      // See https://github.com/WordPress/gutenberg/pull/19242#issuecomment-590295412
+
+
+      if ((slot === null || slot === void 0 ? void 0 : slot.ref) === ref) {
+        return nextSlots;
+      }
+
+      return prevSlots;
+    });
+  }, []);
+  var updateSlot = Object(external_this_wp_element_["useCallback"])(function (name, fillProps) {
+    var slot = slots[name];
+
+    if (!slot) {
+      return;
+    }
+
+    if (!lib_default()(slot.fillProps, fillProps)) {
+      slot.fillProps = fillProps;
+      var slotFills = fills[name];
+
+      if (slotFills) {
+        // Force update fills
+        slotFills.map(function (fill) {
+          return fill.current.rerender();
+        });
+      }
+    }
+  }, [slots, fills]);
+  var registerFill = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
+    setFills(function (prevFills) {
+      return slot_fill_provider_objectSpread({}, prevFills, Object(defineProperty["a" /* default */])({}, name, [].concat(Object(toConsumableArray["a" /* default */])(prevFills[name] || []), [ref])));
+    });
+  }, []);
+  var unregisterFill = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
+    setFills(function (prevFills) {
+      if (prevFills[name]) {
+        return slot_fill_provider_objectSpread({}, prevFills, Object(defineProperty["a" /* default */])({}, name, prevFills[name].filter(function (fillRef) {
+          return fillRef !== ref;
+        })));
+      }
+
+      return prevFills;
+    });
+  }, []); // Memoizing the return value so it can be directly passed to Provider value
+
+  var registry = Object(external_this_wp_element_["useMemo"])(function () {
+    return {
+      slots: slots,
+      fills: fills,
+      registerSlot: registerSlot,
+      updateSlot: updateSlot,
+      unregisterSlot: unregisterSlot,
+      registerFill: registerFill,
+      unregisterFill: unregisterFill
+    };
+  }, [slots, fills, registerSlot, updateSlot, unregisterSlot, registerFill, unregisterFill]);
+  return registry;
+}
+
+function slot_fill_provider_SlotFillProvider(_ref) {
+  var children = _ref.children;
+  var registry = useSlotRegistry();
+  return Object(external_this_wp_element_["createElement"])(slot_fill_context["a" /* default */].Provider, {
+    value: registry
+  }, children);
+}
+//# sourceMappingURL=slot-fill-provider.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/context.js
+
+
+
+
+
+
+
+
+
+
+function context_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (context_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function context_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+var SlotFillContext = Object(external_this_wp_element_["createContext"])({
+  registerSlot: function registerSlot() {},
+  unregisterSlot: function unregisterSlot() {},
+  registerFill: function registerFill() {},
+  unregisterFill: function unregisterFill() {},
+  getSlot: function getSlot() {},
+  getFills: function getFills() {},
+  subscribe: function subscribe() {}
+});
+var Provider = SlotFillContext.Provider,
+    Consumer = SlotFillContext.Consumer;
+
+var context_SlotFillProvider = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(SlotFillProvider, _Component);
+
+  var _super = context_createSuper(SlotFillProvider);
+
+  function SlotFillProvider() {
+    var _this;
+
+    Object(classCallCheck["a" /* default */])(this, SlotFillProvider);
+
+    _this = _super.apply(this, arguments);
+    _this.registerSlot = _this.registerSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.registerFill = _this.registerFill.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.unregisterSlot = _this.unregisterSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.unregisterFill = _this.unregisterFill.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.getSlot = _this.getSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.getFills = _this.getFills.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.hasFills = _this.hasFills.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.subscribe = _this.subscribe.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.slots = {};
+    _this.fills = {};
+    _this.listeners = [];
+    _this.contextValue = {
+      registerSlot: _this.registerSlot,
+      unregisterSlot: _this.unregisterSlot,
+      registerFill: _this.registerFill,
+      unregisterFill: _this.unregisterFill,
+      getSlot: _this.getSlot,
+      getFills: _this.getFills,
+      hasFills: _this.hasFills,
+      subscribe: _this.subscribe
+    };
+    return _this;
+  }
+
+  Object(createClass["a" /* default */])(SlotFillProvider, [{
+    key: "registerSlot",
+    value: function registerSlot(name, slot) {
+      var previousSlot = this.slots[name];
+      this.slots[name] = slot;
+      this.triggerListeners(); // Sometimes the fills are registered after the initial render of slot
+      // But before the registerSlot call, we need to rerender the slot
+
+      this.forceUpdateSlot(name); // If a new instance of a slot is being mounted while another with the
+      // same name exists, force its update _after_ the new slot has been
+      // assigned into the instance, such that its own rendering of children
+      // will be empty (the new Slot will subsume all fills for this name).
+
+      if (previousSlot) {
+        previousSlot.forceUpdate();
+      }
+    }
+  }, {
+    key: "registerFill",
+    value: function registerFill(name, instance) {
+      this.fills[name] = [].concat(Object(toConsumableArray["a" /* default */])(this.fills[name] || []), [instance]);
+      this.forceUpdateSlot(name);
+    }
+  }, {
+    key: "unregisterSlot",
+    value: function unregisterSlot(name, instance) {
+      // If a previous instance of a Slot by this name unmounts, do nothing,
+      // as the slot and its fills should only be removed for the current
+      // known instance.
+      if (this.slots[name] !== instance) {
+        return;
+      }
+
+      delete this.slots[name];
+      this.triggerListeners();
+    }
+  }, {
+    key: "unregisterFill",
+    value: function unregisterFill(name, instance) {
+      this.fills[name] = Object(external_lodash_["without"])(this.fills[name], instance);
+      this.resetFillOccurrence(name);
+      this.forceUpdateSlot(name);
+    }
+  }, {
+    key: "getSlot",
+    value: function getSlot(name) {
+      return this.slots[name];
+    }
+  }, {
+    key: "getFills",
+    value: function getFills(name, slotInstance) {
+      // Fills should only be returned for the current instance of the slot
+      // in which they occupy.
+      if (this.slots[name] !== slotInstance) {
+        return [];
+      }
+
+      return Object(external_lodash_["sortBy"])(this.fills[name], 'occurrence');
+    }
+  }, {
+    key: "hasFills",
+    value: function hasFills(name) {
+      return this.fills[name] && !!this.fills[name].length;
+    }
+  }, {
+    key: "resetFillOccurrence",
+    value: function resetFillOccurrence(name) {
+      Object(external_lodash_["forEach"])(this.fills[name], function (instance) {
+        instance.occurrence = undefined;
+      });
+    }
+  }, {
+    key: "forceUpdateSlot",
+    value: function forceUpdateSlot(name) {
+      var slot = this.getSlot(name);
+
+      if (slot) {
+        slot.forceUpdate();
+      }
+    }
+  }, {
+    key: "triggerListeners",
+    value: function triggerListeners() {
+      this.listeners.forEach(function (listener) {
+        return listener();
+      });
+    }
+  }, {
+    key: "subscribe",
+    value: function subscribe(listener) {
+      var _this2 = this;
+
+      this.listeners.push(listener);
+      return function () {
+        _this2.listeners = Object(external_lodash_["without"])(_this2.listeners, listener);
+      };
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return Object(external_this_wp_element_["createElement"])(Provider, {
+        value: this.contextValue
+      }, Object(external_this_wp_element_["createElement"])(slot_fill_provider_SlotFillProvider, null, this.props.children));
+    }
+  }]);
+
+  return SlotFillProvider;
+}(external_this_wp_element_["Component"]);
+/**
+ * React hook returning the active slot given a name.
+ *
+ * @param {string} name Slot name.
+ * @return {Object} Slot object.
+ */
+
+
+var context_useSlot = function useSlot(name) {
+  var _useContext = Object(external_this_wp_element_["useContext"])(SlotFillContext),
+      getSlot = _useContext.getSlot,
+      subscribe = _useContext.subscribe;
+
+  var _useState = Object(external_this_wp_element_["useState"])(getSlot(name)),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      slot = _useState2[0],
+      setSlot = _useState2[1];
+
+  Object(external_this_wp_element_["useEffect"])(function () {
+    setSlot(getSlot(name));
+    var unsubscribe = subscribe(function () {
+      setSlot(getSlot(name));
+    });
+    return unsubscribe;
+  }, [name]);
+  return slot;
+};
+/* harmony default export */ var context = (context_SlotFillProvider);
+
+//# sourceMappingURL=context.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/slot.js
+
+
+
+
+
+
+
+
+
+
+function slot_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (slot_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function slot_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+var slot_SlotComponent = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(SlotComponent, _Component);
+
+  var _super = slot_createSuper(SlotComponent);
+
+  function SlotComponent() {
+    var _this;
+
+    Object(classCallCheck["a" /* default */])(this, SlotComponent);
+
+    _this = _super.apply(this, arguments);
+    _this.isUnmounted = false;
+    _this.bindNode = _this.bindNode.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    return _this;
+  }
+
+  Object(createClass["a" /* default */])(SlotComponent, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var registerSlot = this.props.registerSlot;
+      registerSlot(this.props.name, this);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      var unregisterSlot = this.props.unregisterSlot;
+      this.isUnmounted = true;
+      unregisterSlot(this.props.name, this);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var _this$props = this.props,
+          name = _this$props.name,
+          unregisterSlot = _this$props.unregisterSlot,
+          registerSlot = _this$props.registerSlot;
+
+      if (prevProps.name !== name) {
+        unregisterSlot(prevProps.name);
+        registerSlot(name, this);
+      }
+    }
+  }, {
+    key: "bindNode",
+    value: function bindNode(node) {
+      this.node = node;
+    }
+  }, {
+    key: "forceUpdate",
+    value: function forceUpdate() {
+      if (this.isUnmounted) {
+        return;
+      }
+
+      Object(get["a" /* default */])(Object(getPrototypeOf["a" /* default */])(SlotComponent.prototype), "forceUpdate", this).call(this);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          children = _this$props2.children,
+          name = _this$props2.name,
+          _this$props2$fillProp = _this$props2.fillProps,
+          fillProps = _this$props2$fillProp === void 0 ? {} : _this$props2$fillProp,
+          getFills = _this$props2.getFills;
+      var fills = Object(external_lodash_["map"])(getFills(name, this), function (fill) {
+        var fillKey = fill.occurrence;
+        var fillChildren = Object(external_lodash_["isFunction"])(fill.children) ? fill.children(fillProps) : fill.children;
+        return external_this_wp_element_["Children"].map(fillChildren, function (child, childIndex) {
+          if (!child || Object(external_lodash_["isString"])(child)) {
+            return child;
+          }
+
+          var childKey = "".concat(fillKey, "---").concat(child.key || childIndex);
+          return Object(external_this_wp_element_["cloneElement"])(child, {
+            key: childKey
+          });
+        });
+      }).filter( // In some cases fills are rendered only when some conditions apply.
+      // This ensures that we only use non-empty fills when rendering, i.e.,
+      // it allows us to render wrappers only when the fills are actually present.
+      Object(external_lodash_["negate"])(external_this_wp_element_["isEmptyElement"]));
+      return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_lodash_["isFunction"])(children) ? children(fills) : fills);
+    }
+  }]);
+
+  return SlotComponent;
+}(external_this_wp_element_["Component"]);
+
+var slot_Slot = function Slot(props) {
+  return Object(external_this_wp_element_["createElement"])(Consumer, null, function (_ref) {
+    var registerSlot = _ref.registerSlot,
+        unregisterSlot = _ref.unregisterSlot,
+        getFills = _ref.getFills;
+    return Object(external_this_wp_element_["createElement"])(slot_SlotComponent, Object(esm_extends["a" /* default */])({}, props, {
+      registerSlot: registerSlot,
+      unregisterSlot: unregisterSlot,
+      getFills: getFills
+    }));
+  });
+};
+
+/* harmony default export */ var slot_fill_slot = (slot_Slot);
+//# sourceMappingURL=slot.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/fill.js
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+var occurrences = 0;
+
+function fill_FillComponent(_ref) {
+  var name = _ref.name,
+      children = _ref.children,
+      registerFill = _ref.registerFill,
+      unregisterFill = _ref.unregisterFill;
+  var slot = context_useSlot(name);
+  var ref = Object(external_this_wp_element_["useRef"])({
+    name: name,
+    children: children
+  });
+
+  if (!ref.current.occurrence) {
+    ref.current.occurrence = ++occurrences;
+  }
+
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    registerFill(name, ref.current);
+    return function () {
+      return unregisterFill(name, ref.current);
+    };
+  }, []);
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    ref.current.children = children;
+
+    if (slot) {
+      slot.forceUpdate();
+    }
+  }, [children]);
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    if (name === ref.current.name) {
+      // ignore initial effect
+      return;
+    }
+
+    unregisterFill(ref.current.name, ref.current);
+    ref.current.name = name;
+    registerFill(name, ref.current);
+  }, [name]);
+
+  if (!slot || !slot.node) {
+    return null;
+  } // If a function is passed as a child, provide it with the fillProps.
+
+
+  if (Object(external_lodash_["isFunction"])(children)) {
+    children = children(slot.props.fillProps);
+  }
+
+  return Object(external_this_wp_element_["createPortal"])(children, slot.node);
+}
+
+var fill_Fill = function Fill(props) {
+  return Object(external_this_wp_element_["createElement"])(Consumer, null, function (_ref2) {
+    var registerFill = _ref2.registerFill,
+        unregisterFill = _ref2.unregisterFill;
+    return Object(external_this_wp_element_["createElement"])(fill_FillComponent, Object(esm_extends["a" /* default */])({}, props, {
+      registerFill: registerFill,
+      unregisterFill: unregisterFill
+    }));
+  });
+};
+
+/* harmony default export */ var slot_fill_fill = (fill_Fill);
+//# sourceMappingURL=fill.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot.js
+
+
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+function bubbles_virtually_slot_Slot(_ref) {
+  var name = _ref.name,
+      _ref$fillProps = _ref.fillProps,
+      fillProps = _ref$fillProps === void 0 ? {} : _ref$fillProps,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      props = Object(objectWithoutProperties["a" /* default */])(_ref, ["name", "fillProps", "as"]);
+
+  var registry = Object(external_this_wp_element_["useContext"])(slot_fill_context["a" /* default */]);
+  var ref = Object(external_this_wp_element_["useRef"])();
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    registry.registerSlot(name, ref, fillProps);
+    return function () {
+      registry.unregisterSlot(name, ref);
+    }; // We are not including fillProps in the deps because we don't want to
+    // unregister and register the slot whenever fillProps change, which would
+    // cause the fill to be re-mounted. We are only considering the initial value
+    // of fillProps.
+  }, [registry.registerSlot, registry.unregisterSlot, name]); // fillProps may be an update that interacts with the layout, so we
+  // useLayoutEffect
+
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    registry.updateSlot(name, fillProps);
+  });
+  return Object(external_this_wp_element_["createElement"])(Component, Object(esm_extends["a" /* default */])({
+    ref: ref
+  }, props));
+}
+//# sourceMappingURL=slot.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/fill.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function useForceUpdate() {
+  var _useState = Object(external_this_wp_element_["useState"])({}),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      setState = _useState2[1];
+
+  return function () {
+    return setState({});
+  };
+}
+
+function bubbles_virtually_fill_Fill(_ref) {
+  var name = _ref.name,
+      children = _ref.children;
+  var slot = use_slot_useSlot(name);
+  var ref = Object(external_this_wp_element_["useRef"])({
+    rerender: useForceUpdate()
+  });
+  Object(external_this_wp_element_["useEffect"])(function () {
+    // We register fills so we can keep track of their existance.
+    // Some Slot implementations need to know if there're already fills
+    // registered so they can choose to render themselves or not.
+    slot.registerFill(ref);
+    return function () {
+      slot.unregisterFill(ref);
+    };
+  }, [slot.registerFill, slot.unregisterFill]);
+
+  if (!slot.ref || !slot.ref.current) {
+    return null;
+  }
+
+  if (typeof children === 'function') {
+    children = children(slot.fillProps);
+  }
+
+  return Object(external_this_wp_element_["createPortal"])(children, slot.ref.current);
+}
+//# sourceMappingURL=fill.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/index.js
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+function slot_fill_Slot(_ref) {
+  var bubblesVirtually = _ref.bubblesVirtually,
+      props = Object(objectWithoutProperties["a" /* default */])(_ref, ["bubblesVirtually"]);
+
+  if (bubblesVirtually) {
+    return Object(external_this_wp_element_["createElement"])(bubbles_virtually_slot_Slot, props);
+  }
+
+  return Object(external_this_wp_element_["createElement"])(slot_fill_slot, props);
+}
+function slot_fill_Fill(props) {
+  // We're adding both Fills here so they can register themselves before
+  // their respective slot has been registered. Only the Fill that has a slot
+  // will render. The other one will return null.
+  return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(slot_fill_fill, props), Object(external_this_wp_element_["createElement"])(bubbles_virtually_fill_Fill, props));
+}
+function createSlotFill(name) {
+  var FillComponent = function FillComponent(props) {
+    return Object(external_this_wp_element_["createElement"])(slot_fill_Fill, Object(esm_extends["a" /* default */])({
+      name: name
+    }, props));
+  };
+
+  FillComponent.displayName = name + 'Fill';
+
+  var SlotComponent = function SlotComponent(props) {
+    return Object(external_this_wp_element_["createElement"])(slot_fill_Slot, Object(esm_extends["a" /* default */])({
+      name: name
+    }, props));
+  };
+
+  SlotComponent.displayName = name + 'Slot';
+  return {
+    Fill: FillComponent,
+    Slot: SlotComponent
+  };
+}
+
+//# sourceMappingURL=index.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/animate/index.js
+
+
+
+/**
+ * External dependencies
+ */
+
+
+function Animate(_ref) {
+  var type = _ref.type,
+      _ref$options = _ref.options,
+      options = _ref$options === void 0 ? {} : _ref$options,
+      children = _ref.children;
+
+  if (type === 'appear') {
+    var _classnames;
+
+    var _options$origin = options.origin,
+        origin = _options$origin === void 0 ? 'top' : _options$origin;
+
+    var _origin$split = origin.split(' '),
+        _origin$split2 = Object(slicedToArray["a" /* default */])(_origin$split, 2),
+        yAxis = _origin$split2[0],
+        _origin$split2$ = _origin$split2[1],
+        xAxis = _origin$split2$ === void 0 ? 'center' : _origin$split2$;
+
+    return children({
+      className: classnames_default()('components-animate__appear', (_classnames = {}, Object(defineProperty["a" /* default */])(_classnames, 'is-from-' + xAxis, xAxis !== 'center'), Object(defineProperty["a" /* default */])(_classnames, 'is-from-' + yAxis, yAxis !== 'middle'), _classnames))
+    });
+  }
+
+  if (type === 'slide-in') {
+    var _options$origin2 = options.origin,
+        _origin = _options$origin2 === void 0 ? 'left' : _options$origin2;
+
+    return children({
+      className: classnames_default()('components-animate__slide-in', 'is-from-' + _origin)
+    });
+  }
+
+  if (type === 'loading') {
+    return children({
+      className: classnames_default()('components-animate__loading')
+    });
+  }
+
+  return children({});
+}
+
+/* harmony default export */ var build_module_animate = (Animate);
+//# sourceMappingURL=index.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/index.js
+
+
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+
+
+
+var FocusManaged = Object(with_constrained_tabbing["a" /* default */])(Object(with_focus_return["a" /* default */])(function (_ref) {
+  var children = _ref.children;
+  return children;
+}));
+/**
+ * Name of slot in which popover should fill.
+ *
+ * @type {string}
+ */
+
+var SLOT_NAME = 'Popover';
+
+function computeAnchorRect(anchorRefFallback, anchorRect, getAnchorRect) {
+  var anchorRef = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var shouldAnchorIncludePadding = arguments.length > 4 ? arguments[4] : undefined;
+
+  if (anchorRect) {
+    return anchorRect;
+  }
+
+  if (getAnchorRect) {
+    if (!anchorRefFallback.current) {
+      return;
+    }
+
+    return getAnchorRect(anchorRefFallback.current);
+  }
+
+  if (anchorRef !== false) {
+    if (!anchorRef || !window.Range || !window.Element || !window.DOMRect) {
+      return;
+    }
+
+    if (anchorRef instanceof window.Range) {
+      return Object(dom["a" /* getRectangleFromRange */])(anchorRef);
+    }
+
+    if (anchorRef instanceof window.Element) {
+      var _rect2 = anchorRef.getBoundingClientRect();
+
+      if (shouldAnchorIncludePadding) {
+        return _rect2;
+      }
+
+      return withoutPadding(_rect2, anchorRef);
+    }
+
+    var top = anchorRef.top,
+        bottom = anchorRef.bottom;
+    var topRect = top.getBoundingClientRect();
+    var bottomRect = bottom.getBoundingClientRect();
+
+    var _rect = new window.DOMRect(topRect.left, topRect.top, topRect.width, bottomRect.bottom - topRect.top);
+
+    if (shouldAnchorIncludePadding) {
+      return _rect;
+    }
+
+    return withoutPadding(_rect, anchorRef);
+  }
+
+  if (!anchorRefFallback.current) {
+    return;
+  }
+
+  var parentNode = anchorRefFallback.current.parentNode;
+  var rect = parentNode.getBoundingClientRect();
+
+  if (shouldAnchorIncludePadding) {
+    return rect;
+  }
+
+  return withoutPadding(rect, parentNode);
+}
+
+function withoutPadding(rect, element) {
+  var _window$getComputedSt = window.getComputedStyle(element),
+      paddingTop = _window$getComputedSt.paddingTop,
+      paddingBottom = _window$getComputedSt.paddingBottom,
+      paddingLeft = _window$getComputedSt.paddingLeft,
+      paddingRight = _window$getComputedSt.paddingRight;
+
+  var top = paddingTop ? parseInt(paddingTop, 10) : 0;
+  var bottom = paddingBottom ? parseInt(paddingBottom, 10) : 0;
+  var left = paddingLeft ? parseInt(paddingLeft, 10) : 0;
+  var right = paddingRight ? parseInt(paddingRight, 10) : 0;
+  return {
+    x: rect.left + left,
+    y: rect.top + top,
+    width: rect.width - left - right,
+    height: rect.height - top - bottom,
+    left: rect.left + left,
+    right: rect.right - right,
+    top: rect.top + top,
+    bottom: rect.bottom - bottom
+  };
+}
+/**
+ * Hook used to focus the first tabbable element on mount.
+ *
+ * @param {boolean|string} focusOnMount Focus on mount mode.
+ * @param {Object}         contentRef   Reference to the popover content element.
+ */
+
+
+function useFocusContentOnMount(focusOnMount, contentRef) {
+  // Focus handling
+  Object(external_this_wp_element_["useEffect"])(function () {
+    /*
+     * Without the setTimeout, the dom node is not being focused. Related:
+     * https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
+     *
+     * TODO: Treat the cause, not the symptom.
+     */
+    var focusTimeout = setTimeout(function () {
+      if (!focusOnMount || !contentRef.current) {
+        return;
+      }
+
+      if (focusOnMount === 'firstElement') {
+        // Find first tabbable node within content and shift focus, falling
+        // back to the popover panel itself.
+        var firstTabbable = build_module["a" /* focus */].tabbable.find(contentRef.current)[0];
+
+        if (firstTabbable) {
+          firstTabbable.focus();
+        } else {
+          contentRef.current.focus();
+        }
+
+        return;
+      }
+
+      if (focusOnMount === 'container') {
+        // Focus the popover panel itself so items in the popover are easily
+        // accessed via keyboard navigation.
+        contentRef.current.focus();
+      }
+    }, 0);
+    return function () {
+      return clearTimeout(focusTimeout);
+    };
+  }, []);
+}
+/**
+ * Sets or removes an element attribute.
+ *
+ * @param {Element} element The element to modify.
+ * @param {string}  name    The attribute name to set or remove.
+ * @param {?string} value   The value to set. A falsy value will remove the
+ *                          attribute.
+ */
+
+
+function setAttribute(element, name, value) {
+  if (!value) {
+    if (element.hasAttribute(name)) {
+      element.removeAttribute(name);
+    }
+  } else if (element.getAttribute(name) !== value) {
+    element.setAttribute(name, value);
+  }
+}
+/**
+ * Sets or removes an element style property.
+ *
+ * @param {Element} element  The element to modify.
+ * @param {string}  property The property to set or remove.
+ * @param {?string} value    The value to set. A falsy value will remove the
+ *                           property.
+ */
+
+
+function setStyle(element, property) {
+  var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+  if (element.style[property] !== value) {
+    element.style[property] = value;
+  }
+}
+/**
+ * Sets or removes an element class.
+ *
+ * @param {Element} element The element to modify.
+ * @param {string}  name    The class to set or remove.
+ * @param {boolean} toggle  True to set the class, false to remove.
+ */
+
+
+function setClass(element, name, toggle) {
+  if (toggle) {
+    if (!element.classList.contains(name)) {
+      element.classList.add(name);
+    }
+  } else if (element.classList.contains(name)) {
+    element.classList.remove(name);
+  }
+}
+
+var popover_Popover = function Popover(_ref2) {
+  var headerTitle = _ref2.headerTitle,
+      onClose = _ref2.onClose,
+      onKeyDown = _ref2.onKeyDown,
+      children = _ref2.children,
+      className = _ref2.className,
+      _ref2$noArrow = _ref2.noArrow,
+      noArrow = _ref2$noArrow === void 0 ? true : _ref2$noArrow,
+      isAlternate = _ref2.isAlternate,
+      _ref2$position = _ref2.position,
+      position = _ref2$position === void 0 ? 'bottom right' : _ref2$position,
+      range = _ref2.range,
+      _ref2$focusOnMount = _ref2.focusOnMount,
+      focusOnMount = _ref2$focusOnMount === void 0 ? 'firstElement' : _ref2$focusOnMount,
+      anchorRef = _ref2.anchorRef,
+      shouldAnchorIncludePadding = _ref2.shouldAnchorIncludePadding,
+      anchorRect = _ref2.anchorRect,
+      getAnchorRect = _ref2.getAnchorRect,
+      expandOnMobile = _ref2.expandOnMobile,
+      _ref2$animate = _ref2.animate,
+      animate = _ref2$animate === void 0 ? true : _ref2$animate,
+      onClickOutside = _ref2.onClickOutside,
+      onFocusOutside = _ref2.onFocusOutside,
+      __unstableSticky = _ref2.__unstableSticky,
+      _ref2$__unstableSlotN = _ref2.__unstableSlotName,
+      __unstableSlotName = _ref2$__unstableSlotN === void 0 ? SLOT_NAME : _ref2$__unstableSlotN,
+      __unstableObserveElement = _ref2.__unstableObserveElement,
+      __unstableBoundaryParent = _ref2.__unstableBoundaryParent,
+      contentProps = Object(objectWithoutProperties["a" /* default */])(_ref2, ["headerTitle", "onClose", "onKeyDown", "children", "className", "noArrow", "isAlternate", "position", "range", "focusOnMount", "anchorRef", "shouldAnchorIncludePadding", "anchorRect", "getAnchorRect", "expandOnMobile", "animate", "onClickOutside", "onFocusOutside", "__unstableSticky", "__unstableSlotName", "__unstableObserveElement", "__unstableBoundaryParent"]);
+
+  var anchorRefFallback = Object(external_this_wp_element_["useRef"])(null);
+  var contentRef = Object(external_this_wp_element_["useRef"])(null);
+  var containerRef = Object(external_this_wp_element_["useRef"])();
+  var isMobileViewport = Object(use_viewport_match["a" /* default */])('medium', '<');
+
+  var _useState = Object(external_this_wp_element_["useState"])(),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      animateOrigin = _useState2[0],
+      setAnimateOrigin = _useState2[1];
+
+  var slot = use_slot_useSlot(__unstableSlotName);
+  var isExpanded = expandOnMobile && isMobileViewport;
+
+  var _useResizeObserver = use_resize_observer(),
+      _useResizeObserver2 = Object(slicedToArray["a" /* default */])(_useResizeObserver, 2),
+      containerResizeListener = _useResizeObserver2[0],
+      contentSize = _useResizeObserver2[1];
+
+  noArrow = isExpanded || noArrow;
+  Object(external_this_wp_element_["useLayoutEffect"])(function () {
+    if (isExpanded) {
+      setClass(containerRef.current, 'is-without-arrow', noArrow);
+      setClass(containerRef.current, 'is-alternate', isAlternate);
+      setAttribute(containerRef.current, 'data-x-axis');
+      setAttribute(containerRef.current, 'data-y-axis');
+      setStyle(containerRef.current, 'top');
+      setStyle(containerRef.current, 'left');
+      setStyle(contentRef.current, 'maxHeight');
+      setStyle(contentRef.current, 'maxWidth');
+      return;
+    }
+
+    var refresh = function refresh() {
+      if (!containerRef.current || !contentRef.current) {
+        return;
+      }
+
+      var anchor = computeAnchorRect(anchorRefFallback, anchorRect, getAnchorRect, anchorRef, shouldAnchorIncludePadding);
+
+      if (!anchor) {
+        return;
+      }
+
+      var _containerRef$current = containerRef.current,
+          offsetParent = _containerRef$current.offsetParent,
+          ownerDocument = _containerRef$current.ownerDocument;
+      var relativeOffsetTop = 0; // If there is a positioned ancestor element that is not the body,
+      // subtract the position from the anchor rect. If the position of
+      // the popover is fixed, the offset parent is null or the body
+      // element, in which case the position is relative to the viewport.
+      // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+
+      if (offsetParent && offsetParent !== ownerDocument.body) {
+        var offsetParentRect = offsetParent.getBoundingClientRect();
+        relativeOffsetTop = offsetParentRect.top;
+        anchor = new window.DOMRect(anchor.left - offsetParentRect.left, anchor.top - offsetParentRect.top, anchor.width, anchor.height);
+      }
+
+      var boundaryElement;
+
+      if (__unstableBoundaryParent) {
+        var _containerRef$current2;
+
+        boundaryElement = (_containerRef$current2 = containerRef.current.closest('.popover-slot')) === null || _containerRef$current2 === void 0 ? void 0 : _containerRef$current2.parentNode;
+      }
+
+      var usedContentSize = !contentSize.height ? contentRef.current.getBoundingClientRect() : contentSize;
+
+      var _computePopoverPositi = computePopoverPosition(anchor, usedContentSize, position, __unstableSticky, containerRef.current, relativeOffsetTop, boundaryElement),
+          popoverTop = _computePopoverPositi.popoverTop,
+          popoverLeft = _computePopoverPositi.popoverLeft,
+          xAxis = _computePopoverPositi.xAxis,
+          yAxis = _computePopoverPositi.yAxis,
+          contentHeight = _computePopoverPositi.contentHeight,
+          contentWidth = _computePopoverPositi.contentWidth;
+
+      if (typeof popoverTop === 'number' && typeof popoverLeft === 'number') {
+        setStyle(containerRef.current, 'top', popoverTop + 'px');
+        setStyle(containerRef.current, 'left', popoverLeft + 'px');
+      }
+
+      setClass(containerRef.current, 'is-without-arrow', noArrow || xAxis === 'center' && yAxis === 'middle');
+      setClass(containerRef.current, 'is-alternate', isAlternate);
+      setAttribute(containerRef.current, 'data-x-axis', xAxis);
+      setAttribute(containerRef.current, 'data-y-axis', yAxis);
+      setStyle(contentRef.current, 'maxHeight', typeof contentHeight === 'number' ? contentHeight + 'px' : '');
+      setStyle(contentRef.current, 'maxWidth', typeof contentWidth === 'number' ? contentWidth + 'px' : ''); // Compute the animation position
+
+      var yAxisMapping = {
+        top: 'bottom',
+        bottom: 'top'
+      };
+      var xAxisMapping = {
+        left: 'right',
+        right: 'left'
+      };
+      var animateYAxis = yAxisMapping[yAxis] || 'middle';
+      var animateXAxis = xAxisMapping[xAxis] || 'center';
+      setAnimateOrigin(animateXAxis + ' ' + animateYAxis);
+    };
+
+    refresh();
+    /*
+     * There are sometimes we need to reposition or resize the popover that
+     * are not handled by the resize/scroll window events (i.e. CSS changes
+     * in the layout that changes the position of the anchor).
+     *
+     * For these situations, we refresh the popover every 0.5s
+     */
+
+    var intervalHandle = window.setInterval(refresh, 500);
+    var rafId;
+
+    var refreshOnAnimationFrame = function refreshOnAnimationFrame() {
+      window.cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(refresh);
+    }; // Sometimes a click trigger a layout change that affects the popover
+    // position. This is an opportunity to immediately refresh rather than
+    // at the interval.
+
+
+    window.addEventListener('click', refreshOnAnimationFrame);
+    window.addEventListener('resize', refresh);
+    window.addEventListener('scroll', refresh, true);
+    var observer;
+
+    if (__unstableObserveElement) {
+      observer = new window.MutationObserver(refresh);
+      observer.observe(__unstableObserveElement, {
+        attributes: true
+      });
+    }
+
+    return function () {
+      window.clearInterval(intervalHandle);
+      window.removeEventListener('resize', refresh);
+      window.removeEventListener('scroll', refresh, true);
+      window.removeEventListener('click', refreshOnAnimationFrame);
+      window.cancelAnimationFrame(rafId);
+
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [isExpanded, anchorRect, getAnchorRect, anchorRef, shouldAnchorIncludePadding, position, contentSize, __unstableSticky, __unstableObserveElement, __unstableBoundaryParent]);
+  useFocusContentOnMount(focusOnMount, contentRef); // Event handlers
+
+  var maybeClose = function maybeClose(event) {
+    // Close on escape
+    if (event.keyCode === keycodes_build_module["b" /* ESCAPE */] && onClose) {
+      event.stopPropagation();
+      onClose();
+    } // Preserve original content prop behavior
+
+
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+  };
+  /**
+   * Shims an onFocusOutside callback to be compatible with a deprecated
+   * onClickOutside prop function, if provided.
+   *
+   * @param {FocusEvent} event Focus event from onFocusOutside.
+   */
+
+
+  function handleOnFocusOutside(event) {
+    // Defer to given `onFocusOutside` if specified. Call `onClose` only if
+    // both `onFocusOutside` and `onClickOutside` are unspecified. Doing so
+    // assures backwards-compatibility for prior `onClickOutside` default.
+    if (onFocusOutside) {
+      onFocusOutside(event);
+      return;
+    } else if (!onClickOutside) {
+      if (onClose) {
+        onClose();
+      }
+
+      return;
+    } // Simulate MouseEvent using FocusEvent#relatedTarget as emulated click
+    // target. MouseEvent constructor is unsupported in Internet Explorer.
+
+
+    var clickEvent;
+
+    try {
+      clickEvent = new window.MouseEvent('click');
+    } catch (error) {
+      clickEvent = document.createEvent('MouseEvent');
+      clickEvent.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    }
+
+    Object.defineProperty(clickEvent, 'target', {
+      get: function get() {
+        return event.relatedTarget;
+      }
+    });
+    Object(deprecated_build_module["a" /* default */])('Popover onClickOutside prop', {
+      alternative: 'onFocusOutside'
+    });
+    onClickOutside(clickEvent);
+  } // Disable reason: We care to capture the _bubbled_ events from inputs
+  // within popover as inferring close intent.
+
+
+  var content = Object(external_this_wp_element_["createElement"])(detect_outside, {
+    onFocusOutside: handleOnFocusOutside
+  }, Object(external_this_wp_element_["createElement"])(build_module_animate, {
+    type: animate && animateOrigin ? 'appear' : null,
+    options: {
+      origin: animateOrigin
+    }
+  }, function (_ref3) {
+    var animateClassName = _ref3.className;
+    return Object(external_this_wp_element_["createElement"])(isolated_event_container["a" /* default */], Object(esm_extends["a" /* default */])({
+      className: classnames_default()('components-popover', className, animateClassName, {
+        'is-expanded': isExpanded,
+        'is-without-arrow': noArrow,
+        'is-alternate': isAlternate
+      })
+    }, contentProps, {
+      onKeyDown: maybeClose,
+      ref: containerRef
+    }), isExpanded && Object(external_this_wp_element_["createElement"])(scroll_lock, null), isExpanded && Object(external_this_wp_element_["createElement"])("div", {
+      className: "components-popover__header"
+    }, Object(external_this_wp_element_["createElement"])("span", {
+      className: "components-popover__header-title"
+    }, headerTitle), Object(external_this_wp_element_["createElement"])(build_module_button["a" /* default */], {
+      className: "components-popover__close",
+      icon: library_close["a" /* default */],
+      onClick: onClose
+    })), Object(external_this_wp_element_["createElement"])("div", {
+      ref: contentRef,
+      className: "components-popover__content",
+      tabIndex: "-1"
+    }, Object(external_this_wp_element_["createElement"])("div", {
+      style: {
+        position: 'relative'
+      }
+    }, containerResizeListener, children)));
+  })); // Apply focus to element as long as focusOnMount is truthy; false is
+  // the only "disabled" value.
+
+  if (focusOnMount) {
+    content = Object(external_this_wp_element_["createElement"])(FocusManaged, null, content);
+  }
+
+  if (slot.ref) {
+    content = Object(external_this_wp_element_["createElement"])(slot_fill_Fill, {
+      name: __unstableSlotName
+    }, content);
+  }
+
+  if (anchorRef || anchorRect) {
+    return content;
+  }
+
+  return Object(external_this_wp_element_["createElement"])("span", {
+    ref: anchorRefFallback
+  }, content);
+};
+
+var PopoverContainer = popover_Popover;
+
+PopoverContainer.Slot = function (_ref4) {
+  var _ref4$name = _ref4.name,
+      name = _ref4$name === void 0 ? SLOT_NAME : _ref4$name;
+  return Object(external_this_wp_element_["createElement"])(slot_fill_Slot, {
+    bubblesVirtually: true,
+    name: name,
+    className: "popover-slot"
+  });
+};
+
+/* harmony default export */ var popover = __webpack_exports__["a"] = (PopoverContainer);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 123:
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wc"]["currency"]; }());
 
 /***/ }),
 
-/***/ 117:
+/***/ 124:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(51);
+/* harmony import */ var _dashicon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(95);
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function Icon(_ref) {
+  var _ref$icon = _ref.icon,
+      icon = _ref$icon === void 0 ? null : _ref$icon,
+      size = _ref.size,
+      additionalProps = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_ref, ["icon", "size"]);
+
+  // Dashicons should be 20x20 by default.
+  var dashiconSize = size || 20;
+
+  if ('string' === typeof icon) {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_dashicon__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
+      icon: icon,
+      size: dashiconSize
+    }, additionalProps));
+  }
+
+  if (icon && _dashicon__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"] === icon.type) {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(icon, _objectSpread({
+      size: dashiconSize
+    }, additionalProps));
+  } // Icons should be 24x24 by default.
+
+
+  var iconSize = size || 24;
+
+  if ('function' === typeof icon) {
+    if (icon.prototype instanceof _wordpress_element__WEBPACK_IMPORTED_MODULE_3__["Component"]) {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(icon, _objectSpread({
+        size: iconSize
+      }, additionalProps));
+    }
+
+    return icon(_objectSpread({
+      size: iconSize
+    }, additionalProps));
+  }
+
+  if (icon && (icon.type === 'svg' || icon.type === _wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__[/* SVG */ "c"])) {
+    var appliedProps = _objectSpread({
+      width: iconSize,
+      height: iconSize
+    }, icon.props, {}, additionalProps);
+
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__[/* SVG */ "c"], appliedProps);
+  }
+
+  if (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(icon)) {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(icon, _objectSpread({
+      size: iconSize
+    }, additionalProps));
+  }
+
+  return icon;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Icon);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 125:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(23);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
+var inherits = __webpack_require__(22);
+
+// EXTERNAL MODULE: external {"this":["wp","element"]}
+var external_this_wp_element_ = __webpack_require__(0);
+
+// EXTERNAL MODULE: external "lodash"
+var external_lodash_ = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/popover/index.js + 13 modules
+var popover = __webpack_require__(121);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/shortcut/index.js
+
+
+/**
+ * External dependencies
+ */
+
+
+function Shortcut(_ref) {
+  var shortcut = _ref.shortcut,
+      className = _ref.className;
+
+  if (!shortcut) {
+    return null;
+  }
+
+  var displayText;
+  var ariaLabel;
+
+  if (Object(external_lodash_["isString"])(shortcut)) {
+    displayText = shortcut;
+  }
+
+  if (Object(external_lodash_["isObject"])(shortcut)) {
+    displayText = shortcut.display;
+    ariaLabel = shortcut.ariaLabel;
+  }
+
+  return Object(external_this_wp_element_["createElement"])("span", {
+    className: className,
+    "aria-label": ariaLabel
+  }, displayText);
+}
+
+/* harmony default export */ var build_module_shortcut = (Shortcut);
+//# sourceMappingURL=index.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/tooltip/index.js
+
+
+
+
+
+
+
+function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Time over children to wait before showing tooltip
+ *
+ * @type {number}
+ */
+
+var TOOLTIP_DELAY = 700;
+
+var tooltip_Tooltip = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(Tooltip, _Component);
+
+  var _super = _createSuper(Tooltip);
+
+  function Tooltip() {
+    var _this;
+
+    Object(classCallCheck["a" /* default */])(this, Tooltip);
+
+    _this = _super.apply(this, arguments);
+    _this.delayedSetIsOver = Object(external_lodash_["debounce"])(function (isOver) {
+      return _this.setState({
+        isOver: isOver
+      });
+    }, TOOLTIP_DELAY);
+    /**
+     * Prebound `isInMouseDown` handler, created as a constant reference to
+     * assure ability to remove in component unmount.
+     *
+     * @type {Function}
+     */
+
+    _this.cancelIsMouseDown = _this.createSetIsMouseDown(false);
+    /**
+     * Whether a the mouse is currently pressed, used in determining whether
+     * to handle a focus event as displaying the tooltip immediately.
+     *
+     * @type {boolean}
+     */
+
+    _this.isInMouseDown = false;
+    _this.state = {
+      isOver: false
+    };
+    return _this;
+  }
+
+  Object(createClass["a" /* default */])(Tooltip, [{
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.delayedSetIsOver.cancel();
+      document.removeEventListener('mouseup', this.cancelIsMouseDown);
+    }
+  }, {
+    key: "emitToChild",
+    value: function emitToChild(eventName, event) {
+      var children = this.props.children;
+
+      if (external_this_wp_element_["Children"].count(children) !== 1) {
+        return;
+      }
+
+      var child = external_this_wp_element_["Children"].only(children);
+
+      if (typeof child.props[eventName] === 'function') {
+        child.props[eventName](event);
+      }
+    }
+  }, {
+    key: "createToggleIsOver",
+    value: function createToggleIsOver(eventName, isDelayed) {
+      var _this2 = this;
+
+      return function (event) {
+        // Preserve original child callback behavior
+        _this2.emitToChild(eventName, event); // Mouse events behave unreliably in React for disabled elements,
+        // firing on mouseenter but not mouseleave.  Further, the default
+        // behavior for disabled elements in some browsers is to ignore
+        // mouse events. Don't bother trying to to handle them.
+        //
+        // See: https://github.com/facebook/react/issues/4251
+
+
+        if (event.currentTarget.disabled) {
+          return;
+        } // A focus event will occur as a result of a mouse click, but it
+        // should be disambiguated between interacting with the button and
+        // using an explicit focus shift as a cue to display the tooltip.
+
+
+        if ('focus' === event.type && _this2.isInMouseDown) {
+          return;
+        } // Needed in case unsetting is over while delayed set pending, i.e.
+        // quickly blur/mouseleave before delayedSetIsOver is called
+
+
+        _this2.delayedSetIsOver.cancel();
+
+        var isOver = Object(external_lodash_["includes"])(['focus', 'mouseenter'], event.type);
+
+        if (isOver === _this2.state.isOver) {
+          return;
+        }
+
+        if (isDelayed) {
+          _this2.delayedSetIsOver(isOver);
+        } else {
+          _this2.setState({
+            isOver: isOver
+          });
+        }
+      };
+    }
+    /**
+     * Creates an event callback to handle assignment of the `isInMouseDown`
+     * instance property in response to a `mousedown` or `mouseup` event.
+     *
+     * @param {boolean} isMouseDown Whether handler is to be created for the
+     *                              `mousedown` event, as opposed to `mouseup`.
+     *
+     * @return {Function} Event callback handler.
+     */
+
+  }, {
+    key: "createSetIsMouseDown",
+    value: function createSetIsMouseDown(isMouseDown) {
+      var _this3 = this;
+
+      return function (event) {
+        // Preserve original child callback behavior
+        _this3.emitToChild(isMouseDown ? 'onMouseDown' : 'onMouseUp', event); // On mouse down, the next `mouseup` should revert the value of the
+        // instance property and remove its own event handler. The bind is
+        // made on the document since the `mouseup` might not occur within
+        // the bounds of the element.
+
+
+        document[isMouseDown ? 'addEventListener' : 'removeEventListener']('mouseup', _this3.cancelIsMouseDown);
+        _this3.isInMouseDown = isMouseDown;
+      };
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          children = _this$props.children,
+          position = _this$props.position,
+          text = _this$props.text,
+          shortcut = _this$props.shortcut;
+
+      if (external_this_wp_element_["Children"].count(children) !== 1) {
+        if (false) {}
+
+        return children;
+      }
+
+      var child = external_this_wp_element_["Children"].only(children);
+      var isOver = this.state.isOver;
+      return Object(external_this_wp_element_["cloneElement"])(child, {
+        onMouseEnter: this.createToggleIsOver('onMouseEnter', true),
+        onMouseLeave: this.createToggleIsOver('onMouseLeave'),
+        onClick: this.createToggleIsOver('onClick'),
+        onFocus: this.createToggleIsOver('onFocus'),
+        onBlur: this.createToggleIsOver('onBlur'),
+        onMouseDown: this.createSetIsMouseDown(true),
+        children: Object(external_this_wp_element_["concatChildren"])(child.props.children, isOver && Object(external_this_wp_element_["createElement"])(popover["a" /* default */], {
+          focusOnMount: false,
+          position: position,
+          className: "components-tooltip",
+          "aria-hidden": "true",
+          animate: false,
+          noArrow: true
+        }, text, Object(external_this_wp_element_["createElement"])(build_module_shortcut, {
+          className: "components-tooltip__shortcut",
+          shortcut: shortcut
+        })))
+      });
+    }
+  }]);
+
+  return Tooltip;
+}(external_this_wp_element_["Component"]);
+
+/* harmony default export */ var tooltip = __webpack_exports__["a"] = (tooltip_Tooltip);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 126:
+/***/ (function(module, exports) {
+
+function _setPrototypeOf(o, p) {
+  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+module.exports = _setPrototypeOf;
+
+/***/ }),
+
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2011,7 +5145,7 @@ module.exports = emptyFunction;
 
 
 
-var ReactPropTypesSecret = __webpack_require__(118);
+var ReactPropTypesSecret = __webpack_require__(128);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -2070,7 +5204,7 @@ module.exports = function() {
 
 /***/ }),
 
-/***/ 118:
+/***/ 128:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2090,14 +5224,14 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
-/***/ 119:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(74);
-var formats = __webpack_require__(96);
+var utils = __webpack_require__(75);
+var formats = __webpack_require__(91);
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
@@ -2377,38 +5511,26 @@ module.exports = function (object, opts) {
 
 /***/ }),
 
-/***/ 12:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ 13:
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
 }
+
+module.exports = _classCallCheck;
 
 /***/ }),
 
-/***/ 120:
+/***/ 130:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(74);
+var utils = __webpack_require__(75);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -2678,7 +5800,7 @@ module.exports = function (str, opts) {
 
 /***/ }),
 
-/***/ 121:
+/***/ 131:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2737,7 +5859,7 @@ module.exports = isShallowEqualObjects;
 
 /***/ }),
 
-/***/ 122:
+/***/ 132:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2776,281 +5898,280 @@ module.exports = isShallowEqualArrays;
 
 /***/ }),
 
-/***/ 123:
+/***/ 133:
 /***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 /**
  * This is the common logic for both the Node.js and web browser
  * implementations of `debug()`.
  */
+
 function setup(env) {
-  createDebug.debug = createDebug;
-  createDebug.default = createDebug;
-  createDebug.coerce = coerce;
-  createDebug.disable = disable;
-  createDebug.enable = enable;
-  createDebug.enabled = enabled;
-  createDebug.humanize = __webpack_require__(124);
-  Object.keys(env).forEach(function (key) {
-    createDebug[key] = env[key];
-  });
-  /**
-  * Active `debug` instances.
-  */
+	createDebug.debug = createDebug;
+	createDebug.default = createDebug;
+	createDebug.coerce = coerce;
+	createDebug.disable = disable;
+	createDebug.enable = enable;
+	createDebug.enabled = enabled;
+	createDebug.humanize = __webpack_require__(134);
 
-  createDebug.instances = [];
-  /**
-  * The currently active debug mode names, and names to skip.
-  */
+	Object.keys(env).forEach(key => {
+		createDebug[key] = env[key];
+	});
 
-  createDebug.names = [];
-  createDebug.skips = [];
-  /**
-  * Map of special "%n" handling functions, for the debug "format" argument.
-  *
-  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
-  */
+	/**
+	* Active `debug` instances.
+	*/
+	createDebug.instances = [];
 
-  createDebug.formatters = {};
-  /**
-  * Selects a color for a debug namespace
-  * @param {String} namespace The namespace string for the for the debug instance to be colored
-  * @return {Number|String} An ANSI color code for the given namespace
-  * @api private
-  */
+	/**
+	* The currently active debug mode names, and names to skip.
+	*/
 
-  function selectColor(namespace) {
-    var hash = 0;
+	createDebug.names = [];
+	createDebug.skips = [];
 
-    for (var i = 0; i < namespace.length; i++) {
-      hash = (hash << 5) - hash + namespace.charCodeAt(i);
-      hash |= 0; // Convert to 32bit integer
-    }
+	/**
+	* Map of special "%n" handling functions, for the debug "format" argument.
+	*
+	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	*/
+	createDebug.formatters = {};
 
-    return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
-  }
+	/**
+	* Selects a color for a debug namespace
+	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @return {Number|String} An ANSI color code for the given namespace
+	* @api private
+	*/
+	function selectColor(namespace) {
+		let hash = 0;
 
-  createDebug.selectColor = selectColor;
-  /**
-  * Create a debugger with the given `namespace`.
-  *
-  * @param {String} namespace
-  * @return {Function}
-  * @api public
-  */
+		for (let i = 0; i < namespace.length; i++) {
+			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
+			hash |= 0; // Convert to 32bit integer
+		}
 
-  function createDebug(namespace) {
-    var prevTime;
+		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+	}
+	createDebug.selectColor = selectColor;
 
-    function debug() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+	/**
+	* Create a debugger with the given `namespace`.
+	*
+	* @param {String} namespace
+	* @return {Function}
+	* @api public
+	*/
+	function createDebug(namespace) {
+		let prevTime;
 
-      // Disabled?
-      if (!debug.enabled) {
-        return;
-      }
+		function debug(...args) {
+			// Disabled?
+			if (!debug.enabled) {
+				return;
+			}
 
-      var self = debug; // Set `diff` timestamp
+			const self = debug;
 
-      var curr = Number(new Date());
-      var ms = curr - (prevTime || curr);
-      self.diff = ms;
-      self.prev = prevTime;
-      self.curr = curr;
-      prevTime = curr;
-      args[0] = createDebug.coerce(args[0]);
+			// Set `diff` timestamp
+			const curr = Number(new Date());
+			const ms = curr - (prevTime || curr);
+			self.diff = ms;
+			self.prev = prevTime;
+			self.curr = curr;
+			prevTime = curr;
 
-      if (typeof args[0] !== 'string') {
-        // Anything else let's inspect with %O
-        args.unshift('%O');
-      } // Apply any `formatters` transformations
+			args[0] = createDebug.coerce(args[0]);
 
+			if (typeof args[0] !== 'string') {
+				// Anything else let's inspect with %O
+				args.unshift('%O');
+			}
 
-      var index = 0;
-      args[0] = args[0].replace(/%([a-zA-Z%])/g, function (match, format) {
-        // If we encounter an escaped % then don't increase the array index
-        if (match === '%%') {
-          return match;
-        }
+			// Apply any `formatters` transformations
+			let index = 0;
+			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+				// If we encounter an escaped % then don't increase the array index
+				if (match === '%%') {
+					return match;
+				}
+				index++;
+				const formatter = createDebug.formatters[format];
+				if (typeof formatter === 'function') {
+					const val = args[index];
+					match = formatter.call(self, val);
 
-        index++;
-        var formatter = createDebug.formatters[format];
+					// Now we need to remove `args[index]` since it's inlined in the `format`
+					args.splice(index, 1);
+					index--;
+				}
+				return match;
+			});
 
-        if (typeof formatter === 'function') {
-          var val = args[index];
-          match = formatter.call(self, val); // Now we need to remove `args[index]` since it's inlined in the `format`
+			// Apply env-specific formatting (colors, etc.)
+			createDebug.formatArgs.call(self, args);
 
-          args.splice(index, 1);
-          index--;
-        }
+			const logFn = self.log || createDebug.log;
+			logFn.apply(self, args);
+		}
 
-        return match;
-      }); // Apply env-specific formatting (colors, etc.)
+		debug.namespace = namespace;
+		debug.enabled = createDebug.enabled(namespace);
+		debug.useColors = createDebug.useColors();
+		debug.color = selectColor(namespace);
+		debug.destroy = destroy;
+		debug.extend = extend;
+		// Debug.formatArgs = formatArgs;
+		// debug.rawLog = rawLog;
 
-      createDebug.formatArgs.call(self, args);
-      var logFn = self.log || createDebug.log;
-      logFn.apply(self, args);
-    }
+		// env-specific initialization logic for debug instances
+		if (typeof createDebug.init === 'function') {
+			createDebug.init(debug);
+		}
 
-    debug.namespace = namespace;
-    debug.enabled = createDebug.enabled(namespace);
-    debug.useColors = createDebug.useColors();
-    debug.color = selectColor(namespace);
-    debug.destroy = destroy;
-    debug.extend = extend; // Debug.formatArgs = formatArgs;
-    // debug.rawLog = rawLog;
-    // env-specific initialization logic for debug instances
+		createDebug.instances.push(debug);
 
-    if (typeof createDebug.init === 'function') {
-      createDebug.init(debug);
-    }
+		return debug;
+	}
 
-    createDebug.instances.push(debug);
-    return debug;
-  }
+	function destroy() {
+		const index = createDebug.instances.indexOf(this);
+		if (index !== -1) {
+			createDebug.instances.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
 
-  function destroy() {
-    var index = createDebug.instances.indexOf(this);
+	function extend(namespace, delimiter) {
+		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		newDebug.log = this.log;
+		return newDebug;
+	}
 
-    if (index !== -1) {
-      createDebug.instances.splice(index, 1);
-      return true;
-    }
+	/**
+	* Enables a debug mode by namespaces. This can include modes
+	* separated by a colon and wildcards.
+	*
+	* @param {String} namespaces
+	* @api public
+	*/
+	function enable(namespaces) {
+		createDebug.save(namespaces);
 
-    return false;
-  }
+		createDebug.names = [];
+		createDebug.skips = [];
 
-  function extend(namespace, delimiter) {
-    var newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
-    newDebug.log = this.log;
-    return newDebug;
-  }
-  /**
-  * Enables a debug mode by namespaces. This can include modes
-  * separated by a colon and wildcards.
-  *
-  * @param {String} namespaces
-  * @api public
-  */
+		let i;
+		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+		const len = split.length;
 
+		for (i = 0; i < len; i++) {
+			if (!split[i]) {
+				// ignore empty strings
+				continue;
+			}
 
-  function enable(namespaces) {
-    createDebug.save(namespaces);
-    createDebug.names = [];
-    createDebug.skips = [];
-    var i;
-    var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-    var len = split.length;
+			namespaces = split[i].replace(/\*/g, '.*?');
 
-    for (i = 0; i < len; i++) {
-      if (!split[i]) {
-        // ignore empty strings
-        continue;
-      }
+			if (namespaces[0] === '-') {
+				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+			} else {
+				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+			}
+		}
 
-      namespaces = split[i].replace(/\*/g, '.*?');
+		for (i = 0; i < createDebug.instances.length; i++) {
+			const instance = createDebug.instances[i];
+			instance.enabled = createDebug.enabled(instance.namespace);
+		}
+	}
 
-      if (namespaces[0] === '-') {
-        createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-      } else {
-        createDebug.names.push(new RegExp('^' + namespaces + '$'));
-      }
-    }
+	/**
+	* Disable debug output.
+	*
+	* @return {String} namespaces
+	* @api public
+	*/
+	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
+		createDebug.enable('');
+		return namespaces;
+	}
 
-    for (i = 0; i < createDebug.instances.length; i++) {
-      var instance = createDebug.instances[i];
-      instance.enabled = createDebug.enabled(instance.namespace);
-    }
-  }
-  /**
-  * Disable debug output.
-  *
-  * @return {String} namespaces
-  * @api public
-  */
+	/**
+	* Returns true if the given mode name is enabled, false otherwise.
+	*
+	* @param {String} name
+	* @return {Boolean}
+	* @api public
+	*/
+	function enabled(name) {
+		if (name[name.length - 1] === '*') {
+			return true;
+		}
 
+		let i;
+		let len;
 
-  function disable() {
-    var namespaces = [].concat(createDebug.names.map(toNamespace), createDebug.skips.map(toNamespace).map(function (namespace) {
-      return '-' + namespace;
-    })).join(',');
-    createDebug.enable('');
-    return namespaces;
-  }
-  /**
-  * Returns true if the given mode name is enabled, false otherwise.
-  *
-  * @param {String} name
-  * @return {Boolean}
-  * @api public
-  */
+		for (i = 0, len = createDebug.skips.length; i < len; i++) {
+			if (createDebug.skips[i].test(name)) {
+				return false;
+			}
+		}
 
+		for (i = 0, len = createDebug.names.length; i < len; i++) {
+			if (createDebug.names[i].test(name)) {
+				return true;
+			}
+		}
 
-  function enabled(name) {
-    if (name[name.length - 1] === '*') {
-      return true;
-    }
+		return false;
+	}
 
-    var i;
-    var len;
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
+	}
 
-    for (i = 0, len = createDebug.skips.length; i < len; i++) {
-      if (createDebug.skips[i].test(name)) {
-        return false;
-      }
-    }
+	/**
+	* Coerce `val`.
+	*
+	* @param {Mixed} val
+	* @return {Mixed}
+	* @api private
+	*/
+	function coerce(val) {
+		if (val instanceof Error) {
+			return val.stack || val.message;
+		}
+		return val;
+	}
 
-    for (i = 0, len = createDebug.names.length; i < len; i++) {
-      if (createDebug.names[i].test(name)) {
-        return true;
-      }
-    }
+	createDebug.enable(createDebug.load());
 
-    return false;
-  }
-  /**
-  * Convert regexp to namespace
-  *
-  * @param {RegExp} regxep
-  * @return {String} namespace
-  * @api private
-  */
-
-
-  function toNamespace(regexp) {
-    return regexp.toString().substring(2, regexp.toString().length - 2).replace(/\.\*\?$/, '*');
-  }
-  /**
-  * Coerce `val`.
-  *
-  * @param {Mixed} val
-  * @return {Mixed}
-  * @api private
-  */
-
-
-  function coerce(val) {
-    if (val instanceof Error) {
-      return val.stack || val.message;
-    }
-
-    return val;
-  }
-
-  createDebug.enable(createDebug.load());
-  return createDebug;
+	return createDebug;
 }
 
 module.exports = setup;
 
+
 /***/ }),
 
-/***/ 124:
+/***/ 134:
 /***/ (function(module, exports) {
 
 /**
@@ -3219,14 +6340,87 @@ function plural(ms, msAbs, n, name) {
 
 /***/ }),
 
-/***/ 13:
+/***/ 135:
 /***/ (function(module, exports) {
 
-(function() { module.exports = this["React"]; }());
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+module.exports = _arrayWithHoles;
 
 /***/ }),
 
-/***/ 131:
+/***/ 136:
+/***/ (function(module, exports) {
+
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+module.exports = _iterableToArrayLimit;
+
+/***/ }),
+
+/***/ 137:
+/***/ (function(module, exports) {
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableRest;
+
+/***/ }),
+
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
+var setPrototypeOf = __webpack_require__(126);
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) setPrototypeOf(subClass, superClass);
+}
+
+module.exports = _inherits;
+
+/***/ }),
+
+/***/ 144:
 /***/ (function(module, exports) {
 
 function _inheritsLoose(subClass, superClass) {
@@ -3239,7 +6433,7 @@ module.exports = _inheritsLoose;
 
 /***/ }),
 
-/***/ 132:
+/***/ 145:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3250,7 +6444,7 @@ __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding *
 // UNUSED EXPORTS: setup
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.js
-var build_module = __webpack_require__(72);
+var build_module = __webpack_require__(71);
 
 // EXTERNAL MODULE: external {"this":["wp","i18n"]}
 var external_this_wp_i18n_ = __webpack_require__(3);
@@ -3451,117 +6645,261 @@ function speak(message, ariaLive) {
 
 /***/ }),
 
-/***/ 134:
-/***/ (function(module, exports, __webpack_require__) {
-
-var objectWithoutPropertiesLoose = __webpack_require__(282);
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
-module.exports = _objectWithoutProperties;
-
-/***/ }),
-
-/***/ 14:
+/***/ 146:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
-/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(46);
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _asyncToGenerator; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
   }
 
-  return target;
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCountryCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getCurrencyRegion; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getProductIdsForCart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getCategorizedOnboardingProducts; });
+/* unused harmony export getProductList */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getPriceValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isOnboardingEnabled; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return isWCAdmin; });
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(69);
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Gets the country code from a country:state value string.
+ *
+ * @param {string} countryState Country state string, e.g. US:GA.
+ * @return {string} Country string.
+ */
+
+function getCountryCode(countryState) {
+  if (!countryState) {
+    return null;
+  }
+
+  return countryState.split(':')[0];
+}
+function getCurrencyRegion(countryState) {
+  var region = getCountryCode(countryState);
+  var euCountries = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["without"])(Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__[/* getSetting */ "g"])('onboarding', {
+    euCountries: []
+  }).euCountries, 'GB');
+
+  if (euCountries.includes(region)) {
+    region = 'EU';
+  }
+
+  return region;
+}
+/**
+ * Gets the product IDs for items based on the product types and theme selected in the onboarding profiler.
+ *
+ * @param {Object} profileItems Onboarding profile.
+ * @param {boolean} includeInstalledItems Include installed items in returned product IDs.
+ * @param {Array} installedPlugins Installed plugins.
+ * @return {Array} Product Ids.
+ */
+
+function getProductIdsForCart(profileItems) {
+  var includeInstalledItems = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var installedPlugins = arguments.length > 2 ? arguments[2] : undefined;
+  var productList = getProductList(profileItems, includeInstalledItems, installedPlugins);
+  var productIds = productList.map(function (product) {
+    return product.id || product.product;
+  });
+  return productIds;
+}
+/**
+ * Gets the labeled/categorized product names and types for items based on the product types and theme selected in the onboarding profiler.
+ *
+ * @param {Object} profileItems Onboarding profile.
+ * @param {Array} installedPlugins Installed plugins.
+ * @return {Array} Objects with labeled/categorized product names and types.
+ */
+
+function getCategorizedOnboardingProducts(profileItems, installedPlugins) {
+  var productList = {};
+  productList.products = getProductList(profileItems, true, installedPlugins);
+  productList.remainingProducts = getProductList(profileItems, false, installedPlugins);
+
+  var uniqueItemsList = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(new Set([].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(productList.products), _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(productList.remainingProducts))));
+
+  productList.uniqueItemsList = uniqueItemsList.map(function (product) {
+    var cleanedProduct;
+
+    if (product.label) {
+      cleanedProduct = {
+        type: 'extension',
+        name: product.label
+      };
+    } else {
+      cleanedProduct = {
+        type: 'theme',
+        name: product.title
+      };
+    }
+
+    return cleanedProduct;
+  });
+  return productList;
+}
+/**
+ * Gets a product list for items based on the product types and theme selected in the onboarding profiler.
+ *
+ * @param {Object} profileItems Onboarding profile.
+ * @param {boolean} includeInstalledItems Include installed items in returned product list.
+ * @param {Array} installedPlugins Installed plugins.
+ * @return {Array} Products.
+ */
+
+function getProductList(profileItems) {
+  var includeInstalledItems = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var installedPlugins = arguments.length > 2 ? arguments[2] : undefined;
+  var onboarding = Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__[/* getSetting */ "g"])('onboarding', {});
+  var productList = []; // The population of onboarding.productTypes only happens if the task list should be shown
+  // so bail early if it isn't present.
+
+  if (!onboarding.productTypes) {
+    return productList;
+  }
+
+  var productTypes = profileItems.product_types || [];
+  productTypes.forEach(function (productType) {
+    if (onboarding.productTypes[productType] && onboarding.productTypes[productType].product && (includeInstalledItems || !installedPlugins.includes(onboarding.productTypes[productType].slug))) {
+      productList.push(onboarding.productTypes[productType]);
+    }
+  });
+  var theme = onboarding.themes.find(function (themeData) {
+    return themeData.slug === profileItems.theme;
+  });
+
+  if (theme && theme.id && getPriceValue(theme.price) > 0 && (includeInstalledItems || !theme.is_installed)) {
+    productList.push(theme);
+  }
+
+  return productList;
+}
+/**
+ * Get the value of a price from a string, removing any non-numeric characters.
+ *
+ * @param {string} string Price string.
+ * @return {number} Number value.
+ */
+
+function getPriceValue(string) {
+  return Number(Object(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_1__["decodeEntities"])(string).replace(/[^0-9.-]+/g, ''));
+}
+/**
+ * Returns if the onboarding feature of WooCommerce Admin should be enabled.
+ *
+ * While we preform an a/b test of onboarding, the feature will be enabled within the plugin build,
+ * but only if the user recieved the test/opted in.
+ *
+ * @return {boolean} True if the onboarding is enabled.
+ */
+
+function isOnboardingEnabled() {
+  if (!window.wcAdminFeatures.onboarding) {
+    return false;
+  }
+
+  return Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__[/* getSetting */ "g"])('onboardingEnabled', false);
+}
+/**
+ * Determines if a URL is a WC admin url.
+ *
+ * @param {*} url - the url to test
+ * @return {boolean} true if the url is a wc-admin URL
+ */
+
+function isWCAdmin(url) {
+  return /admin.php\?page=wc-admin/.test(url);
 }
 
 /***/ }),
 
 /***/ 15:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+var _typeof = __webpack_require__(39);
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
+var assertThisInitialized = __webpack_require__(7);
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-var arrayLikeToArray = __webpack_require__(31);
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
 
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
+  return assertThisInitialized(self);
 }
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(51);
 
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
-
-
-
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
-}
+module.exports = _possibleConstructorReturn;
 
 /***/ }),
 
-/***/ 156:
-/***/ (function(module, exports) {
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
 
-function _setPrototypeOf(o, p) {
-  module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
+module.exports = __webpack_require__(105);
 
-  return _setPrototypeOf(o, p);
-}
-
-module.exports = _setPrototypeOf;
 
 /***/ }),
 
-/***/ 157:
+/***/ 169:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3574,15 +6912,15 @@ module.exports = _setPrototypeOf;
 
 
 
-var React = __webpack_require__(13);
+var React = __webpack_require__(10);
 
 var REACT_ELEMENT_TYPE =
   (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) ||
   0xeac7;
 
-var emptyFunction = __webpack_require__(114);
-var invariant = __webpack_require__(158);
-var warning = __webpack_require__(159);
+var emptyFunction = __webpack_require__(118);
+var invariant = __webpack_require__(170);
+var warning = __webpack_require__(171);
 
 var SEPARATOR = '.';
 var SUBSEPARATOR = ':';
@@ -3890,7 +7228,14 @@ module.exports = createReactFragment;
 
 /***/ }),
 
-/***/ 158:
+/***/ 17:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["moment"]; }());
+
+/***/ }),
+
+/***/ 170:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3944,7 +7289,7 @@ module.exports = invariant;
 
 /***/ }),
 
-/***/ 159:
+/***/ 171:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3958,7 +7303,7 @@ module.exports = invariant;
 
 
 
-var emptyFunction = __webpack_require__(114);
+var emptyFunction = __webpack_require__(118);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -3975,14 +7320,7 @@ module.exports = warning;
 
 /***/ }),
 
-/***/ 16:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["moment"]; }());
-
-/***/ }),
-
-/***/ 160:
+/***/ 172:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4024,46 +7362,22 @@ module.exports = function (mixedString) {
 
 /***/ }),
 
-/***/ 161:
-/***/ (function(module, exports) {
+/***/ 18:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
 
-  return arr2;
+  return self;
 }
-
-module.exports = _arrayLikeToArray;
 
 /***/ }),
 
-/***/ 17:
-/***/ (function(module, exports) {
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-
-/***/ }),
-
-/***/ 175:
+/***/ 185:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4087,7 +7401,7 @@ module.exports = _defineProperty;
 
 /***/ }),
 
-/***/ 176:
+/***/ 186:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4100,17 +7414,17 @@ __webpack_require__.d(__webpack_exports__, "c", function() { return /* reexport 
 // UNUSED EXPORTS: HOUR
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
-var regenerator = __webpack_require__(77);
+var regenerator = __webpack_require__(16);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__(68);
+var asyncToGenerator = __webpack_require__(146);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(12);
+var esm_extends = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/debug/src/browser.js
-var browser = __webpack_require__(88);
+var browser = __webpack_require__(83);
 var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
 
 // EXTERNAL MODULE: external "lodash"
@@ -4248,7 +7562,7 @@ function components_components(client) {
   return componentSummaries;
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(46);
+var objectWithoutPropertiesLoose = __webpack_require__(47);
 
 // CONCATENATED MODULE: ./node_modules/@fresh-data/framework/es/devinfo/resources.js
 
@@ -5009,108 +8323,119 @@ function mapFunctions(functionsByName) {
 
 /***/ }),
 
-/***/ 178:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(161);
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-
-module.exports = _unsupportedIterableToArray;
-
-/***/ }),
-
-/***/ 18:
+/***/ 19:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
+/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(source, excluded);
+  var key, i;
 
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
 
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
     }
   }
 
-  return _arr;
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(51);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || _nonIterableRest();
+  return target;
 }
 
 /***/ }),
 
-/***/ 181:
+/***/ 192:
+/***/ (function(module, exports) {
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+module.exports = _objectWithoutPropertiesLoose;
+
+/***/ }),
+
+/***/ 193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(214);
+  module.exports = __webpack_require__(227);
 } else {}
 
 
 /***/ }),
 
-/***/ 19:
+/***/ 2:
 /***/ (function(module, exports) {
 
-(function() { module.exports = this["wp"]["data"]; }());
+(function() { module.exports = this["lodash"]; }());
 
 /***/ }),
 
-/***/ 199:
+/***/ 20:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+/***/ }),
+
+/***/ 213:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var reactIs = __webpack_require__(181);
+var reactIs = __webpack_require__(193);
 
 /**
  * Copyright 2015, Yahoo! Inc.
@@ -5215,127 +8540,7 @@ module.exports = hoistNonReactStatics;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["lodash"]; }());
-
-/***/ }),
-
-/***/ 20:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADMIN_URL; });
-/* unused harmony export COUNTRIES */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return CURRENCY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return LOCALE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return ORDER_STATUSES; });
-/* unused harmony export SITE_TITLE */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return WC_ASSET_URL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getSetting; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return setSetting; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getAdminLink; });
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-
-
-/**
- * External dependencies
- */
- // Remove mutable data from settings object to prevent access. Data stores should be used instead.
-
-var mutableSources = ['wcAdminSettings', 'preloadSettings'];
-var settings = (typeof wcSettings === "undefined" ? "undefined" : _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(wcSettings)) === 'object' ? wcSettings : {};
-var SOURCE = Object.keys(settings).reduce(function (source, key) {
-  if (!mutableSources.includes(key)) {
-    source[key] = settings[key];
-  }
-
-  return source;
-}, {});
-var ADMIN_URL = SOURCE.adminUrl;
-var COUNTRIES = SOURCE.countries;
-var CURRENCY = SOURCE.currency;
-var LOCALE = SOURCE.locale;
-var ORDER_STATUSES = SOURCE.orderStatuses;
-var SITE_TITLE = SOURCE.siteTitle;
-var WC_ASSET_URL = SOURCE.wcAssetUrl;
-/**
- * Retrieves a setting value from the setting state.
- *
- * @export
- * @param {string}   name                         The identifier for the setting.
- * @param {*}    [fallback=false]             The value to use as a fallback
- *                                                if the setting is not in the
- *                                                state.
- * @param {Function} [filter=( val ) => val]  	  A callback for filtering the
- *                                                value before it's returned.
- *                                                Receives both the found value
- *                                                (if it exists for the key) and
- *                                                the provided fallback arg.
- *
- * @return {*}  The value present in the settings state for the given
- *                   name.
- */
-
-function getSetting(name) {
-  var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  var filter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (val) {
-    return val;
-  };
-
-  if (mutableSources.includes(name)) {
-    throw new Error(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Mutable settings should be accessed via data store.'));
-  }
-
-  var value = SOURCE.hasOwnProperty(name) ? SOURCE[name] : fallback;
-  return filter(value, fallback);
-}
-/**
- * Sets a value to a property on the settings state.
- *
- * NOTE: This feature is to be removed in favour of data stores when a full migration
- * is complete.
- *
- * @deprecated
- *
- * @export
- * @param {string}   name                        The setting property key for the
- *                                               setting being mutated.
- * @param {*}    value                       The value to set.
- * @param {Function} [filter=( val ) => val]     Allows for providing a callback
- *                                               to sanitize the setting (eg.
- *                                               ensure it's a number)
- */
-
-function setSetting(name, value) {
-  var filter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (val) {
-    return val;
-  };
-
-  if (mutableSources.includes(name)) {
-    throw new Error(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Mutable settings should be mutated via data store.'));
-  }
-
-  SOURCE[name] = filter(value);
-}
-/**
- * Returns a string with the site's wp-admin URL appended. JS version of `admin_url`.
- *
- * @param {string} path Relative path.
- * @return {string} Full admin URL.
- */
-
-function getAdminLink(path) {
-  return (ADMIN_URL || '') + path;
-}
-
-/***/ }),
-
-/***/ 201:
+/***/ 215:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5345,8 +8550,8 @@ function getAdminLink(path) {
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(202);
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(216);
 /**
  * External dependencies
  */
@@ -5364,31 +8569,31 @@ var manageStock = Object(_settings__WEBPACK_IMPORTED_MODULE_3__[/* getSetting */
  */
 
 var RevenueReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-revenue */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, 749));
+  return Promise.all(/* import() | analytics-report-revenue */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, 724));
 });
 var ProductsReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-products */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(8), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, 748));
+  return Promise.all(/* import() | analytics-report-products */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(7), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, 725));
 });
 var OrdersReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-orders */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, 750));
+  return Promise.all(/* import() | analytics-report-orders */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, 726));
 });
 var CategoriesReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-categories */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(8), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, 744));
+  return Promise.all(/* import() | analytics-report-categories */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(7), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, 722));
 });
 var CouponsReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-coupons */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, 746));
+  return Promise.all(/* import() | analytics-report-coupons */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, 727));
 });
 var TaxesReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-taxes */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(21)]).then(__webpack_require__.bind(null, 747));
+  return Promise.all(/* import() | analytics-report-taxes */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, 728));
 });
 var DownloadsReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-downloads */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(0), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, 751));
+  return Promise.all(/* import() | analytics-report-downloads */[__webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, 729));
 });
 var StockReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-stock */[__webpack_require__.e(1), __webpack_require__.e(0), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, 743));
+  return Promise.all(/* import() | analytics-report-stock */[__webpack_require__.e(0), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, 721));
 });
 var CustomersReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["lazy"])(function () {
-  return Promise.all(/* import() | analytics-report-customers */[__webpack_require__.e(1), __webpack_require__.e(0), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, 745));
+  return Promise.all(/* import() | analytics-report-customers */[__webpack_require__.e(0), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, 723));
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (function () {
@@ -5438,42 +8643,42 @@ var CustomersReport = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["la
 
 /***/ }),
 
-/***/ 202:
+/***/ 216:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REPORTS_FILTER", function() { return REPORTS_FILTER; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(43);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(47);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(175);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(185);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(55);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_components__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(23);
+/* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(29);
 /* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_navigation__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(451);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(448);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_style_scss__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var analytics_components_report_error__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(267);
-/* harmony import */ var wc_api_items_utils__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(283);
+/* harmony import */ var analytics_components_report_error__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(277);
+/* harmony import */ var wc_api_items_utils__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(296);
 /* harmony import */ var wc_api_with_select__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(104);
-/* harmony import */ var lib_currency_context__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(204);
-/* harmony import */ var _get_reports__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(201);
+/* harmony import */ var lib_currency_context__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(218);
+/* harmony import */ var _get_reports__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(215);
 
 
 
@@ -5519,7 +8724,9 @@ var REPORTS_FILTER = 'woocommerce_admin_reports_list';
  * because it no longer exists under the path `/analytics/:report`. Use `props.path`/
  * instead to determine if the Customers Report is being rendered.
  *
+ * @param params.params
  * @param {Object} params -url parameters
+ * @param params.path
  * @return {string} - report parameter
  */
 
@@ -5628,7 +8835,7 @@ Report.propTypes = {
 
 /***/ }),
 
-/***/ 203:
+/***/ 217:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5639,51 +8846,51 @@ __webpack_require__.d(__webpack_exports__, "b", function() { return /* binding *
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ layout_EmbedLayout; });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(17);
+var defineProperty = __webpack_require__(5);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/extends.js
-var helpers_extends = __webpack_require__(78);
+var helpers_extends = __webpack_require__(33);
 var extends_default = /*#__PURE__*/__webpack_require__.n(helpers_extends);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(134);
+var objectWithoutProperties = __webpack_require__(49);
 var objectWithoutProperties_default = /*#__PURE__*/__webpack_require__.n(objectWithoutProperties);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(42);
+var classCallCheck = __webpack_require__(13);
 var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/createClass.js
-var createClass = __webpack_require__(41);
+var createClass = __webpack_require__(12);
 var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inherits.js
-var inherits = __webpack_require__(43);
+var inherits = __webpack_require__(14);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(47);
+var possibleConstructorReturn = __webpack_require__(15);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(28);
+var getPrototypeOf = __webpack_require__(6);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: external {"this":["wp","element"]}
 var external_this_wp_element_ = __webpack_require__(0);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/higher-order/compose.js
-var compose = __webpack_require__(175);
+var compose = __webpack_require__(185);
 
 // EXTERNAL MODULE: external {"this":["wp","data"]}
-var external_this_wp_data_ = __webpack_require__(19);
+var external_this_wp_data_ = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(62);
+var inheritsLoose = __webpack_require__(61);
 
 // EXTERNAL MODULE: external "React"
-var external_React_ = __webpack_require__(13);
+var external_React_ = __webpack_require__(10);
 var external_React_default = /*#__PURE__*/__webpack_require__.n(external_React_);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
@@ -5691,10 +8898,10 @@ var prop_types = __webpack_require__(1);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // EXTERNAL MODULE: ./node_modules/history/esm/history.js + 2 modules
-var esm_history = __webpack_require__(102);
+var esm_history = __webpack_require__(96);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inheritsLoose.js
-var helpers_inheritsLoose = __webpack_require__(131);
+var helpers_inheritsLoose = __webpack_require__(144);
 var inheritsLoose_default = /*#__PURE__*/__webpack_require__.n(helpers_inheritsLoose);
 
 // EXTERNAL MODULE: ./node_modules/gud/index.js
@@ -5872,28 +9079,28 @@ function createReactContext(defaultValue, calculateChangedBits) {
   };
 }
 
-var index = external_React_default.a.createContext || createReactContext;
+var esm_index = external_React_default.a.createContext || createReactContext;
 
-/* harmony default export */ var esm = (index);
+/* harmony default export */ var esm = (esm_index);
 
 // EXTERNAL MODULE: ./node_modules/tiny-invariant/dist/tiny-invariant.esm.js
-var tiny_invariant_esm = __webpack_require__(81);
+var tiny_invariant_esm = __webpack_require__(80);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(12);
+var esm_extends = __webpack_require__(8);
 
-// EXTERNAL MODULE: ./node_modules/react-router/node_modules/path-to-regexp/index.js
-var path_to_regexp = __webpack_require__(264);
+// EXTERNAL MODULE: ./node_modules/path-to-regexp/index.js
+var path_to_regexp = __webpack_require__(274);
 var path_to_regexp_default = /*#__PURE__*/__webpack_require__.n(path_to_regexp);
 
 // EXTERNAL MODULE: ./node_modules/react-is/index.js
-var react_is = __webpack_require__(181);
+var react_is = __webpack_require__(193);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(46);
+var objectWithoutPropertiesLoose = __webpack_require__(47);
 
 // EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var hoist_non_react_statics_cjs = __webpack_require__(199);
+var hoist_non_react_statics_cjs = __webpack_require__(213);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // CONCATENATED MODULE: ./node_modules/react-router/esm/react-router.js
@@ -6550,16 +9757,16 @@ var lib = __webpack_require__(67);
 var external_this_wc_components_ = __webpack_require__(55);
 
 // EXTERNAL MODULE: external {"this":["wc","navigation"]}
-var external_this_wc_navigation_ = __webpack_require__(23);
+var external_this_wc_navigation_ = __webpack_require__(29);
 
 // EXTERNAL MODULE: ./client/settings/index.js
-var settings = __webpack_require__(20);
+var settings = __webpack_require__(28);
 
 // EXTERNAL MODULE: external {"this":["wc","data"]}
-var external_this_wc_data_ = __webpack_require__(48);
+var external_this_wc_data_ = __webpack_require__(46);
 
 // EXTERNAL MODULE: ./client/layout/style.scss
-var layout_style = __webpack_require__(450);
+var layout_style = __webpack_require__(447);
 
 // EXTERNAL MODULE: external {"this":["wp","hooks"]}
 var external_this_wp_hooks_ = __webpack_require__(44);
@@ -6568,10 +9775,13 @@ var external_this_wp_hooks_ = __webpack_require__(44);
 var external_this_wp_i18n_ = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./client/utils/index.js
-var utils = __webpack_require__(275);
+var utils = __webpack_require__(286);
 
 // EXTERNAL MODULE: ./client/analytics/report/get-reports.js
-var get_reports = __webpack_require__(201);
+var get_reports = __webpack_require__(215);
+
+// EXTERNAL MODULE: ./client/dashboard/utils.js
+var dashboard_utils = __webpack_require__(148);
 
 // CONCATENATED MODULE: ./client/layout/controller.js
 
@@ -6605,26 +9815,27 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 var AnalyticsReport = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.resolve(/* import() */).then(__webpack_require__.bind(null, 202));
+  return Promise.resolve(/* import() */).then(__webpack_require__.bind(null, 216));
 });
 var AnalyticsSettings = Object(external_this_wp_element_["lazy"])(function () {
-  return __webpack_require__.e(/* import() | analytics-settings */ 22).then(__webpack_require__.bind(null, 937));
+  return __webpack_require__.e(/* import() | analytics-settings */ 21).then(__webpack_require__.bind(null, 928));
 });
 var Dashboard = Object(external_this_wp_element_["lazy"])(function () {
-  return __webpack_require__.e(/* import() | dashboard */ 28).then(__webpack_require__.bind(null, 927));
+  return __webpack_require__.e(/* import() | dashboard */ 27).then(__webpack_require__.bind(null, 918));
 });
 var DevDocs = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | devdocs */[__webpack_require__.e(2), __webpack_require__.e(50), __webpack_require__.e(32)]).then(__webpack_require__.bind(null, 940));
+  return Promise.all(/* import() | devdocs */[__webpack_require__.e(1), __webpack_require__.e(49), __webpack_require__.e(31)]).then(__webpack_require__.bind(null, 931));
 });
 var Homescreen = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | homescreen */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(5), __webpack_require__.e(6), __webpack_require__.e(33)]).then(__webpack_require__.bind(null, 934));
+  return Promise.all(/* import() | homescreen */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(5), __webpack_require__.e(32)]).then(__webpack_require__.bind(null, 925));
 });
 var MarketingOverview = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | marketing-overview */[__webpack_require__.e(2), __webpack_require__.e(51), __webpack_require__.e(37)]).then(__webpack_require__.bind(null, 938));
+  return Promise.all(/* import() | marketing-overview */[__webpack_require__.e(1), __webpack_require__.e(50), __webpack_require__.e(36)]).then(__webpack_require__.bind(null, 929));
 });
 var ProfileWizard = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | profile-wizard */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(6), __webpack_require__.e(52), __webpack_require__.e(45)]).then(__webpack_require__.bind(null, 935));
+  return Promise.all(/* import() | profile-wizard */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(51), __webpack_require__.e(44)]).then(__webpack_require__.bind(null, 926));
 });
+
 
 var TIME_EXCLUDED_SCREENS_FILTER = 'woocommerce_admin_time_excluded_screens';
 var PAGES_FILTER = 'woocommerce_admin_pages_list';
@@ -6797,9 +10008,7 @@ var controller_Controller = /*#__PURE__*/function (_Component) {
  */
 
 function updateLinkHref(item, nextQuery, excludedScreens) {
-  var isWCAdmin = /admin.php\?page=wc-admin/.test(item.href);
-
-  if (isWCAdmin) {
+  if (Object(dashboard_utils["g" /* isWCAdmin */])(item.href)) {
     var search = Object(external_lodash_["last"])(item.href.split('?'));
     var query = Object(lib["parse"])(search);
     var defaultPath = window.wcAdminFeatures.homescreen ? 'homescreen' : 'dashboard';
@@ -6860,28 +10069,25 @@ window.wpNavMenuClassChange = function (page, url) {
   wpWrap.classList.remove('wp-responsive-open');
 };
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(65);
+var assertThisInitialized = __webpack_require__(7);
 var assertThisInitialized_default = /*#__PURE__*/__webpack_require__.n(assertThisInitialized);
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(7);
+var classnames = __webpack_require__(4);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // EXTERNAL MODULE: external {"this":["wp","htmlEntities"]}
-var external_this_wp_htmlEntities_ = __webpack_require__(70);
+var external_this_wp_htmlEntities_ = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./client/header/style.scss
-var header_style = __webpack_require__(452);
+var header_style = __webpack_require__(449);
 
 // EXTERNAL MODULE: ./node_modules/react-click-outside/dist/index.js
 var dist = __webpack_require__(419);
 var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/button/index.js
-var build_module_button = __webpack_require__(69);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/menu.js + 1 modules
-var menu = __webpack_require__(430);
+var build_module_button = __webpack_require__(90);
 
 // EXTERNAL MODULE: ./node_modules/gridicons/dist/pages.js
 var dist_pages = __webpack_require__(420);
@@ -6892,13 +10098,13 @@ var cross_small = __webpack_require__(421);
 var cross_small_default = /*#__PURE__*/__webpack_require__.n(cross_small);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/icon/index.js
-var icon = __webpack_require__(284);
+var build_module_icon = __webpack_require__(452);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/lifesaver.js
-var lifesaver = __webpack_require__(757);
+var lifesaver = __webpack_require__(736);
 
 // EXTERNAL MODULE: ./client/header/activity-panel/style.scss
-var activity_panel_style = __webpack_require__(454);
+var activity_panel_style = __webpack_require__(451);
 
 // CONCATENATED MODULE: ./client/header/activity-panel/toggle-bubble.js
 
@@ -6940,13 +10146,13 @@ toggle_bubble_ActivityPanelToggleBubble.propTypes = {
 };
 /* harmony default export */ var toggle_bubble = (toggle_bubble_ActivityPanelToggleBubble);
 // EXTERNAL MODULE: ./client/analytics/settings/config.js + 1 modules
-var config = __webpack_require__(279);
+var config = __webpack_require__(294);
 
 // EXTERNAL MODULE: ./client/wc-api/constants.js
-var constants = __webpack_require__(30);
+var constants = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./client/header/activity-panel/panels/inbox/utils.js
-var inbox_utils = __webpack_require__(276);
+var inbox_utils = __webpack_require__(287);
 
 // CONCATENATED MODULE: ./client/header/activity-panel/unread-indicators.js
 /**
@@ -7070,17 +10276,147 @@ function getUnapprovedReviews(select) {
 function getUnreadStock() {
   return Object(settings["g" /* getSetting */])('hasLowStock', false);
 }
-// EXTERNAL MODULE: ./client/dashboard/utils.js
-var dashboard_utils = __webpack_require__(268);
-
-// EXTERNAL MODULE: ./client/lib/tracks.js
-var tracks = __webpack_require__(64);
-
 // EXTERNAL MODULE: ./client/wc-api/with-select.js
 var with_select = __webpack_require__(104);
 
-// CONCATENATED MODULE: ./client/header/activity-panel/index.js
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
+var slicedToArray = __webpack_require__(53);
+var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
 
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/menu.js + 1 modules
+var menu = __webpack_require__(738);
+
+// CONCATENATED MODULE: ./client/header/activity-panel/tab/index.js
+
+
+/**
+ * External dependencies
+ */
+
+
+
+var tab_Tab = function Tab(_ref) {
+  var icon = _ref.icon,
+      title = _ref.title,
+      name = _ref.name,
+      unread = _ref.unread,
+      selected = _ref.selected,
+      isPanelOpen = _ref.isPanelOpen,
+      onTabClick = _ref.onTabClick,
+      index = _ref.index;
+  var className = classnames_default()('woocommerce-layout__activity-panel-tab', {
+    'is-active': isPanelOpen && selected,
+    'has-unread': unread
+  });
+  var tabIndex = -1; // Only make this item tabbable if it is the currently selected item, or the panel is closed and the item is the first item.
+
+  if (selected || !isPanelOpen && index === 0) {
+    tabIndex = null;
+  }
+
+  var tabKey = "activity-panel-tab-".concat(name);
+  return Object(external_this_wp_element_["createElement"])(build_module_button["a" /* default */], {
+    role: "tab",
+    className: className,
+    tabIndex: tabIndex,
+    "aria-selected": selected,
+    "aria-controls": "activity-panel-".concat(name),
+    key: tabKey,
+    id: tabKey,
+    onClick: function onClick() {
+      onTabClick(name);
+    }
+  }, icon, title, ' ', unread && Object(external_this_wp_element_["createElement"])("span", {
+    className: "screen-reader-text"
+  }, Object(external_this_wp_i18n_["__"])('unread activity', 'woocommerce-admin')));
+};
+// EXTERNAL MODULE: ./client/lib/tracks.js
+var tracks = __webpack_require__(63);
+
+// CONCATENATED MODULE: ./client/header/activity-panel/tabs/index.js
+
+
+
+
+
+
+
+var tabs_Tabs = function Tabs(_ref) {
+  var tabs = _ref.tabs,
+      _onTabClick = _ref.onTabClick,
+      selectedTabName = _ref.selectedTab,
+      _ref$tabOpen = _ref.tabOpen,
+      tabOpen = _ref$tabOpen === void 0 ? false : _ref$tabOpen;
+
+  var _useState = Object(external_this_wp_element_["useState"])({
+    tabOpen: tabOpen,
+    currentTab: selectedTabName
+  }),
+      _useState2 = slicedToArray_default()(_useState, 2),
+      _useState2$ = _useState2[0],
+      tabIsOpenState = _useState2$.tabOpen,
+      currentTab = _useState2$.currentTab,
+      setTabState = _useState2[1]; // Keep state synced with props
+
+
+  Object(external_this_wp_element_["useEffect"])(function () {
+    setTabState({
+      tabOpen: tabOpen,
+      currentTab: selectedTabName
+    });
+  }, [tabOpen, selectedTabName]);
+  return Object(external_this_wp_element_["createElement"])(menu["a" /* default */], {
+    role: "tablist",
+    orientation: "horizontal",
+    className: "woocommerce-layout__activity-panel-tabs"
+  }, tabs && tabs.map(function (tab, i) {
+    return Object(external_this_wp_element_["createElement"])(tab_Tab, extends_default()({
+      key: i,
+      index: i,
+      isPanelOpen: tabIsOpenState,
+      selected: currentTab === tab.name
+    }, tab, {
+      onTabClick: function onTabClick() {
+        var isTabOpen = currentTab === tab.name || currentTab === '' ? !tabIsOpenState : true; // If a panel is being opened, or if an existing panel is already open and a different one is being opened, record a track.
+
+        if (!isTabOpen || currentTab !== tab.name) {
+          Object(tracks["b" /* recordEvent */])('activity_panel_open', {
+            tab: tab.name
+          });
+        }
+
+        setTabState({
+          tabOpen: isTabOpen,
+          currentTab: tab.name
+        });
+
+        _onTabClick(tab, isTabOpen);
+      }
+    }));
+  }));
+};
+// CONCATENATED MODULE: ./client/header/activity-panel/setup-progress.js
+
+var setup_progress_SetupProgress = function SetupProgress() {
+  return Object(external_this_wp_element_["createElement"])("svg", {
+    className: "setup-progress",
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, Object(external_this_wp_element_["createElement"])("path", {
+    d: "M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z",
+    stroke: "#DCDCDE",
+    strokeWidth: "2"
+  }), Object(external_this_wp_element_["createElement"])("path", {
+    d: "M4 12V12C4 16.4183 7.58172 20 12 20V20C16.4183 20 20 16.4183 20 12V12C20 7.58172 16.4183 4 12 4V4" // stroke="#1E1E1E"
+    ,
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  }));
+};
+// CONCATENATED MODULE: ./client/header/activity-panel/index.js
 
 
 
@@ -7095,6 +10431,7 @@ function activity_panel_isNativeReflectConstruct() { if (typeof Reflect === "und
 /**
  * External dependencies
  */
+
 
 
 
@@ -7121,20 +10458,21 @@ function activity_panel_isNativeReflectConstruct() { if (typeof Reflect === "und
 
 
 
+
 var HelpPanel = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | activity-panels-help */[__webpack_require__.e(4), __webpack_require__.e(7), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, 941));
+  return Promise.all(/* import() | activity-panels-help */[__webpack_require__.e(3), __webpack_require__.e(6), __webpack_require__.e(8)]).then(__webpack_require__.bind(null, 935));
 });
 var InboxPanel = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | activity-panels-inbox */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(5), __webpack_require__.e(49), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, 801));
+  return Promise.all(/* import() | activity-panels-inbox */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(48), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, 785));
 });
 var OrdersPanel = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | activity-panels-orders */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, 945));
+  return Promise.all(/* import() | activity-panels-orders */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, 936));
 });
 var StockPanel = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | activity-panels-stock */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, 942));
+  return Promise.all(/* import() | activity-panels-stock */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, 937));
 });
 var ReviewsPanel = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | activity-panels-inbox */[__webpack_require__.e(2), __webpack_require__.e(4), __webpack_require__.e(5), __webpack_require__.e(49), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, 932));
+  return Promise.all(/* import() | activity-panels-inbox */[__webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(48), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, 923));
 });
 
 
@@ -7145,16 +10483,12 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
 
   var _super = activity_panel_createSuper(ActivityPanel);
 
-  function ActivityPanel() {
+  function ActivityPanel(props) {
     var _this;
 
     classCallCheck_default()(this, ActivityPanel);
 
-    _this = _super.apply(this, arguments);
-    _this.togglePanel = _this.togglePanel.bind(assertThisInitialized_default()(_this));
-    _this.clearPanel = _this.clearPanel.bind(assertThisInitialized_default()(_this));
-    _this.toggleMobile = _this.toggleMobile.bind(assertThisInitialized_default()(_this));
-    _this.renderTab = _this.renderTab.bind(assertThisInitialized_default()(_this));
+    _this = _super.call(this, props);
     _this.state = {
       isPanelOpen: false,
       mobileOpen: false,
@@ -7166,41 +10500,34 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
 
   createClass_default()(ActivityPanel, [{
     key: "togglePanel",
-    value: function togglePanel(tabName) {
-      var _this$state = this.state,
-          isPanelOpen = _this$state.isPanelOpen,
-          currentTab = _this$state.currentTab; // If a panel is being opened, or if an existing panel is already open and a different one is being opened, record a track.
-
-      if (!isPanelOpen || tabName !== currentTab) {
-        Object(tracks["b" /* recordEvent */])('activity_panel_open', {
-          tab: tabName
-        });
-      }
-
+    value: function togglePanel(_ref, isTabOpen) {
+      var tabName = _ref.name;
       this.setState(function (state) {
-        if (tabName === state.currentTab || state.currentTab === '') {
-          return {
-            isPanelOpen: !state.isPanelOpen,
-            currentTab: tabName,
-            mobileOpen: !state.isPanelOpen
-          };
-        }
-
+        var isPanelSwitching = tabName !== state.currentTab && state.currentTab !== '' && isTabOpen && state.isPanelOpen;
         return {
+          isPanelOpen: isTabOpen,
+          mobileOpen: isTabOpen,
           currentTab: tabName,
-          isPanelSwitching: true
+          isPanelSwitching: isPanelSwitching
+        };
+      });
+    }
+  }, {
+    key: "closePanel",
+    value: function closePanel() {
+      this.setState(function () {
+        return {
+          isPanelOpen: false,
+          currentTab: ''
         };
       });
     }
   }, {
     key: "clearPanel",
     value: function clearPanel() {
-      this.setState(function (_ref) {
-        var isPanelOpen = _ref.isPanelOpen;
-        return isPanelOpen ? {
+      this.setState(function () {
+        return {
           isPanelSwitching: false
-        } : {
-          currentTab: ''
         };
       });
     } // On smaller screen, the panel buttons are hidden behind a toggle.
@@ -7220,13 +10547,11 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleClickOutside",
     value: function handleClickOutside(event) {
-      var _this$state2 = this.state,
-          isPanelOpen = _this$state2.isPanelOpen,
-          currentTab = _this$state2.currentTab;
+      var isPanelOpen = this.state.isPanelOpen;
       var isClickOnModalOrSnackbar = event.target.closest('.woocommerce-inbox-dismiss-confirmation_modal') || event.target.closest('.components-snackbar__action');
 
       if (isPanelOpen && !isClickOnModalOrSnackbar) {
-        this.togglePanel(currentTab);
+        this.closePanel();
       }
     } // @todo Pull in dynamic unread status/count
 
@@ -7240,15 +10565,43 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
           hasUnreadStock = _this$props.hasUnreadStock,
           isEmbedded = _this$props.isEmbedded,
           requestingTaskListOptions = _this$props.requestingTaskListOptions,
+          taskListEnabledResolving = _this$props.taskListEnabledResolving,
           taskListComplete = _this$props.taskListComplete,
           taskListHidden = _this$props.taskListHidden,
+          taskListEnabled = _this$props.taskListEnabled,
           query = _this$props.query; // Don't show the inbox on the Home screen.
 
       var _this$props$getHistor = this.props.getHistory(),
           location = _this$props$getHistor.location;
 
       var showInbox = isEmbedded || !window.wcAdminFeatures.homescreen || location.pathname !== '/';
-      var isPerformingSetupTask = query.task && !query.path && (requestingTaskListOptions === true || taskListHidden === false && taskListComplete === false);
+      var isPerformingSetupTask = query.task && !query.path && (requestingTaskListOptions === true || taskListHidden === false && taskListComplete === false); // To prevent a flicker between 2 different tab groups, while this option resolves just display no tabs.
+
+      if (taskListEnabledResolving) {
+        return [];
+      }
+
+      if (!taskListComplete && taskListEnabled && showInbox) {
+        return [{
+          name: 'inbox',
+          title: Object(external_this_wp_i18n_["__"])('Inbox', 'woocommerce-admin'),
+          icon: Object(external_this_wp_element_["createElement"])("i", {
+            className: "material-icons-outlined"
+          }, "inbox"),
+          unread: hasUnreadNotes
+        }, {
+          name: 'setup',
+          title: Object(external_this_wp_i18n_["__"])('Store Setup', 'woocommerce-admin'),
+          icon: Object(external_this_wp_element_["createElement"])(setup_progress_SetupProgress, null)
+        }, isPerformingSetupTask && {
+          name: 'help',
+          title: Object(external_this_wp_i18n_["__"])('Help', 'woocommerce-admin'),
+          icon: Object(external_this_wp_element_["createElement"])("i", {
+            className: "material-icons-outlined"
+          }, "support")
+        }].filter(Boolean);
+      }
+
       return [!isPerformingSetupTask && showInbox ? {
         name: 'inbox',
         title: Object(external_this_wp_i18n_["__"])('Inbox', 'woocommerce-admin'),
@@ -7278,7 +10631,7 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
       } : null, isPerformingSetupTask && {
         name: 'help',
         title: Object(external_this_wp_i18n_["__"])('Help', 'woocommerce-admin'),
-        icon: Object(external_this_wp_element_["createElement"])(icon["a" /* default */], {
+        icon: Object(external_this_wp_element_["createElement"])(build_module_icon["a" /* default */], {
           icon: lifesaver["a" /* default */]
         })
       }].filter(Boolean);
@@ -7286,12 +10639,17 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
   }, {
     key: "getPanelContent",
     value: function getPanelContent(tab) {
+      var _this$props2 = this.props,
+          hasUnreadOrders = _this$props2.hasUnreadOrders,
+          query = _this$props2.query,
+          hasUnapprovedReviews = _this$props2.hasUnapprovedReviews;
+      var task = query.task;
+
       switch (tab) {
         case 'inbox':
           return Object(external_this_wp_element_["createElement"])(InboxPanel, null);
 
         case 'orders':
-          var hasUnreadOrders = this.props.hasUnreadOrders;
           return Object(external_this_wp_element_["createElement"])(OrdersPanel, {
             hasActionableOrders: hasUnreadOrders
           });
@@ -7300,14 +10658,11 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
           return Object(external_this_wp_element_["createElement"])(StockPanel, null);
 
         case 'reviews':
-          var hasUnapprovedReviews = this.props.hasUnapprovedReviews;
           return Object(external_this_wp_element_["createElement"])(ReviewsPanel, {
             hasUnapprovedReviews: hasUnapprovedReviews
           });
 
         case 'help':
-          var query = this.props.query;
-          var task = query.task;
           return Object(external_this_wp_element_["createElement"])(HelpPanel, {
             taskName: task
           });
@@ -7319,10 +10674,15 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
   }, {
     key: "renderPanel",
     value: function renderPanel() {
-      var _this$state3 = this.state,
-          isPanelOpen = _this$state3.isPanelOpen,
-          currentTab = _this$state3.currentTab,
-          isPanelSwitching = _this$state3.isPanelSwitching;
+      var _this2 = this;
+
+      var _this$props3 = this.props,
+          updateOptions = _this$props3.updateOptions,
+          taskListHidden = _this$props3.taskListHidden;
+      var _this$state = this.state,
+          isPanelOpen = _this$state.isPanelOpen,
+          currentTab = _this$state.currentTab,
+          isPanelSwitching = _this$state.isPanelSwitching;
       var tab = Object(external_lodash_["find"])(this.getTabs(), {
         name: currentTab
       });
@@ -7331,6 +10691,29 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
         return Object(external_this_wp_element_["createElement"])("div", {
           className: "woocommerce-layout__activity-panel-wrapper"
         });
+      }
+
+      var clearPanel = function clearPanel() {
+        _this2.clearPanel();
+      };
+
+      if (currentTab === 'setup') {
+        var currentLocation = window.location.href;
+        var homescreenLocation = Object(settings["f" /* getAdminLink */])('admin.php?page=wc-admin'); // Don't navigate if we're already on the homescreen, this will cause an infinite loop
+
+        if (currentLocation !== homescreenLocation) {
+          // Ensure that if the user is trying to get to the task list they can see it even if
+          // it was dismissed.
+          if (taskListHidden === 'no') {
+            this.redirectToHomeScreen();
+          } else {
+            updateOptions({
+              woocommerce_task_list_hidden: 'no'
+            }).then(this.redirectToHomeScreen);
+          }
+        }
+
+        return null;
       }
 
       var classNames = classnames_default()('woocommerce-layout__activity-panel-wrapper', {
@@ -7342,8 +10725,8 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
         tabIndex: 0,
         role: "tabpanel",
         "aria-label": tab.title,
-        onTransitionEnd: this.clearPanel,
-        onAnimationEnd: this.clearPanel
+        onTransitionEnd: clearPanel,
+        onAnimationEnd: clearPanel
       }, Object(external_this_wp_element_["createElement"])("div", {
         className: "woocommerce-layout__activity-panel-content",
         key: 'activity-panel-' + currentTab,
@@ -7353,40 +10736,24 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
       }, this.getPanelContent(currentTab))));
     }
   }, {
-    key: "renderTab",
-    value: function renderTab(tab, i) {
-      var _this$state4 = this.state,
-          currentTab = _this$state4.currentTab,
-          isPanelOpen = _this$state4.isPanelOpen;
-      var className = classnames_default()('woocommerce-layout__activity-panel-tab', {
-        'is-active': isPanelOpen && tab.name === currentTab,
-        'has-unread': tab.unread
-      });
-      var selected = tab.name === currentTab;
-      var tabIndex = -1; // Only make this item tabbable if it is the currently selected item, or the panel is closed and the item is the first item.
-
-      if (selected || !isPanelOpen && i === 0) {
-        tabIndex = null;
+    key: "redirectToHomeScreen",
+    value: function redirectToHomeScreen() {
+      if (Object(dashboard_utils["g" /* isWCAdmin */])(window.location.href)) {
+        Object(external_this_wc_navigation_["getHistory"])().push(Object(external_this_wc_navigation_["getNewPath"])({}, '/', {}));
+      } else {
+        window.location.href = Object(settings["f" /* getAdminLink */])('admin.php?page=wc-admin');
       }
-
-      return Object(external_this_wp_element_["createElement"])(build_module_button["a" /* default */], {
-        role: "tab",
-        className: className,
-        tabIndex: tabIndex,
-        "aria-selected": selected,
-        "aria-controls": 'activity-panel-' + tab.name,
-        key: 'activity-panel-tab-' + tab.name,
-        id: 'activity-panel-tab-' + tab.name,
-        onClick: Object(external_lodash_["partial"])(this.togglePanel, tab.name)
-      }, tab.icon, tab.title, ' ', tab.unread && Object(external_this_wp_element_["createElement"])("span", {
-        className: "screen-reader-text"
-      }, Object(external_this_wp_i18n_["__"])('unread activity', 'woocommerce-admin')));
     }
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var tabs = this.getTabs();
-      var mobileOpen = this.state.mobileOpen;
+      var _this$state2 = this.state,
+          mobileOpen = _this$state2.mobileOpen,
+          currentTab = _this$state2.currentTab,
+          isPanelOpen = _this$state2.isPanelOpen;
       var headerId = Object(external_lodash_["uniqueId"])('activity-panel-header_');
       var panelClasses = classnames_default()('woocommerce-layout__activity-panel', {
         'is-mobile-open': this.state.mobileOpen
@@ -7403,7 +10770,9 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
         id: "woocommerce-activity-panel",
         "aria-labelledby": headerId
       }, Object(external_this_wp_element_["createElement"])(build_module_button["a" /* default */], {
-        onClick: this.toggleMobile,
+        onClick: function onClick() {
+          _this3.toggleMobile();
+        },
         label: mobileOpen ? Object(external_this_wp_i18n_["__"])('Close Activity Panel', 'woocommerce-admin') : viewLabel,
         "aria-expanded": mobileOpen,
         className: "woocommerce-layout__activity-panel-mobile-toggle"
@@ -7411,11 +10780,14 @@ var activity_panel_ActivityPanel = /*#__PURE__*/function (_Component) {
         hasUnread: hasUnread
       })), Object(external_this_wp_element_["createElement"])("div", {
         className: panelClasses
-      }, Object(external_this_wp_element_["createElement"])(menu["a" /* default */], {
-        role: "tablist",
-        orientation: "horizontal",
-        className: "woocommerce-layout__activity-panel-tabs"
-      }, tabs && tabs.map(this.renderTab)), this.renderPanel())));
+      }, Object(external_this_wp_element_["createElement"])(tabs_Tabs, {
+        tabs: tabs,
+        tabOpen: isPanelOpen,
+        selectedTab: currentTab,
+        onTabClick: function onTabClick(tab, tabOpen) {
+          _this3.togglePanel(tab, tabOpen);
+        }
+      }), this.renderPanel())));
     }
   }]);
 
@@ -7434,9 +10806,12 @@ activity_panel_ActivityPanel.defaultProps = {
       getOption = _select.getOption,
       isResolving = _select.isResolving;
 
+  var taskListEnabledResolving = isResolving('getOption', ['woocommerce_homescreen_enabled']); // This indicates the task list is in progress, but not if it has been hidden or not
+
+  var taskListEnabled = Object(dashboard_utils["f" /* isOnboardingEnabled */])();
   var requestingTaskListOptions, taskListComplete, taskListHidden;
 
-  if (Object(dashboard_utils["e" /* isOnboardingEnabled */])()) {
+  if (Object(dashboard_utils["f" /* isOnboardingEnabled */])()) {
     taskListComplete = getOption('woocommerce_task_list_complete') === 'yes';
     taskListHidden = getOption('woocommerce_task_list_hidden') === 'yes';
     requestingTaskListOptions = isResolving('getOption', ['woocommerce_task_list_complete']) || isResolving('getOption', ['woocommerce_task_list_hidden']);
@@ -7448,8 +10823,14 @@ activity_panel_ActivityPanel.defaultProps = {
     hasUnreadStock: hasUnreadStock,
     hasUnapprovedReviews: hasUnapprovedReviews,
     requestingTaskListOptions: requestingTaskListOptions,
+    taskListEnabledResolving: taskListEnabledResolving,
     taskListComplete: taskListComplete,
-    taskListHidden: taskListHidden
+    taskListHidden: taskListHidden,
+    taskListEnabled: taskListEnabled
+  };
+}), Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
+  return {
+    updateOptions: dispatch(external_this_wc_data_["OPTIONS_STORE_NAME"]).updateOptions
   };
 }), dist_default.a)(activity_panel_ActivityPanel));
 // CONCATENATED MODULE: ./client/header/index.js
@@ -7493,12 +10874,12 @@ var header_Header = /*#__PURE__*/function (_Component) {
 
   var _super = header_createSuper(Header);
 
-  function Header() {
+  function Header(props) {
     var _this;
 
     classCallCheck_default()(this, Header);
 
-    _this = _super.call(this);
+    _this = _super.call(this, props);
     _this.state = {
       isScrolled: false
     };
@@ -7659,20 +11040,20 @@ var notices_Notices = /*#__PURE__*/function (_Component) {
 
 /* harmony default export */ var layout_notices = (notices_Notices);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
-var regenerator = __webpack_require__(77);
+var regenerator = __webpack_require__(16);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__(68);
+var asyncToGenerator = __webpack_require__(146);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(18);
+var esm_slicedToArray = __webpack_require__(26);
 
 // EXTERNAL MODULE: ./node_modules/react-spring/web.cjs.js
-var web_cjs = __webpack_require__(263);
+var web_cjs = __webpack_require__(273);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/hooks/use-reduced-motion/index.js
-var use_reduced_motion = __webpack_require__(758);
+var use_reduced_motion = __webpack_require__(737);
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/snackbar/index.js
 var snackbar = __webpack_require__(422);
@@ -7723,7 +11104,7 @@ function SnackbarList(_ref) {
   var _useState = Object(external_this_wp_element_["useState"])(function () {
     return new WeakMap();
   }),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 1),
+      _useState2 = Object(esm_slicedToArray["a" /* default */])(_useState, 1),
       refMap = _useState2[0];
 
   var transitions = Object(web_cjs["useTransition"])(notices, function (notice) {
@@ -7826,7 +11207,7 @@ function SnackbarList(_ref) {
 /* harmony default export */ var list = (SnackbarList);
 //# sourceMappingURL=list.js.map
 // EXTERNAL MODULE: ./client/layout/transient-notices/style.scss
-var transient_notices_style = __webpack_require__(455);
+var transient_notices_style = __webpack_require__(453);
 
 // CONCATENATED MODULE: ./client/layout/transient-notices/index.js
 
@@ -7908,7 +11289,7 @@ transient_notices_TransientNotices.propTypes = {
   };
 }))(transient_notices_TransientNotices));
 // EXTERNAL MODULE: ./client/analytics/report/index.js
-var analytics_report = __webpack_require__(202);
+var analytics_report = __webpack_require__(216);
 
 // CONCATENATED MODULE: ./client/layout/index.js
 
@@ -7958,7 +11339,7 @@ function layout_isNativeReflectConstruct() { if (typeof Reflect === "undefined" 
 
 
 var StoreAlerts = Object(external_this_wp_element_["lazy"])(function () {
-  return Promise.all(/* import() | store-alerts */[__webpack_require__.e(5), __webpack_require__.e(46)]).then(__webpack_require__.bind(null, 943));
+  return Promise.all(/* import() | store-alerts */[__webpack_require__.e(4), __webpack_require__.e(45)]).then(__webpack_require__.bind(null, 930));
 });
 
 var layout_PrimaryLayout = /*#__PURE__*/function (_Component) {
@@ -8190,7 +11571,7 @@ var layout_EmbedLayout = /*#__PURE__*/function (_Component4) {
 
 /***/ }),
 
-/***/ 204:
+/***/ 218:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8200,9 +11581,9 @@ var layout_EmbedLayout = /*#__PURE__*/function (_Component4) {
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _woocommerce_currency__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(116);
+/* harmony import */ var _woocommerce_currency__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(123);
 /* harmony import */ var _woocommerce_currency__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_currency__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
+/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 /**
  * External dependencies
  */
@@ -8229,20 +11610,56 @@ var CurrencyContext = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["cr
 
 /***/ }),
 
-/***/ 205:
+/***/ 219:
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wc"]["number"]; }());
 
 /***/ }),
 
-/***/ 212:
+/***/ 22:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _inherits; });
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+/***/ }),
+
+/***/ 226:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _use_media_query__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(89);
+/* harmony import */ var _use_media_query__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(84);
 /**
  * WordPress dependencies
  */
@@ -8336,31 +11753,7 @@ useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provide
 
 /***/ }),
 
-/***/ 213:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-
-
-/**
- * WordPress dependencies
- */
-
-var close = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* SVG */ "b"], {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* Path */ "a"], {
-  d: "M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"
-}));
-/* harmony default export */ __webpack_exports__["a"] = (close);
-//# sourceMappingURL=close.js.map
-
-/***/ }),
-
-/***/ 214:
+/***/ 227:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8383,70 +11776,147 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 
 /***/ }),
 
-/***/ 215:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(161);
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return arrayLikeToArray(arr);
-}
-
-module.exports = _arrayWithoutHoles;
-
-/***/ }),
-
-/***/ 216:
-/***/ (function(module, exports) {
-
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-
-/***/ }),
-
-/***/ 217:
-/***/ (function(module, exports) {
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-module.exports = _nonIterableSpread;
-
-/***/ }),
-
-/***/ 22:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["wp"]["apiFetch"]; }());
-
-/***/ }),
-
 /***/ 23:
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-(function() { module.exports = this["wc"]["navigation"]; }());
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _possibleConstructorReturn; });
+/* harmony import */ var _helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(50);
+/* harmony import */ var _assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (Object(_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(call) === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return Object(_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(self);
+}
 
 /***/ }),
 
 /***/ 24:
 /***/ (function(module, exports) {
 
-(function() { module.exports = this["wc"]["date"]; }());
+(function() { module.exports = this["wp"]["data"]; }());
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayWithoutHoles = __webpack_require__(106);
+
+var iterableToArray = __webpack_require__(107);
+
+var unsupportedIterableToArray = __webpack_require__(77);
+
+var nonIterableSpread = __webpack_require__(108);
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray;
 
 /***/ }),
 
 /***/ 26:
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-(function() { module.exports = this["wp"]["url"]; }());
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(68);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || _nonIterableRest();
+}
 
 /***/ }),
 
-/***/ 263:
+/***/ 27:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+var arrayLikeToArray = __webpack_require__(58);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(68);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
+
+
+
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
+}
+
+/***/ }),
+
+/***/ 273:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8456,12 +11926,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var _extends = _interopDefault(__webpack_require__(78));
-var _objectWithoutPropertiesLoose = _interopDefault(__webpack_require__(282));
-var React = __webpack_require__(13);
+var _extends = _interopDefault(__webpack_require__(33));
+var _objectWithoutPropertiesLoose = _interopDefault(__webpack_require__(192));
+var React = __webpack_require__(10);
 var React__default = _interopDefault(React);
-var _inheritsLoose = _interopDefault(__webpack_require__(131));
-var _assertThisInitialized = _interopDefault(__webpack_require__(65));
+var _inheritsLoose = _interopDefault(__webpack_require__(144));
+var _assertThisInitialized = _interopDefault(__webpack_require__(7));
 
 var is = {
   arr: Array.isArray,
@@ -10777,10 +14247,10 @@ exports.useSprings = useSprings;
 
 /***/ }),
 
-/***/ 264:
+/***/ 274:
 /***/ (function(module, exports, __webpack_require__) {
 
-var isarray = __webpack_require__(456)
+var isarray = __webpack_require__(454)
 
 /**
  * Expose `pathToRegexp`.
@@ -11210,7 +14680,7 @@ function pathToRegexp (path, keys, options) {
 
 /***/ }),
 
-/***/ 265:
+/***/ 275:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11233,23 +14703,23 @@ if (typeof self !== 'undefined') {
 var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(root);
 /* harmony default export */ __webpack_exports__["a"] = (result);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(60), __webpack_require__(457)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(59), __webpack_require__(455)(module)))
 
 /***/ }),
 
-/***/ 267:
+/***/ 277:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(47);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
@@ -11259,7 +14729,7 @@ var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(55);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_components__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(20);
+/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(28);
 
 
 
@@ -11358,122 +14828,120 @@ ReportError.defaultProps = {
 
 /***/ }),
 
-/***/ 268:
+/***/ 28:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getCountryCode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCurrencyRegion; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getProductIdsForCart; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getPriceValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isOnboardingEnabled; });
-/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(70);
-/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADMIN_URL; });
+/* unused harmony export COUNTRIES */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return CURRENCY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return LOCALE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return ORDER_STATUSES; });
+/* unused harmony export SITE_TITLE */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return WC_ASSET_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getSetting; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return setSetting; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getAdminLink; });
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+
+
 /**
  * External dependencies
  */
+ // Remove mutable data from settings object to prevent access. Data stores should be used instead.
 
+var mutableSources = ['wcAdminSettings', 'preloadSettings'];
+var settings = (typeof wcSettings === "undefined" ? "undefined" : _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(wcSettings)) === 'object' ? wcSettings : {};
+var SOURCE = Object.keys(settings).reduce(function (source, key) {
+  if (!mutableSources.includes(key)) {
+    source[key] = settings[key];
+  }
 
+  return source;
+}, {});
+var ADMIN_URL = SOURCE.adminUrl;
+var COUNTRIES = SOURCE.countries;
+var CURRENCY = SOURCE.currency;
+var LOCALE = SOURCE.locale;
+var ORDER_STATUSES = SOURCE.orderStatuses;
+var SITE_TITLE = SOURCE.siteTitle;
+var WC_ASSET_URL = SOURCE.wcAssetUrl;
 /**
- * Internal dependencies
- */
-
-
-/**
- * Gets the country code from a country:state value string.
+ * Retrieves a setting value from the setting state.
  *
- * @param {string} countryState Country state string, e.g. US:GA.
- * @return {string} Country string.
- */
-
-function getCountryCode(countryState) {
-  if (!countryState) {
-    return null;
-  }
-
-  return countryState.split(':')[0];
-}
-function getCurrencyRegion(countryState) {
-  var region = getCountryCode(countryState);
-  var euCountries = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["without"])(Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_2__[/* getSetting */ "g"])('onboarding', {
-    euCountries: []
-  }).euCountries, 'GB');
-
-  if (euCountries.includes(region)) {
-    region = 'EU';
-  }
-
-  return region;
-}
-/**
- * Gets the product IDs for items based on the product types and theme selected in the onboarding profiler.
+ * @export
+ * @param {string}   name                         The identifier for the setting.
+ * @param {*}    [fallback=false]             The value to use as a fallback
+ *                                                if the setting is not in the
+ *                                                state.
+ * @param {Function} [filter=( val ) => val]  	  A callback for filtering the
+ *                                                value before it's returned.
+ *                                                Receives both the found value
+ *                                                (if it exists for the key) and
+ *                                                the provided fallback arg.
  *
- * @param {Object} profileItems Onboarding profile.
- * @param {boolean} includeInstalledItems Include installed items in returned product IDs.
- * @param {Array} installedPlugins Installed plugins.
- * @return {Array} Product Ids.
+ * @return {*}  The value present in the settings state for the given
+ *                   name.
  */
 
-function getProductIdsForCart(profileItems) {
-  var includeInstalledItems = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  var installedPlugins = arguments.length > 2 ? arguments[2] : undefined;
-  var onboarding = Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_2__[/* getSetting */ "g"])('onboarding', {});
-  var productIds = []; // The population of onboarding.productTypes only happens if the task list should be shown
-  // so bail early if it isn't present.
+function getSetting(name) {
+  var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var filter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (val) {
+    return val;
+  };
 
-  if (!onboarding.productTypes) {
-    return productIds;
+  if (mutableSources.includes(name)) {
+    throw new Error(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Mutable settings should be accessed via data store.'));
   }
 
-  var productTypes = profileItems.product_types || [];
-  productTypes.forEach(function (productType) {
-    if (onboarding.productTypes[productType] && onboarding.productTypes[productType].product && (includeInstalledItems || !installedPlugins.includes(onboarding.productTypes[productType].slug))) {
-      productIds.push(onboarding.productTypes[productType].product);
-    }
-  });
-  var theme = onboarding.themes.find(function (themeData) {
-    return themeData.slug === profileItems.theme;
-  });
-
-  if (theme && theme.id && getPriceValue(theme.price) > 0 && (includeInstalledItems || !theme.is_installed)) {
-    productIds.push(theme.id);
-  }
-
-  return productIds;
+  var value = SOURCE.hasOwnProperty(name) ? SOURCE[name] : fallback;
+  return filter(value, fallback);
 }
 /**
- * Get the value of a price from a string, removing any non-numeric characters.
+ * Sets a value to a property on the settings state.
  *
- * @param {string} string Price string.
- * @return {number} Number value.
+ * NOTE: This feature is to be removed in favour of data stores when a full migration
+ * is complete.
+ *
+ * @deprecated
+ *
+ * @export
+ * @param {string}   name                        The setting property key for the
+ *                                               setting being mutated.
+ * @param {*}    value                       The value to set.
+ * @param {Function} [filter=( val ) => val]     Allows for providing a callback
+ *                                               to sanitize the setting (eg.
+ *                                               ensure it's a number)
  */
 
-function getPriceValue(string) {
-  return Number(Object(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_0__["decodeEntities"])(string).replace(/[^0-9.-]+/g, ''));
-}
-/**
- * Returns if the onboarding feature of WooCommerce Admin should be enabled.
- *
- * While we preform an a/b test of onboarding, the feature will be enabled within the plugin build,
- * but only if the user recieved the test/opted in.
- *
- * @return {boolean} True if the onboarding is enabled.
- */
+function setSetting(name, value) {
+  var filter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (val) {
+    return val;
+  };
 
-function isOnboardingEnabled() {
-  if (!window.wcAdminFeatures.onboarding) {
-    return false;
+  if (mutableSources.includes(name)) {
+    throw new Error(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Mutable settings should be mutated via data store.'));
   }
 
-  return Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_2__[/* getSetting */ "g"])('onboardingEnabled', false);
+  SOURCE[name] = filter(value);
+}
+/**
+ * Returns a string with the site's wp-admin URL appended. JS version of `admin_url`.
+ *
+ * @param {string} path Relative path.
+ * @return {string} Full admin URL.
+ */
+
+function getAdminLink(path) {
+  return (ADMIN_URL || '') + path;
 }
 
 /***/ }),
 
-/***/ 275:
+/***/ 286:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11524,7 +14992,7 @@ function getScreenName() {
 
 /***/ }),
 
-/***/ 276:
+/***/ 287:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11574,7 +15042,14 @@ function hasValidNotes(notes) {
 
 /***/ }),
 
-/***/ 279:
+/***/ 29:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wc"]["navigation"]; }());
+
+/***/ }),
+
+/***/ 294:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11595,23 +15070,23 @@ var external_this_wp_i18n_ = __webpack_require__(3);
 var external_this_wp_hooks_ = __webpack_require__(44);
 
 // EXTERNAL MODULE: ./node_modules/interpolate-components/lib/index.js
-var lib = __webpack_require__(36);
+var lib = __webpack_require__(42);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
 // EXTERNAL MODULE: ./client/settings/index.js
-var settings = __webpack_require__(20);
+var settings = __webpack_require__(28);
 
 // EXTERNAL MODULE: ./node_modules/qs/lib/index.js
 var qs_lib = __webpack_require__(67);
 
 // EXTERNAL MODULE: ./client/lib/date.js
-var date = __webpack_require__(111);
+var date = __webpack_require__(115);
 
 // EXTERNAL MODULE: external {"this":["wc","components"]}
 var external_this_wc_components_ = __webpack_require__(55);
 
 // EXTERNAL MODULE: external {"this":["wc","data"]}
-var external_this_wc_data_ = __webpack_require__(48);
+var external_this_wc_data_ = __webpack_require__(46);
 
 // CONCATENATED MODULE: ./client/analytics/settings/default-date.js
 
@@ -11762,51 +15237,15 @@ var config = Object(external_this_wp_hooks_["applyFilters"])(SETTINGS_FILTER, {
 
 /***/ }),
 
-/***/ 28:
-/***/ (function(module, exports) {
-
-function _getPrototypeOf(o) {
-  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-module.exports = _getPrototypeOf;
-
-/***/ }),
-
-/***/ 282:
-/***/ (function(module, exports) {
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-module.exports = _objectWithoutPropertiesLoose;
-
-/***/ }),
-
-/***/ 283:
+/***/ 296:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getLeaderboard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return searchItemsByString; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lib_date__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(111);
+/* harmony import */ var lib_date__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(115);
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -11926,60 +15365,31 @@ function searchItemsByString(select, endpoint, search) {
 
 /***/ }),
 
-/***/ 284:
+/***/ 297:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(51);
 
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 /**
  * WordPress dependencies
  */
- // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
 
-/* eslint-disable jsdoc/valid-types */
-
-/** @typedef {{icon: JSX.Element, size?: number} & import('react').ComponentPropsWithoutRef<'SVG'>} IconProps */
-
-/* eslint-enable jsdoc/valid-types */
-
-/**
- * Return an SVG icon.
- *
- * @param {IconProps} props icon is the SVG component to render
- *                          size is a number specifiying the icon size in pixels
- *                          Other props will be passed to wrapped SVG component
- *
- * @return {JSX.Element}  Icon component
- */
-
-function Icon(_ref) {
-  var icon = _ref.icon,
-      _ref$size = _ref.size,
-      size = _ref$size === void 0 ? 24 : _ref$size,
-      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["icon", "size"]);
-
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["cloneElement"])(icon, _objectSpread({
-    width: size,
-    height: size
-  }, props));
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Icon);
-//# sourceMappingURL=index.js.map
+var close = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* SVG */ "c"], {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* Path */ "b"], {
+  d: "M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"
+}));
+/* harmony default export */ __webpack_exports__["a"] = (close);
+//# sourceMappingURL=close.js.map
 
 /***/ }),
 
-/***/ 285:
+/***/ 298:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11989,7 +15399,7 @@ function Icon(_ref) {
 /* unused harmony export combineReducers */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return compose; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return createStore; });
-/* harmony import */ var symbol_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(265);
+/* harmony import */ var symbol_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(275);
 
 
 /**
@@ -12643,13 +16053,6 @@ if (false) {}
 
 /***/ }),
 
-/***/ 29:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["wp"]["dataControls"]; }());
-
-/***/ }),
-
 /***/ 3:
 /***/ (function(module, exports) {
 
@@ -12657,7 +16060,60 @@ if (false) {}
 
 /***/ }),
 
-/***/ 30:
+/***/ 31:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["apiFetch"]; }());
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wc"]["date"]; }());
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, exports) {
+
+function _extends() {
+  module.exports = _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+
+/***/ }),
+
+/***/ 34:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["url"]; }());
+
+/***/ }),
+
+/***/ 35:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["dataControls"]; }());
+
+/***/ }),
+
+/***/ 36:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12669,7 +16125,7 @@ if (false) {}
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MAX_PER_PAGE; });
 /* unused harmony export DEFAULT_ACTIONABLE_STATUSES */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return QUERY_DEFAULTS; });
-/* harmony import */ var _fresh_data_framework__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(176);
+/* harmony import */ var _fresh_data_framework__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
 /**
  * External dependencies
  */
@@ -12695,24 +16151,1323 @@ var QUERY_DEFAULTS = {
 
 /***/ }),
 
-/***/ 31:
+/***/ 37:
+/***/ (function(module, exports) {
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, exports) {
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    module.exports = _typeof = function _typeof(obj) {
+      return typeof obj;
+    };
+  } else {
+    module.exports = _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+module.exports = _typeof;
+
+/***/ }),
+
+/***/ 4:
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if ( true && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+
+/***/ 419:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var hoistNonReactStatic = __webpack_require__(450);
+var React = __webpack_require__(10);
+var ReactDOM = __webpack_require__(79);
+
+module.exports = function enhanceWithClickOutside(WrappedComponent) {
+  var componentName = WrappedComponent.displayName || WrappedComponent.name;
+
+  var EnhancedComponent = function (_React$Component) {
+    _inherits(EnhancedComponent, _React$Component);
+
+    function EnhancedComponent(props) {
+      _classCallCheck(this, EnhancedComponent);
+
+      var _this = _possibleConstructorReturn(this, (EnhancedComponent.__proto__ || Object.getPrototypeOf(EnhancedComponent)).call(this, props));
+
+      _this.handleClickOutside = _this.handleClickOutside.bind(_this);
+      return _this;
+    }
+
+    _createClass(EnhancedComponent, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        document.addEventListener('click', this.handleClickOutside, true);
+      }
+    }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        document.removeEventListener('click', this.handleClickOutside, true);
+      }
+    }, {
+      key: 'handleClickOutside',
+      value: function handleClickOutside(e) {
+        var domNode = this.__domNode;
+        if ((!domNode || !domNode.contains(e.target)) && this.__wrappedInstance && typeof this.__wrappedInstance.handleClickOutside === 'function') {
+          this.__wrappedInstance.handleClickOutside(e);
+        }
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this2 = this;
+
+        var _props = this.props,
+            wrappedRef = _props.wrappedRef,
+            rest = _objectWithoutProperties(_props, ['wrappedRef']);
+
+        return React.createElement(WrappedComponent, _extends({}, rest, {
+          ref: function ref(c) {
+            _this2.__wrappedInstance = c;
+            _this2.__domNode = ReactDOM.findDOMNode(c);
+            wrappedRef && wrappedRef(c);
+          }
+        }));
+      }
+    }]);
+
+    return EnhancedComponent;
+  }(React.Component);
+
+  EnhancedComponent.displayName = 'clickOutside(' + componentName + ')';
+
+  return hoistNonReactStatic(EnhancedComponent, WrappedComponent);
+};
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
+                                                                                                                                                                                                                                                                               * External Dependencies
+                                                                                                                                                                                                                                                                               */
+
+
+/**
+ * Internal Dependencies
+ */
+
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactAddonsCreateFragment = __webpack_require__(169);
+
+var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
+
+var _tokenize = __webpack_require__(172);
+
+var _tokenize2 = _interopRequireDefault(_tokenize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var currentMixedString = void 0;
+
+function getCloseIndex(openIndex, tokens) {
+	var openToken = tokens[openIndex],
+	    nestLevel = 0,
+	    token,
+	    i;
+	for (i = openIndex + 1; i < tokens.length; i++) {
+		token = tokens[i];
+		if (token.value === openToken.value) {
+			if (token.type === 'componentOpen') {
+				nestLevel++;
+				continue;
+			}
+			if (token.type === 'componentClose') {
+				if (nestLevel === 0) {
+					return i;
+				}
+				nestLevel--;
+			}
+		}
+	}
+	// if we get this far, there was no matching close token
+	throw new Error('Missing closing component token `' + openToken.value + '`');
+}
+
+function buildChildren(tokens, components) {
+	var children = [],
+	    childrenObject = {},
+	    openComponent,
+	    clonedOpenComponent,
+	    openIndex,
+	    closeIndex,
+	    token,
+	    i,
+	    grandChildTokens,
+	    grandChildren,
+	    siblingTokens,
+	    siblings;
+
+	for (i = 0; i < tokens.length; i++) {
+		token = tokens[i];
+		if (token.type === 'string') {
+			children.push(token.value);
+			continue;
+		}
+		// component node should at least be set
+		if (!components.hasOwnProperty(token.value) || typeof components[token.value] === 'undefined') {
+			throw new Error('Invalid interpolation, missing component node: `' + token.value + '`');
+		}
+		// should be either ReactElement or null (both type "object"), all other types deprecated
+		if (_typeof(components[token.value]) !== 'object') {
+			throw new Error('Invalid interpolation, component node must be a ReactElement or null: `' + token.value + '`', '\n> ' + currentMixedString);
+		}
+		// we should never see a componentClose token in this loop
+		if (token.type === 'componentClose') {
+			throw new Error('Missing opening component token: `' + token.value + '`');
+		}
+		if (token.type === 'componentOpen') {
+			openComponent = components[token.value];
+			openIndex = i;
+			break;
+		}
+		// componentSelfClosing token
+		children.push(components[token.value]);
+		continue;
+	}
+
+	if (openComponent) {
+		closeIndex = getCloseIndex(openIndex, tokens);
+		grandChildTokens = tokens.slice(openIndex + 1, closeIndex);
+		grandChildren = buildChildren(grandChildTokens, components);
+		clonedOpenComponent = _react2.default.cloneElement(openComponent, {}, grandChildren);
+		children.push(clonedOpenComponent);
+
+		if (closeIndex < tokens.length - 1) {
+			siblingTokens = tokens.slice(closeIndex + 1);
+			siblings = buildChildren(siblingTokens, components);
+			children = children.concat(siblings);
+		}
+	}
+
+	if (children.length === 1) {
+		return children[0];
+	}
+
+	children.forEach(function (child, index) {
+		if (child) {
+			childrenObject['interpolation-child-' + index] = child;
+		}
+	});
+
+	return (0, _reactAddonsCreateFragment2.default)(childrenObject);
+}
+
+function interpolate(options) {
+	var mixedString = options.mixedString,
+	    components = options.components,
+	    throwErrors = options.throwErrors;
+
+
+	currentMixedString = mixedString;
+
+	if (!components) {
+		return mixedString;
+	}
+
+	if ((typeof components === 'undefined' ? 'undefined' : _typeof(components)) !== 'object') {
+		if (throwErrors) {
+			throw new Error('Interpolation Error: unable to process `' + mixedString + '` because components is not an object');
+		}
+
+		return mixedString;
+	}
+
+	var tokens = (0, _tokenize2.default)(mixedString);
+
+	try {
+		return buildChildren(tokens, components);
+	} catch (error) {
+		if (throwErrors) {
+			throw new Error('Interpolation Error: unable to process `' + mixedString + '` because of error `' + error.message + '`');
+		}
+
+		return mixedString;
+	}
+};
+
+exports.default = interpolate;
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 420:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _extends=Object.assign||function(a){for(var c,b=1;b<arguments.length;b++)for(var d in c=arguments[b],c)Object.prototype.hasOwnProperty.call(c,d)&&(a[d]=c[d]);return a};Object.defineProperty(exports,'__esModule',{value:!0});exports.default=function(a){var b=a.size,c=b===void 0?24:b,d=a.onClick,e=a.icon,f=a.className,g=_objectWithoutProperties(a,['size','onClick','icon','className']),j=['gridicon','gridicons-pages',f,!1,!1,!1].filter(Boolean).join(' ');return _react2.default.createElement('svg',_extends({className:j,height:c,width:c,onClick:d},g,{xmlns:'http://www.w3.org/2000/svg',viewBox:'0 0 24 24'}),_react2.default.createElement('g',null,_react2.default.createElement('path',{d:'M16 8H8V6h8v2zm0 2H8v2h8v-2zm4-6v12l-6 6H6c-1.105 0-2-.895-2-2V4c0-1.105.895-2 2-2h12c1.105 0 2 .895 2 2zm-2 10V4H6v16h6v-4c0-1.105.895-2 2-2h4z'})))};var _react=__webpack_require__(10),_react2=_interopRequireDefault(_react);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _objectWithoutProperties(a,b){var d={};for(var c in a)0<=b.indexOf(c)||Object.prototype.hasOwnProperty.call(a,c)&&(d[c]=a[c]);return d}module.exports=exports['default'];
+
+
+/***/ }),
+
+/***/ 421:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _extends=Object.assign||function(a){for(var c,b=1;b<arguments.length;b++)for(var d in c=arguments[b],c)Object.prototype.hasOwnProperty.call(c,d)&&(a[d]=c[d]);return a};Object.defineProperty(exports,'__esModule',{value:!0});exports.default=function(a){var b=a.size,c=b===void 0?24:b,d=a.onClick,e=a.icon,f=a.className,g=_objectWithoutProperties(a,['size','onClick','icon','className']),j=['gridicon','gridicons-cross-small',f,!1,!1,!1].filter(Boolean).join(' ');return _react2.default.createElement('svg',_extends({className:j,height:c,width:c,onClick:d},g,{xmlns:'http://www.w3.org/2000/svg',viewBox:'0 0 24 24'}),_react2.default.createElement('g',null,_react2.default.createElement('path',{d:'M17.705 7.705l-1.41-1.41L12 10.59 7.705 6.295l-1.41 1.41L10.59 12l-4.295 4.295 1.41 1.41L12 13.41l4.295 4.295 1.41-1.41L13.41 12l4.295-4.295z'})))};var _react=__webpack_require__(10),_react2=_interopRequireDefault(_react);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _objectWithoutProperties(a,b){var d={};for(var c in a)0<=b.indexOf(c)||Object.prototype.hasOwnProperty.call(a,c)&&(d[c]=a[c]);return d}module.exports=exports['default'];
+
+
+/***/ }),
+
+/***/ 422:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(145);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(82);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(90);
 
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+var NOTICE_TIMEOUT = 10000;
+/** @typedef {import('@wordpress/element').WPElement} WPElement */
+
+/**
+ * Custom hook which announces the message with the given politeness, if a
+ * valid message is provided.
+ *
+ * @param {string|WPElement}     [message]  Message to announce.
+ * @param {'polite'|'assertive'} politeness Politeness to announce.
+ */
+
+function useSpokenMessage(message, politeness) {
+  var spokenMessage = typeof message === 'string' ? message : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["renderToString"])(message);
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (spokenMessage) {
+      Object(_wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__[/* speak */ "a"])(spokenMessage, politeness);
+    }
+  }, [spokenMessage, politeness]);
+}
+
+function Snackbar(_ref, ref) {
+  var className = _ref.className,
+      children = _ref.children,
+      _ref$spokenMessage = _ref.spokenMessage,
+      spokenMessage = _ref$spokenMessage === void 0 ? children : _ref$spokenMessage,
+      _ref$politeness = _ref.politeness,
+      politeness = _ref$politeness === void 0 ? 'polite' : _ref$politeness,
+      _ref$actions = _ref.actions,
+      actions = _ref$actions === void 0 ? [] : _ref$actions,
+      _ref$onRemove = _ref.onRemove,
+      onRemove = _ref$onRemove === void 0 ? lodash__WEBPACK_IMPORTED_MODULE_1__["noop"] : _ref$onRemove;
+  useSpokenMessage(spokenMessage, politeness);
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var timeoutHandle = setTimeout(function () {
+      onRemove();
+    }, NOTICE_TIMEOUT);
+    return function () {
+      return clearTimeout(timeoutHandle);
+    };
+  }, []);
+  var classes = classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, 'components-snackbar');
+
+  if (actions && actions.length > 1) {
+    // we need to inform developers that snackbar only accepts 1 action
+    typeof process !== "undefined" && process.env && "production" !== "production" ? Object(_wordpress_warning__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])('Snackbar can only have 1 action, use Notice if your message require many messages') : void 0; // return first element only while keeping it inside an array
+
+    actions = [actions[0]];
   }
 
-  return arr2;
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    ref: ref,
+    className: classes,
+    onClick: onRemove,
+    tabIndex: "0",
+    role: "button",
+    onKeyPress: onRemove,
+    "aria-label": Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Dismiss this notice')
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "components-snackbar__content"
+  }, children, actions.map(function (_ref2, index) {
+    var label = _ref2.label,
+        _onClick = _ref2.onClick,
+        url = _ref2.url;
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(___WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
+      key: index,
+      href: url,
+      isTertiary: true,
+      onClick: function onClick(event) {
+        event.stopPropagation();
+
+        if (_onClick) {
+          _onClick(event);
+        }
+      },
+      className: "components-snackbar__action"
+    }, label);
+  })));
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(Snackbar));
+//# sourceMappingURL=index.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(41)))
+
+/***/ }),
+
+/***/ 423:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {// @flow
+
+
+var key = '__global_unique_id__';
+
+module.exports = function() {
+  return global[key] = (global[key] || 0) + 1;
+};
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(59)))
+
+/***/ }),
+
+/***/ 424:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return symbolObservablePonyfill; });
+function symbolObservablePonyfill(root) {
+	var result;
+	var Symbol = root.Symbol;
+
+	if (typeof Symbol === 'function') {
+		if (Symbol.observable) {
+			result = Symbol.observable;
+		} else {
+			result = Symbol('observable');
+			Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+
+
+/***/ }),
+
+/***/ 44:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["hooks"]; }());
+
+/***/ }),
+
+/***/ 444:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_notices__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(709);
+/* harmony import */ var _stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(446);
+/* harmony import */ var _stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(217);
+/* harmony import */ var wc_api_wp_data_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(708);
+/* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(46);
+/* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__);
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+ // Modify webpack pubilcPath at runtime based on location of WordPress Plugin.
+// eslint-disable-next-line no-undef,camelcase
+
+__webpack_require__.p = global.wcAdminAssets.path;
+var appRoot = document.getElementById('root');
+var settingsGroup = 'wc_admin';
+var hydrateUser = window.wcSettings.currentUserData;
+
+if (appRoot) {
+  var HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])(settingsGroup, window.wcSettings)(_layout__WEBPACK_IMPORTED_MODULE_3__[/* PageLayout */ "b"]);
+  var hydrateSettings = window.wcSettings.preloadSettings && window.wcSettings.preloadSettings.general;
+
+  if (hydrateSettings) {
+    HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])('general', {
+      general: window.wcSettings.preloadSettings.general
+    })(HydratedPageLayout);
+  }
+
+  if (hydrateUser) {
+    HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withCurrentUserHydration"])(hydrateUser)(HydratedPageLayout);
+  }
+
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(HydratedPageLayout, null), appRoot);
+} else {
+  var embeddedRoot = document.getElementById('woocommerce-embedded-root');
+  var HydratedEmbedLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])(settingsGroup, window.wcSettings)(_layout__WEBPACK_IMPORTED_MODULE_3__[/* EmbedLayout */ "a"]);
+
+  if (hydrateUser) {
+    HydratedEmbedLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withCurrentUserHydration"])(hydrateUser)(HydratedEmbedLayout);
+  } // Render the header.
+
+
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(HydratedEmbedLayout, null), embeddedRoot);
+  embeddedRoot.classList.remove('is-embed-loading'); // Render notices just above the WP content div.
+
+  var wpBody = document.getElementById('wpbody-content');
+  var wrap = wpBody.querySelector('.wrap.woocommerce') || wpBody.querySelector('[class="wrap"]');
+  var noticeContainer = document.createElement('div');
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "woocommerce-layout"
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_layout__WEBPACK_IMPORTED_MODULE_3__[/* PrimaryLayout */ "c"], null)), wpBody.insertBefore(noticeContainer, wrap));
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(59)))
+
+/***/ }),
+
+/***/ 446:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 447:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 448:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 449:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 450:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    getDerivedStateFromProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+};
+
+var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    callee: true,
+    arguments: true,
+    arity: true
+};
+
+var defineProperty = Object.defineProperty;
+var getOwnPropertyNames = Object.getOwnPropertyNames;
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var getPrototypeOf = Object.getPrototypeOf;
+var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
+
+function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+
+        if (objectPrototype) {
+            var inheritedComponent = getPrototypeOf(sourceComponent);
+            if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+            }
+        }
+
+        var keys = getOwnPropertyNames(sourceComponent);
+
+        if (getOwnPropertySymbols) {
+            keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+            var key = keys[i];
+            if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
+                var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+                try { // Avoid failures from read-only properties
+                    defineProperty(targetComponent, key, descriptor);
+                } catch (e) {}
+            }
+        }
+
+        return targetComponent;
+    }
+
+    return targetComponent;
+}
+
+module.exports = hoistNonReactStatics;
+
+
+/***/ }),
+
+/***/ 451:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 452:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * WordPress dependencies
+ */
+ // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
+
+/* eslint-disable jsdoc/valid-types */
+
+/** @typedef {{icon: JSX.Element, size?: number} & import('react').ComponentPropsWithoutRef<'SVG'>} IconProps */
+
+/* eslint-enable jsdoc/valid-types */
+
+/**
+ * Return an SVG icon.
+ *
+ * @param {IconProps} props icon is the SVG component to render
+ *                          size is a number specifiying the icon size in pixels
+ *                          Other props will be passed to wrapped SVG component
+ *
+ * @return {JSX.Element}  Icon component
+ */
+
+function Icon(_ref) {
+  var icon = _ref.icon,
+      _ref$size = _ref.size,
+      size = _ref$size === void 0 ? 24 : _ref$size,
+      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["icon", "size"]);
+
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["cloneElement"])(icon, _objectSpread({
+    width: size,
+    height: size
+  }, props));
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Icon);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 453:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 454:
+/***/ (function(module, exports) {
+
+module.exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
+
+
+/***/ }),
+
+/***/ 455:
+/***/ (function(module, exports) {
+
+module.exports = function(originalModule) {
+	if (!originalModule.webpackPolyfill) {
+		var module = Object.create(originalModule);
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		Object.defineProperty(module, "exports", {
+			enumerable: true
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+
+/***/ 46:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wc"]["data"]; }());
+
+/***/ }),
+
+/***/ 47:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
 }
 
 /***/ }),
 
-/***/ 32:
+/***/ 49:
+/***/ (function(module, exports, __webpack_require__) {
+
+var objectWithoutPropertiesLoose = __webpack_require__(192);
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = objectWithoutPropertiesLoose(source, excluded);
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+module.exports = _objectWithoutProperties;
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+
+/***/ }),
+
+/***/ 50:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _typeof; });
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function _typeof(obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+/***/ }),
+
+/***/ 51:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Circle; });
+/* unused harmony export G */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Path; });
+/* unused harmony export Polygon */
+/* unused harmony export Rect */
+/* unused harmony export Defs */
+/* unused harmony export RadialGradient */
+/* unused harmony export LinearGradient */
+/* unused harmony export Stop */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SVG; });
+/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+ // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
+
+/* eslint-disable jsdoc/valid-types */
+
+/** @typedef {{isPressed?: boolean} & import('react').ComponentPropsWithoutRef<'svg'>} SVGProps */
+
+/* eslint-enable jsdoc/valid-types */
+
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'circle'>} props
+ *
+ * @return {JSX.Element} Circle component
+ */
+
+var Circle = function Circle(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('circle', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'g'>} props
+ *
+ * @return {JSX.Element} G component
+ */
+
+var G = function G(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('g', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'path'>} props
+ *
+ * @return {JSX.Element} Path component
+ */
+
+var Path = function Path(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('path', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'polygon'>} props
+ *
+ * @return {JSX.Element} Polygon component
+ */
+
+var Polygon = function Polygon(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('polygon', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'rect'>} props
+ *
+ * @return {JSX.Element} Rect component
+ */
+
+var Rect = function Rect(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('rect', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'defs'>} props
+ *
+ * @return {JSX.Element} Defs component
+ */
+
+var Defs = function Defs(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('defs', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'radialGradient'>} props
+ *
+ * @return {JSX.Element} RadialGradient component
+ */
+
+var RadialGradient = function RadialGradient(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('radialGradient', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'linearGradient'>} props
+ *
+ * @return {JSX.Element} LinearGradient component
+ */
+
+var LinearGradient = function LinearGradient(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('linearGradient', props);
+};
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'stop'>} props
+ *
+ * @return {JSX.Element} Stop component
+ */
+
+var Stop = function Stop(props) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('stop', props);
+};
+/**
+ *
+ * @param {SVGProps} props isPressed indicates whether the SVG should appear as pressed.
+ *                         Other props will be passed through to svg component.
+ *
+ * @return {JSX.Element} Stop component
+ */
+
+var SVG = function SVG(_ref) {
+  var className = _ref.className,
+      isPressed = _ref.isPressed,
+      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["className", "isPressed"]);
+
+  var appliedProps = _objectSpread({}, props, {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, {
+      'is-pressed': isPressed
+    }) || undefined,
+    role: 'img',
+    'aria-hidden': true,
+    focusable: false
+  }); // Disable reason: We need to have a way to render HTML tag for web.
+  // eslint-disable-next-line react/forbid-elements
+
+
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])("svg", appliedProps);
+};
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 53:
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayWithHoles = __webpack_require__(135);
+
+var iterableToArrayLimit = __webpack_require__(136);
+
+var unsupportedIterableToArray = __webpack_require__(77);
+
+var nonIterableRest = __webpack_require__(137);
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+
+/***/ }),
+
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12728,10 +17483,10 @@ __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding *
 // UNUSED EXPORTS: BACKSPACE, ENTER, SPACE, DELETE, F10, ALT, CTRL, COMMAND, SHIFT, ZERO, modifiers, rawShortcut, displayShortcutList, displayShortcut, shortcutAriaLabel, isKeyboardEvent
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(6);
+var defineProperty = __webpack_require__(11);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(27);
 
 // EXTERNAL MODULE: external "lodash"
 var external_lodash_ = __webpack_require__(2);
@@ -13055,2236 +17810,362 @@ var isKeyboardEvent = Object(external_lodash_["mapValues"])(modifiers, function 
 
 /***/ }),
 
-/***/ 34:
+/***/ 55:
 /***/ (function(module, exports) {
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-module.exports = _typeof;
+(function() { module.exports = this["wc"]["components"]; }());
 
 /***/ }),
 
-/***/ 35:
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-
-/***/ 36:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
-                                                                                                                                                                                                                                                                               * External Dependencies
-                                                                                                                                                                                                                                                                               */
-
-
-/**
- * Internal Dependencies
- */
-
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactAddonsCreateFragment = __webpack_require__(157);
-
-var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
-
-var _tokenize = __webpack_require__(160);
-
-var _tokenize2 = _interopRequireDefault(_tokenize);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var currentMixedString = void 0;
-
-function getCloseIndex(openIndex, tokens) {
-	var openToken = tokens[openIndex],
-	    nestLevel = 0,
-	    token,
-	    i;
-	for (i = openIndex + 1; i < tokens.length; i++) {
-		token = tokens[i];
-		if (token.value === openToken.value) {
-			if (token.type === 'componentOpen') {
-				nestLevel++;
-				continue;
-			}
-			if (token.type === 'componentClose') {
-				if (nestLevel === 0) {
-					return i;
-				}
-				nestLevel--;
-			}
-		}
-	}
-	// if we get this far, there was no matching close token
-	throw new Error('Missing closing component token `' + openToken.value + '`');
-}
-
-function buildChildren(tokens, components) {
-	var children = [],
-	    childrenObject = {},
-	    openComponent,
-	    clonedOpenComponent,
-	    openIndex,
-	    closeIndex,
-	    token,
-	    i,
-	    grandChildTokens,
-	    grandChildren,
-	    siblingTokens,
-	    siblings;
-
-	for (i = 0; i < tokens.length; i++) {
-		token = tokens[i];
-		if (token.type === 'string') {
-			children.push(token.value);
-			continue;
-		}
-		// component node should at least be set
-		if (!components.hasOwnProperty(token.value) || typeof components[token.value] === 'undefined') {
-			throw new Error('Invalid interpolation, missing component node: `' + token.value + '`');
-		}
-		// should be either ReactElement or null (both type "object"), all other types deprecated
-		if (_typeof(components[token.value]) !== 'object') {
-			throw new Error('Invalid interpolation, component node must be a ReactElement or null: `' + token.value + '`', '\n> ' + currentMixedString);
-		}
-		// we should never see a componentClose token in this loop
-		if (token.type === 'componentClose') {
-			throw new Error('Missing opening component token: `' + token.value + '`');
-		}
-		if (token.type === 'componentOpen') {
-			openComponent = components[token.value];
-			openIndex = i;
-			break;
-		}
-		// componentSelfClosing token
-		children.push(components[token.value]);
-		continue;
-	}
-
-	if (openComponent) {
-		closeIndex = getCloseIndex(openIndex, tokens);
-		grandChildTokens = tokens.slice(openIndex + 1, closeIndex);
-		grandChildren = buildChildren(grandChildTokens, components);
-		clonedOpenComponent = _react2.default.cloneElement(openComponent, {}, grandChildren);
-		children.push(clonedOpenComponent);
-
-		if (closeIndex < tokens.length - 1) {
-			siblingTokens = tokens.slice(closeIndex + 1);
-			siblings = buildChildren(siblingTokens, components);
-			children = children.concat(siblings);
-		}
-	}
-
-	if (children.length === 1) {
-		return children[0];
-	}
-
-	children.forEach(function (child, index) {
-		if (child) {
-			childrenObject['interpolation-child-' + index] = child;
-		}
-	});
-
-	return (0, _reactAddonsCreateFragment2.default)(childrenObject);
-}
-
-function interpolate(options) {
-	var mixedString = options.mixedString,
-	    components = options.components,
-	    throwErrors = options.throwErrors;
-
-
-	currentMixedString = mixedString;
-
-	if (!components) {
-		return mixedString;
-	}
-
-	if ((typeof components === 'undefined' ? 'undefined' : _typeof(components)) !== 'object') {
-		if (throwErrors) {
-			throw new Error('Interpolation Error: unable to process `' + mixedString + '` because components is not an object');
-		}
-
-		return mixedString;
-	}
-
-	var tokens = (0, _tokenize2.default)(mixedString);
-
-	try {
-		return buildChildren(tokens, components);
-	} catch (error) {
-		if (throwErrors) {
-			throw new Error('Interpolation Error: unable to process `' + mixedString + '` because of error `' + error.message + '`');
-		}
-
-		return mixedString;
-	}
-};
-
-exports.default = interpolate;
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 37:
+/***/ 56:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export Circle */
-/* unused harmony export G */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Path; });
-/* unused harmony export Polygon */
-/* unused harmony export Rect */
-/* unused harmony export Defs */
-/* unused harmony export RadialGradient */
-/* unused harmony export LinearGradient */
-/* unused harmony export Stop */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SVG; });
-/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * External dependencies
- */
-
+/* unused harmony export logged */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deprecated; });
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * WordPress dependencies
  */
 
- // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
-
-/* eslint-disable jsdoc/valid-types */
-
-/** @typedef {{isPressed?: boolean} & import('react').ComponentPropsWithoutRef<'svg'>} SVGProps */
-
-/* eslint-enable jsdoc/valid-types */
-
 /**
- * @param {import('react').ComponentPropsWithoutRef<'circle'>} props
+ * Object map tracking messages which have been logged, for use in ensuring a
+ * message is only logged once.
  *
- * @return {JSX.Element} Circle component
+ * @type {Object}
  */
 
-var Circle = function Circle(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('circle', props);
-};
+var logged = Object.create(null);
 /**
- * @param {import('react').ComponentPropsWithoutRef<'g'>} props
+ * Logs a message to notify developers about a deprecated feature.
  *
- * @return {JSX.Element} G component
+ * @param {string}  feature             Name of the deprecated feature.
+ * @param {?Object} options             Personalisation options
+ * @param {?string} options.version     Version in which the feature will be removed.
+ * @param {?string} options.alternative Feature to use instead
+ * @param {?string} options.plugin      Plugin name if it's a plugin feature
+ * @param {?string} options.link        Link to documentation
+ * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
+ *
+ * @example
+ * ```js
+ * import deprecated from '@wordpress/deprecated';
+ *
+ * deprecated( 'Eating meat', {
+ * 	version: 'the future',
+ * 	alternative: 'vegetables',
+ * 	plugin: 'the earth',
+ * 	hint: 'You may find it beneficial to transition gradually.',
+ * } );
+ *
+ * // Logs: 'Eating meat is deprecated and will be removed from the earth in the future. Please use vegetables instead. Note: You may find it beneficial to transition gradually.'
+ * ```
  */
 
-var G = function G(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('g', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'path'>} props
- *
- * @return {JSX.Element} Path component
- */
+function deprecated(feature) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var version = options.version,
+      alternative = options.alternative,
+      plugin = options.plugin,
+      link = options.link,
+      hint = options.hint;
+  var pluginMessage = plugin ? " from ".concat(plugin) : '';
+  var versionMessage = version ? " and will be removed".concat(pluginMessage, " in version ").concat(version) : '';
+  var useInsteadMessage = alternative ? " Please use ".concat(alternative, " instead.") : '';
+  var linkMessage = link ? " See: ".concat(link) : '';
+  var hintMessage = hint ? " Note: ".concat(hint) : '';
+  var message = "".concat(feature, " is deprecated").concat(versionMessage, ".").concat(useInsteadMessage).concat(linkMessage).concat(hintMessage); // Skip if already logged.
 
-var Path = function Path(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('path', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'polygon'>} props
- *
- * @return {JSX.Element} Polygon component
- */
-
-var Polygon = function Polygon(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('polygon', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'rect'>} props
- *
- * @return {JSX.Element} Rect component
- */
-
-var Rect = function Rect(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('rect', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'defs'>} props
- *
- * @return {JSX.Element} Defs component
- */
-
-var Defs = function Defs(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('defs', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'radialGradient'>} props
- *
- * @return {JSX.Element} RadialGradient component
- */
-
-var RadialGradient = function RadialGradient(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('radialGradient', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'linearGradient'>} props
- *
- * @return {JSX.Element} LinearGradient component
- */
-
-var LinearGradient = function LinearGradient(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('linearGradient', props);
-};
-/**
- * @param {import('react').ComponentPropsWithoutRef<'stop'>} props
- *
- * @return {JSX.Element} Stop component
- */
-
-var Stop = function Stop(props) {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])('stop', props);
-};
-/**
- *
- * @param {SVGProps} props isPressed indicates whether the SVG should appear as pressed.
- *                         Other props will be passed through to svg component.
- *
- * @return {JSX.Element} Stop component
- */
-
-var SVG = function SVG(_ref) {
-  var className = _ref.className,
-      isPressed = _ref.isPressed,
-      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["className", "isPressed"]);
-
-  var appliedProps = _objectSpread({}, props, {
-    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, {
-      'is-pressed': isPressed
-    }) || undefined,
-    role: 'img',
-    'aria-hidden': true,
-    focusable: false
-  }); // Disable reason: We need to have a way to render HTML tag for web.
-  // eslint-disable-next-line react/forbid-elements
+  if (message in logged) {
+    return;
+  }
+  /**
+   * Fires whenever a deprecated feature is encountered
+   *
+   * @param {string}  feature             Name of the deprecated feature.
+   * @param {?Object} options             Personalisation options
+   * @param {?string} options.version     Version in which the feature will be removed.
+   * @param {?string} options.alternative Feature to use instead
+   * @param {?string} options.plugin      Plugin name if it's a plugin feature
+   * @param {?string} options.link        Link to documentation
+   * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
+   * @param {?string} message             Message sent to console.warn
+   */
 
 
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])("svg", appliedProps);
-};
+  Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__["doAction"])('deprecated', feature, options, message); // eslint-disable-next-line no-console
+
+  console.warn(message);
+  logged[message] = true;
+}
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 39:
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithoutHoles = __webpack_require__(215);
+"use strict";
 
-var iterableToArray = __webpack_require__(216);
 
-var unsupportedIterableToArray = __webpack_require__(178);
+/**
+ * Internal dependencies;
+ */
+var isShallowEqualObjects = __webpack_require__( 131 );
+var isShallowEqualArrays = __webpack_require__( 132 );
 
-var nonIterableSpread = __webpack_require__(217);
+var isArray = Array.isArray;
 
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
+/**
+ * @typedef {Record<string, any>} ComparableObject
+ */
+
+/**
+ * Returns true if the two arrays or objects are shallow equal, or false
+ * otherwise.
+ *
+ * @param {any[]|ComparableObject} a First object or array to compare.
+ * @param {any[]|ComparableObject} b Second object or array to compare.
+ *
+ * @return {boolean} Whether the two values are shallow equal.
+ */
+function isShallowEqual( a, b ) {
+	if ( a && b ) {
+		if ( a.constructor === Object && b.constructor === Object ) {
+			return isShallowEqualObjects( a, b );
+		} else if ( isArray( a ) && isArray( b ) ) {
+			return isShallowEqualArrays( a, b );
+		}
+	}
+
+	return a === b;
 }
 
-module.exports = _toConsumableArray;
+module.exports = isShallowEqual;
+module.exports.isShallowEqualObjects = isShallowEqualObjects;
+module.exports.isShallowEqualArrays = isShallowEqualArrays;
+
 
 /***/ }),
 
-/***/ 4:
+/***/ 58:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _getPrototypeOf; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+/***/ }),
+
+/***/ 59:
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports) {
+
 function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
     return o.__proto__ || Object.getPrototypeOf(o);
   };
   return _getPrototypeOf(o);
 }
 
+module.exports = _getPrototypeOf;
+
 /***/ }),
 
-/***/ 40:
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _typeof; });
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _inheritsLoose; });
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
 }
 
 /***/ }),
 
-/***/ 41:
-/***/ (function(module, exports) {
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-module.exports = _createClass;
-
-/***/ }),
-
-/***/ 419:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var hoistNonReactStatic = __webpack_require__(453);
-var React = __webpack_require__(13);
-var ReactDOM = __webpack_require__(80);
-
-module.exports = function enhanceWithClickOutside(WrappedComponent) {
-  var componentName = WrappedComponent.displayName || WrappedComponent.name;
-
-  var EnhancedComponent = function (_React$Component) {
-    _inherits(EnhancedComponent, _React$Component);
-
-    function EnhancedComponent(props) {
-      _classCallCheck(this, EnhancedComponent);
-
-      var _this = _possibleConstructorReturn(this, (EnhancedComponent.__proto__ || Object.getPrototypeOf(EnhancedComponent)).call(this, props));
-
-      _this.handleClickOutside = _this.handleClickOutside.bind(_this);
-      return _this;
-    }
-
-    _createClass(EnhancedComponent, [{
-      key: 'componentDidMount',
-      value: function componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside, true);
-      }
-    }, {
-      key: 'componentWillUnmount',
-      value: function componentWillUnmount() {
-        document.removeEventListener('click', this.handleClickOutside, true);
-      }
-    }, {
-      key: 'handleClickOutside',
-      value: function handleClickOutside(e) {
-        var domNode = this.__domNode;
-        if ((!domNode || !domNode.contains(e.target)) && this.__wrappedInstance && typeof this.__wrappedInstance.handleClickOutside === 'function') {
-          this.__wrappedInstance.handleClickOutside(e);
-        }
-      }
-    }, {
-      key: 'render',
-      value: function render() {
-        var _this2 = this;
-
-        var _props = this.props,
-            wrappedRef = _props.wrappedRef,
-            rest = _objectWithoutProperties(_props, ['wrappedRef']);
-
-        return React.createElement(WrappedComponent, _extends({}, rest, {
-          ref: function ref(c) {
-            _this2.__wrappedInstance = c;
-            _this2.__domNode = ReactDOM.findDOMNode(c);
-            wrappedRef && wrappedRef(c);
-          }
-        }));
-      }
-    }]);
-
-    return EnhancedComponent;
-  }(React.Component);
-
-  EnhancedComponent.displayName = 'clickOutside(' + componentName + ')';
-
-  return hoistNonReactStatic(EnhancedComponent, WrappedComponent);
-};
-
-/***/ }),
-
-/***/ 42:
-/***/ (function(module, exports) {
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-
-/***/ }),
-
-/***/ 420:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _extends=Object.assign||function(a){for(var c,b=1;b<arguments.length;b++)for(var d in c=arguments[b],c)Object.prototype.hasOwnProperty.call(c,d)&&(a[d]=c[d]);return a};Object.defineProperty(exports,'__esModule',{value:!0});exports.default=function(a){var b=a.size,c=b===void 0?24:b,d=a.onClick,e=a.icon,f=a.className,g=_objectWithoutProperties(a,['size','onClick','icon','className']),j=['gridicon','gridicons-pages',f,!1,!1,!1].filter(Boolean).join(' ');return _react2.default.createElement('svg',_extends({className:j,height:c,width:c,onClick:d},g,{xmlns:'http://www.w3.org/2000/svg',viewBox:'0 0 24 24'}),_react2.default.createElement('g',null,_react2.default.createElement('path',{d:'M16 8H8V6h8v2zm0 2H8v2h8v-2zm4-6v12l-6 6H6c-1.105 0-2-.895-2-2V4c0-1.105.895-2 2-2h12c1.105 0 2 .895 2 2zm-2 10V4H6v16h6v-4c0-1.105.895-2 2-2h4z'})))};var _react=__webpack_require__(13),_react2=_interopRequireDefault(_react);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _objectWithoutProperties(a,b){var d={};for(var c in a)0<=b.indexOf(c)||Object.prototype.hasOwnProperty.call(a,c)&&(d[c]=a[c]);return d}module.exports=exports['default'];
-
-
-/***/ }),
-
-/***/ 421:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _extends=Object.assign||function(a){for(var c,b=1;b<arguments.length;b++)for(var d in c=arguments[b],c)Object.prototype.hasOwnProperty.call(c,d)&&(a[d]=c[d]);return a};Object.defineProperty(exports,'__esModule',{value:!0});exports.default=function(a){var b=a.size,c=b===void 0?24:b,d=a.onClick,e=a.icon,f=a.className,g=_objectWithoutProperties(a,['size','onClick','icon','className']),j=['gridicon','gridicons-cross-small',f,!1,!1,!1].filter(Boolean).join(' ');return _react2.default.createElement('svg',_extends({className:j,height:c,width:c,onClick:d},g,{xmlns:'http://www.w3.org/2000/svg',viewBox:'0 0 24 24'}),_react2.default.createElement('g',null,_react2.default.createElement('path',{d:'M17.705 7.705l-1.41-1.41L12 10.59 7.705 6.295l-1.41 1.41L10.59 12l-4.295 4.295 1.41 1.41L12 13.41l4.295 4.295 1.41-1.41L13.41 12l4.295-4.295z'})))};var _react=__webpack_require__(13),_react2=_interopRequireDefault(_react);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _objectWithoutProperties(a,b){var d={};for(var c in a)0<=b.indexOf(c)||Object.prototype.hasOwnProperty.call(a,c)&&(d[c]=a[c]);return d}module.exports=exports['default'];
-
-
-/***/ }),
-
-/***/ 422:
+/***/ 63:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(132);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(90);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(69);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return recordEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return queueRecordEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return recordPageView; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(83);
+/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(debug__WEBPACK_IMPORTED_MODULE_2__);
 
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 /**
  * External dependencies
  */
 
-
 /**
- * WordPress dependencies
+ * Module variables
  */
 
-
-
-
-
+var tracksDebug = debug__WEBPACK_IMPORTED_MODULE_2___default()('wc-admin:tracks');
 /**
- * Internal dependencies
- */
-
-
-var NOTICE_TIMEOUT = 10000;
-/** @typedef {import('@wordpress/element').WPElement} WPElement */
-
-/**
- * Custom hook which announces the message with the given politeness, if a
- * valid message is provided.
+ * Record an event to Tracks
  *
- * @param {string|WPElement}     [message]  Message to announce.
- * @param {'polite'|'assertive'} politeness Politeness to announce.
+ * @param {string} eventName The name of the event to record, don't include the wcadmin_ prefix
+ * @param {Object} eventProperties event properties to include in the event
  */
 
-function useSpokenMessage(message, politeness) {
-  var spokenMessage = typeof message === 'string' ? message : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["renderToString"])(message);
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    if (spokenMessage) {
-      Object(_wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__[/* speak */ "a"])(spokenMessage, politeness);
-    }
-  }, [spokenMessage, politeness]);
-}
-
-function Snackbar(_ref, ref) {
-  var className = _ref.className,
-      children = _ref.children,
-      _ref$spokenMessage = _ref.spokenMessage,
-      spokenMessage = _ref$spokenMessage === void 0 ? children : _ref$spokenMessage,
-      _ref$politeness = _ref.politeness,
-      politeness = _ref$politeness === void 0 ? 'polite' : _ref$politeness,
-      _ref$actions = _ref.actions,
-      actions = _ref$actions === void 0 ? [] : _ref$actions,
-      _ref$onRemove = _ref.onRemove,
-      onRemove = _ref$onRemove === void 0 ? lodash__WEBPACK_IMPORTED_MODULE_1__["noop"] : _ref$onRemove;
-  useSpokenMessage(spokenMessage, politeness);
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    var timeoutHandle = setTimeout(function () {
-      onRemove();
-    }, NOTICE_TIMEOUT);
-    return function () {
-      return clearTimeout(timeoutHandle);
-    };
-  }, []);
-  var classes = classnames__WEBPACK_IMPORTED_MODULE_2___default()(className, 'components-snackbar');
-
-  if (actions && actions.length > 1) {
-    // we need to inform developers that snackbar only accepts 1 action
-    typeof process !== "undefined" && process.env && "production" !== "production" ? Object(_wordpress_warning__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])('Snackbar can only have 1 action, use Notice if your message require many messages') : void 0; // return first element only while keeping it inside an array
-
-    actions = [actions[0]];
-  }
-
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-    ref: ref,
-    className: classes,
-    onClick: onRemove,
-    tabIndex: "0",
-    role: "button",
-    onKeyPress: onRemove,
-    "aria-label": Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Dismiss this notice')
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-    className: "components-snackbar__content"
-  }, children, actions.map(function (_ref2, index) {
-    var label = _ref2.label,
-        _onClick = _ref2.onClick,
-        url = _ref2.url;
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(___WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
-      key: index,
-      href: url,
-      isTertiary: true,
-      onClick: function onClick(event) {
-        event.stopPropagation();
-
-        if (_onClick) {
-          _onClick(event);
-        }
-      },
-      className: "components-snackbar__action"
-    }, label);
-  })));
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(Snackbar));
-//# sourceMappingURL=index.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
-
-/***/ }),
-
-/***/ 423:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {// @flow
-
-
-var key = '__global_unique_id__';
-
-module.exports = function() {
-  return global[key] = (global[key] || 0) + 1;
-};
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(60)))
-
-/***/ }),
-
-/***/ 424:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return symbolObservablePonyfill; });
-function symbolObservablePonyfill(root) {
-	var result;
-	var Symbol = root.Symbol;
-
-	if (typeof Symbol === 'function') {
-		if (Symbol.observable) {
-			result = Symbol.observable;
-		} else {
-			result = Symbol('observable');
-			Symbol.observable = result;
-		}
-	} else {
-		result = '@@observable';
-	}
-
-	return result;
-};
-
-
-/***/ }),
-
-/***/ 43:
-/***/ (function(module, exports, __webpack_require__) {
-
-var setPrototypeOf = __webpack_require__(156);
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
+function recordEvent(eventName, eventProperties) {
+  tracksDebug('recordevent %s %o', 'wcadmin_' + eventName, eventProperties, {
+    _tqk: window._tkq,
+    shouldRecord:  true && !!window._tkq && !!window.wcTracks && !!window.wcTracks.isEnabled
   });
-  if (superClass) setPrototypeOf(subClass, superClass);
+
+  if (!window.wcTracks || typeof window.wcTracks.recordEvent !== 'function' || "production" === 'development') {
+    return false;
+  }
+
+  window.wcTracks.recordEvent(eventName, eventProperties);
 }
-
-module.exports = _inherits;
-
-/***/ }),
-
-/***/ 430:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// UNUSED EXPORTS: NavigableMenu
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(12);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(14);
-
-// EXTERNAL MODULE: external {"this":["wp","element"]}
-var external_this_wp_element_ = __webpack_require__(0);
-
-// EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/keycodes/build-module/index.js + 1 modules
-var build_module = __webpack_require__(32);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(5);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(11);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(4);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
-var inherits = __webpack_require__(10);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/index.js + 2 modules
-var dom_build_module = __webpack_require__(49);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/container.js
-
-
-
-
-
-
-
-
-
-
-function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-function cycleValue(value, total, offset) {
-  var nextValue = value + offset;
-
-  if (nextValue < 0) {
-    return total + nextValue;
-  } else if (nextValue >= total) {
-    return nextValue - total;
-  }
-
-  return nextValue;
-}
-
-var container_NavigableContainer = /*#__PURE__*/function (_Component) {
-  Object(inherits["a" /* default */])(NavigableContainer, _Component);
-
-  var _super = _createSuper(NavigableContainer);
-
-  function NavigableContainer() {
-    var _this;
-
-    Object(classCallCheck["a" /* default */])(this, NavigableContainer);
-
-    _this = _super.apply(this, arguments);
-    _this.onKeyDown = _this.onKeyDown.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.bindContainer = _this.bindContainer.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.getFocusableContext = _this.getFocusableContext.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.getFocusableIndex = _this.getFocusableIndex.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    return _this;
-  }
-
-  Object(createClass["a" /* default */])(NavigableContainer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      // We use DOM event listeners instead of React event listeners
-      // because we want to catch events from the underlying DOM tree
-      // The React Tree can be different from the DOM tree when using
-      // portals. Block Toolbars for instance are rendered in a separate
-      // React Trees.
-      this.container.addEventListener('keydown', this.onKeyDown);
-      this.container.addEventListener('focus', this.onFocus);
+var tracksQueue = {
+  localStorageKey: function localStorageKey() {
+    return 'tracksQueue';
+  },
+  clear: function clear() {
+    if (!window.localStorage) {
+      return;
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.container.removeEventListener('keydown', this.onKeyDown);
-      this.container.removeEventListener('focus', this.onFocus);
-    }
-  }, {
-    key: "bindContainer",
-    value: function bindContainer(ref) {
-      var forwardedRef = this.props.forwardedRef;
-      this.container = ref;
 
-      if (Object(external_lodash_["isFunction"])(forwardedRef)) {
-        forwardedRef(ref);
-      } else if (forwardedRef && 'current' in forwardedRef) {
-        forwardedRef.current = ref;
+    window.localStorage.removeItem(tracksQueue.localStorageKey());
+  },
+  get: function get() {
+    if (!window.localStorage) {
+      return [];
+    }
+
+    var items = window.localStorage.getItem(tracksQueue.localStorageKey());
+    items = items ? JSON.parse(items) : [];
+    items = Array.isArray(items) ? items : [];
+    return items;
+  },
+  add: function add() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    if (!window.localStorage) {
+      // If unable to queue, run it now.
+      tracksDebug('Unable to queue, running now', {
+        args: args
+      });
+      recordEvent.apply(null, args || undefined);
+      return;
+    }
+
+    var items = tracksQueue.get();
+    var newItem = {
+      args: args
+    };
+    items.push(newItem);
+    items = items.slice(-100); // Upper limit.
+
+    tracksDebug('Adding new item to queue.', newItem);
+    window.localStorage.setItem(tracksQueue.localStorageKey(), JSON.stringify(items));
+  },
+  process: function process() {
+    if (!window.localStorage) {
+      return; // Not possible.
+    }
+
+    var items = tracksQueue.get();
+    tracksQueue.clear();
+    tracksDebug('Processing items in queue.', items);
+    items.forEach(function (item) {
+      if (_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1___default()(item) === 'object') {
+        tracksDebug('Processing item in queue.', item);
+        recordEvent.apply(null, item.args || undefined);
       }
-    }
-  }, {
-    key: "getFocusableContext",
-    value: function getFocusableContext(target) {
-      var onlyBrowserTabstops = this.props.onlyBrowserTabstops;
-      var finder = onlyBrowserTabstops ? dom_build_module["a" /* focus */].tabbable : dom_build_module["a" /* focus */].focusable;
-      var focusables = finder.find(this.container);
-      var index = this.getFocusableIndex(focusables, target);
-
-      if (index > -1 && target) {
-        return {
-          index: index,
-          target: target,
-          focusables: focusables
-        };
-      }
-
-      return null;
-    }
-  }, {
-    key: "getFocusableIndex",
-    value: function getFocusableIndex(focusables, target) {
-      var directIndex = focusables.indexOf(target);
-
-      if (directIndex !== -1) {
-        return directIndex;
-      }
-    }
-  }, {
-    key: "onKeyDown",
-    value: function onKeyDown(event) {
-      if (this.props.onKeyDown) {
-        this.props.onKeyDown(event);
-      }
-
-      var getFocusableContext = this.getFocusableContext;
-      var _this$props = this.props,
-          _this$props$cycle = _this$props.cycle,
-          cycle = _this$props$cycle === void 0 ? true : _this$props$cycle,
-          eventToOffset = _this$props.eventToOffset,
-          _this$props$onNavigat = _this$props.onNavigate,
-          onNavigate = _this$props$onNavigat === void 0 ? external_lodash_["noop"] : _this$props$onNavigat,
-          stopNavigationEvents = _this$props.stopNavigationEvents;
-      var offset = eventToOffset(event); // eventToOffset returns undefined if the event is not handled by the component
-
-      if (offset !== undefined && stopNavigationEvents) {
-        // Prevents arrow key handlers bound to the document directly interfering
-        event.stopImmediatePropagation(); // When navigating a collection of items, prevent scroll containers
-        // from scrolling.
-
-        if (event.target.getAttribute('role') === 'menuitem') {
-          event.preventDefault();
-        }
-      }
-
-      if (!offset) {
-        return;
-      }
-
-      var context = getFocusableContext(document.activeElement);
-
-      if (!context) {
-        return;
-      }
-
-      var index = context.index,
-          focusables = context.focusables;
-      var nextIndex = cycle ? cycleValue(index, focusables.length, offset) : index + offset;
-
-      if (nextIndex >= 0 && nextIndex < focusables.length) {
-        focusables[nextIndex].focus();
-        onNavigate(nextIndex, focusables[nextIndex]);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props2 = this.props,
-          children = _this$props2.children,
-          props = Object(objectWithoutProperties["a" /* default */])(_this$props2, ["children"]);
-
-      return Object(external_this_wp_element_["createElement"])("div", Object(esm_extends["a" /* default */])({
-        ref: this.bindContainer
-      }, Object(external_lodash_["omit"])(props, ['stopNavigationEvents', 'eventToOffset', 'onNavigate', 'onKeyDown', 'cycle', 'onlyBrowserTabstops', 'forwardedRef'])), children);
-    }
-  }]);
-
-  return NavigableContainer;
-}(external_this_wp_element_["Component"]);
-
-var container_forwardedNavigableContainer = function forwardedNavigableContainer(props, ref) {
-  return Object(external_this_wp_element_["createElement"])(container_NavigableContainer, Object(esm_extends["a" /* default */])({}, props, {
-    forwardedRef: ref
-  }));
-};
-
-container_forwardedNavigableContainer.displayName = 'NavigableContainer';
-/* harmony default export */ var container = (Object(external_this_wp_element_["forwardRef"])(container_forwardedNavigableContainer));
-//# sourceMappingURL=container.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/menu.js
-
-
-
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-function NavigableMenu(_ref, ref) {
-  var _ref$role = _ref.role,
-      role = _ref$role === void 0 ? 'menu' : _ref$role,
-      _ref$orientation = _ref.orientation,
-      orientation = _ref$orientation === void 0 ? 'vertical' : _ref$orientation,
-      rest = Object(objectWithoutProperties["a" /* default */])(_ref, ["role", "orientation"]);
-
-  var eventToOffset = function eventToOffset(evt) {
-    var keyCode = evt.keyCode;
-    var next = [build_module["a" /* DOWN */]];
-    var previous = [build_module["f" /* UP */]];
-
-    if (orientation === 'horizontal') {
-      next = [build_module["d" /* RIGHT */]];
-      previous = [build_module["c" /* LEFT */]];
-    }
-
-    if (orientation === 'both') {
-      next = [build_module["d" /* RIGHT */], build_module["a" /* DOWN */]];
-      previous = [build_module["c" /* LEFT */], build_module["f" /* UP */]];
-    }
-
-    if (Object(external_lodash_["includes"])(next, keyCode)) {
-      return 1;
-    } else if (Object(external_lodash_["includes"])(previous, keyCode)) {
-      return -1;
-    }
-  };
-
-  return Object(external_this_wp_element_["createElement"])(container, Object(esm_extends["a" /* default */])({
-    ref: ref,
-    stopNavigationEvents: true,
-    onlyBrowserTabstops: false,
-    role: role,
-    "aria-orientation": role === 'presentation' ? null : orientation,
-    eventToOffset: eventToOffset
-  }, rest));
-}
-/* harmony default export */ var menu = __webpack_exports__["a"] = (Object(external_this_wp_element_["forwardRef"])(NavigableMenu));
-//# sourceMappingURL=menu.js.map
-
-/***/ }),
-
-/***/ 44:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["wp"]["hooks"]; }());
-
-/***/ }),
-
-/***/ 446:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_notices__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(725);
-/* harmony import */ var _stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(449);
-/* harmony import */ var _stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_stylesheets_index_scss__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(203);
-/* harmony import */ var wc_api_wp_data_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(724);
-/* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(48);
-/* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__);
-
-
-/**
- * External dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
- // Modify webpack pubilcPath at runtime based on location of WordPress Plugin.
-// eslint-disable-next-line no-undef,camelcase
-
-__webpack_require__.p = global.wcAdminAssets.path;
-var appRoot = document.getElementById('root');
-var settingsGroup = 'wc_admin';
-var hydrateUser = window.wcSettings.currentUserData;
-
-if (appRoot) {
-  var HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])(settingsGroup, window.wcSettings)(_layout__WEBPACK_IMPORTED_MODULE_3__[/* PageLayout */ "b"]);
-  var hydrateSettings = window.wcSettings.preloadSettings && window.wcSettings.preloadSettings.general;
-
-  if (hydrateSettings) {
-    HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])('general', {
-      general: window.wcSettings.preloadSettings.general
-    })(HydratedPageLayout);
-  }
-
-  if (hydrateUser) {
-    HydratedPageLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withCurrentUserHydration"])(hydrateUser)(HydratedPageLayout);
-  }
-
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(HydratedPageLayout, null), appRoot);
-} else {
-  var embeddedRoot = document.getElementById('woocommerce-embedded-root');
-  var HydratedEmbedLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withSettingsHydration"])(settingsGroup, window.wcSettings)(_layout__WEBPACK_IMPORTED_MODULE_3__[/* EmbedLayout */ "a"]);
-
-  if (hydrateUser) {
-    HydratedEmbedLayout = Object(_woocommerce_data__WEBPACK_IMPORTED_MODULE_5__["withCurrentUserHydration"])(hydrateUser)(HydratedEmbedLayout);
-  } // Render the header.
-
-
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(HydratedEmbedLayout, null), embeddedRoot);
-  embeddedRoot.classList.remove('is-embed-loading'); // Render notices just above the WP content div.
-
-  var wpBody = document.getElementById('wpbody-content');
-  var wrap = wpBody.querySelector('.wrap.woocommerce') || wpBody.querySelector('[class="wrap"]');
-  var noticeContainer = document.createElement('div');
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["render"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-    className: "woocommerce-layout"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_layout__WEBPACK_IMPORTED_MODULE_3__[/* PrimaryLayout */ "c"], null)), wpBody.insertBefore(noticeContainer, wrap));
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(60)))
-
-/***/ }),
-
-/***/ 448:
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-var runtime = (function (exports) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
     });
   }
-
-  exports.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  exports.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  exports.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return PromiseImpl.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return PromiseImpl.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (delegate.iterator["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  exports.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  exports.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-
-  // Regardless of whether this script is executing as a CommonJS module
-  // or not, return the runtime object so that we can declare the variable
-  // regeneratorRuntime in the outer scope, which allows this module to be
-  // injected easily by `bin/regenerator --include-runtime script.js`.
-  return exports;
-
-}(
-  // If this script is executing as a CommonJS module, use module.exports
-  // as the regeneratorRuntime namespace. Otherwise create a new empty
-  // object. Either way, the resulting object will be used to initialize
-  // the regeneratorRuntime variable at the top of this file.
-   true ? module.exports : undefined
-));
-
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  // This module should not be running in strict mode, so the above
-  // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, we can escape
-  // strict mode using a global Function call. This could conceivably fail
-  // if a Content Security Policy forbids using Function, but in that case
-  // the proper solution is to fix the accidental strict mode problem. If
-  // you've misconfigured your bundler to force strict mode and applied a
-  // CSP to forbid Function, and you're not willing to fix either of those
-  // problems, please detail your unique predicament in a GitHub issue.
-  Function("r", "regeneratorRuntime = r")(runtime);
-}
-
-
-/***/ }),
-
-/***/ 449:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 450:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 451:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 452:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 453:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
+};
 /**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ * Queue a tracks event.
+ *
+ * This allows you to delay tracks  events that would otherwise cause a race condition.
+ * For example, when we trigger `wcadmin_tasklist_appearance_continue_setup` we're simultaneously moving the user to a new page via
+ * `window.location`. This is an example of a race condition that should be avoided by enqueueing the event,
+ * and therefore running it on the next pageview.
+ *
+ * @param {string} eventName The name of the event to record, don't include the wcadmin_ prefix
+ * @param {Object} eventProperties event properties to include in the event
  */
-var REACT_STATICS = {
-    childContextTypes: true,
-    contextTypes: true,
-    defaultProps: true,
-    displayName: true,
-    getDefaultProps: true,
-    getDerivedStateFromProps: true,
-    mixins: true,
-    propTypes: true,
-    type: true
-};
 
-var KNOWN_STATICS = {
-    name: true,
-    length: true,
-    prototype: true,
-    caller: true,
-    callee: true,
-    arguments: true,
-    arity: true
-};
-
-var defineProperty = Object.defineProperty;
-var getOwnPropertyNames = Object.getOwnPropertyNames;
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var getPrototypeOf = Object.getPrototypeOf;
-var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
-
-function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
-
-        if (objectPrototype) {
-            var inheritedComponent = getPrototypeOf(sourceComponent);
-            if (inheritedComponent && inheritedComponent !== objectPrototype) {
-                hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-            }
-        }
-
-        var keys = getOwnPropertyNames(sourceComponent);
-
-        if (getOwnPropertySymbols) {
-            keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-        }
-
-        for (var i = 0; i < keys.length; ++i) {
-            var key = keys[i];
-            if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
-                var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-                try { // Avoid failures from read-only properties
-                    defineProperty(targetComponent, key, descriptor);
-                } catch (e) {}
-            }
-        }
-
-        return targetComponent;
-    }
-
-    return targetComponent;
+function queueRecordEvent(eventName, eventProperties) {
+  tracksQueue.add(eventName, eventProperties);
 }
+/**
+ * Record a page view to Tracks
+ *
+ * @param {string} path the page/path to record a page view for
+ * @param {Object} extraProperties extra event properties to include in the event
+ */
 
-module.exports = hoistNonReactStatics;
-
-
-/***/ }),
-
-/***/ 454:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 455:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 456:
-/***/ (function(module, exports) {
-
-module.exports = Array.isArray || function (arr) {
-  return Object.prototype.toString.call(arr) == '[object Array]';
-};
-
-
-/***/ }),
-
-/***/ 457:
-/***/ (function(module, exports) {
-
-module.exports = function(originalModule) {
-	if (!originalModule.webpackPolyfill) {
-		var module = Object.create(originalModule);
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		Object.defineProperty(module, "exports", {
-			enumerable: true
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-
-/***/ 46:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
+function recordPageView(path, extraProperties) {
+  if (!path) {
+    return;
   }
 
-  return target;
+  recordEvent('page_view', _objectSpread({
+    path: path
+  }, extraProperties)); // Process queue.
+
+  tracksQueue.process();
 }
 
 /***/ }),
 
-/***/ 47:
-/***/ (function(module, exports, __webpack_require__) {
-
-var _typeof = __webpack_require__(34);
-
-var assertThisInitialized = __webpack_require__(65);
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return assertThisInitialized(self);
-}
-
-module.exports = _possibleConstructorReturn;
-
-/***/ }),
-
-/***/ 48:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["wc"]["data"]; }());
-
-/***/ }),
-
-/***/ 49:
+/***/ 65:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15605,46 +18486,13 @@ var build_module_focus = {
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-/***/ }),
-
-/***/ 51:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
-}
-
-/***/ }),
-
-/***/ 53:
+/***/ 66:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(90);
+/* harmony import */ var _wordpress_warning__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(82);
 /**
  * WordPress dependencies
  */
@@ -15663,461 +18511,7 @@ var SlotFillContext = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["cr
 });
 /* harmony default export */ __webpack_exports__["a"] = (SlotFillContext);
 //# sourceMappingURL=slot-fill-context.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
-
-/***/ }),
-
-/***/ 54:
-/***/ (function(module, exports) {
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
-module.exports = _asyncToGenerator;
-
-/***/ }),
-
-/***/ 55:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["wc"]["components"]; }());
-
-/***/ }),
-
-/***/ 56:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export logged */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deprecated; });
-/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
-/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * WordPress dependencies
- */
-
-/**
- * Object map tracking messages which have been logged, for use in ensuring a
- * message is only logged once.
- *
- * @type {Object}
- */
-
-var logged = Object.create(null);
-/**
- * Logs a message to notify developers about a deprecated feature.
- *
- * @param {string}  feature             Name of the deprecated feature.
- * @param {?Object} options             Personalisation options
- * @param {?string} options.version     Version in which the feature will be removed.
- * @param {?string} options.alternative Feature to use instead
- * @param {?string} options.plugin      Plugin name if it's a plugin feature
- * @param {?string} options.link        Link to documentation
- * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
- *
- * @example
- * ```js
- * import deprecated from '@wordpress/deprecated';
- *
- * deprecated( 'Eating meat', {
- * 	version: 'the future',
- * 	alternative: 'vegetables',
- * 	plugin: 'the earth',
- * 	hint: 'You may find it beneficial to transition gradually.',
- * } );
- *
- * // Logs: 'Eating meat is deprecated and will be removed from the earth in the future. Please use vegetables instead. Note: You may find it beneficial to transition gradually.'
- * ```
- */
-
-function deprecated(feature) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var version = options.version,
-      alternative = options.alternative,
-      plugin = options.plugin,
-      link = options.link,
-      hint = options.hint;
-  var pluginMessage = plugin ? " from ".concat(plugin) : '';
-  var versionMessage = version ? " and will be removed".concat(pluginMessage, " in version ").concat(version) : '';
-  var useInsteadMessage = alternative ? " Please use ".concat(alternative, " instead.") : '';
-  var linkMessage = link ? " See: ".concat(link) : '';
-  var hintMessage = hint ? " Note: ".concat(hint) : '';
-  var message = "".concat(feature, " is deprecated").concat(versionMessage, ".").concat(useInsteadMessage).concat(linkMessage).concat(hintMessage); // Skip if already logged.
-
-  if (message in logged) {
-    return;
-  }
-  /**
-   * Fires whenever a deprecated feature is encountered
-   *
-   * @param {string}  feature             Name of the deprecated feature.
-   * @param {?Object} options             Personalisation options
-   * @param {?string} options.version     Version in which the feature will be removed.
-   * @param {?string} options.alternative Feature to use instead
-   * @param {?string} options.plugin      Plugin name if it's a plugin feature
-   * @param {?string} options.link        Link to documentation
-   * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
-   * @param {?string} message             Message sent to console.warn
-   */
-
-
-  Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_0__["doAction"])('deprecated', feature, options, message); // eslint-disable-next-line no-console
-
-  console.warn(message);
-  logged[message] = true;
-}
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 57:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * External dependencies
- */
-
-/**
- * Given a function mapping a component to an enhanced component and modifier
- * name, returns the enhanced component augmented with a generated displayName.
- *
- * @param {Function} mapComponentToEnhancedComponent Function mapping component
- *                                                   to enhanced component.
- * @param {string}   modifierName                    Seed name from which to
- *                                                   generated display name.
- *
- * @return {WPComponent} Component class with generated display name assigned.
- */
-
-function createHigherOrderComponent(mapComponentToEnhancedComponent, modifierName) {
-  return function (OriginalComponent) {
-    var EnhancedComponent = mapComponentToEnhancedComponent(OriginalComponent);
-    var _OriginalComponent$di = OriginalComponent.displayName,
-        displayName = _OriginalComponent$di === void 0 ? OriginalComponent.name || 'Component' : _OriginalComponent$di;
-    EnhancedComponent.displayName = "".concat(Object(lodash__WEBPACK_IMPORTED_MODULE_0__["upperFirst"])(Object(lodash__WEBPACK_IMPORTED_MODULE_0__["camelCase"])(modifierName)), "(").concat(displayName, ")");
-    return EnhancedComponent;
-  };
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createHigherOrderComponent);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 58:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Internal dependencies;
- */
-var isShallowEqualObjects = __webpack_require__( 121 );
-var isShallowEqualArrays = __webpack_require__( 122 );
-
-var isArray = Array.isArray;
-
-/**
- * @typedef {Record<string, any>} ComparableObject
- */
-
-/**
- * Returns true if the two arrays or objects are shallow equal, or false
- * otherwise.
- *
- * @param {any[]|ComparableObject} a First object or array to compare.
- * @param {any[]|ComparableObject} b Second object or array to compare.
- *
- * @return {boolean} Whether the two values are shallow equal.
- */
-function isShallowEqual( a, b ) {
-	if ( a && b ) {
-		if ( a.constructor === Object && b.constructor === Object ) {
-			return isShallowEqualObjects( a, b );
-		} else if ( isArray( a ) && isArray( b ) ) {
-			return isShallowEqualArrays( a, b );
-		}
-	}
-
-	return a === b;
-}
-
-module.exports = isShallowEqual;
-module.exports.isShallowEqualObjects = isShallowEqualObjects;
-module.exports.isShallowEqualArrays = isShallowEqualArrays;
-
-
-/***/ }),
-
-/***/ 59:
-/***/ (function(module, exports) {
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
-  };
-}
-
-module.exports = _interopRequireDefault;
-
-/***/ }),
-
-/***/ 6:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-
-/***/ 60:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 62:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _inheritsLoose; });
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-/***/ }),
-
-/***/ 64:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return recordEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return queueRecordEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return recordPageView; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(88);
-/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(debug__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * External dependencies
- */
-
-/**
- * Module variables
- */
-
-var tracksDebug = debug__WEBPACK_IMPORTED_MODULE_2___default()('wc-admin:tracks');
-/**
- * Record an event to Tracks
- *
- * @param {string} eventName The name of the event to record, don't include the wcadmin_ prefix
- * @param {Object} eventProperties event properties to include in the event
- */
-
-function recordEvent(eventName, eventProperties) {
-  tracksDebug('recordevent %s %o', 'wcadmin_' + eventName, eventProperties, {
-    _tqk: window._tkq,
-    shouldRecord:  true && !!window._tkq && !!window.wcTracks && !!window.wcTracks.isEnabled
-  });
-
-  if (!window.wcTracks || typeof window.wcTracks.recordEvent !== 'function' || "production" === 'development') {
-    return false;
-  }
-
-  window.wcTracks.recordEvent(eventName, eventProperties);
-}
-var tracksQueue = {
-  localStorageKey: function localStorageKey() {
-    return 'tracksQueue';
-  },
-  clear: function clear() {
-    if (!window.localStorage) {
-      return;
-    }
-
-    window.localStorage.removeItem(tracksQueue.localStorageKey());
-  },
-  get: function get() {
-    if (!window.localStorage) {
-      return [];
-    }
-
-    var items = window.localStorage.getItem(tracksQueue.localStorageKey());
-    items = items ? JSON.parse(items) : [];
-    items = Array.isArray(items) ? items : [];
-    return items;
-  },
-  add: function add() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    if (!window.localStorage) {
-      // If unable to queue, run it now.
-      tracksDebug('Unable to queue, running now', {
-        args: args
-      });
-      recordEvent.apply(null, args || undefined);
-      return;
-    }
-
-    var items = tracksQueue.get();
-    var newItem = {
-      args: args
-    };
-    items.push(newItem);
-    items = items.slice(-100); // Upper limit.
-
-    tracksDebug('Adding new item to queue.', newItem);
-    window.localStorage.setItem(tracksQueue.localStorageKey(), JSON.stringify(items));
-  },
-  process: function process() {
-    if (!window.localStorage) {
-      return; // Not possible.
-    }
-
-    var items = tracksQueue.get();
-    tracksQueue.clear();
-    tracksDebug('Processing items in queue.', items);
-    items.forEach(function (item) {
-      if (_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1___default()(item) === 'object') {
-        tracksDebug('Processing item in queue.', item);
-        recordEvent.apply(null, item.args || undefined);
-      }
-    });
-  }
-};
-/**
- * Queue a tracks event.
- *
- * This allows you to delay tracks  events that would otherwise cause a race condition.
- * For example, when we trigger `wcadmin_tasklist_appearance_continue_setup` we're simultaneously moving the user to a new page via
- * `window.location`. This is an example of a race condition that should be avoided by enqueueing the event,
- * and therefore running it on the next pageview.
- *
- * @param {string} eventName The name of the event to record, don't include the wcadmin_ prefix
- * @param {Object} eventProperties event properties to include in the event
- */
-
-function queueRecordEvent(eventName, eventProperties) {
-  tracksQueue.add(eventName, eventProperties);
-}
-/**
- * Record a page view to Tracks
- *
- * @param {string} path the page/path to record a page view for
- * @param {Object} extraProperties extra event properties to include in the event
- */
-
-function recordPageView(path, extraProperties) {
-  if (!path) {
-    return;
-  }
-
-  recordEvent('page_view', _objectSpread({
-    path: path
-  }, extraProperties)); // Process queue.
-
-  tracksQueue.process();
-}
-
-/***/ }),
-
-/***/ 65:
-/***/ (function(module, exports) {
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-module.exports = _assertThisInitialized;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(41)))
 
 /***/ }),
 
@@ -16127,9 +18521,9 @@ module.exports = _assertThisInitialized;
 "use strict";
 
 
-var stringify = __webpack_require__(119);
-var parse = __webpack_require__(120);
-var formats = __webpack_require__(96);
+var stringify = __webpack_require__(129);
+var parse = __webpack_require__(130);
+var formats = __webpack_require__(91);
 
 module.exports = {
     formats: formats,
@@ -16144,328 +18538,58 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _asyncToGenerator; });
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(58);
 
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
 }
 
 /***/ }),
 
 /***/ 69:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export Button */
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_deprecated__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(56);
-/* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(100);
-/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(99);
-
-
-
-
-function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-var disabledEventsOnDisabledButton = ['onMouseDown', 'onClick'];
-function Button(props, ref) {
-  var href = props.href,
-      target = props.target,
-      isPrimary = props.isPrimary,
-      isSmall = props.isSmall,
-      isTertiary = props.isTertiary,
-      isPressed = props.isPressed,
-      isBusy = props.isBusy,
-      isDefault = props.isDefault,
-      isSecondary = props.isSecondary,
-      isLink = props.isLink,
-      isDestructive = props.isDestructive,
-      className = props.className,
-      disabled = props.disabled,
-      icon = props.icon,
-      iconSize = props.iconSize,
-      showTooltip = props.showTooltip,
-      tooltipPosition = props.tooltipPosition,
-      shortcut = props.shortcut,
-      label = props.label,
-      children = props.children,
-      isFocusable = props.__experimentalIsFocusable,
-      additionalProps = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["href", "target", "isPrimary", "isSmall", "isTertiary", "isPressed", "isBusy", "isDefault", "isSecondary", "isLink", "isDestructive", "className", "disabled", "icon", "iconSize", "showTooltip", "tooltipPosition", "shortcut", "label", "children", "__experimentalIsFocusable"]);
-
-  if (isDefault) {
-    Object(_wordpress_deprecated__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])('Button isDefault prop', {
-      alternative: 'isSecondary'
-    });
-  }
-
-  var classes = classnames__WEBPACK_IMPORTED_MODULE_3___default()('components-button', className, {
-    'is-secondary': isDefault || isSecondary,
-    'is-primary': isPrimary,
-    'is-small': isSmall,
-    'is-tertiary': isTertiary,
-    'is-pressed': isPressed,
-    'is-busy': isBusy,
-    'is-link': isLink,
-    'is-destructive': isDestructive,
-    'has-text': !!icon && !!children,
-    'has-icon': !!icon
-  });
-  var trulyDisabled = disabled && !isFocusable;
-  var Tag = href !== undefined && !trulyDisabled ? 'a' : 'button';
-  var tagProps = Tag === 'a' ? {
-    href: href,
-    target: target
-  } : {
-    type: 'button',
-    disabled: trulyDisabled,
-    'aria-pressed': isPressed
-  };
-
-  if (disabled && isFocusable) {
-    // In this case, the button will be disabled, but still focusable and
-    // perceivable by screen reader users.
-    tagProps['aria-disabled'] = true;
-
-    var _iterator = _createForOfIteratorHelper(disabledEventsOnDisabledButton),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var disabledEvent = _step.value;
-
-        additionalProps[disabledEvent] = function (event) {
-          event.stopPropagation();
-          event.preventDefault();
-        };
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
-    }
-  } // Should show the tooltip if...
-
-
-  var shouldShowTooltip = !trulyDisabled && ( // an explicit tooltip is passed or...
-  showTooltip && label || // there's a shortcut or...
-  shortcut || // there's a label and...
-  !!label && ( // the children are empty and...
-  !children || Object(lodash__WEBPACK_IMPORTED_MODULE_4__["isArray"])(children) && !children.length) && // the tooltip is not explicitly disabled.
-  false !== showTooltip);
-  var element = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(Tag, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, tagProps, additionalProps, {
-    className: classes,
-    "aria-label": additionalProps['aria-label'] || label,
-    ref: ref
-  }), icon && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_icon__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], {
-    icon: icon,
-    size: iconSize
-  }), children);
-
-  if (!shouldShowTooltip) {
-    return element;
-  }
-
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_tooltip__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
-    text: label,
-    shortcut: shortcut,
-    position: tooltipPosition
-  }, element);
-}
-/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["forwardRef"])(Button));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg) && arg.length) {
-				var inner = classNames.apply(null, arg);
-				if (inner) {
-					classes.push(inner);
-				}
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if ( true && module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-		// register as 'classnames', consistent with npm package name
-		define('classnames', [], function () {
-			return classNames;
-		});
-	} else {
-		window.classNames = classNames;
-	}
-}());
-
-
-/***/ }),
-
-/***/ 70:
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wp"]["htmlEntities"]; }());
 
 /***/ }),
 
-/***/ 72:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ 7:
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return domReady; });
-/**
- * @typedef {() => void} Callback
- *
- * TODO: Remove this typedef and inline `() => void` type.
- *
- * This typedef is used so that a descriptive type is provided in our
- * automatically generated documentation.
- *
- * An in-line type `() => void` would be preferable, but the generated
- * documentation is `null` in that case.
- *
- * @see https://github.com/WordPress/gutenberg/issues/18045
- */
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
 
-/**
- * Specify a function to execute when the DOM is fully loaded.
- *
- * @param {Callback} callback A function to execute after the DOM is ready.
- *
- * @example
- * ```js
- * import domReady from '@wordpress/dom-ready';
- *
- * domReady( function() {
- * 	//do something after DOM loads.
- * } );
- * ```
- *
- * @return {void}
- */
-function domReady(callback) {
-  if (document.readyState === 'complete' || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
-  document.readyState === 'interactive' // DOMContentLoaded fires at this point, so we call directly.
-  ) {
-      return void callback();
-    } // DOMContentLoaded has not fired yet, delay callback until then.
-
-
-  document.addEventListener('DOMContentLoaded', callback);
+  return self;
 }
-//# sourceMappingURL=index.js.map
+
+module.exports = _assertThisInitialized;
 
 /***/ }),
 
-/***/ 724:
+/***/ 708:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: external {"this":["wp","data"]}
-var external_this_wp_data_ = __webpack_require__(19);
+var external_this_wp_data_ = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/@fresh-data/framework/es/index.js + 8 modules
-var es = __webpack_require__(176);
+var es = __webpack_require__(186);
 
 // EXTERNAL MODULE: ./node_modules/redux/es/redux.js
-var redux = __webpack_require__(285);
+var redux = __webpack_require__(298);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(17);
+var defineProperty = __webpack_require__(5);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
 // CONCATENATED MODULE: ./client/wc-api/wp-data-store/reducer.js
@@ -16599,11 +18723,15 @@ function createApiClient(name, apiSpec) {
 
 /* harmony default export */ var create_api_client = (createApiClient);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__(39);
+var toConsumableArray = __webpack_require__(25);
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
 
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
+var regenerator = __webpack_require__(16);
+var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
+
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__(54);
+var asyncToGenerator = __webpack_require__(37);
 var asyncToGenerator_default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator);
 
 // EXTERNAL MODULE: external {"this":["wp","i18n"]}
@@ -16629,6 +18757,7 @@ function getResourceIdentifier(resourceName) {
 
 
 
+
 /**
  * External dependencies
  */
@@ -16642,10 +18771,10 @@ function getResourceIdentifier(resourceName) {
 
 var mutations_initiateReportExport = function initiateReportExport(operations) {
   return /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(reportType, reportTitle, reportArgs) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(reportType, reportTitle, reportArgs) {
       var _dispatch, createNotice, resourceName, result, response;
 
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -16684,13 +18813,14 @@ var mutations_initiateReportExport = function initiateReportExport(operations) {
   initiateReportExport: mutations_initiateReportExport
 });
 // EXTERNAL MODULE: external {"this":["wp","apiFetch"]}
-var external_this_wp_apiFetch_ = __webpack_require__(22);
+var external_this_wp_apiFetch_ = __webpack_require__(31);
 var external_this_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_this_wp_apiFetch_);
 
 // EXTERNAL MODULE: ./client/wc-api/constants.js
-var constants = __webpack_require__(30);
+var constants = __webpack_require__(36);
 
 // CONCATENATED MODULE: ./client/wc-api/export/operations.js
+
 
 
 
@@ -16716,9 +18846,9 @@ function initiateExport(resourceNames, data, fetch) {
     return name.startsWith('report-export-');
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var prefix, reportType, url, result;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -16778,6 +18908,7 @@ function initiateExport(resourceNames, data, fetch) {
 
 
 
+
 function mutations_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function mutations_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { mutations_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { mutations_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -16795,10 +18926,10 @@ function mutations_objectSpread(target) { for (var i = 1; i < arguments.length; 
 
 var mutations_updateProductStock = function updateProductStock(operations) {
   return /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(product, newStock) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(product, newStock) {
       var _dispatch, createNotice, oldStockQuantity, resourceName, result, response;
 
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -16851,13 +18982,14 @@ var mutations_updateProductStock = function updateProductStock(operations) {
   updateProductStock: mutations_updateProductStock
 });
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(134);
+var objectWithoutProperties = __webpack_require__(49);
 var objectWithoutProperties_default = /*#__PURE__*/__webpack_require__.n(objectWithoutProperties);
 
 // EXTERNAL MODULE: external {"this":["wp","url"]}
-var external_this_wp_url_ = __webpack_require__(26);
+var external_this_wp_url_ = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./client/wc-api/items/operations.js
+
 
 
 
@@ -16894,9 +19026,9 @@ function operations_read(resourceNames) {
     return Boolean(typeEndpointMap[prefix]);
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var prefix, endpoint, query, url, isUnboundedRequest, response, items, totalCount, ids, itemResources;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -16988,10 +19120,10 @@ function items_operations_update(resourceNames, data) {
     return updateableTypes.includes(getResourcePrefix(name));
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref3 = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(resourceName) {
+    var _ref3 = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee2(resourceName) {
       var _data$resourceName, id, parentId, type, itemData, url;
 
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      return regenerator_default.a.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
@@ -17049,10 +19181,10 @@ function operations_updateLocally(resourceNames, data) {
     status: 'publish'
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref6 = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(resourceName) {
+    var _ref6 = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee3(resourceName) {
       var _ref7;
 
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      return regenerator_default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
@@ -17165,6 +19297,7 @@ var selectors_isGetItemsRequesting = function isGetItemsRequesting(getResource) 
 
 
 
+
 /**
  * External dependencies
  */
@@ -17189,9 +19322,9 @@ function imports_operations_read(resourceNames) {
     return Boolean(operations_typeEndpointMap[prefix]);
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var prefix, endpoint, query, fetchArgs, response, data;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -17319,6 +19452,7 @@ var selectors_getImportTotals = function getImportTotals(getResource, requireRes
 
 
 
+
 function notes_operations_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function notes_operations_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { notes_operations_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { notes_operations_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -17365,9 +19499,9 @@ function readNoteQueries(resourceNames, fetch) {
     return isResourcePrefix(name, 'note-query');
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var query, url, response, notes, totalCount, ids, noteResources;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -17683,6 +19817,7 @@ var getUndoDismissRequesting = function getUndoDismissRequesting(getResource) {
 
 
 
+
 function notes_mutations_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function notes_mutations_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { notes_mutations_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { notes_mutations_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -17709,10 +19844,10 @@ var mutations_updateNote = function updateNote(operations) {
 
 var mutations_removeNote = function removeNote(operations) {
   return /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(noteId) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(noteId) {
       var _dispatch, createNotice, resourceKey, resourceName, result, response;
 
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -17764,10 +19899,10 @@ var mutations_removeNote = function removeNote(operations) {
 };
 
 var mutations_removeAllNotes = function removeAllNotes(operations) {
-  return /*#__PURE__*/asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+  return /*#__PURE__*/asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee2() {
     var _dispatch2, createNotice, resourceKey, result, response;
 
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regenerator_default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -17845,6 +19980,7 @@ var mutations_triggerNoteAction = function triggerNoteAction(operations) {
 
 
 
+
 /**
  * External dependencies
  */
@@ -17877,9 +20013,9 @@ function items_operations_read(resourceNames) {
     return Boolean(items_operations_typeEndpointMap[prefix]);
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var prefix, endpoint, query, fetchArgs, response, report, totalResults, totalPages;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -17998,6 +20134,7 @@ var selectors_isReportItemsRequesting = function isReportItemsRequesting(getReso
 
 
 
+
 /**
  * External dependencies
  */
@@ -18029,9 +20166,9 @@ function stats_operations_read(resourceNames) {
     return Boolean(stats_operations_typeEndpointMap[prefix]);
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var prefix, endpoint, query, fetchArgs, response, report, totalResults, totalPages;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -18158,6 +20295,7 @@ var selectors_isReportStatsRequesting = function isReportStatsRequesting(getReso
 
 
 
+
 function reviews_operations_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function reviews_operations_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { reviews_operations_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { reviews_operations_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -18184,9 +20322,9 @@ function readReviewQueries(resourceNames, fetch) {
     return isResourcePrefix(name, 'review-query');
   });
   return filteredNames.map( /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(resourceName) {
+    var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(resourceName) {
       var query, url, response, reviews, totalCount, ids, reviewResources;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -18456,7 +20594,7 @@ Object(external_this_wp_data_["registerGenericStore"])('wc-api', createWcApiStor
 
 /***/ }),
 
-/***/ 725:
+/***/ 709:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18477,16 +20615,16 @@ __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, "getNotices", function() { return getNotices; });
 
 // EXTERNAL MODULE: external {"this":["wp","data"]}
-var external_this_wp_data_ = __webpack_require__(19);
+var external_this_wp_data_ = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(27);
 
 // EXTERNAL MODULE: external "lodash"
 var external_lodash_ = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(6);
+var defineProperty = __webpack_require__(11);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/notices/build-module/store/utils/on-sub-key.js
 
@@ -18574,7 +20712,7 @@ var notices = on_sub_key('context')(function () {
 /* harmony default export */ var store_reducer = (notices);
 //# sourceMappingURL=reducer.js.map
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
-var regenerator = __webpack_require__(77);
+var regenerator = __webpack_require__(16);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/notices/build-module/store/constants.js
@@ -18848,7 +20986,7 @@ function getNotices(state) {
 }
 //# sourceMappingURL=selectors.js.map
 // EXTERNAL MODULE: ./node_modules/@wordpress/a11y/build-module/index.js + 4 modules
-var build_module = __webpack_require__(132);
+var build_module = __webpack_require__(145);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/notices/build-module/store/controls.js
 /**
@@ -18890,7 +21028,465 @@ var build_module = __webpack_require__(132);
 
 /***/ }),
 
-/***/ 74:
+/***/ 71:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return domReady; });
+/**
+ * @typedef {() => void} Callback
+ *
+ * TODO: Remove this typedef and inline `() => void` type.
+ *
+ * This typedef is used so that a descriptive type is provided in our
+ * automatically generated documentation.
+ *
+ * An in-line type `() => void` would be preferable, but the generated
+ * documentation is `null` in that case.
+ *
+ * @see https://github.com/WordPress/gutenberg/issues/18045
+ */
+
+/**
+ * Specify a function to execute when the DOM is fully loaded.
+ *
+ * @param {Callback} callback A function to execute after the DOM is ready.
+ *
+ * @example
+ * ```js
+ * import domReady from '@wordpress/dom-ready';
+ *
+ * domReady( function() {
+ * 	//do something after DOM loads.
+ * } );
+ * ```
+ *
+ * @return {void}
+ */
+function domReady(callback) {
+  if (document.readyState === 'complete' || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
+  document.readyState === 'interactive' // DOMContentLoaded fires at this point, so we call directly.
+  ) {
+      return void callback();
+    } // DOMContentLoaded has not fired yet, delay callback until then.
+
+
+  document.addEventListener('DOMContentLoaded', callback);
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 72:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/**
+ * External dependencies
+ */
+
+/**
+ * Given a function mapping a component to an enhanced component and modifier
+ * name, returns the enhanced component augmented with a generated displayName.
+ *
+ * @param {Function} mapComponentToEnhancedComponent Function mapping component
+ *                                                   to enhanced component.
+ * @param {string}   modifierName                    Seed name from which to
+ *                                                   generated display name.
+ *
+ * @return {WPComponent} Component class with generated display name assigned.
+ */
+
+function createHigherOrderComponent(mapComponentToEnhancedComponent, modifierName) {
+  return function (OriginalComponent) {
+    var EnhancedComponent = mapComponentToEnhancedComponent(OriginalComponent);
+    var _OriginalComponent$di = OriginalComponent.displayName,
+        displayName = _OriginalComponent$di === void 0 ? OriginalComponent.name || 'Component' : _OriginalComponent$di;
+    EnhancedComponent.displayName = "".concat(Object(lodash__WEBPACK_IMPORTED_MODULE_0__["upperFirst"])(Object(lodash__WEBPACK_IMPORTED_MODULE_0__["camelCase"])(modifierName)), "(").concat(displayName, ")");
+    return EnhancedComponent;
+  };
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createHigherOrderComponent);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 720:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wc"]["csvExport"]; }());
+
+/***/ }),
+
+/***/ 73:
+/***/ (function(module, exports) {
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+module.exports = _arrayLikeToArray;
+
+/***/ }),
+
+/***/ 736:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(51);
+
+
+/**
+ * WordPress dependencies
+ */
+
+var lifesaver = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* SVG */ "c"], {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* Path */ "b"], {
+  fillRule: "evenodd",
+  d: "M17.375 15.656A6.47 6.47 0 0018.5 12a6.47 6.47 0 00-.943-3.374l-1.262.813c.448.749.705 1.625.705 2.561a4.977 4.977 0 01-.887 2.844l1.262.813zm-1.951 1.87l-.813-1.261A4.976 4.976 0 0112 17c-.958 0-1.852-.27-2.613-.736l-.812 1.261A6.47 6.47 0 0012 18.5a6.47 6.47 0 003.424-.974zm-8.8-1.87A6.47 6.47 0 015.5 12c0-1.235.344-2.39.943-3.373l1.261.812A4.977 4.977 0 007 12c0 1.056.328 2.036.887 2.843l-1.262.813zm2.581-7.803A4.977 4.977 0 0112 7c1.035 0 1.996.314 2.794.853l.812-1.262A6.47 6.47 0 0012 5.5a6.47 6.47 0 00-3.607 1.092l.812 1.261zM12 20a8 8 0 100-16 8 8 0 000 16zm0-4.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z",
+  clipRule: "evenodd"
+}));
+/* harmony default export */ __webpack_exports__["a"] = (lifesaver);
+//# sourceMappingURL=lifesaver.js.map
+
+/***/ }),
+
+/***/ 737:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _use_media_query__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(84);
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Whether or not the user agent is Internet Explorer.
+ *
+ * @type {boolean}
+ */
+
+var IS_IE = typeof window !== 'undefined' && window.navigator.userAgent.indexOf('Trident') >= 0;
+/**
+ * Hook returning whether the user has a preference for reduced motion.
+ *
+ * @return {boolean} Reduced motion preference value.
+ */
+
+var useReducedMotion = process.env.FORCE_REDUCED_MOTION || IS_IE ? function () {
+  return true;
+} : function () {
+  return Object(_use_media_query__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])('(prefers-reduced-motion: reduce)');
+};
+/* harmony default export */ __webpack_exports__["a"] = (useReducedMotion);
+//# sourceMappingURL=index.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(41)))
+
+/***/ }),
+
+/***/ 738:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// UNUSED EXPORTS: NavigableMenu
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(19);
+
+// EXTERNAL MODULE: external {"this":["wp","element"]}
+var external_this_wp_element_ = __webpack_require__(0);
+
+// EXTERNAL MODULE: external "lodash"
+var external_lodash_ = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/keycodes/build-module/index.js + 1 modules
+var build_module = __webpack_require__(54);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+var assertThisInitialized = __webpack_require__(18);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(23);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
+var inherits = __webpack_require__(22);
+
+// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/index.js + 2 modules
+var dom_build_module = __webpack_require__(65);
+
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/container.js
+
+
+
+
+
+
+
+
+
+
+function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+function cycleValue(value, total, offset) {
+  var nextValue = value + offset;
+
+  if (nextValue < 0) {
+    return total + nextValue;
+  } else if (nextValue >= total) {
+    return nextValue - total;
+  }
+
+  return nextValue;
+}
+
+var container_NavigableContainer = /*#__PURE__*/function (_Component) {
+  Object(inherits["a" /* default */])(NavigableContainer, _Component);
+
+  var _super = _createSuper(NavigableContainer);
+
+  function NavigableContainer() {
+    var _this;
+
+    Object(classCallCheck["a" /* default */])(this, NavigableContainer);
+
+    _this = _super.apply(this, arguments);
+    _this.onKeyDown = _this.onKeyDown.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.bindContainer = _this.bindContainer.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.getFocusableContext = _this.getFocusableContext.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    _this.getFocusableIndex = _this.getFocusableIndex.bind(Object(assertThisInitialized["a" /* default */])(_this));
+    return _this;
+  }
+
+  Object(createClass["a" /* default */])(NavigableContainer, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      // We use DOM event listeners instead of React event listeners
+      // because we want to catch events from the underlying DOM tree
+      // The React Tree can be different from the DOM tree when using
+      // portals. Block Toolbars for instance are rendered in a separate
+      // React Trees.
+      this.container.addEventListener('keydown', this.onKeyDown);
+      this.container.addEventListener('focus', this.onFocus);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.container.removeEventListener('keydown', this.onKeyDown);
+      this.container.removeEventListener('focus', this.onFocus);
+    }
+  }, {
+    key: "bindContainer",
+    value: function bindContainer(ref) {
+      var forwardedRef = this.props.forwardedRef;
+      this.container = ref;
+
+      if (Object(external_lodash_["isFunction"])(forwardedRef)) {
+        forwardedRef(ref);
+      } else if (forwardedRef && 'current' in forwardedRef) {
+        forwardedRef.current = ref;
+      }
+    }
+  }, {
+    key: "getFocusableContext",
+    value: function getFocusableContext(target) {
+      var onlyBrowserTabstops = this.props.onlyBrowserTabstops;
+      var finder = onlyBrowserTabstops ? dom_build_module["a" /* focus */].tabbable : dom_build_module["a" /* focus */].focusable;
+      var focusables = finder.find(this.container);
+      var index = this.getFocusableIndex(focusables, target);
+
+      if (index > -1 && target) {
+        return {
+          index: index,
+          target: target,
+          focusables: focusables
+        };
+      }
+
+      return null;
+    }
+  }, {
+    key: "getFocusableIndex",
+    value: function getFocusableIndex(focusables, target) {
+      var directIndex = focusables.indexOf(target);
+
+      if (directIndex !== -1) {
+        return directIndex;
+      }
+    }
+  }, {
+    key: "onKeyDown",
+    value: function onKeyDown(event) {
+      if (this.props.onKeyDown) {
+        this.props.onKeyDown(event);
+      }
+
+      var getFocusableContext = this.getFocusableContext;
+      var _this$props = this.props,
+          _this$props$cycle = _this$props.cycle,
+          cycle = _this$props$cycle === void 0 ? true : _this$props$cycle,
+          eventToOffset = _this$props.eventToOffset,
+          _this$props$onNavigat = _this$props.onNavigate,
+          onNavigate = _this$props$onNavigat === void 0 ? external_lodash_["noop"] : _this$props$onNavigat,
+          stopNavigationEvents = _this$props.stopNavigationEvents;
+      var offset = eventToOffset(event); // eventToOffset returns undefined if the event is not handled by the component
+
+      if (offset !== undefined && stopNavigationEvents) {
+        // Prevents arrow key handlers bound to the document directly interfering
+        event.stopImmediatePropagation(); // When navigating a collection of items, prevent scroll containers
+        // from scrolling.
+
+        if (event.target.getAttribute('role') === 'menuitem') {
+          event.preventDefault();
+        }
+      }
+
+      if (!offset) {
+        return;
+      }
+
+      var context = getFocusableContext(document.activeElement);
+
+      if (!context) {
+        return;
+      }
+
+      var index = context.index,
+          focusables = context.focusables;
+      var nextIndex = cycle ? cycleValue(index, focusables.length, offset) : index + offset;
+
+      if (nextIndex >= 0 && nextIndex < focusables.length) {
+        focusables[nextIndex].focus();
+        onNavigate(nextIndex, focusables[nextIndex]);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          children = _this$props2.children,
+          props = Object(objectWithoutProperties["a" /* default */])(_this$props2, ["children"]);
+
+      return Object(external_this_wp_element_["createElement"])("div", Object(esm_extends["a" /* default */])({
+        ref: this.bindContainer
+      }, Object(external_lodash_["omit"])(props, ['stopNavigationEvents', 'eventToOffset', 'onNavigate', 'onKeyDown', 'cycle', 'onlyBrowserTabstops', 'forwardedRef'])), children);
+    }
+  }]);
+
+  return NavigableContainer;
+}(external_this_wp_element_["Component"]);
+
+var container_forwardedNavigableContainer = function forwardedNavigableContainer(props, ref) {
+  return Object(external_this_wp_element_["createElement"])(container_NavigableContainer, Object(esm_extends["a" /* default */])({}, props, {
+    forwardedRef: ref
+  }));
+};
+
+container_forwardedNavigableContainer.displayName = 'NavigableContainer';
+/* harmony default export */ var container = (Object(external_this_wp_element_["forwardRef"])(container_forwardedNavigableContainer));
+//# sourceMappingURL=container.js.map
+// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/navigable-container/menu.js
+
+
+
+
+/**
+ * External dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+function NavigableMenu(_ref, ref) {
+  var _ref$role = _ref.role,
+      role = _ref$role === void 0 ? 'menu' : _ref$role,
+      _ref$orientation = _ref.orientation,
+      orientation = _ref$orientation === void 0 ? 'vertical' : _ref$orientation,
+      rest = Object(objectWithoutProperties["a" /* default */])(_ref, ["role", "orientation"]);
+
+  var eventToOffset = function eventToOffset(evt) {
+    var keyCode = evt.keyCode;
+    var next = [build_module["a" /* DOWN */]];
+    var previous = [build_module["f" /* UP */]];
+
+    if (orientation === 'horizontal') {
+      next = [build_module["d" /* RIGHT */]];
+      previous = [build_module["c" /* LEFT */]];
+    }
+
+    if (orientation === 'both') {
+      next = [build_module["d" /* RIGHT */], build_module["a" /* DOWN */]];
+      previous = [build_module["c" /* LEFT */], build_module["f" /* UP */]];
+    }
+
+    if (Object(external_lodash_["includes"])(next, keyCode)) {
+      return 1;
+    } else if (Object(external_lodash_["includes"])(previous, keyCode)) {
+      return -1;
+    }
+  };
+
+  return Object(external_this_wp_element_["createElement"])(container, Object(esm_extends["a" /* default */])({
+    ref: ref,
+    stopNavigationEvents: true,
+    onlyBrowserTabstops: false,
+    role: role,
+    "aria-orientation": role === 'presentation' ? null : orientation,
+    eventToOffset: eventToOffset
+  }, rest));
+}
+/* harmony default export */ var menu = __webpack_exports__["a"] = (Object(external_this_wp_element_["forwardRef"])(NavigableMenu));
+//# sourceMappingURL=menu.js.map
+
+/***/ }),
+
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19134,87 +21730,714 @@ module.exports = {
 
 /***/ }),
 
-/***/ 742:
-/***/ (function(module, exports) {
+/***/ 77:
+/***/ (function(module, exports, __webpack_require__) {
 
-(function() { module.exports = this["wc"]["csvExport"]; }());
+var arrayLikeToArray = __webpack_require__(73);
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+
+module.exports = _unsupportedIterableToArray;
 
 /***/ }),
 
-/***/ 757:
+/***/ 79:
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["ReactDOM"]; }());
+
+/***/ }),
+
+/***/ 8:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ 80:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var isProduction = "production" === 'production';
+var prefix = 'Invariant failed';
+function invariant(condition, message) {
+    if (condition) {
+        return;
+    }
+    if (isProduction) {
+        throw new Error(prefix);
+    }
+    throw new Error(prefix + ": " + (message || ''));
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (invariant);
+
+
+/***/ }),
+
+/***/ 82:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return warning; });
+function isDev() {
+  return typeof process !== 'undefined' && process.env && "production" !== 'production';
+}
+/**
+ * Shows a warning with `message` if environment is not `production`.
+ *
+ * @param {string} message Message to show in the warning.
+ *
+ * @example
+ * ```js
+ * import warning from '@wordpress/warning';
+ *
+ * function MyComponent( props ) {
+ *   if ( ! props.title ) {
+ *     warning( '`props.title` was not passed' );
+ *   }
+ *   ...
+ * }
+ * ```
+ */
+
+
+function warning(message) {
+  if (!isDev()) {
+    return;
+  } // eslint-disable-next-line no-console
+
+
+  console.warn(message); // Throwing an error and catching it immediately to improve debugging
+  // A consumer can use 'pause on caught exceptions'
+  // https://github.com/facebook/react/issues/4216
+
+  try {
+    throw Error(message);
+  } catch (x) {// do nothing
+  }
+}
+//# sourceMappingURL=index.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(41)))
+
+/***/ }),
+
+/***/ 83:
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+	'#0000CC',
+	'#0000FF',
+	'#0033CC',
+	'#0033FF',
+	'#0066CC',
+	'#0066FF',
+	'#0099CC',
+	'#0099FF',
+	'#00CC00',
+	'#00CC33',
+	'#00CC66',
+	'#00CC99',
+	'#00CCCC',
+	'#00CCFF',
+	'#3300CC',
+	'#3300FF',
+	'#3333CC',
+	'#3333FF',
+	'#3366CC',
+	'#3366FF',
+	'#3399CC',
+	'#3399FF',
+	'#33CC00',
+	'#33CC33',
+	'#33CC66',
+	'#33CC99',
+	'#33CCCC',
+	'#33CCFF',
+	'#6600CC',
+	'#6600FF',
+	'#6633CC',
+	'#6633FF',
+	'#66CC00',
+	'#66CC33',
+	'#9900CC',
+	'#9900FF',
+	'#9933CC',
+	'#9933FF',
+	'#99CC00',
+	'#99CC33',
+	'#CC0000',
+	'#CC0033',
+	'#CC0066',
+	'#CC0099',
+	'#CC00CC',
+	'#CC00FF',
+	'#CC3300',
+	'#CC3333',
+	'#CC3366',
+	'#CC3399',
+	'#CC33CC',
+	'#CC33FF',
+	'#CC6600',
+	'#CC6633',
+	'#CC9900',
+	'#CC9933',
+	'#CCCC00',
+	'#CCCC33',
+	'#FF0000',
+	'#FF0033',
+	'#FF0066',
+	'#FF0099',
+	'#FF00CC',
+	'#FF00FF',
+	'#FF3300',
+	'#FF3333',
+	'#FF3366',
+	'#FF3399',
+	'#FF33CC',
+	'#FF33FF',
+	'#FF6600',
+	'#FF6633',
+	'#FF9900',
+	'#FF9933',
+	'#FFCC00',
+	'#FFCC33'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+// eslint-disable-next-line complexity
+function useColors() {
+	// NB: In an Electron preload script, document will be defined but not fully
+	// initialized. Since we know we're in Chrome, we'll just detect this case
+	// explicitly
+	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+		return true;
+	}
+
+	// Internet Explorer and Edge do not support colors.
+	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+		return false;
+	}
+
+	// Is webkit? http://stackoverflow.com/a/16459606/376773
+	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+		// Is firebug? http://stackoverflow.com/a/398120/376773
+		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+		// Is firefox >= v31?
+		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		// Double check webkit in userAgent just in case we are in a worker
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+	args[0] = (this.useColors ? '%c' : '') +
+		this.namespace +
+		(this.useColors ? ' %c' : ' ') +
+		args[0] +
+		(this.useColors ? '%c ' : ' ') +
+		'+' + module.exports.humanize(this.diff);
+
+	if (!this.useColors) {
+		return;
+	}
+
+	const c = 'color: ' + this.color;
+	args.splice(1, 0, c, 'color: inherit');
+
+	// The final "%c" is somewhat tricky, because there could be other
+	// arguments passed either before or after the %c, so we need to
+	// figure out the correct index to insert the CSS into
+	let index = 0;
+	let lastC = 0;
+	args[0].replace(/%[a-zA-Z%]/g, match => {
+		if (match === '%%') {
+			return;
+		}
+		index++;
+		if (match === '%c') {
+			// We only are interested in the *last* %c
+			// (the user may have provided their own)
+			lastC = index;
+		}
+	});
+
+	args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+function log(...args) {
+	// This hackery is required for IE8/9, where
+	// the `console.log` function doesn't have 'apply'
+	return typeof console === 'object' &&
+		console.log &&
+		console.log(...args);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+function save(namespaces) {
+	try {
+		if (namespaces) {
+			exports.storage.setItem('debug', namespaces);
+		} else {
+			exports.storage.removeItem('debug');
+		}
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+function load() {
+	let r;
+	try {
+		r = exports.storage.getItem('debug');
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+
+	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	if (!r && typeof process !== 'undefined' && 'env' in process) {
+		r = process.env.DEBUG;
+	}
+
+	return r;
+}
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+	try {
+		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+		// The Browser also has localStorage in the global context.
+		return localStorage;
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+module.exports = __webpack_require__(133)(exports);
+
+const {formatters} = module.exports;
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+	try {
+		return JSON.stringify(v);
+	} catch (error) {
+		return '[UnexpectedJSONParseError]: ' + error.message;
+	}
+};
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(41)))
+
+/***/ }),
+
+/***/ 84:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useMediaQuery; });
+/* harmony import */ var _babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 
 
 /**
  * WordPress dependencies
  */
 
-var lifesaver = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* SVG */ "b"], {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__[/* Path */ "a"], {
-  fillRule: "evenodd",
-  d: "M17.375 15.656A6.47 6.47 0 0018.5 12a6.47 6.47 0 00-.943-3.374l-1.262.813c.448.749.705 1.625.705 2.561a4.977 4.977 0 01-.887 2.844l1.262.813zm-1.951 1.87l-.813-1.261A4.976 4.976 0 0112 17c-.958 0-1.852-.27-2.613-.736l-.812 1.261A6.47 6.47 0 0012 18.5a6.47 6.47 0 003.424-.974zm-8.8-1.87A6.47 6.47 0 015.5 12c0-1.235.344-2.39.943-3.373l1.261.812A4.977 4.977 0 007 12c0 1.056.328 2.036.887 2.843l-1.262.813zm2.581-7.803A4.977 4.977 0 0112 7c1.035 0 1.996.314 2.794.853l.812-1.262A6.47 6.47 0 0012 5.5a6.47 6.47 0 00-3.607 1.092l.812 1.261zM12 20a8 8 0 100-16 8 8 0 000 16zm0-4.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z",
-  clipRule: "evenodd"
-}));
-/* harmony default export */ __webpack_exports__["a"] = (lifesaver);
-//# sourceMappingURL=lifesaver.js.map
+/**
+ * Runs a media query and returns its value when it changes.
+ *
+ * @param {string} [query] Media Query.
+ * @return {boolean} return value of the media query.
+ */
+
+function useMediaQuery(query) {
+  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(query && window.matchMedia(query).matches),
+      _useState2 = Object(_babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(_useState, 2),
+      match = _useState2[0],
+      setMatch = _useState2[1];
+
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    if (!query) {
+      return;
+    }
+
+    var updateMatch = function updateMatch() {
+      return setMatch(window.matchMedia(query).matches);
+    };
+
+    updateMatch();
+    var list = window.matchMedia(query);
+    list.addListener(updateMatch);
+    return function () {
+      list.removeListener(updateMatch);
+    };
+  }, [query]);
+  return query && match;
+}
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 758:
+/***/ 9:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var _use_media_query__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(89);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _getPrototypeOf; });
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+/***/ }),
+
+/***/ 90:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Button */
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_deprecated__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(56);
+/* harmony import */ var _tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(125);
+/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(124);
+
+
+
+
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
 /**
  * Internal dependencies
  */
 
-/**
- * Whether or not the user agent is Internet Explorer.
- *
- * @type {boolean}
- */
 
-var IS_IE = typeof window !== 'undefined' && window.navigator.userAgent.indexOf('Trident') >= 0;
-/**
- * Hook returning whether the user has a preference for reduced motion.
- *
- * @return {boolean} Reduced motion preference value.
- */
 
-var useReducedMotion = process.env.FORCE_REDUCED_MOTION || IS_IE ? function () {
-  return true;
-} : function () {
-  return Object(_use_media_query__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])('(prefers-reduced-motion: reduce)');
-};
-/* harmony default export */ __webpack_exports__["a"] = (useReducedMotion);
+var disabledEventsOnDisabledButton = ['onMouseDown', 'onClick'];
+function Button(props, ref) {
+  var href = props.href,
+      target = props.target,
+      isPrimary = props.isPrimary,
+      isSmall = props.isSmall,
+      isTertiary = props.isTertiary,
+      isPressed = props.isPressed,
+      isBusy = props.isBusy,
+      isDefault = props.isDefault,
+      isSecondary = props.isSecondary,
+      isLink = props.isLink,
+      isDestructive = props.isDestructive,
+      className = props.className,
+      disabled = props.disabled,
+      icon = props.icon,
+      iconSize = props.iconSize,
+      showTooltip = props.showTooltip,
+      tooltipPosition = props.tooltipPosition,
+      shortcut = props.shortcut,
+      label = props.label,
+      children = props.children,
+      isFocusable = props.__experimentalIsFocusable,
+      additionalProps = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["href", "target", "isPrimary", "isSmall", "isTertiary", "isPressed", "isBusy", "isDefault", "isSecondary", "isLink", "isDestructive", "className", "disabled", "icon", "iconSize", "showTooltip", "tooltipPosition", "shortcut", "label", "children", "__experimentalIsFocusable"]);
+
+  if (isDefault) {
+    Object(_wordpress_deprecated__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])('Button isDefault prop', {
+      alternative: 'isSecondary'
+    });
+  }
+
+  var classes = classnames__WEBPACK_IMPORTED_MODULE_3___default()('components-button', className, {
+    'is-secondary': isDefault || isSecondary,
+    'is-primary': isPrimary,
+    'is-small': isSmall,
+    'is-tertiary': isTertiary,
+    'is-pressed': isPressed,
+    'is-busy': isBusy,
+    'is-link': isLink,
+    'is-destructive': isDestructive,
+    'has-text': !!icon && !!children,
+    'has-icon': !!icon
+  });
+  var trulyDisabled = disabled && !isFocusable;
+  var Tag = href !== undefined && !trulyDisabled ? 'a' : 'button';
+  var tagProps = Tag === 'a' ? {
+    href: href,
+    target: target
+  } : {
+    type: 'button',
+    disabled: trulyDisabled,
+    'aria-pressed': isPressed
+  };
+
+  if (disabled && isFocusable) {
+    // In this case, the button will be disabled, but still focusable and
+    // perceivable by screen reader users.
+    tagProps['aria-disabled'] = true;
+
+    var _iterator = _createForOfIteratorHelper(disabledEventsOnDisabledButton),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var disabledEvent = _step.value;
+
+        additionalProps[disabledEvent] = function (event) {
+          event.stopPropagation();
+          event.preventDefault();
+        };
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  } // Should show the tooltip if...
+
+
+  var shouldShowTooltip = !trulyDisabled && ( // an explicit tooltip is passed or...
+  showTooltip && label || // there's a shortcut or...
+  shortcut || // there's a label and...
+  !!label && ( // the children are empty and...
+  !children || Object(lodash__WEBPACK_IMPORTED_MODULE_4__["isArray"])(children) && !children.length) && // the tooltip is not explicitly disabled.
+  false !== showTooltip);
+  var element = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(Tag, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, tagProps, additionalProps, {
+    className: classes,
+    "aria-label": additionalProps['aria-label'] || label,
+    ref: ref
+  }), icon && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_icon__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], {
+    icon: icon,
+    size: iconSize
+  }), children);
+
+  if (!shouldShowTooltip) {
+    return element;
+  }
+
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])(_tooltip__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
+    text: label,
+    shortcut: shortcut,
+    position: tooltipPosition
+  }, element);
+}
+/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["forwardRef"])(Button));
 //# sourceMappingURL=index.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
 
 /***/ }),
 
-/***/ 76:
+/***/ 91:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var replace = String.prototype.replace;
+var percentTwenties = /%20/g;
+
+var util = __webpack_require__(75);
+
+var Format = {
+    RFC1738: 'RFC1738',
+    RFC3986: 'RFC3986'
+};
+
+module.exports = util.assign(
+    {
+        'default': Format.RFC3986,
+        formatters: {
+            RFC1738: function (value) {
+                return replace.call(value, percentTwenties, '+');
+            },
+            RFC3986: function (value) {
+                return String(value);
+            }
+        }
+    },
+    Format
+);
+
+
+/***/ }),
+
+/***/ 93:
+/***/ (function(module, exports, __webpack_require__) {
+
+var e=__webpack_require__(10),n={display:"block",opacity:0,position:"absolute",top:0,left:0,height:"100%",width:"100%",overflow:"hidden",pointerEvents:"none",zIndex:-1},t=function(t){var r=t.onResize,u=e.useRef();return function(n,t){var r=function(){return n.current&&n.current.contentDocument&&n.current.contentDocument.defaultView};function u(){t();var e=r();e&&e.addEventListener("resize",t)}e.useEffect((function(){return r()?u():n.current&&n.current.addEventListener&&n.current.addEventListener("load",u),function(){var e=r();e&&"function"==typeof e.removeEventListener&&e.removeEventListener("resize",t)}}),[])}(u,(function(){return r(u)})),e.createElement("iframe",{style:n,src:"about:blank",ref:u,"aria-hidden":!0,tabIndex:-1,frameBorder:0})},r=function(e){return{width:null!=e?e.offsetWidth:null,height:null!=e?e.offsetHeight:null}};module.exports=function(n){void 0===n&&(n=r);var u=e.useState(n(null)),o=u[0],i=u[1],c=e.useCallback((function(e){return i(n(e.current))}),[n]);return[e.useMemo((function(){return e.createElement(t,{onResize:c})}),[c]),o]};
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 94:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ get_get; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(9);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/superPropBase.js
+
+function _superPropBase(object, property) {
+  while (!Object.prototype.hasOwnProperty.call(object, property)) {
+    object = Object(getPrototypeOf["a" /* default */])(object);
+    if (object === null) break;
+  }
+
+  return object;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/get.js
+
+function get_get(target, property, receiver) {
+  if (typeof Reflect !== "undefined" && Reflect.get) {
+    get_get = Reflect.get;
+  } else {
+    get_get = function _get(target, property, receiver) {
+      var base = _superPropBase(target, property);
+      if (!base) return;
+      var desc = Object.getOwnPropertyDescriptor(base, property);
+
+      if (desc.get) {
+        return desc.get.call(receiver);
+      }
+
+      return desc.value;
+    };
+  }
+
+  return get_get(target, property, receiver || target);
+}
+
+/***/ }),
+
+/***/ 95:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Dashicon; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
+/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
+/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(22);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(37);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(51);
 
 
 
@@ -20423,7 +23646,7 @@ var Dashicon = /*#__PURE__*/function (_Component) {
       }
 
       var iconClass = ['dashicon', 'dashicons-' + icon, className].filter(Boolean).join(' ');
-      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__[/* SVG */ "b"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__[/* SVG */ "c"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
         "aria-hidden": true,
         role: "img",
         focusable: "false",
@@ -20432,7 +23655,7 @@ var Dashicon = /*#__PURE__*/function (_Component) {
         width: size,
         height: size,
         viewBox: "0 0 20 20"
-      }, extraProps), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__[/* Path */ "a"], {
+      }, extraProps), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_8__[/* Path */ "b"], {
         d: path
       }));
     }
@@ -20446,3841 +23669,1062 @@ var Dashicon = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
-/***/ 77:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(448);
-
-
-/***/ }),
-
-/***/ 78:
-/***/ (function(module, exports) {
-
-function _extends() {
-  module.exports = _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-module.exports = _extends;
-
-/***/ }),
-
-/***/ 8:
+/***/ 96:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
 
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ createBrowserHistory; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ createMemoryHistory; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ createLocation; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* binding */ locationsAreEqual; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ createPath; });
 
-/***/ }),
-
-/***/ 80:
-/***/ (function(module, exports) {
-
-(function() { module.exports = this["ReactDOM"]; }());
-
-/***/ }),
-
-/***/ 81:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var isProduction = "production" === 'production';
-var prefix = 'Invariant failed';
-function invariant(condition, message) {
-    if (condition) {
-        return;
-    }
-    if (isProduction) {
-        throw new Error(prefix);
-    }
-    throw new Error(prefix + ": " + (message || ''));
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (invariant);
-
-
-/***/ }),
-
-/***/ 83:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
+// UNUSED EXPORTS: createHashHistory, parsePath
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(12);
+var esm_extends = __webpack_require__(8);
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(18);
+// CONCATENATED MODULE: ./node_modules/resolve-pathname/esm/resolve-pathname.js
+function isAbsolute(pathname) {
+  return pathname.charAt(0) === '/';
+}
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(14);
-
-// EXTERNAL MODULE: external {"this":["wp","element"]}
-var external_this_wp_element_ = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(7);
-var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/dom.js
-var dom = __webpack_require__(97);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/dom/build-module/index.js + 2 modules
-var build_module = __webpack_require__(49);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/keycodes/build-module/index.js + 1 modules
-var keycodes_build_module = __webpack_require__(32);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/deprecated/build-module/index.js
-var deprecated_build_module = __webpack_require__(56);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/hooks/use-viewport-match/index.js
-var use_viewport_match = __webpack_require__(212);
-
-// EXTERNAL MODULE: ./node_modules/react-resize-aware/dist/index.js
-var dist = __webpack_require__(101);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/compose/build-module/hooks/use-resize-observer/index.js
-/**
- * External dependencies
- */
-
-/**
- * Hook which allows to listen the resize event of any target element when it changes sizes.
- * _Note: `useResizeObserver` will report `null` until after first render_
- *
- * @return {Array} An array of {Element} `resizeListener` and {?Object} `sizes` with properties `width` and `height`
- *
- * @example
- *
- * ```js
- * const App = () => {
- * 	const [ resizeListener, sizes ] = useResizeObserver();
- *
- * 	return (
- * 		<div>
- * 			{ resizeListener }
- * 			Your content here
- * 		</div>
- * 	);
- * };
- * ```
- *
- */
-
-/* harmony default export */ var use_resize_observer = (dist_default.a);
-//# sourceMappingURL=index.js.map
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/node_modules/@wordpress/icons/build-module/library/close.js
-var library_close = __webpack_require__(213);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(6);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/utils.js
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Module constants
- */
-
-var HEIGHT_OFFSET = 10; // used by the arrow and a bit of empty space
-
-/**
- * Utility used to compute the popover position over the xAxis
- *
- * @param {Object}  anchorRect      Anchor Rect.
- * @param {Object}  contentSize     Content Size.
- * @param {string}  xAxis           Desired xAxis.
- * @param {string}  corner          Desired corner.
- * @param {boolean} sticky          Whether or not to stick the popover to the
- *                                  scroll container edge when part of the anchor
- *                                  leaves view.
- * @param {string}  chosenYAxis     yAxis to be used.
- * @param {Element} boundaryElement Boundary element.
- *
- * @return {Object} Popover xAxis position and constraints.
- */
-
-function computePopoverXAxisPosition(anchorRect, contentSize, xAxis, corner, sticky, chosenYAxis, boundaryElement) {
-  var width = contentSize.width;
-  var isRTL = document.documentElement.dir === 'rtl'; // Correct xAxis for RTL support
-
-  if (xAxis === 'left' && isRTL) {
-    xAxis = 'right';
-  } else if (xAxis === 'right' && isRTL) {
-    xAxis = 'left';
+// About 1.5x faster than the two-arg version of Array#splice()
+function spliceOne(list, index) {
+  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
+    list[i] = list[k];
   }
 
-  if (corner === 'left' && isRTL) {
-    corner = 'right';
-  } else if (corner === 'right' && isRTL) {
-    corner = 'left';
-  } // x axis alignment choices
+  list.pop();
+}
 
+// This implementation is based heavily on node's url.parse
+function resolvePathname(to, from) {
+  if (from === undefined) from = '';
 
-  var anchorMidPoint = Math.round(anchorRect.left + anchorRect.width / 2);
-  var centerAlignment = {
-    popoverLeft: anchorMidPoint,
-    contentWidth: (anchorMidPoint - width / 2 > 0 ? width / 2 : anchorMidPoint) + (anchorMidPoint + width / 2 > window.innerWidth ? window.innerWidth - anchorMidPoint : width / 2)
-  };
-  var leftAlignmentX = anchorRect.left;
+  var toParts = (to && to.split('/')) || [];
+  var fromParts = (from && from.split('/')) || [];
 
-  if (corner === 'right') {
-    leftAlignmentX = anchorRect.right;
-  } else if (chosenYAxis !== 'middle') {
-    leftAlignmentX = anchorMidPoint;
+  var isToAbs = to && isAbsolute(to);
+  var isFromAbs = from && isAbsolute(from);
+  var mustEndAbs = isToAbs || isFromAbs;
+
+  if (to && isAbsolute(to)) {
+    // to is absolute
+    fromParts = toParts;
+  } else if (toParts.length) {
+    // to is relative, drop the filename
+    fromParts.pop();
+    fromParts = fromParts.concat(toParts);
   }
 
-  var rightAlignmentX = anchorRect.right;
+  if (!fromParts.length) return '/';
 
-  if (corner === 'left') {
-    rightAlignmentX = anchorRect.left;
-  } else if (chosenYAxis !== 'middle') {
-    rightAlignmentX = anchorMidPoint;
-  }
-
-  var leftAlignment = {
-    popoverLeft: leftAlignmentX,
-    contentWidth: leftAlignmentX - width > 0 ? width : leftAlignmentX
-  };
-  var rightAlignment = {
-    popoverLeft: rightAlignmentX,
-    contentWidth: rightAlignmentX + width > window.innerWidth ? window.innerWidth - rightAlignmentX : width
-  }; // Choosing the x axis
-
-  var chosenXAxis = xAxis;
-  var contentWidth = null;
-
-  if (!sticky) {
-    if (xAxis === 'center' && centerAlignment.contentWidth === width) {
-      chosenXAxis = 'center';
-    } else if (xAxis === 'left' && leftAlignment.contentWidth === width) {
-      chosenXAxis = 'left';
-    } else if (xAxis === 'right' && rightAlignment.contentWidth === width) {
-      chosenXAxis = 'right';
-    } else {
-      chosenXAxis = leftAlignment.contentWidth > rightAlignment.contentWidth ? 'left' : 'right';
-      var chosenWidth = chosenXAxis === 'left' ? leftAlignment.contentWidth : rightAlignment.contentWidth;
-      contentWidth = chosenWidth !== width ? chosenWidth : null;
-    }
-  }
-
-  var popoverLeft;
-
-  if (chosenXAxis === 'center') {
-    popoverLeft = centerAlignment.popoverLeft;
-  } else if (chosenXAxis === 'left') {
-    popoverLeft = leftAlignment.popoverLeft;
+  var hasTrailingSlash;
+  if (fromParts.length) {
+    var last = fromParts[fromParts.length - 1];
+    hasTrailingSlash = last === '.' || last === '..' || last === '';
   } else {
-    popoverLeft = rightAlignment.popoverLeft;
+    hasTrailingSlash = false;
   }
 
-  if (boundaryElement) {
-    var boundaryRect = boundaryElement.getBoundingClientRect();
-    popoverLeft = Math.min(popoverLeft, boundaryRect.right - width);
-  }
+  var up = 0;
+  for (var i = fromParts.length; i >= 0; i--) {
+    var part = fromParts[i];
 
-  return {
-    xAxis: chosenXAxis,
-    popoverLeft: popoverLeft,
-    contentWidth: contentWidth
-  };
-}
-/**
- * Utility used to compute the popover position over the yAxis
- *
- * @param {Object}  anchorRect        Anchor Rect.
- * @param {Object}  contentSize       Content Size.
- * @param {string}  yAxis             Desired yAxis.
- * @param {string}  corner            Desired corner.
- * @param {boolean} sticky            Whether or not to stick the popover to the
- *                                    scroll container edge when part of the
- *                                    anchor leaves view.
- * @param {Element} anchorRef         The anchor element.
- * @param {Element} relativeOffsetTop If applicable, top offset of the relative
- *                                    positioned parent container.
- *
- * @return {Object} Popover xAxis position and constraints.
- */
-
-function computePopoverYAxisPosition(anchorRect, contentSize, yAxis, corner, sticky, anchorRef, relativeOffsetTop) {
-  var height = contentSize.height;
-
-  if (sticky) {
-    var scrollContainerEl = Object(dom["b" /* getScrollContainer */])(anchorRef) || document.body;
-    var scrollRect = scrollContainerEl.getBoundingClientRect();
-    var stickyPosition = scrollRect.top + height - relativeOffsetTop;
-
-    if (anchorRect.top <= stickyPosition) {
-      return {
-        yAxis: yAxis,
-        popoverTop: Math.min(anchorRect.bottom, stickyPosition)
-      };
-    }
-  } // y axis alignment choices
-
-
-  var anchorMidPoint = anchorRect.top + anchorRect.height / 2;
-
-  if (corner === 'bottom') {
-    anchorMidPoint = anchorRect.bottom;
-  } else if (corner === 'top') {
-    anchorMidPoint = anchorRect.top;
-  }
-
-  var middleAlignment = {
-    popoverTop: anchorMidPoint,
-    contentHeight: (anchorMidPoint - height / 2 > 0 ? height / 2 : anchorMidPoint) + (anchorMidPoint + height / 2 > window.innerHeight ? window.innerHeight - anchorMidPoint : height / 2)
-  };
-  var topAlignment = {
-    popoverTop: anchorRect.top,
-    contentHeight: anchorRect.top - HEIGHT_OFFSET - height > 0 ? height : anchorRect.top - HEIGHT_OFFSET
-  };
-  var bottomAlignment = {
-    popoverTop: anchorRect.bottom,
-    contentHeight: anchorRect.bottom + HEIGHT_OFFSET + height > window.innerHeight ? window.innerHeight - HEIGHT_OFFSET - anchorRect.bottom : height
-  }; // Choosing the y axis
-
-  var chosenYAxis = yAxis;
-  var contentHeight = null;
-
-  if (!sticky) {
-    if (yAxis === 'middle' && middleAlignment.contentHeight === height) {
-      chosenYAxis = 'middle';
-    } else if (yAxis === 'top' && topAlignment.contentHeight === height) {
-      chosenYAxis = 'top';
-    } else if (yAxis === 'bottom' && bottomAlignment.contentHeight === height) {
-      chosenYAxis = 'bottom';
-    } else {
-      chosenYAxis = topAlignment.contentHeight > bottomAlignment.contentHeight ? 'top' : 'bottom';
-      var chosenHeight = chosenYAxis === 'top' ? topAlignment.contentHeight : bottomAlignment.contentHeight;
-      contentHeight = chosenHeight !== height ? chosenHeight : null;
+    if (part === '.') {
+      spliceOne(fromParts, i);
+    } else if (part === '..') {
+      spliceOne(fromParts, i);
+      up++;
+    } else if (up) {
+      spliceOne(fromParts, i);
+      up--;
     }
   }
 
-  var popoverTop;
+  if (!mustEndAbs) for (; up--; up) fromParts.unshift('..');
 
-  if (chosenYAxis === 'middle') {
-    popoverTop = middleAlignment.popoverTop;
-  } else if (chosenYAxis === 'top') {
-    popoverTop = topAlignment.popoverTop;
-  } else {
-    popoverTop = bottomAlignment.popoverTop;
-  }
+  if (
+    mustEndAbs &&
+    fromParts[0] !== '' &&
+    (!fromParts[0] || !isAbsolute(fromParts[0]))
+  )
+    fromParts.unshift('');
 
-  return {
-    yAxis: chosenYAxis,
-    popoverTop: popoverTop,
-    contentHeight: contentHeight
-  };
-}
-/**
- * Utility used to compute the popover position and the content max width/height
- * for a popover given its anchor rect and its content size.
- *
- * @param {Object}  anchorRect        Anchor Rect.
- * @param {Object}  contentSize       Content Size.
- * @param {string}  position          Position.
- * @param {boolean} sticky            Whether or not to stick the popover to the
- *                                    scroll container edge when part of the
- *                                    anchor leaves view.
- * @param {Element} anchorRef         The anchor element.
- * @param {number}  relativeOffsetTop If applicable, top offset of the relative
- *                                    positioned parent container.
- * @param {Element} boundaryElement   Boundary element.
- *
- * @return {Object} Popover position and constraints.
- */
+  var result = fromParts.join('/');
 
-function computePopoverPosition(anchorRect, contentSize) {
-  var position = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'top';
-  var sticky = arguments.length > 3 ? arguments[3] : undefined;
-  var anchorRef = arguments.length > 4 ? arguments[4] : undefined;
-  var relativeOffsetTop = arguments.length > 5 ? arguments[5] : undefined;
-  var boundaryElement = arguments.length > 6 ? arguments[6] : undefined;
+  if (hasTrailingSlash && result.substr(-1) !== '/') result += '/';
 
-  var _position$split = position.split(' '),
-      _position$split2 = Object(slicedToArray["a" /* default */])(_position$split, 3),
-      yAxis = _position$split2[0],
-      _position$split2$ = _position$split2[1],
-      xAxis = _position$split2$ === void 0 ? 'center' : _position$split2$,
-      corner = _position$split2[2];
-
-  var yAxisPosition = computePopoverYAxisPosition(anchorRect, contentSize, yAxis, corner, sticky, anchorRef, relativeOffsetTop);
-  var xAxisPosition = computePopoverXAxisPosition(anchorRect, contentSize, xAxis, corner, sticky, yAxisPosition.yAxis, boundaryElement);
-  return _objectSpread({}, xAxisPosition, {}, yAxisPosition);
-}
-//# sourceMappingURL=utils.js.map
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/index.js + 1 modules
-var with_focus_return = __webpack_require__(87);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-constrained-tabbing/index.js
-var with_constrained_tabbing = __webpack_require__(84);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(11);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(4);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
-var inherits = __webpack_require__(10);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-outside/index.js
-var with_focus_outside = __webpack_require__(85);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/detect-outside.js
-
-
-
-
-
-
-function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-
-var detect_outside_PopoverDetectOutside = /*#__PURE__*/function (_Component) {
-  Object(inherits["a" /* default */])(PopoverDetectOutside, _Component);
-
-  var _super = _createSuper(PopoverDetectOutside);
-
-  function PopoverDetectOutside() {
-    Object(classCallCheck["a" /* default */])(this, PopoverDetectOutside);
-
-    return _super.apply(this, arguments);
-  }
-
-  Object(createClass["a" /* default */])(PopoverDetectOutside, [{
-    key: "handleFocusOutside",
-    value: function handleFocusOutside(event) {
-      this.props.onFocusOutside(event);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return this.props.children;
-    }
-  }]);
-
-  return PopoverDetectOutside;
-}(external_this_wp_element_["Component"]);
-
-/* harmony default export */ var detect_outside = (Object(with_focus_outside["a" /* default */])(detect_outside_PopoverDetectOutside));
-//# sourceMappingURL=detect-outside.js.map
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/button/index.js
-var build_module_button = __webpack_require__(69);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/scroll-lock/index.js
-
-
-
-
-
-
-function scroll_lock_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (scroll_lock_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function scroll_lock_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Creates a ScrollLock component bound to the specified document.
- *
- * This function creates a ScrollLock component for the specified document
- * and is exposed so we can create an isolated component for unit testing.
- *
- * @param {Object} args Keyword args.
- * @param {HTMLDocument} args.htmlDocument The document to lock the scroll for.
- * @param {string} args.className The name of the class used to lock scrolling.
- * @return {WPComponent} The bound ScrollLock component.
- */
-
-function createScrollLockComponent() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$htmlDocument = _ref.htmlDocument,
-      htmlDocument = _ref$htmlDocument === void 0 ? document : _ref$htmlDocument,
-      _ref$className = _ref.className,
-      className = _ref$className === void 0 ? 'lockscroll' : _ref$className;
-
-  var lockCounter = 0;
-  /*
-   * Setting `overflow: hidden` on html and body elements resets body scroll in iOS.
-   * Save scroll top so we can restore it after locking scroll.
-   *
-   * NOTE: It would be cleaner and possibly safer to find a localized solution such
-   * as preventing default on certain touchmove events.
-   */
-
-  var previousScrollTop = 0;
-  /**
-   * Locks and unlocks scroll depending on the boolean argument.
-   *
-   * @param {boolean} locked Whether or not scroll should be locked.
-   */
-
-  function setLocked(locked) {
-    var scrollingElement = htmlDocument.scrollingElement || htmlDocument.body;
-
-    if (locked) {
-      previousScrollTop = scrollingElement.scrollTop;
-    }
-
-    var methodName = locked ? 'add' : 'remove';
-    scrollingElement.classList[methodName](className); // Adding the class to the document element seems to be necessary in iOS.
-
-    htmlDocument.documentElement.classList[methodName](className);
-
-    if (!locked) {
-      scrollingElement.scrollTop = previousScrollTop;
-    }
-  }
-  /**
-   * Requests scroll lock.
-   *
-   * This function tracks requests for scroll lock. It locks scroll on the first
-   * request and counts each request so `releaseLock` can unlock scroll when
-   * all requests have been released.
-   */
-
-
-  function requestLock() {
-    if (lockCounter === 0) {
-      setLocked(true);
-    }
-
-    ++lockCounter;
-  }
-  /**
-   * Releases a request for scroll lock.
-   *
-   * This function tracks released requests for scroll lock. When all requests
-   * have been released, it unlocks scroll.
-   */
-
-
-  function releaseLock() {
-    if (lockCounter === 1) {
-      setLocked(false);
-    }
-
-    --lockCounter;
-  }
-
-  return /*#__PURE__*/function (_Component) {
-    Object(inherits["a" /* default */])(ScrollLock, _Component);
-
-    var _super = scroll_lock_createSuper(ScrollLock);
-
-    function ScrollLock() {
-      Object(classCallCheck["a" /* default */])(this, ScrollLock);
-
-      return _super.apply(this, arguments);
-    }
-
-    Object(createClass["a" /* default */])(ScrollLock, [{
-      key: "componentDidMount",
-
-      /**
-       * Requests scroll lock on mount.
-       */
-      value: function componentDidMount() {
-        requestLock();
-      }
-      /**
-       * Releases scroll lock before unmount.
-       */
-
-    }, {
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        releaseLock();
-      }
-      /**
-       * Render nothing as this component is merely a way to declare scroll lock.
-       *
-       * @return {null} Render nothing by returning `null`.
-       */
-
-    }, {
-      key: "render",
-      value: function render() {
-        return null;
-      }
-    }]);
-
-    return ScrollLock;
-  }(external_this_wp_element_["Component"]);
-}
-/* harmony default export */ var scroll_lock = (createScrollLockComponent());
-//# sourceMappingURL=index.js.map
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/isolated-event-container/index.js
-var isolated_event_container = __webpack_require__(86);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot-fill-context.js
-var slot_fill_context = __webpack_require__(53);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/use-slot.js
-
-
-function use_slot_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function use_slot_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { use_slot_ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { use_slot_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-function use_slot_useSlot(name) {
-  var registry = Object(external_this_wp_element_["useContext"])(slot_fill_context["a" /* default */]);
-  var slot = registry.slots[name] || {};
-  var slotFills = registry.fills[name];
-  var fills = Object(external_this_wp_element_["useMemo"])(function () {
-    return slotFills || [];
-  }, [slotFills]);
-  var updateSlot = Object(external_this_wp_element_["useCallback"])(function (fillProps) {
-    registry.updateSlot(name, fillProps);
-  }, [name, registry.updateSlot]);
-  var unregisterSlot = Object(external_this_wp_element_["useCallback"])(function (slotRef) {
-    registry.unregisterSlot(name, slotRef);
-  }, [name, registry.unregisterSlot]);
-  var registerFill = Object(external_this_wp_element_["useCallback"])(function (fillRef) {
-    registry.registerFill(name, fillRef);
-  }, [name, registry.registerFill]);
-  var unregisterFill = Object(external_this_wp_element_["useCallback"])(function (fillRef) {
-    registry.unregisterFill(name, fillRef);
-  }, [name, registry.unregisterFill]);
-  return use_slot_objectSpread({}, slot, {
-    updateSlot: updateSlot,
-    unregisterSlot: unregisterSlot,
-    fills: fills,
-    registerFill: registerFill,
-    unregisterFill: unregisterFill
-  });
-}
-//# sourceMappingURL=use-slot.js.map
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(5);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/superPropBase.js
-
-function _superPropBase(object, property) {
-  while (!Object.prototype.hasOwnProperty.call(object, property)) {
-    object = Object(getPrototypeOf["a" /* default */])(object);
-    if (object === null) break;
-  }
-
-  return object;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/get.js
-
-function get_get(target, property, receiver) {
-  if (typeof Reflect !== "undefined" && Reflect.get) {
-    get_get = Reflect.get;
-  } else {
-    get_get = function _get(target, property, receiver) {
-      var base = _superPropBase(target, property);
-      if (!base) return;
-      var desc = Object.getOwnPropertyDescriptor(base, property);
-
-      if (desc.get) {
-        return desc.get.call(receiver);
-      }
-
-      return desc.value;
-    };
-  }
-
-  return get_get(target, property, receiver || target);
-}
-// EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
-var toConsumableArray = __webpack_require__(15);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(40);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/is-shallow-equal/lib/index.js
-var lib = __webpack_require__(58);
-var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot-fill-provider.js
-
-
-
-
-
-
-
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return Object(esm_typeof["a" /* default */])(key) === "symbol" ? key : String(key); }
-
-function _toPrimitive(input, hint) { if (Object(esm_typeof["a" /* default */])(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (Object(esm_typeof["a" /* default */])(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-function slot_fill_provider_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function slot_fill_provider_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { slot_fill_provider_ownKeys(Object(source), true).forEach(function (key) { Object(defineProperty["a" /* default */])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { slot_fill_provider_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-function useSlotRegistry() {
-  var _useState = Object(external_this_wp_element_["useState"])({}),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
-      slots = _useState2[0],
-      setSlots = _useState2[1];
-
-  var _useState3 = Object(external_this_wp_element_["useState"])({}),
-      _useState4 = Object(slicedToArray["a" /* default */])(_useState3, 2),
-      fills = _useState4[0],
-      setFills = _useState4[1];
-
-  var registerSlot = Object(external_this_wp_element_["useCallback"])(function (name, ref, fillProps) {
-    setSlots(function (prevSlots) {
-      var slot = prevSlots[name] || {};
-      return slot_fill_provider_objectSpread({}, prevSlots, Object(defineProperty["a" /* default */])({}, name, slot_fill_provider_objectSpread({}, slot, {
-        ref: ref || slot.ref,
-        fillProps: fillProps || slot.fillProps || {}
-      })));
-    });
-  }, []);
-  var unregisterSlot = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
-    setSlots(function (prevSlots) {
-      var slot = prevSlots[name],
-          nextSlots = Object(objectWithoutProperties["a" /* default */])(prevSlots, [name].map(_toPropertyKey)); // Make sure we're not unregistering a slot registered by another element
-      // See https://github.com/WordPress/gutenberg/pull/19242#issuecomment-590295412
-
-
-      if ((slot === null || slot === void 0 ? void 0 : slot.ref) === ref) {
-        return nextSlots;
-      }
-
-      return prevSlots;
-    });
-  }, []);
-  var updateSlot = Object(external_this_wp_element_["useCallback"])(function (name, fillProps) {
-    var slot = slots[name];
-
-    if (!slot) {
-      return;
-    }
-
-    if (!lib_default()(slot.fillProps, fillProps)) {
-      slot.fillProps = fillProps;
-      var slotFills = fills[name];
-
-      if (slotFills) {
-        // Force update fills
-        slotFills.map(function (fill) {
-          return fill.current.rerender();
-        });
-      }
-    }
-  }, [slots, fills]);
-  var registerFill = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
-    setFills(function (prevFills) {
-      return slot_fill_provider_objectSpread({}, prevFills, Object(defineProperty["a" /* default */])({}, name, [].concat(Object(toConsumableArray["a" /* default */])(prevFills[name] || []), [ref])));
-    });
-  }, []);
-  var unregisterFill = Object(external_this_wp_element_["useCallback"])(function (name, ref) {
-    setFills(function (prevFills) {
-      if (prevFills[name]) {
-        return slot_fill_provider_objectSpread({}, prevFills, Object(defineProperty["a" /* default */])({}, name, prevFills[name].filter(function (fillRef) {
-          return fillRef !== ref;
-        })));
-      }
-
-      return prevFills;
-    });
-  }, []); // Memoizing the return value so it can be directly passed to Provider value
-
-  var registry = Object(external_this_wp_element_["useMemo"])(function () {
-    return {
-      slots: slots,
-      fills: fills,
-      registerSlot: registerSlot,
-      updateSlot: updateSlot,
-      unregisterSlot: unregisterSlot,
-      registerFill: registerFill,
-      unregisterFill: unregisterFill
-    };
-  }, [slots, fills, registerSlot, updateSlot, unregisterSlot, registerFill, unregisterFill]);
-  return registry;
+  return result;
 }
 
-function slot_fill_provider_SlotFillProvider(_ref) {
-  var children = _ref.children;
-  var registry = useSlotRegistry();
-  return Object(external_this_wp_element_["createElement"])(slot_fill_context["a" /* default */].Provider, {
-    value: registry
-  }, children);
-}
-//# sourceMappingURL=slot-fill-provider.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/context.js
-
-
-
-
-
-
-
-
-
-
-function context_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (context_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function context_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-var SlotFillContext = Object(external_this_wp_element_["createContext"])({
-  registerSlot: function registerSlot() {},
-  unregisterSlot: function unregisterSlot() {},
-  registerFill: function registerFill() {},
-  unregisterFill: function unregisterFill() {},
-  getSlot: function getSlot() {},
-  getFills: function getFills() {},
-  subscribe: function subscribe() {}
-});
-var Provider = SlotFillContext.Provider,
-    Consumer = SlotFillContext.Consumer;
-
-var context_SlotFillProvider = /*#__PURE__*/function (_Component) {
-  Object(inherits["a" /* default */])(SlotFillProvider, _Component);
-
-  var _super = context_createSuper(SlotFillProvider);
-
-  function SlotFillProvider() {
-    var _this;
-
-    Object(classCallCheck["a" /* default */])(this, SlotFillProvider);
-
-    _this = _super.apply(this, arguments);
-    _this.registerSlot = _this.registerSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.registerFill = _this.registerFill.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.unregisterSlot = _this.unregisterSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.unregisterFill = _this.unregisterFill.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.getSlot = _this.getSlot.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.getFills = _this.getFills.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.hasFills = _this.hasFills.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.subscribe = _this.subscribe.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.slots = {};
-    _this.fills = {};
-    _this.listeners = [];
-    _this.contextValue = {
-      registerSlot: _this.registerSlot,
-      unregisterSlot: _this.unregisterSlot,
-      registerFill: _this.registerFill,
-      unregisterFill: _this.unregisterFill,
-      getSlot: _this.getSlot,
-      getFills: _this.getFills,
-      hasFills: _this.hasFills,
-      subscribe: _this.subscribe
-    };
-    return _this;
-  }
-
-  Object(createClass["a" /* default */])(SlotFillProvider, [{
-    key: "registerSlot",
-    value: function registerSlot(name, slot) {
-      var previousSlot = this.slots[name];
-      this.slots[name] = slot;
-      this.triggerListeners(); // Sometimes the fills are registered after the initial render of slot
-      // But before the registerSlot call, we need to rerender the slot
-
-      this.forceUpdateSlot(name); // If a new instance of a slot is being mounted while another with the
-      // same name exists, force its update _after_ the new slot has been
-      // assigned into the instance, such that its own rendering of children
-      // will be empty (the new Slot will subsume all fills for this name).
-
-      if (previousSlot) {
-        previousSlot.forceUpdate();
-      }
-    }
-  }, {
-    key: "registerFill",
-    value: function registerFill(name, instance) {
-      this.fills[name] = [].concat(Object(toConsumableArray["a" /* default */])(this.fills[name] || []), [instance]);
-      this.forceUpdateSlot(name);
-    }
-  }, {
-    key: "unregisterSlot",
-    value: function unregisterSlot(name, instance) {
-      // If a previous instance of a Slot by this name unmounts, do nothing,
-      // as the slot and its fills should only be removed for the current
-      // known instance.
-      if (this.slots[name] !== instance) {
-        return;
-      }
-
-      delete this.slots[name];
-      this.triggerListeners();
-    }
-  }, {
-    key: "unregisterFill",
-    value: function unregisterFill(name, instance) {
-      this.fills[name] = Object(external_lodash_["without"])(this.fills[name], instance);
-      this.resetFillOccurrence(name);
-      this.forceUpdateSlot(name);
-    }
-  }, {
-    key: "getSlot",
-    value: function getSlot(name) {
-      return this.slots[name];
-    }
-  }, {
-    key: "getFills",
-    value: function getFills(name, slotInstance) {
-      // Fills should only be returned for the current instance of the slot
-      // in which they occupy.
-      if (this.slots[name] !== slotInstance) {
-        return [];
-      }
-
-      return Object(external_lodash_["sortBy"])(this.fills[name], 'occurrence');
-    }
-  }, {
-    key: "hasFills",
-    value: function hasFills(name) {
-      return this.fills[name] && !!this.fills[name].length;
-    }
-  }, {
-    key: "resetFillOccurrence",
-    value: function resetFillOccurrence(name) {
-      Object(external_lodash_["forEach"])(this.fills[name], function (instance) {
-        instance.occurrence = undefined;
-      });
-    }
-  }, {
-    key: "forceUpdateSlot",
-    value: function forceUpdateSlot(name) {
-      var slot = this.getSlot(name);
-
-      if (slot) {
-        slot.forceUpdate();
-      }
-    }
-  }, {
-    key: "triggerListeners",
-    value: function triggerListeners() {
-      this.listeners.forEach(function (listener) {
-        return listener();
-      });
-    }
-  }, {
-    key: "subscribe",
-    value: function subscribe(listener) {
-      var _this2 = this;
-
-      this.listeners.push(listener);
-      return function () {
-        _this2.listeners = Object(external_lodash_["without"])(_this2.listeners, listener);
-      };
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return Object(external_this_wp_element_["createElement"])(Provider, {
-        value: this.contextValue
-      }, Object(external_this_wp_element_["createElement"])(slot_fill_provider_SlotFillProvider, null, this.props.children));
-    }
-  }]);
-
-  return SlotFillProvider;
-}(external_this_wp_element_["Component"]);
-/**
- * React hook returning the active slot given a name.
- *
- * @param {string} name Slot name.
- * @return {Object} Slot object.
- */
-
-
-var context_useSlot = function useSlot(name) {
-  var _useContext = Object(external_this_wp_element_["useContext"])(SlotFillContext),
-      getSlot = _useContext.getSlot,
-      subscribe = _useContext.subscribe;
-
-  var _useState = Object(external_this_wp_element_["useState"])(getSlot(name)),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
-      slot = _useState2[0],
-      setSlot = _useState2[1];
-
-  Object(external_this_wp_element_["useEffect"])(function () {
-    setSlot(getSlot(name));
-    var unsubscribe = subscribe(function () {
-      setSlot(getSlot(name));
-    });
-    return unsubscribe;
-  }, [name]);
-  return slot;
-};
-/* harmony default export */ var context = (context_SlotFillProvider);
-
-//# sourceMappingURL=context.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/slot.js
-
-
-
-
-
-
-
-
-
-
-function slot_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (slot_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function slot_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-var slot_SlotComponent = /*#__PURE__*/function (_Component) {
-  Object(inherits["a" /* default */])(SlotComponent, _Component);
-
-  var _super = slot_createSuper(SlotComponent);
-
-  function SlotComponent() {
-    var _this;
-
-    Object(classCallCheck["a" /* default */])(this, SlotComponent);
-
-    _this = _super.apply(this, arguments);
-    _this.isUnmounted = false;
-    _this.bindNode = _this.bindNode.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    return _this;
-  }
-
-  Object(createClass["a" /* default */])(SlotComponent, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var registerSlot = this.props.registerSlot;
-      registerSlot(this.props.name, this);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      var unregisterSlot = this.props.unregisterSlot;
-      this.isUnmounted = true;
-      unregisterSlot(this.props.name, this);
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      var _this$props = this.props,
-          name = _this$props.name,
-          unregisterSlot = _this$props.unregisterSlot,
-          registerSlot = _this$props.registerSlot;
-
-      if (prevProps.name !== name) {
-        unregisterSlot(prevProps.name);
-        registerSlot(name, this);
-      }
-    }
-  }, {
-    key: "bindNode",
-    value: function bindNode(node) {
-      this.node = node;
-    }
-  }, {
-    key: "forceUpdate",
-    value: function forceUpdate() {
-      if (this.isUnmounted) {
-        return;
-      }
-
-      get_get(Object(getPrototypeOf["a" /* default */])(SlotComponent.prototype), "forceUpdate", this).call(this);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props2 = this.props,
-          children = _this$props2.children,
-          name = _this$props2.name,
-          _this$props2$fillProp = _this$props2.fillProps,
-          fillProps = _this$props2$fillProp === void 0 ? {} : _this$props2$fillProp,
-          getFills = _this$props2.getFills;
-      var fills = Object(external_lodash_["map"])(getFills(name, this), function (fill) {
-        var fillKey = fill.occurrence;
-        var fillChildren = Object(external_lodash_["isFunction"])(fill.children) ? fill.children(fillProps) : fill.children;
-        return external_this_wp_element_["Children"].map(fillChildren, function (child, childIndex) {
-          if (!child || Object(external_lodash_["isString"])(child)) {
-            return child;
-          }
-
-          var childKey = "".concat(fillKey, "---").concat(child.key || childIndex);
-          return Object(external_this_wp_element_["cloneElement"])(child, {
-            key: childKey
-          });
-        });
-      }).filter( // In some cases fills are rendered only when some conditions apply.
-      // This ensures that we only use non-empty fills when rendering, i.e.,
-      // it allows us to render wrappers only when the fills are actually present.
-      Object(external_lodash_["negate"])(external_this_wp_element_["isEmptyElement"]));
-      return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_lodash_["isFunction"])(children) ? children(fills) : fills);
-    }
-  }]);
-
-  return SlotComponent;
-}(external_this_wp_element_["Component"]);
-
-var slot_Slot = function Slot(props) {
-  return Object(external_this_wp_element_["createElement"])(Consumer, null, function (_ref) {
-    var registerSlot = _ref.registerSlot,
-        unregisterSlot = _ref.unregisterSlot,
-        getFills = _ref.getFills;
-    return Object(external_this_wp_element_["createElement"])(slot_SlotComponent, Object(esm_extends["a" /* default */])({}, props, {
-      registerSlot: registerSlot,
-      unregisterSlot: unregisterSlot,
-      getFills: getFills
-    }));
-  });
-};
-
-/* harmony default export */ var slot_fill_slot = (slot_Slot);
-//# sourceMappingURL=slot.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/fill.js
-
-
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-var occurrences = 0;
-
-function fill_FillComponent(_ref) {
-  var name = _ref.name,
-      children = _ref.children,
-      registerFill = _ref.registerFill,
-      unregisterFill = _ref.unregisterFill;
-  var slot = context_useSlot(name);
-  var ref = Object(external_this_wp_element_["useRef"])({
-    name: name,
-    children: children
-  });
-
-  if (!ref.current.occurrence) {
-    ref.current.occurrence = ++occurrences;
-  }
-
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    registerFill(name, ref.current);
-    return function () {
-      return unregisterFill(name, ref.current);
-    };
-  }, []);
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    ref.current.children = children;
-
-    if (slot) {
-      slot.forceUpdate();
-    }
-  }, [children]);
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    if (name === ref.current.name) {
-      // ignore initial effect
-      return;
-    }
-
-    unregisterFill(ref.current.name, ref.current);
-    ref.current.name = name;
-    registerFill(name, ref.current);
-  }, [name]);
-
-  if (!slot || !slot.node) {
-    return null;
-  } // If a function is passed as a child, provide it with the fillProps.
-
-
-  if (Object(external_lodash_["isFunction"])(children)) {
-    children = children(slot.props.fillProps);
-  }
-
-  return Object(external_this_wp_element_["createPortal"])(children, slot.node);
+/* harmony default export */ var resolve_pathname = (resolvePathname);
+
+// CONCATENATED MODULE: ./node_modules/value-equal/esm/value-equal.js
+function value_equal_valueOf(obj) {
+  return obj.valueOf ? obj.valueOf() : Object.prototype.valueOf.call(obj);
 }
 
-var fill_Fill = function Fill(props) {
-  return Object(external_this_wp_element_["createElement"])(Consumer, null, function (_ref2) {
-    var registerFill = _ref2.registerFill,
-        unregisterFill = _ref2.unregisterFill;
-    return Object(external_this_wp_element_["createElement"])(fill_FillComponent, Object(esm_extends["a" /* default */])({}, props, {
-      registerFill: registerFill,
-      unregisterFill: unregisterFill
-    }));
-  });
-};
-
-/* harmony default export */ var slot_fill_fill = (fill_Fill);
-//# sourceMappingURL=fill.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/slot.js
-
-
-
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-function bubbles_virtually_slot_Slot(_ref) {
-  var name = _ref.name,
-      _ref$fillProps = _ref.fillProps,
-      fillProps = _ref$fillProps === void 0 ? {} : _ref$fillProps,
-      _ref$as = _ref.as,
-      Component = _ref$as === void 0 ? 'div' : _ref$as,
-      props = Object(objectWithoutProperties["a" /* default */])(_ref, ["name", "fillProps", "as"]);
-
-  var registry = Object(external_this_wp_element_["useContext"])(slot_fill_context["a" /* default */]);
-  var ref = Object(external_this_wp_element_["useRef"])();
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    registry.registerSlot(name, ref, fillProps);
-    return function () {
-      registry.unregisterSlot(name, ref);
-    }; // We are not including fillProps in the deps because we don't want to
-    // unregister and register the slot whenever fillProps change, which would
-    // cause the fill to be re-mounted. We are only considering the initial value
-    // of fillProps.
-  }, [registry.registerSlot, registry.unregisterSlot, name]); // fillProps may be an update that interacts with the layout, so we
-  // useLayoutEffect
-
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    registry.updateSlot(name, fillProps);
-  });
-  return Object(external_this_wp_element_["createElement"])(Component, Object(esm_extends["a" /* default */])({
-    ref: ref
-  }, props));
-}
-//# sourceMappingURL=slot.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/bubbles-virtually/fill.js
-
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-
-function useForceUpdate() {
-  var _useState = Object(external_this_wp_element_["useState"])({}),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
-      setState = _useState2[1];
-
-  return function () {
-    return setState({});
-  };
-}
-
-function bubbles_virtually_fill_Fill(_ref) {
-  var name = _ref.name,
-      children = _ref.children;
-  var slot = use_slot_useSlot(name);
-  var ref = Object(external_this_wp_element_["useRef"])({
-    rerender: useForceUpdate()
-  });
-  Object(external_this_wp_element_["useEffect"])(function () {
-    // We register fills so we can keep track of their existance.
-    // Some Slot implementations need to know if there're already fills
-    // registered so they can choose to render themselves or not.
-    slot.registerFill(ref);
-    return function () {
-      slot.unregisterFill(ref);
-    };
-  }, [slot.registerFill, slot.unregisterFill]);
-
-  if (!slot.ref || !slot.ref.current) {
-    return null;
-  }
-
-  if (typeof children === 'function') {
-    children = children(slot.fillProps);
-  }
-
-  return Object(external_this_wp_element_["createPortal"])(children, slot.ref.current);
-}
-//# sourceMappingURL=fill.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/slot-fill/index.js
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-function slot_fill_Slot(_ref) {
-  var bubblesVirtually = _ref.bubblesVirtually,
-      props = Object(objectWithoutProperties["a" /* default */])(_ref, ["bubblesVirtually"]);
-
-  if (bubblesVirtually) {
-    return Object(external_this_wp_element_["createElement"])(bubbles_virtually_slot_Slot, props);
-  }
-
-  return Object(external_this_wp_element_["createElement"])(slot_fill_slot, props);
-}
-function slot_fill_Fill(props) {
-  // We're adding both Fills here so they can register themselves before
-  // their respective slot has been registered. Only the Fill that has a slot
-  // will render. The other one will return null.
-  return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(slot_fill_fill, props), Object(external_this_wp_element_["createElement"])(bubbles_virtually_fill_Fill, props));
-}
-function createSlotFill(name) {
-  var FillComponent = function FillComponent(props) {
-    return Object(external_this_wp_element_["createElement"])(slot_fill_Fill, Object(esm_extends["a" /* default */])({
-      name: name
-    }, props));
-  };
-
-  FillComponent.displayName = name + 'Fill';
-
-  var SlotComponent = function SlotComponent(props) {
-    return Object(external_this_wp_element_["createElement"])(slot_fill_Slot, Object(esm_extends["a" /* default */])({
-      name: name
-    }, props));
-  };
-
-  SlotComponent.displayName = name + 'Slot';
-  return {
-    Fill: FillComponent,
-    Slot: SlotComponent
-  };
-}
-
-//# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/animate/index.js
-
-
-
-/**
- * External dependencies
- */
-
-
-function Animate(_ref) {
-  var type = _ref.type,
-      _ref$options = _ref.options,
-      options = _ref$options === void 0 ? {} : _ref$options,
-      children = _ref.children;
-
-  if (type === 'appear') {
-    var _classnames;
-
-    var _options$origin = options.origin,
-        origin = _options$origin === void 0 ? 'top' : _options$origin;
-
-    var _origin$split = origin.split(' '),
-        _origin$split2 = Object(slicedToArray["a" /* default */])(_origin$split, 2),
-        yAxis = _origin$split2[0],
-        _origin$split2$ = _origin$split2[1],
-        xAxis = _origin$split2$ === void 0 ? 'center' : _origin$split2$;
-
-    return children({
-      className: classnames_default()('components-animate__appear', (_classnames = {}, Object(defineProperty["a" /* default */])(_classnames, 'is-from-' + xAxis, xAxis !== 'center'), Object(defineProperty["a" /* default */])(_classnames, 'is-from-' + yAxis, yAxis !== 'middle'), _classnames))
-    });
-  }
-
-  if (type === 'slide-in') {
-    var _options$origin2 = options.origin,
-        _origin = _options$origin2 === void 0 ? 'left' : _options$origin2;
-
-    return children({
-      className: classnames_default()('components-animate__slide-in', 'is-from-' + _origin)
-    });
-  }
-
-  if (type === 'loading') {
-    return children({
-      className: classnames_default()('components-animate__loading')
-    });
-  }
-
-  return children({});
-}
-
-/* harmony default export */ var build_module_animate = (Animate);
-//# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/popover/index.js
-
-
-
-
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-
-
-
-
-var FocusManaged = Object(with_constrained_tabbing["a" /* default */])(Object(with_focus_return["a" /* default */])(function (_ref) {
-  var children = _ref.children;
-  return children;
-}));
-/**
- * Name of slot in which popover should fill.
- *
- * @type {string}
- */
-
-var SLOT_NAME = 'Popover';
-
-function computeAnchorRect(anchorRefFallback, anchorRect, getAnchorRect) {
-  var anchorRef = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  var shouldAnchorIncludePadding = arguments.length > 4 ? arguments[4] : undefined;
-
-  if (anchorRect) {
-    return anchorRect;
-  }
-
-  if (getAnchorRect) {
-    if (!anchorRefFallback.current) {
-      return;
-    }
-
-    return getAnchorRect(anchorRefFallback.current);
-  }
-
-  if (anchorRef !== false) {
-    if (!anchorRef || !window.Range || !window.Element || !window.DOMRect) {
-      return;
-    }
-
-    if (anchorRef instanceof window.Range) {
-      return Object(dom["a" /* getRectangleFromRange */])(anchorRef);
-    }
-
-    if (anchorRef instanceof window.Element) {
-      var _rect2 = anchorRef.getBoundingClientRect();
-
-      if (shouldAnchorIncludePadding) {
-        return _rect2;
-      }
-
-      return withoutPadding(_rect2, anchorRef);
-    }
-
-    var top = anchorRef.top,
-        bottom = anchorRef.bottom;
-    var topRect = top.getBoundingClientRect();
-    var bottomRect = bottom.getBoundingClientRect();
-
-    var _rect = new window.DOMRect(topRect.left, topRect.top, topRect.width, bottomRect.bottom - topRect.top);
-
-    if (shouldAnchorIncludePadding) {
-      return _rect;
-    }
-
-    return withoutPadding(_rect, anchorRef);
-  }
-
-  if (!anchorRefFallback.current) {
-    return;
-  }
-
-  var parentNode = anchorRefFallback.current.parentNode;
-  var rect = parentNode.getBoundingClientRect();
-
-  if (shouldAnchorIncludePadding) {
-    return rect;
-  }
-
-  return withoutPadding(rect, parentNode);
-}
-
-function withoutPadding(rect, element) {
-  var _window$getComputedSt = window.getComputedStyle(element),
-      paddingTop = _window$getComputedSt.paddingTop,
-      paddingBottom = _window$getComputedSt.paddingBottom,
-      paddingLeft = _window$getComputedSt.paddingLeft,
-      paddingRight = _window$getComputedSt.paddingRight;
-
-  var top = paddingTop ? parseInt(paddingTop, 10) : 0;
-  var bottom = paddingBottom ? parseInt(paddingBottom, 10) : 0;
-  var left = paddingLeft ? parseInt(paddingLeft, 10) : 0;
-  var right = paddingRight ? parseInt(paddingRight, 10) : 0;
-  return {
-    x: rect.left + left,
-    y: rect.top + top,
-    width: rect.width - left - right,
-    height: rect.height - top - bottom,
-    left: rect.left + left,
-    right: rect.right - right,
-    top: rect.top + top,
-    bottom: rect.bottom - bottom
-  };
-}
-/**
- * Hook used to focus the first tabbable element on mount.
- *
- * @param {boolean|string} focusOnMount Focus on mount mode.
- * @param {Object}         contentRef   Reference to the popover content element.
- */
-
-
-function useFocusContentOnMount(focusOnMount, contentRef) {
-  // Focus handling
-  Object(external_this_wp_element_["useEffect"])(function () {
-    /*
-     * Without the setTimeout, the dom node is not being focused. Related:
-     * https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
-     *
-     * TODO: Treat the cause, not the symptom.
-     */
-    var focusTimeout = setTimeout(function () {
-      if (!focusOnMount || !contentRef.current) {
-        return;
-      }
-
-      if (focusOnMount === 'firstElement') {
-        // Find first tabbable node within content and shift focus, falling
-        // back to the popover panel itself.
-        var firstTabbable = build_module["a" /* focus */].tabbable.find(contentRef.current)[0];
-
-        if (firstTabbable) {
-          firstTabbable.focus();
-        } else {
-          contentRef.current.focus();
-        }
-
-        return;
-      }
-
-      if (focusOnMount === 'container') {
-        // Focus the popover panel itself so items in the popover are easily
-        // accessed via keyboard navigation.
-        contentRef.current.focus();
-      }
-    }, 0);
-    return function () {
-      return clearTimeout(focusTimeout);
-    };
-  }, []);
-}
-/**
- * Sets or removes an element attribute.
- *
- * @param {Element} element The element to modify.
- * @param {string}  name    The attribute name to set or remove.
- * @param {?string} value   The value to set. A falsy value will remove the
- *                          attribute.
- */
-
-
-function setAttribute(element, name, value) {
-  if (!value) {
-    if (element.hasAttribute(name)) {
-      element.removeAttribute(name);
-    }
-  } else if (element.getAttribute(name) !== value) {
-    element.setAttribute(name, value);
-  }
-}
-/**
- * Sets or removes an element style property.
- *
- * @param {Element} element  The element to modify.
- * @param {string}  property The property to set or remove.
- * @param {?string} value    The value to set. A falsy value will remove the
- *                           property.
- */
-
-
-function setStyle(element, property) {
-  var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-
-  if (element.style[property] !== value) {
-    element.style[property] = value;
-  }
-}
-/**
- * Sets or removes an element class.
- *
- * @param {Element} element The element to modify.
- * @param {string}  name    The class to set or remove.
- * @param {boolean} toggle  True to set the class, false to remove.
- */
-
-
-function setClass(element, name, toggle) {
-  if (toggle) {
-    if (!element.classList.contains(name)) {
-      element.classList.add(name);
-    }
-  } else if (element.classList.contains(name)) {
-    element.classList.remove(name);
-  }
-}
-
-var popover_Popover = function Popover(_ref2) {
-  var headerTitle = _ref2.headerTitle,
-      onClose = _ref2.onClose,
-      onKeyDown = _ref2.onKeyDown,
-      children = _ref2.children,
-      className = _ref2.className,
-      _ref2$noArrow = _ref2.noArrow,
-      noArrow = _ref2$noArrow === void 0 ? true : _ref2$noArrow,
-      isAlternate = _ref2.isAlternate,
-      _ref2$position = _ref2.position,
-      position = _ref2$position === void 0 ? 'bottom right' : _ref2$position,
-      range = _ref2.range,
-      _ref2$focusOnMount = _ref2.focusOnMount,
-      focusOnMount = _ref2$focusOnMount === void 0 ? 'firstElement' : _ref2$focusOnMount,
-      anchorRef = _ref2.anchorRef,
-      shouldAnchorIncludePadding = _ref2.shouldAnchorIncludePadding,
-      anchorRect = _ref2.anchorRect,
-      getAnchorRect = _ref2.getAnchorRect,
-      expandOnMobile = _ref2.expandOnMobile,
-      _ref2$animate = _ref2.animate,
-      animate = _ref2$animate === void 0 ? true : _ref2$animate,
-      onClickOutside = _ref2.onClickOutside,
-      onFocusOutside = _ref2.onFocusOutside,
-      __unstableSticky = _ref2.__unstableSticky,
-      _ref2$__unstableSlotN = _ref2.__unstableSlotName,
-      __unstableSlotName = _ref2$__unstableSlotN === void 0 ? SLOT_NAME : _ref2$__unstableSlotN,
-      __unstableObserveElement = _ref2.__unstableObserveElement,
-      __unstableBoundaryParent = _ref2.__unstableBoundaryParent,
-      contentProps = Object(objectWithoutProperties["a" /* default */])(_ref2, ["headerTitle", "onClose", "onKeyDown", "children", "className", "noArrow", "isAlternate", "position", "range", "focusOnMount", "anchorRef", "shouldAnchorIncludePadding", "anchorRect", "getAnchorRect", "expandOnMobile", "animate", "onClickOutside", "onFocusOutside", "__unstableSticky", "__unstableSlotName", "__unstableObserveElement", "__unstableBoundaryParent"]);
-
-  var anchorRefFallback = Object(external_this_wp_element_["useRef"])(null);
-  var contentRef = Object(external_this_wp_element_["useRef"])(null);
-  var containerRef = Object(external_this_wp_element_["useRef"])();
-  var isMobileViewport = Object(use_viewport_match["a" /* default */])('medium', '<');
-
-  var _useState = Object(external_this_wp_element_["useState"])(),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
-      animateOrigin = _useState2[0],
-      setAnimateOrigin = _useState2[1];
-
-  var slot = use_slot_useSlot(__unstableSlotName);
-  var isExpanded = expandOnMobile && isMobileViewport;
-
-  var _useResizeObserver = use_resize_observer(),
-      _useResizeObserver2 = Object(slicedToArray["a" /* default */])(_useResizeObserver, 2),
-      containerResizeListener = _useResizeObserver2[0],
-      contentSize = _useResizeObserver2[1];
-
-  noArrow = isExpanded || noArrow;
-  Object(external_this_wp_element_["useLayoutEffect"])(function () {
-    if (isExpanded) {
-      setClass(containerRef.current, 'is-without-arrow', noArrow);
-      setClass(containerRef.current, 'is-alternate', isAlternate);
-      setAttribute(containerRef.current, 'data-x-axis');
-      setAttribute(containerRef.current, 'data-y-axis');
-      setStyle(containerRef.current, 'top');
-      setStyle(containerRef.current, 'left');
-      setStyle(contentRef.current, 'maxHeight');
-      setStyle(contentRef.current, 'maxWidth');
-      return;
-    }
-
-    var refresh = function refresh() {
-      if (!containerRef.current || !contentRef.current) {
-        return;
-      }
-
-      var anchor = computeAnchorRect(anchorRefFallback, anchorRect, getAnchorRect, anchorRef, shouldAnchorIncludePadding);
-
-      if (!anchor) {
-        return;
-      }
-
-      var _containerRef$current = containerRef.current,
-          offsetParent = _containerRef$current.offsetParent,
-          ownerDocument = _containerRef$current.ownerDocument;
-      var relativeOffsetTop = 0; // If there is a positioned ancestor element that is not the body,
-      // subtract the position from the anchor rect. If the position of
-      // the popover is fixed, the offset parent is null or the body
-      // element, in which case the position is relative to the viewport.
-      // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
-
-      if (offsetParent && offsetParent !== ownerDocument.body) {
-        var offsetParentRect = offsetParent.getBoundingClientRect();
-        relativeOffsetTop = offsetParentRect.top;
-        anchor = new window.DOMRect(anchor.left - offsetParentRect.left, anchor.top - offsetParentRect.top, anchor.width, anchor.height);
-      }
-
-      var boundaryElement;
-
-      if (__unstableBoundaryParent) {
-        var _containerRef$current2;
-
-        boundaryElement = (_containerRef$current2 = containerRef.current.closest('.popover-slot')) === null || _containerRef$current2 === void 0 ? void 0 : _containerRef$current2.parentNode;
-      }
-
-      var usedContentSize = !contentSize.height ? contentRef.current.getBoundingClientRect() : contentSize;
-
-      var _computePopoverPositi = computePopoverPosition(anchor, usedContentSize, position, __unstableSticky, containerRef.current, relativeOffsetTop, boundaryElement),
-          popoverTop = _computePopoverPositi.popoverTop,
-          popoverLeft = _computePopoverPositi.popoverLeft,
-          xAxis = _computePopoverPositi.xAxis,
-          yAxis = _computePopoverPositi.yAxis,
-          contentHeight = _computePopoverPositi.contentHeight,
-          contentWidth = _computePopoverPositi.contentWidth;
-
-      if (typeof popoverTop === 'number' && typeof popoverLeft === 'number') {
-        setStyle(containerRef.current, 'top', popoverTop + 'px');
-        setStyle(containerRef.current, 'left', popoverLeft + 'px');
-      }
-
-      setClass(containerRef.current, 'is-without-arrow', noArrow || xAxis === 'center' && yAxis === 'middle');
-      setClass(containerRef.current, 'is-alternate', isAlternate);
-      setAttribute(containerRef.current, 'data-x-axis', xAxis);
-      setAttribute(containerRef.current, 'data-y-axis', yAxis);
-      setStyle(contentRef.current, 'maxHeight', typeof contentHeight === 'number' ? contentHeight + 'px' : '');
-      setStyle(contentRef.current, 'maxWidth', typeof contentWidth === 'number' ? contentWidth + 'px' : ''); // Compute the animation position
-
-      var yAxisMapping = {
-        top: 'bottom',
-        bottom: 'top'
-      };
-      var xAxisMapping = {
-        left: 'right',
-        right: 'left'
-      };
-      var animateYAxis = yAxisMapping[yAxis] || 'middle';
-      var animateXAxis = xAxisMapping[xAxis] || 'center';
-      setAnimateOrigin(animateXAxis + ' ' + animateYAxis);
-    };
-
-    refresh();
-    /*
-     * There are sometimes we need to reposition or resize the popover that
-     * are not handled by the resize/scroll window events (i.e. CSS changes
-     * in the layout that changes the position of the anchor).
-     *
-     * For these situations, we refresh the popover every 0.5s
-     */
-
-    var intervalHandle = window.setInterval(refresh, 500);
-    var rafId;
-
-    var refreshOnAnimationFrame = function refreshOnAnimationFrame() {
-      window.cancelAnimationFrame(rafId);
-      rafId = window.requestAnimationFrame(refresh);
-    }; // Sometimes a click trigger a layout change that affects the popover
-    // position. This is an opportunity to immediately refresh rather than
-    // at the interval.
-
-
-    window.addEventListener('click', refreshOnAnimationFrame);
-    window.addEventListener('resize', refresh);
-    window.addEventListener('scroll', refresh, true);
-    var observer;
-
-    if (__unstableObserveElement) {
-      observer = new window.MutationObserver(refresh);
-      observer.observe(__unstableObserveElement, {
-        attributes: true
-      });
-    }
-
-    return function () {
-      window.clearInterval(intervalHandle);
-      window.removeEventListener('resize', refresh);
-      window.removeEventListener('scroll', refresh, true);
-      window.removeEventListener('click', refreshOnAnimationFrame);
-      window.cancelAnimationFrame(rafId);
-
-      if (observer) {
-        observer.disconnect();
-      }
-    };
-  }, [isExpanded, anchorRect, getAnchorRect, anchorRef, shouldAnchorIncludePadding, position, contentSize, __unstableSticky, __unstableObserveElement, __unstableBoundaryParent]);
-  useFocusContentOnMount(focusOnMount, contentRef); // Event handlers
-
-  var maybeClose = function maybeClose(event) {
-    // Close on escape
-    if (event.keyCode === keycodes_build_module["b" /* ESCAPE */] && onClose) {
-      event.stopPropagation();
-      onClose();
-    } // Preserve original content prop behavior
-
-
-    if (onKeyDown) {
-      onKeyDown(event);
-    }
-  };
-  /**
-   * Shims an onFocusOutside callback to be compatible with a deprecated
-   * onClickOutside prop function, if provided.
-   *
-   * @param {FocusEvent} event Focus event from onFocusOutside.
-   */
-
-
-  function handleOnFocusOutside(event) {
-    // Defer to given `onFocusOutside` if specified. Call `onClose` only if
-    // both `onFocusOutside` and `onClickOutside` are unspecified. Doing so
-    // assures backwards-compatibility for prior `onClickOutside` default.
-    if (onFocusOutside) {
-      onFocusOutside(event);
-      return;
-    } else if (!onClickOutside) {
-      if (onClose) {
-        onClose();
-      }
-
-      return;
-    } // Simulate MouseEvent using FocusEvent#relatedTarget as emulated click
-    // target. MouseEvent constructor is unsupported in Internet Explorer.
-
-
-    var clickEvent;
-
-    try {
-      clickEvent = new window.MouseEvent('click');
-    } catch (error) {
-      clickEvent = document.createEvent('MouseEvent');
-      clickEvent.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-    }
-
-    Object.defineProperty(clickEvent, 'target', {
-      get: function get() {
-        return event.relatedTarget;
-      }
-    });
-    Object(deprecated_build_module["a" /* default */])('Popover onClickOutside prop', {
-      alternative: 'onFocusOutside'
-    });
-    onClickOutside(clickEvent);
-  } // Disable reason: We care to capture the _bubbled_ events from inputs
-  // within popover as inferring close intent.
-
-
-  var content = Object(external_this_wp_element_["createElement"])(detect_outside, {
-    onFocusOutside: handleOnFocusOutside
-  }, Object(external_this_wp_element_["createElement"])(build_module_animate, {
-    type: animate && animateOrigin ? 'appear' : null,
-    options: {
-      origin: animateOrigin
-    }
-  }, function (_ref3) {
-    var animateClassName = _ref3.className;
-    return Object(external_this_wp_element_["createElement"])(isolated_event_container["a" /* default */], Object(esm_extends["a" /* default */])({
-      className: classnames_default()('components-popover', className, animateClassName, {
-        'is-expanded': isExpanded,
-        'is-without-arrow': noArrow,
-        'is-alternate': isAlternate
+function valueEqual(a, b) {
+  // Test for strict equality first.
+  if (a === b) return true;
+
+  // Otherwise, if either of them == null they are not equal.
+  if (a == null || b == null) return false;
+
+  if (Array.isArray(a)) {
+    return (
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every(function(item, index) {
+        return valueEqual(item, b[index]);
       })
-    }, contentProps, {
-      onKeyDown: maybeClose,
-      ref: containerRef
-    }), isExpanded && Object(external_this_wp_element_["createElement"])(scroll_lock, null), isExpanded && Object(external_this_wp_element_["createElement"])("div", {
-      className: "components-popover__header"
-    }, Object(external_this_wp_element_["createElement"])("span", {
-      className: "components-popover__header-title"
-    }, headerTitle), Object(external_this_wp_element_["createElement"])(build_module_button["a" /* default */], {
-      className: "components-popover__close",
-      icon: library_close["a" /* default */],
-      onClick: onClose
-    })), Object(external_this_wp_element_["createElement"])("div", {
-      ref: contentRef,
-      className: "components-popover__content",
-      tabIndex: "-1"
-    }, Object(external_this_wp_element_["createElement"])("div", {
-      style: {
-        position: 'relative'
-      }
-    }, containerResizeListener, children)));
-  })); // Apply focus to element as long as focusOnMount is truthy; false is
-  // the only "disabled" value.
-
-  if (focusOnMount) {
-    content = Object(external_this_wp_element_["createElement"])(FocusManaged, null, content);
+    );
   }
 
-  if (slot.ref) {
-    content = Object(external_this_wp_element_["createElement"])(slot_fill_Fill, {
-      name: __unstableSlotName
-    }, content);
-  }
+  if (typeof a === 'object' || typeof b === 'object') {
+    var aValue = value_equal_valueOf(a);
+    var bValue = value_equal_valueOf(b);
 
-  if (anchorRef || anchorRect) {
-    return content;
-  }
+    if (aValue !== a || bValue !== b) return valueEqual(aValue, bValue);
 
-  return Object(external_this_wp_element_["createElement"])("span", {
-    ref: anchorRefFallback
-  }, content);
-};
-
-var PopoverContainer = popover_Popover;
-
-PopoverContainer.Slot = function (_ref4) {
-  var _ref4$name = _ref4.name,
-      name = _ref4$name === void 0 ? SLOT_NAME : _ref4$name;
-  return Object(external_this_wp_element_["createElement"])(slot_fill_Slot, {
-    bubblesVirtually: true,
-    name: name,
-    className: "popover-slot"
-  });
-};
-
-/* harmony default export */ var popover = __webpack_exports__["a"] = (PopoverContainer);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 84:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(10);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(57);
-/* harmony import */ var _wordpress_keycodes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(32);
-/* harmony import */ var _wordpress_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(49);
-
-
-
-
-
-
-
-
-function _createSuper(Derived) { return function () { var Super = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-var withConstrainedTabbing = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])(function (WrappedComponent) {
-  return /*#__PURE__*/function (_Component) {
-    Object(_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(_class, _Component);
-
-    var _super = _createSuper(_class);
-
-    function _class() {
-      var _this;
-
-      Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this, _class);
-
-      _this = _super.apply(this, arguments);
-      _this.focusContainRef = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createRef"])();
-      _this.handleTabBehaviour = _this.handleTabBehaviour.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_this));
-      return _this;
-    }
-
-    Object(_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_class, [{
-      key: "handleTabBehaviour",
-      value: function handleTabBehaviour(event) {
-        if (event.keyCode !== _wordpress_keycodes__WEBPACK_IMPORTED_MODULE_8__[/* TAB */ "e"]) {
-          return;
-        }
-
-        var tabbables = _wordpress_dom__WEBPACK_IMPORTED_MODULE_9__[/* focus */ "a"].tabbable.find(this.focusContainRef.current);
-
-        if (!tabbables.length) {
-          return;
-        }
-
-        var firstTabbable = tabbables[0];
-        var lastTabbable = tabbables[tabbables.length - 1];
-
-        if (event.shiftKey && event.target === firstTabbable) {
-          event.preventDefault();
-          lastTabbable.focus();
-        } else if (!event.shiftKey && event.target === lastTabbable) {
-          event.preventDefault();
-          firstTabbable.focus();
-          /*
-           * When pressing Tab and none of the tabbables has focus, the keydown
-           * event happens on the wrapper div: move focus on the first tabbable.
-           */
-        } else if (!tabbables.includes(event.target)) {
-          event.preventDefault();
-          firstTabbable.focus();
-        }
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        // Disable reason: this component is non-interactive, but must capture
-        // events from the wrapped component to determine when the Tab key is used.
-
-        /* eslint-disable jsx-a11y/no-static-element-interactions */
-        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])("div", {
-          onKeyDown: this.handleTabBehaviour,
-          ref: this.focusContainRef,
-          tabIndex: "-1"
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["createElement"])(WrappedComponent, this.props));
-        /* eslint-enable jsx-a11y/no-static-element-interactions */
-      }
-    }]);
-
-    return _class;
-  }(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__["Component"]);
-}, 'withConstrainedTabbing');
-/* harmony default export */ __webpack_exports__["a"] = (withConstrainedTabbing);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 85:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var _babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(57);
-
-
-
-
-
-
-
-
-
-function _createSuper(Derived) { return function () { var Super = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(_babel_runtime_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(_babel_runtime_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Input types which are classified as button types, for use in considering
- * whether element is a (focus-normalized) button.
- *
- * @type {string[]}
- */
-
-var INPUT_BUTTON_TYPES = ['button', 'submit'];
-/**
- * Returns true if the given element is a button element subject to focus
- * normalization, or false otherwise.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
- *
- * @param {Element} element Element to test.
- *
- * @return {boolean} Whether element is a button.
- */
-
-function isFocusNormalizedButton(element) {
-  switch (element.nodeName) {
-    case 'A':
-    case 'BUTTON':
-      return true;
-
-    case 'INPUT':
-      return Object(lodash__WEBPACK_IMPORTED_MODULE_8__["includes"])(INPUT_BUTTON_TYPES, element.type);
+    return Object.keys(Object.assign({}, a, b)).every(function(key) {
+      return valueEqual(a[key], b[key]);
+    });
   }
 
   return false;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])(function (WrappedComponent) {
-  return /*#__PURE__*/function (_Component) {
-    Object(_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(_class, _Component);
+/* harmony default export */ var value_equal = (valueEqual);
 
-    var _super = _createSuper(_class);
+// EXTERNAL MODULE: ./node_modules/tiny-invariant/dist/tiny-invariant.esm.js
+var tiny_invariant_esm = __webpack_require__(80);
 
-    function _class() {
-      var _this;
+// CONCATENATED MODULE: ./node_modules/history/esm/history.js
 
-      Object(_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(this, _class);
 
-      _this = _super.apply(this, arguments);
-      _this.bindNode = _this.bindNode.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
-      _this.cancelBlurCheck = _this.cancelBlurCheck.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
-      _this.queueBlurCheck = _this.queueBlurCheck.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
-      _this.normalizeButtonFocus = _this.normalizeButtonFocus.bind(Object(_babel_runtime_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(_this));
-      return _this;
+
+
+
+
+function addLeadingSlash(path) {
+  return path.charAt(0) === '/' ? path : '/' + path;
+}
+function stripLeadingSlash(path) {
+  return path.charAt(0) === '/' ? path.substr(1) : path;
+}
+function hasBasename(path, prefix) {
+  return path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 && '/?#'.indexOf(path.charAt(prefix.length)) !== -1;
+}
+function stripBasename(path, prefix) {
+  return hasBasename(path, prefix) ? path.substr(prefix.length) : path;
+}
+function stripTrailingSlash(path) {
+  return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+}
+function parsePath(path) {
+  var pathname = path || '/';
+  var search = '';
+  var hash = '';
+  var hashIndex = pathname.indexOf('#');
+
+  if (hashIndex !== -1) {
+    hash = pathname.substr(hashIndex);
+    pathname = pathname.substr(0, hashIndex);
+  }
+
+  var searchIndex = pathname.indexOf('?');
+
+  if (searchIndex !== -1) {
+    search = pathname.substr(searchIndex);
+    pathname = pathname.substr(0, searchIndex);
+  }
+
+  return {
+    pathname: pathname,
+    search: search === '?' ? '' : search,
+    hash: hash === '#' ? '' : hash
+  };
+}
+function createPath(location) {
+  var pathname = location.pathname,
+      search = location.search,
+      hash = location.hash;
+  var path = pathname || '/';
+  if (search && search !== '?') path += search.charAt(0) === '?' ? search : "?" + search;
+  if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : "#" + hash;
+  return path;
+}
+
+function createLocation(path, state, key, currentLocation) {
+  var location;
+
+  if (typeof path === 'string') {
+    // Two-arg form: push(path, state)
+    location = parsePath(path);
+    location.state = state;
+  } else {
+    // One-arg form: push(location)
+    location = Object(esm_extends["a" /* default */])({}, path);
+    if (location.pathname === undefined) location.pathname = '';
+
+    if (location.search) {
+      if (location.search.charAt(0) !== '?') location.search = '?' + location.search;
+    } else {
+      location.search = '';
     }
 
-    Object(_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_class, [{
-      key: "componentWillUnmount",
-      value: function componentWillUnmount() {
-        this.cancelBlurCheck();
-      }
-    }, {
-      key: "bindNode",
-      value: function bindNode(node) {
-        if (node) {
-          this.node = node;
+    if (location.hash) {
+      if (location.hash.charAt(0) !== '#') location.hash = '#' + location.hash;
+    } else {
+      location.hash = '';
+    }
+
+    if (state !== undefined && location.state === undefined) location.state = state;
+  }
+
+  try {
+    location.pathname = decodeURI(location.pathname);
+  } catch (e) {
+    if (e instanceof URIError) {
+      throw new URIError('Pathname "' + location.pathname + '" could not be decoded. ' + 'This is likely caused by an invalid percent-encoding.');
+    } else {
+      throw e;
+    }
+  }
+
+  if (key) location.key = key;
+
+  if (currentLocation) {
+    // Resolve incomplete/relative pathname relative to current location.
+    if (!location.pathname) {
+      location.pathname = currentLocation.pathname;
+    } else if (location.pathname.charAt(0) !== '/') {
+      location.pathname = resolve_pathname(location.pathname, currentLocation.pathname);
+    }
+  } else {
+    // When there is no prior location and pathname is empty, set it to /
+    if (!location.pathname) {
+      location.pathname = '/';
+    }
+  }
+
+  return location;
+}
+function locationsAreEqual(a, b) {
+  return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && a.key === b.key && value_equal(a.state, b.state);
+}
+
+function createTransitionManager() {
+  var prompt = null;
+
+  function setPrompt(nextPrompt) {
+     false ? undefined : void 0;
+    prompt = nextPrompt;
+    return function () {
+      if (prompt === nextPrompt) prompt = null;
+    };
+  }
+
+  function confirmTransitionTo(location, action, getUserConfirmation, callback) {
+    // TODO: If another transition starts while we're still confirming
+    // the previous one, we may end up in a weird state. Figure out the
+    // best way to handle this.
+    if (prompt != null) {
+      var result = typeof prompt === 'function' ? prompt(location, action) : prompt;
+
+      if (typeof result === 'string') {
+        if (typeof getUserConfirmation === 'function') {
+          getUserConfirmation(result, callback);
         } else {
-          delete this.node;
-          this.cancelBlurCheck();
+           false ? undefined : void 0;
+          callback(true);
         }
+      } else {
+        // Return false from a transition hook to cancel the transition.
+        callback(result !== false);
       }
-    }, {
-      key: "queueBlurCheck",
-      value: function queueBlurCheck(event) {
-        var _this2 = this;
-
-        // React does not allow using an event reference asynchronously
-        // due to recycling behavior, except when explicitly persisted.
-        event.persist(); // Skip blur check if clicking button. See `normalizeButtonFocus`.
-
-        if (this.preventBlurCheck) {
-          return;
-        }
-
-        this.blurCheckTimeout = setTimeout(function () {
-          // If document is not focused then focus should remain
-          // inside the wrapped component and therefore we cancel
-          // this blur event thereby leaving focus in place.
-          // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasFocus.
-          if (!document.hasFocus()) {
-            event.preventDefault();
-            return;
-          }
-
-          if ('function' === typeof _this2.node.handleFocusOutside) {
-            _this2.node.handleFocusOutside(event);
-          }
-        }, 0);
-      }
-    }, {
-      key: "cancelBlurCheck",
-      value: function cancelBlurCheck() {
-        clearTimeout(this.blurCheckTimeout);
-      }
-      /**
-       * Handles a mousedown or mouseup event to respectively assign and
-       * unassign a flag for preventing blur check on button elements. Some
-       * browsers, namely Firefox and Safari, do not emit a focus event on
-       * button elements when clicked, while others do. The logic here
-       * intends to normalize this as treating click on buttons as focus.
-       *
-       * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
-       *
-       * @param {MouseEvent} event Event for mousedown or mouseup.
-       */
-
-    }, {
-      key: "normalizeButtonFocus",
-      value: function normalizeButtonFocus(event) {
-        var type = event.type,
-            target = event.target;
-        var isInteractionEnd = Object(lodash__WEBPACK_IMPORTED_MODULE_8__["includes"])(['mouseup', 'touchend'], type);
-
-        if (isInteractionEnd) {
-          this.preventBlurCheck = false;
-        } else if (isFocusNormalizedButton(target)) {
-          this.preventBlurCheck = true;
-        }
-      }
-    }, {
-      key: "render",
-      value: function render() {
-        // Disable reason: See `normalizeButtonFocus` for browser-specific
-        // focus event normalization.
-
-        /* eslint-disable jsx-a11y/no-static-element-interactions */
-        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])("div", {
-          onFocus: this.cancelBlurCheck,
-          onMouseDown: this.normalizeButtonFocus,
-          onMouseUp: this.normalizeButtonFocus,
-          onTouchStart: this.normalizeButtonFocus,
-          onTouchEnd: this.normalizeButtonFocus,
-          onBlur: this.queueBlurCheck
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["createElement"])(WrappedComponent, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-          ref: this.bindNode
-        }, this.props)));
-        /* eslint-enable jsx-a11y/no-static-element-interactions */
-      }
-    }]);
-
-    return _class;
-  }(_wordpress_element__WEBPACK_IMPORTED_MODULE_7__["Component"]);
-}, 'withFocusOutside'));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 86:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-/**
- * WordPress dependencies
- */
-
-
-function stopPropagation(event) {
-  event.stopPropagation();
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["forwardRef"])(function (_ref, ref) {
-  var children = _ref.children,
-      props = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref, ["children"]);
-
-  // Disable reason: this stops certain events from propagating outside of the component.
-  //   - onMouseDown is disabled as this can cause interactions with other DOM elements
-
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__["createElement"])("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
-    ref: ref,
-    onMouseDown: stopPropagation
-  }), children);
-  /* eslint-enable jsx-a11y/no-static-element-interactions */
-}));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 87:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// UNUSED EXPORTS: Provider
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
-var toConsumableArray = __webpack_require__(15);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(11);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(4);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js + 1 modules
-var inherits = __webpack_require__(10);
-
-// EXTERNAL MODULE: external {"this":["wp","element"]}
-var external_this_wp_element_ = __webpack_require__(0);
-
-// EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/compose/build-module/utils/create-higher-order-component/index.js
-var create_higher_order_component = __webpack_require__(57);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(5);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/context.js
-
-
-
-
-
-
-
-
-
-function _createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-var _createContext = Object(external_this_wp_element_["createContext"])({
-  focusHistory: []
-}),
-    Provider = _createContext.Provider,
-    Consumer = _createContext.Consumer;
-
-Provider.displayName = 'FocusReturnProvider';
-Consumer.displayName = 'FocusReturnConsumer';
-/**
- * The maximum history length to capture for the focus stack. When exceeded,
- * items should be shifted from the stack for each consecutive push.
- *
- * @type {number}
- */
-
-var MAX_STACK_LENGTH = 100;
-
-var context_FocusReturnProvider = /*#__PURE__*/function (_Component) {
-  Object(inherits["a" /* default */])(FocusReturnProvider, _Component);
-
-  var _super = _createSuper(FocusReturnProvider);
-
-  function FocusReturnProvider() {
-    var _this;
-
-    Object(classCallCheck["a" /* default */])(this, FocusReturnProvider);
-
-    _this = _super.apply(this, arguments);
-    _this.onFocus = _this.onFocus.bind(Object(assertThisInitialized["a" /* default */])(_this));
-    _this.state = {
-      focusHistory: []
-    };
-    return _this;
+    } else {
+      callback(true);
+    }
   }
 
-  Object(createClass["a" /* default */])(FocusReturnProvider, [{
-    key: "onFocus",
-    value: function onFocus(event) {
-      var focusHistory = this.state.focusHistory; // Push the focused element to the history stack, keeping only unique
-      // members but preferring the _last_ occurrence of any duplicates.
-      // Lodash's `uniq` behavior favors the first occurrence, so the array
-      // is temporarily reversed prior to it being called upon. Uniqueness
-      // helps avoid situations where, such as in a constrained tabbing area,
-      // the user changes focus enough within a transient element that the
-      // stack may otherwise only consist of members pending destruction, at
-      // which point focus might have been lost.
+  var listeners = [];
 
-      var nextFocusHistory = Object(external_lodash_["uniq"])([].concat(Object(toConsumableArray["a" /* default */])(focusHistory), [event.target]).slice(-1 * MAX_STACK_LENGTH).reverse()).reverse();
-      this.setState({
-        focusHistory: nextFocusHistory
-      });
+  function appendListener(fn) {
+    var isActive = true;
+
+    function listener() {
+      if (isActive) fn.apply(void 0, arguments);
     }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          children = _this$props.children,
-          className = _this$props.className;
-      return Object(external_this_wp_element_["createElement"])(Provider, {
-        value: this.state
-      }, Object(external_this_wp_element_["createElement"])("div", {
-        onFocus: this.onFocus,
-        className: className
-      }, children));
-    }
-  }]);
 
-  return FocusReturnProvider;
-}(external_this_wp_element_["Component"]);
-
-/* harmony default export */ var with_focus_return_context = (context_FocusReturnProvider);
-
-//# sourceMappingURL=context.js.map
-// CONCATENATED MODULE: ./node_modules/@wordpress/components/build-module/higher-order/with-focus-return/index.js
-
-
-
-
-
-
-
-
-function with_focus_return_createSuper(Derived) { return function () { var Super = Object(getPrototypeOf["a" /* default */])(Derived), result; if (with_focus_return_isNativeReflectConstruct()) { var NewTarget = Object(getPrototypeOf["a" /* default */])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return Object(possibleConstructorReturn["a" /* default */])(this, result); }; }
-
-function with_focus_return_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-/**
- * External dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-/**
- * Returns true if the given object is component-like. An object is component-
- * like if it is an instance of wp.element.Component, or is a function.
- *
- * @param {*} object Object to test.
- *
- * @return {boolean} Whether object is component-like.
- */
-
-function isComponentLike(object) {
-  return object instanceof external_this_wp_element_["Component"] || typeof object === 'function';
-}
-/**
- * Higher Order Component used to be used to wrap disposable elements like
- * sidebars, modals, dropdowns. When mounting the wrapped component, we track a
- * reference to the current active element so we know where to restore focus
- * when the component is unmounted.
- *
- * @param {(WPComponent|Object)} options The component to be enhanced with
- *                                      focus return behavior, or an object
- *                                      describing the component and the
- *                                      focus return characteristics.
- *
- * @return {WPComponent} Component with the focus restauration behaviour.
- */
-
-
-function withFocusReturn(options) {
-  // Normalize as overloaded form `withFocusReturn( options )( Component )`
-  // or as `withFocusReturn( Component )`.
-  if (isComponentLike(options)) {
-    var WrappedComponent = options;
-    return withFocusReturn({})(WrappedComponent);
-  }
-
-  var _options$onFocusRetur = options.onFocusReturn,
-      onFocusReturn = _options$onFocusRetur === void 0 ? external_lodash_["stubTrue"] : _options$onFocusRetur;
-  return function (WrappedComponent) {
-    var FocusReturn = /*#__PURE__*/function (_Component) {
-      Object(inherits["a" /* default */])(FocusReturn, _Component);
-
-      var _super = with_focus_return_createSuper(FocusReturn);
-
-      function FocusReturn() {
-        var _this;
-
-        Object(classCallCheck["a" /* default */])(this, FocusReturn);
-
-        _this = _super.apply(this, arguments);
-        _this.ownFocusedElements = new Set();
-        _this.activeElementOnMount = document.activeElement;
-
-        _this.setIsFocusedFalse = function () {
-          return _this.isFocused = false;
-        };
-
-        _this.setIsFocusedTrue = function (event) {
-          _this.ownFocusedElements.add(event.target);
-
-          _this.isFocused = true;
-        };
-
-        return _this;
-      }
-
-      Object(createClass["a" /* default */])(FocusReturn, [{
-        key: "componentWillUnmount",
-        value: function componentWillUnmount() {
-          var activeElementOnMount = this.activeElementOnMount,
-              isFocused = this.isFocused,
-              ownFocusedElements = this.ownFocusedElements;
-
-          if (!isFocused) {
-            return;
-          } // Defer to the component's own explicit focus return behavior,
-          // if specified. The function should return `false` to prevent
-          // the default behavior otherwise occurring here. This allows
-          // for support that the `onFocusReturn` decides to allow the
-          // default behavior to occur under some conditions.
-
-
-          if (onFocusReturn() === false) {
-            return;
-          }
-
-          var stack = [].concat(Object(toConsumableArray["a" /* default */])(external_lodash_["without"].apply(void 0, [this.props.focus.focusHistory].concat(Object(toConsumableArray["a" /* default */])(ownFocusedElements)))), [activeElementOnMount]);
-          var candidate;
-
-          while (candidate = stack.pop()) {
-            if (document.body.contains(candidate)) {
-              candidate.focus();
-              return;
-            }
-          }
-        }
-      }, {
-        key: "render",
-        value: function render() {
-          return Object(external_this_wp_element_["createElement"])("div", {
-            onFocus: this.setIsFocusedTrue,
-            onBlur: this.setIsFocusedFalse
-          }, Object(external_this_wp_element_["createElement"])(WrappedComponent, this.props.childProps));
-        }
-      }]);
-
-      return FocusReturn;
-    }(external_this_wp_element_["Component"]);
-
-    return function (props) {
-      return Object(external_this_wp_element_["createElement"])(Consumer, null, function (context) {
-        return Object(external_this_wp_element_["createElement"])(FocusReturn, {
-          childProps: props,
-          focus: context
-        });
+    listeners.push(listener);
+    return function () {
+      isActive = false;
+      listeners = listeners.filter(function (item) {
+        return item !== listener;
       });
     };
+  }
+
+  function notifyListeners() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    listeners.forEach(function (listener) {
+      return listener.apply(void 0, args);
+    });
+  }
+
+  return {
+    setPrompt: setPrompt,
+    confirmTransitionTo: confirmTransitionTo,
+    appendListener: appendListener,
+    notifyListeners: notifyListeners
   };
 }
 
-/* harmony default export */ var with_focus_return = __webpack_exports__["a"] = (Object(create_higher_order_component["a" /* default */])(withFocusReturn, 'withFocusReturn'));
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 88:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var _interopRequireDefault = __webpack_require__(59);
-
-var _typeof2 = _interopRequireDefault(__webpack_require__(34));
-
-/* eslint-env browser */
-
-/**
- * This is the web browser implementation of `debug()`.
- */
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = localstorage();
-/**
- * Colors.
- */
-
-exports.colors = ['#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC', '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF', '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC', '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF', '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC', '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366', '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933', '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC', '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF', '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'];
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-// eslint-disable-next-line complexity
-
-function useColors() {
-  // NB: In an Electron preload script, document will be defined but not fully
-  // initialized. Since we know we're in Chrome, we'll just detect this case
-  // explicitly
-  if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
-    return true;
-  } // Internet Explorer and Edge do not support colors.
-
-
-  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-    return false;
-  } // Is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-
-
-  return typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
-  typeof window !== 'undefined' && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
-  // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
-  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
+var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+function getConfirmation(message, callback) {
+  callback(window.confirm(message)); // eslint-disable-line no-alert
 }
 /**
- * Colorize log arguments if enabled.
+ * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *
- * @api public
+ * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
+ * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
+ * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
+ */
+
+function supportsHistory() {
+  var ua = window.navigator.userAgent;
+  if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) && ua.indexOf('Mobile Safari') !== -1 && ua.indexOf('Chrome') === -1 && ua.indexOf('Windows Phone') === -1) return false;
+  return window.history && 'pushState' in window.history;
+}
+/**
+ * Returns true if browser fires popstate on hash change.
+ * IE10 and IE11 do not.
+ */
+
+function supportsPopStateOnHashChange() {
+  return window.navigator.userAgent.indexOf('Trident') === -1;
+}
+/**
+ * Returns false if using go(n) with hash history causes a full page reload.
+ */
+
+function supportsGoWithoutReloadUsingHash() {
+  return window.navigator.userAgent.indexOf('Firefox') === -1;
+}
+/**
+ * Returns true if a given popstate event is an extraneous WebKit event.
+ * Accounts for the fact that Chrome on iOS fires real popstate events
+ * containing undefined state when pressing the back button.
+ */
+
+function isExtraneousPopstateEvent(event) {
+  return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
+}
+
+var PopStateEvent = 'popstate';
+var HashChangeEvent = 'hashchange';
+
+function getHistoryState() {
+  try {
+    return window.history.state || {};
+  } catch (e) {
+    // IE 11 sometimes throws when accessing window.history.state
+    // See https://github.com/ReactTraining/history/pull/289
+    return {};
+  }
+}
+/**
+ * Creates a history object that uses the HTML5 history API including
+ * pushState, replaceState, and the popstate event.
  */
 
 
-function formatArgs(args) {
-  args[0] = (this.useColors ? '%c' : '') + this.namespace + (this.useColors ? ' %c' : ' ') + args[0] + (this.useColors ? '%c ' : ' ') + '+' + module.exports.humanize(this.diff);
-
-  if (!this.useColors) {
-    return;
+function createBrowserHistory(props) {
+  if (props === void 0) {
+    props = {};
   }
 
-  var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit'); // The final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
+  !canUseDOM ?  false ? undefined : Object(tiny_invariant_esm["a" /* default */])(false) : void 0;
+  var globalHistory = window.history;
+  var canUseHistory = supportsHistory();
+  var needsHashChangeListener = !supportsPopStateOnHashChange();
+  var _props = props,
+      _props$forceRefresh = _props.forceRefresh,
+      forceRefresh = _props$forceRefresh === void 0 ? false : _props$forceRefresh,
+      _props$getUserConfirm = _props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
+      _props$keyLength = _props.keyLength,
+      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
+  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function (match) {
-    if (match === '%%') {
-      return;
-    }
+  function getDOMLocation(historyState) {
+    var _ref = historyState || {},
+        key = _ref.key,
+        state = _ref.state;
 
-    index++;
+    var _window$location = window.location,
+        pathname = _window$location.pathname,
+        search = _window$location.search,
+        hash = _window$location.hash;
+    var path = pathname + search + hash;
+     false ? undefined : void 0;
+    if (basename) path = stripBasename(path, basename);
+    return createLocation(path, state, key);
+  }
 
-    if (match === '%c') {
-      // We only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-  args.splice(lastC, 0, c);
-}
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
+  function createKey() {
+    return Math.random().toString(36).substr(2, keyLength);
+  }
 
+  var transitionManager = createTransitionManager();
 
-function log() {
-  var _console;
+  function setState(nextState) {
+    Object(esm_extends["a" /* default */])(history, nextState);
 
-  // This hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return (typeof console === "undefined" ? "undefined" : (0, _typeof2.default)(console)) === 'object' && console.log && (_console = console).log.apply(_console, arguments);
-}
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
+    history.length = globalHistory.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
 
+  function handlePopState(event) {
+    // Ignore extraneous popstate events in WebKit.
+    if (isExtraneousPopstateEvent(event)) return;
+    handlePop(getDOMLocation(event.state));
+  }
 
-function save(namespaces) {
-  try {
-    if (namespaces) {
-      exports.storage.setItem('debug', namespaces);
+  function handleHashChange() {
+    handlePop(getDOMLocation(getHistoryState()));
+  }
+
+  var forceNextPop = false;
+
+  function handlePop(location) {
+    if (forceNextPop) {
+      forceNextPop = false;
+      setState();
     } else {
-      exports.storage.removeItem('debug');
-    }
-  } catch (error) {// Swallow
-    // XXX (@Qix-) should we be logging these?
-  }
-}
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-
-function load() {
-  var r;
-
-  try {
-    r = exports.storage.getItem('debug');
-  } catch (error) {// Swallow
-    // XXX (@Qix-) should we be logging these?
-  } // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-
-
-  if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
-  }
-
-  return r;
-}
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-
-function localstorage() {
-  try {
-    // TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
-    // The Browser also has localStorage in the global context.
-    return localStorage;
-  } catch (error) {// Swallow
-    // XXX (@Qix-) should we be logging these?
-  }
-}
-
-module.exports = __webpack_require__(123)(exports);
-var formatters = module.exports.formatters;
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-formatters.j = function (v) {
-  try {
-    return JSON.stringify(v);
-  } catch (error) {
-    return '[UnexpectedJSONParseError]: ' + error.message;
-  }
-};
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
-
-/***/ }),
-
-/***/ 89:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useMediaQuery; });
-/* harmony import */ var _babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-
-
-/**
- * WordPress dependencies
- */
-
-/**
- * Runs a media query and returns its value when it changes.
- *
- * @param {string} [query] Media Query.
- * @return {boolean} return value of the media query.
- */
-
-function useMediaQuery(query) {
-  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useState"])(query && window.matchMedia(query).matches),
-      _useState2 = Object(_babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(_useState, 2),
-      match = _useState2[0],
-      setMatch = _useState2[1];
-
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
-    if (!query) {
-      return;
-    }
-
-    var updateMatch = function updateMatch() {
-      return setMatch(window.matchMedia(query).matches);
-    };
-
-    updateMatch();
-    var list = window.matchMedia(query);
-    list.addListener(updateMatch);
-    return function () {
-      list.removeListener(updateMatch);
-    };
-  }, [query]);
-  return query && match;
-}
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-/***/ }),
-
-/***/ 90:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return warning; });
-function isDev() {
-  return typeof process !== 'undefined' && process.env && "production" !== 'production';
-}
-/**
- * Shows a warning with `message` if environment is not `production`.
- *
- * @param {string} message Message to show in the warning.
- *
- * @example
- * ```js
- * import warning from '@wordpress/warning';
- *
- * function MyComponent( props ) {
- *   if ( ! props.title ) {
- *     warning( '`props.title` was not passed' );
- *   }
- *   ...
- * }
- * ```
- */
-
-
-function warning(message) {
-  if (!isDev()) {
-    return;
-  } // eslint-disable-next-line no-console
-
-
-  console.warn(message); // Throwing an error and catching it immediately to improve debugging
-  // A consumer can use 'pause on caught exceptions'
-  // https://github.com/facebook/react/issues/4216
-
-  try {
-    throw Error(message);
-  } catch (x) {// do nothing
-  }
-}
-//# sourceMappingURL=index.js.map
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
-
-/***/ }),
-
-/***/ 91:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-
-
-/**
- * External dependencies
- */
-
-
-function Shortcut(_ref) {
-  var shortcut = _ref.shortcut,
-      className = _ref.className;
-
-  if (!shortcut) {
-    return null;
-  }
-
-  var displayText;
-  var ariaLabel;
-
-  if (Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isString"])(shortcut)) {
-    displayText = shortcut;
-  }
-
-  if (Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isObject"])(shortcut)) {
-    displayText = shortcut.display;
-    ariaLabel = shortcut.ariaLabel;
-  }
-
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", {
-    className: className,
-    "aria-label": ariaLabel
-  }, displayText);
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Shortcut);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 96:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var replace = String.prototype.replace;
-var percentTwenties = /%20/g;
-
-var util = __webpack_require__(74);
-
-var Format = {
-    RFC1738: 'RFC1738',
-    RFC3986: 'RFC3986'
-};
-
-module.exports = util.assign(
-    {
-        'default': Format.RFC3986,
-        formatters: {
-            RFC1738: function (value) {
-                return replace.call(value, percentTwenties, '+');
-            },
-            RFC3986: function (value) {
-                return String(value);
-            }
+      var action = 'POP';
+      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+        if (ok) {
+          setState({
+            action: action,
+            location: location
+          });
+        } else {
+          revertPop(location);
         }
+      });
+    }
+  }
+
+  function revertPop(fromLocation) {
+    var toLocation = history.location; // TODO: We could probably make this more reliable by
+    // keeping a list of keys we've seen in sessionStorage.
+    // Instead, we just default to 0 for keys we don't know.
+
+    var toIndex = allKeys.indexOf(toLocation.key);
+    if (toIndex === -1) toIndex = 0;
+    var fromIndex = allKeys.indexOf(fromLocation.key);
+    if (fromIndex === -1) fromIndex = 0;
+    var delta = toIndex - fromIndex;
+
+    if (delta) {
+      forceNextPop = true;
+      go(delta);
+    }
+  }
+
+  var initialLocation = getDOMLocation(getHistoryState());
+  var allKeys = [initialLocation.key]; // Public interface
+
+  function createHref(location) {
+    return basename + createPath(location);
+  }
+
+  function push(path, state) {
+     false ? undefined : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var href = createHref(location);
+      var key = location.key,
+          state = location.state;
+
+      if (canUseHistory) {
+        globalHistory.pushState({
+          key: key,
+          state: state
+        }, null, href);
+
+        if (forceRefresh) {
+          window.location.href = href;
+        } else {
+          var prevIndex = allKeys.indexOf(history.location.key);
+          var nextKeys = allKeys.slice(0, prevIndex + 1);
+          nextKeys.push(location.key);
+          allKeys = nextKeys;
+          setState({
+            action: action,
+            location: location
+          });
+        }
+      } else {
+         false ? undefined : void 0;
+        window.location.href = href;
+      }
+    });
+  }
+
+  function replace(path, state) {
+     false ? undefined : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var href = createHref(location);
+      var key = location.key,
+          state = location.state;
+
+      if (canUseHistory) {
+        globalHistory.replaceState({
+          key: key,
+          state: state
+        }, null, href);
+
+        if (forceRefresh) {
+          window.location.replace(href);
+        } else {
+          var prevIndex = allKeys.indexOf(history.location.key);
+          if (prevIndex !== -1) allKeys[prevIndex] = location.key;
+          setState({
+            action: action,
+            location: location
+          });
+        }
+      } else {
+         false ? undefined : void 0;
+        window.location.replace(href);
+      }
+    });
+  }
+
+  function go(n) {
+    globalHistory.go(n);
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  var listenerCount = 0;
+
+  function checkDOMListeners(delta) {
+    listenerCount += delta;
+
+    if (listenerCount === 1 && delta === 1) {
+      window.addEventListener(PopStateEvent, handlePopState);
+      if (needsHashChangeListener) window.addEventListener(HashChangeEvent, handleHashChange);
+    } else if (listenerCount === 0) {
+      window.removeEventListener(PopStateEvent, handlePopState);
+      if (needsHashChangeListener) window.removeEventListener(HashChangeEvent, handleHashChange);
+    }
+  }
+
+  var isBlocked = false;
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  }
+
+  function listen(listener) {
+    var unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
+    return function () {
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  }
+
+  var history = {
+    length: globalHistory.length,
+    action: 'POP',
+    location: initialLocation,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    block: block,
+    listen: listen
+  };
+  return history;
+}
+
+var HashChangeEvent$1 = 'hashchange';
+var HashPathCoders = {
+  hashbang: {
+    encodePath: function encodePath(path) {
+      return path.charAt(0) === '!' ? path : '!/' + stripLeadingSlash(path);
     },
-    Format
-);
-
-
-/***/ }),
-
-/***/ 97:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export isHorizontalEdge */
-/* unused harmony export isVerticalEdge */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRectangleFromRange; });
-/* unused harmony export computeCaretRect */
-/* unused harmony export placeCaretAtHorizontalEdge */
-/* unused harmony export placeCaretAtVerticalEdge */
-/* unused harmony export isTextField */
-/* unused harmony export isNumberInput */
-/* unused harmony export documentHasTextSelection */
-/* unused harmony export documentHasUncollapsedSelection */
-/* unused harmony export documentHasSelection */
-/* unused harmony export isEntirelySelected */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getScrollContainer; });
-/* unused harmony export getOffsetParent */
-/* unused harmony export replace */
-/* unused harmony export remove */
-/* unused harmony export insertAfter */
-/* unused harmony export unwrap */
-/* unused harmony export replaceTag */
-/* unused harmony export wrap */
-/* unused harmony export __unstableStripHTML */
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * External dependencies
- */
-
-/**
- * Browser dependencies
- */
-
-var _window = window,
-    DOMParser = _window.DOMParser,
-    getComputedStyle = _window.getComputedStyle;
-var _window$Node = window.Node,
-    TEXT_NODE = _window$Node.TEXT_NODE,
-    ELEMENT_NODE = _window$Node.ELEMENT_NODE,
-    DOCUMENT_POSITION_PRECEDING = _window$Node.DOCUMENT_POSITION_PRECEDING,
-    DOCUMENT_POSITION_FOLLOWING = _window$Node.DOCUMENT_POSITION_FOLLOWING;
-/**
- * Returns true if the given selection object is in the forward direction, or
- * false otherwise.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
- *
- * @param {Selection} selection Selection object to check.
- *
- * @return {boolean} Whether the selection is forward.
- */
-
-function isSelectionForward(selection) {
-  var anchorNode = selection.anchorNode,
-      focusNode = selection.focusNode,
-      anchorOffset = selection.anchorOffset,
-      focusOffset = selection.focusOffset;
-  var position = anchorNode.compareDocumentPosition(focusNode); // Disable reason: `Node#compareDocumentPosition` returns a bitmask value,
-  // so bitwise operators are intended.
-
-  /* eslint-disable no-bitwise */
-  // Compare whether anchor node precedes focus node. If focus node (where
-  // end of selection occurs) is after the anchor node, it is forward.
-
-  if (position & DOCUMENT_POSITION_PRECEDING) {
-    return false;
-  }
-
-  if (position & DOCUMENT_POSITION_FOLLOWING) {
-    return true;
-  }
-  /* eslint-enable no-bitwise */
-  // `compareDocumentPosition` returns 0 when passed the same node, in which
-  // case compare offsets.
-
-
-  if (position === 0) {
-    return anchorOffset <= focusOffset;
-  } // This should never be reached, but return true as default case.
-
-
-  return true;
-}
-/**
- * Check whether the selection is at the edge of the container. Checks for
- * horizontal position by default. Set `onlyVertical` to true to check only
- * vertically.
- *
- * @param {Element} container    Focusable element.
- * @param {boolean} isReverse    Set to true to check left, false to check right.
- * @param {boolean} onlyVertical Set to true to check only vertical position.
- *
- * @return {boolean} True if at the edge, false if not.
- */
-
-
-function isEdge(container, isReverse, onlyVertical) {
-  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], container.tagName)) {
-    if (container.selectionStart !== container.selectionEnd) {
-      return false;
+    decodePath: function decodePath(path) {
+      return path.charAt(0) === '!' ? path.substr(1) : path;
     }
-
-    if (isReverse) {
-      return container.selectionStart === 0;
-    }
-
-    return container.value.length === container.selectionStart;
+  },
+  noslash: {
+    encodePath: stripLeadingSlash,
+    decodePath: addLeadingSlash
+  },
+  slash: {
+    encodePath: addLeadingSlash,
+    decodePath: addLeadingSlash
   }
+};
 
-  if (!container.isContentEditable) {
-    return true;
-  }
-
-  var selection = window.getSelection();
-
-  if (!selection.rangeCount) {
-    return false;
-  }
-
-  var originalRange = selection.getRangeAt(0);
-  var range = originalRange.cloneRange();
-  var isForward = isSelectionForward(selection);
-  var isCollapsed = selection.isCollapsed; // Collapse in direction of selection.
-
-  if (!isCollapsed) {
-    range.collapse(!isForward);
-  }
-
-  var rangeRect = getRectangleFromRange(range);
-
-  if (!rangeRect) {
-    return false;
-  }
-
-  var computedStyle = window.getComputedStyle(container);
-  var lineHeight = parseInt(computedStyle.lineHeight, 10) || 0; // Only consider the multiline selection at the edge if the direction is
-  // towards the edge.
-
-  if (!isCollapsed && rangeRect.height > lineHeight && isForward === isReverse) {
-    return false;
-  }
-
-  var padding = parseInt(computedStyle["padding".concat(isReverse ? 'Top' : 'Bottom')], 10) || 0; // Calculate a buffer that is half the line height. In some browsers, the
-  // selection rectangle may not fill the entire height of the line, so we add
-  // 3/4 the line height to the selection rectangle to ensure that it is well
-  // over its line boundary.
-
-  var buffer = 3 * parseInt(lineHeight, 10) / 4;
-  var containerRect = container.getBoundingClientRect();
-  var originalRangeRect = getRectangleFromRange(originalRange);
-  var verticalEdge = isReverse ? containerRect.top + padding > originalRangeRect.top - buffer : containerRect.bottom - padding < originalRangeRect.bottom + buffer;
-
-  if (!verticalEdge) {
-    return false;
-  }
-
-  if (onlyVertical) {
-    return true;
-  } // In the case of RTL scripts, the horizontal edge is at the opposite side.
-
-
-  var direction = computedStyle.direction;
-  var isReverseDir = direction === 'rtl' ? !isReverse : isReverse; // To calculate the horizontal position, we insert a test range and see if
-  // this test range has the same horizontal position. This method proves to
-  // be better than a DOM-based calculation, because it ignores empty text
-  // nodes and a trailing line break element. In other words, we need to check
-  // visual positioning, not DOM positioning.
-
-  var x = isReverseDir ? containerRect.left + 1 : containerRect.right - 1;
-  var y = isReverse ? containerRect.top + buffer : containerRect.bottom - buffer;
-  var testRange = hiddenCaretRangeFromPoint(document, x, y, container);
-
-  if (!testRange) {
-    return false;
-  }
-
-  var side = isReverseDir ? 'left' : 'right';
-  var testRect = getRectangleFromRange(testRange); // Allow the position to be 1px off.
-
-  return Math.abs(testRect[side] - rangeRect[side]) <= 1;
+function stripHash(url) {
+  var hashIndex = url.indexOf('#');
+  return hashIndex === -1 ? url : url.slice(0, hashIndex);
 }
-/**
- * Check whether the selection is horizontally at the edge of the container.
- *
- * @param {Element} container Focusable element.
- * @param {boolean} isReverse Set to true to check left, false for right.
- *
- * @return {boolean} True if at the horizontal edge, false if not.
- */
 
-
-function isHorizontalEdge(container, isReverse) {
-  return isEdge(container, isReverse);
+function getHashPath() {
+  // We can't use window.location.hash here because it's not
+  // consistent across browsers - Firefox will pre-decode it!
+  var href = window.location.href;
+  var hashIndex = href.indexOf('#');
+  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
 }
-/**
- * Check whether the selection is vertically at the edge of the container.
- *
- * @param {Element} container Focusable element.
- * @param {boolean} isReverse Set to true to check top, false for bottom.
- *
- * @return {boolean} True if at the vertical edge, false if not.
- */
 
-function isVerticalEdge(container, isReverse) {
-  return isEdge(container, isReverse, true);
+function pushHashPath(path) {
+  window.location.hash = path;
 }
-/**
- * Get the rectangle of a given Range.
- *
- * @param {Range} range The range.
- *
- * @return {DOMRect} The rectangle.
- */
 
-function getRectangleFromRange(range) {
-  // For uncollapsed ranges, get the rectangle that bounds the contents of the
-  // range; this a rectangle enclosing the union of the bounding rectangles
-  // for all the elements in the range.
-  if (!range.collapsed) {
-    return range.getBoundingClientRect();
-  }
-
-  var _range = range,
-      startContainer = _range.startContainer; // Correct invalid "BR" ranges. The cannot contain any children.
-
-  if (startContainer.nodeName === 'BR') {
-    var parentNode = startContainer.parentNode;
-    var index = Array.from(parentNode.childNodes).indexOf(startContainer);
-    range = document.createRange();
-    range.setStart(parentNode, index);
-    range.setEnd(parentNode, index);
-  }
-
-  var rect = range.getClientRects()[0]; // If the collapsed range starts (and therefore ends) at an element node,
-  // `getClientRects` can be empty in some browsers. This can be resolved
-  // by adding a temporary text node with zero-width space to the range.
-  //
-  // See: https://stackoverflow.com/a/6847328/995445
-
-  if (!rect) {
-    var padNode = document.createTextNode("\u200B"); // Do not modify the live range.
-
-    range = range.cloneRange();
-    range.insertNode(padNode);
-    rect = range.getClientRects()[0];
-    padNode.parentNode.removeChild(padNode);
-  }
-
-  return rect;
+function replaceHashPath(path) {
+  window.location.replace(stripHash(window.location.href) + '#' + path);
 }
-/**
- * Get the rectangle for the selection in a container.
- *
- * @return {?DOMRect} The rectangle.
- */
 
-function computeCaretRect() {
-  var selection = window.getSelection();
-  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
-
-  if (!range) {
-    return;
+function createHashHistory(props) {
+  if (props === void 0) {
+    props = {};
   }
 
-  return getRectangleFromRange(range);
-}
-/**
- * Places the caret at start or end of a given element.
- *
- * @param {Element} container Focusable element.
- * @param {boolean} isReverse True for end, false for start.
- */
+  !canUseDOM ?  false ? undefined : Object(tiny_invariant_esm["a" /* default */])(false) : void 0;
+  var globalHistory = window.history;
+  var canGoWithoutReload = supportsGoWithoutReloadUsingHash();
+  var _props = props,
+      _props$getUserConfirm = _props.getUserConfirmation,
+      getUserConfirmation = _props$getUserConfirm === void 0 ? getConfirmation : _props$getUserConfirm,
+      _props$hashType = _props.hashType,
+      hashType = _props$hashType === void 0 ? 'slash' : _props$hashType;
+  var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
+  var _HashPathCoders$hashT = HashPathCoders[hashType],
+      encodePath = _HashPathCoders$hashT.encodePath,
+      decodePath = _HashPathCoders$hashT.decodePath;
 
-function placeCaretAtHorizontalEdge(container, isReverse) {
-  if (!container) {
-    return;
+  function getDOMLocation() {
+    var path = decodePath(getHashPath());
+     false ? undefined : void 0;
+    if (basename) path = stripBasename(path, basename);
+    return createLocation(path);
   }
 
-  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], container.tagName)) {
-    container.focus();
+  var transitionManager = createTransitionManager();
 
-    if (isReverse) {
-      container.selectionStart = container.value.length;
-      container.selectionEnd = container.value.length;
+  function setState(nextState) {
+    Object(esm_extends["a" /* default */])(history, nextState);
+
+    history.length = globalHistory.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
+
+  var forceNextPop = false;
+  var ignorePath = null;
+
+  function locationsAreEqual$$1(a, b) {
+    return a.pathname === b.pathname && a.search === b.search && a.hash === b.hash;
+  }
+
+  function handleHashChange() {
+    var path = getHashPath();
+    var encodedPath = encodePath(path);
+
+    if (path !== encodedPath) {
+      // Ensure we always have a properly-encoded hash.
+      replaceHashPath(encodedPath);
     } else {
-      container.selectionStart = 0;
-      container.selectionEnd = 0;
-    }
+      var location = getDOMLocation();
+      var prevLocation = history.location;
+      if (!forceNextPop && locationsAreEqual$$1(prevLocation, location)) return; // A hashchange doesn't always == location change.
 
-    return;
-  }
+      if (ignorePath === createPath(location)) return; // Ignore this change; we already setState in push/replace.
 
-  container.focus();
-
-  if (!container.isContentEditable) {
-    return;
-  } // Select on extent child of the container, not the container itself. This
-  // avoids the selection always being `endOffset` of 1 when placed at end,
-  // where `startContainer`, `endContainer` would always be container itself.
-
-
-  var rangeTarget = container[isReverse ? 'lastChild' : 'firstChild']; // If no range target, it implies that the container is empty. Focusing is
-  // sufficient for caret to be placed correctly.
-
-  if (!rangeTarget) {
-    return;
-  }
-
-  var selection = window.getSelection();
-  var range = document.createRange();
-  range.selectNodeContents(rangeTarget);
-  range.collapse(!isReverse);
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
-/**
- * Polyfill.
- * Get a collapsed range for a given point.
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
- *
- * @param {Document} doc The document of the range.
- * @param {number}    x   Horizontal position within the current viewport.
- * @param {number}    y   Vertical position within the current viewport.
- *
- * @return {?Range} The best range for the given point.
- */
-
-function caretRangeFromPoint(doc, x, y) {
-  if (doc.caretRangeFromPoint) {
-    return doc.caretRangeFromPoint(x, y);
-  }
-
-  if (!doc.caretPositionFromPoint) {
-    return null;
-  }
-
-  var point = doc.caretPositionFromPoint(x, y); // If x or y are negative, outside viewport, or there is no text entry node.
-  // https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
-
-  if (!point) {
-    return null;
-  }
-
-  var range = doc.createRange();
-  range.setStart(point.offsetNode, point.offset);
-  range.collapse(true);
-  return range;
-}
-/**
- * Get a collapsed range for a given point.
- * Gives the container a temporary high z-index (above any UI).
- * This is preferred over getting the UI nodes and set styles there.
- *
- * @param {Document} doc       The document of the range.
- * @param {number}    x         Horizontal position within the current viewport.
- * @param {number}    y         Vertical position within the current viewport.
- * @param {Element}  container Container in which the range is expected to be found.
- *
- * @return {?Range} The best range for the given point.
- */
-
-
-function hiddenCaretRangeFromPoint(doc, x, y, container) {
-  var originalZIndex = container.style.zIndex;
-  var originalPosition = container.style.position; // A z-index only works if the element position is not static.
-
-  container.style.zIndex = '10000';
-  container.style.position = 'relative';
-  var range = caretRangeFromPoint(doc, x, y);
-  container.style.zIndex = originalZIndex;
-  container.style.position = originalPosition;
-  return range;
-}
-/**
- * Places the caret at the top or bottom of a given element.
- *
- * @param {Element} container           Focusable element.
- * @param {boolean} isReverse           True for bottom, false for top.
- * @param {DOMRect} [rect]              The rectangle to position the caret with.
- * @param {boolean} [mayUseScroll=true] True to allow scrolling, false to disallow.
- */
-
-
-function placeCaretAtVerticalEdge(container, isReverse, rect) {
-  var mayUseScroll = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-
-  if (!container) {
-    return;
-  }
-
-  if (!rect || !container.isContentEditable) {
-    placeCaretAtHorizontalEdge(container, isReverse);
-    return;
-  } // Offset by a buffer half the height of the caret rect. This is needed
-  // because caretRangeFromPoint may default to the end of the selection if
-  // offset is too close to the edge. It's unclear how to precisely calculate
-  // this threshold; it may be the padded area of some combination of line
-  // height, caret height, and font size. The buffer offset is effectively
-  // equivalent to a point at half the height of a line of text.
-
-
-  var buffer = rect.height / 2;
-  var editableRect = container.getBoundingClientRect();
-  var x = rect.left;
-  var y = isReverse ? editableRect.bottom - buffer : editableRect.top + buffer;
-  var range = hiddenCaretRangeFromPoint(document, x, y, container);
-
-  if (!range || !container.contains(range.startContainer)) {
-    if (mayUseScroll && (!range || !range.startContainer || !range.startContainer.contains(container))) {
-      // Might be out of view.
-      // Easier than attempting to calculate manually.
-      container.scrollIntoView(isReverse);
-      placeCaretAtVerticalEdge(container, isReverse, rect, false);
-      return;
-    }
-
-    placeCaretAtHorizontalEdge(container, isReverse);
-    return;
-  }
-
-  var selection = window.getSelection();
-  selection.removeAllRanges();
-  selection.addRange(range);
-  container.focus(); // Editable was already focussed, it goes back to old range...
-  // This fixes it.
-
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
-/**
- * Check whether the given element is a text field, where text field is defined
- * by the ability to select within the input, or that it is contenteditable.
- *
- * See: https://html.spec.whatwg.org/#textFieldSelection
- *
- * @param {HTMLElement} element The HTML element.
- *
- * @return {boolean} True if the element is an text field, false if not.
- */
-
-function isTextField(element) {
-  var nodeName = element.nodeName,
-      contentEditable = element.contentEditable;
-  var nonTextInputs = ['button', 'checkbox', 'hidden', 'file', 'radio', 'image', 'range', 'reset', 'submit', 'number'];
-  return nodeName === 'INPUT' && !nonTextInputs.includes(element.type) || nodeName === 'TEXTAREA' || contentEditable === 'true';
-}
-/**
- * Check whether the given element is an input field of type number
- * and has a valueAsNumber
- *
- * @param {HTMLElement} element The HTML element.
- *
- * @return {boolean} True if the element is input and holds a number.
- */
-
-function isNumberInput(element) {
-  var nodeName = element.nodeName,
-      type = element.type,
-      valueAsNumber = element.valueAsNumber;
-  return nodeName === 'INPUT' && type === 'number' && !!valueAsNumber;
-}
-/**
- * Check whether the current document has selected text. This applies to ranges
- * of text in the document, and not selection inside <input> and <textarea>
- * elements.
- *
- * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
- *
- * @return {boolean} True if there is selection, false if not.
- */
-
-function documentHasTextSelection() {
-  var selection = window.getSelection();
-  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
-  return range && !range.collapsed;
-}
-/**
- * Check whether the given element, assumed an input field or textarea,
- * contains a (uncollapsed) selection of text.
- *
- * Note: this is perhaps an abuse of the term "selection", since these elements
- * manage selection differently and aren't covered by Selection#collapsed.
- *
- * See: https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection#Related_objects.
- *
- * @param {HTMLElement} element The HTML element.
- *
- * @return {boolean} Whether the input/textareaa element has some "selection".
- */
-
-function inputFieldHasUncollapsedSelection(element) {
-  if (!isTextField(element) && !isNumberInput(element)) {
-    return false;
-  }
-
-  try {
-    var selectionStart = element.selectionStart,
-        selectionEnd = element.selectionEnd;
-    return selectionStart !== null && selectionStart !== selectionEnd;
-  } catch (error) {
-    // Safari throws an exception when trying to get `selectionStart`
-    // on non-text <input> elements (which, understandably, don't
-    // have the text selection API). We catch this via a try/catch
-    // block, as opposed to a more explicit check of the element's
-    // input types, because of Safari's non-standard behavior. This
-    // also means we don't have to worry about the list of input
-    // types that support `selectionStart` changing as the HTML spec
-    // evolves over time.
-    return false;
-  }
-}
-/**
- * Check whether the current document has any sort of selection. This includes
- * ranges of text across elements and any selection inside <input> and
- * <textarea> elements.
- *
- * @return {boolean} Whether there is any sort of "selection" in the document.
- */
-
-
-function documentHasUncollapsedSelection() {
-  return documentHasTextSelection() || inputFieldHasUncollapsedSelection(document.activeElement);
-}
-/**
- * Check whether the current document has a selection. This checks for both
- * focus in an input field and general text selection.
- *
- * @return {boolean} True if there is selection, false if not.
- */
-
-function documentHasSelection() {
-  return isTextField(document.activeElement) || isNumberInput(document.activeElement) || documentHasTextSelection();
-}
-/**
- * Check whether the contents of the element have been entirely selected.
- * Returns true if there is no possibility of selection.
- *
- * @param {Element} element The element to check.
- *
- * @return {boolean} True if entirely selected, false if not.
- */
-
-function isEntirelySelected(element) {
-  if (Object(lodash__WEBPACK_IMPORTED_MODULE_0__["includes"])(['INPUT', 'TEXTAREA'], element.nodeName)) {
-    return element.selectionStart === 0 && element.value.length === element.selectionEnd;
-  }
-
-  if (!element.isContentEditable) {
-    return true;
-  }
-
-  var selection = window.getSelection();
-  var range = selection.rangeCount ? selection.getRangeAt(0) : null;
-
-  if (!range) {
-    return true;
-  }
-
-  var startContainer = range.startContainer,
-      endContainer = range.endContainer,
-      startOffset = range.startOffset,
-      endOffset = range.endOffset;
-
-  if (startContainer === element && endContainer === element && startOffset === 0 && endOffset === element.childNodes.length) {
-    return true;
-  }
-
-  var lastChild = element.lastChild;
-  var lastChildContentLength = lastChild.nodeType === TEXT_NODE ? lastChild.data.length : lastChild.childNodes.length;
-  return startContainer === element.firstChild && endContainer === element.lastChild && startOffset === 0 && endOffset === lastChildContentLength;
-}
-/**
- * Given a DOM node, finds the closest scrollable container node.
- *
- * @param {Element} node Node from which to start.
- *
- * @return {?Element} Scrollable container node, if found.
- */
-
-function getScrollContainer(node) {
-  if (!node) {
-    return;
-  } // Scrollable if scrollable height exceeds displayed...
-
-
-  if (node.scrollHeight > node.clientHeight) {
-    // ...except when overflow is defined to be hidden or visible
-    var _window$getComputedSt = window.getComputedStyle(node),
-        overflowY = _window$getComputedSt.overflowY;
-
-    if (/(auto|scroll)/.test(overflowY)) {
-      return node;
-    }
-  } // Continue traversing
-
-
-  return getScrollContainer(node.parentNode);
-}
-/**
- * Returns the closest positioned element, or null under any of the conditions
- * of the offsetParent specification. Unlike offsetParent, this function is not
- * limited to HTMLElement and accepts any Node (e.g. Node.TEXT_NODE).
- *
- * @see https://drafts.csswg.org/cssom-view/#dom-htmlelement-offsetparent
- *
- * @param {Node} node Node from which to find offset parent.
- *
- * @return {?Node} Offset parent.
- */
-
-function getOffsetParent(node) {
-  // Cannot retrieve computed style or offset parent only anything other than
-  // an element node, so find the closest element node.
-  var closestElement;
-
-  while (closestElement = node.parentNode) {
-    if (closestElement.nodeType === ELEMENT_NODE) {
-      break;
+      ignorePath = null;
+      handlePop(location);
     }
   }
 
-  if (!closestElement) {
-    return null;
-  } // If the closest element is already positioned, return it, as offsetParent
-  // does not otherwise consider the node itself.
-
-
-  if (getComputedStyle(closestElement).position !== 'static') {
-    return closestElement;
+  function handlePop(location) {
+    if (forceNextPop) {
+      forceNextPop = false;
+      setState();
+    } else {
+      var action = 'POP';
+      transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+        if (ok) {
+          setState({
+            action: action,
+            location: location
+          });
+        } else {
+          revertPop(location);
+        }
+      });
+    }
   }
 
-  return closestElement.offsetParent;
-}
-/**
- * Given two DOM nodes, replaces the former with the latter in the DOM.
- *
- * @param {Element} processedNode Node to be removed.
- * @param {Element} newNode       Node to be inserted in its place.
- * @return {void}
- */
+  function revertPop(fromLocation) {
+    var toLocation = history.location; // TODO: We could probably make this more reliable by
+    // keeping a list of paths we've seen in sessionStorage.
+    // Instead, we just default to 0 for paths we don't know.
 
-function replace(processedNode, newNode) {
-  insertAfter(newNode, processedNode.parentNode);
-  remove(processedNode);
-}
-/**
- * Given a DOM node, removes it from the DOM.
- *
- * @param {Element} node Node to be removed.
- * @return {void}
- */
+    var toIndex = allPaths.lastIndexOf(createPath(toLocation));
+    if (toIndex === -1) toIndex = 0;
+    var fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
+    if (fromIndex === -1) fromIndex = 0;
+    var delta = toIndex - fromIndex;
 
-function remove(node) {
-  node.parentNode.removeChild(node);
-}
-/**
- * Given two DOM nodes, inserts the former in the DOM as the next sibling of
- * the latter.
- *
- * @param {Element} newNode       Node to be inserted.
- * @param {Element} referenceNode Node after which to perform the insertion.
- * @return {void}
- */
-
-function insertAfter(newNode, referenceNode) {
-  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-/**
- * Unwrap the given node. This means any child nodes are moved to the parent.
- *
- * @param {Node} node The node to unwrap.
- *
- * @return {void}
- */
-
-function unwrap(node) {
-  var parent = node.parentNode;
-
-  while (node.firstChild) {
-    parent.insertBefore(node.firstChild, node);
-  }
-
-  parent.removeChild(node);
-}
-/**
- * Replaces the given node with a new node with the given tag name.
- *
- * @param {Element}  node    The node to replace
- * @param {string}   tagName The new tag name.
- *
- * @return {Element} The new node.
- */
-
-function replaceTag(node, tagName) {
-  var newNode = node.ownerDocument.createElement(tagName);
-
-  while (node.firstChild) {
-    newNode.appendChild(node.firstChild);
-  }
-
-  node.parentNode.replaceChild(newNode, node);
-  return newNode;
-}
-/**
- * Wraps the given node with a new node with the given tag name.
- *
- * @param {Element} newNode       The node to insert.
- * @param {Element} referenceNode The node to wrap.
- */
-
-function wrap(newNode, referenceNode) {
-  referenceNode.parentNode.insertBefore(newNode, referenceNode);
-  newNode.appendChild(referenceNode);
-}
-/**
- * Removes any HTML tags from the provided string.
- *
- * @param {string} html The string containing html.
- *
- * @return {string} The text content with any html removed.
- */
-
-function __unstableStripHTML(html) {
-  var document = new DOMParser().parseFromString(html, 'text/html');
-  return document.body.textContent || '';
-}
-//# sourceMappingURL=dom.js.map
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(37);
-/* harmony import */ var _dashicon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(76);
+    if (delta) {
+      forceNextPop = true;
+      go(delta);
+    }
+  } // Ensure the hash is encoded properly before doing anything else.
 
 
+  var path = getHashPath();
+  var encodedPath = encodePath(path);
+  if (path !== encodedPath) replaceHashPath(encodedPath);
+  var initialLocation = getDOMLocation();
+  var allPaths = [createPath(initialLocation)]; // Public interface
 
+  function createHref(location) {
+    var baseTag = document.querySelector('base');
+    var href = '';
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-function Icon(_ref) {
-  var _ref$icon = _ref.icon,
-      icon = _ref$icon === void 0 ? null : _ref$icon,
-      size = _ref.size,
-      additionalProps = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(_ref, ["icon", "size"]);
-
-  // Dashicons should be 20x20 by default.
-  var dashiconSize = size || 20;
-
-  if ('string' === typeof icon) {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_dashicon__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
-      icon: icon,
-      size: dashiconSize
-    }, additionalProps));
-  }
-
-  if (icon && _dashicon__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"] === icon.type) {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(icon, _objectSpread({
-      size: dashiconSize
-    }, additionalProps));
-  } // Icons should be 24x24 by default.
-
-
-  var iconSize = size || 24;
-
-  if ('function' === typeof icon) {
-    if (icon.prototype instanceof _wordpress_element__WEBPACK_IMPORTED_MODULE_3__["Component"]) {
-      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(icon, _objectSpread({
-        size: iconSize
-      }, additionalProps));
+    if (baseTag && baseTag.getAttribute('href')) {
+      href = stripHash(window.location.href);
     }
 
-    return icon(_objectSpread({
-      size: iconSize
-    }, additionalProps));
+    return href + '#' + encodePath(basename + createPath(location));
   }
 
-  if (icon && (icon.type === 'svg' || icon.type === _wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__[/* SVG */ "b"])) {
-    var appliedProps = _objectSpread({
-      width: iconSize,
-      height: iconSize
-    }, icon.props, {}, additionalProps);
+  function push(path, state) {
+     false ? undefined : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, undefined, undefined, history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var path = createPath(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
 
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_4__[/* SVG */ "b"], appliedProps);
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a PUSH, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        pushHashPath(encodedPath);
+        var prevIndex = allPaths.lastIndexOf(createPath(history.location));
+        var nextPaths = allPaths.slice(0, prevIndex + 1);
+        nextPaths.push(path);
+        allPaths = nextPaths;
+        setState({
+          action: action,
+          location: location
+        });
+      } else {
+         false ? undefined : void 0;
+        setState();
+      }
+    });
   }
 
-  if (Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(icon)) {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(icon, _objectSpread({
-      size: iconSize
-    }, additionalProps));
+  function replace(path, state) {
+     false ? undefined : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, undefined, undefined, history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var path = createPath(location);
+      var encodedPath = encodePath(basename + path);
+      var hashChanged = getHashPath() !== encodedPath;
+
+      if (hashChanged) {
+        // We cannot tell if a hashchange was caused by a REPLACE, so we'd
+        // rather setState here and ignore the hashchange. The caveat here
+        // is that other hash histories in the page will consider it a POP.
+        ignorePath = path;
+        replaceHashPath(encodedPath);
+      }
+
+      var prevIndex = allPaths.indexOf(createPath(history.location));
+      if (prevIndex !== -1) allPaths[prevIndex] = path;
+      setState({
+        action: action,
+        location: location
+      });
+    });
   }
 
-  return icon;
+  function go(n) {
+     false ? undefined : void 0;
+    globalHistory.go(n);
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  var listenerCount = 0;
+
+  function checkDOMListeners(delta) {
+    listenerCount += delta;
+
+    if (listenerCount === 1 && delta === 1) {
+      window.addEventListener(HashChangeEvent$1, handleHashChange);
+    } else if (listenerCount === 0) {
+      window.removeEventListener(HashChangeEvent$1, handleHashChange);
+    }
+  }
+
+  var isBlocked = false;
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    var unblock = transitionManager.setPrompt(prompt);
+
+    if (!isBlocked) {
+      checkDOMListeners(1);
+      isBlocked = true;
+    }
+
+    return function () {
+      if (isBlocked) {
+        isBlocked = false;
+        checkDOMListeners(-1);
+      }
+
+      return unblock();
+    };
+  }
+
+  function listen(listener) {
+    var unlisten = transitionManager.appendListener(listener);
+    checkDOMListeners(1);
+    return function () {
+      checkDOMListeners(-1);
+      unlisten();
+    };
+  }
+
+  var history = {
+    length: globalHistory.length,
+    action: 'POP',
+    location: initialLocation,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    block: block,
+    listen: listen
+  };
+  return history;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Icon);
-//# sourceMappingURL=index.js.map
+function clamp(n, lowerBound, upperBound) {
+  return Math.min(Math.max(n, lowerBound), upperBound);
+}
+/**
+ * Creates a history object that stores locations in memory.
+ */
+
+
+function createMemoryHistory(props) {
+  if (props === void 0) {
+    props = {};
+  }
+
+  var _props = props,
+      getUserConfirmation = _props.getUserConfirmation,
+      _props$initialEntries = _props.initialEntries,
+      initialEntries = _props$initialEntries === void 0 ? ['/'] : _props$initialEntries,
+      _props$initialIndex = _props.initialIndex,
+      initialIndex = _props$initialIndex === void 0 ? 0 : _props$initialIndex,
+      _props$keyLength = _props.keyLength,
+      keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
+  var transitionManager = createTransitionManager();
+
+  function setState(nextState) {
+    Object(esm_extends["a" /* default */])(history, nextState);
+
+    history.length = history.entries.length;
+    transitionManager.notifyListeners(history.location, history.action);
+  }
+
+  function createKey() {
+    return Math.random().toString(36).substr(2, keyLength);
+  }
+
+  var index = clamp(initialIndex, 0, initialEntries.length - 1);
+  var entries = initialEntries.map(function (entry) {
+    return typeof entry === 'string' ? createLocation(entry, undefined, createKey()) : createLocation(entry, undefined, entry.key || createKey());
+  }); // Public interface
+
+  var createHref = createPath;
+
+  function push(path, state) {
+     false ? undefined : void 0;
+    var action = 'PUSH';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      var prevIndex = history.index;
+      var nextIndex = prevIndex + 1;
+      var nextEntries = history.entries.slice(0);
+
+      if (nextEntries.length > nextIndex) {
+        nextEntries.splice(nextIndex, nextEntries.length - nextIndex, location);
+      } else {
+        nextEntries.push(location);
+      }
+
+      setState({
+        action: action,
+        location: location,
+        index: nextIndex,
+        entries: nextEntries
+      });
+    });
+  }
+
+  function replace(path, state) {
+     false ? undefined : void 0;
+    var action = 'REPLACE';
+    var location = createLocation(path, state, createKey(), history.location);
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (!ok) return;
+      history.entries[history.index] = location;
+      setState({
+        action: action,
+        location: location
+      });
+    });
+  }
+
+  function go(n) {
+    var nextIndex = clamp(history.index + n, 0, history.entries.length - 1);
+    var action = 'POP';
+    var location = history.entries[nextIndex];
+    transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
+      if (ok) {
+        setState({
+          action: action,
+          location: location,
+          index: nextIndex
+        });
+      } else {
+        // Mimic the behavior of DOM histories by
+        // causing a render after a cancelled POP.
+        setState();
+      }
+    });
+  }
+
+  function goBack() {
+    go(-1);
+  }
+
+  function goForward() {
+    go(1);
+  }
+
+  function canGo(n) {
+    var nextIndex = history.index + n;
+    return nextIndex >= 0 && nextIndex < history.entries.length;
+  }
+
+  function block(prompt) {
+    if (prompt === void 0) {
+      prompt = false;
+    }
+
+    return transitionManager.setPrompt(prompt);
+  }
+
+  function listen(listener) {
+    return transitionManager.appendListener(listener);
+  }
+
+  var history = {
+    length: entries.length,
+    action: 'POP',
+    location: entries[index],
+    index: index,
+    entries: entries,
+    createHref: createHref,
+    push: push,
+    replace: replace,
+    go: go,
+    goBack: goBack,
+    goForward: goForward,
+    canGo: canGo,
+    block: block,
+    listen: listen
+  };
+  return history;
+}
+
+
+
 
 /***/ })
 

@@ -75,7 +75,7 @@ class AG_ePDQ_gdpr {
     We accept payments through Barclays ePDQ. When processing payments, some of your data will be passed to Barclays, including information required to process or support the payment, such as the purchase total and billing information.<br /><br />
     Once an order has been placed some of the data sent back from Barclays is stored to support the payment and order, this data will remain part of the order until it is deleted.
     <br/><br />
-    Please see Barclays ePDQ Privacy Policy for more details.' ) . '</p>';
+    Please see Barclays ePDQ Privacy Policy for more details.', 'ag_epdq_server' ) . '</p>';
     }
 
     

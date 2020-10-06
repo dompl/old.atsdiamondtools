@@ -225,8 +225,8 @@ class epdq_checkout_subscription extends epdq_checkout
             echo implode('', $epdq_args);
             echo '<input type="hidden" name="SHASIGN" value="' . $shasign . '"/>';
             echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce('generate-nonce') . '" />';
-            echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_checkout') . '" />';
-            echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_checkout') . '</a></form>';
+            echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_server') . '" />';
+            echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_server') . '</a></form>';
 
         endif;
 

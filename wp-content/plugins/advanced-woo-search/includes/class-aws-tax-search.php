@@ -191,7 +191,8 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                         'name'     => $result->name,
                         'id'       => $result->term_id,
                         'count'    => ( $result->count > 0 ) ? $result->count : '',
-                        'link'     => $term_link
+                        'link'     => $term_link,
+                        'excerpt'  => '',
                     );
 
                     $result_array[$result->taxonomy][] = $new_result;

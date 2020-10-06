@@ -82,19 +82,19 @@ this["wc"] = this["wc"] || {}; this["wc"]["date"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 714);
+/******/ 	return __webpack_require__(__webpack_require__.s = 698);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 119:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(74);
-var formats = __webpack_require__(96);
+var utils = __webpack_require__(75);
+var formats = __webpack_require__(91);
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
@@ -374,13 +374,13 @@ module.exports = function (object, opts) {
 
 /***/ }),
 
-/***/ 120:
+/***/ 130:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(74);
+var utils = __webpack_require__(75);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -650,7 +650,7 @@ module.exports = function (str, opts) {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["moment"]; }());
@@ -677,9 +677,9 @@ module.exports = function (str, opts) {
 "use strict";
 
 
-var stringify = __webpack_require__(119);
-var parse = __webpack_require__(120);
-var formats = __webpack_require__(96);
+var stringify = __webpack_require__(129);
+var parse = __webpack_require__(130);
+var formats = __webpack_require__(91);
 
 module.exports = {
     formats: formats,
@@ -690,7 +690,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 714:
+/***/ 698:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -717,7 +717,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadLocaleData", function() { return loadLocaleData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dateValidationMessages", function() { return dateValidationMessages; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateDateInputForRange", function() { return validateDateInputForRange; });
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
@@ -734,11 +734,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var isoDateFormat = 'YYYY-MM-DD';
 /**
- * @typedef {Object} Moment - An instance of moment
- * @typedef {Object} DateParams
- */
-
-/**
  * DateValue Object
  *
  * @typedef  {Object} DateValue - Describes the date range supplied by the date picker.
@@ -751,7 +746,7 @@ var isoDateFormat = 'YYYY-MM-DD';
 /**
  * DateParams Object
  *
- * @typedef {Object} dateParams - date parameters derived from query parameters.
+ * @typedef {Object} DateParams - date parameters derived from query parameters.
  * @property {string} period - period value, ie `last_week`
  * @property {string} compare - compare valuer, ie previous_year
  * @param {moment.Moment|null} after - If the period supplied is "custom", this is the after date
@@ -1217,7 +1212,8 @@ function getIntervalForQuery(query) {
 /**
  * Returns the current chart type to use.
  *
- * @param  {Object} query Current query
+ * @param {Object} query Current query
+ * @param query.chartType
  * @return {string} Current chart type.
  */
 
@@ -1311,6 +1307,10 @@ function getDateFormatsForInterval(interval) {
  * of moment style js formats.
  *
  * @param {Object} config Locale config object, from store settings.
+ * @param config.userLocale
+ * @param config.weekdaysShort
+ * @param config.userLocale
+ * @param config.weekdaysShort
  */
 
 function loadLocaleData(_ref2) {
@@ -1391,7 +1391,7 @@ function validateDateInputForRange(type, value, before, after, format) {
 
 /***/ }),
 
-/***/ 74:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1635,7 +1635,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 96:
+/***/ 91:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1644,7 +1644,7 @@ module.exports = {
 var replace = String.prototype.replace;
 var percentTwenties = /%20/g;
 
-var util = __webpack_require__(74);
+var util = __webpack_require__(75);
 
 var Format = {
     RFC1738: 'RFC1738',

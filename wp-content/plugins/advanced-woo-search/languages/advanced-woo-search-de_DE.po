@@ -300,7 +300,7 @@ msgid "Mobile full screen"
 msgstr "Mobilgeräte-Ansicht volle Bildschirmgröße"
 
 msgid ""
-"Full screen search on focus. Will not works if search form is inside block "
+"Full screen search on focus. Will not work if the search form is inside the block "
 "with position: fixed."
 msgstr ""
 "Bildschirmfüllende Suche im Fokus. Wird nicht funktionieren, wenn das "

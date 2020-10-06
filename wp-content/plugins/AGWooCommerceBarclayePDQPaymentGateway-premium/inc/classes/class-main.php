@@ -109,7 +109,7 @@ function init_ag_epdq() {
 		*/
 		public function display_test_message() {
 
-			$input = sprintf(__('<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target="_blank" href="%s">here</a> for more card numbers, steps on setting up and troubleshooting.'), 'https://www.weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/');
+			$input = sprintf(__('<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target="_blank" href="%s">here</a> for more card numbers, steps on setting up and troubleshooting.', 'ag_epdq_server'), 'https://www.weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/');
 			return $input;
 
 		}
@@ -121,8 +121,8 @@ function init_ag_epdq() {
 		*/
 		public function display_redirect_message() {
 			
-			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>', 'ag_epdq_checkout'), AG_ePDQ_server_path . 'img/AG-ePDQ-redirect.png' );
-			$input .= __('<p class="AG-redirect-notice">After clicking "Place order", you will be redirected to Barclays to complete your purchase securely.</p>', 'ag_epdq_checkout');
+			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>', 'ag_epdq_server'), AG_ePDQ_server_path . 'img/AG-ePDQ-redirect.png' );
+			$input .= __('<p class="AG-redirect-notice">After clicking "Place order", you will be redirected to Barclays to complete your purchase securely.</p>', 'ag_epdq_server');
 			return $input;
 
 		}
@@ -184,9 +184,9 @@ function init_ag_epdq() {
 		{
 			?>
 
-		<h3><?php echo __('AG ePDQ Checkout Settings', 'ag_epdq_checkout'); ?></h3>
-		<p><?php echo __('This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_checkout') ?></p>
-		<p><i><?php echo __('Having issues setting up the plugin? Why not try the setup wizard <a href="'. admin_url('?page=AG_ePDQ-wizard') .'">here</a>.', 'ag_epdq_checkout') ?></i></p>
+		<h3><?php echo __('AG ePDQ Checkout Settings', 'ag_epdq_server'); ?></h3>
+		<p><?php echo __('This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_server') ?></p>
+		<p><i><?php echo __('Having issues setting up the plugin? Why not try the setup wizard <a href="'. admin_url('?page=AG_ePDQ-wizard') .'">here</a>.', 'ag_epdq_server') ?></i></p>
 		<table class="form-table">
 			<?php $this->generate_settings_html(); ?>
 		</table>
@@ -294,6 +294,11 @@ function init_ag_epdq() {
 			'TP' => (isset($this->template) ? $this->template : ''),
 			'LOGO' => (isset($this->logo) ? $this->logo : ''),
 			'TITLE' => '',
+			// New feature in the works.
+			//'DATATYPE' => 'TRAVEL',
+			//'AIAIRNAME' => 'AGtestref',
+			//'AITINUM'	=> 'BSP + 000000000',
+
 		);
 
 		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order)) {
@@ -353,6 +358,12 @@ function init_ag_epdq() {
 
 		$shasign = hash(ePDQ_crypt::get_sha_method(), implode($settings['shain'], $shasign_arg) . $settings['shain']);
 
+		// Enable deeper debugging, useful for when the ePDQ team require data to debug.
+		if(defined('ePDQ_support_debug')) {
+			AG_ePDQ_Helpers::ag_log(print_r($fields, TRUE) .' ' . print_r($shasign, TRUE), 'debug', $this->debug);
+		}
+
+
 		$epdq_args = array();
 		foreach ($fields as $key => $value) {
 			if ($value == '') continue;
@@ -368,14 +379,14 @@ function init_ag_epdq() {
 			echo implode('', $epdq_args);
 			echo '<input type="hidden" name="SHASIGN" value="' . sanitize_text_field( $shasign ) . '"/>';
 			echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce('generate-nonce') . '" />';
-			echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_checkout') . '" />';
-			echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_checkout') . '</a></form>';
+			echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_server') . '" />';
+			echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_server') . '</a></form>';
 
 		endif;
 
 		wc_enqueue_js('
 				jQuery("body").block({
-						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_checkout') . '",
+						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server') . '",
 						overlayCSS:
 						{
 							background: "#fff",
@@ -619,7 +630,7 @@ function init_ag_epdq() {
 		switch ($STATUS): case '4':
 			case '5':
 			case '9':
-				$noteTitle = __('Barclays ePDQ transaction is confirmed.', 'ag_epdq_checkout');
+				$noteTitle = __('Barclays ePDQ transaction is confirmed.', 'ag_epdq_server');
 				AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed. No issues to report.', 'debug', $this->debug);
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($note);
@@ -629,7 +640,7 @@ function init_ag_epdq() {
 			case '41':
 			case '51':
 			case '91':
-				$noteTitle = __('Barclays ePDQ transaction is awaiting for confirmation.', 'ag_epdq_checkout');
+				$noteTitle = __('Barclays ePDQ transaction is awaiting for confirmation.', 'ag_epdq_server');
 				AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is awaiting for confirmation. No issues to report.', 'debug', $this->debug);
 				$order->add_order_note($noteTitle);
 				$order->update_status('on-hold', $note);
@@ -637,7 +648,7 @@ function init_ag_epdq() {
 
 			case '2':
 			case '93':
-				$noteTitle = __('Barclays ePDQ transaction was refused.', 'ag_epdq_checkout');
+				$noteTitle = __('Barclays ePDQ transaction was refused.', 'ag_epdq_server');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				AG_ePDQ_Helpers::ag_log('The authorisation has been refused by the financial institution. The customer can retry the authorisation process after selecting another card or another payment method.', 'notice', $this->debug);
@@ -647,7 +658,7 @@ function init_ag_epdq() {
 
 			case '52':
 			case '92':
-				$noteTitle = __('Barclays ePDQ payment uncertain.', 'ag_epdq_checkout');
+				$noteTitle = __('Barclays ePDQ payment uncertain.', 'ag_epdq_server');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				AG_ePDQ_Helpers::ag_log('A technical problem arose during the authorisation/payment process, giving an unpredictable result.', 'notice', $this->debug);
@@ -656,7 +667,7 @@ function init_ag_epdq() {
 				break;
 
 			case '1':
-				$noteTitle = __('The customer has cancelled the transaction', 'ag_epdq_checkout');
+				$noteTitle = __('The customer has cancelled the transaction', 'ag_epdq_server');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				$order->update_status('failed', $note);
@@ -664,7 +675,7 @@ function init_ag_epdq() {
 				break;
 
 			case '0':
-				$noteTitle = __('Incomplete or invalid', 'ag_epdq_checkout');
+				$noteTitle = __('Incomplete or invalid', 'ag_epdq_server');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
 				$order->update_status('failed', $note);
@@ -700,11 +711,11 @@ function init_ag_epdq() {
 
 		if (!$transaction_id) {
 			AG_ePDQ_Helpers::ag_log('Refund failed: Transaction ID not found.', 'debug', $this->debug);
-			return new WP_Error('error', __('Refund failed: Transaction ID not found.', 'ag_epdq_checkout'));
+			return new WP_Error('error', __('Refund failed: Transaction ID not found.', 'ag_epdq_server'));
 		}
 		if (!$refund_amount) {
 			AG_ePDQ_Helpers::ag_log('Refund failed: Amount invalid.', 'debug', $this->debug);
-			return new WP_Error('error', __('Refund failed: Amount invalid.', 'ag_epdq_checkout'));
+			return new WP_Error('error', __('Refund failed: Amount invalid.', 'ag_epdq_server'));
 		}
 
 		if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
@@ -773,16 +784,16 @@ function init_ag_epdq() {
 		if (!is_wp_error($result) && $result['response']['code'] >= 200 && $result['response']['code'] < 300) {
 			if (in_array($status, $accepted)) {
 				$order->add_order_note(
-					__('Refund successful', 'ag_epdq_checkout') . '<br />' .
-						__('Refund Amount: ', 'ag_epdq_checkout') . $amount . '<br />' .
-						__('Refund Reason: ', 'ag_epdq_checkout') . $reason . '<br />' .
-						__('ePDQ Status: ', 'ag_epdq_checkout') . AG_errors::get_epdq_status_code($status) . ' '
+					__('Refund successful', 'ag_epdq_server') . '<br />' .
+						__('Refund Amount: ', 'ag_epdq_server') . $amount . '<br />' .
+						__('Refund Reason: ', 'ag_epdq_server') . $reason . '<br />' .
+						__('ePDQ Status: ', 'ag_epdq_server') . AG_errors::get_epdq_status_code($status) . ' '
 				);
 				return true;
 			} else {
 
-				$order->add_order_note(__('Refund failed', 'ag_epdq_checkout') . '<br />' . __('ePDQ Status: ', 'ag_epdq_checkout') . AG_errors::get_epdq_status_code($status) . '<br />');
-				$order->add_order_note(__('Refund Note', 'ag_epdq_checkout') . '<br /><strong>' . __('Error: ', 'ag_epdq_checkout') . $fullError . '</strong><br />');
+				$order->add_order_note(__('Refund failed', 'ag_epdq_server') . '<br />' . __('ePDQ Status: ', 'ag_epdq_server') . AG_errors::get_epdq_status_code($status) . '<br />');
+				$order->add_order_note(__('Refund Note', 'ag_epdq_server') . '<br /><strong>' . __('Error: ', 'ag_epdq_server') . $fullError . '</strong><br />');
 				// Log refund error
 				AG_ePDQ_Helpers::ag_log($string, 'debug', $this->debug);
 			}

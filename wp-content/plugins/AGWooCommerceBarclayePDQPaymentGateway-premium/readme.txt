@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.4.2
+Tested up to: 5.5.2
 Stable tag: 4.2
 
 == Description ==
@@ -37,6 +37,14 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.1.3 - 30/09/20 =
+* New           - Added new deeper debugging, ePDQ support sometimes need a data dump to debug any issues.
+* New           - Plugin is now translation ready - Next update will include some translations.
+* Update        - FS SDK update.
+* Change        - Change to FS SDK structure.
+* Change        - Text in the wizard has been changed for step 4 - Recent update to Chrome forced this change, read here for more information: https://we-are-ag.helpscoutdocs.com/article/233-keep-getting-unknown-order1r
+
 
 = v4.1.2 - 02/09/20 =
 * Fix           - Added "somdn_error_logs_export_errors" to unset() list in SHA_check().

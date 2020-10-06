@@ -54,7 +54,7 @@ class AG_licence
         }
         
         if ( !isset( self::$freemius ) ) {
-            require_once self::$args['paths']['plugin'] . 'inc/vendor/freemius/start.php';
+            require_once self::$args['paths']['plugin'] . 'inc/vendor/freemius/wordpress-sdk/start.php';
             $menu = array(
                 'slug'        => self::get_fs_arg( 'menu/slug', null ),
                 'contact'     => self::get_fs_arg( 'menu/contact', false ),
@@ -161,14 +161,14 @@ class AG_licence
     public function ag_available_checkout( $available_gateways )
     {
         if ( !self::$freemius->can_use_premium_code() ) {
-            unset( $available_gateways['ag_epdq_checkout'] );
+            unset( $available_gateways['ag_epdq_server'] );
         }
         $new = AG_licence::new_install();
         $gateway_notice = self::$args['update']['disable_gateway'];
         $name = 'ag_dismiss_warning';
         $dismissed = get_option( $name, false );
         if ( $gateway_notice === true && $new && $dismissed != '1' ) {
-            unset( $available_gateways['ag_epdq_checkout'] );
+            unset( $available_gateways['ag_epdq_server'] );
         }
         return $available_gateways;
     }
@@ -178,7 +178,7 @@ class AG_licence
         if ( !self::$args['update']['update_notice'] ) {
             return;
         }
-        printf( '<br /><br /><strong>%s</strong>', __( self::$args['update']['message'], 'ag_epdq_checkout' ) );
+        printf( '<br /><br /><strong>%s</strong>', __( self::$args['update']['message'], 'ag_epdq_server' ) );
     }
     
     public function ag_admin_notice()
@@ -210,10 +210,10 @@ class AG_licence
 						Hide <span class="dashicons dashicons-dismiss"></span></button>
 				</form>
                 <p><strong><?php 
-            _e( self::$args['update']['name'], 'ag_epdq_checkout' );
+            _e( self::$args['update']['name'], 'ag_epdq_server' );
             ?></strong></p>
                 <p><?php 
-            _e( self::$args['update']['message'], 'ag_epdq_checkout' );
+            _e( self::$args['update']['message'], 'ag_epdq_server' );
             ?></p>
             </div>
 

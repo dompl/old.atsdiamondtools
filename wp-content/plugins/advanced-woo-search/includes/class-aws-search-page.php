@@ -76,6 +76,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             add_filter( 'posts_pre_query', array( $this, 'posts_pre_query' ), 999, 2 );
 
+            // Overwrite WooCommerce global products count if it is set to zero
+            add_filter( 'woocommerce_product_loop_start', array( $this, 'woocommerce_product_loop_start' ), 99999 );
+
             add_filter( 'body_class', array( $this, 'body_class' ), 999 );
 
         }
@@ -108,7 +111,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 $post_array = (array) $post_array;
                 $post_data = $post_array['post_data'];
 
-                $post->ID = $post_data->ID;
+                $post->ID = ( isset( $post_array['parent_id'] ) && $post_array['parent_id'] ) ? $post_array['parent_id'] : $post_data->ID;
                 $post->site_id = get_current_blog_id();
 
                 if ( ! empty( $post_data->site_id ) ) {
@@ -273,6 +276,8 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             }
 
+            $query->set( 'aws_query', true );
+
         }
 
         /**
@@ -356,6 +361,18 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             return $this->data['search_res'][$hash];
 
+        }
+
+        /*
+         * Overwrite WooCommerce global products count if it is set to zero
+         */
+        public function woocommerce_product_loop_start( $loop_start ) {
+            if ( isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && ! empty( $this->data['all_products'] ) ) {
+                if ( isset( $GLOBALS['woocommerce_loop'] ) && isset( $GLOBALS['woocommerce_loop']['total'] ) && $GLOBALS['woocommerce_loop']['total'] === 0 ) {
+                    $GLOBALS['woocommerce_loop']['total'] = count( $this->data['all_products'] );
+                }
+            }
+            return $loop_start;
         }
 
         /*

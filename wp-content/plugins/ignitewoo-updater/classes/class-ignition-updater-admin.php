@@ -71,6 +71,7 @@ class Ignition_Updater_Admin {
 		add_action( 'admin_init', array( $this, 'load_updater_instances' ) ); 
 
 		$menu_hook = is_multisite() ? 'network_admin_menu' : 'admin_menu';
+
 		add_action( $menu_hook, array( $this, 'register_settings_screen' ) );
 
 		// Display an admin notice, if there are IgniteWoo products that do not have license keys activated.
@@ -144,7 +145,7 @@ class Ignition_Updater_Admin {
 					continue;
 				}
 
-				if ( current_time( 'timestamp' ) > strtotime( '-60 days', $date->format( 'U' ) ) && current_time( 'timestamp' ) < strtotime( '+14 days', $date->format( 'U' ) ) ) {
+				if ( current_time( 'timestamp' ) > strtotime( '-45 days', $date->format( 'U' ) ) && current_time( 'timestamp' ) < strtotime( '+14 days', $date->format( 'U' ) ) ) {
 					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid losing access to important updates and support.', 'ignition-updater' ), $product['product_name'], $date->format( get_option( 'date_format' ) ), '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
 				} elseif ( current_time( 'timestamp' ) > $date->format( 'U' ) ) {
 					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> has expired. Please %srenew%s to receive important updates and support.', 'ignition-updater' ), $product['product_name'], '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );

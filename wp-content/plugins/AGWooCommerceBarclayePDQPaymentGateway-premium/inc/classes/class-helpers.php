@@ -145,7 +145,7 @@ class AG_ePDQ_Helpers
 	 */
 	public static function do_ssl_check() {
 		if( is_ssl() == false ) {
-			echo "<div class=\"error\"><p>". sprintf( __( "<strong>%s</strong> is enabled, but you dont have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>" ), 'ePDQ Direct Link Checkout', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) ."</p></div>";
+			echo "<div class=\"error\"><p>". sprintf( __( "<strong>%s</strong> is enabled, but you dont have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>", 'ag_epdq_server' ), 'ePDQ Direct Link Checkout', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) ."</p></div>";
 		}
 	}
 

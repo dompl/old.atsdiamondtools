@@ -189,6 +189,19 @@ class GFCampaignMonitor extends GFFeedAddOn {
 
 	}
 
+	/**
+	 * Return the plugin's icon for the plugin/form settings menu.
+	 *
+	 * @since 3.9
+	 *
+	 * @return string
+	 */
+	public function get_menu_icon() {
+
+		return file_get_contents( $this->get_base_path() . '/images/menu-icon.svg' );
+
+	}
+
 
 
 
@@ -225,10 +238,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 						'type'              => 'text',
 						'class'             => 'medium',
 						'feedback_callback' => array( $this, 'initialize_api' ),
-						'description'       => sprintf(
-							'<small>%s</small>',
-							esc_html__( "To locate your API key, in your Campaign Monitor account, click on your profile image and then select 'Account settings'. On the Account settings page click 'API keys' and then click 'Show API key'. If you haven't generated one yet, click 'Generate API key' instead.", 'gravityformscampaignmonitor' )
-						),
+						'description'       => esc_html__( "To locate your API key, in your Campaign Monitor account, click on your profile image and then select 'Account settings'. On the Account settings page click 'API keys' and then click 'Show API key'. If you haven't generated one yet, click 'Generate API key' instead.", 'gravityformscampaignmonitor' ),
 					),
 				)
 			),
@@ -457,6 +467,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 		);
 
 		// Display checkbox field.
+		unset( $field['callback'] );
 		$html = $this->settings_checkbox( $field, false );
 
 		// Prepare field tooltip.

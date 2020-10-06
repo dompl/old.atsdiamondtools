@@ -244,7 +244,7 @@ msgstr ""
 msgid "Mobile full screen"
 msgstr ""
 
-msgid "Full screen search on focus. Will not works if search form is inside block with position: fixed."
+msgid "Full screen search on focus. Will not work if the search form is inside the block with position: fixed."
 msgstr ""
 
 msgid "Search Results"

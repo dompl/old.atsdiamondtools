@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.5
-Stable tag: 2.09
+Stable tag: 2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,6 +110,20 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.11 ( 2020-09-21 ) =
+* Add - Venedor theme support
+* Update - Option to add description for archive pages inside search results
+* Update - Support for OceanWP theme
+* Update - Diacritic chars list
+* Fix - Overwrite WooCommerce global products count if it is set to zero
+* Fix - Bug with get_image_id function
+* Fix - Settings page typos
+
+= 2.10 ( 2020-09-07 ) =
+* Update - Storefront theme integration
+* Fix - Search results page output
+* Dev - Add aws_results_layout js filter
 
 = 2.09 ( 2020-08-23 ) =
 * Update - Support for latest WooCommerce version

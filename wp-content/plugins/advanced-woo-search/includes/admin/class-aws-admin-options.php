@@ -376,7 +376,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['form'][] = array(
                 "name"  => __( "Mobile full screen", "advanced-woo-search" ),
-                "desc"  => __( "Full screen search on focus. Will not works if search form is inside block with position: fixed.", "advanced-woo-search" ),
+                "desc"  => __( "Full screen search on focus. Will not work if the search form is inside the block with position: fixed.", "advanced-woo-search" ),
                 "id"    => "mobile_overlay",
                 "value" => 'false',
                 "type"  => "radio",

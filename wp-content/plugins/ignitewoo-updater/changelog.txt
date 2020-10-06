@@ -1,3 +1,11 @@
+Version 3.0.2
+
+	Fixed version checking
+
+Version 3.0.1
+
+	Replace deprecated jQuery function calls
+
 Version 3.0  
 	
 	Updated to use the new license API endpoints at IgniteWoo, the old endpoints are being retired and will totally be disabled.
