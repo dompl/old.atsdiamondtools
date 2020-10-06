@@ -61,6 +61,7 @@
     "jquery-backstretch": "^2.1.16",
     "jquery-match-height": "^0.7.2",
     "jquery.cookie": "^1.4.1",
+    "jquery.countdown": "^1.2.8",
     "lightbox2": "^2.10.0",
     "polyfill-number": "^0.0.1"
   }

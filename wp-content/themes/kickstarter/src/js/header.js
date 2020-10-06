@@ -1,6 +1,4 @@
 // ==== HEADER ==== //
-;(function($) {
-		$(function() {
-
-		});
-}(jQuery));
+(function ($) {
+	$(function () {});
+})(jQuery);

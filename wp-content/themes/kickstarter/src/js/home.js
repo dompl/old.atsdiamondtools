@@ -1,6 +1,4 @@
 // ==== HOME PAGE SCRIPTS ==== //
-;(function($) {
-    $(function() {
-
-    });
-}(jQuery));
+(function ($) {
+	$(function () {});
+})(jQuery);
