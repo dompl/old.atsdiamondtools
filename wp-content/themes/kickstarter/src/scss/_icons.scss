@@ -123,11 +123,14 @@
     @if $filename == times-circle {
         $char: "\E020";
     }
-    @if $filename == twitter {
+    @if $filename == truck {
         $char: "\E021";
     }
-    @if $filename == user {
+    @if $filename == twitter {
         $char: "\E022";
+    }
+    @if $filename == user {
+        $char: "\E023";
     }
 
     @return $char;
@@ -240,6 +243,9 @@
 }
 .icon-times-circle {
     @include icon(times-circle);
+}
+.icon-truck {
+    @include icon(truck);
 }
 .icon-twitter {
     @include icon(twitter);

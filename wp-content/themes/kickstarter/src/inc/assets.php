@@ -24,8 +24,8 @@ function voidx_assets_footer()
                             // Initialize variables
     $name = 'voidx-footer'; // This is the script handle
     $file = 'x';            // The beginning of the filename; "x" is the namespace set in `gulpconfig.js`
-    $vars = array();        // An empty array that may be populated by script variables for output with `wp_localize_script` after the footer script is enqueued
 
+    $vars = apply_filters( 'footer_localize_script', array() );
     // This approach allows for conditional loading of various script bundles based on options set in `src/functions-config-defaults.php`
     // Note: bundles require fewer HTTP requests at the expense of addition caching hits when different scripts are requested on different pages of your site
     // You could also load one main bundle on every page with supplementary scripts as needed (e.g. for commenting or a contact page); it's up to you!

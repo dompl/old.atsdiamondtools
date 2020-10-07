@@ -50,8 +50,6 @@
 
 	<body <?php body_class()?>>
 
-		<div id="getting-started"></div>
-
 		<header id="masthead" class="clx">
 			<?php if ( is_front_page() ): ?>
 			<?php // get_template_part( 'modules/header/christmas' );?>

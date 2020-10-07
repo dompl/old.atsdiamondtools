@@ -9,6 +9,7 @@
 	<?php endif;?>
 </section>
 <?php do_action( 'ats_after_email_signup' );?>
+
 <footer id="footer" data-responsive="769">
 	<div class="container">
 		<div class="susy-reset">
@@ -29,6 +30,7 @@
 		</div>
 	</div>
 </footer>
+<?php do_action( 'clock' )?>
 <?php wp_footer();?>
 </body>
 </html>
