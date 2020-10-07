@@ -80,9 +80,13 @@ module.exports = {
 				modules + "jquery-backstretch/jquery.backstretch.js", // https://github.com/jquery-backstretch/jquery-backstretch
 				modules + "jquery.cookie/jquery.cookie.js", // https://github.com/carhartl/jquery-cookie
 				modules + "cookie-policy/js/cookie-policy.js",
+				// modules + "jquery.countdown/jquery.countdown.js", // Clock for delivery countdown
 				src + "js/lib/navigation.js",
+				src + "js/lib/jquery-countdown.js",
+				src + "js/lib/countdown.js",
 				src + "js/assets/navigation.js",
 				src + "js/lib/slick.js", // https://github.com/kenwheeler/slick
+				// src + "js/lib/clock.js", // Clock for delivery countdown
 				src + "js/helpers.js", // Simple heler functions
 				woojs + "listing/sorting.js",
 				src + "js/footer.js",

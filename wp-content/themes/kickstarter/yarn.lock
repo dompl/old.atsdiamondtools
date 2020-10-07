@@ -3885,6 +3885,11 @@ jquery.cookie@^1.4.1:
   resolved "https://registry.yarnpkg.com/jquery.cookie/-/jquery.cookie-1.4.1.tgz#d63dce209eab691fe63316db08ca9e47e0f9385b"
   integrity sha1-1j3OIJ6raR/mMxbbCMqeR+D5OFs=
 
+jquery.countdown@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/jquery.countdown/-/jquery.countdown-1.2.8.tgz#9a224de619ae527aeb4f4eb4a790a93dee0e6276"
+  integrity sha1-miJN5hmuUnrrT060p5CpPe4OYnY=
+
 jquery@^3.1.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
