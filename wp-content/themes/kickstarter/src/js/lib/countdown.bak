@@ -1,0 +1,51 @@
+// ==== HEADER ==== //
+// http://hilios.github.io/jQuery.countdown/examples/show-total-hours.html
+(function ($) {
+  $(function () {
+    $(".countdown-container .truck").on("click", function () {
+      $(".countdown-container").toggleClass("hidden");
+      $.cookie("ats_del", true, { expires: 1, path: "/" });
+    });
+
+    $(".countdown-container").show();
+    $("[data-countdown]").each(function () {
+      var $this = $(this),
+        finalDate = $(this).data("countdown");
+      ats_data = $(this).data("ats-countdown");
+      $this
+        .countdown(finalDate, function (event) {
+          days = event.offset.days;
+          hours = event.offset.hours;
+          minutes = event.offset.minutes;
+          seconds_html =
+            // ats_data.show_seconds == 1 ? " and %-S %!S:second,seconds;" : "";
+            1 == 1 ? " and %-S %!S:second,seconds;" : "";
+          if (days > 0) {
+            $this.html(
+              event.strftime(
+                "%-d days %-H %!H:hour,hours; %-M %!M:minute,minutes;" +
+                  seconds_html
+              )
+            );
+          } else if (hours > 0) {
+            $this.html(
+              event.strftime(
+                "%-H %!H:hour,hours; %-M %!M:minute,minutes;" + seconds_html
+              )
+            );
+          } else if (minutes > 0) {
+            $this.html(
+              event.strftime("%-M %!M:minute,minutes;" + seconds_html)
+            );
+          } else {
+            if (ats_data.show_seconds == 1) {
+              $this.html(event.strftime("%-S %!S:second,seconds;"));
+            }
+          }
+        })
+        .on("finish.countdown", function (event) {
+          $this.closest("li").remove();
+        });
+    });
+  });
+})(jQuery);
