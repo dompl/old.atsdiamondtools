@@ -182,6 +182,28 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_search_page_filters', array( $this, 'berocket_search_page_filters' ) );
             }
 
+            // Product Sort and Display for WooCommerce plugin
+            if ( defined( 'WC_PSAD_NAME' ) ) {
+                add_filter( "option_psad_shop_page_enable", array( $this, 'psad_filter' ) );
+            }
+
+            if ( 'Avada' === $this->current_theme ) {
+                add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 1 );
+                add_filter( 'aws_products_order_by', array( $this, 'avada_aws_products_order_by' ), 1 );
+                add_filter( 'post_class', array( $this, 'avada_post_class' ) );
+            }
+
+            // FacetWP plugin
+            if ( class_exists( 'FacetWP' ) ) {
+                add_filter( 'facetwp_filtered_post_ids', array( $this, 'facetwp_filtered_post_ids' ), 1 );
+                add_filter( 'aws_searchpage_enabled', array( $this, 'facetwp_aws_searchpage_enabled' ), 1 );
+            }
+
+            // Product Visibility by User Role for WooCommerce plugin
+            if ( class_exists( 'Alg_WC_PVBUR' ) ) {
+                add_filter( 'aws_search_results_products', array( $this, 'pvbur_aws_search_results_products' ), 1 );
+            }
+
         }
 
         /**
@@ -195,7 +217,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             // Divi module
-            if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) ) {
+            if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) || function_exists( 'et_setup_theme' ) ) {
                 include_once( AWS_DIR . '/includes/modules/divi/class-divi-aws-module.php' );
             }
 
@@ -1228,7 +1250,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         $filters['on_sale'] = true;
                     } elseif ( $get_filter === '_sale[2]' ) {
                         $filters['on_sale'] = false;
-                    } elseif( preg_match( '/([\w]+)\[(.+?)\]/', $get_filter, $matches ) ) {
+                    } elseif ( strpos( $get_filter, 'price[' ) === 0 ) {
+                        if ( preg_match( '/([\w]+)\[(\d+)_(\d+)\]/', $get_filter, $matches ) ) {
+                            $filters['price_min'] = intval( $matches[2] );
+                            $filters['price_max'] = intval( $matches[3] );
+                        }
+                    } elseif ( preg_match( '/(.+)\[(.+?)\]/', $get_filter, $matches ) ) {
                         $taxonomy = $matches[1];
                         $operator = strpos( $matches[2], '-' ) !== false ? 'OR' : 'AND';
                         $explode_char = strpos( $matches[2], '-' ) !== false ? '-' : '+';
@@ -1243,6 +1270,148 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             return $filters;
+
+        }
+
+        /*
+         * Product Sort and Display for WooCommerce plugin disable on search page
+         */
+        function psad_filter( $value ) {
+            if ( isset( $_GET['type_aws'] ) ) {
+                return 'no';
+            }
+            return $value;
+        }
+
+        /*
+         * Avada theme posts per page option
+         */
+        public function avada_posts_per_page( $posts_per_page ) {
+            $posts_per_page = isset( $_GET['product_count'] ) && intval( sanitize_text_field( $_GET['product_count'] ) ) ? intval( sanitize_text_field( $_GET['product_count'] ) ) : 12;
+            return $posts_per_page;
+        }
+
+        /*
+         * Avada theme order by options
+         */
+        public function avada_aws_products_order_by( $order_by ) {
+
+            $order_by_new = '';
+
+            if ( isset( $_GET['product_orderby'] ) ) {
+                switch( sanitize_text_field( $_GET['product_orderby'] ) ) {
+                    case 'name':
+                        $order_by_new = 'title';
+                        break;
+                    case 'price':
+                        $order_by_new = 'price';
+                        break;
+                    case 'date':
+                        $order_by_new = 'date';
+                        break;
+                    case 'popularity':
+                        $order_by_new = 'popularity';
+                        break;
+                    case 'rating':
+                        $order_by_new = 'rating';
+                        break;
+                }
+            }
+
+            if ( isset( $_GET['product_order'] ) && $order_by_new ) {
+                $product_order = sanitize_text_field( $_GET['product_order'] );
+                if ( in_array( $product_order, array( 'asc', 'desc' ) ) ) {
+                    $order_by_new = $order_by_new . '-' . $product_order;
+                }
+
+            }
+
+            if ( $order_by_new ) {
+                $order_by = $order_by_new;
+            }
+
+            return $order_by;
+
+        }
+
+        /*
+         * Avada theme fix for product variations inside list products view
+         */
+        public function avada_post_class( $classes ) {
+            if ( 'product_variation' === get_post_type()  ) {
+                if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+                    parse_str( sanitize_text_field( wp_unslash( $_SERVER['QUERY_STRING'] ) ), $params );
+                    if ( isset( $params['product_view'] ) && $params['product_view'] ) {
+                        $classes[] = 'product-' . $params['product_view'] . '-view';
+                    }
+                }
+            }
+            return $classes;
+        }
+
+        /*
+         * FacetWP check for active filters
+         */
+        public function facetwp_filtered_post_ids( $post_ids ) {
+            if ( isset( $_GET['type_aws'] ) && isset( $_GET['s'] ) && ! empty( $post_ids ) ) {
+                $this->data['facetwp'] = true;
+            }
+            return $post_ids;
+        }
+
+        /*
+         * Disable AWS search if FacetWP is active
+         */
+        public function facetwp_aws_searchpage_enabled( $enabled ) {
+            if ( isset( $this->data['facetwp'] ) && $this->data['facetwp'] ) {
+                $enabled = false;
+            }
+            return $enabled;
+        }
+
+        /*
+         * Product Visibility by User Role for WooCommerce plugin hide products for certain users
+         */
+        public function pvbur_aws_search_results_products( $products ) {
+
+            $user_role = 'guest';
+            if ( is_user_logged_in() ) {
+                $user = wp_get_current_user();
+                $roles = ( array ) $user->roles;
+                $user_role = $roles[0];
+            }
+
+            foreach( $products as $key => $product ) {
+
+                $visible_roles = get_post_meta( $product['parent_id'], '_alg_wc_pvbur_visible', true );
+                $invisible_roles = get_post_meta( $product['parent_id'], '_alg_wc_pvbur_invisible', true );
+
+                if ( is_array( $invisible_roles ) && ! empty( $invisible_roles ) ) {
+                    foreach( $invisible_roles as $invisible_role ) {
+                        if ( $user_role == $invisible_role ) {
+                            unset( $products[$key] );
+                            continue 2;
+                        }
+                    }
+                }
+
+                if ( is_array( $visible_roles ) && ! empty( $visible_roles ) ) {
+                    $show = false;
+                    foreach( $visible_roles as $visible_role ) {
+                        if ( $user_role == $visible_role ) {
+                            $show = true;
+                            break;
+                        }
+                    }
+                    if ( ! $show ) {
+                        unset( $products[$key] );
+                        continue;
+                    }
+                }
+
+            }
+
+            return $products;
 
         }
 

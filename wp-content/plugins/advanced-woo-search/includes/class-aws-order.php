@@ -273,6 +273,14 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             }
 
+            /**
+             * Filter order by value
+             * @since 2.13
+             * @param string $order_by Order by value
+             * @param object $query Page query
+             */
+            $order_by = apply_filters( 'aws_products_order_by', $order_by, $query );
+
             switch( $order_by ) {
 
                 case 'price':
@@ -310,9 +318,18 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                     break;
 
                 case 'rating':
+                case 'rating-desc':
 
                     if ( isset( $this->products[0]['f_rating'] ) ) {
                         usort( $this->products, array( $this, 'compare_rating' ) );
+                    }
+
+                    break;
+
+                case 'rating-asc':
+
+                    if ( isset( $this->products[0]['f_rating'] ) ) {
+                        usort( $this->products, array( $this, 'compare_rating_asc' ) );
                     }
 
                     break;
@@ -447,7 +464,19 @@ if ( ! class_exists( 'AWS_Order' ) ) :
         }
 
         /*
-         * Compare rating
+         * Compare rating asc
+         */
+        private function compare_rating_asc( $a, $b ) {
+            $a = intval( $a['f_rating'] * 100 );
+            $b = intval( $b['f_rating'] * 100 );
+            if ($a == $b) {
+                return 0;
+            }
+            return ($a < $b) ? -1 : 1;
+        }
+
+        /*
+         * Compare popularity
          */
         private function compare_reviews( $a, $b ) {
             $a = intval( $a['f_reviews'] * 100 );

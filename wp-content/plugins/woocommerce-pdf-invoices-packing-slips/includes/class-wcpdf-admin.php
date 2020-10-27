@@ -372,7 +372,10 @@ class Admin {
 		if ( $invoice = wcpdf_get_invoice( $order ) ) {
 			$invoice_number = $invoice->get_number();
 			$invoice_date = $invoice->get_date();
+			$invoice_notes = !empty($invoice->get_document_notes()) ? $invoice->get_document_notes() : null;
+
 			?>
+
 			<div class="wcpdf-data-fields" data-document="invoice" data-order_id="<?php echo WCX_Order::get_id( $order ); ?>">
 				<h4>
 					<?php echo $invoice->get_title(); ?><?php if ($invoice->exists()) : ?>
@@ -430,6 +433,38 @@ class Admin {
 					</p>
 				</div>
 			</div>
+
+			<?php do_action( 'wpo_wcpdf_meta_box_before_document_notes', $invoice, $order ); ?>
+
+			<div class="wcpdf-data-fields" data-document="invoice" data-order_id="<?php echo WCX_Order::get_id( $order ); ?>">
+				<div class="invoice-notes">
+					<p class="form-field form-field-wide">
+						<div>
+							<span><strong><?php _e( 'Notes (printed in the invoice):', 'woocommerce-pdf-invoices-packing-slips' ); ?></strong></span>
+							<span class="wpo-wcpdf-edit-document-notes dashicons dashicons-edit"></span>
+						</div>
+						<!-- Read only -->
+						<div class="read-only">
+							<?php if ( $invoice->exists() ) : ?>
+								<p><?php if (!empty($invoice_notes)) echo $invoice_notes; ?></p>
+							<?php endif; ?>
+						</div>
+						<!-- Editable -->
+						<div class="editable">
+							<p class="form-field form-field-wide">
+								<?php if ( $invoice->exists() ) : ?>
+								<p><textarea name="wcpdf_invoice_notes" cols="60" rows="5" disabled="disabled"><?php if (!empty($invoice_notes)) echo $invoice_notes; ?></textarea></p>
+								<?php else : ?>
+								<p><textarea name="wcpdf_invoice_notes" cols="60" rows="5" disabled="disabled"></textarea></p>
+								<?php endif; ?>
+							</p>
+						</div>
+					</p>
+				</div>			
+			</div>
+
+			<?php do_action( 'wpo_wcpdf_meta_box_after_document_notes', $invoice, $order ); ?>
+
 			<?php
 		}
 
@@ -520,6 +555,42 @@ class Admin {
 					$invoice_number = sanitize_text_field( $_POST['_wcpdf_invoice_number'] );
 					// set number
 					$invoice->set_number( $invoice_number );
+				}
+
+				if ( isset( $_POST['wcpdf_invoice_notes'] ) ) {
+					// allowed HTML
+					$allowed_html = array(
+						'a'		=> array(
+							'href' 	=> array(),
+							'title' => array(),
+							'id' 	=> array(),
+							'class'	=> array(),
+							'style'	=> array(),
+						),
+						'br'	=> array(),
+						'em'	=> array(),
+						'strong'=> array(),
+						'div'	=> array(
+							'id'	=> array(),
+							'class' => array(),
+							'style'	=> array(),
+						),
+						'span'	=> array(
+							'id' 	=> array(),
+							'class'	=> array(),
+							'style'	=> array(),
+						),
+						'p'		=> array(
+							'id' 	=> array(),
+							'class' => array(),
+							'style' => array(),
+						),
+						'b'		=> array(),
+					);
+					// sanitize
+					$invoice_notes = wp_kses( stripslashes($_POST['wcpdf_invoice_notes']), $allowed_html );
+					// set notes
+					$invoice->set_notes( $invoice_notes );
 				}
 
 				$invoice->save();

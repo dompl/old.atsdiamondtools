@@ -168,6 +168,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
                     delete_transient( 'aws_index_processed' );
 
+                    do_action( 'aws_index_complete', $index_meta );
+
                 }
 
             }
@@ -308,6 +310,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             dbDelta( $sql );
+
+            do_action( 'aws_create_index_table' );
 
         }
 
