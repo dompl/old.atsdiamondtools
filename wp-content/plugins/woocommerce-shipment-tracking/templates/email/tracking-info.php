@@ -45,7 +45,7 @@ if ( $tracking_items ) : ?>
 				</tr><?php
 		}
 		?></tbody>
-	</table>
+	</table><br /><br />
 
 <?php
 endif;

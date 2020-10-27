@@ -334,7 +334,7 @@ function wpimagebase()
 {
     return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 }
-wpimage( 'img=' . array( 'id' ) . '&w=&h=&crop=false&retina=false&upscale=true' );
+// wpimage( 'img=' . array( 'id' ) . '&w=&h=&crop=false&retina=false&upscale=true' );
 
 /**
  * @param $image_id

@@ -1,7 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 
 /**
  * REST API shipment tracking controller.
@@ -11,14 +8,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.5.0
  */
 
-class WC_Shipment_Tracking_V1_REST_API_Controller extends WC_REST_Controller {
+class WC_Shipment_Tracking_Order_REST_API_Controller extends WC_REST_Controller {
 
 	/**
 	 * Endpoint namespace.
+	 * This should not be in wc/* because shippment tracking does not need to follow WC core apis.
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'wc/v1';
+	protected $namespace = 'wc-shipment-tracking/v3';
 
 	/**
 	 * Route base.
@@ -33,6 +31,16 @@ class WC_Shipment_Tracking_V1_REST_API_Controller extends WC_REST_Controller {
 	 * @var string
 	 */
 	protected $post_type = 'shop_order';
+
+	/**
+	 * @param $namespace
+	 *
+	 * @return WC_Shipment_Tracking_Order_REST_API_Controller
+	 */
+	public function set_namespace( $namespace ) {
+		$this->namespace = $namespace;
+		return $this;
+	}
 
 	/**
 	 * Register the routes for trackings.
@@ -62,6 +70,7 @@ class WC_Shipment_Tracking_V1_REST_API_Controller extends WC_REST_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_providers' ),
+				'permission_callback' => '__return_true',
 			),
 		) );
 
@@ -193,6 +202,7 @@ class WC_Shipment_Tracking_V1_REST_API_Controller extends WC_REST_Controller {
 	 * @return array
 	 */
 	public function get_providers( $request ) {
+		wc_deprecated_argument( 'order_id', '1.6.20', 'providers endpoint does not require a variation_id anymore.' );
 		$st = WC_Shipment_Tracking_Actions::get_instance();
 		return rest_ensure_response( $st->get_providers() );
 	}
