@@ -14,7 +14,12 @@ class WC_Shipment_Tracking_XML_Export_Compat {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'wc_customer_order_xml_export_suite_order_data', array( $this, 'add_fields_to_xml_export_order_format' ), 10, 2 );
+		// add fields based on XML Export version
+		if ( version_compare( get_option( 'wc_customer_order_xml_export_suite_version' ), '2.0.0', '<' ) ) {
+			add_filter( 'wc_customer_order_xml_export_suite_order_export_order_list_format', array( $this, 'add_fields_to_xml_export_order_format' ), 10, 2 );
+		} else {
+			add_filter( 'wc_customer_order_xml_export_suite_order_data', array( $this, 'add_fields_to_xml_export_order_format' ), 10, 2 );
+		}
 	}
 
 	/**

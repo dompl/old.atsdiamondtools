@@ -291,6 +291,7 @@ function init_ag_epdq() {
 			'OWNERTELNO' => $order->get_billing_phone(),
 			'ACCEPTURL' => $order_received_url,
 			'DECLINEURL' => $cancel_order_url,
+			'HOMEURL' => $cancel_order_url,
 			'TP' => (isset($this->template) ? $this->template : ''),
 			'LOGO' => (isset($this->logo) ? $this->logo : ''),
 			'TITLE' => '',
@@ -385,7 +386,7 @@ function init_ag_epdq() {
 		endif;
 
 		wc_enqueue_js('
-				jQuery("body").block({
+				$("body").block({
 						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server') . '",
 						overlayCSS:
 						{
@@ -402,7 +403,7 @@ function init_ag_epdq() {
 									lineHeight:		"32px"
 							}
 					});
-				jQuery("#submit_epdq_payment_form").click();
+				$("#submit_epdq_payment_form").click();
 		');
 	}
 

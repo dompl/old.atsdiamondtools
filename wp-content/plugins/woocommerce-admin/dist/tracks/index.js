@@ -82,12 +82,12 @@ this["wc"] = this["wc"] || {}; this["wc"]["tracks"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 674);
+/******/ 	return __webpack_require__(__webpack_require__.s = 720);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 34:
+/***/ 33:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -278,7 +278,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 43:
+/***/ 48:
 /***/ (function(module, exports) {
 
 function _typeof(obj) {
@@ -323,7 +323,7 @@ module.exports = _defineProperty;
 
 /***/ }),
 
-/***/ 508:
+/***/ 542:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/* eslint-env browser */
@@ -332,7 +332,6 @@ module.exports = _defineProperty;
  * This is the web browser implementation of `debug()`.
  */
 
-exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
 exports.load = load;
@@ -498,18 +497,14 @@ function formatArgs(args) {
 }
 
 /**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
+ * Invokes `console.debug()` when available.
+ * No-op when `console.debug` is not a "function".
+ * If `console.debug` is not available, falls back
+ * to `console.log`.
  *
  * @api public
  */
-function log(...args) {
-	// This hackery is required for IE8/9, where
-	// the `console.log` function doesn't have 'apply'
-	return typeof console === 'object' &&
-		console.log &&
-		console.log(...args);
-}
+exports.log = console.debug || console.log || (() => {});
 
 /**
  * Save `namespaces`.
@@ -575,7 +570,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(675)(exports);
+module.exports = __webpack_require__(721)(exports);
 
 const {formatters} = module.exports;
 
@@ -591,11 +586,11 @@ formatters.j = function (v) {
 	}
 };
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(33)))
 
 /***/ }),
 
-/***/ 674:
+/***/ 720:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -605,9 +600,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recordPageView", function() { return recordPageView; });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(43);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(48);
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(508);
+/* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(542);
 /* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(debug__WEBPACK_IMPORTED_MODULE_2__);
 
 
@@ -772,7 +767,7 @@ function recordPageView(path, extraProperties) {
 
 /***/ }),
 
-/***/ 675:
+/***/ 721:
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -788,7 +783,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(676);
+	createDebug.humanize = __webpack_require__(722);
 
 	Object.keys(env).forEach(key => {
 		createDebug[key] = env[key];
@@ -894,13 +889,11 @@ function setup(env) {
 		debug.namespace = namespace;
 		debug.enabled = createDebug.enabled(namespace);
 		debug.useColors = createDebug.useColors();
-		debug.color = selectColor(namespace);
+		debug.color = createDebug.selectColor(namespace);
 		debug.destroy = destroy;
 		debug.extend = extend;
-		// Debug.formatArgs = formatArgs;
-		// debug.rawLog = rawLog;
 
-		// env-specific initialization logic for debug instances
+		// Env-specific initialization logic for debug instances
 		if (typeof createDebug.init === 'function') {
 			createDebug.init(debug);
 		}
@@ -1045,7 +1038,7 @@ module.exports = setup;
 
 /***/ }),
 
-/***/ 676:
+/***/ 722:
 /***/ (function(module, exports) {
 
 /**

@@ -1,5 +1,5 @@
-WooCommerce Better Customer List WordPress Plugin, 2019 Blaze Concepts Ltd
-WooCommerce Better Customer List is distributed under the terms of the GNU GPL
+Better Customer List for WooCommerce WordPress Plugin, 2019 Blaze Concepts Ltd
+Better Customer List for WooCommerce is distributed under the terms of the GNU GPL
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -42,7 +42,7 @@ class AG_ePDQ_Wizard
         
 
 	public function wizard_page() {
-		add_dashboard_page( '', '', 'manage_options', self::$args['plugin_name'].'-wizard', '' );
+		add_submenu_page( null, '', '', 'manage_options', self::$args['plugin_name'].'-wizard', '' );
 	}
 	
 

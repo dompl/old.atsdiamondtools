@@ -387,5 +387,5 @@ $_SERVER['REQUEST_URI'] = request_URI();
 			</tr>
 		</tfoot>
 	</table>
-    <p style="float: right;"><?php _e('Thank you for using WooCommerce Better Customer List - If you find the plugin useful be sure to leave us a <a href="https://wordpress.org/support/plugin/woo-better-customer-list/reviews/#new-post" target="_blank">review here</a>.', 'woo-better-customer-list' ); ?></p>
+    <p style="float: right;"><?php _e('Thank you for using Better Customer List for WooCommerce - If you find the plugin useful be sure to leave us a <a href="https://wordpress.org/support/plugin/woo-better-customer-list/reviews/#new-post" target="_blank">review here</a>.', 'woo-better-customer-list' ); ?></p>
 </div>

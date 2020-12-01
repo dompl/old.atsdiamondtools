@@ -82,12 +82,12 @@ this["wc"] = this["wc"] || {}; this["wc"]["number"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 672);
+/******/ 	return __webpack_require__(__webpack_require__.s = 718);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 124:
+/***/ 116:
 /***/ (function(module, exports) {
 
 function _arrayWithHoles(arr) {
@@ -98,7 +98,7 @@ module.exports = _arrayWithHoles;
 
 /***/ }),
 
-/***/ 125:
+/***/ 117:
 /***/ (function(module, exports) {
 
 function _iterableToArrayLimit(arr, i) {
@@ -132,7 +132,7 @@ module.exports = _iterableToArrayLimit;
 
 /***/ }),
 
-/***/ 126:
+/***/ 118:
 /***/ (function(module, exports) {
 
 function _nonIterableRest() {
@@ -143,16 +143,16 @@ module.exports = _nonIterableRest;
 
 /***/ }),
 
-/***/ 38:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithHoles = __webpack_require__(124);
+var arrayWithHoles = __webpack_require__(116);
 
-var iterableToArrayLimit = __webpack_require__(125);
+var iterableToArrayLimit = __webpack_require__(117);
 
-var unsupportedIterableToArray = __webpack_require__(81);
+var unsupportedIterableToArray = __webpack_require__(83);
 
-var nonIterableRest = __webpack_require__(126);
+var nonIterableRest = __webpack_require__(118);
 
 function _slicedToArray(arr, i) {
   return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
@@ -184,7 +184,7 @@ module.exports = _defineProperty;
 
 /***/ }),
 
-/***/ 672:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -194,7 +194,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calculateDelta", function() { return calculateDelta; });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__);
 
 
@@ -233,7 +233,7 @@ function _objectSpread(target) {
   return target;
 }
 
-var numberFormatter = __webpack_require__(673);
+var numberFormatter = __webpack_require__(719);
 /**
  * Formats a number using site's current locale
  *
@@ -321,7 +321,7 @@ function calculateDelta(primaryValue, secondaryValue) {
 
 /***/ }),
 
-/***/ 673:
+/***/ 719:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -329,26 +329,26 @@ function calculateDelta(primaryValue, secondaryValue) {
 
 module.exports = function number_format(number, decimals, decPoint, thousandsSep) {
   // eslint-disable-line camelcase
-  //  discuss at: http://locutus.io/php/number_format/
-  // original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-  // improved by: Kevin van Zonneveld (http://kvz.io)
+  //  discuss at: https://locutus.io/php/number_format/
+  // original by: Jonas Raoni Soares Silva (https://www.jsfromhell.com)
+  // improved by: Kevin van Zonneveld (https://kvz.io)
   // improved by: davook
-  // improved by: Brett Zamir (http://brett-zamir.me)
-  // improved by: Brett Zamir (http://brett-zamir.me)
+  // improved by: Brett Zamir (https://brett-zamir.me)
+  // improved by: Brett Zamir (https://brett-zamir.me)
   // improved by: Theriault (https://github.com/Theriault)
-  // improved by: Kevin van Zonneveld (http://kvz.io)
-  // bugfixed by: Michael White (http://getsprink.com)
+  // improved by: Kevin van Zonneveld (https://kvz.io)
+  // bugfixed by: Michael White (https://getsprink.com)
   // bugfixed by: Benjamin Lupton
-  // bugfixed by: Allan Jensen (http://www.winternet.no)
+  // bugfixed by: Allan Jensen (https://www.winternet.no)
   // bugfixed by: Howard Yeend
   // bugfixed by: Diogo Resende
   // bugfixed by: Rival
-  // bugfixed by: Brett Zamir (http://brett-zamir.me)
-  //  revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-  //  revised by: Luke Smith (http://lucassmith.name)
-  //    input by: Kheang Hok Chin (http://www.distantia.ca/)
+  // bugfixed by: Brett Zamir (https://brett-zamir.me)
+  //  revised by: Jonas Raoni Soares Silva (https://www.jsfromhell.com)
+  //  revised by: Luke Smith (https://lucassmith.name)
+  //    input by: Kheang Hok Chin (https://www.distantia.ca/)
   //    input by: Jay Klehr
-  //    input by: Amir Habibi (http://www.residence-mixte.com/)
+  //    input by: Amir Habibi (https://www.residence-mixte.com/)
   //    input by: Amirouche
   //   example 1: number_format(1234.56)
   //   returns 1: '1,235'
@@ -415,7 +415,7 @@ module.exports = function number_format(number, decimals, decPoint, thousandsSep
 
 /***/ }),
 
-/***/ 78:
+/***/ 79:
 /***/ (function(module, exports) {
 
 function _arrayLikeToArray(arr, len) {
@@ -432,10 +432,10 @@ module.exports = _arrayLikeToArray;
 
 /***/ }),
 
-/***/ 81:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeToArray = __webpack_require__(78);
+var arrayLikeToArray = __webpack_require__(79);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;

@@ -10,7 +10,7 @@ We are AG's flagship plugin (where it all began), this plugin will allow you to 
 
 == Installation ==
 
-Setting up this plugin should only take 30 minuties to complete, follow the steps over at the plugin documentation page [here] (https://we-are-ag.helpscoutdocs.com/article/45-setup)
+Setting up this plugin should only take 30 minutes to complete, follow the steps over at the plugin documentation page [here] (https://we-are-ag.helpscoutdocs.com/article/45-setup)
 
 == Frequently Asked Questions ==
 
@@ -37,6 +37,14 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.1.4 - 09/11/20 =
+* Fix           - Fixed bug where welcome screen link would show blank in admin menu.
+* Fix           - Fixed double translation string in class-epdq-error-codes.php.
+* Fix           - Fixed issue where auto redirect would not work with some themes.
+* New           - Added the HOMEURL parameter for when customer clicks back to merchant button in ePDQ payment page.
+* Update        - FS SDK update.
+
 
 = v4.1.3 - 30/09/20 =
 * New           - Added new deeper debugging, ePDQ support sometimes need a data dump to debug any issues.

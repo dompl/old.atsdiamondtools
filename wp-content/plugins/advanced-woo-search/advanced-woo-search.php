@@ -3,12 +3,12 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 2.13
+Version: 2.15
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 WC requires at least: 3.0.0
-WC tested up to: 4.6.0
+WC tested up to: 4.7.0
 */
 
 
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AWS_VERSION', '2.13' );
+define( 'AWS_VERSION', '2.15' );
 
 
 define( 'AWS_DIR', dirname( __FILE__ ) );
@@ -92,7 +92,6 @@ final class AWS_Main {
         if ( $this->get_settings('seamless') === 'true' ) {
             add_filter( 'get_search_form', array( $this, 'markup' ), 999999 );
             add_filter( 'get_product_search_form', array( $this, 'markup' ), 999999 );
-            add_filter( 'astra_get_search_form', array( $this, 'markup' ), 999999 );
         }
 
     }

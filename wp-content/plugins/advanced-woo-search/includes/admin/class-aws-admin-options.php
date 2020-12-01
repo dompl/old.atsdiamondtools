@@ -566,6 +566,13 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            /**
+             * Filter admin page options
+             * @since 2.15
+             * @param array $options Array of options
+             */
+            $options = apply_filters( 'aws_admin_page_options', $options );
+
             return $options;
 
         }

@@ -1,10 +1,10 @@
 <?php
 /**
- * WooCommerce Better Customer List setup
+ * Better Customer List for WooCommerce setup
  *
  * @author   Blaze Concepts
  * @category Users
- * @package  WooCommerce Better Customer List
+ * @package  Better Customer List for WooCommerce
  * @since    1.0
  */
 

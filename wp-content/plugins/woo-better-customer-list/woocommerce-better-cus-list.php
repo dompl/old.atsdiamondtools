@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: WooCommerce Better Customer List
+ * Plugin Name: Better Customer List for WooCommerce
  * Plugin URI:
  * Description: Dedicated customers admin page with customer sales information.
- * Version: 1.2.1
- * Tested up to: 5.2
+ * Version: 1.2.2
+ * Tested up to: 5.5.1
  * WC requires at least: 2.5.5
- * WC tested up to: 3.6.5
+ * WC tested up to: 4.6.1
  * Author: Blaze Concepts
  * Author URI: https://www.blazeconcepts.co.uk/
  *

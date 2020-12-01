@@ -129,6 +129,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'woodmart_head_action' ) );
                 }
 
+                if ( 'Astra' === $this->current_theme ) {
+                    add_filter( 'astra_get_search_form', array( $this, 'astra_markup' ), 999999 );
+                    add_action( 'wp_head', array( $this, 'astra_head_action' ) );
+                }
+
                 if ( 'Storefront' === $this->current_theme ) {
                     add_action( 'wp_footer', array( $this, 'storefront_footer_action' ) );
                 }
@@ -219,6 +224,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Divi module
             if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) || function_exists( 'et_setup_theme' ) ) {
                 include_once( AWS_DIR . '/includes/modules/divi/class-divi-aws-module.php' );
+            }
+
+            // WCFM - WooCommerce Multivendor Marketplace
+            if ( class_exists( 'WCFMmp' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-wcfm.php' );
+                AWS_WCFM::instance();
             }
 
         }
@@ -742,40 +753,127 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
-         * Storefront theme search form layout
+         * Astra theme form markup
          */
-        public function storefront_footer_action() { ?>
-            <script>
-                window.addEventListener('load', function() {
-                    function aws_results_layout( styles, options  ) {
-                        if ( typeof jQuery !== 'undefined' ) {
-                            var $storefrontHandheld = options.form.closest('.storefront-handheld-footer-bar');
-                            if ( $storefrontHandheld.length ) {
-                                if ( ! $storefrontHandheld.find('.aws-search-result').length ) {
-                                    $storefrontHandheld.append( options.resultsBlock );
-                                }
-                                styles.top = 'auto';
-                                styles.bottom = 130;
-                            }
-                        }
-                        return styles;
-                    }
-                    if ( typeof AwsHooks === 'object' && typeof AwsHooks.add_filter === 'function' ) {
-                        AwsHooks.add_filter( 'aws_results_layout', aws_results_layout );
-                    }
-                }, false);
-            </script>
-            <style>
-                .storefront-handheld-footer-bar .aws-search-result ul li {
-                    float: none !important;
-                    display: block !important;
-                    text-align: left !important;
+        public function astra_markup( $output ) {
+            if ( function_exists( 'aws_get_search_form' ) && is_string( $output ) ) {
+
+                $pattern = '/(<form[\s\S]*?<\/form>)/i';
+                $form = aws_get_search_form(false);
+
+                if ( strpos( $output, 'aws-container' ) !== false ) {
+                    $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
                 }
-                .storefront-handheld-footer-bar .aws-search-result ul li a {
-                    text-indent: 0 !important;
-                    text-decoration: none;
+
+                $output = trim(preg_replace('/\s\s+/', ' ', $output));
+                $output = preg_replace( $pattern, $form, $output );
+                $output = str_replace( 'aws-container', 'aws-container search-form', $output );
+                $output = str_replace( 'aws-search-field', 'aws-search-field search-field', $output );
+
+            }
+            return $output;
+        }
+
+        /*
+         * Astra theme
+         */
+        public function astra_head_action() { ?>
+
+            <style>
+                .ast-search-menu-icon.slide-search .search-form {
+                    width: auto;
+                }
+                .ast-search-menu-icon .search-form {
+                    padding: 0 !important;
+                }
+                .ast-search-menu-icon.ast-dropdown-active.slide-search .ast-search-icon {
+                    opacity: 0;
+                }
+                .ast-search-menu-icon.slide-search .aws-container .aws-search-field {
+                    width: 0;
+                    background: #fff;
+                    border: none;
+                }
+                .ast-search-menu-icon.ast-dropdown-active.slide-search .aws-search-field {
+                    width: 235px;
+                }
+                .ast-search-menu-icon.slide-search .aws-container .aws-search-form .aws-form-btn {
+                    background: #fff;
+                    border: none;
                 }
             </style>
+
+        <?php }
+
+        /*
+         * Storefront theme search form layout
+         */
+        public function storefront_footer_action() {
+
+            $mobile_screen = AWS()->get_settings( 'mobile_overlay' );
+
+            ?>
+
+            <?php if ( $mobile_screen && $mobile_screen === 'true' ): ?>
+
+                <script>
+                    window.addEventListener('load', function() {
+                        if ( typeof jQuery !== 'undefined' ) {
+                            var search = jQuery('.storefront-handheld-footer-bar .search a');
+                            search.on( 'click', function() {
+                                var searchForm = jQuery('.storefront-handheld-footer-bar .aws-container');
+                                searchForm.after('<div class="aws-placement-container"></div>');
+                                searchForm.addClass('aws-mobile-fixed').prepend('<div class="aws-mobile-fixed-close"><svg width="17" height="17" viewBox="1.5 1.5 21 21"><path d="M22.182 3.856c.522-.554.306-1.394-.234-1.938-.54-.543-1.433-.523-1.826-.135C19.73 2.17 11.955 10 11.955 10S4.225 2.154 3.79 1.783c-.438-.371-1.277-.4-1.81.135-.533.537-.628 1.513-.25 1.938.377.424 8.166 8.218 8.166 8.218s-7.85 7.864-8.166 8.219c-.317.354-.34 1.335.25 1.805.59.47 1.24.455 1.81 0 .568-.456 8.166-7.951 8.166-7.951l8.167 7.86c.747.72 1.504.563 1.96.09.456-.471.609-1.268.1-1.804-.508-.537-8.167-8.219-8.167-8.219s7.645-7.665 8.167-8.218z"></path></svg></div>');
+                                jQuery('body').addClass('aws-overlay').append('<div class="aws-overlay-mask"></div>').append( searchForm );
+                                searchForm.find('.aws-search-field').focus();
+                            } );
+                        }
+                    }, false);
+                </script>
+
+                <style>
+                    .storefront-handheld-footer-bar ul li.search.active .site-search {
+                        display: none !important;
+                    }
+                </style>
+
+            <?php else: ?>
+
+                <script>
+                    window.addEventListener('load', function() {
+                        function aws_results_layout( styles, options  ) {
+                            if ( typeof jQuery !== 'undefined' ) {
+                                var $storefrontHandheld = options.form.closest('.storefront-handheld-footer-bar');
+                                if ( $storefrontHandheld.length ) {
+                                    if ( ! $storefrontHandheld.find('.aws-search-result').length ) {
+                                        $storefrontHandheld.append( options.resultsBlock );
+                                    }
+                                    styles.top = 'auto';
+                                    styles.bottom = 130;
+                                }
+                            }
+                            return styles;
+                        }
+                        if ( typeof AwsHooks === 'object' && typeof AwsHooks.add_filter === 'function' ) {
+                            AwsHooks.add_filter( 'aws_results_layout', aws_results_layout );
+                        }
+                    }, false);
+                </script>
+
+                <style>
+                    .storefront-handheld-footer-bar .aws-search-result ul li {
+                        float: none !important;
+                        display: block !important;
+                        text-align: left !important;
+                    }
+                    .storefront-handheld-footer-bar .aws-search-result ul li a {
+                        text-indent: 0 !important;
+                        text-decoration: none;
+                    }
+                </style>
+
+            <?php endif; ?>
+
         <?php }
 
         /*
@@ -1008,6 +1106,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Venedor' === $this->current_theme ) {
                 $selectors[] = '#search-form form';
+            }
+
+            // WCFM - WooCommerce Multivendor Marketplace
+            if ( class_exists( 'WCFMmp' ) ) {
+                $selectors[] = '#wcfmmp-store .woocommerce-product-search';
             }
 
             return $selectors;

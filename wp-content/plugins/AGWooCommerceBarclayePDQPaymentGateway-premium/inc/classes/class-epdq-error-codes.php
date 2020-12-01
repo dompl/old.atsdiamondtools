@@ -599,11 +599,11 @@ class AG_errors
 			60001145 => __('rate euro-vv (Koerseuro-vv) not numeric.', 'ag_epdq_server'),
 			60001146 => __('comma rate euro-vv (Kommakoerseuro-vv) incorrect.', 'ag_epdq_server'),
 			60001147 => __('invalid acceptgiro distributor.', 'ag_epdq_server'),
-			60001148 => __('Original run number and/or BRN missing.', 'ag_epdq_server', 'ag_epdq_server'),
-			60001149 => __('Amount/Account number/ BRN different.', 'ag_epdq_server', 'ag_epdq_server'),
-			60001150 => __('Direct debit already revoked/restored.', 'ag_epdq_server', 'ag_epdq_server'),
-			60001151 => __('Direct debit already reversed/revoked/restored.', 'ag_epdq_server', 'ag_epdq_server'),
-			60001153 => __('Payer\'s account number not know.', 'ag_epdq_server', 'ag_epdq_server'),
+			60001148 => __('Original run number and/or BRN missing.', 'ag_epdq_server'),
+			60001149 => __('Amount/Account number/ BRN different.', 'ag_epdq_server'),
+			60001150 => __('Direct debit already revoked/restored.', 'ag_epdq_server'),
+			60001151 => __('Direct debit already reversed/revoked/restored.', 'ag_epdq_server'),
+			60001153 => __('Payer\'s account number not know.', 'ag_epdq_server'),
 		);
 
 

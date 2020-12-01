@@ -1,12 +1,12 @@
-=== WooCommerce Better Customer List ===
+=== Better Customer List for WooCommerce ===
 Contributors: blazeconcepts
 Donate link: https://www.paypal.me/blazeconcepts
 Tags: woocommerce, better, customer, list, user, management, data, status, orders, report, value
 Requires at least: 4.7
-Tested up to: 5.2
-Stable tag: 1.2.1
+Tested up to: 5.5.1
+Stable tag: 1.2.2
 WC requires at least: 2.5.5
-WC tested up to: 3.6.5
+WC tested up to: 4.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Displays summarised WooCommerce order information by individual customers in a m
 
 == Description ==
 
-WooCommerce Better Customer List improves on the existing customer list provided by WooCommerce (under Reports) which is painfully slow loading when your customer database gets large. This plugin is fast loading and allows you to view order history by customer.
+Better Customer List for WooCommerce improves on the existing customer list provided by WooCommerce (under Reports) which is painfully slow loading when your customer database gets large. This plugin is fast loading and allows you to view order history by customer.
 
 = Table information includes: =
 * **Customer Name** - The customer's full name
@@ -45,11 +45,11 @@ The Customer List states whether the customer is Active or Inactive based on the
 Install now to ensure you don't miss out on these features when added to future updates!
 
 == Installation ==
-**WooCommerce Better Customer List** requires the [WooCommerce](https://wordpress.org/plugins/woocommerce/ "WooCommerce") plugin (at least version 2.5.5) to be installed. Tested from WooCommerce 2.5.5 to 3.6.5.
+**Better Customer List for WooCommerce** requires the [WooCommerce](https://wordpress.org/plugins/woocommerce/ "WooCommerce") plugin (at least version 2.5.5) to be installed. Tested from WooCommerce 2.5.5 to 3.6.5.
 
 = Via WordPress =
 1. From the WordPress Dashboard, go to Plugins > Add New
-2. Search for 'WooCommerce Better Customer List' and click Install. Then click Activate.
+2. Search for 'Better Customer List for WooCommerce' and click Install. Then click Activate.
 3. Click 'Customers' in the Admin sidebar to see the Customer List.
 
 = Manual =
@@ -100,3 +100,6 @@ Install now to ensure you don't miss out on these features when added to future 
 
 = 1.2.1 =
 * Fix from adding languages
+
+= 1.2.2 =
+* Compatibility version updates and name change

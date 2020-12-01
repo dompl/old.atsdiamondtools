@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.5
-Stable tag: 2.13
+Stable tag: 2.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,7 @@ Additional features available only in PRO plugin version.
 * **Add to cart** button in search results
 * Support for [WooCommerce Brands plugin](https://woocommerce.com/products/brands/)
 * Support for Advanced Custom Fields plugin
+* Support for WCFM - WooCommerce Multivendor Marketplace plugin
 
 [Features list](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
@@ -110,6 +111,17 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.15 ( 2020-11-16 ) =
+* Update - Support for WCFM - WooCommerce Multivendor Marketplace plugin: add seamless integration for the vendors shop page, limit search results to vendor products only
+* Update - Settings page styles
+* Dev - Add aws_admin_page_options filter
+
+= 2.14 ( 2020-11-02 ) =
+* Update - Elementor search page support
+* Update - Divi Builder search page support
+* Update - Astra theme integration
+* Update - Storefront theme integration for footer search form
 
 = 2.13 ( 2020-10-19 ) =
 * Add - FacetWP plugin integration. [Read more](https://advanced-woo-search.com/guide/facetwp/)
