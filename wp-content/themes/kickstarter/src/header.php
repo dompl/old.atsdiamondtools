@@ -54,9 +54,10 @@
 			<?php if ( is_front_page() ): ?>
 			<?php // get_template_part( 'modules/header/christmas' );?>
 			<?php endif?>
-			<?php // get_template_part( 'modules/header/corona' );?>
-			<?php // get_template_part( 'modules/header/top' );?>
-			<?php // get_template_part( 'modules/header/middle' );?>
-			<?php // get_template_part( 'modules/header/navigation' );?>
+			<?php get_template_part( 'modules/header/corona' );?>
+			<?php get_template_part( 'modules/header/top' );?>
+			<?php get_template_part( 'modules/header/middle' );?>
+			<?php get_template_part( 'modules/header/navigation' );?>
 		</header>
 		<?php  !  is_front_page() ? do_action( 'page_header' ) : ''?>
+		<?php echo do_shortcode( '[ats_orders_error]' ); ?>
