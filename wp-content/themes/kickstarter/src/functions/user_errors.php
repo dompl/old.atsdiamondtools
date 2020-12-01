@@ -14,6 +14,9 @@ if ( !  defined( 'ABSPATH' ) ) {
 add_shortcode( 'ats_orders_error', 'ats_test_action_' );
 function ats_test_action_()
 {
+    if ( is_admin() ) {
+        return;
+    }
     $allowed_users = array( 1, 2, 3 );
 
     if ( !  in_array( get_current_user_id(), $allowed_users ) || !  current_user_can( 'administrator' ) ) {
@@ -40,7 +43,7 @@ function ats_test_action_()
             $order_email         = get_userdata( $customer_id[0] )->user_email;
             $order_billing_email = $order->billing_email;
 
-            if ( is_numeric( $order_id ) ) {
+            if ( is_numeric( $order_id ) && get_field( 'was_checked', $order_id ) != true ) {
                 if ( $order_email !== $order_billing_email && !  email_exists( $order_billing_email ) ) {
                     $i .= '<tr>';
                     $i .= '<td><strong>' . $item . '</strong></td>';
