@@ -18,6 +18,8 @@ if ( ! class_exists( 'AWS_Admin_Ajax' ) ) :
 
             add_action( 'wp_ajax_aws-changeState', array( &$this, 'change_state' ) );
 
+            add_action( 'wp_ajax_aws-hideWelcomeNotice', array( $this, 'hide_welcome_notice' ) );
+
         }
 
         /*
@@ -38,6 +40,19 @@ if ( ! class_exists( 'AWS_Admin_Ajax' ) ) :
             update_option( 'aws_settings', $settings );
 
             do_action( 'aws_cache_clear' );
+
+            wp_send_json_success( '1' );
+
+        }
+
+        /*
+         * Hide plugin welcome notice
+         */
+        public function hide_welcome_notice() {
+
+            check_ajax_referer( 'aws_admin_ajax_nonce' );
+
+            update_option( 'aws_hide_welcome_notice', 'true', false );
 
             wp_send_json_success( '1' );
 

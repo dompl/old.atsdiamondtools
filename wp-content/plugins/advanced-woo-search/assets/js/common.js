@@ -57,7 +57,10 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             init: function() {
 
-                $('body').append('<div id="aws-search-result-' + instance + '" class="aws-search-result" style="display: none;"></div>');
+                // @since 2.16
+                var appendResultsTo = AwsHooks.apply_filters( 'aws_results_append_to', 'body', { instance: instance, form: self, data: d } );
+
+                $(appendResultsTo).append('<div id="aws-search-result-' + instance + '" class="aws-search-result" style="display: none;"></div>');
 
                 methods.addClasses();
 
@@ -611,13 +614,12 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                     }
 
-                    var scrolledTop = $itemsList.scrollTop();
-                    var position = $( d.resultBlock ).find('.aws_result_item.hovered').position();
-
-                    if ( position ) {
-                        $itemsList.scrollTop( position.top + scrolledTop )
+                    var activeItemOffset = $(".aws_result_item.hovered").position();
+                    if ( activeItemOffset ) {
+                        $itemsList.animate({
+                            scrollTop: activeItemOffset.top + $itemsList.scrollTop()
+                        }, 400);
                     }
-
 
                 }
             }

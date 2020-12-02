@@ -478,3 +478,66 @@ msgstr ""
 
 msgid "Search for taxonomies and displayed their archive pages in search results."
 msgstr ""
+
+msgid "Welcome to %s"
+msgstr ""
+
+msgid "Powerful search plugin for WooCommerce."
+msgstr ""
+
+msgid "Get Started"
+msgstr ""
+
+msgid "In order to start using the plugin search form you need to take following steps:"
+msgstr ""
+
+msgid "Index plugin table."
+msgstr ""
+
+msgid "Click on the 'Reindex table' button and wait till the index process is finished."
+msgstr ""
+
+msgid "Set plugin settings."
+msgstr ""
+
+msgid "Leave it to default values or customize some of them."
+msgstr ""
+
+msgid "Add search form."
+msgstr ""
+
+msgid "There are several ways you can add a search form to your site. Use the 'Seamless integration' option, shortcode, widget or custom php function. Read more inside %s section or read %s."
+msgstr ""
+
+msgid "Activation"
+msgstr ""
+
+msgid "guide article"
+msgstr ""
+
+msgid "Finish!"
+msgstr ""
+
+msgid "Now all is set and you can check your search form on the pages where you add it."
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "How to Add Search Form"
+msgstr ""
+
+msgid "Search Sources"
+msgstr ""
+
+msgid "Terms Pages Search"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Support Forums"
+msgstr ""
+
+msgid "Contact Form"
+msgstr ""

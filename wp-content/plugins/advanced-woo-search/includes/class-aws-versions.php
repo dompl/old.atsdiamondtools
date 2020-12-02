@@ -355,7 +355,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
          */
         public function admin_notice_no_index() { ?>
             <div class="updated notice is-dismissible">
-                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to plugin setting page and start the indexing of your products. %s', 'advanced-woo-search' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'advanced-woo-search' ).'</a>'  ); ?></p>
+                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to the plugin setting page and start indexing your products. %s', 'advanced-woo-search' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'advanced-woo-search' ).'</a>'  ); ?></p>
             </div>
         <?php }
 

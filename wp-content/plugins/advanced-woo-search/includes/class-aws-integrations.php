@@ -138,6 +138,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_footer', array( $this, 'storefront_footer_action' ) );
                 }
 
+                if ( 'Elessi Theme' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'elessi_head_action' ) );
+                }
+
                 // Elementor pro
                 if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                     add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
@@ -806,6 +810,26 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Elessi theme
+         */
+        public function elessi_head_action() { ?>
+
+            <style>
+                .warpper-mobile-search .aws-container .aws-search-field {
+                    border-radius: 30px !important;
+                    border: 1px solid #ccc !important;;
+                    padding-left: 20px !important;;
+                }
+                .warpper-mobile-search .aws-container .aws-search-form .aws-form-btn,
+                .nasa-header-search-wrap .aws-container .aws-search-form .aws-form-btn {
+                    background: transparent !important;
+                    border: none !important;
+                }
+            </style>
+
+        <?php }
+
+        /*
          * Storefront theme search form layout
          */
         public function storefront_footer_action() {
@@ -1106,6 +1130,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Venedor' === $this->current_theme ) {
                 $selectors[] = '#search-form form';
+            }
+
+            if ( 'Elessi Theme' === $this->current_theme ) {
+                $selectors[] = '.warpper-mobile-search form';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

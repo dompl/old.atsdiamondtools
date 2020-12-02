@@ -173,4 +173,22 @@ jQuery(document).ready(function ($) {
     });
 
 
+    // Dismiss welcome notice
+
+    $( '.aws-welcome-notice.is-dismissible' ).on('click', '.notice-dismiss', function ( event ) {
+
+        $.ajax({
+            type: 'POST',
+            url: aws_vars.ajaxurl,
+            data: {
+                action: 'aws-hideWelcomeNotice',
+                _ajax_nonce: aws_vars.ajax_nonce
+            },
+            dataType: "json",
+            success: function (data) {
+            }
+        });
+
+    });
+
 });

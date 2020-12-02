@@ -53,6 +53,9 @@ class WC_Validation {
 			case 'AT':
 				$valid = (bool) preg_match( '/^([0-9]{4})$/', $postcode );
 				break;
+			case 'BA':
+				$valid = (bool) preg_match( '/^([7-8]{1})([0-9]{4})$/', $postcode );
+				break;
 			case 'BR':
 				$valid = (bool) preg_match( '/^([0-9]{5})([-])?([0-9]{3})$/', $postcode );
 				break;
@@ -76,8 +79,11 @@ class WC_Validation {
 			case 'IE':
 				$valid = (bool) preg_match( '/([AC-FHKNPRTV-Y]\d{2}|D6W)[0-9AC-FHKNPRTV-Y]{4}/', wc_normalize_postcode( $postcode ) );
 				break;
+			case 'IN':
+				$valid = (bool) preg_match( '/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/', $postcode );
+				break;
 			case 'JP':
-				$valid = (bool) preg_match( '/^([0-9]{3})([-])([0-9]{4})$/', $postcode );
+				$valid = (bool) preg_match( '/^([0-9]{3})([-]?)([0-9]{4})$/', $postcode );
 				break;
 			case 'PT':
 				$valid = (bool) preg_match( '/^([0-9]{4})([-])([0-9]{3})$/', $postcode );
@@ -101,6 +107,9 @@ class WC_Validation {
 				break;
 			case 'SI':
 				$valid = (bool) preg_match( '/^([1-9][0-9]{3})$/', $postcode );
+				break;
+			case 'LI':
+				$valid = (bool) preg_match( '/^(94[8-9][0-9])$/', $postcode );
 				break;
 			default:
 				$valid = true;

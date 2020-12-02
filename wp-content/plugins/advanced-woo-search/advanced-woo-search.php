@@ -3,7 +3,7 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 2.15
+Version: 2.16
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
@@ -16,16 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AWS_VERSION', '2.15' );
-
-
-define( 'AWS_DIR', dirname( __FILE__ ) );
-define( 'AWS_URL', plugins_url( '', __FILE__ ) );
-
-
-define( 'AWS_INDEX_TABLE_NAME', 'aws_index' );
-define( 'AWS_CACHE_TABLE_NAME', 'aws_cache' );
-
+if ( ! defined( 'AWS_FILE' ) ) {
+    define( 'AWS_FILE', __FILE__ );
+}
 
 if ( ! class_exists( 'AWS_Main' ) ) :
 
@@ -71,6 +64,8 @@ final class AWS_Main {
 	 */
 	public function __construct() {
 
+        $this->define_constants();
+
         $this->data['settings'] = get_option( 'aws_settings' );
 
 		add_filter( 'widget_text', 'do_shortcode' );
@@ -97,6 +92,21 @@ final class AWS_Main {
     }
 
     /**
+     * Define constants
+     */
+    private function define_constants() {
+
+        $this->define( 'AWS_VERSION', '2.16' );
+
+        $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
+        $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
+
+        $this->define( 'AWS_INDEX_TABLE_NAME', 'aws_index' );
+        $this->define( 'AWS_CACHE_TABLE_NAME', 'aws_cache' );
+
+    }
+
+    /**
      * Include required core files used in admin and on the frontend.
      */
     public function includes() {
@@ -119,6 +129,7 @@ final class AWS_Main {
         include_once( 'includes/admin/class-aws-admin-ajax.php' );
         include_once( 'includes/admin/class-aws-admin-fields.php' );
         include_once( 'includes/admin/class-aws-admin-options.php' );
+        include_once( 'includes/admin/class-aws-admin-meta-boxes.php' );
 
     }
 
@@ -196,6 +207,15 @@ final class AWS_Main {
     }
 
     /*
+     * Define constant if not already set
+     */
+    private function define( $name, $value ) {
+        if ( ! defined( $name ) ) {
+            define( $name, $value );
+        }
+    }
+
+    /*
      * Add ajax action to WPML plugin
      */
     function add_wpml_ajax_actions( $actions ){
@@ -262,6 +282,25 @@ function aws_install_woocommerce_admin_notice() {
 	</div>
 	<?php
 }
+
+
+/*
+ * Activation hook
+ */
+register_activation_hook( __FILE__, 'aws_on_activation' );
+function aws_on_activation() {
+    $hide_notice = get_option( 'aws_hide_welcome_notice' );
+    if ( ! $hide_notice ) {
+        $free_plugin_version = get_option( 'aws_plugin_ver' );
+        $pro_plugin_version = get_option( 'aws_pro_plugin_ver' );
+        $hide = 'false';
+        if ( $free_plugin_version || $pro_plugin_version ) {
+            $hide = 'true';
+        }
+        update_option( 'aws_hide_welcome_notice', $hide, false );
+    }
+}
+
 
 /*
  * Init AWS plugin

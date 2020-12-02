@@ -314,3 +314,12 @@ h1.aws-instance-name {
 .aws-table.aws-table-sources td.aws-name {
     font-weight: 400;
 }
+
+/* Welcome message */
+
+.welcome-panel .welcome-panel-column:first-child {
+   width: 60%;
+}
+.welcome-panel .welcome-panel-column {
+    width: 20%;
+}
