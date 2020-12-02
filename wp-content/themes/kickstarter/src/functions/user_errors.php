@@ -30,9 +30,7 @@ function ats_test_action_()
         )
     );
 
-    $i = '<form action="' . get_bloginfo( 'url' ) . $_SERVER['REQUEST_URI'] . '" method="get"><button type="submit" name="update_orders" value="true">Update Orders</button></form>';
-    $i .= '<div style="padding:10px">Click update orders to reassign all to guest user.</div>';
-    $i .= '<table>';
+    $i    = '<table>';
     $item = 1;
     foreach ( $guest_orders as $order ) {
 
