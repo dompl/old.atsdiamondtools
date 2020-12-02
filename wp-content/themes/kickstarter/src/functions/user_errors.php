@@ -27,11 +27,12 @@ function ats_test_action_()
         array(
             'type'  => array( 'shop_order' ),
             'limit' => -1
-
         )
     );
 
-    $i    = '<table>';
+    $i = '<form action="' . get_bloginfo( 'url' ) . $_SERVER['REQUEST_URI'] . '" method="get"><button type="submit" name="update_orders" value="true">Update Orders</button></form>';
+    $i .= '<div style="padding:10px">Click update orders to reassign all to guest user.</div>';
+    $i .= '<table>';
     $item = 1;
     foreach ( $guest_orders as $order ) {
 
@@ -43,15 +44,33 @@ function ats_test_action_()
             $order_email         = get_userdata( $customer_id[0] )->user_email;
             $order_billing_email = $order->billing_email;
 
-            if ( is_numeric( $order_id ) && get_field( 'was_checked', $order_id ) != true ) {
+            if ( is_numeric( $order_id ) ) {
                 if ( $order_email !== $order_billing_email && !  email_exists( $order_billing_email ) ) {
-                    $i .= '<tr>';
-                    $i .= '<td><strong>' . $item . '</strong></td>';
-                    $i .= '<td>' . $order_email . '</td>';
-                    $i .= '<td>' . $order_billing_email . '</td>';
-                    $i .= '<td><a href="' . get_admin_url() . "post.php?post={$order_id}&action=edit\" target='_blank'>{$order_id}</a></td>";
-                    $i .= '</tr>';
-                    $item++;
+
+                    /** Check if the email is from the same domain */
+                    $email_different_domain = false;
+
+                    $email_1 = explode( '@', $order_email );
+                    $email_2 = explode( '@', $order_billing_email );
+
+                    if ( $email_1[1] !== $email_2[1] ) {
+                        $i .= '<tr>';
+                        $i .= '<td><strong>' . $item++ . '</strong></td>';
+                        $i .= '<td>' . $order_email . '</td>';
+                        $i .= '<td>' . $order_billing_email . '</td>';
+                        $i .= '<td><a href="' . get_admin_url() . "post.php?post={$order_id}&action=edit\" target='_blank'>{$order_id}</a></td>";
+
+                        if ( isset( $_GET['update_orders'] ) && $_GET['update_orders'] == 'true' ) {
+                            $update_post_meta = update_post_meta( $order_id, '_customer_user', 0 );
+                            if ( $update_post_meta ) {
+                                $i .= '<td><span style="color:green">Order has been reassigned to guest user</span></td>';
+                            } else {
+                                $i .= '<td><span style="color:red">Order not updated</span></td>';
+                            }
+                        }
+                        $i .= '</tr>';
+                    }
+
                 }
             }
         }
