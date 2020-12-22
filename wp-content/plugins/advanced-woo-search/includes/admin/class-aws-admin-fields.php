@@ -114,7 +114,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
                                 <?php foreach ( $value['choices'] as $val => $label ) { ?>
-                                    <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $plugin_options[ $value['id'] ], $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
+                                    <?php $option_val = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : ''; ?>
+                                    <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $option_val, $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
                                 <?php } ?>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
@@ -127,7 +128,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                             <td>
                                 <select name="<?php echo esc_attr( $value['id'] ); ?>">
                                     <?php foreach ( $value['choices'] as $val => $label ) { ?>
-                                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $plugin_options[ $value['id'] ], $val ); ?>><?php echo esc_html( $label ); ?></option>
+                                        <?php $option_val = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : ''; ?>
+                                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $option_val, $val ); ?>><?php echo esc_html( $label ); ?></option>
                                     <?php } ?>
                                 </select>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>

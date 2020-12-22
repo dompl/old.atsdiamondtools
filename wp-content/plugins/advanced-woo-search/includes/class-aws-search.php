@@ -517,6 +517,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         continue;
                     }
 
+                    setup_postdata( $post_item );
+
                     $post_id = method_exists( $product, 'get_id' ) ? $product->get_id() : $post_item;
                     $parent_id = $product->is_type( 'variation' ) && method_exists( $product, 'get_parent_id' ) ? $product->get_parent_id() : $post_id;
 
@@ -666,6 +668,9 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     );
 
                     $products_array[] = $new_result;
+
+                    wp_reset_postdata();
+
                 }
 
             }

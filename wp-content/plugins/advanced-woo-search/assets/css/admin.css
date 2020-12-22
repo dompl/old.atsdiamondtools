@@ -91,6 +91,11 @@
     margin-right: -40px;
 }
 
+#aws_form select {
+    min-width: 170px;
+    display: block;
+}
+
 /* Image select option */
 #aws_form .img-select {
     position: relative;

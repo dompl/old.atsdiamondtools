@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.6
-Stable tag: 2.16
+Stable tag: 2.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,6 +13,8 @@ WooCommerce search plugin. Advanced search features. Support for both AJAX searc
 == Description ==
 
 Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** search and **search results page** display.
+
+[Plugin home page](https://advanced-woo-search.com/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) | [Features List](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) | [Docs](https://advanced-woo-search.com/guide/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
 = Main Features =
 
@@ -42,8 +44,6 @@ Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** 
 = Premium Features =
 
 Additional features available only in PRO plugin version.
-
-[Premium Version Demo](https://advanced-woo-search.com/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 	
 * Search **results layouts**
 * Search **form layouts**
@@ -111,6 +111,10 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.17 ( 2020-12-14 ) =
+* Dev - Specify global $product variable for search results items
+* Dev - Add aws_show_mobile_layout js filter
 
 = 2.16 ( 2020-11-30 ) =
 * Add - Welcome message
