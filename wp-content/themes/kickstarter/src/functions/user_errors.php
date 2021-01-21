@@ -77,3 +77,26 @@ function ats_test_action_()
 
     return $i;
 }
+
+add_shortcode( 'user_reassignment', 'user_reassignment_function' );
+function user_reassignment_function()
+{
+    if ( is_admin() ) {
+        return;
+    }
+    $guest_orders = wc_get_orders(
+        array(
+            'type'  => array( 'shop_order' ),
+            'limit' => -1
+        )
+    );
+
+    foreach ( $guest_orders as $order ) {
+        $order_id = $order->id;
+        $user_id  = get_post_meta( $order_id, '_customer_user', true );
+        $user     = get_userdata( $user_id );
+        if ( !  $user ) {
+            $update_post_meta = update_post_meta( $order_id, '_customer_user', 0 );
+        }
+    }
+}

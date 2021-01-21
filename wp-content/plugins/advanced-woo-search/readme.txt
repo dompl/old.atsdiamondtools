@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.6
-Stable tag: 2.17
+Stable tag: 2.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,14 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.18 ( 2021-01-04 ) =
+* Add - Support for Walker WordPress theme
+* Update - Elementor plugin support. Add integration with Elementskit plugin header search
+* Update - Search results styles. Fit search results box to search form width
+* Update - Admin menu item  position
+* Update - Add Premium tab inside plugin settings page
+* Dev - Update aws_show_mobile_layout filter. Change it to aws_show_modal_layout and give option to use modal layout on desktop
 
 = 2.17 ( 2020-12-14 ) =
 * Dev - Specify global $product variable for search results items

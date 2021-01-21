@@ -55,13 +55,17 @@ class AWS_Admin {
 
         add_action( 'admin_notices', array( $this, 'display_welcome_header' ), 1 );
 
+        add_filter( 'submenu_file', array( $this, 'submenu_file' ), 10, 2 );
+
     }
 
     /**
      * Add options page
      */
     public function add_admin_page() {
-        add_menu_page( esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), 'manage_options', 'aws-options', array( &$this, 'display_admin_page' ), 'dashicons-search' );
+        add_menu_page( esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), 'manage_options', 'aws-options', array( &$this, 'display_admin_page' ), 'dashicons-search', 70 );
+        add_submenu_page( 'aws-options', __( 'Settings', 'advanced-woo-search' ), __( 'Settings', 'advanced-woo-search'), 'manage_options', 'aws-options', array( $this, 'display_admin_page' ) );
+        add_submenu_page( 'aws-options', __( 'Premium', 'advanced-woo-search' ),  '<span style="color:rgba(255, 255, 91, 0.8);">' . __( 'Premium', 'advanced-woo-search' ) . '</span>', 'manage_options', admin_url( 'admin.php?page=aws-options&tab=premium' ) );
     }
 
     /**
@@ -74,7 +78,8 @@ class AWS_Admin {
         $tabs = array(
             'general' => esc_html__( 'General', 'advanced-woo-search' ),
             'form'    => esc_html__( 'Search Form', 'advanced-woo-search' ),
-            'results' => esc_html__( 'Search Results', 'advanced-woo-search' )
+            'results' => esc_html__( 'Search Results', 'advanced-woo-search' ),
+            'premium' => esc_html__( 'Get Premium', 'advanced-woo-search' )
         );
 
         $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
@@ -85,8 +90,6 @@ class AWS_Admin {
             $tabs_html .= '<a href="' . admin_url( 'admin.php?page=aws-options&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 
         }
-
-        $tabs_html .= '<a href="https://advanced-woo-search.com/?utm_source=plugin&utm_medium=settings-tab&utm_campaign=aws-pro-plugin" class="nav-tab premium-tab" target="_blank">' . esc_html__( 'Get Premium', 'advanced-woo-search' ) . '</a>';
 
         $tabs_html = '<h2 class="nav-tab-wrapper woo-nav-tab-wrapper">'.$tabs_html.'</h2>';
 
@@ -110,6 +113,9 @@ class AWS_Admin {
                 break;
             case('results'):
                 new AWS_Admin_Fields( 'results' );
+                break;
+            case('premium'):
+                new AWS_Admin_Page_Premium();
                 break;
             default:
                 echo AWS_Admin_Meta_Boxes::get_general_tab_content();
@@ -155,6 +161,16 @@ class AWS_Admin {
             ) );
         }
 
+    }
+
+    /*
+     * Change current class for premium tab
+     */
+    public function submenu_file( $submenu_file, $parent_file ) {
+        if ( $parent_file === 'aws-options' && isset( $_GET['tab'] ) && $_GET['tab'] === 'premium' ) {
+            $submenu_file = admin_url( 'admin.php?page=aws-options&tab=premium' );
+        }
+        return $submenu_file;
     }
 
     /*

@@ -142,10 +142,8 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'elessi_head_action' ) );
                 }
 
-                // Elementor pro
-                if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-                    add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
-                    add_filter( 'elementor/widget/render_content', array( $this, 'elementor_render_content' ), 10, 2 );
+                if ( 'Walker' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'walker_head_action' ) );
                 }
 
             }
@@ -221,7 +219,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         public function includes() {
 
             // Elementor plugin widget
-            if ( defined( 'ELEMENTOR_VERSION' ) ) {
+            if ( defined( 'ELEMENTOR_VERSION' ) || defined( 'ELEMENTOR_PRO_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/elementor-widget/class-elementor-aws-init.php' );
             }
 
@@ -830,6 +828,30 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Walker theme
+         */
+        public function walker_head_action()  {  ?>
+            <style>
+                .edgtf-fullscreen-search-inner .aws-container {
+                    position: relative;
+                    width: 50%;
+                    margin: auto;
+                }
+            </style>
+            <script>
+                window.addEventListener('load', function() {
+                    if ( typeof jQuery !== 'undefined' ) {
+                        jQuery(document).on( 'click focus', '.edgtf-fullscreen-search-inner input', function(e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            return false;
+                        } );
+                    }
+                }, false);
+            </script>
+        <?php }
+
+        /*
          * Storefront theme search form layout
          */
         public function storefront_footer_action() {
@@ -899,69 +921,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             <?php endif; ?>
 
         <?php }
-
-        /*
-         * Elementor popup search form init
-         */
-        public function elementor_pro_popup() { ?>
-
-            <script>
-                window.addEventListener('load', function() {
-                    if (window.jQuery) {
-                        jQuery( document ).on( 'elementor/popup/show', function() {
-                            window.setTimeout(function(){
-                                jQuery('.elementor-container .aws-container').each( function() {
-                                    jQuery(this).aws_search();
-                                });
-                            }, 1000);
-                        } );
-                    }
-                }, false);
-            </script>
-
-        <?php }
-
-        /*
-         * Elementor replace search form widget
-         */
-        public function elementor_render_content( $content, $widget ) {
-            if ( method_exists( $widget, 'get_name' ) && $widget->get_name() === 'search-form' ) {
-                if ( method_exists( $widget, 'get_settings' )  ) {
-                    $settings = $widget->get_settings();
-                    if ( is_array( $settings ) && isset( $settings['skin'] ) && $settings['skin'] === 'full_screen' ) {
-                        $content = '<style>
-                            .elementor-search-form--skin-full_screen .elementor-search-form__container {
-                                overflow: hidden;
-                            }
-                            .elementor-search-form--full-screen .aws-container {
-                                width: 100%;
-                            }
-                            .elementor-search-form--full-screen .aws-container .aws-search-form {
-                                height: auto !important;
-                            }
-                            .elementor-search-form--full-screen .aws-container .aws-search-form .aws-search-btn.aws-form-btn {
-                                display: none;
-                            }
-                            .elementor-search-form--full-screen .aws-container .aws-search-field {
-                                border-bottom: 1px solid #fff !important;
-                                font-size: 50px !important;
-                                text-align: center !important;
-                                line-height: 1.5 !important;
-                                color: #7a7a7a !important;
-                            }
-                            .elementor-search-form--full-screen .aws-container .aws-search-field:focus {
-                                background-color: transparent !important;
-                            }
-                        </style>' . $content;
-                        $content = str_replace( array( '<form', '</form>' ), array( '<div', '</div>' ), $content );
-                        $content = preg_replace( '/(<input[\S\s]*?elementor-search-form__input[\S\s]*?\>)/i', aws_get_search_form( false ), $content );
-                        return $content;
-                    }
-                }
-                return aws_get_search_form( false );
-            }
-            return $content;
-        }
 
         /*
          * Porto theme seamless integration
@@ -1134,6 +1093,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Elessi Theme' === $this->current_theme ) {
                 $selectors[] = '.warpper-mobile-search form';
+            }
+
+            if ( 'Walker' === $this->current_theme ) {
+                $selectors[] = '.edgtf-page-header form, .edgtf-mobile-header form, .edgtf-fullscreen-search-form';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

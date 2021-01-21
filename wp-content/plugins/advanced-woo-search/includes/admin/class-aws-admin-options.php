@@ -259,18 +259,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['general'][] = array(
-                "name"  => __( "Show out-of-stock", "advanced-woo-search" ),
-                "desc"  => __( "Show out-of-stock products in search", "advanced-woo-search" ),
-                "id"    => "outofstock",
-                "value" => 'true',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'  => __( 'Show', 'advanced-woo-search' ),
-                    'false'  => __( 'Hide', 'advanced-woo-search' ),
-                )
-            );
-
-            $options['general'][] = array(
                 "name"  => __( "Stop words list", "advanced-woo-search" ),
                 "desc"  => __( "Comma separated list of words that will be excluded from search.", "advanced-woo-search" ) . '<br>' . __( "Re-index required on change.", "advanced-woo-search" ),
                 "id"    => "stopwords",
@@ -451,6 +439,18 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "id"    => "results_num",
                 "value" => 10,
                 "type"  => "number"
+            );
+
+            $options['results'][] = array(
+                "name"  => __( "Show out-of-stock", "advanced-woo-search" ),
+                "desc"  => __( "Show out-of-stock products in search", "advanced-woo-search" ),
+                "id"    => "outofstock",
+                "value" => 'true',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'Show', 'advanced-woo-search' ),
+                    'false'  => __( 'Hide', 'advanced-woo-search' ),
+                )
             );
 
             $options['results'][] = array(

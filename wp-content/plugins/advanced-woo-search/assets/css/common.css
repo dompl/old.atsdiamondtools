@@ -11,7 +11,8 @@
     height: 44px;
 }
 
-.aws-container .aws-search-form * {
+.aws-container .aws-search-form *,
+.aws-search-result {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -461,6 +462,7 @@ body.aws-overlay {
     margin-right: -10px;
     display: inline-block;
     float: right;
+    cursor: pointer;
 }
 
 .aws-overlay-mask {

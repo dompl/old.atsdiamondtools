@@ -3,12 +3,12 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 2.17
+Version: 2.18
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 WC requires at least: 3.0.0
-WC tested up to: 4.7.0
+WC tested up to: 4.8.0
 */
 
 
@@ -96,7 +96,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '2.17' );
+        $this->define( 'AWS_VERSION', '2.18' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -130,6 +130,7 @@ final class AWS_Main {
         include_once( 'includes/admin/class-aws-admin-fields.php' );
         include_once( 'includes/admin/class-aws-admin-options.php' );
         include_once( 'includes/admin/class-aws-admin-meta-boxes.php' );
+        include_once( 'includes/admin/class-aws-admin-page-premium.php' );
 
     }
 
@@ -190,7 +191,7 @@ final class AWS_Main {
 			$setting_link = '<a href="' . admin_url('admin.php?page=aws-options') . '">'.esc_html__( 'Settings', 'advanced-woo-search' ).'</a>';
 			array_unshift( $links, $setting_link );
 
-            $premium_link = '<a href="https://advanced-woo-search.com/?utm_source=plugin&utm_medium=settings-link&utm_campaign=aws-pro-plugin" target="_blank">'.esc_html__( 'Get Premium', 'advanced-woo-search' ).'</a>';
+            $premium_link = '<a href="' . admin_url( 'admin.php?page=aws-options&tab=premium' ) . '">'.esc_html__( 'Premium Version', 'advanced-woo-search' ).'</a>';
             array_unshift( $links, $premium_link );
 		}
 

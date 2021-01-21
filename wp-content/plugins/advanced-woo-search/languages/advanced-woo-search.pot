@@ -541,3 +541,144 @@ msgstr ""
 
 msgid "Contact Form"
 msgstr ""
+
+msgid "Premium Version"
+msgstr ""
+
+msgid "Premium"
+msgstr ""
+
+msgid "Upgrade to the"
+msgstr ""
+
+msgid "Premium plugin version"
+msgstr ""
+
+msgid "to have all available features!"
+msgstr ""
+
+msgid "30-day money back guarantee"
+msgstr ""
+
+msgid "Priority support"
+msgstr ""
+
+msgid "1 year of support and updates"
+msgstr ""
+
+msgid "Premium Features"
+msgstr ""
+
+msgid "New Search Sources"
+msgstr ""
+
+msgid "Search additionally inside %sproduct attributes%s, %staxonomies%s and %scustom fields%s. Inside the plugin settings page it is possible to choose some specific sources that must be available for search ( for example only several product attributes ) or just search for all of them."
+msgstr ""
+
+msgid "Learn more"
+msgstr ""
+
+msgid "Product Variations Support"
+msgstr ""
+
+msgid "Search and show inside search results %svariable product%s, %sproduct variations%s or %sboth%s. With the variable products will be displayed all attributes that belong to that specific variation."
+msgstr ""
+
+msgid "Archive Pages Search"
+msgstr ""
+
+msgid "Search for WooCommerce product %scustom taxonomies%s and %sattributes archive pages%s. Display them right inside search results list along with the product search results."
+msgstr ""
+
+msgid "Users Search"
+msgstr ""
+
+msgid "Search for website users and display them right inside the search results box. Choose what role the user must have to be available for search."
+msgstr ""
+
+msgid "Search Form Filters"
+msgstr ""
+
+msgid "For each search form you can create a unique set of tabs. These tabs have their own %sset of settings%s and work as %sfilters%s for your search results."
+msgstr ""
+
+msgid "Search Form Instances"
+msgstr ""
+
+msgid "Unlimited amount of search form instances with totally different settings and products look. You can create totally different search forms for any of your needs. Each instance is %sindependent%s and has its own %sset of settings%s."
+msgstr ""
+
+msgid "Search Logic Change"
+msgstr ""
+
+msgid "Switch from %sOR%s to %sAND%s search logic. Choose from %spartial%s or %sexact match%s search."
+msgstr ""
+
+msgid "Add to Cart Button"
+msgstr ""
+
+msgid "Display %sAdd to Cart%s button right inside the search results. This makes it possible to add the product to the cart without visiting the product page. This button works perfect also and with product variations."
+msgstr ""
+
+msgid "Search Results Layouts"
+msgstr ""
+
+msgid "Choose between several %spredefined search results layouts%s. For example you can display all products in search results in a grid or in column one by one."
+msgstr ""
+
+msgid "Exclude/Include Products Filters"
+msgstr ""
+
+msgid "Option to exclude or include products from search results by %sproduct ids%s, %staxonomies%s or %sattributes%s. Show only those products that you want. This option works great with the search form filters."
+msgstr ""
+
+msgid "ACF Plugin Support"
+msgstr ""
+
+msgid "All fields that were created with the help of %sAdvanced Custom Fields%s plugin are available for search. Also use a special build-in filters to display any ACF field value right inside the search results list."
+msgstr ""
+
+msgid "You will benefit from our full support for any issues you have with this plugin."
+msgstr ""
+
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgid "Do you offer refunds?"
+msgstr ""
+
+msgid "If you\'re not completely happy with your purchase and we\'re unable to resolve the issue, let us know and we\'ll refund the full purchase price. Refunds can be processed within 30 days of the original purchase."
+msgstr ""
+
+msgid "What payment methods do you accept?"
+msgstr ""
+
+msgid "Checkout is powered FastSpring company. They supports major credit and debit cards, PayPal, and a variety of other mainstream payment methods, so there’s plenty to pick from."
+msgstr ""
+
+msgid "Do you offer support if I need help?"
+msgstr ""
+
+msgid "Yes! You will benefit of our full support for any issues you have with this plugin."
+msgstr ""
+
+msgid "I have other pre-sale questions, can you help?"
+msgstr ""
+
+msgid "Yes! You can ask us any question through our"
+msgstr ""
+
+msgid "contact form."
+msgstr ""
+
+msgid "Website Links:"
+msgstr ""
+
+msgid "Plugin home page"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "Pricing"
+msgstr ""
