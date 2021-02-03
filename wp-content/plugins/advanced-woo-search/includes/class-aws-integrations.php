@@ -211,6 +211,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_search_results_products', array( $this, 'pvbur_aws_search_results_products' ), 1 );
             }
 
+            // WooCommerce Product Filter by WooBeWoo
+            if ( defined( 'WPF_PLUG_NAME' ) ) {
+                add_filter( 'wpf_addHtmlBeforeFilter', array( $this, 'wpf_add_html_before_filter' ) );
+                add_filter( 'aws_search_page_custom_data', array( $this, 'wpf_search_page_custom_data' ) );
+                add_filter( 'aws_search_page_filters', array( $this, 'wpf_search_page_filters' ) );
+            }
+
+            // ATUM Inventory Management for WooCommerce plugin ( Product level addon )
+            if ( class_exists( 'AtumProductLevelsAddon' ) ) {
+                add_filter( 'aws_indexed_data', array( $this, 'atum_index_data' ), 10, 2 );
+            }
+
         }
 
         /**
@@ -1099,6 +1111,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '.edgtf-page-header form, .edgtf-mobile-header form, .edgtf-fullscreen-search-form';
             }
 
+            if ( 'Martfury' === $this->current_theme ) {
+                $selectors[] = '#site-header .products-search';
+            }
+
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
@@ -1507,6 +1523,82 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             return $products;
 
+        }
+
+        /*
+         * WooCommerce Product Filter by WooBeWoo: check for active widget
+         */
+        public function wpf_add_html_before_filter( $html ) {
+            $this->data['wpf_filter'] = true;
+            if ( isset( $_GET['type_aws'] ) ) {
+                $html = str_replace( '&quot;enable_ajax&quot;:&quot;1&quot;', '&quot;enable_ajax&quot;:&quot;0&quot;', $html );
+                $html = str_replace( '"enable_ajax":"1"', '"enable_ajax":"0"', $html );
+            }
+            return $html;
+        }
+
+        /*
+         * WooCommerce Product Filter by WooBeWoo: fix filters display
+         */
+        public function wpf_search_page_custom_data( $data ) {
+            if ( isset( $this->data['wpf_filter'] ) ) {
+                $data['force_ids'] = true;
+            }
+            return $data;
+        }
+
+        /*
+         * WooCommerce Product Filter by WooBeWoo: filter products
+         */
+        public function wpf_search_page_filters( $filters ) {
+
+            foreach ( $_GET as $key => $param ) {
+
+                $isNot = ( substr($param, 0, 1) === '!' );
+
+                if ( strpos($key, 'filter_cat') !== false ) {
+
+                    $idsAnd = explode(',', $param);
+                    $idsOr = explode('|', $param);
+                    $isAnd = count($idsAnd) > count($idsOr);
+                    $operator = $isAnd ? 'AND' : 'OR';
+                    $filters['tax']['product_cat'] = array(
+                        'terms' => $isAnd ? $idsAnd : $idsOr,
+                        'operator' => $operator
+                    );
+                }
+
+                if ( strpos($key, 'product_tag') !== false ) {
+
+                    $idsAnd = explode(',', $param);
+                    $idsOr = explode('|', $param);
+                    $isAnd = count($idsAnd) > count($idsOr);
+                    $operator = $isAnd ? 'AND' : 'OR';
+                    $filters['tax']['product_tag'] = array(
+                        'terms' => $isAnd ? $idsAnd : $idsOr,
+                        'operator' => $operator
+                    );
+                }
+
+                if ( strpos($key, 'pr_onsale') !== false ) {
+                    $filters['on_sale'] = true;
+                }
+
+            }
+
+            return $filters;
+
+        }
+
+        /*
+         * ATUM Inventory Management for WooCommerce plugin ( Product level addon )
+         */
+        public function atum_index_data( $data, $id ) {
+            $is_purchasable = AtumLevels\Inc\Helpers::is_purchase_allowed( $id );
+            if ( ! $is_purchasable ) {
+                $data = array();
+            }
+            return $data;
         }
 
     }

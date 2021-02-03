@@ -377,7 +377,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     $query['stock'] = " AND in_stock = 1";
                 }
 
-                $query['visibility'] = " AND NOT visibility LIKE '%hidden%'";
+                $query['visibility'] = " AND visibility NOT IN ( 'hidden', 'catalog' )";
 
             }
 

@@ -685,11 +685,17 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function translate( $name, $value ) {
 
+            $translated_value = $value;
+
             if ( function_exists( 'icl_t' ) ) {
-                return icl_t( 'aws', $name, $value );
+                $translated_value = icl_t( 'aws', $name, $value );
             }
 
-            return $value;
+            if ( $translated_value === $value ) {
+                $translated_value = __( $translated_value, 'advanced-woo-search' );
+            }
+
+            return $translated_value;
 
         }
 

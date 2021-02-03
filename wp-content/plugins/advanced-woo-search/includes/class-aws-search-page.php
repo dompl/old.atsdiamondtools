@@ -187,10 +187,19 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function posts_pre_query( $posts, $query ) {
 
+            /**
+             * Filter search results custom data array
+             * @since 2.19
+             * @param array $this->data Search results data array
+             * @param object $query Query
+             * @param array $posts Posts
+             */
+            $this->data = apply_filters( 'aws_search_page_custom_data', $this->data, $query, $posts );
+
             $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true : false;
 
             if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $query->query_vars['s'] ) && $query->query && isset( $query->query['fields'] ) && $query->query['fields'] == 'ids' &&
-                ( ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
+                ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
             )
             {
 
@@ -318,7 +327,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true : false;
 
             if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] && isset( $query->query_vars['nopaging'] ) && ! $query->query_vars['nopaging'] &&
-                ( ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
+                ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
             ) {
                 $found_posts = count( $this->data['all_products'] );
             }

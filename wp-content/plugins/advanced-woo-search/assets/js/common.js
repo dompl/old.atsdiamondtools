@@ -418,15 +418,34 @@ AwsHooks.filters = AwsHooks.filters || {};
             analytics: function( label ) {
                 if ( d.useAnalytics ) {
                     try {
-                        if ( typeof gtag !== 'undefined' ) {
+                        var sPage = '/?s=' + encodeURIComponent( 'ajax-search:' + label );
+                        if ( typeof gtag !== 'undefined' && gtag !== null ) {
                             gtag('event', 'AWS search', {
                                 'event_label': label,
-                                'event_category': 'AWS Search Term'
+                                'event_category': 'AWS Search Term',
+                                'transport_type' : 'beacon'
+                            });
+                            gtag('event', 'page_view', {
+                                'page_path': sPage,
+                                'page_title' : 'AWS search'
                             });
                         }
-                        if ( typeof ga !== 'undefined' ) {
+                        if ( typeof ga !== 'undefined' && ga !== null ) {
                             ga('send', 'event', 'AWS search', 'AWS Search Term', label);
-                            ga( 'send', 'pageview', '/?s=' + encodeURIComponent( 'ajax-search:' + label ) );
+                            ga( 'send', 'pageview', sPage );
+                        }
+                        if ( typeof pageTracker !== "undefined" && pageTracker !== null ) {
+                            pageTracker._trackPageview( sPage );
+                            pageTracker._trackEvent( 'AWS search', 'AWS search', 'AWS Search Term', label )
+                        }
+                        if ( typeof _gaq !== 'undefined' && _gaq !== null ) {
+                            _gaq.push(['_trackEvent', 'AWS search', 'AWS Search Term', label ]);
+                            _gaq.push(['_trackPageview', sPage]);
+                        }
+                        // This uses Monster Insights method of tracking Google Analytics.
+                        if ( typeof __gaTracker !== 'undefined' && __gaTracker !== null ) {
+                            __gaTracker( 'send', 'event', 'AWS search', 'AWS Search Term', label );
+                            __gaTracker( 'send', 'pageview', sPage );
                         }
                     }
                     catch (error) {

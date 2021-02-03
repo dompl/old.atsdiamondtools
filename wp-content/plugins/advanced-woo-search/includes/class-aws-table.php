@@ -133,6 +133,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                     'offset'              => $index_meta['offset'],
                     'ignore_sticky_posts' => true,
                     'suppress_filters'    => true,
+                    'has_password'        => false,
                     'no_found_rows'       => 1,
                     'orderby'             => 'ID',
                     'order'               => 'DESC',
@@ -265,6 +266,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 'post_status'         => 'publish',
                 'ignore_sticky_posts' => true,
                 'suppress_filters'    => true,
+                'has_password'        => false,
                 'no_found_rows'       => 1,
                 'orderby'             => 'ID',
                 'order'               => 'DESC',
@@ -830,6 +832,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 'fields'           => 'ids',
                 'post_type'        => 'product',
                 'post_status'      => 'publish',
+                'has_password'     => false,
                 'no_found_rows'    => 1,
                 'include'          => $product_id,
                 'lang'             => ''

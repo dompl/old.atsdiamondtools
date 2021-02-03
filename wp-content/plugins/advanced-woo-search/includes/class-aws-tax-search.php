@@ -172,6 +172,8 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                 foreach ( $search_results as $result ) {
 
+                    $parent = '';
+
                     if ( function_exists( 'wpml_object_id_filter' )  ) {
                         $term = wpml_object_id_filter( $result->term_id, $result->taxonomy );
                         if ( $term != $result->term_id ) {
@@ -183,6 +185,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                     if ( $term != null && !is_wp_error( $term ) ) {
                         $term_link = get_term_link( $term );
+                        $parent    = is_object( $term ) && property_exists( $term, 'parent' ) ? $term->parent : '';
                     } else {
                         continue;
                     }
@@ -193,6 +196,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                         'count'    => ( $result->count > 0 ) ? $result->count : '',
                         'link'     => $term_link,
                         'excerpt'  => '',
+                        'parent'   => $parent
                     );
 
                     $result_array[$result->taxonomy][] = $new_result;

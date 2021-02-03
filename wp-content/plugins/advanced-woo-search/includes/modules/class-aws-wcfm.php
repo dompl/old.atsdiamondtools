@@ -43,9 +43,54 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
          * Constructor
          */
         public function __construct() {
+            add_filter( 'aws_excerpt_search_result', array( $this, 'wcfm_excerpt_search_result' ), 1, 3 );
             add_filter( 'aws_searchbox_markup', array( $this, 'wcfm_searchbox_markup' ), 1, 2 );
             add_filter( 'aws_front_data_parameters', array( $this, 'wcfm_front_data_parameters' ), 1 );
             add_filter( 'aws_search_query_array', array( $this, 'wcfm_search_query_array' ), 1 );
+        }
+
+        /*
+         * Add store name and logo inside search results
+         */
+        function wcfm_excerpt_search_result( $excerpt, $post_id, $product ) {
+
+            if ( function_exists( 'wcfm_get_vendor_id_by_post' ) ) {
+
+                $vendor_id = wcfm_get_vendor_id_by_post( $post_id );
+
+                if ( $vendor_id ) {
+                    if ( apply_filters( 'wcfmmp_is_allow_sold_by', true, $vendor_id ) && wcfm_vendor_has_capability( $vendor_id, 'sold_by' ) ) {
+
+                        global $WCFM, $WCFMmp;
+
+                        $is_store_offline = get_user_meta( $vendor_id, '_wcfm_store_offline', true );
+
+                        if ( ! $is_store_offline ) {
+
+                            $store_name = wcfm_get_vendor_store_name( absint( $vendor_id ) );
+                            $store_url = $WCFMmp->wcfmmp_store->get_shop_url();
+
+                            $logo = '';
+
+                            if ( apply_filters( 'wcfmmp_is_allow_sold_by_logo', true ) ) {
+                                $store_logo = wcfm_get_vendor_store_logo_by_vendor( $vendor_id );
+                                if ( ! $store_logo ) {
+                                    $store_logo = apply_filters( 'wcfmmp_store_default_logo', $WCFM->plugin_url . 'assets/images/wcfmmp-blue.png' );
+                                }
+                                $logo = '<img style="margin-right:4px;" width="24px" src="' . $store_logo . '" />';
+                            }
+
+                            $excerpt .= '<br><span style="margin-top:4px;display:block;" data-link="' . $store_url . '">' . $logo . $store_name . '</span>';
+
+                        }
+
+                    }
+                }
+
+            }
+
+            return $excerpt;
+
         }
 
         /*

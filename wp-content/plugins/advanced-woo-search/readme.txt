@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.6
-Stable tag: 2.18
+Stable tag: 2.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** 
 
 [Plugin home page](https://advanced-woo-search.com/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) | [Features List](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) | [Docs](https://advanced-woo-search.com/guide/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
-= Main Features =
+## Main Features
 
 * **Products search** - Search across all your WooCommerce products
 * **Search in** - Search in product **title**, **content**, **excerpt**, **categories**, **tags**, **ID** and **sku**. Or just in some of them
@@ -41,7 +41,7 @@ Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** 
 * Custom Product Tabs for WooCommerce plugin support
 * Search Exclude plugin support
 
-= Premium Features =
+## Premium Features
 
 Additional features available only in PRO plugin version.
 	
@@ -68,11 +68,18 @@ Additional features available only in PRO plugin version.
 
 [Features list](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
-= More Plugins From Us =
+### More Plugins From Us
 
 Here are some additional plugins that were made with love.
 
-* [Advanced Woo Labels](https://wordpress.org/plugins/advanced-woo-labels/)
+* [Advanced Woo Labels](https://wordpress.org/plugins/advanced-woo-labels/) - advanced labels for WooCommerce products
+* [Share This Image](https://wordpress.org/plugins/share-this-image/) - image sharing blugin
+
+### More usefull links
+
+* Plugin [homepage](https://advanced-woo-search.com/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+* Plugin [documentation](https://advanced-woo-search.com/guide/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+* Follow Advanced Woo Search on [Twitter](https://twitter.com/WooSearch)
 
 == Installation ==
 
@@ -82,13 +89,36 @@ Here are some additional plugins that were made with love.
 
 == Frequently Asked Questions ==
 
-= Knowledge Base =
+Please visit our [Advanced Woo Search guide](https://advanced-woo-search.com/guide/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) before requesting any support.
 
-You can find solutions and answers at the [Advanced Woo Search guide](https://advanced-woo-search.com/guide/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+= What is Advanced Woo Search? =
+
+Advanced Woo Search as is advanced search plugin for WooCommerce shops. Its packed with many usefull features like:
+
+* Search by product title, content, short description, SKU, tags, categories, ID, custom fields, attributes, taxonomies.
+* Support for variable product and its variations.
+* Multilingual plugins support.
+* Search and display product tags, categories, custom taxonomies.
+* and many more...
+
+Please visit [features page](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) for full list of available features.
+
+= What are the requirements to use Advanced Woo Search? =
+
+Advanced Woo Search is a plugin for self-hosted WordPress sites, or wordpress.com hosted sites that allow installation of third party plugins.
+Plugin requires the following at minimum to work properly:
+
+* WordPress 4.0 or greater
+* WooCommerce 3.0.0 or greater
+* PHP 5.5 or greater
+* MySQL 5.6 or MariaDB 10.0 or greater
+* Apache or Nginx server (recommended, but other options may work as well)
 
 = How to insert search form? =
 
-You can use build-in widget to place plugins search form to your sidebar.
+There are several ways you can add plugins search form on your site. The simplest way - is by turning on the **Seamless integration** option from the plugins settings page.
+
+You can also use build-in widget to place plugins search form to your sidebar or any other available widget area.
 
 Or just use shortcode for displaying form inside your post/page:
 
@@ -97,6 +127,30 @@ Or just use shortcode for displaying form inside your post/page:
 Or insert this function inside php file ( often it used to insert form inside page templates files ):
 
 `echo do_shortcode( '[aws_search_form]' );`
+
+Also please read the guide article about search form placement: [Adding Search Form.](https://advanced-woo-search.com/guide/search-form/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= What is the steps to make this plugin works on my site? =
+
+In order to start using the plugin search form you need to take following steps:
+
+* **Installation**. Install and activate the plugin. You can follow [these steps](https://advanced-woo-search.com/guide/installation/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo) if you face any problems.
+* **Index plugin table**. Click on the **Reindex table** button inside the plugin settings page and wait till the index process is finished.
+* **Set plugin settings**. Leave it to default values or customize some of them.
+* **Add search form**. There are several ways you can add a search form to your site. Use the **Seamless integration** option, shortcode, widget or custom php function. Read more in the guide article: [Adding Search Form](https://advanced-woo-search.com/guide/search-form/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+* **Finish!** Now all is set and you can check your search form on the pages where you add it.
+
+= Will this plugin work with my theme? =
+
+Plugin search will works with most of the available WordPress themes. If you faced any problems using the plugin with your theme please [contact support](https://advanced-woo-search.com/contact/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+
+= Is it integrated with my plugin? =
+
+Advanced Woo Search works with many plugins out-of-the-box. For some of the most popular plugins we manually check proper work of integration features. It is the plugins like **Advanced Custom Fields**, **WPML**, **Polylang**, **Elementor**, **Divi Builder**, **BeRocket AJAX Product Filters**, **FacetWP** and many more.
+
+Please read some guide integrations articles: [Integrations](https://advanced-woo-search.com/guide-category/integrations/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
+
+Note that if some of the plugin is not presented in the list it doesn't mean that it will not work with Advanced Woo Search. Many plugins will just work without any extra effort. But if you find any problem with your plugin and Advanced Woo Search please [contact support team](https://advanced-woo-search.com/contact/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo).
 
 = Is this plugin compatible with latest version of Woocommerce? =
 
@@ -111,6 +165,18 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.19 ( 2021-01-18 ) =
+* Add - Support for WooCommerce Product Filter by WooBeWoo plugin
+* Add - Integration for Martfury theme
+* Add - Integration for ATUM Inventory Management for WooCommerce plugin ( Product level addon ). Hide not sellable products
+* Update - Dynamic strings translation. Load translation from .po file for default strings if no dynamic translation specified
+* Update - WCFM - Multivendor Marketplace plugin integration. Add vendors shop name and logo inside search results list
+* Fix - GA tracking code
+* Fix - Do not index and search for password protected products
+* Fix - Hide product with visibility = catalog from the AJAX search results
+* Dev - Update taxonomies search results response. Add parent term value.
+* Dev - Add aws_search_page_custom_data filter
 
 = 2.18 ( 2021-01-04 ) =
 * Add - Support for Walker WordPress theme
