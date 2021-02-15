@@ -245,7 +245,7 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                     });
 
-                    if ( d.showMore ) {
+                    if ( d.showMore && d.showPage ) {
                         html += '<li class="aws_result_item aws_search_more"><a href="#">' + translate.showmore + '</a></li>';
                     }
 

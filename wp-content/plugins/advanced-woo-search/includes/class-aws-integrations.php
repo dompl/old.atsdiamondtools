@@ -88,9 +88,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_action( 'wp_head', array( $this, 'myashop_head_action' ) );
             }
 
-            // Porto theme
-            add_filter( 'porto_search_form_content', array( $this, 'porto_search_form_content_filter' ) );
-
             add_filter( 'aws_terms_exclude_product_cat', array( $this, 'filter_protected_cats_term_exclude' ) );
             add_filter( 'aws_exclude_products', array( $this, 'filter_products_exclude' ) );
 
@@ -144,6 +141,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                 if ( 'Walker' === $this->current_theme ) {
                     add_action( 'wp_head', array( $this, 'walker_head_action' ) );
+                }
+
+                if ( 'Porto' === $this->current_theme ) {
+                    add_filter( 'porto_search_form_content', array( $this, 'porto_search_form_content_filter' ) );
+                    add_action( 'wp_head', array( $this, 'porto_head_action' ) );
                 }
 
             }
@@ -200,6 +202,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'post_class', array( $this, 'avada_post_class' ) );
             }
 
+            if ( 'Electro' === $this->current_theme ) {
+                add_filter( 'aws_searchbox_markup', array( $this, 'electro_searchbox_markup' ), 1, 2 );
+            }
+
             // FacetWP plugin
             if ( class_exists( 'FacetWP' ) ) {
                 add_filter( 'facetwp_filtered_post_ids', array( $this, 'facetwp_filtered_post_ids' ), 1 );
@@ -223,6 +229,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_indexed_data', array( $this, 'atum_index_data' ), 10, 2 );
             }
 
+            // Popups for Divi plugin
+            if ( defined( 'DIVI_POPUP_PLUGIN' ) ) {
+                add_action( 'wp_enqueue_scripts', array( $this, 'divi_popups_enqueue_scripts' ), 999 );
+            }
+
         }
 
         /**
@@ -238,6 +249,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Divi module
             if ( defined( 'ET_BUILDER_PLUGIN_DIR' ) || function_exists( 'et_setup_theme' ) ) {
                 include_once( AWS_DIR . '/includes/modules/divi/class-divi-aws-module.php' );
+            }
+
+            // Beaver builder module
+            if ( class_exists( 'FLBuilder' ) ) {
+                include_once( AWS_DIR . '/includes/modules/bb-aws-search/class-aws-bb-module.php' );
             }
 
             // WCFM - WooCommerce Multivendor Marketplace
@@ -938,15 +954,34 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          * Porto theme seamless integration
          */
         public function porto_search_form_content_filter( $markup ) {
-
-            if ( AWS()->get_settings('seamless') === 'true' ) {
-                $pattern = '/(<form[\S\s]*?<\/form>)/i';
+            $pattern = '/(<form[\S\s]*?<\/form>)/i';
+            if ( strpos( $markup, 'aws-container' ) === false ) {
                 $markup = preg_replace( $pattern, aws_get_search_form( false ), $markup );
             }
-
+            $markup = str_replace( 'aws-container', 'aws-container searchform', $markup );
             return $markup;
-
         }
+
+        /*
+         * Porto theme styles
+         */
+        public function porto_head_action() { ?>
+
+            <style>
+                #header .aws-container .aws-search-field {
+                    border: 1px solid #eeeeee !important;
+                    height: 100%;
+                }
+                #header .aws-container .aws-search-form {
+                    height: 36px;
+                }
+                #header .aws-container .aws-search-form .aws-form-btn {
+                    background: #fff;
+                    border-color: #eeeeee;
+                }
+            </style>
+
+        <?php }
 
         /*
          * Exclude product categories
@@ -1460,6 +1495,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Electro them update search form markup
+         */
+        public function electro_searchbox_markup( $markup, $params ) {
+            $pattern = '/<div class="aws-search-btn aws-form-btn">[\S\s]*?<\/div>/i';
+            $markup = preg_replace( $pattern, '', $markup );
+            return $markup;
+        }
+
+        /*
          * FacetWP check for active filters
          */
         public function facetwp_filtered_post_ids( $post_ids ) {
@@ -1599,6 +1643,34 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $data = array();
             }
             return $data;
+        }
+
+        /*
+         * Popups for Divi plugin fix scrolling for search results
+         */
+        function divi_popups_enqueue_scripts() {
+
+            $script = "
+                if ( typeof DiviArea === 'object' ) {
+                    DiviArea.addAction('disabled_scrolling', function() {
+                        var aws_form = jQuery('[data-da-area] .aws-search-form');
+                        if ( aws_form.length > 0 ) {
+                            DiviArea.Core.enableBodyScroll();
+                            jQuery('body').addClass('da-overlay-visible');
+                        }
+                    });      
+                    DiviArea.addAction('close_area', function() {
+                        var aws_form = jQuery('[data-da-area] .aws-search-form');
+                        if ( aws_form.length > 0 ) {
+                            jQuery('body').removeClass('da-overlay-visible');
+                            jQuery('.aws-search-result').hide();
+                        }
+                    });
+                }
+            ";
+
+            wp_add_inline_script( 'aws-script', $script );
+
         }
 
     }

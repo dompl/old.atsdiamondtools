@@ -682,3 +682,12 @@ msgstr ""
 
 msgid "Pricing"
 msgstr ""
+
+msgid "WooCommerce search form"
+msgstr ""
+
+msgid "To configure your Advanced Woo Search form please visit %s."
+msgstr ""
+
+msgid "plugin settings page"
+msgstr ""

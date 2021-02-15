@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.6
-Stable tag: 2.19
+Stable tag: 2.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -165,6 +165,13 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.20 ( 2021-02-02 ) =
+* Add - Beaver Builder plugin support
+* Update - Integration for Electro theme
+* Update - Porto theme integration
+* Fix - Hide 'Show all results' button if search results page is disabled
+* Fix - Scrolling for search results inside pop-ups via 'Popups for Divi' plugin
 
 = 2.19 ( 2021-01-18 ) =
 * Add - Support for WooCommerce Product Filter by WooBeWoo plugin
