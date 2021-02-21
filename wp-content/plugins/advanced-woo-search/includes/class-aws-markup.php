@@ -48,6 +48,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             }
 
             $form_action = AWS_Helpers::get_search_url();
+            $input_id = uniqid();
 
             $params_string = '';
 
@@ -87,7 +88,8 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
 
             $markup .= '<div class="aws-wrapper">';
 
-                $markup .= '<input  type="search" name="s" value="' . get_search_query() . '" class="aws-search-field" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
+                $markup .= '<label style="position:absolute !important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" class="aws-search-label" for="' . esc_attr( $input_id ) . '">' . esc_attr( $placeholder ) . '</label>';
+                $markup .= '<input type="search" name="s" id="' . esc_attr( $input_id ) . '" value="' . get_search_query() . '" class="aws-search-field" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
                 $markup .= '<input type="hidden" name="post_type" value="product">';
                 $markup .= '<input type="hidden" name="type_aws" value="true">';
 

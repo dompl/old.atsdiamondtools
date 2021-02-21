@@ -32,10 +32,12 @@ class AWS_Widget extends WP_Widget {
             $this->id_base
         );
 
-        echo $before_widget;
-        echo $before_title;
-        echo $title;
-        echo $after_title;
+        if ( $title ) {
+            echo $before_widget;
+            echo $before_title;
+            echo $title;
+            echo $after_title;
+        }
 
         // Generate search form markup
         echo AWS()->markup();

@@ -148,6 +148,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'porto_head_action' ) );
                 }
 
+                if ( 'BoxShop' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'boxshop_head_action' ) );
+                }
+
+                if ( 'Aurum' === $this->current_theme ) {
+                    add_filter( 'aurum_show_search_field_on_mobile', '__return_false' );
+                    add_filter( 'wp_nav_menu', array( $this, 'aurum_mobile_menu' ), 10, 2 );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -240,6 +249,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          * Include files
          */
         public function includes() {
+
+            // Getenberg block
+            if ( function_exists( 'register_block_type' ) ) {
+                include_once( AWS_DIR . '/includes/modules/gutenberg/class-aws-gutenberg-init.php' );
+            }
 
             // Elementor plugin widget
             if ( defined( 'ELEMENTOR_VERSION' ) || defined( 'ELEMENTOR_PRO_VERSION' ) ) {
@@ -968,6 +982,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         public function porto_head_action() { ?>
 
             <style>
+                #header .aws-container.searchform {
+                    border: 0 !important;
+                    border-radius: 0 !important;
+                }
                 #header .aws-container .aws-search-field {
                     border: 1px solid #eeeeee !important;
                     height: 100%;
@@ -982,6 +1000,36 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </style>
 
         <?php }
+
+        /*
+         * BoxShop theme styles
+         */
+        public function boxshop_head_action() { ?>
+
+            <style>
+                .ts-header .aws-container .aws-search-form .aws-search-btn.aws-form-btn {
+                    background-color: #e72304;
+                }
+                .ts-header .aws-container .aws-search-form .aws-search-btn.aws-form-btn:hover {
+                    background-color: #000000;
+                }
+                .aws-container .aws-search-form .aws-search-btn_icon {
+                    color: #fff;
+                }
+            </style>
+
+        <?php }
+
+        /*
+         * Add search form to Aurum theme mobile menu
+         */
+        public function aurum_mobile_menu( $nav_menu, $args ) {
+            if ( $args->theme_location === 'main-menu' && $args->menu_class && $args->menu_class === 'mobile-menu' ) {
+                $form = aws_get_search_form( false );
+                $nav_menu = $form . $nav_menu;
+            }
+            return $nav_menu;
+        }
 
         /*
          * Exclude product categories
@@ -1148,6 +1196,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Martfury' === $this->current_theme ) {
                 $selectors[] = '#site-header .products-search';
+            }
+
+            if ( 'BoxShop' === $this->current_theme ) {
+                $selectors[] = '.ts-header .search-wrapper form';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

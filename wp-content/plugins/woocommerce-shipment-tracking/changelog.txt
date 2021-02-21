@@ -1,5 +1,75 @@
 *** Shipment Tracking Changelog ***
 
+2020-10-12 - version 1.6.26
+* Add   - Purolator shipping for Canada.
+* Fix   - Fastway Couriers NZ is now Aramex.
+
+2020-09-30 - version 1.6.25
+* Fix   - Match provider names without spaces to match ShipStation carrier string.
+* Tweak - WC 4.5 compatibility.
+
+2020-08-11 - version 1.6.24
+* Fix   - WordPress 5.5 REST API compatibility changes.
+
+2020-06-05 - version 1.6.23
+* Fix   - Spaces in postal code prevents some tracking services to fail.
+* Tweak - WC 4.2 compatibility.
+
+2020-04-29 - version 1.6.22
+* Fix - Update post.at link.
+* Fix - Legacy tracking links/provider name not working/showing.
+
+2020-04-23 - version 1.6.21
+* Fix - Subscriptions integration fatal error for PHP7.1.
+
+2020-04-21 - version 1.6.20
+* Tweak - Remove legacy code.
+* Tweak - Introduced a more general REST endpoint (`shipment-trackings/providers`) for methods unrelated to specific order.
+* Tweak - UTF-8 support for custom providers.
+
+2020-03-05 - version 1.6.19
+* Tweak - WC 4.0 compatibility.
+
+2020-01-14 - version 1.6.18
+* Fix - get_option calls were initiating on all page loads hindering performance.
+* Tweak - Move api to its own namespace at wc-shipment-tracking/v3/ old namespaces wc/v1 and wc/v2 are deprecated.
+* Tweak  - WC 3.9 compatibility.
+
+2019-11-05 - version 1.6.17
+* Tweak  - WC 3.8 compatibility.
+
+2019-10-16 - version 1.6.16
+* Tweak - Renamed UK Mail to DHL Parcel UK.
+* Fix	  - Updated UK Mail link to new DHL Parcel UK tracking link.
+* Add	  - Fastway South Africa provider.
+* Add   - Polish shipping providers.
+
+2019-08-06 - version 1.6.15
+* Tweak  - WC 3.7 compatibility.
+
+2019-05-08 - version 1.6.14
+* Fix    - Updated PostNL tracking link.
+
+2019-04-16 - version 1.6.13
+* Tweak  - WC 3.6 compatibility.
+
+2018-09-25 - version 1.6.12
+* Fix    - New tracking URL for UK Mail.
+* Enhancement - Added UPS support for Netherlands
+* Update - WC 3.5 compatibility.
+
+2018-05-23 - version 1.6.11
+* Fix    - Belgian Shipping Provider BPOST tracking link does not work.
+* Fix    - Prevent updater from running more than once.
+* Update - Privacy policy notification.
+* Update - Export/erasure hooks added.
+* Update - WC 3.4 compatibility.
+
+2018-01-25 - version 1.6.10
+* Fix - Ensures a vertical space below the tracking information in HTML emails.
+* Fix - Ensure the "Date" label is shown correctly when viewing tracking information on a mobile device.
+* Tweak - Hide the "Track" button if no tracking URL is present.
+
 2017-12-14 - version 1.6.9
 * Add - WC minimum requirements to header.
 
