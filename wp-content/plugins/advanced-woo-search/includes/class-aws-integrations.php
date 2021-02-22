@@ -276,6 +276,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 AWS_WCFM::instance();
             }
 
+            // WOOF - WooCommerce Products Filter
+            if ( defined( 'WOOF_PLUGIN_NAME' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-woof-filter.php' );
+            }
+
         }
 
         /*

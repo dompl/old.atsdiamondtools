@@ -104,10 +104,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             }
 
             $new_posts = array();
-            $search_query = $query->query_vars['s'] ? $query->query_vars['s'] : $_GET['s'];
             $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
             $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
-            $search_res = $this->search( $search_query, $query, $posts_per_page, $paged );
+            $search_res = $this->search( $query, $posts_per_page, $paged );
 
             $query->found_posts = count( $search_res['all'] );
             $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
@@ -206,9 +205,8 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 $products_ids = array();
                 $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
                 $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
-                $search_query = $_GET['s'];
 
-                $search_res = $this->search( $search_query, $query, $posts_per_page, $paged );
+                $search_res = $this->search( $query, $posts_per_page, $paged );
 
                 $query->found_posts = count( $search_res['all'] );
                 $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
@@ -341,8 +339,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function facetwp_pre_filtered_post_ids( $post_ids, $obj ) {
             if ( isset( $_GET['type_aws'] ) && isset( $_GET['s'] ) ) {
-                $search_query = $_GET['s'];
-                $search_res = $this->search( $search_query, $obj->query, $obj->query_args['posts_per_page'], $obj->query_args['paged'] );
+                $search_res = $this->search( $obj->query, $obj->query_args['posts_per_page'], $obj->query_args['paged'] );
                 $products_ids = array();
                 foreach ( $search_res['all'] as $product ) {
                     $products_ids[] = $product['id'];
@@ -355,13 +352,14 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         /**
          * Perform the search.
          *
-         * @param string $s
          * @param object $query
          * @param int $posts_per_page
          * @param int $paged
          * @return array
          */
-        private function search( $s, $query, $posts_per_page, $paged = 1 ) {
+        private function search( $query, $posts_per_page, $paged = 1 ) {
+
+            $s = $this->get_search_query( $query );
 
             $hash = hash( 'md2', $s );
 
@@ -533,6 +531,27 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             }
 
             return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
+        }
+
+        /**
+         * Get current page search query
+         *
+         * @param object|bool $query
+         * @return string
+         */
+        private function get_search_query( $query = false ) {
+
+            $search_query = isset( $_GET['s'] ) ? $_GET['s'] : ( ( is_object( $query ) && $query->query_vars['s'] ) ? $query->query_vars['s'] : '' );
+
+            /**
+             * Filter search query string for search results page
+             * @since 2.22
+             * @param string $search_query Search query string
+             * @param object|bool $query Search query object
+             */
+
+            return apply_filters( 'aws_search_page_query', $search_query, $query );
+
         }
 
     }
