@@ -38,7 +38,10 @@ msgid ""
 "Update all data in plugins index table. Index table - table with products "
 "data where plugin is searching all typed terms.<br>Use this button if you "
 "think that plugin not shows last actual data in its search results.<br>"
-"<strong>CAUTION:</strong> this can take large amount of time.</span>"
+"<strong>CAUTION:</strong> this can take large amount of time."
+msgstr ""
+
+msgid "Index table options can be found inside %s section."
 msgstr ""
 
 #: includes/class-aws-admin.php:362
@@ -690,4 +693,79 @@ msgid "To configure your Advanced Woo Search form please visit %s."
 msgstr ""
 
 msgid "plugin settings page"
+msgstr ""
+
+msgid "Please do not close the page."
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+msgid "(index disabled)"
+msgstr ""
+
+msgid "(enable)"
+msgstr ""
+
+msgid "Source index disabled"
+msgstr ""
+
+msgid "Advanced Woo Search: In order to apply the changes in the index table you need to reindex. %s"
+msgstr ""
+
+msgid "Search options"
+msgstr ""
+
+msgid "Search rule"
+msgstr ""
+
+msgid "Search rule that will be used for terms search."
+msgstr ""
+
+msgid "( contains ). Search query can be inside any part of the product words ( beginning, end, middle ). Slow."
+msgstr ""
+
+msgid "( begins ). Search query can be only at the beginning of the product words. Fast."
+msgstr ""
+
+msgid "AJAX timeout"
+msgstr ""
+
+msgid "Time after user input that script is waiting before sending a search event to the server, ms."
+msgstr ""
+
+msgid "Index table options"
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
+msgid "To perform the search plugin use a special index table. This table contains normalized words of all your products from all available sources."
+msgstr ""
+
+msgid "Sometimes when there are too many products in your store index table can be very large and that can reflect on search speed."
+msgstr ""
+
+msgid "In this section you can use several options to change the table size by disabling some unused product data."
+msgstr ""
+
+msgid "Note:"
+msgstr ""
+
+msgid "Reindex is required after options changes."
+msgstr ""
+
+msgid "Data to index"
+msgstr ""
+
+msgid "Choose what products data to add inside the plugin index table."
+msgstr ""
+
+msgid "What to index"
+msgstr ""
+
+msgid "Index variations"
+msgstr ""
+
+msgid "Index or not content of product variations."
 msgstr ""

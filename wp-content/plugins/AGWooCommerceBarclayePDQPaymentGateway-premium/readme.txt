@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.5.2
+Tested up to: 5.7
 Stable tag: 4.2
 
 == Description ==
@@ -37,6 +37,47 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.2.2 - 03/06/21 =
+* Fix           - Fix sizing of order column in order screen.
+* Fix           - Fixed "Layout of the payment methods" setting when none is selected.
+* Fix           - Fixed refund amount for users on PHP version < 7.2.
+* Fix           - Show plugin title in WooCommerce checkout block.
+* Fix           - Fixed issue with error status codes in order status check funtion.
+* New           - New define to remove custom order column to display AG status check ('AG_disable_column').
+* New           - New logic to enable manual cancel of order.
+* New           - Need deeper debugging for refunds.
+* Update        - FS SDK update. 
+
+= v4.2.1 - 22/03/21 =
+* New           - Support for WooCommerce Checkout Blocks (Gutenberg).
+* Fix           - Fixed issue where orders were no longer sortable.
+
+
+= v4.2.0 - 19/03/21 =
+* New           - New feature. Auto check order ePDQ status if WooCommerce order is cancelled (Time limit reached), we recommend this feature over Direct HTTP server-to-server request.
+* New           - New feature. You can now manually check the status of an order from within the edit order screen in WooCommerce.
+* New           - If refund fails a new popup notice shows (This replaces the WP default API fail notice).
+* New           - New logic to catch double order notes when API call back happens.
+* New           - New logic gate on payment redirect page to catch issue with plugin settings, new notice shown if set up has an issue.
+* New           - Logging of customer user agent (debug log and within order data).
+* New           - Store time stamp from when customer was sent to ePDQ and when customer returned to website.
+* New           - Print time taken from stored times (Sent and returned to website) in order notes and debug log.
+* New           - New logic to catch if order contains more than 10 products and replace COM parameter with NULL.
+* New           - New warning if refund settings have not been set in plugin settings.
+* New           - New remote_post() function in helper class (Refund and order status check are now using this).
+* New           - New get_enviroment_url() function in helper class (Refund and order status check are now using this).
+* Change        - Storing transaction ID for use in other plugins.
+* Change        - Change language param to use get_locale() function.
+* Change        - Changed how order id is passed to ePDQ.
+* Change        - Moved image folder inside assets.
+* Change        - Notice added to SHA-1 option in settings screen.
+* Change        - Replaced AG_ePDQ_Helpers::AG_escape() in ag_show_wizard() function as was causing issues for small number of new installs.
+* Change        - Some minor changes to setup wizard and a surprise at the end...
+* Fix           - Fixed debug URL in the settings screen.
+* Fix           - Fixed URL's in the welcome screen.
+* Fix           - Fix in wizard to stop multiple demo products being added each time.
+* Update        - FS SDK update.
 
 = v4.1.4 - 09/11/20 =
 * Fix           - Fixed bug where welcome screen link would show blank in admin menu.

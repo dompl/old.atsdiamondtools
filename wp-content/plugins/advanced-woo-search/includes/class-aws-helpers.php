@@ -910,6 +910,51 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
+        /**
+         * Get array of index table options
+         * @return array $options
+         */
+        static public function get_index_options() {
+
+            /**
+             * Apply or not WP filters to indexed content
+             * @since 1.82
+             * @param bool false
+             */
+            $apply_filters = apply_filters( 'aws_index_apply_filters', false );
+
+            $index_variations_option = AWS()->get_settings( 'index_variations' );
+            $index_sources_option = AWS()->get_settings( 'index_sources' );
+
+            $index_variations = $index_variations_option && $index_variations_option === 'false' ? false : true;
+            $index_title = is_array( $index_sources_option ) && isset( $index_sources_option['title'] ) && ! $index_sources_option['title']  ? false : true;
+            $index_content = is_array( $index_sources_option ) && isset( $index_sources_option['content'] ) && ! $index_sources_option['content']  ? false : true;
+            $index_sku = is_array( $index_sources_option ) && isset( $index_sources_option['sku'] ) && ! $index_sources_option['sku']  ? false : true;
+            $index_excerpt = is_array( $index_sources_option ) && isset( $index_sources_option['excerpt'] ) && ! $index_sources_option['excerpt']  ? false : true;
+            $index_category = is_array( $index_sources_option ) && isset( $index_sources_option['category'] ) && ! $index_sources_option['category']  ? false : true;
+            $index_tag = is_array( $index_sources_option ) && isset( $index_sources_option['tag'] ) && ! $index_sources_option['tag']  ? false : true;
+            $index_id = is_array( $index_sources_option ) && isset( $index_sources_option['id'] ) && ! $index_sources_option['id']  ? false : true;
+
+            $index_vars = array(
+                'variations' => $index_variations,
+                'title' => $index_title,
+                'content' => $index_content,
+                'sku' => $index_sku,
+                'excerpt' => $index_excerpt,
+                'category' => $index_category,
+                'tag' => $index_tag,
+                'id' => $index_id,
+            );
+
+            $options = array(
+                'apply_filters' => $apply_filters,
+                'index'         => $index_vars,
+            );
+
+            return $options;
+
+        }
+
     }
 
 endif;

@@ -38,6 +38,14 @@ function init_ag_epdq() {
 			$this->method_title = 'AG ePDQ Checkout';
 			$this->icon			= apply_filters('woocommerce_epdq_checkout_icon', '');
 			$this->has_fields 	= false;
+			$this->test_url 	= 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
+			$this->live_url 	= 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
+			$this->refund_test 	= 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
+			$this->refund_live	= 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
+			$this->notice 		= 'no';
+			$this->status		= 'test';
+
+			
 			if (!AG_licence::valid_licence()) {
 				return;
 			}
@@ -49,20 +57,16 @@ function init_ag_epdq() {
 			}
 			$this->init_settings();
 
-			$this->test_url 	= 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
-			$this->live_url 	= 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
-			$this->refund_test 	= 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-			$this->refund_live	= 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
+
 
 			// Turn settings into variables we can use
 			foreach ($this->settings as $setting_key => $value) {
 				$this->$setting_key = $value;
 			}
 
-			$this->sha_method 	= ($this->sha_method != '') ? $this->sha_method : 2;
+			//$this->sha_method 	= ($this->sha_method != '') ? $this->sha_method : 2;
 			$this->notice 	= ($this->notice != '') ? $this->notice : 'no';
 			$this->threeds = $this->get_option( 'threeds' ) ?: 'no';
-			update_option( 'threeds', $this->threeds );
 			$this->description = $this->display_checkout_description();
 
 			$this->supports = array(
@@ -121,7 +125,7 @@ function init_ag_epdq() {
 		*/
 		public function display_redirect_message() {
 			
-			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>', 'ag_epdq_server'), AG_ePDQ_server_path . 'img/AG-ePDQ-redirect.png' );
+			$input = sprintf(__('<span class="AG-redirect-icon"><img src="%s" /></span>', 'ag_epdq_server'), AG_ePDQ_server_path . 'inc/assets/img/AG-ePDQ-redirect.png' );
 			$input .= __('<p class="AG-redirect-notice">After clicking "Place order", you will be redirected to Barclays to complete your purchase securely.</p>', 'ag_epdq_server');
 			return $input;
 
@@ -163,12 +167,12 @@ function init_ag_epdq() {
 			$icon = '';
 			if (!$cardTypes) {
 				// default behavior
-				$icon = '<img src="' . AG_ePDQ_server_path . '/img/cards.gif" alt="' . $this->title . '" />';
+				$icon = '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/cards.gif" alt="' . $this->title . '" />';
 			} elseif ($cardTypes) {
 				// display icons for the selected card types
 				$icon = '';
 				foreach ($cardTypes as $cardtype) {
-					$icon .= '<img class="ePDQ-card-icons" src="' . AG_ePDQ_server_path . 'img/new-card/' . strtolower($cardtype) . '.png" alt="' . strtolower($cardtype) . '" />';
+					$icon .= '<img class="ePDQ-card-icons" src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower($cardtype) . '.png" alt="' . strtolower($cardtype) . '" />';
 				}
 			}
 
@@ -209,6 +213,19 @@ function init_ag_epdq() {
 
 		$order = new WC_Order($order_id);
 
+		// Storing data for 3Ds debugging.
+		$orderdata = array(
+			'customer_user_agent'   	=> 	$_SERVER['HTTP_USER_AGENT'],
+			'AG_sent_to_ePDQ'	=>	date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ),
+		);
+		
+		AG_ePDQ_Helpers::update_order_meta_data($order_id, $orderdata);
+
+		// This is for debugging customer device type.
+		if(defined('ePDQ_support_debug')) {
+			AG_ePDQ_Helpers::ag_log($_SERVER['HTTP_USER_AGENT'], 'debug', $this->debug);
+		}
+
 		return array(
 			'result' 	=> 'success',
 			'redirect'	=> $order->get_checkout_payment_url(true)
@@ -240,6 +257,13 @@ function init_ag_epdq() {
 			$PSPID = ePDQ_PSPID;
 		} else {
 			$PSPID = $settings['pspid'];
+		}
+
+		// Use different PSPID (This is useful for stores that are franchisees)
+		$ePDQ_PSPID = null;
+		$multi_PSPID = apply_filters('ePDQ_PSPID', $ePDQ_PSPID);
+		if(!empty($multi_PSPID)) {
+			$PSPID = $multi_PSPID;
 		}
 
 		// Products
@@ -279,7 +303,7 @@ function init_ag_epdq() {
 			'AMOUNT' => $order->get_total() * 100,
 			'COMPLUS' => $encrypted_string,
 			'CURRENCY' => get_woocommerce_currency(),
-			'LANGUAGE' => str_replace('-', '_', get_bloginfo('language')),
+			'LANGUAGE' => get_locale(),
 			'CN' => $fullName,
 			'COM' => $com,
 			'EMAIL' => $order->get_billing_email(),
@@ -295,11 +319,6 @@ function init_ag_epdq() {
 			'TP' => (isset($this->template) ? $this->template : ''),
 			'LOGO' => (isset($this->logo) ? $this->logo : ''),
 			'TITLE' => '',
-			// New feature in the works.
-			//'DATATYPE' => 'TRAVEL',
-			//'AIAIRNAME' => 'AGtestref',
-			//'AITINUM'	=> 'BSP + 000000000',
-
 		);
 
 		if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order)) {
@@ -322,8 +341,13 @@ function init_ag_epdq() {
 				default:
 					$billing_period = 'm';
 					$subscription_interval = WC_Subscriptions_Order::get_subscription_interval($order);
+					$adv = strtotime("+1 Months");
 					break;
 			}
+
+			// todo $adv is a hot fix from Ross Davidson, Will need to work out the strtotime for day, week and year and test.
+
+
 			// Recurring payment
 			$fields['SUBSCRIPTION_ID'] = $order->get_order_number();
 			$fields['SUB_AMOUNT'] = $order->get_total() * 100;
@@ -333,7 +357,7 @@ function init_ag_epdq() {
 			$fields['SUB_PERIOD_MOMENT'] = date('d');
 			$fields['SUB_PERIOD_NUMBER'] = $subscription_interval;
 			$fields['SUB_PERIOD_UNIT'] = $billing_period;
-			$fields['SUB_STARTDATE'] = date('Y-m-d');
+			$fields['SUB_STARTDATE'] = date("Y-m-d", $adv);
 			$fields['SUB_STATUS'] = '1';
 		}
 
@@ -341,12 +365,12 @@ function init_ag_epdq() {
 		$fields['PARAMVAR']	 =	$order->get_id();
 
 		// Order card icons on ePDQ side
-		$fields['PMLISTTYPE'] = $this->pmlisttype;
+		$fields['PMLISTTYPE'] = (isset($this->pmlisttype) ? $this->pmlisttype : '0');
 
 		// Hook to add extra para
 		do_action( 'AG_ePDQ_extra_parameters' );
 
-		AG_ePDQ_Helpers::ag_log('Debug URLs ' . $order_received_url .' and ' . $cancel_order_url, 'debug', $this->debug);
+		AG_ePDQ_Helpers::ag_log('Debug URL ' . $order_received_url, 'debug', $this->debug);
 
 
 		$shasign = '';
@@ -372,7 +396,7 @@ function init_ag_epdq() {
 		}
 
 
-		if (isset($this->status) and ($this->status == 'test' or $this->status == 'live')) :
+		if (isset($this->status) and ($this->status == 'test' or $this->status == 'live')) {
 			if ($this->status == 'test')	$url = $this->test_url;
 			if ($this->status == 'live')	$url = $this->live_url;
 
@@ -383,9 +407,7 @@ function init_ag_epdq() {
 			echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __('Pay securely', 'ag_epdq_server') . '" />';
 			echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'ag_epdq_server') . '</a></form>';
 
-		endif;
-
-		wc_enqueue_js('
+			wc_enqueue_js('
 				$("body").block({
 						message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server') . '",
 						overlayCSS:
@@ -404,7 +426,16 @@ function init_ag_epdq() {
 							}
 					});
 				$("#submit_epdq_payment_form").click();
-		');
+			');
+
+		} else {
+
+			echo 'Please double check the ePDQ plugin settings, something is not quite right...';
+			AG_ePDQ_Helpers::ag_log('Please double check the ePDQ plugin settings, something is not quite right...', 'debug', $this->debug);
+
+		}
+
+
 	}
 
 	/**
@@ -464,8 +495,10 @@ function init_ag_epdq() {
 		}
 		$encrypted_string = ePDQ_crypt::ripemd_crypt(implode($hash_fields), $settings['shain']);
 
+		
+
 		if (null !== AG_ePDQ_Helpers::AG_get_request('STATUS')) {
-	
+	 
 			if (hash_equals($encrypted_string, $nonce)) {
 				if (!empty($this->sha_out)) {
 					$SHA_check = $this->SHA_check($check_data);
@@ -493,7 +526,7 @@ function init_ag_epdq() {
 		} else {
 	
 			AG_ePDQ_Helpers::ag_log('The transaction failed, ePDQ didn\'t send any data back. Please check you have setup the plugin correctly.', 'warning', $this->debug);
-			wp_die('Transaction fail.');
+			//wp_die('Transaction fail.');
 		}
 	}
 	
@@ -608,7 +641,23 @@ function init_ag_epdq() {
 			$order_notes['Subscription status: '] = isset($args['creation_status']) ? $args['creation_status'] : '';
 		}
 
+
 		AG_ePDQ_Helpers::update_order_notes($order, $order_notes);
+
+
+		// Time customer took to process through ePDQ
+		update_post_meta( $order->get_id(), 'AG_returned_back', date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ) );
+		$start = new DateTime(get_post_meta( $order->get_id(), 'AG_sent_to_ePDQ', true ));
+		$finish = new DateTime(get_post_meta( $order->get_id(), 'AG_returned_back', true ));
+		
+		if(!empty($start) && !empty($finish)) {
+		
+			$interval = date_diff($start,$finish);
+			AG_ePDQ_Helpers::ag_log('Customer took '. $interval->format('%i Minute %s Seconds') .' to process through ePDQ' , 'debug', $this->debug);
+			$time = __('Customer took '. $interval->format('%i Minute %s Seconds') .' to process through ePDQ', 'ag_epdq_direct');
+			$order->add_order_note($time);
+					
+		}
 
 		$order_data = array();
 		unset($args['SHASIGN']);
@@ -631,12 +680,15 @@ function init_ag_epdq() {
 		switch ($STATUS): case '4':
 			case '5':
 			case '9':
-				$noteTitle = __('Barclays ePDQ transaction is confirmed.', 'ag_epdq_server');
-				AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed. No issues to report.', 'debug', $this->debug);
-				$order->add_order_note($noteTitle);
-				$order->add_order_note($note);
-				$order->payment_complete();
+				if ( ! $order->has_status( array( 'processing', 'completed' ) ) ) {
+					$noteTitle = __('Barclays ePDQ transaction is confirmed.', 'ag_epdq_server');
+					AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed. No issues to report.', 'debug', $this->debug);
+					$order->add_order_note($noteTitle);
+					$order->add_order_note($note);
+					$order->payment_complete($args['PAYID']);
+				}
 				break;
+				
 
 			case '41':
 			case '51':
@@ -671,7 +723,7 @@ function init_ag_epdq() {
 				$noteTitle = __('The customer has cancelled the transaction', 'ag_epdq_server');
 				$order->add_order_note($noteTitle);
 				$order->add_order_note($errornote);
-				$order->update_status('failed', $note);
+				$order->update_status('cancelled', $note);
 				$woocommerce->cart->empty_cart();
 				break;
 
@@ -699,9 +751,10 @@ function init_ag_epdq() {
 	public function process_refund($order_id, $amount = NULL, $reason = '')
 	{
 
-		$order 			= new WC_Order($order_id);
-		$settings 		= ePDQ_crypt::key_settings();
-		$refund_settings 		= ePDQ_crypt::refund_settings();
+		$order 				= new WC_Order($order_id);
+		$settings 			= ePDQ_crypt::key_settings();
+		$refund_settings 	= ePDQ_crypt::refund_settings();
+		$environment_url 	= AG_ePDQ_Helpers::get_enviroment_url('maintenancedirect');
 
 
 		$refund_amount  = $amount * 100;
@@ -717,6 +770,16 @@ function init_ag_epdq() {
 		if (!$refund_amount) {
 			AG_ePDQ_Helpers::ag_log('Refund failed: Amount invalid.', 'debug', $this->debug);
 			return new WP_Error('error', __('Refund failed: Amount invalid.', 'ag_epdq_server'));
+		}
+
+		if (empty($refund_settings['USERID'])) {
+			AG_ePDQ_Helpers::ag_log('Refund failed: API username has not been set.', 'debug', $this->debug);
+			return new WP_Error('error', __('Refund failed: API username has not been set.', 'ag_epdq_server'));
+		}
+
+		if (empty($refund_settings['PSWD'])) {
+			AG_ePDQ_Helpers::ag_log('Refund failed: API password has not been set.', 'debug', $this->debug);
+			return new WP_Error('error', __('Refund failed: API password has not been set.', 'ag_epdq_server'));
 		}
 
 		if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
@@ -754,18 +817,15 @@ function init_ag_epdq() {
 
 		}
 
-		$post_string = array();
-		foreach ($data_post as $key => $value) {
-			$post_string[] = $key . '=' . $value;
+		
+		// Enable deeper debugging, useful for when the ePDQ team require data to debug.
+		if(defined('ePDQ_support_debug')) {
+			AG_ePDQ_Helpers::ag_log(print_r($data_post, TRUE), 'debug', $this->debug);
 		}
-		$actual_string = '';
-		$actual_string = implode('&', $post_string);
-		$result = wp_safe_remote_post($environment_url, array(
-			'method' => 'POST',
-			'timeout'     => 6,
-			'redirection' => 5,
-			'body' => $actual_string,
-		));
+
+		// Post
+		$result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
+
 		$lines = preg_split('/\r\n|\r|\n/', $result['body']);
 		$response = array();
 		foreach ($lines as $line) {
@@ -786,9 +846,9 @@ function init_ag_epdq() {
 			if (in_array($status, $accepted)) {
 				$order->add_order_note(
 					__('Refund successful', 'ag_epdq_server') . '<br />' .
-						__('Refund Amount: ', 'ag_epdq_server') . $amount . '<br />' .
-						__('Refund Reason: ', 'ag_epdq_server') . $reason . '<br />' .
-						__('ePDQ Status: ', 'ag_epdq_server') . AG_errors::get_epdq_status_code($status) . ' '
+					__('Refund Amount: ', 'ag_epdq_server') . $amount . '<br />' .
+					__('Refund Reason: ', 'ag_epdq_server') . $reason . '<br />' .
+					__('ePDQ Status: ', 'ag_epdq_server') . AG_errors::get_epdq_status_code($status) . ' '
 				);
 				return true;
 			} else {
@@ -797,10 +857,12 @@ function init_ag_epdq() {
 				$order->add_order_note(__('Refund Note', 'ag_epdq_server') . '<br /><strong>' . __('Error: ', 'ag_epdq_server') . $fullError . '</strong><br />');
 				// Log refund error
 				AG_ePDQ_Helpers::ag_log($string, 'debug', $this->debug);
+				return new WP_Error('error', __('Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server'));
 			}
 		} else {
 			// Log refund error
 			AG_ePDQ_Helpers::ag_log($string, 'debug', $this->debug);
+			return new WP_Error('error', __('Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server'));
 		}
 	}
 	}

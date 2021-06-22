@@ -1,6 +1,49 @@
 (window["__wcAdmin_webpackJsonp"] = window["__wcAdmin_webpackJsonp"] || []).push([[20],{
 
-/***/ 107:
+/***/ 197:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+function makeEmptyFunction(arg) {
+  return function () {
+    return arg;
+  };
+}
+
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+var emptyFunction = function emptyFunction() {};
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+emptyFunction.thatReturnsThis = function () {
+  return this;
+};
+emptyFunction.thatReturnsArgument = function (arg) {
+  return arg;
+};
+
+module.exports = emptyFunction;
+
+/***/ }),
+
+/***/ 234:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13,15 +56,15 @@
 
 
 
-var React = __webpack_require__(10);
+var React = __webpack_require__(11);
 
 var REACT_ELEMENT_TYPE =
   (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) ||
   0xeac7;
 
-var emptyFunction = __webpack_require__(83);
-var invariant = __webpack_require__(108);
-var warning = __webpack_require__(109);
+var emptyFunction = __webpack_require__(197);
+var invariant = __webpack_require__(235);
+var warning = __webpack_require__(236);
 
 var SEPARATOR = '.';
 var SUBSEPARATOR = ':';
@@ -329,7 +372,7 @@ module.exports = createReactFragment;
 
 /***/ }),
 
-/***/ 108:
+/***/ 235:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -383,7 +426,7 @@ module.exports = invariant;
 
 /***/ }),
 
-/***/ 109:
+/***/ 236:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,7 +440,7 @@ module.exports = invariant;
 
 
 
-var emptyFunction = __webpack_require__(83);
+var emptyFunction = __webpack_require__(197);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -414,7 +457,7 @@ module.exports = warning;
 
 /***/ }),
 
-/***/ 110:
+/***/ 237:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -456,7 +499,7 @@ module.exports = function (mixedString) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -476,15 +519,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  */
 
 
-var _react = __webpack_require__(10);
+var _react = __webpack_require__(11);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactAddonsCreateFragment = __webpack_require__(107);
+var _reactAddonsCreateFragment = __webpack_require__(234);
 
 var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
 
-var _tokenize = __webpack_require__(110);
+var _tokenize = __webpack_require__(237);
 
 var _tokenize2 = _interopRequireDefault(_tokenize);
 
@@ -623,7 +666,7 @@ exports.default = interpolate;
 
 /***/ }),
 
-/***/ 526:
+/***/ 665:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -634,35 +677,55 @@ __webpack_require__.d(__webpack_exports__, "b", function() { return /* binding *
 
 // UNUSED EXPORTS: DEFAULT_ORDER_STATUSES, DEFAULT_DATE_RANGE
 
-// EXTERNAL MODULE: external {"this":["wp","element"]}
-var external_this_wp_element_ = __webpack_require__(0);
+// EXTERNAL MODULE: external ["wp","element"]
+var external_wp_element_ = __webpack_require__(0);
 
-// EXTERNAL MODULE: external {"this":["wp","i18n"]}
-var external_this_wp_i18n_ = __webpack_require__(2);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__(117);
 
-// EXTERNAL MODULE: external {"this":["wp","hooks"]}
-var external_this_wp_hooks_ = __webpack_require__(43);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
+var es_array_filter = __webpack_require__(132);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__(83);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__(108);
+
+// EXTERNAL MODULE: external ["wp","i18n"]
+var external_wp_i18n_ = __webpack_require__(2);
+
+// EXTERNAL MODULE: external ["wp","hooks"]
+var external_wp_hooks_ = __webpack_require__(101);
 
 // EXTERNAL MODULE: ./node_modules/interpolate-components/lib/index.js
-var lib = __webpack_require__(28);
+var lib = __webpack_require__(51);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
 // EXTERNAL MODULE: ./client/wc-admin-settings/index.js
-var wc_admin_settings = __webpack_require__(25);
+var wc_admin_settings = __webpack_require__(42);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(118);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(159);
 
 // EXTERNAL MODULE: ./node_modules/qs/lib/index.js
-var qs_lib = __webpack_require__(49);
+var qs_lib = __webpack_require__(104);
 
-// EXTERNAL MODULE: external {"this":["wc","components"]}
-var external_this_wc_components_ = __webpack_require__(47);
+// EXTERNAL MODULE: external ["wc","components"]
+var external_wc_components_ = __webpack_require__(112);
 
-// EXTERNAL MODULE: external {"this":["wc","data"]}
-var external_this_wc_data_ = __webpack_require__(22);
+// EXTERNAL MODULE: external ["wc","data"]
+var external_wc_data_ = __webpack_require__(33);
 
-// EXTERNAL MODULE: external {"this":["wc","date"]}
-var external_this_wc_date_ = __webpack_require__(29);
+// EXTERNAL MODULE: external ["wc","date"]
+var external_wc_date_ = __webpack_require__(57);
 
 // CONCATENATED MODULE: ./client/analytics/settings/default-date.js
+
+
 
 
 /**
@@ -677,7 +740,7 @@ var default_date_DefaultDate = function DefaultDate(_ref) {
   var value = _ref.value,
       onChange = _ref.onChange;
 
-  var _useSettings = Object(external_this_wc_data_["useSettings"])('wc_admin', ['wcAdminSettings']),
+  var _useSettings = Object(external_wc_data_["useSettings"])('wc_admin', ['wcAdminSettings']),
       wcAdminSettings = _useSettings.wcAdminSettings;
 
   var defaultDateRange = wcAdminSettings.woocommerce_default_date_range;
@@ -693,13 +756,13 @@ var default_date_DefaultDate = function DefaultDate(_ref) {
 
   var query = Object(qs_lib["parse"])(value.replace(/&amp;/g, '&'));
 
-  var _getDateParamsFromQue = Object(external_this_wc_date_["getDateParamsFromQuery"])(query, defaultDateRange),
+  var _getDateParamsFromQue = Object(external_wc_date_["getDateParamsFromQuery"])(query, defaultDateRange),
       period = _getDateParamsFromQue.period,
       compare = _getDateParamsFromQue.compare,
       before = _getDateParamsFromQue.before,
       after = _getDateParamsFromQue.after;
 
-  var _getCurrentDates = Object(external_this_wc_date_["getCurrentDates"])(query, defaultDateRange),
+  var _getCurrentDates = Object(external_wc_date_["getCurrentDates"])(query, defaultDateRange),
       primaryDate = _getCurrentDates.primary,
       secondaryDate = _getCurrentDates.secondary;
 
@@ -711,16 +774,20 @@ var default_date_DefaultDate = function DefaultDate(_ref) {
     primaryDate: primaryDate,
     secondaryDate: secondaryDate
   };
-  return Object(external_this_wp_element_["createElement"])(external_this_wc_components_["DateRangeFilterPicker"], {
+  return Object(external_wp_element_["createElement"])(external_wc_components_["DateRangeFilterPicker"], {
     query: query,
     onRangeSelect: change,
     dateQuery: dateQuery,
-    isoDateFormat: external_this_wc_date_["isoDateFormat"]
+    isoDateFormat: external_wc_date_["isoDateFormat"]
   });
 };
 
 /* harmony default export */ var default_date = (default_date_DefaultDate);
 // CONCATENATED MODULE: ./client/analytics/settings/config.js
+
+
+
+
 
 
 /**
@@ -745,7 +812,7 @@ var filteredOrderStatuses = Object.keys(wc_admin_settings["d" /* ORDER_STATUSES 
   return {
     value: key,
     label: wc_admin_settings["d" /* ORDER_STATUSES */][key],
-    description: Object(external_this_wp_i18n_["sprintf"])(Object(external_this_wp_i18n_["__"])('Exclude the %s status from reports', 'woocommerce-admin'), wc_admin_settings["d" /* ORDER_STATUSES */][key])
+    description: Object(external_wp_i18n_["sprintf"])(Object(external_wp_i18n_["__"])('Exclude the %s status from reports', 'woocommerce-admin'), wc_admin_settings["d" /* ORDER_STATUSES */][key])
   };
 });
 var unregisteredOrderStatuses = Object(wc_admin_settings["g" /* getSetting */])('unregisteredOrderStatuses', {});
@@ -756,146 +823,188 @@ var orderStatusOptions = [{
   })
 }, {
   key: 'customStatuses',
-  label: Object(external_this_wp_i18n_["__"])('Custom Statuses', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('Custom Statuses', 'woocommerce-admin'),
   options: filteredOrderStatuses.filter(function (status) {
     return !DEFAULT_ORDER_STATUSES.includes(status.value);
   })
 }, {
   key: 'unregisteredStatuses',
-  label: Object(external_this_wp_i18n_["__"])('Unregistered Statuses', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('Unregistered Statuses', 'woocommerce-admin'),
   options: Object.keys(unregisteredOrderStatuses).map(function (key) {
     return {
       value: key,
       label: key,
-      description: Object(external_this_wp_i18n_["sprintf"])(Object(external_this_wp_i18n_["__"])('Exclude the %s status from reports', 'woocommerce-admin'), key)
+      description: Object(external_wp_i18n_["sprintf"])(Object(external_wp_i18n_["__"])('Exclude the %s status from reports', 'woocommerce-admin'), key)
     };
   })
 }];
-var config = Object(external_this_wp_hooks_["applyFilters"])(SETTINGS_FILTER, {
+var config = Object(external_wp_hooks_["applyFilters"])(SETTINGS_FILTER, {
   woocommerce_excluded_report_order_statuses: {
-    label: Object(external_this_wp_i18n_["__"])('Excluded Statuses:', 'woocommerce-admin'),
+    label: Object(external_wp_i18n_["__"])('Excluded Statuses:', 'woocommerce-admin'),
     inputType: 'checkboxGroup',
     options: orderStatusOptions,
     helpText: lib_default()({
-      mixedString: Object(external_this_wp_i18n_["__"])('Orders with these statuses are excluded from the totals in your reports. ' + 'The {{strong}}Refunded{{/strong}} status can not be excluded.', 'woocommerce-admin'),
+      mixedString: Object(external_wp_i18n_["__"])('Orders with these statuses are excluded from the totals in your reports. ' + 'The {{strong}}Refunded{{/strong}} status can not be excluded.', 'woocommerce-admin'),
       components: {
-        strong: Object(external_this_wp_element_["createElement"])("strong", null)
+        strong: Object(external_wp_element_["createElement"])("strong", null)
       }
     }),
     defaultValue: ['pending', 'cancelled', 'failed']
   },
   woocommerce_actionable_order_statuses: {
-    label: Object(external_this_wp_i18n_["__"])('Actionable Statuses:', 'woocommerce-admin'),
+    label: Object(external_wp_i18n_["__"])('Actionable Statuses:', 'woocommerce-admin'),
     inputType: 'checkboxGroup',
     options: orderStatusOptions,
-    helpText: Object(external_this_wp_i18n_["__"])('Orders with these statuses require action on behalf of the store admin. ' + 'These orders will show up in the Home Screen - Orders task.', 'woocommerce-admin'),
+    helpText: Object(external_wp_i18n_["__"])('Orders with these statuses require action on behalf of the store admin. ' + 'These orders will show up in the Home Screen - Orders task.', 'woocommerce-admin'),
     defaultValue: DEFAULT_ACTIONABLE_STATUSES
   },
   woocommerce_default_date_range: {
     name: 'woocommerce_default_date_range',
-    label: Object(external_this_wp_i18n_["__"])('Default Date Range:', 'woocommerce-admin'),
+    label: Object(external_wp_i18n_["__"])('Default Date Range:', 'woocommerce-admin'),
     inputType: 'component',
     component: default_date,
-    helpText: Object(external_this_wp_i18n_["__"])('Select a default date range. When no range is selected, reports will be viewed by ' + 'the default date range.', 'woocommerce-admin'),
+    helpText: Object(external_wp_i18n_["__"])('Select a default date range. When no range is selected, reports will be viewed by ' + 'the default date range.', 'woocommerce-admin'),
     defaultValue: DEFAULT_DATE_RANGE
   }
 });
 
 /***/ }),
 
-/***/ 535:
+/***/ 675:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 536:
+/***/ 676:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 537:
+/***/ 677:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 608:
+/***/ 753:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
+var es_symbol = __webpack_require__(126);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
+var es_object_get_own_property_descriptor = __webpack_require__(151);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
+var web_dom_collections_for_each = __webpack_require__(127);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptors.js
+var es_object_get_own_property_descriptors = __webpack_require__(152);
+
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/extends.js
-var helpers_extends = __webpack_require__(24);
+var helpers_extends = __webpack_require__(39);
 var extends_default = /*#__PURE__*/__webpack_require__.n(helpers_extends);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__(19);
+var toConsumableArray = __webpack_require__(29);
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(5);
+var defineProperty = __webpack_require__(4);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
-// EXTERNAL MODULE: external {"this":["wp","element"]}
-var external_this_wp_element_ = __webpack_require__(0);
+// EXTERNAL MODULE: external ["wp","element"]
+var external_wp_element_ = __webpack_require__(0);
 
-// EXTERNAL MODULE: external {"this":["wp","i18n"]}
-var external_this_wp_i18n_ = __webpack_require__(2);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__(83);
 
-// EXTERNAL MODULE: external {"this":["wp","components"]}
-var external_this_wp_components_ = __webpack_require__(4);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
+var es_function_name = __webpack_require__(276);
 
-// EXTERNAL MODULE: external {"this":["wp","compose"]}
-var external_this_wp_compose_ = __webpack_require__(20);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
+var es_array_concat = __webpack_require__(128);
 
-// EXTERNAL MODULE: external {"this":["wp","data"]}
-var external_this_wp_data_ = __webpack_require__(11);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
+var es_array_filter = __webpack_require__(132);
 
-// EXTERNAL MODULE: external {"this":["wc","components"]}
-var external_this_wc_components_ = __webpack_require__(47);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__(117);
 
-// EXTERNAL MODULE: external {"this":["wc","data"]}
-var external_this_wc_data_ = __webpack_require__(22);
+// EXTERNAL MODULE: external ["wp","i18n"]
+var external_wp_i18n_ = __webpack_require__(2);
 
-// EXTERNAL MODULE: external {"this":["wc","tracks"]}
-var external_this_wc_tracks_ = __webpack_require__(27);
+// EXTERNAL MODULE: external ["wp","components"]
+var external_wp_components_ = __webpack_require__(5);
+
+// EXTERNAL MODULE: external ["wp","compose"]
+var external_wp_compose_ = __webpack_require__(34);
+
+// EXTERNAL MODULE: external ["wp","data"]
+var external_wp_data_ = __webpack_require__(15);
+
+// EXTERNAL MODULE: external ["wc","components"]
+var external_wc_components_ = __webpack_require__(112);
+
+// EXTERNAL MODULE: external ["wc","data"]
+var external_wc_data_ = __webpack_require__(33);
+
+// EXTERNAL MODULE: external ["wc","tracks"]
+var external_wc_tracks_ = __webpack_require__(44);
 
 // EXTERNAL MODULE: ./client/analytics/settings/index.scss
-var settings = __webpack_require__(535);
+var settings = __webpack_require__(675);
 
 // EXTERNAL MODULE: ./client/analytics/settings/config.js + 1 modules
-var config = __webpack_require__(526);
+var config = __webpack_require__(665);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.reflect.construct.js
+var es_reflect_construct = __webpack_require__(174);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(12);
+var classCallCheck = __webpack_require__(13);
 var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/createClass.js
-var createClass = __webpack_require__(13);
+var createClass = __webpack_require__(14);
 var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(9);
+var assertThisInitialized = __webpack_require__(10);
 var assertThisInitialized_default = /*#__PURE__*/__webpack_require__.n(assertThisInitialized);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inherits.js
-var inherits = __webpack_require__(14);
+var inherits = __webpack_require__(16);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(15);
+var possibleConstructorReturn = __webpack_require__(17);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/getPrototypeOf.js
 var getPrototypeOf = __webpack_require__(7);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string = __webpack_require__(115);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
+var es_promise = __webpack_require__(158);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__(108);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__(205);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
@@ -905,7 +1014,7 @@ var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 var external_lodash_ = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./client/analytics/settings/setting.scss
-var settings_setting = __webpack_require__(536);
+var settings_setting = __webpack_require__(676);
 
 // CONCATENATED MODULE: ./client/analytics/settings/setting.js
 
@@ -918,9 +1027,16 @@ var settings_setting = __webpack_require__(536);
 
 
 
+
+
+
+
+
+
+
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 /**
  * External dependencies
@@ -963,11 +1079,11 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
       switch (inputType) {
         case 'checkboxGroup':
           return options.map(function (optionGroup) {
-            return optionGroup.options.length > 0 && Object(external_this_wp_element_["createElement"])("div", {
+            return optionGroup.options.length > 0 && Object(external_wp_element_["createElement"])("div", {
               className: "woocommerce-setting__options-group",
               key: optionGroup.key,
               "aria-labelledby": name + '-label'
-            }, optionGroup.label && Object(external_this_wp_element_["createElement"])("span", {
+            }, optionGroup.label && Object(external_wp_element_["createElement"])("span", {
               className: "woocommerce-setting__options-group-label"
             }, optionGroup.label), _this.renderCheckboxOptions(optionGroup.options));
           });
@@ -976,7 +1092,7 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
           return _this.renderCheckboxOptions(options);
 
         case 'button':
-          return Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+          return Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
             isSecondary: true,
             onClick: _this.handleInputCallback,
             disabled: disabled
@@ -984,7 +1100,7 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
 
         case 'component':
           var SettingComponent = component;
-          return Object(external_this_wp_element_["createElement"])(SettingComponent, extends_default()({
+          return Object(external_wp_element_["createElement"])(SettingComponent, extends_default()({
             value: value,
             onChange: handleChange
           }, _this.props));
@@ -992,7 +1108,7 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
         case 'text':
         default:
           var id = Object(external_lodash_["uniqueId"])(name);
-          return Object(external_this_wp_element_["createElement"])("input", {
+          return Object(external_wp_element_["createElement"])("input", {
             id: id,
             type: "text",
             name: name,
@@ -1045,7 +1161,7 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
           value = _this$props3.value;
       var disabled = this.state.disabled;
       return options.map(function (option) {
-        return Object(external_this_wp_element_["createElement"])(external_this_wp_components_["CheckboxControl"], {
+        return Object(external_wp_element_["createElement"])(external_wp_components_["CheckboxControl"], {
           key: name + '-' + option.value,
           label: option.label,
           name: name,
@@ -1071,21 +1187,21 @@ var setting_Setting = /*#__PURE__*/function (_Component) {
           helpText = _this$props4.helpText,
           label = _this$props4.label,
           name = _this$props4.name;
-      return Object(external_this_wp_element_["createElement"])("div", {
+      return Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting"
-      }, Object(external_this_wp_element_["createElement"])("div", {
+      }, Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting__label",
         id: name + '-label'
-      }, label), Object(external_this_wp_element_["createElement"])("div", {
+      }, label), Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting__input"
-      }, this.renderInput(), helpText && Object(external_this_wp_element_["createElement"])("span", {
+      }, this.renderInput(), helpText && Object(external_wp_element_["createElement"])("span", {
         className: "woocommerce-setting__help"
       }, helpText)));
     }
   }]);
 
   return Setting;
-}(external_this_wp_element_["Component"]);
+}(external_wp_element_["Component"]);
 
 setting_Setting.propTypes = {
   /**
@@ -1158,7 +1274,7 @@ setting_Setting.propTypes = {
    */
   value: prop_types_default.a.oneOfType([prop_types_default.a.string, prop_types_default.a.array])
 };
-/* harmony default export */ var analytics_settings_setting = (Object(external_this_wp_compose_["compose"])(Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
+/* harmony default export */ var analytics_settings_setting = (Object(external_wp_compose_["compose"])(Object(external_wp_data_["withDispatch"])(function (dispatch) {
   var _dispatch = dispatch('core/notices'),
       createNotice = _dispatch.createNotice;
 
@@ -1166,8 +1282,11 @@ setting_Setting.propTypes = {
     createNotice: createNotice
   };
 }))(setting_Setting));
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.find.js
+var es_array_find = __webpack_require__(322);
+
 // EXTERNAL MODULE: external "moment"
-var external_moment_ = __webpack_require__(16);
+var external_moment_ = __webpack_require__(21);
 var external_moment_default = /*#__PURE__*/__webpack_require__.n(external_moment_);
 
 // CONCATENATED MODULE: ./client/analytics/settings/historical-data/utils.js
@@ -1233,10 +1352,11 @@ var utils_getStatus = function getStatus(_ref) {
 
   return 'nothing';
 };
-// EXTERNAL MODULE: external {"this":["wp","url"]}
-var external_this_wp_url_ = __webpack_require__(23);
+// EXTERNAL MODULE: external ["wp","url"]
+var external_wp_url_ = __webpack_require__(38);
 
 // CONCATENATED MODULE: ./client/analytics/settings/historical-data/actions.js
+
 
 
 /**
@@ -1270,9 +1390,9 @@ function HistoricalDataActions(_ref) {
       updateImportation = _ref.updateImportation;
 
   var onStartImport = function onStartImport() {
-    var path = Object(external_this_wp_url_["addQueryArgs"])('/wc-analytics/reports/import', utils_formatParams(dateFormat, selectedPeriod, skipChecked));
+    var path = Object(external_wp_url_["addQueryArgs"])('/wc-analytics/reports/import', utils_formatParams(dateFormat, selectedPeriod, skipChecked));
 
-    var errorMessage = Object(external_this_wp_i18n_["__"])('There was a problem rebuilding your report data.', 'woocommerce-admin');
+    var errorMessage = Object(external_wp_i18n_["__"])('There was a problem rebuilding your report data.', 'woocommerce-admin');
 
     var importStarted = true;
     makeQuery(path, errorMessage, importStarted);
@@ -1283,7 +1403,7 @@ function HistoricalDataActions(_ref) {
     stopImport();
     var path = '/wc-analytics/reports/import/cancel';
 
-    var errorMessage = Object(external_this_wp_i18n_["__"])('There was a problem stopping your current import.', 'woocommerce-admin');
+    var errorMessage = Object(external_wp_i18n_["__"])('There was a problem stopping your current import.', 'woocommerce-admin');
 
     makeQuery(path, errorMessage);
   };
@@ -1310,10 +1430,10 @@ function HistoricalDataActions(_ref) {
   var deletePreviousData = function deletePreviousData() {
     var path = '/wc-analytics/reports/import/delete';
 
-    var errorMessage = Object(external_this_wp_i18n_["__"])('There was a problem deleting your previous data.', 'woocommerce-admin');
+    var errorMessage = Object(external_wp_i18n_["__"])('There was a problem deleting your previous data.', 'woocommerce-admin');
 
     makeQuery(path, errorMessage);
-    Object(external_this_wc_tracks_["recordEvent"])('analytics_import_delete_previous');
+    Object(external_wc_tracks_["recordEvent"])('analytics_import_delete_previous');
     setImportStarted(false);
   };
 
@@ -1327,55 +1447,55 @@ function HistoricalDataActions(_ref) {
     var importDisabled = status !== 'ready'; // An import is currently in progress
 
     if (['initializing', 'customers', 'orders', 'finalizing'].includes(status)) {
-      return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+      return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
         className: "woocommerce-settings-historical-data__action-button",
         isPrimary: true,
         onClick: onStopImport
-      }, Object(external_this_wp_i18n_["__"])('Stop Import', 'woocommerce-admin')), Object(external_this_wp_element_["createElement"])("div", {
+      }, Object(external_wp_i18n_["__"])('Stop Import', 'woocommerce-admin')), Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting__help woocommerce-settings-historical-data__action-help"
-      }, Object(external_this_wp_i18n_["__"])('Imported data will not be lost if the import is stopped.', 'woocommerce-admin'), Object(external_this_wp_element_["createElement"])("br", null), Object(external_this_wp_i18n_["__"])('Navigating away from this page will not affect the import.', 'woocommerce-admin')));
+      }, Object(external_wp_i18n_["__"])('Imported data will not be lost if the import is stopped.', 'woocommerce-admin'), Object(external_wp_element_["createElement"])("br", null), Object(external_wp_i18n_["__"])('Navigating away from this page will not affect the import.', 'woocommerce-admin')));
     }
 
     if (['ready', 'nothing'].includes(status)) {
       if (importDate) {
-        return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+        return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
           isPrimary: true,
           onClick: onStartImport,
           disabled: importDisabled
-        }, Object(external_this_wp_i18n_["__"])('Start', 'woocommerce-admin')), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+        }, Object(external_wp_i18n_["__"])('Start', 'woocommerce-admin')), Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
           isSecondary: true,
           onClick: deletePreviousData
-        }, Object(external_this_wp_i18n_["__"])('Delete Previously Imported Data', 'woocommerce-admin')));
+        }, Object(external_wp_i18n_["__"])('Delete Previously Imported Data', 'woocommerce-admin')));
       }
 
-      return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+      return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
         isPrimary: true,
         onClick: onStartImport,
         disabled: importDisabled
-      }, Object(external_this_wp_i18n_["__"])('Start', 'woocommerce-admin')));
+      }, Object(external_wp_i18n_["__"])('Start', 'woocommerce-admin')));
     }
 
     if (status === 'error') {
-      createNotice('error', Object(external_this_wp_i18n_["__"])('Something went wrong with the importation process.', 'woocommerce-admin'));
+      createNotice('error', Object(external_wp_i18n_["__"])('Something went wrong with the importation process.', 'woocommerce-admin'));
     } // Has imported all possible data
 
 
-    return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+    return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
       isSecondary: true,
       onClick: reimportData
-    }, Object(external_this_wp_i18n_["__"])('Re-import Data', 'woocommerce-admin')), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+    }, Object(external_wp_i18n_["__"])('Re-import Data', 'woocommerce-admin')), Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
       isSecondary: true,
       onClick: deletePreviousData
-    }, Object(external_this_wp_i18n_["__"])('Delete Previously Imported Data', 'woocommerce-admin')));
+    }, Object(external_wp_i18n_["__"])('Delete Previously Imported Data', 'woocommerce-admin')));
   };
 
-  return Object(external_this_wp_element_["createElement"])("div", {
+  return Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings__actions woocommerce-settings-historical-data__actions"
   }, getActions());
 }
 
-/* harmony default export */ var actions = (Object(external_this_wp_compose_["compose"])([Object(external_this_wp_data_["withSelect"])(function (select) {
-  var _select = select(external_this_wc_data_["IMPORT_STORE_NAME"]),
+/* harmony default export */ var actions = (Object(external_wp_compose_["compose"])([Object(external_wp_data_["withSelect"])(function (select) {
+  var _select = select(external_wc_data_["IMPORT_STORE_NAME"]),
       getFormSettings = _select.getFormSettings;
 
   var _getFormSettings = getFormSettings(),
@@ -1386,8 +1506,8 @@ function HistoricalDataActions(_ref) {
     selectedPeriod: selectedPeriod,
     skipChecked: skipChecked
   };
-}), Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
-  var _dispatch = dispatch(external_this_wc_data_["IMPORT_STORE_NAME"]),
+}), Object(external_wp_data_["withDispatch"])(function (dispatch) {
+  var _dispatch = dispatch(external_wc_data_["IMPORT_STORE_NAME"]),
       updateImportation = _dispatch.updateImportation,
       setImportStarted = _dispatch.setImportStarted;
 
@@ -1400,8 +1520,8 @@ function HistoricalDataActions(_ref) {
     updateImportation: updateImportation
   };
 })])(HistoricalDataActions));
-// EXTERNAL MODULE: external {"this":["wc","date"]}
-var external_this_wc_date_ = __webpack_require__(29);
+// EXTERNAL MODULE: external ["wc","date"]
+var external_wc_date_ = __webpack_require__(57);
 
 // CONCATENATED MODULE: ./client/analytics/settings/historical-data/period-selector.js
 
@@ -1439,11 +1559,11 @@ function HistoricalDataPeriodSelector(_ref) {
 
   var getDatePickerError = function getDatePickerError(momentDate) {
     if (!momentDate.isValid() || value.date.length !== dateFormat.length) {
-      return external_this_wc_date_["dateValidationMessages"].invalid;
+      return external_wc_date_["dateValidationMessages"].invalid;
     }
 
     if (momentDate.isAfter(new Date(), 'day')) {
-      return external_this_wc_date_["dateValidationMessages"].future;
+      return external_wc_date_["dateValidationMessages"].future;
     }
 
     return null;
@@ -1451,11 +1571,11 @@ function HistoricalDataPeriodSelector(_ref) {
 
   var getDatePicker = function getDatePicker() {
     var momentDate = external_moment_default()(value.date, dateFormat);
-    return Object(external_this_wp_element_["createElement"])("div", {
+    return Object(external_wp_element_["createElement"])("div", {
       className: "woocommerce-settings-historical-data__column"
-    }, Object(external_this_wp_element_["createElement"])("div", {
+    }, Object(external_wp_element_["createElement"])("div", {
       className: "woocommerce-settings-historical-data__column-label"
-    }, Object(external_this_wp_i18n_["__"])('Beginning on', 'woocommerce-admin')), Object(external_this_wp_element_["createElement"])(external_this_wc_components_["DatePicker"], {
+    }, Object(external_wp_i18n_["__"])('Beginning on', 'woocommerce-admin')), Object(external_wp_element_["createElement"])(external_wc_components_["DatePicker"], {
       date: momentDate.isValid() ? momentDate.toDate() : null,
       dateFormat: dateFormat,
       disabled: disabled,
@@ -1468,12 +1588,12 @@ function HistoricalDataPeriodSelector(_ref) {
     }));
   };
 
-  return Object(external_this_wp_element_["createElement"])("div", {
+  return Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings-historical-data__columns"
-  }, Object(external_this_wp_element_["createElement"])("div", {
+  }, Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings-historical-data__column"
-  }, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["SelectControl"], {
-    label: Object(external_this_wp_i18n_["__"])('Import Historical Data', 'woocommerce-admin'),
+  }, Object(external_wp_element_["createElement"])(external_wp_components_["SelectControl"], {
+    label: Object(external_wp_i18n_["__"])('Import Historical Data', 'woocommerce-admin'),
     value: value.label,
     disabled: disabled,
     onChange: onSelectChange,
@@ -1502,8 +1622,8 @@ function HistoricalDataPeriodSelector(_ref) {
   })), value.label === 'custom' && getDatePicker());
 }
 
-/* harmony default export */ var period_selector = (Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
-  var _dispatch = dispatch(external_this_wc_data_["IMPORT_STORE_NAME"]),
+/* harmony default export */ var period_selector = (Object(external_wp_data_["withDispatch"])(function (dispatch) {
+  var _dispatch = dispatch(external_wc_data_["IMPORT_STORE_NAME"]),
       setImportPeriod = _dispatch.setImportPeriod;
 
   return {
@@ -1523,20 +1643,20 @@ function HistoricalDataProgress(_ref) {
   var label = _ref.label,
       progress = _ref.progress,
       total = _ref.total;
-  var labelText = Object(external_this_wp_i18n_["sprintf"])(Object(external_this_wp_i18n_["__"])('Imported %(label)s', 'woocommerce-admin'), {
+  var labelText = Object(external_wp_i18n_["sprintf"])(Object(external_wp_i18n_["__"])('Imported %(label)s', 'woocommerce-admin'), {
     label: label
   });
-  var labelCounters = !Object(external_lodash_["isNil"])(total) ? Object(external_this_wp_i18n_["sprintf"])(Object(external_this_wp_i18n_["__"])('%(progress)s of %(total)s', 'woocommerce-admin'), {
+  var labelCounters = !Object(external_lodash_["isNil"])(total) ? Object(external_wp_i18n_["sprintf"])(Object(external_wp_i18n_["__"])('%(progress)s of %(total)s', 'woocommerce-admin'), {
     progress: progress || 0,
     total: total
   }) : null;
-  return Object(external_this_wp_element_["createElement"])("div", {
+  return Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings-historical-data__progress"
-  }, Object(external_this_wp_element_["createElement"])("span", {
+  }, Object(external_wp_element_["createElement"])("span", {
     className: "woocommerce-settings-historical-data__progress-label"
-  }, labelText), labelCounters && Object(external_this_wp_element_["createElement"])("span", {
+  }, labelText), labelCounters && Object(external_wp_element_["createElement"])("span", {
     className: "woocommerce-settings-historical-data__progress-label"
-  }, labelCounters), Object(external_this_wp_element_["createElement"])("progress", {
+  }, labelCounters), Object(external_wp_element_["createElement"])("progress", {
     className: "woocommerce-settings-historical-data__progress-bar",
     max: total,
     value: progress || 0
@@ -1544,8 +1664,8 @@ function HistoricalDataProgress(_ref) {
 }
 
 /* harmony default export */ var historical_data_progress = (HistoricalDataProgress);
-// EXTERNAL MODULE: external {"this":["wp","hooks"]}
-var external_this_wp_hooks_ = __webpack_require__(43);
+// EXTERNAL MODULE: external ["wp","hooks"]
+var external_wp_hooks_ = __webpack_require__(101);
 
 // CONCATENATED MODULE: ./client/analytics/settings/historical-data/status.js
 
@@ -1562,28 +1682,28 @@ var HISTORICAL_DATA_STATUS_FILTER = 'woocommerce_admin_import_status';
 function HistoricalDataStatus(_ref) {
   var importDate = _ref.importDate,
       status = _ref.status;
-  var statusLabels = Object(external_this_wp_hooks_["applyFilters"])(HISTORICAL_DATA_STATUS_FILTER, {
-    nothing: Object(external_this_wp_i18n_["__"])('Nothing To Import', 'woocommerce-admin'),
-    ready: Object(external_this_wp_i18n_["__"])('Ready To Import', 'woocommerce-admin'),
-    initializing: [Object(external_this_wp_i18n_["__"])('Initializing', 'woocommerce-admin'), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Spinner"], {
+  var statusLabels = Object(external_wp_hooks_["applyFilters"])(HISTORICAL_DATA_STATUS_FILTER, {
+    nothing: Object(external_wp_i18n_["__"])('Nothing To Import', 'woocommerce-admin'),
+    ready: Object(external_wp_i18n_["__"])('Ready To Import', 'woocommerce-admin'),
+    initializing: [Object(external_wp_i18n_["__"])('Initializing', 'woocommerce-admin'), Object(external_wp_element_["createElement"])(external_wp_components_["Spinner"], {
       key: "spinner"
     })],
-    customers: [Object(external_this_wp_i18n_["__"])('Importing Customers', 'woocommerce-admin'), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Spinner"], {
+    customers: [Object(external_wp_i18n_["__"])('Importing Customers', 'woocommerce-admin'), Object(external_wp_element_["createElement"])(external_wp_components_["Spinner"], {
       key: "spinner"
     })],
-    orders: [Object(external_this_wp_i18n_["__"])('Importing Orders', 'woocommerce-admin'), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Spinner"], {
+    orders: [Object(external_wp_i18n_["__"])('Importing Orders', 'woocommerce-admin'), Object(external_wp_element_["createElement"])(external_wp_components_["Spinner"], {
       key: "spinner"
     })],
-    finalizing: [Object(external_this_wp_i18n_["__"])('Finalizing', 'woocommerce-admin'), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Spinner"], {
+    finalizing: [Object(external_wp_i18n_["__"])('Finalizing', 'woocommerce-admin'), Object(external_wp_element_["createElement"])(external_wp_components_["Spinner"], {
       key: "spinner"
     })],
-    finished: importDate === -1 ? Object(external_this_wp_i18n_["__"])('All historical data imported', 'woocommerce-admin') : Object(external_this_wp_i18n_["sprintf"])(Object(external_this_wp_i18n_["__"])('Historical data from %s onward imported', 'woocommerce-admin'), // @todo The date formatting should be localized ( 'll' ), but this is currently broken in Gutenberg.
+    finished: importDate === -1 ? Object(external_wp_i18n_["__"])('All historical data imported', 'woocommerce-admin') : Object(external_wp_i18n_["sprintf"])(Object(external_wp_i18n_["__"])('Historical data from %s onward imported', 'woocommerce-admin'), // @todo The date formatting should be localized ( 'll' ), but this is currently broken in Gutenberg.
     // See https://github.com/WordPress/gutenberg/issues/12626 for details.
     external_moment_default()(importDate).format('YYYY-MM-DD'))
   });
-  return Object(external_this_wp_element_["createElement"])("span", {
+  return Object(external_wp_element_["createElement"])("span", {
     className: "woocommerce-settings-historical-data__status"
-  }, Object(external_this_wp_i18n_["__"])('Status:', 'woocommerce-admin') + ' ', statusLabels[status]);
+  }, Object(external_wp_i18n_["__"])('Status:', 'woocommerce-admin') + ' ', statusLabels[status]);
 }
 
 /* harmony default export */ var historical_data_status = (HistoricalDataStatus);
@@ -1607,17 +1727,17 @@ function HistoricalDataSkipCheckbox(_ref) {
     setSkipPrevious(value);
   };
 
-  return Object(external_this_wp_element_["createElement"])(external_this_wp_components_["CheckboxControl"], {
+  return Object(external_wp_element_["createElement"])(external_wp_components_["CheckboxControl"], {
     className: "woocommerce-settings-historical-data__skip-checkbox",
     checked: checked,
     disabled: disabled,
-    label: Object(external_this_wp_i18n_["__"])('Skip previously imported customers and orders', 'woocommerce-admin'),
+    label: Object(external_wp_i18n_["__"])('Skip previously imported customers and orders', 'woocommerce-admin'),
     onChange: skipChange
   });
 }
 
-/* harmony default export */ var skip_checkbox = (Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
-  var _dispatch = dispatch(external_this_wc_data_["IMPORT_STORE_NAME"]),
+/* harmony default export */ var skip_checkbox = (Object(external_wp_data_["withDispatch"])(function (dispatch) {
+  var _dispatch = dispatch(external_wc_data_["IMPORT_STORE_NAME"]),
       setSkipPrevious = _dispatch.setSkipPrevious;
 
   return {
@@ -1625,7 +1745,7 @@ function HistoricalDataSkipCheckbox(_ref) {
   };
 })(HistoricalDataSkipCheckbox));
 // EXTERNAL MODULE: ./client/analytics/settings/historical-data/style.scss
-var style = __webpack_require__(537);
+var style = __webpack_require__(677);
 
 // CONCATENATED MODULE: ./client/analytics/settings/historical-data/layout.js
 
@@ -1636,13 +1756,20 @@ var style = __webpack_require__(537);
 
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function layout_createSuper(Derived) { var hasNativeReflectConstruct = layout_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
-function layout_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function layout_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 /**
  * External dependencies
@@ -1694,35 +1821,35 @@ var layout_HistoricalDataLayout = /*#__PURE__*/function (_Component) {
           stopImport = _this$props.stopImport,
           skipChecked = _this$props.skipChecked,
           status = _this$props.status;
-      return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wc_components_["SectionHeader"], {
-        title: Object(external_this_wp_i18n_["__"])('Import Historical Data', 'woocommerce-admin')
-      }), Object(external_this_wp_element_["createElement"])("div", {
+      return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wc_components_["SectionHeader"], {
+        title: Object(external_wp_i18n_["__"])('Import Historical Data', 'woocommerce-admin')
+      }), Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-settings__wrapper"
-      }, Object(external_this_wp_element_["createElement"])("div", {
+      }, Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting"
-      }, Object(external_this_wp_element_["createElement"])("div", {
+      }, Object(external_wp_element_["createElement"])("div", {
         className: "woocommerce-setting__input"
-      }, Object(external_this_wp_element_["createElement"])("span", {
+      }, Object(external_wp_element_["createElement"])("span", {
         className: "woocommerce-setting__help"
-      }, Object(external_this_wp_i18n_["__"])('This tool populates historical analytics data by processing customers ' + 'and orders created prior to activating WooCommerce Admin.', 'woocommerce-admin')), status !== 'finished' && Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(period_selector, {
+      }, Object(external_wp_i18n_["__"])('This tool populates historical analytics data by processing customers ' + 'and orders created prior to activating WooCommerce Admin.', 'woocommerce-admin')), status !== 'finished' && Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(period_selector, {
         dateFormat: dateFormat,
         disabled: inProgress,
         value: period
-      }), Object(external_this_wp_element_["createElement"])(skip_checkbox, {
+      }), Object(external_wp_element_["createElement"])(skip_checkbox, {
         disabled: inProgress,
         checked: skipChecked
-      }), Object(external_this_wp_element_["createElement"])(historical_data_progress, {
-        label: Object(external_this_wp_i18n_["__"])('Registered Customers', 'woocommerce-admin'),
+      }), Object(external_wp_element_["createElement"])(historical_data_progress, {
+        label: Object(external_wp_i18n_["__"])('Registered Customers', 'woocommerce-admin'),
         progress: customersProgress,
         total: customersTotal
-      }), Object(external_this_wp_element_["createElement"])(historical_data_progress, {
-        label: Object(external_this_wp_i18n_["__"])('Orders and Refunds', 'woocommerce-admin'),
+      }), Object(external_wp_element_["createElement"])(historical_data_progress, {
+        label: Object(external_wp_i18n_["__"])('Orders and Refunds', 'woocommerce-admin'),
         progress: ordersProgress,
         total: ordersTotal
-      })), Object(external_this_wp_element_["createElement"])(historical_data_status, {
+      })), Object(external_wp_element_["createElement"])(historical_data_status, {
         importDate: importDate,
         status: status
-      })))), Object(external_this_wp_element_["createElement"])(actions, {
+      })))), Object(external_wp_element_["createElement"])(actions, {
         clearStatusAndTotalsCache: clearStatusAndTotalsCache,
         dateFormat: dateFormat,
         importDate: importDate,
@@ -1735,10 +1862,10 @@ var layout_HistoricalDataLayout = /*#__PURE__*/function (_Component) {
   }]);
 
   return HistoricalDataLayout;
-}(external_this_wp_element_["Component"]);
+}(external_wp_element_["Component"]);
 
-/* harmony default export */ var layout = (Object(external_this_wp_data_["withSelect"])(function (select, props) {
-  var _select = select(external_this_wc_data_["IMPORT_STORE_NAME"]),
+/* harmony default export */ var layout = (Object(external_wp_data_["withSelect"])(function (select, props) {
+  var _select = select(external_wc_data_["IMPORT_STORE_NAME"]),
       getImportError = _select.getImportError,
       getImportStatus = _select.getImportStatus,
       getImportTotals = _select.getImportTotals;
@@ -1823,9 +1950,12 @@ var layout_HistoricalDataLayout = /*#__PURE__*/function (_Component) {
 
 
 
+
+
+
 function historical_data_createSuper(Derived) { var hasNativeReflectConstruct = historical_data_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
-function historical_data_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function historical_data_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 /**
  * External dependencies
@@ -1854,7 +1984,7 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
     classCallCheck_default()(this, HistoricalData);
 
     _this = _super.apply(this, arguments);
-    _this.dateFormat = Object(external_this_wp_i18n_["__"])('MM/DD/YYYY', 'woocommerce-admin');
+    _this.dateFormat = Object(external_wp_i18n_["__"])('MM/DD/YYYY', 'woocommerce-admin');
     _this.intervalId = -1;
     _this.lastImportStopTimestamp = 0;
     _this.cacheNeedsClearing = true;
@@ -1876,7 +2006,7 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
         this.cacheNeedsClearing = true;
         this.intervalId = setInterval(function () {
           _this2.clearCache('getImportStatus');
-        }, 3 * external_this_wc_data_["SECOND"]);
+        }, 3 * external_wc_data_["SECOND"]);
       }
     }
   }, {
@@ -1958,7 +2088,7 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
           lastImportStartTimestamp = _this$props4.lastImportStartTimestamp,
           selectedPeriod = _this$props4.selectedPeriod,
           skipChecked = _this$props4.skipChecked;
-      return Object(external_this_wp_element_["createElement"])(layout, {
+      return Object(external_wp_element_["createElement"])(layout, {
         activeImport: activeImport,
         cacheNeedsClearing: this.cacheNeedsClearing,
         createNotice: createNotice,
@@ -1977,19 +2107,19 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
   }]);
 
   return HistoricalData;
-}(external_this_wp_element_["Component"]);
+}(external_wp_element_["Component"]);
 
-/* harmony default export */ var historical_data = (Object(external_this_wp_compose_["compose"])([Object(external_this_wp_data_["withSelect"])(function (select) {
-  var _select = select(external_this_wc_data_["NOTES_STORE_NAME"]),
+/* harmony default export */ var historical_data = (Object(external_wp_compose_["compose"])([Object(external_wp_data_["withSelect"])(function (select) {
+  var _select = select(external_wc_data_["NOTES_STORE_NAME"]),
       getNotes = _select.getNotes;
 
-  var _select2 = select(external_this_wc_data_["IMPORT_STORE_NAME"]),
+  var _select2 = select(external_wc_data_["IMPORT_STORE_NAME"]),
       getImportStarted = _select2.getImportStarted,
       getFormSettings = _select2.getFormSettings;
 
   var notesQuery = {
     page: 1,
-    per_page: external_this_wc_data_["QUERY_DEFAULTS"].pageSize,
+    per_page: external_wc_data_["QUERY_DEFAULTS"].pageSize,
     type: 'update',
     status: 'unactioned'
   };
@@ -2010,11 +2140,11 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
     selectedPeriod: selectedPeriod,
     skipChecked: skipChecked
   };
-}), Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
-  var _dispatch = dispatch(external_this_wc_data_["NOTES_STORE_NAME"]),
+}), Object(external_wp_data_["withDispatch"])(function (dispatch) {
+  var _dispatch = dispatch(external_wc_data_["NOTES_STORE_NAME"]),
       updateNote = _dispatch.updateNote;
 
-  var _dispatch2 = dispatch(external_this_wc_data_["IMPORT_STORE_NAME"]),
+  var _dispatch2 = dispatch(external_wc_data_["IMPORT_STORE_NAME"]),
       invalidateResolution = _dispatch2.invalidateResolution,
       setImportStarted = _dispatch2.setImportStarted;
 
@@ -2023,16 +2153,26 @@ var historical_data_HistoricalData = /*#__PURE__*/function (_Component) {
     setImportStarted: setImportStarted,
     updateNote: updateNote
   };
-}), external_this_wp_components_["withSpokenMessages"]])(historical_data_HistoricalData));
+}), external_wp_components_["withSpokenMessages"]])(historical_data_HistoricalData));
 // CONCATENATED MODULE: ./client/analytics/settings/index.js
 
 
 
 
 
-function settings_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+
+
+
+function settings_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function settings_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { settings_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { settings_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+
+
 
 /**
  * External dependencies
@@ -2058,7 +2198,7 @@ var settings_Settings = function Settings(_ref) {
   var createNotice = _ref.createNotice,
       query = _ref.query;
 
-  var _useSettings = Object(external_this_wc_data_["useSettings"])('wc_admin', ['wcAdminSettings']),
+  var _useSettings = Object(external_wc_data_["useSettings"])('wc_admin', ['wcAdminSettings']),
       settingsError = _useSettings.settingsError,
       isRequesting = _useSettings.isRequesting,
       isDirty = _useSettings.isDirty,
@@ -2067,11 +2207,11 @@ var settings_Settings = function Settings(_ref) {
       updateSettings = _useSettings.updateSettings,
       wcAdminSettings = _useSettings.wcAdminSettings;
 
-  var hasSaved = Object(external_this_wp_element_["useRef"])(false);
-  Object(external_this_wp_element_["useEffect"])(function () {
+  var hasSaved = Object(external_wp_element_["useRef"])(false);
+  Object(external_wp_element_["useEffect"])(function () {
     function warnIfUnsavedChanges(event) {
       if (isDirty) {
-        event.returnValue = Object(external_this_wp_i18n_["__"])('You have unsaved changes. If you proceed, they will be lost.', 'woocommerce-admin');
+        event.returnValue = Object(external_wp_i18n_["__"])('You have unsaved changes. If you proceed, they will be lost.', 'woocommerce-admin');
         return event.returnValue;
       }
     }
@@ -2081,7 +2221,7 @@ var settings_Settings = function Settings(_ref) {
       return window.removeEventListener('beforeunload', warnIfUnsavedChanges);
     };
   }, [isDirty]);
-  Object(external_this_wp_element_["useEffect"])(function () {
+  Object(external_wp_element_["useEffect"])(function () {
     if (isRequesting) {
       hasSaved.current = true;
       return;
@@ -2089,9 +2229,9 @@ var settings_Settings = function Settings(_ref) {
 
     if (!isRequesting && hasSaved.current) {
       if (!settingsError) {
-        createNotice('success', Object(external_this_wp_i18n_["__"])('Your settings have been successfully saved.', 'woocommerce-admin'));
+        createNotice('success', Object(external_wp_i18n_["__"])('Your settings have been successfully saved.', 'woocommerce-admin'));
       } else {
-        createNotice('error', Object(external_this_wp_i18n_["__"])('There was an error saving your settings. Please try again.', 'woocommerce-admin'));
+        createNotice('error', Object(external_wp_i18n_["__"])('There was an error saving your settings. Please try again.', 'woocommerce-admin'));
       }
 
       hasSaved.current = false;
@@ -2100,19 +2240,19 @@ var settings_Settings = function Settings(_ref) {
 
   var resetDefaults = function resetDefaults() {
     if ( // eslint-disable-next-line no-alert
-    window.confirm(Object(external_this_wp_i18n_["__"])('Are you sure you want to reset all settings to default values?', 'woocommerce-admin'))) {
+    window.confirm(Object(external_wp_i18n_["__"])('Are you sure you want to reset all settings to default values?', 'woocommerce-admin'))) {
       var resetSettings = Object.keys(config["b" /* config */]).reduce(function (result, setting) {
         result[setting] = config["b" /* config */][setting].defaultValue;
         return result;
       }, {});
       updateAndPersistSettings('wcAdminSettings', resetSettings);
-      Object(external_this_wc_tracks_["recordEvent"])('analytics_settings_reset_defaults');
+      Object(external_wc_tracks_["recordEvent"])('analytics_settings_reset_defaults');
     }
   };
 
   var saveChanges = function saveChanges() {
     persistSettings();
-    Object(external_this_wc_tracks_["recordEvent"])('analytics_settings_save', wcAdminSettings); // On save, reset persisted query properties of Nav Menu links to default
+    Object(external_wc_tracks_["recordEvent"])('analytics_settings_save', wcAdminSettings); // On save, reset persisted query properties of Nav Menu links to default
 
     query.period = undefined;
     query.compare = undefined;
@@ -2147,36 +2287,36 @@ var settings_Settings = function Settings(_ref) {
     updateSettings('wcAdminSettings', nextSettings);
   };
 
-  return Object(external_this_wp_element_["createElement"])(external_this_wp_element_["Fragment"], null, Object(external_this_wp_element_["createElement"])(external_this_wc_components_["SectionHeader"], {
-    title: Object(external_this_wp_i18n_["__"])('Analytics Settings', 'woocommerce-admin')
-  }), Object(external_this_wp_element_["createElement"])("div", {
+  return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wc_components_["SectionHeader"], {
+    title: Object(external_wp_i18n_["__"])('Analytics Settings', 'woocommerce-admin')
+  }), Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings__wrapper"
   }, Object.keys(config["b" /* config */]).map(function (setting) {
-    return Object(external_this_wp_element_["createElement"])(analytics_settings_setting, extends_default()({
+    return Object(external_wp_element_["createElement"])(analytics_settings_setting, extends_default()({
       handleChange: handleInputChange,
       value: wcAdminSettings[setting],
       key: setting,
       name: setting
     }, config["b" /* config */][setting]));
-  }), Object(external_this_wp_element_["createElement"])("div", {
+  }), Object(external_wp_element_["createElement"])("div", {
     className: "woocommerce-settings__actions"
-  }, Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+  }, Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
     isSecondary: true,
     onClick: resetDefaults
-  }, Object(external_this_wp_i18n_["__"])('Reset Defaults', 'woocommerce-admin')), Object(external_this_wp_element_["createElement"])(external_this_wp_components_["Button"], {
+  }, Object(external_wp_i18n_["__"])('Reset Defaults', 'woocommerce-admin')), Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
     isPrimary: true,
     isBusy: isRequesting,
     onClick: saveChanges
-  }, Object(external_this_wp_i18n_["__"])('Save Settings', 'woocommerce-admin')))), query.import === 'true' ? Object(external_this_wp_element_["createElement"])(external_this_wc_components_["ScrollTo"], {
+  }, Object(external_wp_i18n_["__"])('Save Settings', 'woocommerce-admin')))), query.import === 'true' ? Object(external_wp_element_["createElement"])(external_wc_components_["ScrollTo"], {
     offset: "-56"
-  }, Object(external_this_wp_element_["createElement"])(historical_data, {
+  }, Object(external_wp_element_["createElement"])(historical_data, {
     createNotice: createNotice
-  })) : Object(external_this_wp_element_["createElement"])(historical_data, {
+  })) : Object(external_wp_element_["createElement"])(historical_data, {
     createNotice: createNotice
   }));
 };
 
-/* harmony default export */ var analytics_settings = __webpack_exports__["default"] = (Object(external_this_wp_compose_["compose"])(Object(external_this_wp_data_["withDispatch"])(function (dispatch) {
+/* harmony default export */ var analytics_settings = __webpack_exports__["default"] = (Object(external_wp_compose_["compose"])(Object(external_wp_data_["withDispatch"])(function (dispatch) {
   var _dispatch = dispatch('core/notices'),
       createNotice = _dispatch.createNotice;
 
@@ -2184,49 +2324,6 @@ var settings_Settings = function Settings(_ref) {
     createNotice: createNotice
   };
 }))(settings_Settings));
-
-/***/ }),
-
-/***/ 83:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-function makeEmptyFunction(arg) {
-  return function () {
-    return arg;
-  };
-}
-
-/**
- * This function accepts and discards inputs; it has no side effects. This is
- * primarily useful idiomatically for overridable function endpoints which
- * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
- */
-var emptyFunction = function emptyFunction() {};
-
-emptyFunction.thatReturns = makeEmptyFunction;
-emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-emptyFunction.thatReturnsThis = function () {
-  return this;
-};
-emptyFunction.thatReturnsArgument = function (arg) {
-  return arg;
-};
-
-module.exports = emptyFunction;
 
 /***/ })
 

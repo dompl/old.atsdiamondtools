@@ -22,3 +22,7 @@
     margin-left:5px; 
     margin-right: 5px;
 }
+
+.wc-block-checkout__payment-method .wc-block-components-radio-control-accordion-option .wc-block-components-radio-control__label .epdq-payment-logo {
+    height: 35px;
+}

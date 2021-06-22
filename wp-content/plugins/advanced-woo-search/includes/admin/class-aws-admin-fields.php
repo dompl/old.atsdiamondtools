@@ -74,10 +74,18 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <?php break;
 
                     case 'number': ?>
+
+                        <?php
+                        $params = '';
+                        $params .= isset( $value['step'] ) ? ' step="' . $value['step'] . '"' : '';
+                        $params .= isset( $value['min'] ) ? ' min="' . $value['min'] . '"' : '';
+                        $params .= isset( $value['max'] ) ? ' max="' . $value['max'] . '"' : '';
+                        ?>
+
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <input type="number" name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $plugin_options[ $value['id'] ] ) ); ?>">
+                                <input type="number" <?php echo $params; ?> name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $plugin_options[ $value['id'] ] ) ); ?>">
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
                         </tr>
@@ -296,14 +304,18 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                                             <?php
                                             $active_class = isset( $table_options[$val] ) && $table_options[$val] ? 'active' : '';
                                             $label = is_array( $fchoices ) ? $fchoices['label'] : $fchoices;
+                                            if ( strpos( $label, 'index disabled' ) !== false ) {
+                                                $active_class = 'disabled';
+                                            }
                                             ?>
 
                                             <tr>
-                                                <td class="aws-name"><?php echo esc_html( $label ); ?></td>
+                                                <td class="aws-name"><?php echo $label; ?></td>
                                                 <td class="aws-actions"></td>
                                                 <td class="aws-active <?php echo $active_class; ?>">
                                                     <span data-change-state="1" data-setting="<?php echo esc_attr( $value['id'] ); ?>" data-name="<?php echo esc_attr( $val ); ?>" class="aws-yes" title="<?php echo esc_attr__( 'Disable this source', 'advanced-woo-search' ); ?>"><?php echo esc_html__( 'Yes', 'advanced-woo-search' ); ?></span>
                                                     <span data-change-state="0" data-setting="<?php echo esc_attr( $value['id'] ); ?>" data-name="<?php echo esc_attr( $val ); ?>" class="aws-no" title="<?php echo esc_attr__( 'Enable this source', 'advanced-woo-search' ); ?>"><?php echo esc_html__( 'No', 'advanced-woo-search' ); ?></span>
+                                                    <span style="display: none;" class="aws-disabled" title="<?php echo esc_attr__( 'Source index disabled', 'advanced-woo-search' ); ?>"><?php echo esc_html__( 'No', 'advanced-woo-search' ); ?></span>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -320,9 +332,21 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
                         <?php break;
 
-                    case 'heading': ?>
+                    case 'heading':
+
+                        $heading_tag = isset( $value['heading_type'] ) && $value['heading_type'] === 'text' ? 'span' : 'h3';
+                        $heading_description = isset( $value['desc'] ) ? $value['desc'] : '';
+                        $id = isset($value['id']) && $value['id'] ? 'id="' . $value['id'] . '"' : '';
+                        ?>
+
                         <tr valign="top">
-                            <th scope="row"><h3 class="aws-heading"><?php echo esc_html( $value['name'] ); ?></h3></th>
+                            <th scope="row"><<?php echo $heading_tag; ?> <?php echo $id; ?> class="aws-heading"><?php echo esc_html( $value['name'] ); ?></<?php echo $heading_tag; ?>></th>
+
+                            <?php if ( $heading_description ): ?>
+                                <td>
+                                    <span class="description"><?php echo $heading_description; ?></span>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <?php break;
 

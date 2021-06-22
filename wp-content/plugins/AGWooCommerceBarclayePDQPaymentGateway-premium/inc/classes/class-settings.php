@@ -47,7 +47,7 @@ class AG_ePDQ_Settings
                                 'title' => __('Description', 'ag_epdq_server'),
                                 'type' => 'textarea',
                                 'description' => __('Description of the payment process. This description will be visible throughout the site and the payment page.', 'ag_epdq_server'),
-                                'default' => 'Use the <strong>secure payment processor of Barclays Bank Plc</strong> and checkout with your debit/credit card.',
+                                'default' => 'Use the secure payment processor of Barclaycard and checkout with your debit/credit card.',
                                 'desc_tip'      => true
                         ),
                         'access_key' => array(
@@ -82,7 +82,7 @@ class AG_ePDQ_Settings
                                 'title' => __('SHA encryption method', 'ag_epdq_server'),
                                 'type' => 'select',
                                 'css'  => 'height: 35px;',
-                                'options' => array(0 => 'SHA-1', 1 => 'SHA-256', 2 => 'SHA-512'),
+                                'options' => array(0 => 'SHA-1 (We do not recommend this option, please use another)', 1 => 'SHA-256', 2 => 'SHA-512'),
                                 'description' => __('Sha encryption method - this needs to match what you have set in the ePDQ back office.', 'ag_epdq_server'),
                                 'default' => '',
                                 'desc_tip'      => true,
@@ -143,7 +143,7 @@ class AG_ePDQ_Settings
                                 'type' => 'checkbox',
                                 'label' => 'Enable debug reporting',
                                 'default' => 'no',
-                                'description' => 'To view the log go <a href="' . site_url() . '/wp-admin/admin.php?page=wc-status&tab=logs">here</a> and find <strong>AG-WooCommerce-Barclays-ePDQ-Payment-Gateway</strong> in the WooCommerce logs',
+                                'description' => 'To view the log go <a href="' . site_url('/wp-admin/admin.php?page=wc-status&tab=logs') . '">here</a> and find <strong>AG-WooCommerce-Barclays-ePDQ-Payment-Gateway</strong> in the WooCommerce logs',
                                 'desc_tip' => false
                         ),
                         'refund' => array(
@@ -199,7 +199,7 @@ class AG_ePDQ_Settings
                                 'title' => __('Description', 'ag_epdq_server'),
                                 'type' => 'textarea',
                                 'description' => __('Description of the payment process. This description will be visible throughout the site and the payment page.', 'ag_epdq_server'),
-                                'default' => 'Use the <strong>secure payment processor of Barclays Bank Plc</strong> and checkout with your debit/credit card.',
+                                'default' => 'Use the secure payment processor of Barclaycard and checkout with your debit/credit card.',
                                 'desc_tip'      => true
                         ),
                         'access_key' => array(
@@ -234,7 +234,7 @@ class AG_ePDQ_Settings
                                 'title' => __('SHA encryption method', 'ag_epdq_server'),
                                 'type' => 'select',
                                 'css'  => 'height: 35px;',
-                                'options' => array(0 => 'SHA-1', 1 => 'SHA-256', 2 => 'SHA-512'),
+                                'options' => array(0 => 'SHA-1 (We do not recommend this option, please use another)', 1 => 'SHA-256', 2 => 'SHA-512'),
                                 'description' => __('Sha encryption method - this needs to match what you have set in the epdq back office.', 'ag_epdq_server'),
                                 'default' => '',
                                 'desc_tip'      => true,
@@ -295,7 +295,7 @@ class AG_ePDQ_Settings
                                 'type' => 'checkbox',
                                 'label' => 'Enable debug reporting',
                                 'default' => 'no',
-                                'description' => 'To view the log go <a href="' . site_url() . '/wp-admin/admin.php?page=wc-status&tab=logs">here</a> and find <strong>AG-WooCommerce-Barclays-ePDQ-Payment-Gateway</strong> in the WooCommerce logs',
+                                'description' => 'To view the log go <a href="' . site_url('/wp-admin/admin.php?page=wc-status&tab=logs') . '">here</a> and find <strong>AG-WooCommerce-Barclays-ePDQ-Payment-Gateway</strong> in the WooCommerce logs',
                                 'desc_tip' => false
                         ),
                         'refund' => array(

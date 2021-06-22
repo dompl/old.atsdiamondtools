@@ -94,8 +94,6 @@ if (!class_exists('AWS_Gutenberg_Init')) :
 
             }
 
-            $search_form = '<div style="margin: 20px 0;">' . $search_form . '</div>';
-
             return $search_form;
 
         }

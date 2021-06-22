@@ -457,3 +457,6 @@
                 /* background-color: grey; */
                 pointer-events: none;
              }
+.post-type-shop_order .wp-list-table .column-order_number_new {
+    width: 21ch !important; 
+}

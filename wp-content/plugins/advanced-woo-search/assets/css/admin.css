@@ -63,7 +63,7 @@
 
 .wp-submenu .current a[href*="page=aws-options&tab=premium"] span,
 .wp-submenu a[href*="page=aws-options&tab=premium"]:hover span {
-    color: rgb(255, 255, 91, 1) !important;
+    color: rgb(255, 255, 91) !important;
 }
 
 /* Reindex button */
@@ -80,7 +80,8 @@
     margin-top: 4px;
 }
 
-#aws-reindex .reindex-progress {
+#aws-reindex .reindex-progress,
+#aws-reindex .reindex-notice {
     display: none;
     margin-left: 15px;
     position: relative;
@@ -89,8 +90,13 @@
     font-weight: bold;
 }
 
+#aws-reindex .reindex-notice {
+    font-weight: normal;
+}
+
 #aws-reindex.loading .loader,
-#aws-reindex.loading .reindex-progress {
+#aws-reindex.loading .reindex-progress,
+#aws-reindex.loading .reindex-notice {
     display: inline-block;
 }
 
@@ -278,12 +284,20 @@ h1.aws-instance-name {
     width: 500px;
 }
 
+.aws-table.aws-table-sources th.aws-actions {
+    width: 60px;
+}
 .aws-table.aws-table-sources th.aws-active {
     width: 30px;
 }
 
+.aws-table.aws-table-sources td.aws-active {
+    text-align: center;
+}
+
 .aws-table.aws-table-sources td.aws-active .aws-yes,
-.aws-table.aws-table-sources td.aws-active .aws-no{
+.aws-table.aws-table-sources td.aws-active .aws-no,
+.aws-table.aws-table-sources td.aws-active .aws-disabled {
     background-color: #26CC06;
     padding: 1px 7px;
     color: #fff;
@@ -292,17 +306,32 @@ h1.aws-instance-name {
     cursor: pointer;
 }
 
+.aws-table.aws-table-sources td.aws-active .aws-disabled {
+    background-color: #808080;
+    cursor: default;
+}
+
 .aws-table.aws-table-sources td.aws-active .aws-no {
     background-color: #CC0606;
 }
 
 .aws-table.aws-table-sources td.aws-active .aws-yes,
+.aws-table.aws-table-sources td.aws-active .aws-disabled,
 .aws-table.aws-table-sources td.aws-active.active .aws-no {
     display: none;
 }
 
 .aws-table.aws-table-sources td.aws-active.active .aws-yes {
     display: inline;
+}
+
+.aws-table.aws-table-sources td.aws-active.disabled .aws-disabled {
+    display: inline !important;
+}
+
+.aws-table.aws-table-sources td.aws-active.disabled .aws-yes,
+.aws-table.aws-table-sources td.aws-active.disabled .aws-no {
+    display: none;
 }
 
 .aws-table.aws-table-sources td.aws-active:after {

@@ -120,6 +120,19 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                 $relevance_query = '0';
             }
 
+            $lang = isset( $_REQUEST['lang'] ) ? sanitize_text_field( $_REQUEST['lang'] ) : '';
+            if ( $lang ) {
+                $terms = get_terms( array(
+                    'taxonomy'   => $this->taxonomy,
+                    'hide_empty' => true,
+                    'fields'     => 'ids',
+                    'lang'       => $lang
+                ) );
+                if ( $terms ) {
+                    $search_query .= sprintf( " AND ( " . $wpdb->terms . ".term_id IN ( %s ) )", implode( ',', $terms ) );
+                }
+            }
+
             $sql = "
 			SELECT
 				distinct($wpdb->terms.name),
@@ -174,14 +187,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                     $parent = '';
 
-                    if ( function_exists( 'wpml_object_id_filter' )  ) {
-                        $term = wpml_object_id_filter( $result->term_id, $result->taxonomy );
-                        if ( $term != $result->term_id ) {
-                            continue;
-                        }
-                    } else {
-                        $term = get_term( $result->term_id, $result->taxonomy );
-                    }
+                    $term = get_term( $result->term_id, $result->taxonomy );
 
                     if ( $term != null && !is_wp_error( $term ) ) {
                         $term_link = get_term_link( $term );

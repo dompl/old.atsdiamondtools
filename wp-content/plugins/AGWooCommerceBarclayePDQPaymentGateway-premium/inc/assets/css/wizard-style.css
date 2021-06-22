@@ -3,7 +3,8 @@ body {
     margin: 65px auto 24px;
     box-shadow: none;
     background: #f1f1f1;
-    padding: 0
+    padding: 0;
+    border: none;
 }
 
 .ag_wizard-step__wizard_welcome .ag-logo,  .ag_wizard-step__wizard_welcome .ag_wizard-steps { display: none;}

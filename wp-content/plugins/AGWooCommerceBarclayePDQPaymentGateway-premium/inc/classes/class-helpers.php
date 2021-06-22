@@ -169,4 +169,49 @@ class AG_ePDQ_Helpers
 	}
 
 
+		/**
+	 * Get the right enviroment URL
+	 *
+	 * @param [type] $endpoint - where we are posting to
+	 * @return $enviroment_url
+	 */
+	public static function get_enviroment_url($endpoint) {
+
+		$ePDQ_settings  = new epdq_checkout();
+
+		if ($ePDQ_settings->status == 'test')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/'. $endpoint. '.asp';
+		if ($ePDQ_settings->status == 'live')	$environment_url = 'https://payments.epdq.co.uk/ncol/prod/'. $endpoint. '.asp';
+
+		return $environment_url;
+	}
+
+
+	public static function remote_post( $environment_url, $data_post ) {
+		
+		$post_string = array();
+		foreach ($data_post as $key => $value) {
+			$post_string[] = $key . '=' . $value;
+		}
+
+		$actual_string = '';
+		$actual_string = implode('&', $post_string);
+		$result = wp_safe_remote_post(esc_url($environment_url), array(
+			'method' => 'POST',
+			'timeout'     => 6,
+			'redirection' => 5,
+			'body' => $actual_string,
+		));
+
+		// Check for error
+		if ( is_wp_error( $result ) ) {
+			error_log( 'ERROR' );
+			error_log( print_r( $response, true ) );
+			return;
+		}
+		
+		return $result;
+
+	}
+
+
 }

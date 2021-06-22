@@ -14,7 +14,7 @@ class AG_ePDQ_Wizard_steps
 {
 	public static $single_instance = null;
 	public static $args = array();
-    public static $ag_svg = AG_ePDQ_server_path . 'img/ag-logo.png';
+    public static $ag_svg = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png';
     public static $settings_key = 'woocommerce_epdq_checkout_settings';
     public $shaMethod = 1;
     
@@ -589,7 +589,7 @@ class AG_ePDQ_Wizard_steps
         update_option( self::$settings_key, array_merge( $saved_settings, $settings ) );
 
         $product = isset( $_POST['product'] ) ? AG_ePDQ_Helpers::AG_escape( $_POST['product'] ) : '';
-        if($product === 'yes') {
+        if($product === 'yes' && ! get_page_by_title('We are AG test product', OBJECT, 'product')) {
 
             $args = array(	   
                 'post_author' => 1, 
@@ -621,11 +621,14 @@ class AG_ePDQ_Wizard_steps
 
 
     public static function wizard_epdq_step_finish() { ?>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="<?php echo AG_ePDQ_server_path . 'inc/assets/js/confetti.js'; ?>"></script>
     
 		<form method="post" class="step">
 			<input type="hidden" name="save_step" value="step_finish" />
             <?php wp_nonce_field( self::$args['plugin_name'].'-wizard' ); ?>
-            <h1><?php echo __('Congratulations!', 'ag_epdq_server'); ?></h1>
+            <h1><?php echo __('Congratulations! 🎉', 'ag_epdq_server'); ?></h1>
             <p class="setup-text">
             <?php echo __('The plugin has been setup and your gateways is ready.<br />
                 Tell the world how easy this setup was!', 'ag_epdq_server'); ?>
@@ -654,7 +657,7 @@ class AG_ePDQ_Wizard_steps
                 'facebook-share-dialog', 
                 'width=626,height=436'); 
                 return false;">
-            <img class="fb-share" src="<?php echo AG_ePDQ_server_path . 'img/fb-share.png'; ?>" />
+            <img class="fb-share" src="<?php echo AG_ePDQ_server_path . 'inc/assets/img/fb-share.png'; ?>" />
             </a>                
 
 			<p class="setup-text">

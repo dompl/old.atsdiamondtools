@@ -344,6 +344,46 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
+                if ( version_compare( $current_version, '2.23', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+
+                        if ( ! isset( $settings['search_rule'] ) ) {
+                            $settings['search_rule'] = 'contains';
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                        if ( ! isset( $settings['search_timeout'] ) ) {
+                            $settings['search_timeout'] = '300';
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                        if ( ! isset( $settings['index_sources'] ) ) {
+                            $index_sources = array();
+                            $options_array = AWS_Admin_Options::include_options();
+                            foreach( $options_array['performance'] as $def_option ) {
+                                if ( isset( $def_option['id'] ) && $def_option['id'] === 'index_sources' && isset( $def_option['choices'] ) ) {
+                                    foreach( $def_option['choices'] as $choice_key => $choice_label ) {
+                                        $index_sources[$choice_key] = 1;
+                                    }
+                                    $settings['index_sources'] = $index_sources;
+                                    break;
+                                }
+                            }
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                        if ( ! isset( $settings['index_variations'] ) ) {
+                            $settings['index_variations'] = 'true';
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                    }
+
+                }
+
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );

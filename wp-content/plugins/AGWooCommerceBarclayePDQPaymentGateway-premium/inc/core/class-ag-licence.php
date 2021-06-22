@@ -124,7 +124,7 @@ class AG_licence
     
     public static function plugin_icon( $icon )
     {
-        return self::$args['paths']['plugin'] . '/img/plugin-icon.png';
+        return self::$args['paths']['plugin'] . '/inc/assets/img/plugin-icon.png';
     }
     
     public static function valid_licence()
@@ -230,9 +230,8 @@ class AG_licence
         }
         $new = self::new_install();
         $prem = self::valid_licence();
-        $url = AG_ePDQ_Helpers::AG_escape( $_SERVER['REQUEST_URI'] );
-        $option_name = 'AG_epdq_setup_wizard_shown';
-        $shown = get_option( $option_name, false );
+        $url = htmlspecialchars( $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8' );
+        $shown = get_option( 'AG_epdq_setup_wizard_shown', false );
         $wizardURL = 'AG_ePDQ-wizard';
         
         if ( !$shown && !$new && !substr_count( $url, 'AG_ePDQ-wizard' ) && $prem ) {

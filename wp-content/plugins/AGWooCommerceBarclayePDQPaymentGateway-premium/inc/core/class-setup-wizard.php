@@ -15,7 +15,7 @@ class AG_ePDQ_Wizard
 
 	public static $single_instance = null;
 	public static $args = array();
-	public static $ag_png = AG_ePDQ_server_path . 'img/ag-logo.png';
+	public static $ag_png = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png';
 	public static $ourSteps = array(); 
 	public $steps = array();
 	public $step = array();

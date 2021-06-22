@@ -20,6 +20,8 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
          */
         protected static $_instance = null;
 
+        private $data = array();
+
         /**
          * Main AWS_Woof_Filter_Init Instance
          *
@@ -43,13 +45,17 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
 
             add_filter( 'aws_search_page_filters', array( $this, 'woof_search_page_filters' ) );
 
-            add_filter( 'aws_searchpage_enabled', array( $this, 'woof_searchpage_enabled' ) );
+            add_filter( 'aws_searchpage_enabled', array( $this, 'woof_searchpage_enabled' ), 1, 2 );
 
             add_filter( 'aws_search_page_query', array( $this, 'woof_aws_searchpage_query' ) );
 
             add_filter( 'woof_text_search_like_option', array( $this, 'woof_text_search_like_option' ) );
 
             add_filter( 'woof_get_request_data', array( $this, 'woof_get_request_data' ), 999 );
+
+            add_filter( 'posts_where_request', array( $this, 'posts_where_request' ), 1 );
+
+            add_filter( 'aws_search_page_custom_data', array( $this, 'aws_search_page_custom_data' ) );
 
         }
 
@@ -92,8 +98,8 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
         /*
          * Enable aws search
          */
-        public function woof_searchpage_enabled( $enabled ) {
-            if ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' && isset( $_GET['type_aws'] ) && isset( $_GET['woof_text'] ) ) {
+        public function woof_searchpage_enabled( $enabled, $query ) {
+            if ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' && isset( $_GET['type_aws'] ) && isset( $_GET['woof_text'] ) && ! isset( $_REQUEST['woof_dyn_recount_going'] ) && ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ) {
                 return true;
             }
             return $enabled;
@@ -126,9 +132,30 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
             if ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' && isset( $_GET['type_aws'] ) && isset( $_GET['s'] ) && ! isset( $_GET['woof_text'] ) ) {
                 $request['woof_text'] = $request['s'];
             }
+            if ( isset( $_REQUEST['woof_dyn_recount_going'] ) ) {
+                return '';
+            }
             return $request;
         }
 
+        /*
+         * Set WHERE request for filters counter
+         */
+        public function posts_where_request( $where ) {
+            if ( isset( $_REQUEST['woof_dyn_recount_going'] ) && $this->data && isset( $this->data['ids'] ) ) {
+                global $wpdb;
+                $where .= " AND {$wpdb->posts}.ID IN ( " . implode( ',', $this->data['ids'] ) . " ) ";
+            }
+            return $where;
+        }
+
+        /*
+         * Set search query custom data
+         */
+        public function aws_search_page_custom_data( $data ) {
+            $this->data = $data;
+            return $data;
+        }
         
     }
 

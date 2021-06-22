@@ -127,20 +127,18 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $results_num     = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
             $search_in       = AWS()->get_settings( 'search_in' );
             $outofstock      = AWS()->get_settings( 'outofstock' );
+            $search_rule     = AWS()->get_settings( 'search_rule' );
 
-            if ( is_array( $search_in ) ) {
+            $search_in_arr = array();
+
+            if ( is_array( $search_in ) && ! empty( $search_in ) ) {
                 foreach( $search_in as $search_in_source => $search_in_active ) {
                     if ( $search_in_active ) {
                         $search_in_arr[] = $search_in_source;
                     }
                 }
-            } else {
+            } elseif ( is_string( $search_in ) && $search_in ) {
                 $search_in_arr = explode( ',',  $search_in );
-            }
-
-            // Search in title if all options is disabled
-            if ( ! $search_in ) {
-                $search_in_arr = array( 'title' );
             }
 
             $products_array = array();
@@ -152,6 +150,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['search_terms'] = array();
             $this->data['search_in']    = $search_in_arr;
             $this->data['outofstock']   = $outofstock;
+            $this->data['search_rule']   = $search_rule;
 
             $search_array = array_unique( explode( ' ', $s ) );
 
@@ -172,30 +171,34 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             if ( ! empty( $this->data['search_terms'] ) ) {
 
-                $posts_ids = $this->query_index_table();
+                if ( ! empty( $this->data['search_in'] ) ) {
 
-                /**
-                 * Filters array of products ids
-                 *
-                 * @since 1.53
-                 *
-                 * @param array $posts_ids Array of products ids
-                 * @param string $s Search query
-                 */
-                $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s );
+                    $posts_ids = $this->query_index_table();
+
+                    /**
+                     * Filters array of products ids
+                     *
+                     * @since 1.53
+                     *
+                     * @param array $posts_ids Array of products ids
+                     * @param string $s Search query
+                     */
+                    $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s );
 
 
-                $products_array = $this->get_products( $posts_ids );
+                    $products_array = $this->get_products( $posts_ids );
 
-                /**
-                 * Filters array of products before they displayed in search results
-                 *
-                 * @since 1.42
-                 *
-                 * @param array $products_array Array of products results
-                 * @param string $s Search query
-                 */
-                $products_array = apply_filters( 'aws_search_results_products', $products_array, $s );
+                    /**
+                     * Filters array of products before they displayed in search results
+                     *
+                     * @since 1.42
+                     *
+                     * @param array $products_array Array of products results
+                     * @param string $s Search query
+                     */
+                    $products_array = apply_filters( 'aws_search_results_products', $products_array, $s );
+
+                }
 
                 if ( $show_cats === 'true' ) {
                     $tax_to_display[] = 'product_cat';
@@ -261,7 +264,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $search_in_arr    = $this->data['search_in'];
             $results_num      = $this->data['results_num'];
             $outofstock       = $this->data['outofstock'];
-
+            $search_rule      = $this->data['search_rule'];
 
             $reindex_version = get_option( 'aws_reindex_version' );
 
@@ -305,8 +308,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     $search_term = $search_term_norm;
                 }
 
-                $like = '%' . $wpdb->esc_like( $search_term ) . '%';
-
+                if ( $search_rule === 'begins' ) {
+                    $like = $wpdb->esc_like( $search_term ) . '%';
+                } else {
+                    $like = '%' . $wpdb->esc_like( $search_term ) . '%';
+                }
 
                 if ( $search_term_len > 1 ) {
                     $search_array[] = $wpdb->prepare( '( term LIKE %s )', $like );

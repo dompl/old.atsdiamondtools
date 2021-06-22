@@ -65,7 +65,8 @@ class Settings_General {
 					'option_name'	=> $option_name,
 					'id'			=> 'template_path',
 					'options' 		=> $this->find_templates(),
-					'description'	=> sprintf( __( 'Want to use your own template? Copy all the files from <code>%s</code> to your (child) theme in <code>%s</code> to customize them' , 'woocommerce-pdf-invoices-packing-slips' ), $plugin_template_path, $theme_template_path),
+					/* translators: 1,2. template paths */
+					'description'	=> sprintf( __( 'Want to use your own template? Copy all the files from <code>%1$s</code> to your (child) theme in <code>%2$s</code> to customize them' , 'woocommerce-pdf-invoices-packing-slips' ), $plugin_template_path, $theme_template_path),
 				)
 			),
 			array(
@@ -281,7 +282,7 @@ class Settings_General {
 		$installed_templates = array();
 
 		// get base paths
-		$template_base_path = ( defined( 'WC_TEMPLATE_PATH' ) ? WC_TEMPLATE_PATH : $GLOBALS['woocommerce']->template_url );
+		$template_base_path = ( function_exists( 'WC' ) && is_callable( 'WC', 'template_path' ) ) ? WC()->template_path() : 'woocommerce/';
 		$template_base_path = untrailingslashit( $template_base_path );
 		$template_paths = array (
 			// note the order: child-theme before theme, so that array_unique filters out parent doubles

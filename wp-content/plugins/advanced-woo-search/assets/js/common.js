@@ -105,10 +105,12 @@ AwsHooks.filters = AwsHooks.filters || {};
                     methods.showLoader();
                 }
 
+                var searchTimeout = d.searchTimeout > 100 ? d.searchTimeout : 300;
+
                 clearTimeout( keyupTimeout );
                 keyupTimeout = setTimeout( function() {
                     methods.ajaxRequest();
-                }, 300 );
+                }, searchTimeout );
 
             },
 
@@ -505,6 +507,7 @@ AwsHooks.filters = AwsHooks.filters || {};
             showClear: ( self.data('show-clear') !== undefined ) ? self.data('show-clear') : false,
             mobileScreen: ( self.data('mobile-screen') !== undefined ) ? self.data('mobile-screen') : false,
             useAnalytics: ( self.data('use-analytics') !== undefined ) ? self.data('use-analytics') : false,
+            searchTimeout: ( self.data('timeout') !== undefined ) ? parseInt( self.data('timeout') ) : 300,
             instance: instance,
             resultBlock: '#aws-search-result-' + instance,
             pageId: ( self.data('page-id') !== undefined ) ? self.data('page-id') : 0,
@@ -596,8 +599,11 @@ AwsHooks.filters = AwsHooks.filters || {};
 
         $( d.resultBlock ).on( 'click', 'span[href], [data-link]', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             var link = $(this).data('link') ? $(this).data('link') : $(this).attr('href');
+            if ( link === '' || link === '#' ) {
+                return;
+            }
+            e.stopPropagation();
             if ( link ) {
                 window.location = link;
             }

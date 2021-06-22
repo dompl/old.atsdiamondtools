@@ -162,6 +162,14 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             }
 
+            /**
+             * Filter admin page options for current page
+             * @since 2.23
+             * @param array $options_arr Array of options
+             * @param bool|string $tab Current settings page tab
+             */
+            $options_arr = apply_filters( 'aws_admin_page_options_current', $options_arr, $tab );
+
             return $options_arr;
 
         }
@@ -285,6 +293,86 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     '<br>' . __( "Also will send event with category - 'AWS search', action - 'AWS Search Term' and label of value of search term.", "advanced-woo-search" ),
                 "id"    => "use_analytics",
                 "value" => 'false',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
+            $options['performance'][] = array(
+                "name"    => __( "Search options", "advanced-woo-search" ),
+                "type"    => "heading"
+            );
+
+            $options['performance'][] = array(
+                "name"  => __( "Search rule", "advanced-woo-search" ),
+                "desc"  => __( "Search rule that will be used for terms search.", "advanced-woo-search" ),
+                "id"    => "search_rule",
+                "value" => 'contains',
+                "type"  => "radio",
+                'choices' => array(
+                    'contains' => '%s% ' . __( "( contains ). Search query can be inside any part of the product words ( beginning, end, middle ). Slow.", "advanced-woo-search" ),
+                    'begins'   => 's% ' . __( "( begins ). Search query can be only at the beginning of the product words. Fast.", "advanced-woo-search" ),
+                )
+            );
+
+            $options['performance'][] = array(
+                "name"  => __( "AJAX timeout", "advanced-woo-search" ),
+                "desc"  => __( "Time after user input that script is waiting before sending a search event to the server, ms.", "advanced-woo-search" ),
+                "id"    => "search_timeout",
+                "value" => 300,
+                'min'   => 100,
+                "type"  => "number"
+            );
+
+            $options['performance'][] = array(
+                "name"    => __( "Index table options", "advanced-woo-search" ),
+                "id"      => "index_sources",
+                "type"    => "heading"
+            );
+
+            $options['performance'][] = array(
+                "name"         => __( "Overview", "advanced-woo-search" ),
+                'heading_type' => 'text',
+                'desc'         => __( 'To perform the search plugin use a special index table. This table contains normalized words of all your products from all available sources.', "advanced-woo-search" ) . '<br>' .
+                    __( 'Sometimes when there are too many products in your store index table can be very large and that can reflect on search speed.', "advanced-woo-search" ) . '<br>' .
+                    __( 'In this section you can use several options to change the table size by disabling some unused product data.', "advanced-woo-search" ) . '<br>' .
+                    '<b>' . __( "Note:", "advanced-woo-search" ) . '</b> ' . __( "Reindex is required after options changes.", "advanced-woo-search" ),
+                "type"         => "heading"
+            );
+
+            $options['performance'][] = array(
+                "name"       => __( "Data to index", "advanced-woo-search" ),
+                "desc"       => __( "Choose what products data to add inside the plugin index table.", "advanced-woo-search" ),
+                "table_head" => __( 'What to index', 'advanced-woo-search' ),
+                "id"         => "index_sources",
+                "value" => array(
+                    'title'    => 1,
+                    'content'  => 1,
+                    'sku'      => 1,
+                    'excerpt'  => 1,
+                    'category' => 1,
+                    'tag'      => 1,
+                    'id'       => 1,
+                ),
+                "choices" => array(
+                    "title"    => __( "Title", "advanced-woo-search" ),
+                    "content"  => __( "Content", "advanced-woo-search" ),
+                    "sku"      => __( "SKU", "advanced-woo-search" ),
+                    "excerpt"  => __( "Short description", "advanced-woo-search" ),
+                    "category" => __( "Category", "advanced-woo-search" ),
+                    "tag"      => __( "Tag", "advanced-woo-search" ),
+                    "id"       => __( "ID", "advanced-woo-search" ),
+                ),
+                "type"    => "table"
+            );
+
+            $options['performance'][] = array(
+                "name"  => __( "Index variations", "advanced-woo-search" ),
+                "desc"  => __( "Index or not content of product variations.", "advanced-woo-search" ),
+                "id"    => "index_variations",
+                "value" => 'true',
                 "type"  => "radio",
                 'choices' => array(
                     'true'  => __( 'On', 'advanced-woo-search' ),

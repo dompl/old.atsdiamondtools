@@ -28,15 +28,16 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             }
 
 
-            $placeholder   = AWS_Helpers::translate( 'search_field_text', AWS()->get_settings( 'search_field_text' ) );
-            $min_chars     = AWS()->get_settings( 'min_chars' );
-            $show_loader   = AWS()->get_settings( 'show_loader' );
-            $show_more     = AWS()->get_settings( 'show_more' );
-            $show_page     = AWS()->get_settings( 'show_page' );
-            $show_clear    = AWS()->get_settings( 'show_clear' );
-            $mobile_screen = AWS()->get_settings( 'mobile_overlay' );
-            $use_analytics = AWS()->get_settings( 'use_analytics' );
-            $buttons_order = AWS()->get_settings( 'buttons_order' );
+            $placeholder    = AWS_Helpers::translate( 'search_field_text', AWS()->get_settings( 'search_field_text' ) );
+            $min_chars      = AWS()->get_settings( 'min_chars' );
+            $show_loader    = AWS()->get_settings( 'show_loader' );
+            $show_more      = AWS()->get_settings( 'show_more' );
+            $show_page      = AWS()->get_settings( 'show_page' );
+            $show_clear     = AWS()->get_settings( 'show_clear' );
+            $mobile_screen  = AWS()->get_settings( 'mobile_overlay' );
+            $use_analytics  = AWS()->get_settings( 'use_analytics' );
+            $buttons_order  = AWS()->get_settings( 'buttons_order' );
+            $search_timeout = AWS()->get_settings( 'search_timeout' );
 
             $current_lang = AWS_Helpers::get_lang();
 
@@ -64,6 +65,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
                 'data-use-analytics' => $use_analytics,
                 'data-min-chars'     => $min_chars,
                 'data-buttons-order' => $buttons_order,
+                'data-timeout'       => $search_timeout,
                 'data-is-mobile'     => wp_is_mobile() ? 'true' : 'false',
                 'data-page-id'       => get_queried_object_id(),
                 'data-tax'           => get_query_var('taxonomy')
@@ -88,7 +90,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
 
             $markup .= '<div class="aws-wrapper">';
 
-                $markup .= '<label style="position:absolute !important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" class="aws-search-label" for="' . esc_attr( $input_id ) . '">' . esc_attr( $placeholder ) . '</label>';
+                $markup .= '<label class="aws-search-label" for="' . esc_attr( $input_id ) . '">' . esc_attr( $placeholder ) . '</label>';
                 $markup .= '<input type="search" name="s" id="' . esc_attr( $input_id ) . '" value="' . get_search_query() . '" class="aws-search-field" placeholder="' . esc_attr( $placeholder ) . '" autocomplete="off" />';
                 $markup .= '<input type="hidden" name="post_type" value="product">';
                 $markup .= '<input type="hidden" name="type_aws" value="true">';

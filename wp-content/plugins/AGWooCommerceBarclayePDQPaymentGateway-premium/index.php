@@ -10,20 +10,21 @@
  * -----
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 4.1.4
+ * Version: 4.2.2
  * WC requires at least: 3.0.0
- * WC tested up to: 4.7
+ * WC tested up to: 5.2
  * License: GPL3
  */
 
+
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+
 defined('ABSPATH') || die("No script kiddies please!");
-
-
 
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  4.1.4
+ * @version  4.2.2
  * @category Class
  * @author   We are AG
  */
@@ -32,7 +33,7 @@ class AG_ePDQ_server
 
 
 
-	public static $AGversion = "4.1.4";
+	public static $AGversion = "4.2.2";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -54,12 +55,27 @@ class AG_ePDQ_server
 		add_action('wp_enqueue_scripts', array($this, 'ag_checkout_css'));
 		add_filter('woocommerce_payment_gateways', array($this, 'woocommerce_add_epdq_gateway'));
 
+		// If the site supports Gutenberg Blocks, support the Checkout block
+		add_action( 'woocommerce_blocks_loaded', array($this, 'ag_blocks_support' ) );
+
 
 		$this->AG_classes();
 
 
 		if (!AG_licence::valid_licence()) {
 			return;
+		}
+
+	}
+
+
+	public function ag_blocks_support() {
+		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+			add_action( 'woocommerce_blocks_payment_method_type_registration', 
+				function ($registry) {
+					$registry->register(new Automattic\WooCommerce\Blocks\Payments\Integrations\epdq_checkout());
+				}
+			);
 		}
 	}
 
@@ -78,6 +94,7 @@ class AG_ePDQ_server
 		define('AG_ePDQ_path', plugin_dir_path(__FILE__));
 		define('AG_ePDQ_class', AG_ePDQ_path . 'inc/classes/');
 		define('AG_ePDQ_core', AG_ePDQ_path . 'inc/core/');
+		define('AG_ePDQ_blocks', AG_ePDQ_path . 'inc/blocks/');
 		define('AG_ePDQ_admin', admin_url() );
 	}
 
@@ -103,6 +120,8 @@ class AG_ePDQ_server
 		require_once AG_ePDQ_class . 'class-gdpr.php';
 		require_once AG_ePDQ_class . 'class-settings.php';
 		require_once AG_ePDQ_class . 'class-crypt.php';
+		require_once AG_ePDQ_class . 'class-order-status-check.php';
+		require_once AG_ePDQ_blocks . 'ePDQ-class.php';
 		
 		//require_once AG_ePDQ_class . 'class-epdq-score.php';
 		//require_once AG_ePDQ_class . 'AG_3DS_Score/class-3d-score.php';
@@ -123,6 +142,12 @@ class AG_ePDQ_server
 		//));
 
 		AG_ePDQ_Wizard::run_instance(array(
+			'plugin_slug'   => self::$AG_ePDQ_slug,
+			'plugin_version' => self::$AGversion,
+			'plugin_name' => self::$pluginName,
+		));
+
+		AG_ePDQ_order_status_check::run_instance(array(
 			'plugin_slug'   => self::$AG_ePDQ_slug,
 			'plugin_version' => self::$AGversion,
 			'plugin_name' => self::$pluginName,

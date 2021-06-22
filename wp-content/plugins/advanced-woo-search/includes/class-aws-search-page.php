@@ -108,68 +108,17 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
             $search_res = $this->search( $query, $posts_per_page, $paged );
 
-            $query->found_posts = count( $search_res['all'] );
-            $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+            if ( $search_res ) {
 
-            foreach ( $search_res['products'] as $post_array ) {
-                $post = new stdClass();
+                $query->found_posts = count( $search_res['all'] );
+                $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+                $query->set( 'posts_per_page', $posts_per_page );
 
-                $post_array = (array) $post_array;
-                $post_data = $post_array['post_data'];
+                $new_posts = $this->set_posts_objects( $search_res, $query );
 
-                $post->ID = ( isset( $post_array['parent_id'] ) && $post_array['parent_id'] ) ? $post_array['parent_id'] : $post_data->ID;
-                $post->site_id = get_current_blog_id();
+                $this->posts_by_query[spl_object_hash( $query )] = $new_posts;
 
-                if ( ! empty( $post_data->site_id ) ) {
-                    $post->site_id = $post_data->site_id;
-                }
-
-                $post_return_args = array(
-                    'post_type',
-                    'post_author',
-                    'post_name',
-                    'post_status',
-                    'post_title',
-                    'post_parent',
-                    'post_content',
-                    'post_excerpt',
-                    'post_date',
-                    'post_date_gmt',
-                    'post_modified',
-                    'post_modified_gmt',
-                    'post_mime_type',
-                    'comment_count',
-                    'comment_status',
-                    'ping_status',
-                    'menu_order',
-                    'permalink',
-                    'terms',
-                    'post_meta'
-                );
-
-                foreach ( $post_return_args as $key ) {
-                    if ( isset( $post_data->$key ) ) {
-                        $post->$key = $post_data->$key;
-                    }
-                }
-
-                $post->awssearch = true; // Super useful for debugging
-
-                if ( $post ) {
-                    $new_posts[] = $post;
-                }
             }
-
-            /**
-             * Filter search page results
-             * @since 2.01
-             * @param array $new_posts Posts array
-             * @param object $query Query
-             * @param array $this->data Search results data array
-             */
-            $new_posts = apply_filters( 'aws_search_page_results', $new_posts, $query, $this->data );
-
-            $this->posts_by_query[spl_object_hash( $query )] = $new_posts;
 
             global $wpdb;
 
@@ -208,21 +157,25 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
                 $search_res = $this->search( $query, $posts_per_page, $paged );
 
-                $query->found_posts = count( $search_res['all'] );
-                $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+                if ( $search_res ) {
 
-                foreach ( $search_res['products'] as $product ) {
-                    $products_ids[] = $product['id'];
+                    $query->found_posts = count( $search_res['all'] );
+                    $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+
+                    foreach ( $search_res['products'] as $product ) {
+                        $products_ids[] = $product['id'];
+                    }
+
+                    $posts = $products_ids;
+
                 }
-
-                $posts = $products_ids;
 
             }
             return $posts;
         }
 
         /**
-         * Filter the posts array to contain ES query results in EP_Post form. Pull previously queried posts.
+         * Filter the posts array to contain search query result. Pull previously queried posts.
          *
          * @param array $posts
          * @param object $query
@@ -340,11 +293,13 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         public function facetwp_pre_filtered_post_ids( $post_ids, $obj ) {
             if ( isset( $_GET['type_aws'] ) && isset( $_GET['s'] ) ) {
                 $search_res = $this->search( $obj->query, $obj->query_args['posts_per_page'], $obj->query_args['paged'] );
-                $products_ids = array();
-                foreach ( $search_res['all'] as $product ) {
-                    $products_ids[] = $product['id'];
+                if ( $search_res ) {
+                    $products_ids = array();
+                    foreach ( $search_res['all'] as $product ) {
+                        $products_ids[] = $product['id'];
+                    }
+                    $post_ids = $products_ids;
                 }
-                $post_ids = $products_ids;
             }
             return $post_ids;
         }
@@ -355,9 +310,13 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @param object $query
          * @param int $posts_per_page
          * @param int $paged
-         * @return array
+         * @return array | bool
          */
         private function search( $query, $posts_per_page, $paged = 1 ) {
+
+            if ( ! did_action( 'woocommerce_init' ) || ! did_action( 'woocommerce_after_register_taxonomy' ) || ! did_action( 'woocommerce_after_register_post_type' ) ) {
+                return false;
+            }
 
             $s = $this->get_search_query( $query );
 
@@ -551,6 +510,75 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
              */
 
             return apply_filters( 'aws_search_page_query', $search_query, $query );
+
+        }
+
+        /*
+         * Set posts objects with data
+         */
+        private function set_posts_objects( $search_res, $query ) {
+
+            $new_posts = array();
+
+            foreach ( $search_res['products'] as $post_array ) {
+                $post = new stdClass();
+
+                $post_array = (array) $post_array;
+                $post_data = $post_array['post_data'];
+
+                $post->ID = ( isset( $post_array['parent_id'] ) && $post_array['parent_id'] ) ? $post_array['parent_id'] : $post_data->ID;
+                $post->site_id = get_current_blog_id();
+
+                if ( ! empty( $post_data->site_id ) ) {
+                    $post->site_id = $post_data->site_id;
+                }
+
+                $post_return_args = array(
+                    'post_type',
+                    'post_author',
+                    'post_name',
+                    'post_status',
+                    'post_title',
+                    'post_parent',
+                    'post_content',
+                    'post_excerpt',
+                    'post_date',
+                    'post_date_gmt',
+                    'post_modified',
+                    'post_modified_gmt',
+                    'post_mime_type',
+                    'comment_count',
+                    'comment_status',
+                    'ping_status',
+                    'menu_order',
+                    'permalink',
+                    'terms',
+                    'post_meta'
+                );
+
+                foreach ( $post_return_args as $key ) {
+                    if ( isset( $post_data->$key ) ) {
+                        $post->$key = $post_data->$key;
+                    }
+                }
+
+                $post->awssearch = true; // Super useful for debugging
+
+                if ( $post ) {
+                    $new_posts[] = $post;
+                }
+            }
+
+            /**
+             * Filter search page results
+             * @since 2.01
+             * @param array $new_posts Posts array
+             * @param object $query Query
+             * @param array $this->data Search results data array
+             */
+            $new_posts = apply_filters( 'aws_search_page_results', $new_posts, $query, $this->data );
+
+            return $new_posts;
 
         }
 

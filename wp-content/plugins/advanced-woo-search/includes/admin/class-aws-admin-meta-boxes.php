@@ -43,10 +43,11 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
         
                     $html .= '<th>' . esc_html__( 'Reindex table', 'advanced-woo-search' ) . '</th>';
                     $html .= '<td>';
-                        $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span></div><br><br>';
+                        $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span><span class="reindex-notice">' . __( 'Please do not close the page.', 'advanced-woo-search' ) . '</span></div><br><br>';
                         $html .= '<span class="description">' .
                             sprintf( esc_html__( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'advanced-woo-search' ), '<strong>', '</strong>' ) . '<br>' .
-                            __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br><strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . '<br><br>' .
+                            __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br>' .
+                            '<strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . sprintf( __( 'Index table options can be found inside %s section.', 'advanced-woo-search' ), '<a href="'.esc_url( admin_url('admin.php?page=aws-options&tab=performance') ).'">' . __( 'Performance', 'advanced-woo-search' ) . '</a>' ) . '<br><br>' .
                             esc_html__( 'Products in index:', 'advanced-woo-search' ) . '<span id="aws-reindex-count"> <strong>' . AWS_Helpers::get_indexed_products_count() . '</strong></span>';
                         $html .= '</span>';
                     $html .= '</td>';
@@ -117,6 +118,24 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                     $html .= '</div>';
 
                 $html .= '</div>';
+            $html .= '</div>';
+
+            return $html;
+
+        }
+
+        /*
+         * Get content for the reindex notice
+         * @return string
+         */
+        static public function get_reindex_notice() {
+
+            $html = '';
+
+            $html .= '<div class="updated notice is-dismissible">';
+                $html .= '<p>';
+                    $html .= sprintf( esc_html__( 'Advanced Woo Search: In order to apply the changes in the index table you need to reindex. %s', 'advanced-woo-search' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'advanced-woo-search' ).'</a>'  );
+                $html .= '</p>';
             $html .= '</div>';
 
             return $html;

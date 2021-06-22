@@ -105,7 +105,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>License &amp; Billing</h3>
 									<p>Activate or sync your license, cancel your subscription, print invoices, and manage your account information.</p>
-									<a href="<?php echo admin_url(); ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-account" class="ag-button">Manage Licence &amp; Billing</a>
+									<a href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-account'); ?>" class="ag-button">Manage Licence &amp; Billing</a>
 								</div>
 							</div>
 						</div>
@@ -125,7 +125,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>Affiliate</h3>
 									<p>Become an ambassador for AG and earn 20% commission for each sale!</p>
-									<a href="<?php echo admin_url(); ?>admin.php?page=<?php echo self::$args['main_slug']; ?>-affiliation" class="ag-button">Find Out More</a>
+									<a href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-affiliation'); ?>" class="ag-button">Find Out More</a>
 								</div>
 							</div>
 						</div>
@@ -165,7 +165,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>Setup Wizard</h3>
 									<p>Struggling to get setup?</p>
-									<a target="_blank" href="<?php echo esc_url_raw( admin_url() . '?page='.self::$args['plugin_name'].'-wizard' ); ?>" class="ag-button" target="_blank">Use the wizard</a>
+									<a target="_blank" href="<?php echo esc_url_raw( admin_url('?page='.self::$args['plugin_name'].'-wizard') ); ?>" class="ag-button" target="_blank">Use the wizard</a>
 								</div>
 							</div>
 						</div>

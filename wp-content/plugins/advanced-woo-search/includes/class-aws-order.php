@@ -154,17 +154,34 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                         $terms = get_the_terms( $post_array['id'], $taxonomy );
                         $operator = isset( $taxonomy_terms['operator'] ) ? $taxonomy_terms['operator'] : 'OR';
+                        $include_parent = isset( $taxonomy_terms['include_parent'] ) ? $taxonomy_terms['include_parent'] : false;
                         $term_arr = array();
 
                         if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
                             foreach ( $terms as $term ) {
                                 $term_arr[] = $term->term_id;
+                                if ( $include_parent && $term->parent ) {
+                                    $term_arr[] = $term->parent;
+                                    $term_parent = get_term( $term->parent, $taxonomy );
+                                    while ( ! is_wp_error( $term_parent ) && ! empty( $term_parent->parent ) && ! in_array( $term_parent->parent, $term_arr, true ) ) {
+                                        $term_arr[]  = (int) $term_parent->parent;
+                                        $term_parent = get_term( $term_parent->parent, $taxonomy );
+                                    }
+                                }
                             }
                         } elseif( strpos( $taxonomy, 'pa_' ) !== 0 ) {
                             $terms = get_the_terms( $post_array['id'], 'pa_' . $taxonomy );
                             if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
                                 foreach ( $terms as $term ) {
                                     $term_arr[] = $term->term_id;
+                                    if ( $include_parent && $term->parent ) {
+                                        $term_arr[] = $term->parent;
+                                        $term_parent = get_term( $term->parent, $taxonomy );
+                                        while ( ! is_wp_error( $term_parent ) && ! empty( $term_parent->parent ) && ! in_array( $term_parent->parent, $term_arr, true ) ) {
+                                            $term_arr[]  = (int) $term_parent->parent;
+                                            $term_parent = get_term( $term_parent->parent, $taxonomy );
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -216,7 +233,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                             foreach( $attr_filter as $attr_filter_name => $attr_filter_object ) {
 
-                                $operator = $attr_filter_object['operator'];
+                                $operator = isset( $attr_filter_object['operator'] ) ? $attr_filter_object['operator'] : 'OR';
                                 $attr_filter_terms = $attr_filter_object['terms'];
 
                                 $skip = AWS_Helpers::page_filter_tax( $product_terms_array, $attr_filter_terms, $operator );

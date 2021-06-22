@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 5.6
-Stable tag: 2.22
+Tested up to: 5.7
+Stable tag: 2.29
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,7 @@ Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** 
 * Seamless integration option for easy replacing your current search form
 * **WPML**, **Polylang**, **WooCommerce Multilingual**, **qTranslate** support
 * **WPML multi-currency** support
+* Page builder plugins support: Gutenberg, Elementor, Beaver Builder, WPBakery, Divi Builder
 * Custom Product Tabs for WooCommerce plugin support
 * Search Exclude plugin support
 
@@ -165,6 +166,57 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.29 ( 2021-06-07 ) =
+* Add - Woostify theme support
+* Dev - Fix search page filters
+
+= 2.28 ( 2021-05-24 ) =
+* Update - Tested with WC 5.3
+* Update - Index table improvement. Add a new index
+* Fix - Bug with search results for translated terms archive pages
+
+= 2.27 ( 2021-05-10 ) =
+* Fix - WOOF - WooCommerce Products Filter plugin integration
+* Dev - Fix posts_per_page filter for search results page
+* Dev - Update files loading
+
+= 2.26 ( 2021-04-27 ) =
+* Update - Tested with WC 5.2
+* Update - Wholesale Pricing plugin support
+* Update - BeRocket WooCommerce AJAX Products Filter support. Fix bug with slugs in URL for attributes filters
+* Update - Disable automatic re-index after WP All Import plugin finish importing
+* Update - Notice for plugin settings page
+* Update - Search form markup for label tag
+* Fix - Ajax request issue with sending parameters
+* Fix - CoCart plugin issue with empty cart when performing AJAX search
+* Fix - Bug with the empty search results page
+
+= 2.25 ( 2021-04-12 ) =
+* Add - Royal theme integration
+* Update - Aurum theme integration
+* Update - Ultimate Member plugin support
+* Dev - Add deleted_post hook for index table sync
+* Dev - Add aws_js_seamless_searchbox_markup filter
+
+= 2.24 ( 2021-03-25 ) =
+* Fix - Parent theme name detection
+* Dev - Update helper functions
+
+= 2.23 ( 2021-03-22 ) =
+* Add - Performance options
+* Add - Support for TI WooCommerce Wishlist plugin
+* Add - Support for Fury theme
+* Add - Support for Salient theme
+* Add - Support for Bazar theme
+* Add - Support for Claue theme
+* Add - Integration for Urna theme
+* Update - BeRocket AJAX filters plugin support. Fix issue when used slugs for terms instead of IDs inside URL
+* Update - BeRocket AJAX filter support. Include parent terms filters
+* Update - Gutenberg block markup
+* Update - Admin page styles
+* Fix - If no search sources is set - do not show the products search results
+* Dev - Add aws_admin_page_options_current filter
 
 = 2.22 ( 2021-02-19 ) =
 * Add - Support for WOOF - WooCommerce Products Filter plugin

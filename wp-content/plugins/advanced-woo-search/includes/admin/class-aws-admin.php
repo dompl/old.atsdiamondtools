@@ -55,7 +55,14 @@ class AWS_Admin {
 
         add_action( 'admin_notices', array( $this, 'display_welcome_header' ), 1 );
 
+        add_action( 'admin_notices', array( $this, 'display_reindex_message' ), 1 );
+
         add_filter( 'submenu_file', array( $this, 'submenu_file' ), 10, 2 );
+
+        add_filter( 'aws_admin_page_options_current', array( $this, 'check_sources_in_index' ), 1 );
+
+        add_action( 'aws_admin_change_state', array( $this, 'disable_not_indexed_sources' ), 1, 3 );
+
 
     }
 
@@ -76,10 +83,11 @@ class AWS_Admin {
         $nonce = wp_create_nonce( 'plugin-settings' );
 
         $tabs = array(
-            'general' => esc_html__( 'General', 'advanced-woo-search' ),
-            'form'    => esc_html__( 'Search Form', 'advanced-woo-search' ),
-            'results' => esc_html__( 'Search Results', 'advanced-woo-search' ),
-            'premium' => esc_html__( 'Get Premium', 'advanced-woo-search' )
+            'general'     => esc_html__( 'General', 'advanced-woo-search' ),
+            'performance' => esc_html__( 'Performance', 'advanced-woo-search' ),
+            'form'        => esc_html__( 'Search Form', 'advanced-woo-search' ),
+            'results'     => esc_html__( 'Search Results', 'advanced-woo-search' ),
+            'premium'     => esc_html__( 'Get Premium', 'advanced-woo-search' )
         );
 
         $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
@@ -108,6 +116,9 @@ class AWS_Admin {
         echo '<form action="" name="aws_form" id="aws_form" method="post">';
 
         switch ($current_tab) {
+            case('performance'):
+                new AWS_Admin_Fields( 'performance' );
+                break;
             case('form'):
                 new AWS_Admin_Fields( 'form' );
                 break;
@@ -174,6 +185,49 @@ class AWS_Admin {
     }
 
     /*
+     * Check if some sources for disabled from index
+     */
+    public function check_sources_in_index( $options ) {
+
+        if ( $options ) {
+
+            $index_options = AWS_Helpers::get_index_options();
+
+            foreach( $options as $options_key => $options_tab ) {
+                foreach( $options_tab as $key => $option ) {
+                    if ( isset( $option['id'] ) && $option['id'] === 'search_in' && isset( $option['choices'] ) ) {
+                        foreach( $option['choices'] as $choice_key => $choice_label ) {
+                            if ( isset( $index_options['index'][$choice_key] ) && ! $index_options['index'][$choice_key] ) {
+                                $text = '<span style="color:#dc3232;">' . __( '(index disabled)', 'advanced-woo-search' ) . '</span>' . ' <a href="'.esc_url( admin_url('admin.php?page=aws-options&tab=performance#index_sources') ).'">' . __( '(enable)', 'advanced-woo-search' ) . '</a>';
+                                $options[$options_key][$key]['choices'][$choice_key] = $choice_label . ' ' . $text;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return $options;
+
+    }
+
+    /*
+     * Disable sources that was excluded from index
+     */
+    public function disable_not_indexed_sources( $setting, $option, $state ) {
+
+        if ( $setting === 'index_sources' && $state ) {
+            $settings = AWS_Admin_Options::get_settings();
+            if ( isset( $settings['search_in'][$option] ) ) {
+                $settings['search_in'][$option] = 0;
+                update_option( 'aws_settings', $settings );
+            }
+        }
+
+    }
+
+    /*
      * Add welcome notice
      */
     public function display_welcome_header() {
@@ -189,6 +243,25 @@ class AWS_Admin {
         }
 
         echo AWS_Admin_Meta_Boxes::get_welcome_notice();
+
+    }
+
+    /*
+     * Add reindex notice after index options change
+     */
+    public function display_reindex_message() {
+
+        if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'aws-options' ) {
+            return;
+        }
+
+        if ( ! isset( $_POST["Submit"] ) || ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( isset( $_POST["index_variations"] ) || isset( $_POST["search_rule"] ) ) {
+            echo AWS_Admin_Meta_Boxes::get_reindex_notice();
+        }
 
     }
 
