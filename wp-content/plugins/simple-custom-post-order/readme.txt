@@ -3,8 +3,8 @@ Contributors: silkalns
 Tags: custom post order, post order, js post order, page order, posts order, category order, sort posts, sort pages, sort custom posts
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.6
-Stable tag: 2.5.3
+Tested up to: 5.7
+Stable tag: 2.5.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,6 +35,9 @@ An answer to that question.
 3. Settings
 
 == Changelog ==
+
+= Version 2.5.4 - 05.03.2021 =
+Changed: Improved Performance ( https://github.com/ColorlibHQ/simple-custom-post-order/issues/105 )
 
 = Version 2.5.3 =
 * Modified deprecated jQuery functions.

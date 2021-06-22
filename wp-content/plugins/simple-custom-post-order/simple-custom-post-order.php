@@ -3,10 +3,10 @@
 * Plugin Name: Simple Custom Post Order
 * Plugin URI: https://wordpress.org/plugins-wp/simple-custom-post-order/
 * Description: Order Items (Posts, Pages, and Custom Post Types) using a Drag and Drop Sortable JavaScript.
-* Version: 2.5.3
+* Version: 2.5.4
 * Author: Colorlib
 * Author URI: https://colorlib.com/
-* Tested up to: 5.6
+* Tested up to: 5.7
 * Requires: 4.6 or higher
 * License: GPLv3 or later
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -36,7 +36,7 @@
 
 define('SCPORDER_URL', plugins_url('', __FILE__));
 define('SCPORDER_DIR', plugin_dir_path(__FILE__));
-define('SCPORDER_VERSION', '2.5.3');
+define('SCPORDER_VERSION', '2.5.4');
 
 $scporder = new SCPO_Engine();
 
@@ -195,6 +195,7 @@ class SCPO_Engine {
     }
 
     public function _check_load_script_css() {
+
         $active = false;
 
         $objects = $this->get_scporder_options_objects();
@@ -228,8 +229,8 @@ class SCPO_Engine {
         if ($this->_check_load_script_css()) {
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-sortable');
-            wp_enqueue_script('scporderjs', SCPORDER_URL . '/assets/scporder.js', array('jquery'), SCPORDER_VERSION, true);
-            wp_enqueue_style('scporder', SCPORDER_URL . '/assets/scporder.css', array(), SCPORDER_VERSION );
+            wp_enqueue_script('scporderjs', SCPORDER_URL . '/assets/scporder.min.js', array('jquery'), SCPORDER_VERSION, true);
+			add_action( 'admin_print_styles', array( $this, 'print_scpo_style' ) );
 
         }
     }
@@ -658,6 +659,30 @@ class SCPO_Engine {
             wp_die();
         }
     }
+
+	/**
+	 * Print inline admin style
+	 *
+	 * @since 2.5.4
+	 */
+	public function print_scpo_style(){
+		?>
+		<style>
+			.ui-sortable tr:hover {
+				cursor : move;
+			}
+
+			.ui-sortable tr.alternate {
+				background-color : #F9F9F9;
+			}
+
+			.ui-sortable tr.ui-sortable-helper {
+				background-color : #F9F9F9;
+				border-top       : 1px solid #DFDFDF;
+			}
+		</style>
+		<?php
+	}
 
 }
 
