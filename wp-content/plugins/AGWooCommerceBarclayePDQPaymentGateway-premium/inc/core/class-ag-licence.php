@@ -43,7 +43,6 @@ class AG_licence
             10,
             2
         );
-        add_action( 'admin_init', array( $this, 'ag_show_wizard' ) );
         add_action( 'admin_notices', array( $this, 'ag_admin_notice' ) );
     }
     
@@ -62,6 +61,7 @@ class AG_licence
                 'account'     => self::get_fs_arg( 'menu/account', false ),
                 'pricing'     => self::get_fs_arg( 'menu/pricing', false ),
                 'affiliation' => self::get_fs_arg( 'menu/affiliation', false ),
+                'first-path'  => self::get_fs_arg( 'menu/first-path', false ),
             );
             self::$freemius = fs_dynamic_init( array(
                 'id'               => self::get_fs_arg( 'id', null ),
@@ -218,25 +218,6 @@ class AG_licence
             </div>
 
         <?php 
-        }
-    
-    }
-    
-    public function ag_show_wizard()
-    {
-        // Bypass redirect loop if someone is stuck.
-        if ( defined( 'AG_redirect_bypass' ) ) {
-            return;
-        }
-        $new = self::new_install();
-        $prem = self::valid_licence();
-        $url = htmlspecialchars( $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8' );
-        $shown = get_option( 'AG_epdq_setup_wizard_shown', false );
-        $wizardURL = 'AG_ePDQ-wizard';
-        
-        if ( !$shown && !$new && !substr_count( $url, 'AG_ePDQ-wizard' ) && $prem ) {
-            wp_safe_redirect( admin_url( '?page=' . $wizardURL ) );
-            exit;
         }
     
     }

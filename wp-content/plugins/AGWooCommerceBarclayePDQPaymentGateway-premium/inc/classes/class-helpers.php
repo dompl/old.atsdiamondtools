@@ -23,7 +23,7 @@ class AG_ePDQ_Helpers
 	 */
 	public static function ag_log($message, $level, $log)
 	{
-		if ($log == 'yes' || WP_DEBUG === true ) {
+		if ($log === 'yes' || WP_DEBUG === true ) {
 	
 			// Log errors in WooCommerce logs
 			$message = $message . PHP_EOL;
@@ -34,13 +34,13 @@ class AG_ePDQ_Helpers
 	}
 
 
-	/**
-	 * Loop through returned order data and store.
-	 *
-	 * @param $post_id
-	 * @param $meta
-	 * @return void
-	 */
+    /**
+     * Loop through returned order data and store.
+     *
+     * @param $post_id
+     * @param $meta
+     * @return false
+     */
 	public static function update_order_meta_data($post_id, $meta)
 	{
 		if (!get_post($post_id) || !is_array($meta)) {
@@ -59,8 +59,8 @@ class AG_ePDQ_Helpers
 	 *
 	 * @param $customer_order
 	 * @param $meta
-	 * @return void
-	 */
+	 * @return false
+     */
 	public static function update_order_notes($customer_order, $meta)
 	{
 		if (!is_array($meta)) {
@@ -83,7 +83,7 @@ class AG_ePDQ_Helpers
 	 * Get post data and sanitise if set
 	 *
 	 * @param string $name name of post argument to get
-	 * @return mixed post data, or null
+	 * @return string|null post data, or null
 	 */
 	 public static function AG_get_post_data( $name ) {
 		if ( isset( $_POST[ $name ] ) ) {
@@ -97,7 +97,7 @@ class AG_ePDQ_Helpers
 	 * Get request data and sanitise if set
 	 *
 	 * @param string $name name of post argument to get
-	 * @return mixed post data, or null
+	 * @return string|null post data, or null
 	 */
 	public static function AG_get_request( $name ) {
 		if ( isset( $_REQUEST[ $name ] ) ) {
@@ -169,18 +169,18 @@ class AG_ePDQ_Helpers
 	}
 
 
-		/**
-	 * Get the right enviroment URL
-	 *
-	 * @param [type] $endpoint - where we are posting to
-	 * @return $enviroment_url
-	 */
+    /**
+     * Get the right enviroment URL
+     *
+     * @param [type] $endpoint - where we are posting to
+     * @return string $enviroment_url
+     */
 	public static function get_enviroment_url($endpoint) {
 
 		$ePDQ_settings  = new epdq_checkout();
 
-		if ($ePDQ_settings->status == 'test')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/'. $endpoint. '.asp';
-		if ($ePDQ_settings->status == 'live')	$environment_url = 'https://payments.epdq.co.uk/ncol/prod/'. $endpoint. '.asp';
+		if ($ePDQ_settings->status === 'test')	$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/'. $endpoint. '.asp';
+		if ($ePDQ_settings->status === 'live')	$environment_url = 'https://payments.epdq.co.uk/ncol/prod/'. $endpoint. '.asp';
 
 		return $environment_url;
 	}
@@ -193,7 +193,6 @@ class AG_ePDQ_Helpers
 			$post_string[] = $key . '=' . $value;
 		}
 
-		$actual_string = '';
 		$actual_string = implode('&', $post_string);
 		$result = wp_safe_remote_post(esc_url($environment_url), array(
 			'method' => 'POST',
@@ -205,7 +204,7 @@ class AG_ePDQ_Helpers
 		// Check for error
 		if ( is_wp_error( $result ) ) {
 			error_log( 'ERROR' );
-			error_log( print_r( $response, true ) );
+			error_log( print_r( $result, true ) );
 			return;
 		}
 		

@@ -145,8 +145,9 @@ class Ignition_Updater_Admin {
 					continue;
 				}
 
+				// Disable notice about a license set to expire soon
 				if ( current_time( 'timestamp' ) > strtotime( '-45 days', $date->format( 'U' ) ) && current_time( 'timestamp' ) < strtotime( '+14 days', $date->format( 'U' ) ) ) {
-					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid losing access to important updates and support.', 'ignition-updater' ), $product['product_name'], $date->format( get_option( 'date_format' ) ), '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
+					//$notices[] = sprintf( __( 'Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid losing access to important updates and support.', 'ignition-updater' ), $product['product_name'], $date->format( get_option( 'date_format' ) ), '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
 				} elseif ( current_time( 'timestamp' ) > $date->format( 'U' ) ) {
 					$notices[] = sprintf( __( 'Your license for <strong>%s</strong> has expired. Please %srenew%s to receive important updates and support.', 'ignition-updater' ), $product['product_name'], '<a href="' . esc_url( $renew_link ) . '" target="_blank">', '</a>' );
 				}

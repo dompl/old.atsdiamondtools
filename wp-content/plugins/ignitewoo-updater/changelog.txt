@@ -1,3 +1,7 @@
+Version 3.0.3 - June 29, 2021
+
+	Disable message saying that a license will expire soon, not necessary with subscriptions
+
 Version 3.0.2
 
 	Fixed version checking

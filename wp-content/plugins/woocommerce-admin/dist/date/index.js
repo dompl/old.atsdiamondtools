@@ -82,20 +82,34 @@ this["wc"] = this["wc"] || {}; this["wc"]["date"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 581);
+/******/ 	return __webpack_require__(__webpack_require__.s = 491);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 104:
+/***/ 2:
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["wp"]["i18n"]; }());
+
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["lodash"]; }());
+
+/***/ }),
+
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(192);
-var parse = __webpack_require__(193);
-var formats = __webpack_require__(114);
+var stringify = __webpack_require__(63);
+var parse = __webpack_require__(64);
+var formats = __webpack_require__(38);
 
 module.exports = {
     formats: formats,
@@ -106,7 +120,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 114:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -137,13 +151,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 136:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var formats = __webpack_require__(114);
+var formats = __webpack_require__(38);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -396,14 +410,758 @@ module.exports = {
 
 /***/ }),
 
-/***/ 192:
+/***/ 491:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isoDateFormat", function() { return isoDateFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultDateTimeFormat", function() { return defaultDateTimeFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "presetValues", function() { return presetValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "periods", function() { return periods; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendTimestamp", function() { return appendTimestamp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toMoment", function() { return toMoment; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRangeLabel", function() { return getRangeLabel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStoreTimeZoneMoment", function() { return getStoreTimeZoneMoment; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastPeriod", function() { return getLastPeriod; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentPeriod", function() { return getCurrentPeriod; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateParamsFromQuery", function() { return getDateParamsFromQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentDates", function() { return getCurrentDates; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateDifferenceInDays", function() { return getDateDifferenceInDays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPreviousDate", function() { return getPreviousDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllowedIntervalsForQuery", function() { return getAllowedIntervalsForQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getIntervalForQuery", function() { return getIntervalForQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChartTypeForQuery", function() { return getChartTypeForQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dayTicksThreshold", function() { return dayTicksThreshold; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "weekTicksThreshold", function() { return weekTicksThreshold; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultTableDateFormat", function() { return defaultTableDateFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateFormatsForInterval", function() { return getDateFormatsForInterval; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadLocaleData", function() { return loadLocaleData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dateValidationMessages", function() { return dateValidationMessages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateDateInputForRange", function() { return validateDateInputForRange; });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(31);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_3__);
+/**
+ * External dependencies
+ */
+
+
+
+
+const isoDateFormat = 'YYYY-MM-DD';
+const defaultDateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
+/**
+ * DateValue Object
+ *
+ * @typedef  {Object} DateValue - Describes the date range supplied by the date picker.
+ * @property {string} label - The translated value of the period.
+ * @property {string} range - The human readable value of a date range.
+ * @property {moment.Moment} after - Start of the date range.
+ * @property {moment.Moment} before - End of the date range.
+ */
+
+/**
+ * DateParams Object
+ *
+ * @typedef {Object} DateParams - date parameters derived from query parameters.
+ * @property {string} period - period value, ie `last_week`
+ * @property {string} compare - compare valuer, ie previous_year
+ * @param {moment.Moment|null} after - If the period supplied is "custom", this is the after date
+ * @param {moment.Moment|null} before - If the period supplied is "custom", this is the before date
+ */
+
+const presetValues = [{
+  value: 'today',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Today', 'woocommerce-admin')
+}, {
+  value: 'yesterday',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Yesterday', 'woocommerce-admin')
+}, {
+  value: 'week',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week to Date', 'woocommerce-admin')
+}, {
+  value: 'last_week',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Week', 'woocommerce-admin')
+}, {
+  value: 'month',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Month to Date', 'woocommerce-admin')
+}, {
+  value: 'last_month',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Month', 'woocommerce-admin')
+}, {
+  value: 'quarter',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Quarter to Date', 'woocommerce-admin')
+}, {
+  value: 'last_quarter',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Quarter', 'woocommerce-admin')
+}, {
+  value: 'year',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Year to Date', 'woocommerce-admin')
+}, {
+  value: 'last_year',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Year', 'woocommerce-admin')
+}, {
+  value: 'custom',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Custom', 'woocommerce-admin')
+}];
+const periods = [{
+  value: 'previous_period',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Previous Period', 'woocommerce-admin')
+}, {
+  value: 'previous_year',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Previous Year', 'woocommerce-admin')
+}];
+/**
+ * Adds timestamp to a string date.
+ *
+ * @param {moment.Moment} date - Date as a moment object.
+ * @param {string} timeOfDay - Either `start`, `now` or `end` of the day.
+ * @return {string} - String date with timestamp attached.
+ */
+
+const appendTimestamp = (date, timeOfDay) => {
+  if (timeOfDay === 'start') {
+    return date.startOf('day').format(defaultDateTimeFormat);
+  }
+
+  if (timeOfDay === 'now') {
+    // Set seconds to 00 to avoid consecutives calls happening before the previous
+    // one finished.
+    return date.format(defaultDateTimeFormat);
+  }
+
+  if (timeOfDay === 'end') {
+    return date.endOf('day').format(defaultDateTimeFormat);
+  }
+
+  throw new Error('appendTimestamp requires second parameter to be either `start`, `now` or `end`');
+};
+/**
+ * Convert a string to Moment object
+ *
+ * @param {string} format - localized date string format
+ * @param {string} str - date string
+ * @return {Object|null} - Moment object representing given string
+ */
+
+function toMoment(format, str) {
+  if (moment__WEBPACK_IMPORTED_MODULE_0___default.a.isMoment(str)) {
+    return str.isValid() ? str : null;
+  }
+
+  if (typeof str === 'string') {
+    const date = moment__WEBPACK_IMPORTED_MODULE_0___default()(str, [isoDateFormat, format], true);
+    return date.isValid() ? date : null;
+  }
+
+  throw new Error('toMoment requires a string to be passed as an argument');
+}
+/**
+ * Given two dates, derive a string representation
+ *
+ * @param {Object} after - start date
+ * @param {Object} before - end date
+ * @return {string} - text value for the supplied date range
+ */
+
+function getRangeLabel(after, before) {
+  const isSameYear = after.year() === before.year();
+  const isSameMonth = isSameYear && after.month() === before.month();
+  const isSameDay = isSameYear && isSameMonth && after.isSame(before, 'day');
+
+  const fullDateFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMM D, YYYY', 'woocommerce-admin');
+
+  if (isSameDay) {
+    return after.format(fullDateFormat);
+  } else if (isSameMonth) {
+    const afterDate = after.date();
+    return after.format(fullDateFormat).replace(afterDate, `${afterDate} - ${before.date()}`);
+  } else if (isSameYear) {
+    const monthDayFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMM D', 'woocommerce-admin');
+
+    return `${after.format(monthDayFormat)} - ${before.format(fullDateFormat)}`;
+  }
+
+  return `${after.format(fullDateFormat)} - ${before.format(fullDateFormat)}`;
+}
+/**
+ * Gets the current time in the store time zone if set.
+ *
+ * @return {string} - Datetime string.
+ */
+
+function getStoreTimeZoneMoment() {
+  if (!window.wcSettings || !window.wcSettings.timeZone) {
+    return moment__WEBPACK_IMPORTED_MODULE_0___default()();
+  }
+
+  if (['+', '-'].includes(window.wcSettings.timeZone.charAt(0))) {
+    return moment__WEBPACK_IMPORTED_MODULE_0___default()().utcOffset(window.wcSettings.timeZone);
+  }
+
+  return moment__WEBPACK_IMPORTED_MODULE_0___default()().tz(window.wcSettings.timeZone);
+}
+/**
+ * Get a DateValue object for a period prior to the current period.
+ *
+ * @param {string} period - the chosen period
+ * @param {string} compare - `previous_period` or `previous_year`
+ * @return {DateValue} -  DateValue data about the selected period
+ */
+
+function getLastPeriod(period, compare) {
+  const primaryStart = getStoreTimeZoneMoment().startOf(period).subtract(1, period);
+  const primaryEnd = primaryStart.clone().endOf(period);
+  let secondaryStart;
+  let secondaryEnd;
+
+  if (compare === 'previous_period') {
+    if (period === 'year') {
+      // Subtract two entire periods for years to take into account leap year
+      secondaryStart = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf(period).subtract(2, period);
+      secondaryEnd = secondaryStart.clone().endOf(period);
+    } else {
+      // Otherwise, use days in primary period to figure out how far to go back
+      // This is necessary for calculating weeks instead of using `endOf`.
+      const daysDiff = primaryEnd.diff(primaryStart, 'days');
+      secondaryEnd = primaryStart.clone().subtract(1, 'days');
+      secondaryStart = secondaryEnd.clone().subtract(daysDiff, 'days');
+    }
+  } else {
+    secondaryStart = primaryStart.clone().subtract(1, 'years');
+    secondaryEnd = primaryEnd.clone().subtract(1, 'years');
+  } // When the period is month, be sure to force end of month to take into account leap year
+
+
+  if (period === 'month') {
+    secondaryEnd = secondaryEnd.clone().endOf('month');
+  }
+
+  return {
+    primaryStart,
+    primaryEnd,
+    secondaryStart,
+    secondaryEnd
+  };
+}
+/**
+ * Get a DateValue object for a curent period. The period begins on the first day of the period,
+ * and ends on the current day.
+ *
+ * @param {string} period - the chosen period
+ * @param {string} compare - `previous_period` or `previous_year`
+ * @return {DateValue} -  DateValue data about the selected period
+ */
+
+function getCurrentPeriod(period, compare) {
+  const primaryStart = getStoreTimeZoneMoment().startOf(period);
+  const primaryEnd = getStoreTimeZoneMoment();
+  const daysSoFar = primaryEnd.diff(primaryStart, 'days');
+  let secondaryStart;
+  let secondaryEnd;
+
+  if (compare === 'previous_period') {
+    secondaryStart = primaryStart.clone().subtract(1, period);
+    secondaryEnd = primaryEnd.clone().subtract(1, period);
+  } else {
+    secondaryStart = primaryStart.clone().subtract(1, 'years'); // Set the end time to 23:59:59.
+
+    secondaryEnd = secondaryStart.clone().add(daysSoFar + 1, 'days').subtract(1, 'seconds');
+  }
+
+  return {
+    primaryStart,
+    primaryEnd,
+    secondaryStart,
+    secondaryEnd
+  };
+}
+/**
+ * Get a DateValue object for a period described by a period, compare value, and start/end
+ * dates, for custom dates.
+ *
+ * @param {string} period - the chosen period
+ * @param {string} compare - `previous_period` or `previous_year`
+ * @param {Object} [after] - after date if custom period
+ * @param {Object} [before] - before date if custom period
+ * @return {DateValue} - DateValue data about the selected period
+ */
+
+const getDateValue = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])((period, compare, after, before) => {
+  switch (period) {
+    case 'today':
+      return getCurrentPeriod('day', compare);
+
+    case 'yesterday':
+      return getLastPeriod('day', compare);
+
+    case 'week':
+      return getCurrentPeriod('week', compare);
+
+    case 'last_week':
+      return getLastPeriod('week', compare);
+
+    case 'month':
+      return getCurrentPeriod('month', compare);
+
+    case 'last_month':
+      return getLastPeriod('month', compare);
+
+    case 'quarter':
+      return getCurrentPeriod('quarter', compare);
+
+    case 'last_quarter':
+      return getLastPeriod('quarter', compare);
+
+    case 'year':
+      return getCurrentPeriod('year', compare);
+
+    case 'last_year':
+      return getLastPeriod('year', compare);
+
+    case 'custom':
+      const difference = before.diff(after, 'days');
+
+      if (compare === 'previous_period') {
+        const secondaryEnd = after.clone().subtract(1, 'days');
+        const secondaryStart = secondaryEnd.clone().subtract(difference, 'days');
+        return {
+          primaryStart: after,
+          primaryEnd: before,
+          secondaryStart,
+          secondaryEnd
+        };
+      }
+
+      return {
+        primaryStart: after,
+        primaryEnd: before,
+        secondaryStart: after.clone().subtract(1, 'years'),
+        secondaryEnd: before.clone().subtract(1, 'years')
+      };
+  }
+}, (period, compare, after, before) => [period, compare, after && after.format(), before && before.format()].join(':'));
+/**
+ * Memoized internal logic of getDateParamsFromQuery().
+ *
+ * @param {string} period - period value, ie `last_week`
+ * @param {string} compare - compare value, ie `previous_year`
+ * @param {string} after - date in iso date format, ie `2018-07-03`
+ * @param {string} before - date in iso date format, ie `2018-07-03`
+ * @param {string} defaultDateRange - the store's default date range
+ * @return {Object} - date parameters derived from query parameters with added defaults
+ */
+
+const getDateParamsFromQueryMemoized = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])((period, compare, after, before, defaultDateRange) => {
+  if (period && compare) {
+    return {
+      period,
+      compare,
+      after: after ? moment__WEBPACK_IMPORTED_MODULE_0___default()(after) : null,
+      before: before ? moment__WEBPACK_IMPORTED_MODULE_0___default()(before) : null
+    };
+  }
+
+  const queryDefaults = Object(qs__WEBPACK_IMPORTED_MODULE_3__["parse"])(defaultDateRange.replace(/&amp;/g, '&'));
+  return {
+    period: queryDefaults.period,
+    compare: queryDefaults.compare,
+    after: queryDefaults.after ? moment__WEBPACK_IMPORTED_MODULE_0___default()(queryDefaults.after) : null,
+    before: queryDefaults.before ? moment__WEBPACK_IMPORTED_MODULE_0___default()(queryDefaults.before) : null
+  };
+}, (period, compare, after, before, defaultDateRange) => [period, compare, after, before, defaultDateRange].join(':'));
+/**
+ * Add default date-related parameters to a query object
+ *
+ * @param {Object} query - query object
+ * @param {string} query.period - period value, ie `last_week`
+ * @param {string} query.compare - compare value, ie `previous_year`
+ * @param {string} query.after - date in iso date format, ie `2018-07-03`
+ * @param {string} query.before - date in iso date format, ie `2018-07-03`
+ * @param {string} defaultDateRange - the store's default date range
+ * @return {DateParams} - date parameters derived from query parameters with added defaults
+ */
+
+const getDateParamsFromQuery = (query, defaultDateRange = 'period=month&compare=previous_year') => {
+  const {
+    period,
+    compare,
+    after,
+    before
+  } = query;
+  return getDateParamsFromQueryMemoized(period, compare, after, before, defaultDateRange);
+};
+/**
+ * Memoized internal logic of getCurrentDates().
+ *
+ * @param {string} period - period value, ie `last_week`
+ * @param {string} compare - compare value, ie `previous_year`
+ * @param {Object} primaryStart - primary query start DateTime, in Moment instance.
+ * @param {Object} primaryEnd - primary query start DateTime, in Moment instance.
+ * @param {Object} secondaryStart - primary query start DateTime, in Moment instance.
+ * @param {Object} secondaryEnd - primary query start DateTime, in Moment instance.
+ * @return {{primary: DateValue, secondary: DateValue}} - Primary and secondary DateValue objects
+ */
+
+const getCurrentDatesMemoized = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])((period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd) => ({
+  primary: {
+    label: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["find"])(presetValues, item => item.value === period).label,
+    range: getRangeLabel(primaryStart, primaryEnd),
+    after: primaryStart,
+    before: primaryEnd
+  },
+  secondary: {
+    label: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["find"])(periods, item => item.value === compare).label,
+    range: getRangeLabel(secondaryStart, secondaryEnd),
+    after: secondaryStart,
+    before: secondaryEnd
+  }
+}), (period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd) => [period, compare, primaryStart && primaryStart.format(), primaryEnd && primaryEnd.format(), secondaryStart && secondaryStart.format(), secondaryEnd && secondaryEnd.format()].join(':'));
+/**
+ * Get Date Value Objects for a primary and secondary date range
+ *
+ * @param {Object} query - query object
+ * @param {string} query.period - period value, ie `last_week`
+ * @param {string} query.compare - compare value, ie `previous_year`
+ * @param {string} query.after - date in iso date format, ie `2018-07-03`
+ * @param {string} query.before - date in iso date format, ie `2018-07-03`
+ * @param {string} defaultDateRange - the store's default date range
+ * @return {{primary: DateValue, secondary: DateValue}} - Primary and secondary DateValue objects
+ */
+
+const getCurrentDates = (query, defaultDateRange = 'period=month&compare=previous_year') => {
+  const {
+    period,
+    compare,
+    after,
+    before
+  } = getDateParamsFromQuery(query, defaultDateRange);
+  const {
+    primaryStart,
+    primaryEnd,
+    secondaryStart,
+    secondaryEnd
+  } = getDateValue(period, compare, after, before);
+  return getCurrentDatesMemoized(period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd);
+};
+/**
+ * Calculates the date difference between two dates. Used in calculating a matching date for previous period.
+ *
+ * @param {string} date - Date to compare
+ * @param {string} date2 - Seconary date to compare
+ * @return {number}  - Difference in days.
+ */
+
+const getDateDifferenceInDays = (date, date2) => {
+  const _date = moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
+
+  const _date2 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date2);
+
+  return _date.diff(_date2, 'days');
+};
+/**
+ * Get the previous date for either the previous period of year.
+ *
+ * @param {string} date - Base date
+ * @param {string} date1 - primary start
+ * @param {string} date2 - secondary start
+ * @param {string} compare - `previous_period`  or `previous_year`
+ * @param {string} interval - interval
+ * @return {Object}  - Calculated date
+ */
+
+const getPreviousDate = (date, date1, date2, compare, interval) => {
+  const dateMoment = moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
+
+  if (compare === 'previous_year') {
+    return dateMoment.clone().subtract(1, 'years');
+  }
+
+  const _date1 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date1);
+
+  const _date2 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date2);
+
+  const difference = _date1.diff(_date2, interval);
+
+  return dateMoment.clone().subtract(difference, interval);
+};
+/**
+ * Returns the allowed selectable intervals for a specific query.
+ *
+ * @param  {Object} query Current query
+ * @return {Array} Array containing allowed intervals.
+ */
+
+function getAllowedIntervalsForQuery(query) {
+  let allowed = [];
+
+  if (query.period === 'custom') {
+    const {
+      primary
+    } = getCurrentDates(query);
+    const differenceInDays = getDateDifferenceInDays(primary.before, primary.after);
+
+    if (differenceInDays >= 365) {
+      allowed = ['day', 'week', 'month', 'quarter', 'year'];
+    } else if (differenceInDays >= 90) {
+      allowed = ['day', 'week', 'month', 'quarter'];
+    } else if (differenceInDays >= 28) {
+      allowed = ['day', 'week', 'month'];
+    } else if (differenceInDays >= 7) {
+      allowed = ['day', 'week'];
+    } else if (differenceInDays > 1 && differenceInDays < 7) {
+      allowed = ['day'];
+    } else {
+      allowed = ['hour', 'day'];
+    }
+  } else {
+    switch (query.period) {
+      case 'today':
+      case 'yesterday':
+        allowed = ['hour', 'day'];
+        break;
+
+      case 'week':
+      case 'last_week':
+        allowed = ['day'];
+        break;
+
+      case 'month':
+      case 'last_month':
+        allowed = ['day', 'week'];
+        break;
+
+      case 'quarter':
+      case 'last_quarter':
+        allowed = ['day', 'week', 'month'];
+        break;
+
+      case 'year':
+      case 'last_year':
+        allowed = ['day', 'week', 'month', 'quarter'];
+        break;
+
+      default:
+        allowed = ['day'];
+        break;
+    }
+  }
+
+  return allowed;
+}
+/**
+ * Returns the current interval to use.
+ *
+ * @param  {Object} query Current query
+ * @return {string} Current interval.
+ */
+
+function getIntervalForQuery(query) {
+  const allowed = getAllowedIntervalsForQuery(query);
+  const defaultInterval = allowed[0];
+  let current = query.interval || defaultInterval;
+
+  if (query.interval && !allowed.includes(query.interval)) {
+    current = defaultInterval;
+  }
+
+  return current;
+}
+/**
+ * Returns the current chart type to use.
+ *
+ * @param {Object} query Current query
+ * @param {string} query.chartType
+ * @return {string} Current chart type.
+ */
+
+function getChartTypeForQuery({
+  chartType
+}) {
+  if (['line', 'bar'].includes(chartType)) {
+    return chartType;
+  }
+
+  return 'line';
+}
+const dayTicksThreshold = 63;
+const weekTicksThreshold = 9;
+const defaultTableDateFormat = 'm/d/Y';
+/**
+ * Returns date formats for the current interval.
+ * See https://github.com/d3/d3-time-format for chart formats.
+ *
+ * @param  {string} interval Interval to get date formats for.
+ * @param  {number}    [ticks] Number of ticks the axis will have.
+ * @return {string} Current interval.
+ */
+
+function getDateFormatsForInterval(interval, ticks = 0) {
+  let screenReaderFormat = '%B %-d, %Y';
+  let tooltipLabelFormat = '%B %-d, %Y';
+  let xFormat = '%Y-%m-%d';
+  let x2Format = '%b %Y';
+  let tableFormat = defaultTableDateFormat;
+
+  switch (interval) {
+    case 'hour':
+      screenReaderFormat = '%_I%p %B %-d, %Y';
+      tooltipLabelFormat = '%_I%p %b %-d, %Y';
+      xFormat = '%_I%p';
+      x2Format = '%b %-d, %Y';
+      tableFormat = 'h A';
+      break;
+
+    case 'day':
+      if (ticks < dayTicksThreshold) {
+        xFormat = '%-d';
+      } else {
+        xFormat = '%b';
+        x2Format = '%Y';
+      }
+
+      break;
+
+    case 'week':
+      if (ticks < weekTicksThreshold) {
+        xFormat = '%-d';
+        x2Format = '%b %Y';
+      } else {
+        xFormat = '%b';
+        x2Format = '%Y';
+      }
+
+      screenReaderFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week of %B %-d, %Y', 'woocommerce-admin');
+      tooltipLabelFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week of %B %-d, %Y', 'woocommerce-admin');
+      break;
+
+    case 'quarter':
+    case 'month':
+      screenReaderFormat = '%B %Y';
+      tooltipLabelFormat = '%B %Y';
+      xFormat = '%b';
+      x2Format = '%Y';
+      break;
+
+    case 'year':
+      screenReaderFormat = '%Y';
+      tooltipLabelFormat = '%Y';
+      xFormat = '%Y';
+      break;
+  }
+
+  return {
+    screenReaderFormat,
+    tooltipLabelFormat,
+    xFormat,
+    x2Format,
+    tableFormat
+  };
+}
+/**
+ * Gutenberg's moment instance is loaded with i18n values, which are
+ * PHP date formats, ie 'LLL: "F j, Y g:i a"'. Override those with translations
+ * of moment style js formats.
+ *
+ * @param {Object} config Locale config object, from store settings.
+ * @param {string} config.userLocale
+ * @param {Array} config.weekdaysShort
+ */
+
+function loadLocaleData({
+  userLocale,
+  weekdaysShort
+}) {
+  // Don't update if the wp locale hasn't been set yet, like in unit tests, for instance.
+  if (moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale() !== 'en') {
+    moment__WEBPACK_IMPORTED_MODULE_0___default.a.updateLocale(userLocale, {
+      longDateFormat: {
+        L: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MM/DD/YYYY', 'woocommerce-admin'),
+        LL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMMM D, YYYY', 'woocommerce-admin'),
+        LLL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('D MMMM YYYY LT', 'woocommerce-admin'),
+        LLLL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('dddd, D MMMM YYYY LT', 'woocommerce-admin'),
+        LT: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('HH:mm', 'woocommerce-admin')
+      },
+      weekdaysMin: weekdaysShort
+    });
+  }
+}
+const dateValidationMessages = {
+  invalid: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Invalid date', 'woocommerce-admin'),
+  future: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Select a date in the past', 'woocommerce-admin'),
+  startAfterEnd: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Start date must be before end date', 'woocommerce-admin'),
+  endBeforeStart: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Start date must be before end date', 'woocommerce-admin')
+};
+/**
+ * @typedef {Object} validatedDate
+ * @property {Object|null} date - A resulting Moment date object or null, if invalid
+ * @property {string} error - An optional error message if date is invalid
+ */
+
+/**
+ * Validate text input supplied for a date range.
+ *
+ * @param {string} type - Designate beginning or end of range, eg `before` or `after`.
+ * @param {string} value - User input value
+ * @param {Object|null} [before] - If already designated, the before date parameter
+ * @param {Object|null} [after] - If already designated, the after date parameter
+ * @param {string} format - The expected date format in a user's locale
+ * @return {Object} validatedDate - validated date object
+ */
+
+function validateDateInputForRange(type, value, before, after, format) {
+  const date = toMoment(format, value);
+
+  if (!date) {
+    return {
+      date: null,
+      error: dateValidationMessages.invalid
+    };
+  }
+
+  if (moment__WEBPACK_IMPORTED_MODULE_0___default()().isBefore(date, 'day')) {
+    return {
+      date: null,
+      error: dateValidationMessages.future
+    };
+  }
+
+  if (type === 'after' && before && date.isAfter(before, 'day')) {
+    return {
+      date: null,
+      error: dateValidationMessages.startAfterEnd
+    };
+  }
+
+  if (type === 'before' && after && date.isBefore(after, 'day')) {
+    return {
+      date: null,
+      error: dateValidationMessages.endBeforeStart
+    };
+  }
+
+  return {
+    date
+  };
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(136);
-var formats = __webpack_require__(114);
+var utils = __webpack_require__(44);
+var formats = __webpack_require__(38);
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
@@ -682,13 +1440,13 @@ module.exports = function (object, opts) {
 
 /***/ }),
 
-/***/ 193:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(136);
+var utils = __webpack_require__(44);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -947,782 +1705,10 @@ module.exports = function (str, opts) {
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["i18n"]; }());
-
-/***/ }),
-
-/***/ 21:
+/***/ 9:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["moment"]; }());
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["lodash"]; }());
-
-/***/ }),
-
-/***/ 581:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isoDateFormat", function() { return isoDateFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultDateTimeFormat", function() { return defaultDateTimeFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "presetValues", function() { return presetValues; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "periods", function() { return periods; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendTimestamp", function() { return appendTimestamp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toMoment", function() { return toMoment; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRangeLabel", function() { return getRangeLabel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStoreTimeZoneMoment", function() { return getStoreTimeZoneMoment; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastPeriod", function() { return getLastPeriod; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentPeriod", function() { return getCurrentPeriod; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateParamsFromQuery", function() { return getDateParamsFromQuery; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentDates", function() { return getCurrentDates; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateDifferenceInDays", function() { return getDateDifferenceInDays; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPreviousDate", function() { return getPreviousDate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllowedIntervalsForQuery", function() { return getAllowedIntervalsForQuery; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getIntervalForQuery", function() { return getIntervalForQuery; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChartTypeForQuery", function() { return getChartTypeForQuery; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dayTicksThreshold", function() { return dayTicksThreshold; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "weekTicksThreshold", function() { return weekTicksThreshold; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultTableDateFormat", function() { return defaultTableDateFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDateFormatsForInterval", function() { return getDateFormatsForInterval; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadLocaleData", function() { return loadLocaleData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dateValidationMessages", function() { return dateValidationMessages; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateDateInputForRange", function() { return validateDateInputForRange; });
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(104);
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_3__);
-/**
- * External dependencies
- */
-
-
-
-
-var isoDateFormat = 'YYYY-MM-DD';
-var defaultDateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
-/**
- * DateValue Object
- *
- * @typedef  {Object} DateValue - Describes the date range supplied by the date picker.
- * @property {string} label - The translated value of the period.
- * @property {string} range - The human readable value of a date range.
- * @property {moment.Moment} after - Start of the date range.
- * @property {moment.Moment} before - End of the date range.
- */
-
-/**
- * DateParams Object
- *
- * @typedef {Object} DateParams - date parameters derived from query parameters.
- * @property {string} period - period value, ie `last_week`
- * @property {string} compare - compare valuer, ie previous_year
- * @param {moment.Moment|null} after - If the period supplied is "custom", this is the after date
- * @param {moment.Moment|null} before - If the period supplied is "custom", this is the before date
- */
-
-var presetValues = [{
-  value: 'today',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Today', 'woocommerce-admin')
-}, {
-  value: 'yesterday',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Yesterday', 'woocommerce-admin')
-}, {
-  value: 'week',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week to Date', 'woocommerce-admin')
-}, {
-  value: 'last_week',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Week', 'woocommerce-admin')
-}, {
-  value: 'month',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Month to Date', 'woocommerce-admin')
-}, {
-  value: 'last_month',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Month', 'woocommerce-admin')
-}, {
-  value: 'quarter',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Quarter to Date', 'woocommerce-admin')
-}, {
-  value: 'last_quarter',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Quarter', 'woocommerce-admin')
-}, {
-  value: 'year',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Year to Date', 'woocommerce-admin')
-}, {
-  value: 'last_year',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Last Year', 'woocommerce-admin')
-}, {
-  value: 'custom',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Custom', 'woocommerce-admin')
-}];
-var periods = [{
-  value: 'previous_period',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Previous Period', 'woocommerce-admin')
-}, {
-  value: 'previous_year',
-  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Previous Year', 'woocommerce-admin')
-}];
-/**
- * Adds timestamp to a string date.
- *
- * @param {moment.Moment} date - Date as a moment object.
- * @param {string} timeOfDay - Either `start`, `now` or `end` of the day.
- * @return {string} - String date with timestamp attached.
- */
-
-var appendTimestamp = function appendTimestamp(date, timeOfDay) {
-  if (timeOfDay === 'start') {
-    return date.startOf('day').format(defaultDateTimeFormat);
-  }
-
-  if (timeOfDay === 'now') {
-    // Set seconds to 00 to avoid consecutives calls happening before the previous
-    // one finished.
-    return date.format(defaultDateTimeFormat);
-  }
-
-  if (timeOfDay === 'end') {
-    return date.endOf('day').format(defaultDateTimeFormat);
-  }
-
-  throw new Error('appendTimestamp requires second parameter to be either `start`, `now` or `end`');
-};
-/**
- * Convert a string to Moment object
- *
- * @param {string} format - localized date string format
- * @param {string} str - date string
- * @return {Object|null} - Moment object representing given string
- */
-
-function toMoment(format, str) {
-  if (moment__WEBPACK_IMPORTED_MODULE_0___default.a.isMoment(str)) {
-    return str.isValid() ? str : null;
-  }
-
-  if (typeof str === 'string') {
-    var date = moment__WEBPACK_IMPORTED_MODULE_0___default()(str, [isoDateFormat, format], true);
-    return date.isValid() ? date : null;
-  }
-
-  throw new Error('toMoment requires a string to be passed as an argument');
-}
-/**
- * Given two dates, derive a string representation
- *
- * @param {Object} after - start date
- * @param {Object} before - end date
- * @return {string} - text value for the supplied date range
- */
-
-function getRangeLabel(after, before) {
-  var isSameYear = after.year() === before.year();
-  var isSameMonth = isSameYear && after.month() === before.month();
-  var isSameDay = isSameYear && isSameMonth && after.isSame(before, 'day');
-
-  var fullDateFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMM D, YYYY', 'woocommerce-admin');
-
-  if (isSameDay) {
-    return after.format(fullDateFormat);
-  } else if (isSameMonth) {
-    var afterDate = after.date();
-    return after.format(fullDateFormat).replace(afterDate, "".concat(afterDate, " - ").concat(before.date()));
-  } else if (isSameYear) {
-    var monthDayFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMM D', 'woocommerce-admin');
-
-    return "".concat(after.format(monthDayFormat), " - ").concat(before.format(fullDateFormat));
-  }
-
-  return "".concat(after.format(fullDateFormat), " - ").concat(before.format(fullDateFormat));
-}
-/**
- * Gets the current time in the store time zone if set.
- *
- * @return {string} - Datetime string.
- */
-
-function getStoreTimeZoneMoment() {
-  if (!window.wcSettings || !window.wcSettings.timeZone) {
-    return moment__WEBPACK_IMPORTED_MODULE_0___default()();
-  }
-
-  if (['+', '-'].includes(window.wcSettings.timeZone.charAt(0))) {
-    return moment__WEBPACK_IMPORTED_MODULE_0___default()().utcOffset(window.wcSettings.timeZone);
-  }
-
-  return moment__WEBPACK_IMPORTED_MODULE_0___default()().tz(window.wcSettings.timeZone);
-}
-/**
- * Get a DateValue object for a period prior to the current period.
- *
- * @param {string} period - the chosen period
- * @param {string} compare - `previous_period` or `previous_year`
- * @return {DateValue} -  DateValue data about the selected period
- */
-
-function getLastPeriod(period, compare) {
-  var primaryStart = getStoreTimeZoneMoment().startOf(period).subtract(1, period);
-  var primaryEnd = primaryStart.clone().endOf(period);
-  var secondaryStart;
-  var secondaryEnd;
-
-  if (compare === 'previous_period') {
-    if (period === 'year') {
-      // Subtract two entire periods for years to take into account leap year
-      secondaryStart = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf(period).subtract(2, period);
-      secondaryEnd = secondaryStart.clone().endOf(period);
-    } else {
-      // Otherwise, use days in primary period to figure out how far to go back
-      // This is necessary for calculating weeks instead of using `endOf`.
-      var daysDiff = primaryEnd.diff(primaryStart, 'days');
-      secondaryEnd = primaryStart.clone().subtract(1, 'days');
-      secondaryStart = secondaryEnd.clone().subtract(daysDiff, 'days');
-    }
-  } else {
-    secondaryStart = primaryStart.clone().subtract(1, 'years');
-    secondaryEnd = primaryEnd.clone().subtract(1, 'years');
-  } // When the period is month, be sure to force end of month to take into account leap year
-
-
-  if (period === 'month') {
-    secondaryEnd = secondaryEnd.clone().endOf('month');
-  }
-
-  return {
-    primaryStart: primaryStart,
-    primaryEnd: primaryEnd,
-    secondaryStart: secondaryStart,
-    secondaryEnd: secondaryEnd
-  };
-}
-/**
- * Get a DateValue object for a curent period. The period begins on the first day of the period,
- * and ends on the current day.
- *
- * @param {string} period - the chosen period
- * @param {string} compare - `previous_period` or `previous_year`
- * @return {DateValue} -  DateValue data about the selected period
- */
-
-function getCurrentPeriod(period, compare) {
-  var primaryStart = getStoreTimeZoneMoment().startOf(period);
-  var primaryEnd = getStoreTimeZoneMoment();
-  var daysSoFar = primaryEnd.diff(primaryStart, 'days');
-  var secondaryStart;
-  var secondaryEnd;
-
-  if (compare === 'previous_period') {
-    secondaryStart = primaryStart.clone().subtract(1, period);
-    secondaryEnd = primaryEnd.clone().subtract(1, period);
-  } else {
-    secondaryStart = primaryStart.clone().subtract(1, 'years'); // Set the end time to 23:59:59.
-
-    secondaryEnd = secondaryStart.clone().add(daysSoFar + 1, 'days').subtract(1, 'seconds');
-  }
-
-  return {
-    primaryStart: primaryStart,
-    primaryEnd: primaryEnd,
-    secondaryStart: secondaryStart,
-    secondaryEnd: secondaryEnd
-  };
-}
-/**
- * Get a DateValue object for a period described by a period, compare value, and start/end
- * dates, for custom dates.
- *
- * @param {string} period - the chosen period
- * @param {string} compare - `previous_period` or `previous_year`
- * @param {Object} [after] - after date if custom period
- * @param {Object} [before] - before date if custom period
- * @return {DateValue} - DateValue data about the selected period
- */
-
-var getDateValue = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])(function (period, compare, after, before) {
-  switch (period) {
-    case 'today':
-      return getCurrentPeriod('day', compare);
-
-    case 'yesterday':
-      return getLastPeriod('day', compare);
-
-    case 'week':
-      return getCurrentPeriod('week', compare);
-
-    case 'last_week':
-      return getLastPeriod('week', compare);
-
-    case 'month':
-      return getCurrentPeriod('month', compare);
-
-    case 'last_month':
-      return getLastPeriod('month', compare);
-
-    case 'quarter':
-      return getCurrentPeriod('quarter', compare);
-
-    case 'last_quarter':
-      return getLastPeriod('quarter', compare);
-
-    case 'year':
-      return getCurrentPeriod('year', compare);
-
-    case 'last_year':
-      return getLastPeriod('year', compare);
-
-    case 'custom':
-      var difference = before.diff(after, 'days');
-
-      if (compare === 'previous_period') {
-        var secondaryEnd = after.clone().subtract(1, 'days');
-        var secondaryStart = secondaryEnd.clone().subtract(difference, 'days');
-        return {
-          primaryStart: after,
-          primaryEnd: before,
-          secondaryStart: secondaryStart,
-          secondaryEnd: secondaryEnd
-        };
-      }
-
-      return {
-        primaryStart: after,
-        primaryEnd: before,
-        secondaryStart: after.clone().subtract(1, 'years'),
-        secondaryEnd: before.clone().subtract(1, 'years')
-      };
-  }
-}, function (period, compare, after, before) {
-  return [period, compare, after && after.format(), before && before.format()].join(':');
-});
-/**
- * Memoized internal logic of getDateParamsFromQuery().
- *
- * @param {string} period - period value, ie `last_week`
- * @param {string} compare - compare value, ie `previous_year`
- * @param {string} after - date in iso date format, ie `2018-07-03`
- * @param {string} before - date in iso date format, ie `2018-07-03`
- * @param {string} defaultDateRange - the store's default date range
- * @return {Object} - date parameters derived from query parameters with added defaults
- */
-
-var getDateParamsFromQueryMemoized = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])(function (period, compare, after, before, defaultDateRange) {
-  if (period && compare) {
-    return {
-      period: period,
-      compare: compare,
-      after: after ? moment__WEBPACK_IMPORTED_MODULE_0___default()(after) : null,
-      before: before ? moment__WEBPACK_IMPORTED_MODULE_0___default()(before) : null
-    };
-  }
-
-  var queryDefaults = Object(qs__WEBPACK_IMPORTED_MODULE_3__["parse"])(defaultDateRange.replace(/&amp;/g, '&'));
-  return {
-    period: queryDefaults.period,
-    compare: queryDefaults.compare,
-    after: queryDefaults.after ? moment__WEBPACK_IMPORTED_MODULE_0___default()(queryDefaults.after) : null,
-    before: queryDefaults.before ? moment__WEBPACK_IMPORTED_MODULE_0___default()(queryDefaults.before) : null
-  };
-}, function (period, compare, after, before, defaultDateRange) {
-  return [period, compare, after, before, defaultDateRange].join(':');
-});
-/**
- * Add default date-related parameters to a query object
- *
- * @param {Object} query - query object
- * @param {string} query.period - period value, ie `last_week`
- * @param {string} query.compare - compare value, ie `previous_year`
- * @param {string} query.after - date in iso date format, ie `2018-07-03`
- * @param {string} query.before - date in iso date format, ie `2018-07-03`
- * @param {string} defaultDateRange - the store's default date range
- * @return {DateParams} - date parameters derived from query parameters with added defaults
- */
-
-var getDateParamsFromQuery = function getDateParamsFromQuery(query) {
-  var defaultDateRange = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'period=month&compare=previous_year';
-  var period = query.period,
-      compare = query.compare,
-      after = query.after,
-      before = query.before;
-  return getDateParamsFromQueryMemoized(period, compare, after, before, defaultDateRange);
-};
-/**
- * Memoized internal logic of getCurrentDates().
- *
- * @param {string} period - period value, ie `last_week`
- * @param {string} compare - compare value, ie `previous_year`
- * @param {Object} primaryStart - primary query start DateTime, in Moment instance.
- * @param {Object} primaryEnd - primary query start DateTime, in Moment instance.
- * @param {Object} secondaryStart - primary query start DateTime, in Moment instance.
- * @param {Object} secondaryEnd - primary query start DateTime, in Moment instance.
- * @return {{primary: DateValue, secondary: DateValue}} - Primary and secondary DateValue objects
- */
-
-var getCurrentDatesMemoized = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["memoize"])(function (period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd) {
-  return {
-    primary: {
-      label: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["find"])(presetValues, function (item) {
-        return item.value === period;
-      }).label,
-      range: getRangeLabel(primaryStart, primaryEnd),
-      after: primaryStart,
-      before: primaryEnd
-    },
-    secondary: {
-      label: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["find"])(periods, function (item) {
-        return item.value === compare;
-      }).label,
-      range: getRangeLabel(secondaryStart, secondaryEnd),
-      after: secondaryStart,
-      before: secondaryEnd
-    }
-  };
-}, function (period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd) {
-  return [period, compare, primaryStart && primaryStart.format(), primaryEnd && primaryEnd.format(), secondaryStart && secondaryStart.format(), secondaryEnd && secondaryEnd.format()].join(':');
-});
-/**
- * Get Date Value Objects for a primary and secondary date range
- *
- * @param {Object} query - query object
- * @param {string} query.period - period value, ie `last_week`
- * @param {string} query.compare - compare value, ie `previous_year`
- * @param {string} query.after - date in iso date format, ie `2018-07-03`
- * @param {string} query.before - date in iso date format, ie `2018-07-03`
- * @param {string} defaultDateRange - the store's default date range
- * @return {{primary: DateValue, secondary: DateValue}} - Primary and secondary DateValue objects
- */
-
-var getCurrentDates = function getCurrentDates(query) {
-  var defaultDateRange = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'period=month&compare=previous_year';
-
-  var _getDateParamsFromQue = getDateParamsFromQuery(query, defaultDateRange),
-      period = _getDateParamsFromQue.period,
-      compare = _getDateParamsFromQue.compare,
-      after = _getDateParamsFromQue.after,
-      before = _getDateParamsFromQue.before;
-
-  var _getDateValue = getDateValue(period, compare, after, before),
-      primaryStart = _getDateValue.primaryStart,
-      primaryEnd = _getDateValue.primaryEnd,
-      secondaryStart = _getDateValue.secondaryStart,
-      secondaryEnd = _getDateValue.secondaryEnd;
-
-  return getCurrentDatesMemoized(period, compare, primaryStart, primaryEnd, secondaryStart, secondaryEnd);
-};
-/**
- * Calculates the date difference between two dates. Used in calculating a matching date for previous period.
- *
- * @param {string} date - Date to compare
- * @param {string} date2 - Seconary date to compare
- * @return {number}  - Difference in days.
- */
-
-var getDateDifferenceInDays = function getDateDifferenceInDays(date, date2) {
-  var _date = moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
-
-  var _date2 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date2);
-
-  return _date.diff(_date2, 'days');
-};
-/**
- * Get the previous date for either the previous period of year.
- *
- * @param {string} date - Base date
- * @param {string} date1 - primary start
- * @param {string} date2 - secondary start
- * @param {string} compare - `previous_period`  or `previous_year`
- * @param {string} interval - interval
- * @return {Object}  - Calculated date
- */
-
-var getPreviousDate = function getPreviousDate(date, date1, date2, compare, interval) {
-  var dateMoment = moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
-
-  if (compare === 'previous_year') {
-    return dateMoment.clone().subtract(1, 'years');
-  }
-
-  var _date1 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date1);
-
-  var _date2 = moment__WEBPACK_IMPORTED_MODULE_0___default()(date2);
-
-  var difference = _date1.diff(_date2, interval);
-
-  return dateMoment.clone().subtract(difference, interval);
-};
-/**
- * Returns the allowed selectable intervals for a specific query.
- *
- * @param  {Object} query Current query
- * @return {Array} Array containing allowed intervals.
- */
-
-function getAllowedIntervalsForQuery(query) {
-  var allowed = [];
-
-  if (query.period === 'custom') {
-    var _getCurrentDates = getCurrentDates(query),
-        primary = _getCurrentDates.primary;
-
-    var differenceInDays = getDateDifferenceInDays(primary.before, primary.after);
-
-    if (differenceInDays >= 365) {
-      allowed = ['day', 'week', 'month', 'quarter', 'year'];
-    } else if (differenceInDays >= 90) {
-      allowed = ['day', 'week', 'month', 'quarter'];
-    } else if (differenceInDays >= 28) {
-      allowed = ['day', 'week', 'month'];
-    } else if (differenceInDays >= 7) {
-      allowed = ['day', 'week'];
-    } else if (differenceInDays > 1 && differenceInDays < 7) {
-      allowed = ['day'];
-    } else {
-      allowed = ['hour', 'day'];
-    }
-  } else {
-    switch (query.period) {
-      case 'today':
-      case 'yesterday':
-        allowed = ['hour', 'day'];
-        break;
-
-      case 'week':
-      case 'last_week':
-        allowed = ['day'];
-        break;
-
-      case 'month':
-      case 'last_month':
-        allowed = ['day', 'week'];
-        break;
-
-      case 'quarter':
-      case 'last_quarter':
-        allowed = ['day', 'week', 'month'];
-        break;
-
-      case 'year':
-      case 'last_year':
-        allowed = ['day', 'week', 'month', 'quarter'];
-        break;
-
-      default:
-        allowed = ['day'];
-        break;
-    }
-  }
-
-  return allowed;
-}
-/**
- * Returns the current interval to use.
- *
- * @param  {Object} query Current query
- * @return {string} Current interval.
- */
-
-function getIntervalForQuery(query) {
-  var allowed = getAllowedIntervalsForQuery(query);
-  var defaultInterval = allowed[0];
-  var current = query.interval || defaultInterval;
-
-  if (query.interval && !allowed.includes(query.interval)) {
-    current = defaultInterval;
-  }
-
-  return current;
-}
-/**
- * Returns the current chart type to use.
- *
- * @param {Object} query Current query
- * @param {string} query.chartType
- * @return {string} Current chart type.
- */
-
-function getChartTypeForQuery(_ref) {
-  var chartType = _ref.chartType;
-
-  if (['line', 'bar'].includes(chartType)) {
-    return chartType;
-  }
-
-  return 'line';
-}
-var dayTicksThreshold = 63;
-var weekTicksThreshold = 9;
-var defaultTableDateFormat = 'm/d/Y';
-/**
- * Returns date formats for the current interval.
- * See https://github.com/d3/d3-time-format for chart formats.
- *
- * @param  {string} interval Interval to get date formats for.
- * @param  {number}    [ticks] Number of ticks the axis will have.
- * @return {string} Current interval.
- */
-
-function getDateFormatsForInterval(interval) {
-  var ticks = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var screenReaderFormat = '%B %-d, %Y';
-  var tooltipLabelFormat = '%B %-d, %Y';
-  var xFormat = '%Y-%m-%d';
-  var x2Format = '%b %Y';
-  var tableFormat = defaultTableDateFormat;
-
-  switch (interval) {
-    case 'hour':
-      screenReaderFormat = '%_I%p %B %-d, %Y';
-      tooltipLabelFormat = '%_I%p %b %-d, %Y';
-      xFormat = '%_I%p';
-      x2Format = '%b %-d, %Y';
-      tableFormat = 'h A';
-      break;
-
-    case 'day':
-      if (ticks < dayTicksThreshold) {
-        xFormat = '%-d';
-      } else {
-        xFormat = '%b';
-        x2Format = '%Y';
-      }
-
-      break;
-
-    case 'week':
-      if (ticks < weekTicksThreshold) {
-        xFormat = '%-d';
-        x2Format = '%b %Y';
-      } else {
-        xFormat = '%b';
-        x2Format = '%Y';
-      }
-
-      screenReaderFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week of %B %-d, %Y', 'woocommerce-admin');
-      tooltipLabelFormat = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Week of %B %-d, %Y', 'woocommerce-admin');
-      break;
-
-    case 'quarter':
-    case 'month':
-      screenReaderFormat = '%B %Y';
-      tooltipLabelFormat = '%B %Y';
-      xFormat = '%b';
-      x2Format = '%Y';
-      break;
-
-    case 'year':
-      screenReaderFormat = '%Y';
-      tooltipLabelFormat = '%Y';
-      xFormat = '%Y';
-      break;
-  }
-
-  return {
-    screenReaderFormat: screenReaderFormat,
-    tooltipLabelFormat: tooltipLabelFormat,
-    xFormat: xFormat,
-    x2Format: x2Format,
-    tableFormat: tableFormat
-  };
-}
-/**
- * Gutenberg's moment instance is loaded with i18n values, which are
- * PHP date formats, ie 'LLL: "F j, Y g:i a"'. Override those with translations
- * of moment style js formats.
- *
- * @param {Object} config Locale config object, from store settings.
- * @param {string} config.userLocale
- * @param {Array} config.weekdaysShort
- */
-
-function loadLocaleData(_ref2) {
-  var userLocale = _ref2.userLocale,
-      weekdaysShort = _ref2.weekdaysShort;
-
-  // Don't update if the wp locale hasn't been set yet, like in unit tests, for instance.
-  if (moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale() !== 'en') {
-    moment__WEBPACK_IMPORTED_MODULE_0___default.a.updateLocale(userLocale, {
-      longDateFormat: {
-        L: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MM/DD/YYYY', 'woocommerce-admin'),
-        LL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('MMMM D, YYYY', 'woocommerce-admin'),
-        LLL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('D MMMM YYYY LT', 'woocommerce-admin'),
-        LLLL: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('dddd, D MMMM YYYY LT', 'woocommerce-admin'),
-        LT: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('HH:mm', 'woocommerce-admin')
-      },
-      weekdaysMin: weekdaysShort
-    });
-  }
-}
-var dateValidationMessages = {
-  invalid: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Invalid date', 'woocommerce-admin'),
-  future: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Select a date in the past', 'woocommerce-admin'),
-  startAfterEnd: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Start date must be before end date', 'woocommerce-admin'),
-  endBeforeStart: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Start date must be before end date', 'woocommerce-admin')
-};
-/**
- * @typedef {Object} validatedDate
- * @property {Object|null} date - A resulting Moment date object or null, if invalid
- * @property {string} error - An optional error message if date is invalid
- */
-
-/**
- * Validate text input supplied for a date range.
- *
- * @param {string} type - Designate beginning or end of range, eg `before` or `after`.
- * @param {string} value - User input value
- * @param {Object|null} [before] - If already designated, the before date parameter
- * @param {Object|null} [after] - If already designated, the after date parameter
- * @param {string} format - The expected date format in a user's locale
- * @return {Object} validatedDate - validated date object
- */
-
-function validateDateInputForRange(type, value, before, after, format) {
-  var date = toMoment(format, value);
-
-  if (!date) {
-    return {
-      date: null,
-      error: dateValidationMessages.invalid
-    };
-  }
-
-  if (moment__WEBPACK_IMPORTED_MODULE_0___default()().isBefore(date, 'day')) {
-    return {
-      date: null,
-      error: dateValidationMessages.future
-    };
-  }
-
-  if (type === 'after' && before && date.isAfter(before, 'day')) {
-    return {
-      date: null,
-      error: dateValidationMessages.startAfterEnd
-    };
-  }
-
-  if (type === 'before' && after && date.isBefore(after, 'day')) {
-    return {
-      date: null,
-      error: dateValidationMessages.endBeforeStart
-    };
-  }
-
-  return {
-    date: date
-  };
-}
-//# sourceMappingURL=index.js.map
 
 /***/ })
 

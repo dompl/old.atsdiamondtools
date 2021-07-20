@@ -155,13 +155,16 @@ msgstr ""
 msgid "In case you need to add plugin search form on your website, you can do it in several ways:"
 msgstr ""
 
-msgid "Enable a \"Seamless integration\" option ( may not work with some themes )"
+msgid "Enable a %s option ( may not work with some themes )"
 msgstr ""
 
-msgid "Add search form using shortcode %s"
+msgid "Using shortcode %s"
 msgstr ""
 
-msgid "Add search form as widget for one of your theme widget areas. Go to Appearance -> Widgets and drag&drop AWS Widget to one of your widget areas"
+msgid "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas"
+msgstr ""
+
+msgid "Widgets Screen"
 msgstr ""
 
 msgid "Add PHP code to the necessary files of your theme: %s"

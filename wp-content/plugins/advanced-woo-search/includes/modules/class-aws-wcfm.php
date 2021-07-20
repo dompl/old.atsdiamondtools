@@ -47,6 +47,8 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             add_filter( 'aws_searchbox_markup', array( $this, 'wcfm_searchbox_markup' ), 1, 2 );
             add_filter( 'aws_front_data_parameters', array( $this, 'wcfm_front_data_parameters' ), 1 );
             add_filter( 'aws_search_query_array', array( $this, 'wcfm_search_query_array' ), 1 );
+            add_filter( 'aws_terms_search_query', array( $this, 'wcfm_terms_search_query' ), 1, 2 );
+            add_filter( 'aws_search_tax_results', array( $this, 'wcfm_search_tax_results' ), 1 );
         }
 
         /*
@@ -162,6 +164,71 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             }
 
             return $query;
+
+        }
+
+        /*
+         * WCFM - WooCommerce Multivendor Marketplace limit search inside vendoes shop for taxonomies
+         */
+        public function wcfm_terms_search_query( $sql, $taxonomy ) {
+
+            global $wpdb;
+
+            $store = false;
+
+            if ( isset( $_REQUEST['aws_tax'] ) && $_REQUEST['aws_tax'] && strpos( $_REQUEST['aws_tax'], 'store:' ) !== false ) {
+                $vendor_id = intval( str_replace( 'store:', '', $_REQUEST['aws_tax'] ) );
+                $store = function_exists( 'wcfmmp_get_store' ) ? wcfmmp_get_store( $vendor_id ) : false;
+            } else {
+                $store = $this->get_current_store();
+            }
+
+            if ( $store ) {
+                $all_vendor_tax = array();
+                foreach ( $taxonomy as $taxonomy_slug ) {
+                    $vendor_tax = $store->get_store_taxonomies( $taxonomy_slug );
+                    if ( ! empty( $vendor_tax) ) {
+                        $all_vendor_tax = array_merge( $all_vendor_tax, $vendor_tax );
+                    }
+                }
+
+                if ( ! empty( $all_vendor_tax ) ) {
+                    $sql_terms = "AND $wpdb->term_taxonomy.term_id IN ( " . implode( ',', $all_vendor_tax ) . " )";
+                    $sql = str_replace( 'WHERE 1 = 1', 'WHERE 1 = 1 ' . $sql_terms, $sql );
+                } else {
+                    $sql = '';
+                }
+
+            }
+
+            return $sql;
+
+        }
+
+        /*
+         * WCFM - Update links for taxonomies inside vendors store
+         */
+        public function wcfm_search_tax_results( $result_array ) {
+
+            $store = false;
+            if ( isset( $_REQUEST['aws_tax'] ) && $_REQUEST['aws_tax'] && strpos( $_REQUEST['aws_tax'], 'store:' ) !== false ) {
+                $vendor_id = intval( str_replace( 'store:', '', $_REQUEST['aws_tax'] ) );
+                $store = function_exists( 'wcfmmp_get_store' ) ? wcfmmp_get_store( $vendor_id ) : false;
+            } else {
+                $store = $this->get_current_store();
+            }
+
+            if ( $store && $result_array ) {
+                foreach ( $result_array as $tax_name => $items ) {
+                    $url_base = ( $tax_name === 'product_cat' ) ? 'category' : 'tax-' . $tax_name;
+                    foreach ( $items as $item_key => $item ) {
+                        $result_array[$tax_name][$item_key]['link'] = $store->get_shop_url() . $url_base . '/' . $item['slug'];
+                        $result_array[$tax_name][$item_key]['count'] = '';
+                    }
+                }
+            }
+
+            return $result_array;
 
         }
 

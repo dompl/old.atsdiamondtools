@@ -184,6 +184,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['general'][] = array(
                 "name" => __( "Main Settings", "advanced-woo-search" ),
+                "id"   => "main",
                 "type" => "heading"
             );
 

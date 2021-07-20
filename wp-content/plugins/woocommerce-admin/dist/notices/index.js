@@ -82,73 +82,12 @@ this["wc"] = this["wc"] || {}; this["wc"]["notices"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 599);
+/******/ 	return __webpack_require__(__webpack_require__.s = 509);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 143:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(87);
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return arrayLikeToArray(arr);
-}
-
-module.exports = _arrayWithoutHoles;
-
-/***/ }),
-
-/***/ 144:
-/***/ (function(module, exports) {
-
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-
-module.exports = _iterableToArray;
-
-/***/ }),
-
-/***/ 145:
-/***/ (function(module, exports) {
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-module.exports = _nonIterableSpread;
-
-/***/ }),
-
-/***/ 15:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["data"]; }());
-
-/***/ }),
-
-/***/ 29:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayWithoutHoles = __webpack_require__(143);
-
-var iterableToArray = __webpack_require__(144);
-
-var unsupportedIterableToArray = __webpack_require__(98);
-
-var nonIterableSpread = __webpack_require__(145);
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-
-/***/ }),
-
-/***/ 294:
+/***/ 146:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["notices"]; }());
@@ -162,29 +101,7 @@ module.exports = _toConsumableArray;
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module, exports) {
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-
-/***/ }),
-
-/***/ 599:
+/***/ 509:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -207,29 +124,15 @@ __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, "getNotices", function() { return getNotices; });
 
 // EXTERNAL MODULE: external ["wp","notices"]
-var external_wp_notices_ = __webpack_require__(294);
+var external_wp_notices_ = __webpack_require__(146);
 
 // EXTERNAL MODULE: external ["wp","data"]
-var external_wp_data_ = __webpack_require__(15);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__(29);
-var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
+var external_wp_data_ = __webpack_require__(7);
 
 // EXTERNAL MODULE: external "lodash"
 var external_lodash_ = __webpack_require__(3);
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(4);
-var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
-
 // CONCATENATED MODULE: ./packages/notices/build-module/store/utils/on-sub-key.js
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
 /**
  * Higher-order reducer creator which creates a combined reducer object, keyed
  * by a property on the action object.
@@ -238,36 +141,30 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
  *
  * @return {Function} Higher-order reducer.
  */
-var on_sub_key_onSubKey = function onSubKey(actionProperty) {
-  return function (reducer) {
-    return function () {
-      var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var action = arguments.length > 1 ? arguments[1] : undefined;
-      // Retrieve subkey from action. Do not track if undefined; useful for cases
-      // where reducer is scoped by action shape.
-      var key = action[actionProperty];
+const onSubKey = actionProperty => reducer => (state = {}, action) => {
+  // Retrieve subkey from action. Do not track if undefined; useful for cases
+  // where reducer is scoped by action shape.
+  const key = action[actionProperty];
 
-      if (key === undefined) {
-        return state;
-      } // Avoid updating state if unchanged. Note that this also accounts for a
-      // reducer which returns undefined on a key which is not yet tracked.
+  if (key === undefined) {
+    return state;
+  } // Avoid updating state if unchanged. Note that this also accounts for a
+  // reducer which returns undefined on a key which is not yet tracked.
 
 
-      var nextKeyState = reducer(state[key], action);
+  const nextKeyState = reducer(state[key], action);
 
-      if (nextKeyState === state[key]) {
-        return state;
-      }
+  if (nextKeyState === state[key]) {
+    return state;
+  }
 
-      return _objectSpread(_objectSpread({}, state), {}, defineProperty_default()({}, key, nextKeyState));
-    };
+  return { ...state,
+    [key]: nextKeyState
   };
 };
-/* harmony default export */ var on_sub_key = (on_sub_key_onSubKey);
+/* harmony default export */ var on_sub_key = (onSubKey);
 //# sourceMappingURL=on-sub-key.js.map
 // CONCATENATED MODULE: ./packages/notices/build-module/store/reducer.js
-
-
 /**
  * External dependencies
  */
@@ -287,16 +184,13 @@ var on_sub_key_onSubKey = function onSubKey(actionProperty) {
  * @return {Object} Updated state.
  */
 
-var notices = on_sub_key('context')(function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var action = arguments.length > 1 ? arguments[1] : undefined;
-
+const notices = on_sub_key('context')((state = [], action) => {
   switch (action.type) {
     case 'CREATE_NOTICE':
       // Avoid duplicates on ID.
-      return [].concat(toConsumableArray_default()(Object(external_lodash_["reject"])(state, {
+      return [...Object(external_lodash_["reject"])(state, {
         id: action.notice.id
-      })), [action.notice]);
+      }), action.notice];
 
     case 'REMOVE_NOTICE':
       return Object(external_lodash_["reject"])(state, {
@@ -306,7 +200,7 @@ var notices = on_sub_key('context')(function () {
 
   return state;
 });
-/* harmony default export */ var store_reducer = (notices);
+/* harmony default export */ var reducer = (notices);
 //# sourceMappingURL=reducer.js.map
 // CONCATENATED MODULE: ./packages/notices/build-module/store/constants.js
 /**
@@ -316,14 +210,14 @@ var notices = on_sub_key('context')(function () {
  *
  * @type {string}
  */
-var DEFAULT_CONTEXT = 'global';
+const DEFAULT_CONTEXT = 'global';
 /**
  * Default notice status.
  *
  * @type {string}
  */
 
-var DEFAULT_STATUS = 'info';
+const DEFAULT_STATUS = 'info';
 //# sourceMappingURL=constants.js.map
 // CONCATENATED MODULE: ./packages/notices/build-module/store/actions.js
 /**
@@ -377,48 +271,38 @@ var DEFAULT_STATUS = 'info';
  * @return {Object} Action object.
  */
 
-function createNotice() {
-  var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATUS;
-  var content = arguments.length > 1 ? arguments[1] : undefined;
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var _options$speak = options.speak,
-      speak = _options$speak === void 0 ? true : _options$speak,
-      _options$isDismissibl = options.isDismissible,
-      isDismissible = _options$isDismissibl === void 0 ? true : _options$isDismissibl,
-      _options$context = options.context,
-      context = _options$context === void 0 ? DEFAULT_CONTEXT : _options$context,
-      _options$id = options.id,
-      id = _options$id === void 0 ? Object(external_lodash_["uniqueId"])(context) : _options$id,
-      _options$actions = options.actions,
-      actions = _options$actions === void 0 ? [] : _options$actions,
-      _options$type = options.type,
-      type = _options$type === void 0 ? 'default' : _options$type,
-      __unstableHTML = options.__unstableHTML,
-      _options$icon = options.icon,
-      icon = _options$icon === void 0 ? null : _options$icon,
-      _options$explicitDism = options.explicitDismiss,
-      explicitDismiss = _options$explicitDism === void 0 ? false : _options$explicitDism,
-      _options$onDismiss = options.onDismiss,
-      onDismiss = _options$onDismiss === void 0 ? null : _options$onDismiss; // The supported value shape of content is currently limited to plain text
+function createNotice(status = DEFAULT_STATUS, content, options = {}) {
+  const {
+    speak = true,
+    isDismissible = true,
+    context = DEFAULT_CONTEXT,
+    id = Object(external_lodash_["uniqueId"])(context),
+    actions = [],
+    type = 'default',
+    __unstableHTML,
+    icon = null,
+    explicitDismiss = false,
+    onDismiss = null
+  } = options; // The supported value shape of content is currently limited to plain text
   // strings. To avoid setting expectation that e.g. a WPElement could be
   // supported, cast to a string.
 
   content = String(content);
   return {
     type: 'CREATE_NOTICE',
-    context: context,
+    context,
     notice: {
-      id: id,
-      status: status,
-      content: content,
+      id,
+      status,
+      content,
       spokenMessage: speak ? content : null,
-      __unstableHTML: __unstableHTML,
-      isDismissible: isDismissible,
-      actions: actions,
-      type: type,
-      icon: icon,
-      explicitDismiss: explicitDismiss,
-      onDismiss: onDismiss
+      __unstableHTML,
+      isDismissible,
+      actions,
+      type,
+      icon,
+      explicitDismiss,
+      onDismiss
     }
   };
 }
@@ -492,12 +376,11 @@ function createWarningNotice(content, options) {
  * @return {Object} Action object.
  */
 
-function removeNotice(id) {
-  var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function removeNotice(id, context = DEFAULT_CONTEXT) {
   return {
     type: 'REMOVE_NOTICE',
-    id: id,
-    context: context
+    id,
+    context
   };
 }
 //# sourceMappingURL=actions.js.map
@@ -518,7 +401,7 @@ function removeNotice(id) {
  * @type {Array}
  */
 
-var DEFAULT_NOTICES = [];
+const DEFAULT_NOTICES = [];
 /**
  * @typedef {Object} WPNotice Notice object.
  *
@@ -555,8 +438,7 @@ var DEFAULT_NOTICES = [];
  * @return {WPNotice[]} Array of notices.
  */
 
-function getNotices(state) {
-  var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function getNotices(state, context = DEFAULT_CONTEXT) {
   return state[context] || DEFAULT_NOTICES;
 }
 //# sourceMappingURL=selectors.js.map
@@ -575,7 +457,7 @@ function getNotices(state) {
 // to Gutenberg this needs to be changed back to core/notices.
 
 /* harmony default export */ var store = (Object(external_wp_data_["registerStore"])('core/notices2', {
-  reducer: store_reducer,
+  reducer: reducer,
   actions: actions_namespaceObject,
   selectors: selectors_namespaceObject
 }));
@@ -594,38 +476,10 @@ function getNotices(state) {
 
 /***/ }),
 
-/***/ 87:
+/***/ 7:
 /***/ (function(module, exports) {
 
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-module.exports = _arrayLikeToArray;
-
-/***/ }),
-
-/***/ 98:
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(87);
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-
-module.exports = _unsupportedIterableToArray;
+(function() { module.exports = window["wp"]["data"]; }());
 
 /***/ })
 

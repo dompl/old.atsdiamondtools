@@ -82,7 +82,7 @@ class AG_errors
 	 */
 	public static function get_epdq_ncerror($code)
 	{
-		if ($code == '')
+		if ($code === '')
 			return;
 
 		$code = (int)$code;

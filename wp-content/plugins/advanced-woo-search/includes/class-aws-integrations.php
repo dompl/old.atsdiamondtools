@@ -315,6 +315,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-wholesale.php' );
             }
 
+            // Advanced Woo Labels plugin
+            if ( function_exists( 'AWL' ) || function_exists( 'AWL_PRO' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-awl.php' );
+            }
+
         }
 
         /*

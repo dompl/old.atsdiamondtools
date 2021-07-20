@@ -33,7 +33,7 @@ class AG_ePDQ_order_status_check {
 
 
             add_action('admin_enqueue_scripts', array( $this, 'status_check_js' ) );
-            //add_action('woocommerce_order_status_cancelled', array( $this,'check'));
+            add_action('woocommerce_order_status_cancelled', array( $this,'check'));
             add_action('woocommerce_order_item_add_action_buttons', array( $this, 'callback_button'));
             add_action( 'wp_ajax_ag_manually_check_status_call', array( $this, 'ag_manually_check_status_call' ) );
             add_action( 'manage_shop_order_posts_custom_column', array( $this, 'show_status_check_order_screen' ) );
@@ -60,15 +60,24 @@ class AG_ePDQ_order_status_check {
             $accepted = array(4, 5, 9);
 
             // Check order is using our plugin
-            if($order->get_payment_method() != 'epdq_checkout') {
+            if($order->get_payment_method() !== 'epdq_checkout') {
+                return;
+            }
+
+            // If customer cancels order.
+            if( get_post_meta( $order->get_id(), 'customer_canceled_order' ) ) {
+                $order->add_order_note('The customer canceled the order. Status check did not run.');
                 return;
             }
 
             // if manual change.
             if ( current_user_can('administrator') || current_user_can('shop_manager')) {
-                $order->add_order_note('Order was manually set to cancelled.');
+                $order->add_order_note('Order was manually set to cancelled. Status check did not run.');
                 return;
             }
+
+
+
 
             if (empty($settings['USERID'])) {
                 AG_ePDQ_Helpers::ag_log('AG Status check failed: API username has not been set.', 'debug', $ePDQ_settings->debug);
@@ -93,7 +102,7 @@ class AG_ePDQ_order_status_check {
             // Data to send
 			$data_post = array();
 			$data_post['ORDERID'] = $order->get_order_number();
-			if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
+			if (get_woocommerce_currency() !== 'GBP' && defined('ePDQ_PSPID')) {
 				$data_post['PSPID'] = ePDQ_PSPID;
             } else {
 				$data_post['PSPID'] = $key_settings['pspid'];
@@ -116,7 +125,7 @@ class AG_ePDQ_order_status_check {
 
 
     
-            $STATUS = $response['STATUS'];
+            //$STATUS = $response['STATUS'];
             $NCERROR = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['NCERROR']);
             $NCERRORPLUS = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['NCERRORPLUS']);
             $status = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['STATUS']);
@@ -160,7 +169,7 @@ class AG_ePDQ_order_status_check {
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
                 $order->add_order_note($status_check . $noteTitle);    
     
-            } elseif ($status == 2 || $status == 93) {
+            } elseif ($status === 2 || $status === 93) {
                 
                 $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct').'</strong></p>';
                 $order->add_order_note($error_note);
@@ -169,7 +178,7 @@ class AG_ePDQ_order_status_check {
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
                 $order->add_order_note($status_check . $noteTitle);
     
-            } elseif ($status == 52 || $status == 92) {
+            } elseif ($status === 52 || $status === 92) {
                 
                 $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -178,7 +187,7 @@ class AG_ePDQ_order_status_check {
                 $order->update_status('failed');
                 $order->add_order_note($status_check . $noteTitle);
     
-            } elseif ($status == 1) {
+            } elseif ($status === 1) {
                 
                 $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -187,7 +196,7 @@ class AG_ePDQ_order_status_check {
                 AG_ePDQ_Helpers::ag_log('The customer has cancelled the transaction', 'debug', $ePDQ_settings->debug);
                 $order->add_order_note($status_check . $noteTitle);
             
-            } elseif ($status == 0 || $status === NULL) {
+            } elseif ($status === 0 || $status === NULL) {
                 
                 $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -206,7 +215,7 @@ class AG_ePDQ_order_status_check {
             $settings = ePDQ_crypt::refund_settings();
 
             // Check order is using our plugin
-            if($order->get_payment_method() != 'epdq_checkout') {
+            if($order->get_payment_method() !== 'epdq_checkout') {
                 return;
             }
 
@@ -244,11 +253,11 @@ class AG_ePDQ_order_status_check {
             check_ajax_referer( self::$args['plugin_name'].'-status-check', 'nonce' );
 
             // the data from the ajax call
-            $order_id   = intval($_POST['order_id']);
+            $order_id   = (int)$_POST['order_id'];
             $order      = new WC_Order($order_id);
 
             // Check order is using our plugin
-            if($order->get_payment_method() != 'epdq_checkout') {
+            if($order->get_payment_method() !== 'epdq_checkout') {
                 return;
             }
 
@@ -283,7 +292,7 @@ class AG_ePDQ_order_status_check {
 			$data_post = array();
 			$data_post['ORDERID'] = $order->get_order_number();
 
-			if (get_woocommerce_currency() != 'GBP' && defined('ePDQ_PSPID')) {
+			if (get_woocommerce_currency() !== 'GBP' && defined('ePDQ_PSPID')) {
 				$data_post['PSPID'] = ePDQ_PSPID;
             } else {
 				$data_post['PSPID'] = $key_settings['pspid'];
@@ -306,7 +315,7 @@ class AG_ePDQ_order_status_check {
 
             AG_ePDQ_Helpers::ag_log(print_r($response, TRUE), 'debug', $ePDQ_settings->debug);
     
-            $STATUS = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['STATUS']);
+            //$STATUS = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['STATUS']);
             $NCERROR = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['NCERROR']);
             $NCERRORPLUS = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['NCERRORPLUS']);
             $status = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['STATUS']);
@@ -347,7 +356,7 @@ class AG_ePDQ_order_status_check {
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
                 $order->add_order_note($status_check . $noteTitle);
    
-            } elseif ($status == 2 || $status == 93) {
+            } elseif ($status === 2 || $status === 93) {
                 
                 $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct').'</strong></p>';
                 $order->add_order_note($error_note);
@@ -356,7 +365,7 @@ class AG_ePDQ_order_status_check {
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
                 $order->add_order_note($status_check . $noteTitle);
     
-            } elseif ($status == 52 || $status == 92) {
+            } elseif ($status === 52 || $status === 92) {
                 
                 $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -365,7 +374,7 @@ class AG_ePDQ_order_status_check {
                 $order->update_status('failed');
                 $order->add_order_note($status_check . $noteTitle);
 
-            } elseif ($status == 1) {
+            } elseif ($status === 1) {
                 
                 $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -374,7 +383,7 @@ class AG_ePDQ_order_status_check {
                 AG_ePDQ_Helpers::ag_log('The customer has cancelled the transaction', 'debug', $ePDQ_settings->debug);
                 $order->add_order_note($status_check . $noteTitle);
             
-            } elseif ($status == 0 || $status === NULL) {
+            } elseif ($status === 0 || $status === NULL) {
                 
                 $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct') .'</strong></p>';
                 $order->add_order_note($errornote);
@@ -394,7 +403,7 @@ class AG_ePDQ_order_status_check {
             
             // Disable new column from showing.
             if( defined( 'AG_disable_column' )) {
-                return;
+                return $columns;
             }
             
             $columns['order_number_new'] = 'order_number_new';
@@ -459,7 +468,7 @@ class AG_ePDQ_order_status_check {
                    echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $order->get_id() ) ) . '&action=edit' ) . '" class="order-view"><strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong></a>';
                    
                    // Check order is using our plugin
-                   if($order->get_payment_method() != 'epdq_checkout') {
+                   if($order->get_payment_method() !== 'epdq_checkout') {
                        return;
                    } 
            

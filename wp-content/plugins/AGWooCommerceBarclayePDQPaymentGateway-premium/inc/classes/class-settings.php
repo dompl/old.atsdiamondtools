@@ -15,7 +15,7 @@ class AG_ePDQ_Settings
         /**
          * Plugin settings
          *
-         * @return void
+         * @return array[]
          */
         public static function form_fields()
         {
@@ -168,7 +168,7 @@ class AG_ePDQ_Settings
         /**
          * Refund settings
          *
-         * @return void
+         * @return array[]
          */
         public static function form_fields_refund()
         {

@@ -25,18 +25,18 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                 $html .= '<tr id="activation">';
         
                     $html .= '<th>' . esc_html__( 'Activation', 'advanced-woo-search' ) . '</th>';
-                    $html .= '<td>';
-                        $html .= '<div class="description activation">';
+                    $html .='<td>';
+                        $html .='<div class="description activation">';
                             $html .= esc_html__( 'In case you need to add plugin search form on your website, you can do it in several ways:', 'advanced-woo-search' ) . '<br>';
-                            $html .= '<div class="list">';
-                                $html .= '1. ' . esc_html__( 'Enable a "Seamless integration" option ( may not work with some themes )', 'advanced-woo-search' ) . '<br>';
-                                $html .= '2. ' . sprintf( esc_html__( 'Add search form using shortcode %s', 'advanced-woo-search' ), "<code>[aws_search_form]</code>" ) . '<br>';
-                                $html .= '3. ' . esc_html__( 'Add search form as widget for one of your theme widget areas. Go to Appearance -> Widgets and drag&drop AWS Widget to one of your widget areas', 'advanced-woo-search' ) . '<br>';
-                                $html .= '4. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php if ( function_exists( 'aws_get_search_form' ) ) { aws_get_search_form(); } ?&gt;</code>" ) . '<br>';
-                            $html .= '</div>';
-                        $html .= '</div>';
-                    $html .= '</td>';
-        
+                            $html .='<div class="list">';
+                                $html .='1. ' . sprintf(esc_html__( "Enable a %s option ( may not work with some themes )", 'advanced-woo-search' ), '<a href="#main">' . __( 'Seamless integration', 'advanced-woo-search' ) . '</a>' ) . '<br>';
+                                $html .='2. ' . sprintf( esc_html__( 'Using shortcode %s', 'advanced-woo-search' ), '<code>[aws_search_form]</code>' ) . '<br>';
+                                $html .='3. ' . sprintf( esc_html__( "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas", 'advanced-woo-search' ), '<a href="' . admin_url( 'widgets.php' ) . '" target="_blank">' . __( 'Widgets Screen', 'advanced-woo-search' ) . '</a>' ) . '<br>';
+                                $html .='4. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php aws_get_search_form( true ); ?&gt;</code>" ) . '<br>';
+                            $html .='</div>';
+                        $html .='</div>';
+                    $html .='</td>';
+
                 $html .= '</tr>';
         
                 $html .= '<tr>';

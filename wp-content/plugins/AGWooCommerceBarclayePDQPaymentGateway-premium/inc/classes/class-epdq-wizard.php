@@ -154,7 +154,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label class="wizard-prompt" for="pspid">PSPID</label>
-                <input type="text" id="pspid" class="wizard-input" name="pspid" required value="<?php echo isset($saved_settings['access_key']) ? $saved_settings['access_key'] : ''; ?>" />
+                <input type="text" id="pspid" class="wizard-input" name="pspid" required value="<?php echo $saved_settings['access_key'] ?? ''; ?>" />
             </div>
 
 			<p class="ag_wizard-actions step">
@@ -276,12 +276,12 @@ class AG_ePDQ_Wizard_steps
                 <label for="sha_method"><?php echo __('SHA encryption method', 'ag_epdq_server'); ?></label>
                 <select class="select " name="sha_method" id="sha_method">
                     <?php 
-                    $sha_method = isset($saved_settings['sha_method']) ? $saved_settings['sha_method'] : '0';
+                    $sha_method = $saved_settings['sha_method'] ?? '0';
                     echo '<option value="" disabled>'. __('Select One', 'ag_epdq_server') .'</option>
                     <option value="" disabled>----------------</option>
-                    <option value="0" ' . ($sha_method == '0' ? 'selected' : '') . '>SHA-1</option>
-                    <option value="1" ' . ($sha_method == '1' ? 'selected' : '') . '>SHA-256</option>
-                    <option value="2" ' . ($sha_method == '2' ? 'selected' : '') . '>SHA-512</option>'; 
+                    <option value="0" ' . ($sha_method === '0' ? 'selected' : '') . '>SHA-1</option>
+                    <option value="1" ' . ($sha_method === '1' ? 'selected' : '') . '>SHA-256</option>
+                    <option value="2" ' . ($sha_method === '2' ? 'selected' : '') . '>SHA-512</option>';
                     ?>
                 </select>
             </div>
@@ -360,7 +360,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label class="wizard-prompt" for="sha_in">SHA-IN</label>
-			    <input type="password" id="sha_in" class="wizard-input" name="sha_in" required value="<?php echo isset($saved_settings['sha_in']) ? $saved_settings['sha_in'] : ''; ?>" />
+			    <input type="password" id="sha_in" class="wizard-input" name="sha_in" required value="<?php echo $saved_settings['sha_in'] ?? ''; ?>" />
             </div>
 
 			<p class="ag_wizard-actions step">
@@ -414,7 +414,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label for="ePDQ_redirect"><?php echo __('I have ticked the checkbox in the ePDQ back office.', 'ag_epdq_server'); ?></label>
-                <input  type="checkbox" name="ePDQ_redirect" id="ePDQ_redirect"  value="1" <?php if (get_option('ag_ePDQ_redirect') == 1) { echo "checked='checked'"; } ?> required>
+                <input  type="checkbox" name="ePDQ_redirect" id="ePDQ_redirect"  value="1" <?php if (get_option('ag_ePDQ_redirect') === 1) { echo "checked='checked'"; } ?> required>
             </div>
 
             <section class="callout-yellow" style="margin-top: 20px;">
@@ -441,7 +441,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label class="wizard-prompt" for="sha_out">SHA-OUT</label>
-                <input type="password" id="sha_out" class="wizard-input" name="sha_out" required value="<?php echo isset($saved_settings['sha_out']) ? $saved_settings['sha_out'] : ''; ?>" />
+                <input type="password" id="sha_out" class="wizard-input" name="sha_out" required value="<?php echo $saved_settings['sha_out'] ?? ''; ?>" />
             </div>
 
             <p class="setup-text">
@@ -475,7 +475,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label for="ePDQ_pram"><?php echo __('I have set the correct parameters in the ePDQ back office.', 'ag_epdq_server'); ?></label>
-                <input  type="checkbox" name="ePDQ_pram" id="ePDQ_pram"  value="1" <?php if (get_option('ag_ePDQ_pram') == 1) { echo "checked='checked'"; } ?> required>
+                <input  type="checkbox" name="ePDQ_pram" id="ePDQ_pram"  value="1" <?php if (get_option('ag_ePDQ_pram') === 1) { echo "checked='checked'"; } ?> required>
             </div>
 
 			<p class="ag_wizard-actions step">
@@ -539,7 +539,7 @@ class AG_ePDQ_Wizard_steps
 
             <div class="input-wrap">
                 <label for="3dsecure"><?php echo __('I have 3D Secure enabled in the ePDQ back office.', 'ag_epdq_server'); ?></label>
-                <input  type="checkbox" name="3dsecure" id="3dsecure"  value="1" <?php if (get_option('ag_3dsecure') == 1) { echo "checked='checked'"; } ?> required>
+                <input  type="checkbox" name="3dsecure" id="3dsecure"  value="1" <?php if (get_option('ag_3dsecure') === 1) { echo "checked='checked'"; } ?> required>
             </div>
 
             <p class="setup-text">
@@ -559,13 +559,13 @@ class AG_ePDQ_Wizard_steps
             <div class="input-wrap">
                 <label for="debug"><?php echo __('I would like to enable the plugins error log.', 'ag_epdq_server'); ?></label>
                 <input type="checkbox" name="debug" id="debug" <?php 
-                $debug = isset($saved_settings['debug']) ? $saved_settings['debug'] : 'no';
-                if ($debug == 'yes') { echo "checked='checked'"; } ?> value="yes">
+                $debug = $saved_settings['debug'] ?? 'no';
+                if ($debug === 'yes') { echo "checked='checked'"; } ?> value="yes">
             </div>
 
             <div class="input-wrap">
                 <label for="product"><?php echo __('I would like to add a test product.', 'ag_epdq_server'); ?></label>
-                <input  type="checkbox" name="product" id="product"  <?php if (get_option('ag_product_added') == 'yes') { echo "checked='checked'"; } ?> value="yes">
+                <input  type="checkbox" name="product" id="product"  <?php if (get_option('ag_product_added') === 'yes') { echo "checked='checked'"; } ?> value="yes">
             </div>
 
 			<p class="ag_wizard-actions step">

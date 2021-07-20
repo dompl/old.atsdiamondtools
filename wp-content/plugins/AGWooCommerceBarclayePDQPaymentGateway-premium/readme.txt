@@ -38,12 +38,26 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.2.4 - 08/07/21 =
+* Fix        - Hot-fit for unset in SHA_check().
+* Fix        - Fixed declare for ag_show_wizard() - no longer used.
+
+= v4.2.3 - 07/07/21 =
+* Change        - Change to how product data is passed over to ePDQ - COM parameter.
+* Change        - Added "inner_section" to unset in SHA_check().
+* Change        - Added fallback to AG status check for manual cancel orders.
+* Dev           - Improvements to SHA_check() function for better performance.
+* Dev           - Removed the ag_show_wizard() function and replaced with FS redirect.
+* Enhancement   - Some refactoring within the codebase to help with performance and security.
+* Checking      - Support for new up and coming WooCommerce version 5.5.
+
+
 = v4.2.2 - 03/06/21 =
 * Fix           - Fix sizing of order column in order screen.
 * Fix           - Fixed "Layout of the payment methods" setting when none is selected.
 * Fix           - Fixed refund amount for users on PHP version < 7.2.
 * Fix           - Show plugin title in WooCommerce checkout block.
-* Fix           - Fixed issue with error status codes in order status check funtion.
+* Fix           - Fixed issue with error status codes in order status check function.
 * New           - New define to remove custom order column to display AG status check ('AG_disable_column').
 * New           - New logic to enable manual cancel of order.
 * New           - Need deeper debugging for refunds.

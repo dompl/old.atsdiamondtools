@@ -319,6 +319,13 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                       UNIQUE KEY source_term (id,term,term_source,lang)
                 ) $charset_collate;";
 
+            /**
+             * SQL query that used to create index table
+             * @since 2.31
+             * @param string $sql SQL query string
+             */
+            $sql = apply_filters( 'aws_create_index_table_sql', $sql );
+
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             dbDelta( $sql );
 

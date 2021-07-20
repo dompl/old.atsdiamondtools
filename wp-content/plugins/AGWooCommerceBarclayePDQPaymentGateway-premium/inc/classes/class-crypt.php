@@ -48,7 +48,7 @@ class ePDQ_crypt
      *
      * @param [type] $input
      * @param [type] $password
-     * @return void
+     * @return string
      */
     public static function openssl_crypt($input, $password)
     {
@@ -67,7 +67,7 @@ class ePDQ_crypt
      * @param $message
      * @param $secret_key
      * @param integer $block_size
-     * @return void
+     * @return string
      */
     public static function sodium_crypt($message, $secret_key, $block_size = 1)
     {
@@ -87,7 +87,7 @@ class ePDQ_crypt
      *
      * @param $input
      * @param $password
-     * @return void
+     * @return string
      */
     public static function ripemd_crypt($input, $password)
     {
@@ -98,39 +98,39 @@ class ePDQ_crypt
         return $key . $encrypted;
     }
 
-
-    public static function key_settings() {
+    /**
+     * @return array
+     */
+    public static function key_settings(): array
+    {
 
         if(defined('secure_ePDQ_PSPID') && defined('secure_ePDQ_SHA_in') && defined('secure_ePDQ_SHA_out') && defined('secure_ePDQ_SHA_method') ) {
 
-            $pspid = secure_ePDQ_PSPID;
-            $shain = secure_ePDQ_SHA_in;
-            $shaout = secure_ePDQ_SHA_out;
-            $shamethod = secure_ePDQ_SHA_method;
+            //$pspid = secure_ePDQ_PSPID;
+            //$shain = secure_ePDQ_SHA_in;
+            //$shaout = secure_ePDQ_SHA_out;
+            //$shamethod = secure_ePDQ_SHA_method;
 
             $settings = array(
-                'pspid' => isset($pspid) ? $pspid : '',
-                'shain' => isset($shain) ? $shain : '',
-                'shaout' => isset($shaout) ? $shaout : '',
-                'shamethod' => isset($shamethod) ? $shamethod : '',
+                'pspid' => secure_ePDQ_PSPID ?? '',
+                'shain' => secure_ePDQ_SHA_in ?? '',
+                'shaout' => secure_ePDQ_SHA_out ?? '',
+                'shamethod' => secure_ePDQ_SHA_method ?? '',
             );
-
-            return $settings;
 
         } else {
             
             $ePDQ_settings = new epdq_checkout();
 
             $settings = array(
-                'pspid' => isset($ePDQ_settings->access_key) ? $ePDQ_settings->access_key : '',
-                'shain' => isset($ePDQ_settings->sha_in) ? $ePDQ_settings->sha_in : '',
-                'shaout' => isset($ePDQ_settings->sha_out) ? $ePDQ_settings->sha_out : '',
-                'shamethod' => isset($ePDQ_settings->sha_method) ? $ePDQ_settings->sha_method : '',
+                'pspid' => $ePDQ_settings->access_key ?? '',
+                'shain' => $ePDQ_settings->sha_in ?? '',
+                'shaout' => $ePDQ_settings->sha_out ?? '',
+                'shamethod' => $ePDQ_settings->sha_method ?? '',
             );
 
-            return $settings;
-
         }
+        return $settings;
 
     }
 
@@ -139,37 +139,37 @@ class ePDQ_crypt
 
         if(defined('secure_ePDQ_PSPID') && defined('secure_ePDQ_SHA_in') && defined('secure_ePDQ_SHA_out') && defined('secure_ePDQ_SHA_method') ) {
 
-            $userid = secure_ePDQ_userid;
-            $pswd = secure_ePDQ_pswd;
-            $refid = secure_ePDQ_refid;
+            //$userid = secure_ePDQ_userid;
+            //$pswd = secure_ePDQ_pswd;
+            //$refid = secure_ePDQ_refid;
 
             $settings = array(
-                'USERID' => isset($userid) ? $userid : '',
-                'PSWD' => isset($pswd) ? $pswd : '',
-                'REFID' => isset($refid) ? $refid : '',
+                'USERID' => secure_ePDQ_userid ?? '',
+                'PSWD' => secure_ePDQ_pswd ?? '',
+                'REFID' => secure_ePDQ_refid ?? '',
             );
-
-            return $settings;
 
         } else {
             
             $ePDQ_settings = new epdq_checkout();
 
             $settings = array(
-                'USERID' => isset($ePDQ_settings->api_user) ? $ePDQ_settings->api_user : '',
-                'PSWD' => isset($ePDQ_settings->api_password) ? $ePDQ_settings->api_password : '',
-                'REFID' => isset($ePDQ_settings->api_REFID) ? $ePDQ_settings->api_REFID : '',
+                'USERID' => $ePDQ_settings->api_user ?? '',
+                'PSWD' => $ePDQ_settings->api_password ?? '',
+                'REFID' => $ePDQ_settings->api_REFID ?? '',
             );
 
-            return $settings;
-
         }
+        return $settings;
 
     }
 
 
-
-    public static function get_sha_method() {
+    /**
+     * @return string
+     */
+    public static function get_sha_method(): string
+    {
 
         $settings = self::key_settings();
         $sha_method = $settings['shamethod'];
@@ -177,11 +177,11 @@ class ePDQ_crypt
         $shasign_method = 'sha512';
         $sha_method = (int) $sha_method;
 
-        if ($sha_method == 0) {
+        if ($sha_method === 0) {
 			$shasign_method = 'sha1';
-		} elseif ($sha_method == 1) {
+		} elseif ($sha_method === 1) {
 			$shasign_method = 'sha256';
-		} elseif ($sha_method == 2) {
+		} elseif ($sha_method === 2) {
 			$shasign_method = 'sha512';
         }
 

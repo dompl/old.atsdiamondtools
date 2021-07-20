@@ -186,12 +186,14 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                 foreach ( $search_results as $result ) {
 
                     $parent = '';
+                    $slug = '';
 
                     $term = get_term( $result->term_id, $result->taxonomy );
 
                     if ( $term != null && !is_wp_error( $term ) ) {
                         $term_link = get_term_link( $term );
                         $parent    = is_object( $term ) && property_exists( $term, 'parent' ) ? $term->parent : '';
+                        $slug      = $term->slug;
                     } else {
                         continue;
                     }
@@ -199,6 +201,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                     $new_result = array(
                         'name'     => $result->name,
                         'id'       => $result->term_id,
+                        'slug'     => $slug,
                         'count'    => ( $result->count > 0 ) ? $result->count : '',
                         'link'     => $term_link,
                         'excerpt'  => '',

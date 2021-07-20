@@ -531,3 +531,23 @@ body.aws-overlay {
 #et-boc .aws-container .aws-search-form .aws-search-clear {
     padding: 0 0 0 10px;
 }
+
+.aws-search-result .aws_result_title .advanced-woo-labels {
+    position: relative !important;
+    width: auto !important;
+    margin: 0 5px 5px 0 !important;
+    transform: none !important;
+}
+
+.aws-search-result .aws_result_title .advanced-woo-labels:last-child {
+    margin-bottom: 0 !important;
+}
+
+.aws-search-result .aws_result_title .aws_result_labels {
+    display: flex;
+    margin: 0 !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    text-align: left;
+    justify-content: flex-start;
+}

@@ -3,14 +3,15 @@
  * Plugin Name: IgniteWoo Updater
  * Plugin URI: https://ignitewoo.com/
  * Description: Helps you manage your IgniteWoo software licenses and receive important updates for your IgniteWoo products.
- * Version: 3.0.2
+ * Version: 3.0.3
  * Author: IgniteWoo.com
  * Author URI: https://ignitewoo.com/
  * Network: true
  * Requires at least: 3.8.1
  * Tested up to: 5.2.1
  *
- *  */
+ * Text Domain: ignition-updater
+ */
 /*
     Copyright 2012 - 2020 IgniteWoo.com
     Copyright 2012 - WooThemes

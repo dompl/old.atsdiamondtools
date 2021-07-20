@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.7
-Stable tag: 2.29
+Stable tag: 2.31
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,16 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.31 ( 2021-07-05 ) =
+* Update - Plugin settings page
+* Dev - Add aws_create_index_table_sql filter
+
+= 2.30 ( 2021-06-21 ) =
+* Add - Support for Advanced Woo Labels plugin
+* Update - WCFM plugin fix for vendors shop search. Fix searching for vendor taxonomies
+* Update - Fix styles for YITH Wishlist plugin
+* Update - Tested with WC 5.4
 
 = 2.29 ( 2021-06-07 ) =
 * Add - Woostify theme support
