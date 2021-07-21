@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the WooCommerce Admin package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce Admin 2.4.1\n"
+"Project-Id-Version: WooCommerce Admin 2.4.2\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/woocommerce-admin\n"
-"POT-Creation-Date: 2021-07-01 05:46:02+00:00\n"
+"POT-Creation-Date: 2021-07-19 08:12:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5320,41 +5320,41 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: client/header/activity-panel/index.js:224
+#: client/header/activity-panel/index.js:235
 #: client/header/activity-panel/panels/help.js:42
 msgid "Inbox"
 msgstr ""
 
-#: client/header/activity-panel/index.js:233
+#: client/header/activity-panel/index.js:244
 #: client/marketing/overview/installed-extensions/row.js:112
 #: client/task-list/tasks.js:222
 #: client/task-list/tasks/payments/components/PaymentAction.js:107
 msgid "Finish setup"
 msgstr ""
 
-#: client/header/activity-panel/index.js:266
+#: client/header/activity-panel/index.js:277
 msgid "Help"
 msgstr ""
 
-#: client/header/activity-panel/index.js:280
+#: client/header/activity-panel/index.js:291
 msgid "Preview site"
 msgstr ""
 
-#: client/header/activity-panel/index.js:365
+#: client/header/activity-panel/index.js:368
 msgid "Store Activity"
 msgstr ""
 
-#: client/header/activity-panel/index.js:400
+#: client/header/activity-panel/index.js:403
 msgid "We're here for help"
 msgstr ""
 
-#: client/header/activity-panel/index.js:401
+#: client/header/activity-panel/index.js:404
 msgid ""
 "If you have any questions, feel free to explore the WooCommerce docs listed "
 "here."
 msgstr ""
 
-#: client/header/activity-panel/index.js:405
+#: client/header/activity-panel/index.js:408
 #: client/navigation/components/favorites-tooltip/index.js:51
 msgid "Got it"
 msgstr ""

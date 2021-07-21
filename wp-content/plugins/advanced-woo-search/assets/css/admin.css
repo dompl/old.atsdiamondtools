@@ -223,9 +223,10 @@ h1.aws-instance-name {
     vertical-align: middle;
 }
 
-.aws-table td {
+.aws-table td,
+.form-table .aws-table td {
     vertical-align: middle;
-    padding: 7px;
+    padding: 7px !important;
     line-height: 2em;
 }
 

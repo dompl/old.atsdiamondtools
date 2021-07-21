@@ -43,7 +43,11 @@ if (!class_exists('AWS_Gutenberg_Init')) :
 
             add_action( 'init', array( $this, 'register_block' ) );
 
-            add_filter( 'block_categories', array( $this, 'add_block_category' ), 10, 2 );
+            if ( version_compare( get_bloginfo('version'),'5.8', '>=' ) ) {
+                add_filter( 'block_categories_all', array( $this, 'add_block_category' ) );
+            } else {
+                add_filter( 'block_categories', array( $this, 'add_block_category' ) );
+            }
 
         }
 
@@ -101,7 +105,7 @@ if (!class_exists('AWS_Gutenberg_Init')) :
         /*
          * Add new blocks category
          */
-        public function add_block_category( $categories, $post ) {
+        public function add_block_category( $categories ) {
             return array_merge(
                 $categories,
                 array(

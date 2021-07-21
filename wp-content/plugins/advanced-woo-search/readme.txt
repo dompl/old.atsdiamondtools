@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 5.7
-Stable tag: 2.31
+Tested up to: 5.8
+Stable tag: 2.32
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,17 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.32 ( 2021-07-19 ) =
+* Add - Support for Products Visibility by User Roles plugin
+* Add - Support for WPBakery plugin. Added search form element for page builder
+* Update - Settings page styles for tables
+* Update - Tested with WC 5.5
+* Fix - Bug with not working pagination for search results page that was created with Load Dynamic Content for Elementor plugin
+* Fix - WooCommerce Product Filter by WooBeWoo plugin integration. Fix issue with filtering by attributes
+* Fix - Search form styles for Divi theme
+* Dev - Use new block_categories_all filter for blocks
+* Dev - Add awsLoaded js event
 
 = 2.31 ( 2021-07-05 ) =
 * Update - Plugin settings page

@@ -267,6 +267,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_exclude_products', array( $this, 'wcvo_exclude_products' ), 1 );
             }
 
+            // Dynamic Content for Elementor plugin
+            if ( function_exists( 'dce_load' ) ) {
+                add_action( 'wp_footer', array( $this, 'dce_scripts' ) );
+            }
+
         }
 
         /**
@@ -318,6 +323,16 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Advanced Woo Labels plugin
             if ( function_exists( 'AWL' ) || function_exists( 'AWL_PRO' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-awl.php' );
+            }
+
+            // Products Visibility by User Roles plugin
+            if ( class_exists( 'Addify_Products_Visibility' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-products-visibility.php' );
+            }
+
+            // WPBakery plugin
+            if ( defined( 'WPB_VC_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-wpbakery.php' );
             }
 
         }
@@ -1377,7 +1392,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
                 }
 
-                $html = '<style>.et_search_outer .aws-container { position: absolute;right: 40px;top: 20px; }</style>' . $html;
+                $html = '<style>.et_search_outer .aws-container { position: absolute;right: 40px;top: 20px; top: calc( 100% - 60px ); }</style>' . $html;
                 $html = trim(preg_replace('/\s\s+/', ' ', $html));
                 $html = preg_replace( $pattern, $form, $html );
 
@@ -1871,9 +1886,9 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         'terms' => $isAnd ? $idsAnd : $idsOr,
                         'operator' => $operator
                     );
-                }
 
-                if ( strpos($key, 'product_tag') !== false ) {
+                }
+                elseif ( strpos($key, 'product_tag') !== false ) {
 
                     $idsAnd = explode(',', $param);
                     $idsOr = explode('|', $param);
@@ -1883,10 +1898,49 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         'terms' => $isAnd ? $idsAnd : $idsOr,
                         'operator' => $operator
                     );
-                }
 
-                if ( strpos($key, 'pr_onsale') !== false ) {
+                }
+                elseif ( strpos( $key, 'pr_onsale' ) !== false ) {
                     $filters['on_sale'] = true;
+                }
+                elseif ( strpos( $key, 'filter_' ) === 0 ) {
+
+                    $taxonomy = str_replace( 'filter_', '', $key );
+                    if ( preg_match( '/([a-z]+?)_[\d]/', $taxonomy, $matches )  ) {
+                        $taxonomy = $matches[1];
+                    }
+
+                    $idsAnd = explode(',', $param);
+                    $idsOr = explode('|', $param);
+                    $isAnd = count($idsAnd) > count($idsOr);
+                    $operator = $isAnd ? 'AND' : 'OR';
+
+                    $terms_arr = $isAnd ? $idsAnd : $idsOr;
+
+                    if ( preg_match( '/[a-z]/', $param ) ) {
+                        $new_terms_arr = array();
+                        foreach ( $terms_arr as $term_slug ) {
+                            $term = get_term_by('slug', $term_slug, $taxonomy );
+                            if ( $term ) {
+                                $new_terms_arr[] = $term->term_id;
+                            }
+                            if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                                $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+                                if ( $term ) {
+                                    $new_terms_arr[] = $term->term_id;
+                                }
+                            }
+                        }
+                        if ( $new_terms_arr ) {
+                            $terms_arr = $new_terms_arr;
+                        }
+                    }
+
+                    $filters['tax'][$taxonomy] = array(
+                        'terms' => $terms_arr,
+                        'operator' => $operator
+                    );
+
                 }
 
             }
@@ -1949,6 +2003,34 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
             return $exclude_products;
         }
+
+        /*
+         * Load  Dynamic Content for Elementor plugin scripts for search page
+         */
+        public function dce_scripts() {
+
+            if ( ! isset( $_GET['s'] ) || ! isset( $_GET['post_type'] ) || $_GET['post_type'] !== 'product' || ! isset( $_GET['type_aws'] ) ) {
+                return;
+            }
+
+            ?>
+
+            <script>
+                window.addEventListener('load', function() {
+                    if ( typeof jQuery !== 'undefined' ) {
+                        var $navItems = jQuery('.dce-page-numbers a.page-numbers');
+                        if ( $navItems.length > 0 ) {
+                            $navItems.each(function(){
+                                var s = encodeURIComponent( '<?php echo $_GET['s']; ?>' );
+                                var href = jQuery(this).attr( 'href' ) + '&post_type=product&type_aws=true&s=' + s;
+                                jQuery(this).attr( 'href', href );
+                            });
+                        }
+                    }
+                }, false);
+            </script>
+
+        <?php }
 
     }
 

@@ -467,6 +467,34 @@ AwsHooks.filters = AwsHooks.filters || {};
                 return check;
             },
 
+            createCustomEvent: function( event, params ) {
+
+                var customEvent = false;
+                params = params || null;
+
+                if ( typeof window.CustomEvent === "function" ) {
+                    customEvent = new CustomEvent( event, { bubbles: true, cancelable: true, detail: params } );
+
+                }
+                else if ( document.createEvent ) {
+                    customEvent = document.createEvent( 'CustomEvent' );
+                    customEvent.initCustomEvent( event, true, true, params );
+                }
+
+                return customEvent;
+
+            },
+
+            createAndDispatchEvent: function( obj, event, params ) {
+
+                var customEvent = methods.createCustomEvent( event, params );
+
+                if ( customEvent ) {
+                    obj.dispatchEvent( customEvent );
+                }
+
+            }
+
         };
 
 
@@ -517,6 +545,9 @@ AwsHooks.filters = AwsHooks.filters || {};
 
         var d = self.data(pluginPfx);
 
+
+        // AWS is fully loaded
+        methods.createAndDispatchEvent( document, 'awsLoaded', { instance: instance, form: self, data: d } );
 
 
         if ( $searchForm.length > 0 ) {
