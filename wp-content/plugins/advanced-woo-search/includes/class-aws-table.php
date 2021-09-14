@@ -81,6 +81,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          */
         public function reindex_table( $data = false ) {
 
+            ob_start();
+
             global $wpdb;
 
             $index_meta = $data ? $data : $_POST['data'];
@@ -175,6 +177,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 }
 
             }
+
+            ob_end_clean();
 
             if ( $data ) {
                 return $index_meta;
@@ -328,6 +332,15 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             dbDelta( $sql );
+
+            if ( $wpdb->last_error ) {
+
+                if ( strpos( $wpdb->last_error, 'COLLATION' ) !== false ) {
+                    $sql = str_replace( " COLLATE $wpdb->collate", '', $sql );
+                    dbDelta( $sql );
+                }
+
+            }
 
             do_action( 'aws_create_index_table' );
 

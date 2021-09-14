@@ -79,7 +79,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                     requests[i].abort();
                 }
 
-                if ( d.showPage == 'ajax_off' ) {
+                if ( ! d.ajaxSearch ) {
                     return;
                 }
 
@@ -531,6 +531,7 @@ AwsHooks.filters = AwsHooks.filters || {};
             lang : ( self.data('lang') !== undefined ) ? self.data('lang') : false,
             showLoader: ( self.data('show-loader') !== undefined ) ? self.data('show-loader') : true,
             showMore: ( self.data('show-more') !== undefined ) ? self.data('show-more') : true,
+            ajaxSearch: ( self.data('ajax-search') !== undefined ) ? self.data('ajax-search') : true,
             showPage: ( self.data('show-page') !== undefined ) ? self.data('show-page') : true,
             showClear: ( self.data('show-clear') !== undefined ) ? self.data('show-clear') : false,
             mobileScreen: ( self.data('mobile-screen') !== undefined ) ? self.data('mobile-screen') : false,

@@ -175,6 +175,50 @@ if ( ! class_exists( 'AWS_Wholesale' ) ) :
             }
 
             $products_ids = array();
+            $meta_query = array();
+
+            if ( is_user_logged_in() && !empty( $all_registered_wholesale_roles ) && isset( $all_registered_wholesale_roles[$user_role] )
+                && get_option( 'wwpp_settings_only_show_wholesale_products_to_wholesale_users', false ) === 'yes' ) {
+
+                $meta_query = array(
+                    'relation' => 'OR',
+                    array(
+                        'relation' => 'AND',
+                        array(
+                            'key' => 'wwpp_product_wholesale_visibility_filter',
+                            'value'   => 'all',
+                            'compare' => '!=',
+                        ),
+                        array(
+                            'key' => 'wwpp_product_wholesale_visibility_filter',
+                            'value'   => $user_role,
+                            'compare' => '!=',
+                        )
+                    ),
+                    array(
+                        'key' => 'wholesale_customer_wholesale_price',
+                        'compare' => 'NOT EXISTS'
+                    ),
+                );
+
+            } else {
+
+                $meta_query = array(
+                    'relation' => 'AND',
+                    array(
+                        'key' => 'wwpp_product_wholesale_visibility_filter',
+                        'value'   => 'all',
+                        'compare' => '!=',
+                    ),
+                    array(
+                        'key' => 'wwpp_product_wholesale_visibility_filter',
+                        'value'   => $user_role,
+                        'compare' => '!=',
+                    )
+                );
+
+            }
+
             $restricted_products = get_posts( array(
                 'posts_per_page'      => -1,
                 'fields'              => 'ids',
@@ -187,32 +231,11 @@ if ( ! class_exists( 'AWS_Wholesale' ) ) :
                 'orderby'             => 'ID',
                 'order'               => 'DESC',
                 'lang'                => '',
-                'meta_query' => array(
-                    array(
-                        'key' => 'wwpp_product_wholesale_visibility_filter',
-                        'compare' => 'EXISTS',
-                    )
-                )
+                'meta_query'          => $meta_query
             ) );
 
             if ( $restricted_products ) {
-                foreach ($restricted_products as $restricted_product_id) {
-
-                    $custom_fields = get_post_meta( $restricted_product_id, 'wwpp_product_wholesale_visibility_filter' );
-                    $custom_price = get_post_meta( $restricted_product_id, 'wholesale_customer_wholesale_price' );
-
-                    if ( $custom_fields && ! empty( $custom_fields ) && $custom_fields[0] !== 'all' && $custom_fields[0] !== $user_role ) {
-                        $products_ids[] = $restricted_product_id;
-                        continue;
-                    }
-
-                    if ( is_user_logged_in() && !empty( $all_registered_wholesale_roles ) && isset( $all_registered_wholesale_roles[$user_role] )
-                        && get_option( 'wwpp_settings_only_show_wholesale_products_to_wholesale_users', false ) === 'yes' && ! $custom_price ) {
-                        $products_ids[] = $restricted_product_id;
-                        continue;
-                    }
-
-                }
+                $products_ids = $restricted_products;
             }
 
             return $products_ids;

@@ -65,7 +65,7 @@ msgstr "Очищает кеш от всех результатов поиска"
 
 #: includes/options.php:111
 msgid ""
-"Smart scrapping sentences with searching terms from product description."
+"Smart scraping sentences with searching terms from product description."
 msgstr "Умные списки предложений с поисковыми терминами из описания продукта."
 
 #: includes/options.php:112

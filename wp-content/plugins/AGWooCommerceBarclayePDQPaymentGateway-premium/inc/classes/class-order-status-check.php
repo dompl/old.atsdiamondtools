@@ -59,6 +59,11 @@ class AG_ePDQ_order_status_check {
             $environment_url = AG_ePDQ_Helpers::get_enviroment_url('querydirect');
             $accepted = array(4, 5, 9);
 
+            // Is auto check enabled?
+			if($ePDQ_settings->statusCheck === 'yes') {
+				return;
+			}
+
             // Check order is using our plugin
             if($order->get_payment_method() !== 'epdq_checkout') {
                 return;
@@ -79,21 +84,16 @@ class AG_ePDQ_order_status_check {
 
 
 
-            if (empty($settings['USERID'])) {
+            if (empty($settings['USERID']) || empty($settings['PSWD'])) {
                 AG_ePDQ_Helpers::ag_log('AG Status check failed: API username has not been set.', 'debug', $ePDQ_settings->debug);
-                $order->add_order_note('AG Status check failed: API username has not been set.');
-            }
-    
-            if (empty($settings['PSWD'])) {
-                AG_ePDQ_Helpers::ag_log('AG Status check failed: API password has not been set.', 'debug', $ePDQ_settings->debug);
-                $order->add_order_note('AG Status check failed: API password has not been set.');
+                $order->add_order_note('AG Status check failed: API details not set. <br />Check the guide on hoe to set up <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/how-to-setup-epdq-status-check/" target="_blank">here</a>.');
             }
 
-            if (empty($settings['PSWD']) && empty($settings['USERID'])) {
+            if (empty($settings['PSWD']) || empty($settings['USERID'])) {
                 return;
             }
 
-            // Status check has ran log
+            // Status check has run log
             $auto_status_ran = array(
                 'ag_auto_check_ran'  =>	'Yes',       
             );
@@ -225,7 +225,7 @@ class AG_ePDQ_order_status_check {
 			
 			if ( 0 < $order->get_total() - $order->get_total_refunded() || 0 < absint( $order->get_item_count() - $order->get_item_count_refunded() ) ) {
 			
-				echo '<button id="ag-check-status"  type="button" class="button" data-order_url="'. esc_attr(get_edit_post_link($order->get_id()))  .'" data-order_id="'. esc_attr($order->get_id())  .'">AG ePDQ Order Status Check</button>';
+				echo '<button id="ag-check-status"  type="button" class="button" data-order_url="'. esc_attr(get_edit_post_link($order->get_id()))  .'" data-order_id="'. esc_attr($order->get_id())  .'" data-plugin="'. AG_path .'">AG ePDQ Order Status Check</button>';
 				return;
 			
 			}

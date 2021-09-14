@@ -350,6 +350,22 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         </tr>
                         <?php break;
 
+                    case 'html':
+                        $custom_html = isset( $value['html'] ) ? $value['html'] : '';
+                        $description = isset( $value['desc'] ) ? $value['desc'] : '';
+                        ?>
+                        <tr valign="top">
+                            <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
+                            <td>
+                                <?php echo $value['html']; ?>
+                                <?php if ( $description ): ?>
+                                    <span class="description"><?php echo $description; ?></span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+
+                        <?php break;
+
                 }
 
             }

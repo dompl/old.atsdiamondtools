@@ -549,7 +549,7 @@ class AG_ePDQ_Wizard_steps
 
             <section class="callout-yellow">
                 <h3><?php echo __('Note', 'ag_epdq_server'); ?></h3>
-                <p><?php echo __('In the description field, you will most likely find an error code, something like <strong>unknown order/1/r</strong> if you do you can have a look <a href="https://we-are-ag.helpscoutdocs.com/article/41-error-codes" target="_blank">here</a> at the troubleshooting error codes. There you will find out what the issues is and what is needed to fix it.', 'ag_epdq_server'); ?></p>
+                <p><?php echo __('In the description field, you will most likely find an error code, something like <strong>unknown order/1/r</strong> if you do you can have a look <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/error-codes/" target="_blank">here</a> at the troubleshooting error codes. There you will find out what the issues is and what is needed to fix it.', 'ag_epdq_server'); ?></p>
             </section>
 
             <p class="setup-text">
@@ -669,12 +669,12 @@ class AG_ePDQ_Wizard_steps
             <h2><?php echo __('More Resources', 'ag_epdq_server'); ?></h2>
 				<ul>
                     <li class="documentation">
-                        <a href="https://we-are-ag.helpscoutdocs.com/article/45-setup" target="_blank">
+                        <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/" target="_blank">
                         <?php echo __('Read the Documentation', 'ag_epdq_server'); ?>
                         </a>
                     </li>
                     <li class="troubleshooting">
-                        <a href="https://we-are-ag.helpscoutdocs.com/category/33-category" target="_blank">
+                        <a href="https://weareag.co.uk/docs/troubleshooting-barclays-epdq-payment-gateway/" target="_blank">
                         <?php echo __('See the troubleshooting section', 'ag_epdq_server'); ?>
                         </a>
 					</li>

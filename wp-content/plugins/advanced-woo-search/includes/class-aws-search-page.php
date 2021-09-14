@@ -88,6 +88,15 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             // FacetWP support
             add_filter( 'facetwp_pre_filtered_post_ids', array( $this, 'facetwp_pre_filtered_post_ids' ), 10, 2 );
 
+            // Total number of search results
+            add_filter( 'aws_page_results', array( $this, 'aws_page_results' ), 1 );
+
+            // Number of search results per page
+            add_filter( 'aws_posts_per_page', array( $this, 'aws_posts_per_page' ), 1 );
+
+            // Change default search page query
+            add_filter( 'aws_search_page_custom_data', array( $this, 'aws_search_page_custom_data' ), 1 );
+
         }
 
         /**
@@ -146,7 +155,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true : false;
 
-            if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $query->query_vars['s'] ) && $query->query && isset( $query->query['fields'] ) && $query->query['fields'] == 'ids' &&
+            if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $query->query_vars['s'] ) && $query->query &&
                 ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
             )
             {
@@ -580,6 +589,39 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             return $new_posts;
 
+        }
+
+        /*
+         * Total maximal number of search results for results pages
+         */
+        public function aws_page_results( $num ) {
+            $search_page_res_num = AWS()->get_settings( 'search_page_res_num' );
+            if ( $search_page_res_num ) {
+                $num = intval( $search_page_res_num );
+            }
+            return $num;
+        }
+
+        /*
+         * Number of search results per page
+         */
+        public function aws_posts_per_page( $num ) {
+            $search_page_res_per_page = AWS()->get_settings( 'search_page_res_per_page' );
+            if ( $search_page_res_per_page ) {
+                $num = intval( $search_page_res_per_page );
+            }
+            return $num;
+        }
+
+        /*
+         * Change default search page query
+         */
+        public function aws_search_page_custom_data( $data ) {
+            $search_page_query = AWS()->get_settings( 'search_page_query' );
+            if ( $search_page_query && $search_page_query === 'posts_pre_query' ) {
+                $data['force_ids'] = true;
+            }
+            return $data;
         }
 
     }

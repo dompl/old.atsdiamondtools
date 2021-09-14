@@ -66,7 +66,7 @@ msgstr "Cache löschen für alle Suchergebnisse"
 
 #: includes/options.php:111
 msgid ""
-"Smart scrapping sentences with searching terms from product description."
+"Smart scraping sentences with searching terms from product description."
 msgstr ""
 "Intelligente Verkürzung von Sätzen mit Suchbegriffen aus der "
 "Produktbeschreibung."

@@ -71,7 +71,13 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
             }
 
-            echo json_encode( $this->search() );
+            ob_start();
+
+            $search_results = $this->search();
+
+            ob_end_clean();
+
+            echo json_encode( $search_results );
 
             die;
 
@@ -416,7 +422,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
 
             if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
-                $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", $current_lang );
+                $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", '%' . $wpdb->esc_like( $current_lang ) . '%' );
             }
 
             /**
@@ -575,7 +581,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     }
 
-
                     if ( $show_price === 'true' && ( $product->is_in_stock() || ( ! $product->is_in_stock() && $show_outofstockprice === 'true' ) ) ) {
                         $price = $product->get_price_html();
                         $price = preg_replace("/<a\s(.+?)>(.+?)<\/a>/is", "<span>$2</span>", $price);
@@ -703,6 +708,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             foreach( $this->data['search_terms'] as $search_in ) {
 
+                $search_in = preg_quote( $search_in, '/' );
                 $exact_words[] = '\b' . $search_in . '\b';
 
                 if ( strlen( $search_in ) > 1 ) {
@@ -766,6 +772,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $pattern = array();
 
             foreach( $this->data['search_terms'] as $search_in ) {
+
+                $search_in = preg_quote( $search_in, '/' );
 
                 if ( strlen( $search_in ) > 1 ) {
                     $pattern[] = '(' . $search_in . ')+';

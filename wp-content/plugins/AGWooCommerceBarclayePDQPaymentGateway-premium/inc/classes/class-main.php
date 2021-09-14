@@ -22,28 +22,27 @@ function init_ag_epdq()
     class epdq_checkout extends WC_Payment_Gateway
     {
 
-
         /**
          * Plugin Doc link
          *
          * @var string
          */
-        public static $AG_ePDQ_doc = "https://we-are-ag.helpscoutdocs.com/";
+	    private static $AG_ePDQ_doc = "https://weareag.co.uk/docs/";
         public $settings;
         public $form_fields;
+	    private  static $test_url = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
+	    private  static $live_url = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
+	    private  static $refund_test = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
+	    private  static $refund_live = 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
 
 
-        public function __construct()
+	    public function __construct()
         {
 
             $this->id = 'epdq_checkout';
             $this->method_title = 'AG ePDQ Checkout';
             $this->icon = apply_filters('woocommerce_epdq_checkout_icon', '');
             $this->has_fields = false;
-            $this->test_url = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
-            $this->live_url = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
-            $this->refund_test = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-            $this->refund_live = 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
             $this->notice = 'no';
             $this->status = 'test';
 
@@ -52,11 +51,7 @@ function init_ag_epdq()
                 return;
             }
 
-            if ($this->get_option('refund') === 'yes') {
-                $this->init_form_fields_refund();
-            } else {
-                $this->init_form_fields();
-            }
+            $this->init_form_fields();
             $this->init_settings();
 
 
@@ -85,6 +80,7 @@ function init_ag_epdq()
             add_action('woocommerce_api_epdq_checkout', array($this, 'check_response'));
 
             add_action('admin_head', array('AG_ePDQ_Helpers', 'add_disable_to_input'));
+	        add_action( 'admin_enqueue_scripts', array($this, 'admin_script') );
         }
 
         /**
@@ -97,6 +93,17 @@ function init_ag_epdq()
             $this->form_fields = AG_ePDQ_Settings::form_fields();
         }
 
+        public function admin_script() {
+
+	        $screen = get_current_screen();
+
+	        if ( 'woocommerce_page_wc-settings' !== $screen->base ) {
+		        return;
+	        }
+
+	        wp_enqueue_script('ePDQ_settings_script', AG_ePDQ_server_path . 'inc/assets/js/admin-script.js');
+        }
+
         /**
          * Plugin settings with refund option
          *
@@ -104,7 +111,7 @@ function init_ag_epdq()
          */
         public function init_form_fields_refund()
         {
-            $this->form_fields = AG_ePDQ_Settings::form_fields_refund();
+            //$this->form_fields = AG_ePDQ_Settings::form_fields_refund();
         }
 
         /**
@@ -143,13 +150,14 @@ function init_ag_epdq()
 
             $description = '';
 
-            if ($this->notice === 'yes') {
+            if ( $this->notice === 'yes') {
                 $description .= $this->display_redirect_message();
             } else {
                 $description .= $this->get_option('description');
             }
 
-            if ($this->status === 'test') {
+	        /** @noinspection PhpUndefinedFieldInspection */
+	        if ( $this->status === 'test') {
                 $description .= $this->display_test_message();
             }
 
@@ -403,8 +411,8 @@ function init_ag_epdq()
             }
 
             if (isset($this->status) && ($this->status === 'test' || $this->status === 'live')) {
-                if ($this->status === 'test') $url = $this->test_url;
-                if ($this->status === 'live') $url = $this->live_url;
+                if ($this->status === 'test') $url = self::$test_url;
+                if ($this->status === 'live') $url = self::$live_url;
 
                 echo '<form action="' . esc_url_raw($url) . '" method="post" id="epdq_payment_form">';
                 echo implode('', $epdq_args);
@@ -477,7 +485,7 @@ function init_ag_epdq()
 
                 // Passing id
                 if (!isset($datacheck['PARAMVAR'])) {
-                    AG_ePDQ_Helpers::ag_log('PARAMVAR parameter is missing, please read the docs ' . self::$AG_ePDQ_doc . 'article/106-pending-failed-transactions', 'warning', $this->debug);
+                    AG_ePDQ_Helpers::ag_log('PARAMVAR parameter is missing, please read the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/pending-failed-transactions/', 'warning', $this->debug);
                 } else {
                     $check_data['idOrder'] = AG_ePDQ_Helpers::AG_get_request('PARAMVAR');
                 }
@@ -511,19 +519,19 @@ function init_ag_epdq()
                             if ($this->threeds === 'yes') {
                                 AG_ePDQ_Helpers::ag_log('Extra parameters are required to be sent back when using the AG 3D secure score system, please check through the trouble shooting in the plugin docs.', 'warning', $this->debug);
                             } else {
-                                AG_ePDQ_Helpers::ag_log('Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'article/88-transaction-is-unsuccessful-due-to-a-sha-out-issue', 'warning', $this->debug);
+                                AG_ePDQ_Helpers::ag_log('Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/transaction-is-unsuccessful-due-to-a-sha-out-issue/', 'warning', $this->debug);
                             }
                             // SHA-Out check fail
                             wp_die('Transaction is unsuccessful due to a SHA-Out issue');
                         }
                     } else {
                         // SHA-Out not set
-                        AG_ePDQ_Helpers::ag_log('You dont have SHA-out set, for improved security we recommend you set this. Please check the docs ' . self::$AG_ePDQ_doc . 'article/88-transaction-is-unsuccessful-due-to-a-sha-out-issue', 'warning', $this->debug);
+                        AG_ePDQ_Helpers::ag_log('You dont have SHA-out set, for improved security we recommend you set this. Please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/transaction-is-unsuccessful-due-to-a-sha-out-issue/', 'warning', $this->debug);
                         $this->successful_transaction($check_data);
                     }
                 } else {
                     // Nonce check fail
-                    AG_ePDQ_Helpers::ag_log('Security check fail, please check the docs ' . self::$AG_ePDQ_doc . 'article/86-security-check-fail', 'warning', $this->debug);
+                    AG_ePDQ_Helpers::ag_log('Security check fail, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/security-check-fail/', 'warning', $this->debug);
                     wp_die('Security check fail.');
                 }
             } else {
@@ -557,7 +565,8 @@ function init_ag_epdq()
                 $datatocheck['woocs_order_emails_is_sending'],
                 $datatocheck['q'],
                 $datatocheck['somdn_error_logs_export_errors'],
-                $datatocheck['inner_section']
+                $datatocheck['inner_section'],
+	            $datatocheck['woof_parse_query']
             );
 
             // 3D score check
@@ -628,7 +637,7 @@ function init_ag_epdq()
 
 
             $order_notes = array(
-                'Order ID                            : ' => $args['ORDERID'] = $args['ORDERID'] ?? '',
+                'Order ID                            : ' => $args['ORDERID'] ?? '',
                 'Amount                              : ' => $args['AMOUNT'] = $args['AMOUNT'] ?? '',
                 'Order Currency                      : ' => $args['CURRENCY'] = $args['CURRENCY'] ?? '',
                 'Payment Method                      : ' => $args['PM'] = $args['PM'] ?? '',
@@ -773,8 +782,8 @@ function init_ag_epdq()
             $refund_amount = $amount * 100;
             $transaction_id = get_post_meta($order_id, 'PAYID', true);
 
-            if ($this->status === 'test') $environment_url = $this->refund_test;
-            if ($this->status === 'live') $environment_url = $this->refund_live;
+            if ($this->status === 'test') $environment_url = self::$refund_test;
+            if ($this->status === 'live') $environment_url = self::$refund_live;
 
             if (!$transaction_id) {
                 AG_ePDQ_Helpers::ag_log('Refund failed: Transaction ID not found.', 'debug', $this->debug);

@@ -19,7 +19,7 @@ class AG_welcome_screen {
 	 * Doc url
 	 * @var string
 	 */
-	public static $AG_doc_url = 'https://we-are-ag.helpscoutdocs.com/';
+	public static $AG_doc_url = 'https://weareag.co.uk/docs/';
 
 
 	/**
@@ -147,7 +147,7 @@ class AG_welcome_screen {
 								<div class="card-body">
 									<h3>Documentation</h3>
 									<p>Have a read of the plugin documentation.</p>
-									<a target="_blank" href="<?php echo self::$AG_doc_url; ?>collection/<?php echo self::$args['collection']; ?>" class="ag-button" target="_blank">Documentation</a>
+									<a target="_blank" href="<?php echo self::$AG_doc_url . self::$args['collection']; ?>" class="ag-button" target="_blank">Documentation</a>
 								</div>
 							</div>
 						</div>

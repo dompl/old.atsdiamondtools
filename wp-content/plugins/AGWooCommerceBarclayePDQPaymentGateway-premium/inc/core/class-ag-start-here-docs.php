@@ -32,7 +32,7 @@ class AG_start_here_docs {
 	 * Doc url
 	 * @var string
 	 */
-    public static $AG_doc_url = 'https://we-are-ag.helpscoutdocs.com/';
+    public static $AG_doc_url = 'https://weareag.co.uk/docs/';
     
 
     public static function get_doc_links() {
@@ -40,48 +40,44 @@ class AG_start_here_docs {
 		if (!class_exists('AG_ePDQ_Helpers')) {
             return;
 		}
-		
-		$return = array();
-        $url    = self::$AG_doc_url . self::$args['start_here'];
-		$transient_name = self::$args['plugin_slug'] . '_get_doc_links';
-		
-		$docs_got = get_transient( $transient_name );
 
-        if( empty($docs_got)) {
-		
-			$dom = new DOMDocument();
-			libxml_use_internal_errors(true);
+	    $return = array();
+	    $url = self::$AG_doc_url . self::$args['start_here'];
+	    $transient_name = self::$args['plugin_slug'] . '_get_doc_links_new_doc';
 
-			$html = wp_remote_retrieve_body(wp_safe_remote_get(esc_url($url)));
-			$dom->loadHTML($html);
-			$docs = $dom->getElementsByTagName( 'ul' );
+	    if (!get_transient($transient_name) !== null) {
 
+		    $dom = new DOMDocument();
+		    libxml_use_internal_errors(true);
 
-			foreach ( $docs as $doc ) {
-				$classes = $doc->getAttribute( 'class' );
+		    $html = wp_remote_retrieve_body(wp_safe_remote_get(esc_url($url)));
+		    $dom->loadHTML($html);
+		    $docs = $dom->getElementsByTagName('ul');
 
-				if ( strpos( $classes, 'articleList' ) === false ) {
-					continue;
-				}
+		    foreach ($docs as $doc) {
+			    $classes = $doc->getAttribute('class');
 
-				$links = $doc->getElementsByTagName( 'a' );
+			    if (strpos($classes, 'bpress-section-list') === false) {
+				    continue;
+			    }
 
-				foreach ( $links as $link ) {
-					$return[] = array(
-						'href'  => AG_ePDQ_Helpers::AG_escape( $link->getAttribute( 'href' ) ),
-						'title' => AG_ePDQ_Helpers::AG_escape( $link->nodeValue, ENT_QUOTES ),
-					);
-				}
-			}
+			    $links = $doc->getElementsByTagName('a');
 
 
+			    foreach ($links as $link) {
+				    $return[] = array(
+					    'href' => AG_ePDQ_Helpers::AG_escape($link->getAttribute('href')),
+					    'title' => AG_ePDQ_Helpers::AG_escape($link->nodeValue, ENT_QUOTES),
+				    );
+			    }
 
-			set_transient( $transient_name, $return, 30 * DAY_IN_SECONDS );
+		    }
 
-		}
-		
+		    set_transient($transient_name, $return, 30 * DAY_IN_SECONDS);
 
-		return $return;
+	    }
+
+	    return $return;
 
 	}
 
@@ -91,17 +87,17 @@ class AG_start_here_docs {
 		if (!class_exists('AG_ePDQ_Helpers')) {
             return;
         }
-		
-		$data = self::get_doc_links();
-		$transient_name = self::$args['plugin_slug'] .'_get_doc_links';
-		$transient = get_transient( $transient_name );
-		
-		?>
 
-		<ol>
-			<?php foreach ( $transient as $link ) { ?>
+		$transient_name = self::$args['plugin_slug'] . '_get_doc_links_new_doc';
+		$data = get_transient($transient_name);
+		if (empty($data)) {
+			$data = self::get_doc_links();
+		} ?>
+
+        <ol>
+			<?php foreach ($data as $link) { ?>
 				<li>
-					<a href="<?php echo esc_attr( 'https://we-are-ag.helpscoutdocs.com' . AG_ePDQ_Helpers::AG_decode( $link['href'] ) ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank"><?php echo AG_ePDQ_Helpers::AG_decode( $link['title'] ); ?></a>
+					<a href="<?php echo esc_attr( AG_ePDQ_Helpers::AG_decode( $link['href'] ) ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=insideplugin" target="_blank"><?php echo AG_ePDQ_Helpers::AG_decode( $link['title'] ); ?></a>
 				</li>
 			<?php } ?>
 		</ol>

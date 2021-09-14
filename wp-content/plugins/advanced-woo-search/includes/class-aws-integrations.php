@@ -128,6 +128,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                 if ( 'Astra' === $this->current_theme ) {
                     add_filter( 'astra_get_search_form', array( $this, 'astra_markup' ), 999999 );
+                    add_filter( 'aws_searchbox_markup', array( $this, 'astra_aws_searchbox_markup' ), 1 );
                     add_action( 'wp_head', array( $this, 'astra_head_action' ) );
                 }
 
@@ -228,6 +229,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 1 );
                 add_filter( 'aws_products_order_by', array( $this, 'avada_aws_products_order_by' ), 1 );
                 add_filter( 'post_class', array( $this, 'avada_post_class' ) );
+                add_filter( 'aws_search_page_custom_data', array( $this, 'avada_modify_s_page_query' ) );
             }
 
             if ( 'Electro' === $this->current_theme ) {
@@ -238,6 +240,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             if ( class_exists( 'FacetWP' ) ) {
                 add_filter( 'facetwp_filtered_post_ids', array( $this, 'facetwp_filtered_post_ids' ), 1 );
                 add_filter( 'aws_searchpage_enabled', array( $this, 'facetwp_aws_searchpage_enabled' ), 1 );
+                add_filter( 'aws_search_page_custom_data', array( $this, 'facetwp_aws_search_page_custom_data' ), 1 );
             }
 
             // Product Visibility by User Role for WooCommerce plugin
@@ -333,6 +336,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WPBakery plugin
             if ( defined( 'WPB_VC_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-wpbakery.php' );
+            }
+
+            // WPML plugin
+            if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-wpml.php' );
             }
 
         }
@@ -875,6 +883,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             }
             return $output;
+        }
+
+        /*
+         * Astra theme form markup
+         */
+        public function astra_aws_searchbox_markup( $markup ) {
+            $markup = str_replace( 'aws-container', 'aws-container search-form', $markup );
+            return $markup;
         }
 
         /*
@@ -1511,6 +1527,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '#searchModal form';
             }
 
+            if ( 'Modern Store' === $this->current_theme ) {
+                $selectors[] = '#search-form-container form';
+            }
+
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
@@ -1771,6 +1791,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Avada theme fix search page query
+         */
+        public function avada_modify_s_page_query( $data ) {
+            $data['force_ids'] = true;
+            return $data;
+        }
+
+        /*
          * Electro them update search form markup
          */
         public function electro_searchbox_markup( $markup, $params ) {
@@ -1797,6 +1825,16 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $enabled = false;
             }
             return $enabled;
+        }
+
+        /*
+         * FacetWP - Update search page query
+         */
+        public function facetwp_aws_search_page_custom_data( $data ) {
+            if ( isset( $this->data['facetwp'] ) && $this->data['facetwp'] ) {
+                $data['force_ids'] = true;
+            }
+            return $data;
         }
 
         /*

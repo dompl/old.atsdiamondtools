@@ -32,7 +32,8 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             $min_chars      = AWS()->get_settings( 'min_chars' );
             $show_loader    = AWS()->get_settings( 'show_loader' );
             $show_more      = AWS()->get_settings( 'show_more' );
-            $show_page      = AWS()->get_settings( 'show_page' );
+            $ajax_search    = AWS()->get_settings( 'enable_ajax' );
+            $show_page      = AWS()->get_settings( 'search_page' );
             $show_clear     = AWS()->get_settings( 'show_clear' );
             $mobile_screen  = AWS()->get_settings( 'mobile_overlay' );
             $use_analytics  = AWS()->get_settings( 'use_analytics' );
@@ -60,6 +61,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
                 'data-show-loader'   => $show_loader,
                 'data-show-more'     => $show_more,
                 'data-show-page'     => $show_page,
+                'data-ajax-search'   => $ajax_search,
                 'data-show-clear'    => $show_clear,
                 'data-mobile-screen' => $mobile_screen,
                 'data-use-analytics' => $use_analytics,

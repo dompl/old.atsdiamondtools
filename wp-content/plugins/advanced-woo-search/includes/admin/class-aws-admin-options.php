@@ -201,31 +201,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['general'][] = array(
-                "name"  => __( "Cache results", "advanced-woo-search" ),
-                "desc"  => __( "Turn off if you have old data in the search results after content of products was changed.<br><strong>CAUTION:</strong> can dramatically increase search speed", "advanced-woo-search" ),
-                "id"    => "cache",
-                "value" => 'true',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'  => __( 'On', 'advanced-woo-search' ),
-                    'false'  => __( 'Off', 'advanced-woo-search' ),
-                )
-            );
-
-            $options['general'][] = array(
-                "name"  => __( "Sync index table", "advanced-woo-search" ),
-                "desc"  => __( "Automatically update plugin index table when product content was changed. This means that in search there will be always latest product data.", "advanced-woo-search" ) . '<br>' .
-                    __( "Turn this off if you have any problems with performance.", "advanced-woo-search" ),
-                "id"    => "autoupdates",
-                "value" => 'true',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'  => __( 'On', 'advanced-woo-search' ),
-                    'false'  => __( 'Off', 'advanced-woo-search' ),
-                )
-            );
-
-            $options['general'][] = array(
                 "name"       => __( "Search in", "advanced-woo-search" ),
                 "desc"       => __( "Click on status icon to enable or disable search source.", "advanced-woo-search" ),
                 "table_head" => __( 'Search Source', 'advanced-woo-search' ),
@@ -301,6 +276,51 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            $options['general'][] = array(
+                "name"    => __( "Search results page", "advanced-woo-search" ),
+                "type"    => "heading"
+            );
+
+            $options['general'][] = array(
+                "name"  => __( "Enable results page", "advanced-woo-search" ),
+                "desc"  => __( "Show plugin search results on a separated search results page. Will use your current theme products search results page template.", "advanced-woo-search" ),
+                "id"    => "search_page",
+                "value" => 'true',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
+            $options['general'][] = array(
+                "name"  => __( "Max number of results", "advanced-woo-search" ),
+                "desc"  => __( "Maximal total number of search results. Larger values can lead to slower search speed.", "advanced-woo-search" ),
+                "id"    => "search_page_res_num",
+                "value" => 100,
+                "type"  => "number"
+            );
+
+            $options['general'][] = array(
+                "name"  => __( "Results per page", "advanced-woo-search" ),
+                "desc"  => __( "Number of search results per page. Empty or 0 - use theme default value.", "advanced-woo-search" ),
+                "id"    => "search_page_res_per_page",
+                "value" => '',
+                "type"  => "number"
+            );
+
+            $options['general'][] = array(
+                "name"  => __( "Change query hook", "advanced-woo-search" ),
+                "desc"  => __( "If you have any problems with correct products results on the search results page - try to change this option.", "advanced-woo-search" ),
+                "id"    => "search_page_query",
+                "value" => 'default',
+                "type"  => "radio",
+                'choices' => array(
+                    'default' => __( 'Default', 'advanced-woo-search' ),
+                    'posts_pre_query' => __( 'posts_pre_query', 'advanced-woo-search' ),
+                )
+            );
+
             $options['performance'][] = array(
                 "name"    => __( "Search options", "advanced-woo-search" ),
                 "type"    => "heading"
@@ -325,6 +345,31 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "value" => 300,
                 'min'   => 100,
                 "type"  => "number"
+            );
+
+            $options['performance'][] = array(
+                "name"    => __( "Cache options", "advanced-woo-search" ),
+                "type"    => "heading"
+            );
+
+            $options['performance'][] = array(
+                "name"  => __( "Cache results", "advanced-woo-search" ),
+                "desc"  => __( "Cache search results to increase search speed.", "advanced-woo-search" ) . '<br>' .
+                           __( "Turn off if you have old data in the search results after the content of products was changed.", "advanced-woo-search" ),
+                "id"    => "cache",
+                "value" => 'true',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
+            $options['performance'][] = array(
+                "name"    => __( "Clear cache", "advanced-woo-search" ),
+                "type"    => "html",
+                "desc"    =>__( "Clear cache for all search results.", "advanced-woo-search" ),
+                "html"    => '<div id="aws-clear-cache"><input class="button" type="button" value="' . esc_attr__( 'Clear cache', 'advanced-woo-search' ) . '"><span class="loader"></span></div><br>',
             );
 
             $options['performance'][] = array(
@@ -381,6 +426,19 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            $options['performance'][] = array(
+                "name"  => __( "Sync index table", "advanced-woo-search" ),
+                "desc"  => __( "Automatically update plugin index table when product content was changed. This means that in search there will be always latest product data.", "advanced-woo-search" ) . '<br>' .
+                    __( "Turn this off if you have any problems with performance.", "advanced-woo-search" ),
+                "id"    => "autoupdates",
+                "value" => 'true',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
             // Search Form Settings
             $options['form'][] = array(
                 "name"  => __( "Text for search field", "advanced-woo-search" ),
@@ -413,6 +471,18 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "id"    => "min_chars",
                 "value" => 1,
                 "type"  => "number"
+            );
+
+            $options['form'][] = array(
+                "name"  => __( "AJAX search", "advanced-woo-search" ),
+                "desc"  => __( "Use or not live search feature.", "advanced-woo-search" ),
+                "id"    => "enable_ajax",
+                "value" => 'true',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false' => __( 'Off', 'advanced-woo-search' ),
+                )
             );
 
             $options['form'][] = array(
@@ -464,19 +534,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['form'][] = array(
-                "name"  => __( "Search Results", "advanced-woo-search" ),
-                "desc"  => __( "Choose how to view search results.", "advanced-woo-search" ),
-                "id"    => "show_page",
-                "value" => 'true',
-                "type"  => "radio",
-                'choices' => array(
-                    'true'     => __( 'Both ajax search results and search results page', 'advanced-woo-search' ),
-                    'false'    => __( 'Only ajax search results ( no search results page )', 'advanced-woo-search' ),
-                    'ajax_off' => __( 'Only search results page ( no ajax search results )', 'advanced-woo-search' )
-                )
-            );
-
-            $options['form'][] = array(
                 "name"  => __( "Form Styling", "advanced-woo-search" ),
                 "desc"  => __( "Choose search form layout", "advanced-woo-search" ) . '<br>' . __( "Filter button will be visible only if you have more than one active filter for current search form instance.", "advanced-woo-search" ),
                 "id"    => "buttons_order",
@@ -509,7 +566,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "value" => 'true',
                 "type"  => "radio",
                 'choices' => array(
-                    'true'  => __( "Smart scrapping sentences with searching terms from product description.", "advanced-woo-search" ),
+                    'true'  => __( "Smart scraping sentences with searching terms from product description.", "advanced-woo-search" ),
                     'false' => __( "First N words of product description ( number of words that you choose below. )", "advanced-woo-search" ),
                 )
             );

@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: 4.2
 
 == Description ==
@@ -37,6 +37,15 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.2.5 - 12/08/21 =
+* Change     - Changed status check loading image URL.
+* Change     - Changed logic for API details not set for status check feature.
+* Change     - Added link to docs on how to set up status check (in order note).
+* Change     - Changed doc URL's in debug warnings, we have a new doc site.
+* Change     - Change to start here and troubleshooting links in welcome screen.
+* New        - New setting to disable the auto status check feature from running (Merchants can still do manual checks).
+* Dev        - Re-coded the class-settings.php file to streamline it, new admin JS file also added to show/hide refund & status check API details.
 
 = v4.2.4 - 08/07/21 =
 * Fix        - Hot-fit for unset in SHA_check().
@@ -80,7 +89,7 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * New           - New logic to catch if order contains more than 10 products and replace COM parameter with NULL.
 * New           - New warning if refund settings have not been set in plugin settings.
 * New           - New remote_post() function in helper class (Refund and order status check are now using this).
-* New           - New get_enviroment_url() function in helper class (Refund and order status check are now using this).
+* New           - New get_environment_url() function in helper class (Refund and order status check are now using this).
 * Change        - Storing transaction ID for use in other plugins.
 * Change        - Change language param to use get_locale() function.
 * Change        - Changed how order id is passed to ePDQ.
@@ -154,7 +163,7 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * Tweak         - Extra catch for WOOCS plugin.
 * Dev           - New error log catch, catch all parameters before sending to ePDQ, This is to catch issues with third party plugins adding in parameters to the get_checkout_order_received_url() function.
 * Dev           - Old error log system define removed - AG_ePDQ_debug.
-* Fix           - Fix to stop plugins by pluginus.net (WOOF product filter & WOOCS Currency converter) from breaking the decryption.
+* Fix           - Fix to stop plugins by plugins.net (WOOF product filter & WOOCS Currency converter) from breaking the decryption.
 * Fix           - Fix for some users having issues with Direct HTTP server-to-server request.
 * Checking      - Checking support for new WooCommerce version 4.2+ (Changed tested up to notice).
 
@@ -385,7 +394,7 @@ Automatic updates should work like a charm; as always though, update on a stagin
 = v2.1.0 – 29/09/15  =
 * Fix – Removed unused sections from admin screen.   
 * Fix - Tweaked process for better results.   
-* Feature – Add option for tracking, better debuging.   
+* Feature – Add option for tracking, better debugging.
 * Feature – Changed to new Repo.   
 * Feature – Added RSS feed.   
 

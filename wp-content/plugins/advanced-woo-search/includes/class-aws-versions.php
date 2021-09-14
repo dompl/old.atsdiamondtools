@@ -384,6 +384,40 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
+                if ( version_compare( $current_version, '2.34', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+
+                        if ( isset( $settings['show_page'] ) && ! isset( $settings['search_page'] ) ) {
+                            $search_page_val = $settings['show_page'] === 'false' ? 'false' : 'true';
+                            $settings['search_page'] = $search_page_val;
+                        }
+
+                        if ( isset( $settings['show_page'] ) && ! isset( $settings['enable_ajax'] ) ) {
+                            $search_page_val = $settings['show_page'] === 'ajax_off' ? 'false' : 'true';
+                            $settings['enable_ajax'] = $search_page_val;
+                        }
+
+                        if ( ! isset( $settings['search_page_res_num'] ) ) {
+                            $settings['search_page_res_num'] = '100';
+                        }
+
+                        if ( ! isset( $settings['search_page_res_per_page'] ) ) {
+                            $settings['search_page_res_per_page'] = '';
+                        }
+
+                        if ( ! isset( $settings['search_page_query'] ) ) {
+                            $settings['search_page_query'] = 'default';
+                        }
+
+                        update_option( 'aws_settings', $settings );
+
+                    }
+
+                }
+
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );

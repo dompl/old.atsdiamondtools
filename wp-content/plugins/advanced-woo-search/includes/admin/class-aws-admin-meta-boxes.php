@@ -54,17 +54,6 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
         
                 $html .= '</tr>';
         
-        
-                $html .= '<tr>';
-        
-                    $html .= '<th>' . esc_html__( 'Clear cache', 'advanced-woo-search' ) . '</th>';
-                    $html .= '<td>';
-                        $html .= '<div id="aws-clear-cache"><input class="button" type="button" value="' . esc_attr__( 'Clear cache', 'advanced-woo-search' ) . '"><span class="loader"></span></div><br>';
-                        $html .= '<span class="description">' . esc_html__( 'Clear cache for all search results.', 'advanced-woo-search' ) . '</span>';
-                    $html .= '</td>';
-        
-                $html .= '</tr>';
-        
                 $html .= '</tbody>';
             $html .= '</table>';
 

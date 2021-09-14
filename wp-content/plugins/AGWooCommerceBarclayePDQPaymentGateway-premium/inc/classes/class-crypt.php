@@ -139,10 +139,6 @@ class ePDQ_crypt
 
         if(defined('secure_ePDQ_PSPID') && defined('secure_ePDQ_SHA_in') && defined('secure_ePDQ_SHA_out') && defined('secure_ePDQ_SHA_method') ) {
 
-            //$userid = secure_ePDQ_userid;
-            //$pswd = secure_ePDQ_pswd;
-            //$refid = secure_ePDQ_refid;
-
             $settings = array(
                 'USERID' => secure_ePDQ_userid ?? '',
                 'PSWD' => secure_ePDQ_pswd ?? '',

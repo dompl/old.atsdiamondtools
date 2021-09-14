@@ -44,7 +44,7 @@ msgstr "Az összes keresési eredmény törlése a gyorsítótárból"
 
 #: includes/options.php:111
 msgid ""
-"Smart scrapping sentences with searching terms from product description."
+"Smart scraping sentences with searching terms from product description."
 msgstr ""
 "A keresési kifejezést tartalmazó mondatot jelenítsük meg leírásként a "
 "találat alatt."

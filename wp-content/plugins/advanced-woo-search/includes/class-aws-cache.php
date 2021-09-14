@@ -115,6 +115,15 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
             dbDelta( $sql );
 
+            if ( $wpdb->last_error ) {
+
+                if ( strpos( $wpdb->last_error, 'COLLATION' ) !== false ) {
+                    $sql = str_replace( " COLLATE $wpdb->collate", '', $sql );
+                    dbDelta( $sql );
+                }
+
+            }
+
         }
 
         /*
