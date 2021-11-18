@@ -707,7 +707,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         static public function get_lang() {
 
             $current_lang = false;
-
+            
             if ( ( defined( 'ICL_SITEPRESS_VERSION' ) || function_exists( 'pll_current_language' ) ) ) {
 
                 if ( has_filter('wpml_current_language') ) {
@@ -719,6 +719,10 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             } elseif( function_exists( 'qtranxf_getLanguage' ) ) {
 
                 $current_lang = qtranxf_getLanguage();
+
+            } elseif ( defined( 'FALANG_VERSION' ) ) {
+
+                $current_lang = Falang()->get_current_language()->slug;
 
             }
 

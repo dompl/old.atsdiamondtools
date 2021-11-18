@@ -180,6 +180,8 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
          */
         static public function include_options() {
 
+            $show_out_of_stock = 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ? 'false' : 'true';
+
             $options = array();
 
             $options['general'][] = array(
@@ -591,7 +593,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "name"  => __( "Show out-of-stock", "advanced-woo-search" ),
                 "desc"  => __( "Show out-of-stock products in search", "advanced-woo-search" ),
                 "id"    => "outofstock",
-                "value" => 'true',
+                "value" => $show_out_of_stock,
                 "type"  => "radio",
                 'choices' => array(
                     'true'  => __( 'Show', 'advanced-woo-search' ),

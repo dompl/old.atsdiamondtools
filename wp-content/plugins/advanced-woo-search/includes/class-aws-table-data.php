@@ -310,6 +310,37 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
 
                 }
 
+            }  elseif ( defined( 'FALANG_VERSION' ) ) {
+                $falang_post = new \Falang\Core\Post($data['id']);
+                $is_translated = $falang_post->is_post_type_translatable($falang_post->post_type );
+
+                if ($is_translated){
+                    $languages = Falang()->get_model()->get_languages_list( array( 'hide_default' => true )  );
+
+                    foreach ($languages as $language) {
+                        $translated_post_data = array();
+                        $translated_post_data['id'] = $data['id'];
+                        $translated_post_data['in_stock'] = $data['in_stock'];
+                        $translated_post_data['on_sale'] = $data['on_sale'];
+                        $translated_post_data['visibility'] = $data['visibility'];
+                        $translated_post_data['lang'] = $language->slug;
+                        $translated_post_data['terms'] = array();
+
+                        $post = get_post($data['id']);
+                        $translated_title = $falang_post->translate_post_field($post, 'post_title', $language);
+                        $translated_content = $falang_post->translate_post_field($post, 'post_content', $language);
+                        $translated_excerpt = $falang_post->translate_post_field($post, 'post_excerpt', $language);
+
+                        $translated_post_data['terms']['title'] = $this->options['index']['title'] ? $this->extract_terms( $translated_title, 'title' ) : '';
+                        $translated_post_data['terms']['content'] = $this->options['index']['content'] ? $this->extract_terms( $translated_content, 'content' ) : '';
+                        $translated_post_data['terms']['excerpt'] = $this->options['index']['excerpt'] ? $this->extract_terms( $translated_excerpt, 'excerpt' ) : '';
+                        $translated_post_data['terms']['sku'] = $this->options['index']['sku'] ? $this->extract_terms( $sku, 'sku' ) : '';
+                        $translated_post_data['terms']['id'] = $this->options['index']['id'] ? $this->extract_terms( $data['id'], 'id' ) : '';
+
+                        $this->scraped_data[] = $translated_post_data;
+
+                    }
+                }
             }
 
             $this->scraped_data[] = $data;
@@ -334,6 +365,8 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
                 $lang = pll_get_post_language( $this->id ) ? pll_get_post_language( $this->id ) : pll_default_language();
             } elseif ( function_exists( 'qtranxf_getLanguageDefault' ) ) {
                 $lang = qtranxf_getLanguageDefault();
+            } elseif ( defined( 'FALANG_VERSION' ) ) {
+                $lang = Falang()->get_current_language()->slug;
             }
 
             return $lang;
@@ -361,7 +394,7 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
                 "=",
                 "Ă‚Â¨",
                 "â€™",
-                "â€",
+                "â€",
                 "â€ť",
                 "â€ś",
                 "â€ž",
@@ -415,6 +448,9 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
                         if ( $new_array_key && strlen( $str_item_term ) > 3 && strlen( $new_array_key ) > 2 ) {
                             if ( ! isset( $str_new_array[$new_array_key] ) ) {
                                 $str_new_array[$new_array_key] = $str_item_num;
+                            }
+                            if ( $source === 'sku' ) {
+                                $str_new_array[$str_item_term] = $str_item_num;
                             }
                         } else {
                             if ( ! isset( $str_new_array[$str_item_term] ) ) {

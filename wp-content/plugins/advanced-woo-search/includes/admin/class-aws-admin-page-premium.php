@@ -62,7 +62,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature1.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature1.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -79,7 +79,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature2.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature2.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -96,7 +96,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature3.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature3.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -113,7 +113,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature4.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature4.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -130,7 +130,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature5.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature5.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -147,7 +147,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature6.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature6.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -164,7 +164,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature7.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature7.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -181,7 +181,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature8.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature8.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -198,7 +198,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature9.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature9.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -215,7 +215,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature10.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature10.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -232,7 +232,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature11.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature11.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';
@@ -248,7 +248,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                     echo '</div>';
                     echo '<div class="column">';
                         echo '<div class="img">';
-                            echo '<img alt="" src="' . AWS_URL . '/assets/img/pro/feature12.png' . '" />';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature12.png' . '" />';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';

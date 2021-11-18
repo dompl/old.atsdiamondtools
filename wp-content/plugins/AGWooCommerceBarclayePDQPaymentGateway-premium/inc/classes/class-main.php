@@ -81,7 +81,23 @@ function init_ag_epdq()
 
             add_action('admin_head', array('AG_ePDQ_Helpers', 'add_disable_to_input'));
 	        add_action( 'admin_enqueue_scripts', array($this, 'admin_script') );
+
         }
+
+	    /**
+	     * Validate customer billing address, there is a character limit of 34 for each, this is set by the ePDQ platform.
+	     */
+	    public function validate_fields()
+	    {
+
+		    if ( strlen( $_POST['billing_address_1'] ) > 34 ) {
+			    wc_add_notice( 'Your street address is too long, please also use the second address field.', 'error' );
+		    }
+		    if ( strlen( $_POST['billing_address_2'] ) > 34 ) {
+			    wc_add_notice( 'Your second street address is too long. Please shorten your billing address.', 'error' );
+		    }
+
+	    }
 
         /**
          * Plugin settings
@@ -247,7 +263,6 @@ function init_ag_epdq()
             );
         }
 
-
         /**
          * receipt_page
          *
@@ -291,7 +306,7 @@ function init_ag_epdq()
             $product_id_string = implode(',', $product_ids);
 
             // If the items in the cart add to more than the character limit set by ePDQ then switch to product id.
-            if (strlen($product_list_string) < 99) {
+            if (strlen($product_list_string) < 99 && get_locale() !== 'ar') {
                 $product_list = $product_list_string;
             } elseif (strlen($product_id_string) < 99) {
                 $product_list = $product_id_string;
@@ -353,13 +368,14 @@ function init_ag_epdq()
                         break;
                     case 'year':
                         $billing_period = 'm';
-                        $subscription_interval = '12';
+                        $subscription_interval = WC_Subscriptions_Order::get_subscription_interval($order);;
+	                    //$adv = strtotime("+12 Months");
                         break;
                     case 'month':
                     default:
                         $billing_period = 'm';
                         $subscription_interval = WC_Subscriptions_Order::get_subscription_interval($order);
-                        $adv = strtotime("+1 Months");
+                        //$adv = strtotime("+1 Months");
                         break;
                 }
 
@@ -394,7 +410,7 @@ function init_ag_epdq()
             ksort($fields);
             foreach ($fields as $key => $value) {
                 if ($value == '') continue;
-                $shasign_arg[] = $key . '=' . utf8_encode($value);
+                $shasign_arg[] = $key . '=' . $value;
             }
 
             $shasign = hash(ePDQ_crypt::get_sha_method(), implode($settings['shain'], $shasign_arg) . $settings['shain']);
@@ -407,7 +423,7 @@ function init_ag_epdq()
             $epdq_args = array();
             foreach ($fields as $key => $value) {
                 if ($value === '') continue;
-                $epdq_args[] = '<input type="hidden" name="' . sanitize_text_field($key) . '" value="' . sanitize_text_field($value) . '"/>';
+                $epdq_args[] = '<input type="hidden" name="' . sanitize_text_field($key) . '" value="' . $value . '"/>';
             }
 
             if (isset($this->status) && ($this->status === 'test' || $this->status === 'live')) {
@@ -804,7 +820,7 @@ function init_ag_epdq()
                 return new WP_Error('error', __('Refund failed: API password has not been set.', 'ag_epdq_server'));
             }
 
-            if (get_woocommerce_currency() !== 'GBP' && defined('ePDQ_PSPID')) {
+            if (AG_ePDQ_Helpers::ag_get_order_currency($order) !== 'GBP' && defined('ePDQ_PSPID')) {
                 $PSPID = ePDQ_PSPID;
             } else {
                 $PSPID = $settings['pspid'];

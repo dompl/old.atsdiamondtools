@@ -38,6 +38,13 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.2.6 - 25/10/21 =
+* Fix       - Fixed issue when sending Arabic products to ePDQ.
+* Fix       - Fixed typo in status check error notice.
+* New       - New helper function to get order currency (This is used for refunds and status check).
+* New       - New validate_fields() function to help when customers enter too long street address.
+* Change    - utf8 encode fix.
+
 = v4.2.5 - 12/08/21 =
 * Change     - Changed status check loading image URL.
 * Change     - Changed logic for API details not set for status check feature.
@@ -45,7 +52,7 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * Change     - Changed doc URL's in debug warnings, we have a new doc site.
 * Change     - Change to start here and troubleshooting links in welcome screen.
 * New        - New setting to disable the auto status check feature from running (Merchants can still do manual checks).
-* Dev        - Re-coded the class-settings.php file to streamline it, new admin JS file also added to show/hide refund & status check API details.
+* Dev        -
 
 = v4.2.4 - 08/07/21 =
 * Fix        - Hot-fit for unset in SHA_check().

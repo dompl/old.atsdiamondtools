@@ -817,5 +817,13 @@ endif;
 AWS_Search::factory();
 
 function aws_search( $keyword = '' ) {
-    return AWS_Search::factory()->search( $keyword );
+
+    ob_start();
+
+    $search_results = AWS_Search::factory()->search( $keyword );
+
+    ob_end_clean();
+
+    return $search_results;
+
 }

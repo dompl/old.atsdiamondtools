@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 5.8
-Stable tag: 2.35
+Stable tag: 2.40
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,41 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.40 ( 2021-11-10 ) =
+* Fix - Bug with condition function
+
+= 2.39 ( 2021-11-09 ) =
+* Add - Support for Falang translation plugin
+* Add - Support for WR Nitro theme
+* Add - Support for Deals for WooCommerce plugin
+* Update - Tested with WC 5.9
+* Update - Seamless integration js script
+* Update - Botiga theme support. Fix styles and back to top button
+* Update - Support for OceanWP theme
+* Fix - PHP 8.0 notice for Divi builder search module
+* Fix - Prevent unexpected output when running search function
+* Fix - URL for plugin assets. Remove additional slash
+* Fix - Issue with SKU search for singular terms
+
+= 2.38 ( 2021-10-25 ) =
+* Add - Support for WooCommerce Product Filter by WooBeWoo plugin
+* Add - Quantity change buttons for products search results. Visible on mobile devices
+* Update - Tested with WC 5.8
+* Fix - WOOCS - WooCommerce Currency Switcher plugin support for AJAX pricing update<
+
+= 2.37 ( 2021-10-11 ) =
+* Add - Support for B2BKing plugin
+* Update - Hide out-of-stock items by default if corresponding WC option is enabled
+* Update - Tested with WC 5.7
+
+= 2.36 ( 2021-09-21 ) =
+* Update - Woodmart theme support. Update search results page pagination links
+* Update - Avada theme support. Set number of products per search results page
+* Fix - Taxonomies search by description. Not strip special characters from the search query
+* Fix - Error with not valid scripts loaded for new widgets block editor
+* Fix - Ultimate Member plugin support
+* Fix - Avada theme support for search results page
 
 = 2.35 ( 2021-08-31 ) =
 * Add - Seamless integration for Modern Store theme

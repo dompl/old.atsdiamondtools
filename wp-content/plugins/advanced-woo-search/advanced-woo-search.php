@@ -3,12 +3,12 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 2.35
+Version: 2.40
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 WC requires at least: 3.0.0
-WC tested up to: 5.6.0
+WC tested up to: 5.9.0
 */
 
 
@@ -96,7 +96,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '2.35' );
+        $this->define( 'AWS_VERSION', '2.40' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -169,11 +169,11 @@ final class AWS_Main {
 	 * Load assets for search form
 	 */
 	public function load_scripts() {
-		wp_enqueue_style( 'aws-style', AWS_URL . '/assets/css/common.css', array(), AWS_VERSION );
+		wp_enqueue_style( 'aws-style', AWS_URL . 'assets/css/common.css', array(), AWS_VERSION );
         if ( is_rtl() ) {
-            wp_enqueue_style( 'aws-style-rtl', AWS_URL . '/assets/css/common-rtl.css', array(), AWS_VERSION );
+            wp_enqueue_style( 'aws-style-rtl', AWS_URL . 'assets/css/common-rtl.css', array(), AWS_VERSION );
         }
-        wp_enqueue_script('aws-script', AWS_URL . '/assets/js/common.js', array('jquery'), AWS_VERSION, true);
+        wp_enqueue_script('aws-script', AWS_URL . 'assets/js/common.js', array('jquery'), AWS_VERSION, true);
         wp_localize_script('aws-script', 'aws_vars', array(
             'sale'       => __('Sale!', 'advanced-woo-search'),
             'sku'        => __('SKU', 'advanced-woo-search') . ': ',

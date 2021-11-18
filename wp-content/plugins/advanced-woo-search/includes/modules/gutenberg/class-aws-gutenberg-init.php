@@ -56,16 +56,23 @@ if (!class_exists('AWS_Gutenberg_Init')) :
          */
         public function register_block() {
 
+            global $pagenow;
+
+            $scripts = array( 'wp-blocks', 'wp-editor' );
+            if ( $pagenow && $pagenow === 'widgets.php' && version_compare( get_bloginfo('version'),'5.8', '>=' ) ) {
+                $scripts = array( 'wp-blocks', 'wp-edit-widgets' );
+            }
+
             wp_register_script(
                 'aws-gutenberg-search-block',
-                AWS_URL . '/includes/modules/gutenberg/aws-gutenberg-search-block.js',
-                array('wp-blocks','wp-editor'),
+                AWS_URL . 'includes/modules/gutenberg/aws-gutenberg-search-block.js',
+                $scripts,
                 AWS_VERSION
             );
 
             wp_register_style(
                 'aws-gutenberg-styles-editor',
-                AWS_URL . '/assets/css/common.css',
+                AWS_URL . 'assets/css/common.css',
                 array( 'wp-edit-blocks' ),
                 AWS_VERSION
             );

@@ -82,7 +82,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["navigation"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 465);
+/******/ 	return __webpack_require__(__webpack_require__.s = 467);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -94,7 +94,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["navigation"] =
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["url"]; }());
@@ -129,7 +129,7 @@ function _extends() {
 /***/ 3:
 /***/ (function(module, exports) {
 
-(function() { module.exports = window["lodash"]; }());
+(function() { module.exports = window["wp"]["components"]; }());
 
 /***/ }),
 
@@ -193,7 +193,7 @@ module.exports = {
 /***/ 4:
 /***/ (function(module, exports) {
 
-(function() { module.exports = window["wp"]["components"]; }());
+(function() { module.exports = window["lodash"]; }());
 
 /***/ }),
 
@@ -218,7 +218,7 @@ function invariant(condition, message) {
 
 /***/ }),
 
-/***/ 465:
+/***/ 467:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -251,22 +251,22 @@ __webpack_require__.d(__webpack_exports__, "WooNavigationItem", function() { ret
 var external_wp_element_ = __webpack_require__(0);
 
 // EXTERNAL MODULE: external ["wp","url"]
-var external_wp_url_ = __webpack_require__(14);
+var external_wp_url_ = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/qs/lib/index.js
 var lib = __webpack_require__(32);
 
 // EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(3);
+var external_lodash_ = __webpack_require__(4);
 
 // EXTERNAL MODULE: external ["wp","hooks"]
 var external_wp_hooks_ = __webpack_require__(30);
 
 // EXTERNAL MODULE: external ["wp","components"]
-var external_wp_components_ = __webpack_require__(4);
+var external_wp_components_ = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/history/esm/history.js + 2 modules
-var esm_history = __webpack_require__(51);
+var esm_history = __webpack_require__(52);
 
 // CONCATENATED MODULE: ./packages/navigation/build-module/history.js
 /**
@@ -794,7 +794,7 @@ WooNavigationItem.Slot = ({
 
 /***/ }),
 
-/***/ 48:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +1053,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2118,7 +2118,7 @@ function createMemoryHistory(props) {
 "use strict";
 
 
-var utils = __webpack_require__(48);
+var utils = __webpack_require__(49);
 var formats = __webpack_require__(39);
 var has = Object.prototype.hasOwnProperty;
 
@@ -2404,7 +2404,7 @@ module.exports = function (object, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(48);
+var utils = __webpack_require__(49);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;

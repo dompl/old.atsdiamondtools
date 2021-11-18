@@ -272,6 +272,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                 if ( $terms_desc_search = apply_filters( 'aws_search_terms_description', false ) ) {
                     $relevance_desc = 10 + 2 * $search_term_len;
                     $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", $like );
+                    $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
                 }
 
             }
@@ -299,6 +300,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                 if ( $terms_desc_search = apply_filters( 'aws_search_terms_description', false ) ) {
                     $search_array[] = $wpdb->prepare('( description LIKE %s )', $like);
+                    $search_array[] = $wpdb->prepare('( description LIKE %s )', '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
                 }
 
             }

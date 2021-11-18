@@ -24,7 +24,7 @@ class AWS_WPBakery extends WPBakeryShortCode {
             'description'  	=> __( 'Plugin search form', 'advanced-woo-search'),
             'category'      => __( 'Advanced Woo Search', 'advanced-woo-search'),
             "class"		    => "vc_aws_form",
-            "icon"		    => AWS_URL . '/assets/img/logo-small.png',
+            "icon"		    => AWS_URL . 'assets/img/logo-small.png',
             "controls"	    => "full",
             'params' => array(
 

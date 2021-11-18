@@ -18,7 +18,7 @@ function aws_divi_register_modules() {
 
                 wp_enqueue_style(
                     'aws-divi',
-                    AWS_URL . '/includes/modules/divi/divi.css', array(), AWS_VERSION
+                    AWS_URL . 'includes/modules/divi/divi.css', array(), AWS_VERSION
                 );
 
                 return array(
@@ -32,7 +32,7 @@ function aws_divi_register_modules() {
                 );
             }
 
-            public function render( $unprocessed_props, $content = null, $render_slug ) {
+            public function render( $unprocessed_props, $content = null, $render_slug = null ) {
                 if ( function_exists( 'aws_get_search_form' ) ) {
                     $search_form = aws_get_search_form( false );
                     if ( $this->props['placeholder'] ) {

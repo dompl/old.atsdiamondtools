@@ -9,7 +9,7 @@ class AwsSearchModule extends FLBuilderModule {
             'description'     => __( 'WooCommerce search form', 'advanced-woo-search' ),
             'category'        => __( 'WooCommerce', 'fl-builder' ),
             'dir'             => AWS_DIR . '/includes/modules/bb-aws-search/',
-            'url'             => AWS_URL . '/includes/modules/bb-aws-search/',
+            'url'             => AWS_URL . 'includes/modules/bb-aws-search/',
             'icon'            => 'search.svg',
             'partial_refresh' => true,
         ));

@@ -181,7 +181,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                                     <?php foreach ( $value['choices'] as $val => $img ) { ?>
                                         <li class="option">
                                             <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $plugin_options[ $value['id'] ], $val ); ?>>
-                                            <span class="ico" style="background: url('<?php echo esc_url( AWS_URL . '/assets/img/' . $img ); ?>') no-repeat 50% 50%;"></span>
+                                            <span class="ico" style="background: url('<?php echo esc_url( AWS_URL . 'assets/img/' . $img ); ?>') no-repeat 50% 50%;"></span>
                                         </li>
                                     <?php } ?>
                                 </ul>

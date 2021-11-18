@@ -246,15 +246,15 @@ if ( ! class_exists( 'AWS_UM' ) ) :
 
                     if ( $restricted_terms ) {
                         foreach( $restricted_terms as $restricted_term ) {
-                            $um_content_restriction = get_term_meta( $restricted_term->term_id, 'um_content_restriction', true );
-                            $is_restricted = $this->is_restricted( $um_content_restriction );
-                            if ( $is_restricted ) {
-                                $restricted_terms_arr[$restricted_term->taxonomy][] = $restricted_term->term_id;
+                            if ( is_object( $restricted_term ) ) {
+                                $um_content_restriction = get_term_meta( $restricted_term->term_id, 'um_content_restriction', true );
+                                $is_restricted = $this->is_restricted( $um_content_restriction );
+                                if ( $is_restricted ) {
+                                    $restricted_terms_arr[$restricted_term->taxonomy][] = $restricted_term->term_id;
+                                }
                             }
-
                         }
                     }
-
 
                 }
             }

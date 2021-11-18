@@ -187,6 +187,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'royal_wp_head' ) );
                 }
 
+                if ( 'WR Nitro' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'wr_nitro_wp_head' ) );
+                }
+
+                if ( 'Botiga' === $this->current_theme ) {
+                    add_filter( 'aws_searchbox_markup', array( $this, 'botiga_aws_searchbox_markup' ) );
+                    add_action( 'wp_head', array( $this, 'botiga_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -226,14 +235,17 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             if ( 'Avada' === $this->current_theme ) {
-                add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 1 );
+                add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 2 );
                 add_filter( 'aws_products_order_by', array( $this, 'avada_aws_products_order_by' ), 1 );
                 add_filter( 'post_class', array( $this, 'avada_post_class' ) );
-                add_filter( 'aws_search_page_custom_data', array( $this, 'avada_modify_s_page_query' ) );
             }
 
             if ( 'Electro' === $this->current_theme ) {
                 add_filter( 'aws_searchbox_markup', array( $this, 'electro_searchbox_markup' ), 1, 2 );
+            }
+
+            if ( 'Woodmart' === $this->current_theme ) {
+                add_filter( 'woodmart_shop_page_link', array( $this, 'woodmart_shop_page_link' ), 9999 );
             }
 
             // FacetWP plugin
@@ -246,13 +258,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Product Visibility by User Role for WooCommerce plugin
             if ( class_exists( 'Alg_WC_PVBUR' ) ) {
                 add_filter( 'aws_search_results_products', array( $this, 'pvbur_aws_search_results_products' ), 1 );
-            }
-
-            // WooCommerce Product Filter by WooBeWoo
-            if ( defined( 'WPF_PLUG_NAME' ) ) {
-                add_filter( 'wpf_addHtmlBeforeFilter', array( $this, 'wpf_add_html_before_filter' ) );
-                add_filter( 'aws_search_page_custom_data', array( $this, 'wpf_search_page_custom_data' ) );
-                add_filter( 'aws_search_page_filters', array( $this, 'wpf_search_page_filters' ) );
             }
 
             // ATUM Inventory Management for WooCommerce plugin ( Product level addon )
@@ -275,8 +280,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_action( 'wp_footer', array( $this, 'dce_scripts' ) );
             }
 
-        }
+            // WOOCS - WooCommerce Currency Switcher: fix ajax pricing loading
+            if ( class_exists( 'WOOCS_STARTER' ) ) {
+                add_filter( 'aws_search_pre_filter_products', array( $this, 'woocs_pricing_ajax_fix' ) );
+            }
 
+            //  Deals for WooCommerce
+            if ( function_exists( 'DFW' ) ) {
+                add_filter( 'aws_search_pre_filter_products', array( $this, 'dfm_search_pre_filter_products' ) );
+            }
+
+        }
+        
         /**
          * Include files
          */
@@ -323,6 +338,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-wholesale.php' );
             }
 
+            // B2BKing plugin
+            if ( class_exists( 'B2bking' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-b2bking.php' );
+            }
+
             // Advanced Woo Labels plugin
             if ( function_exists( 'AWL' ) || function_exists( 'AWL_PRO' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-awl.php' );
@@ -341,6 +361,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WPML plugin
             if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-wpml.php' );
+            }
+
+            // WooCommerce Product Filter by WooBeWoo
+            if ( defined( 'WPF_PLUG_NAME' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-woobewoo-filters.php' );
             }
 
         }
@@ -614,9 +639,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             <style>
                 .oceanwp-theme #searchform-header-replace .aws-container {
                     padding-right: 45px;
-                    padding-top: 15px;
+                    padding-top: 0;
                 }
-                .oceanwp-theme #searchform-overlay .aws-container {
+                .oceanwp-theme #searchform-header-replace .aws-container .aws-search-form .aws-form-btn {
+                    background: transparent;
+                    border: none;
+                }
+                .oceanwp-theme #searchform-overlay .aws-container,
+                .oceanwp-theme #icon-searchform-overlay .aws-container {
                     position: absolute;
                     top: 50%;
                     left: 0;
@@ -624,17 +654,29 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     width: 100%;
                     text-align: center;
                 }
-                .oceanwp-theme #searchform-overlay .aws-container form {
+                .oceanwp-theme #searchform-overlay .aws-container form,
+                .oceanwp-theme #icon-searchform-overlay .aws-container form {
                     position: static;
                 }
-                .oceanwp-theme #searchform-overlay a.search-overlay-close {
+                .oceanwp-theme #searchform-overlay a.search-overlay-close,
+                .oceanwp-theme #icon-searchform-overlay a.search-overlay-close {
                     top: -100px;
+                }
+                .oceanwp-theme #searchform-overlay .aws-container .aws-search-form,
+                .oceanwp-theme #icon-searchform-overlay .aws-container .aws-search-form,
+                .oceanwp-theme #searchform-overlay .aws-container .aws-search-form .aws-form-btn,
+                .oceanwp-theme #icon-searchform-overlay .aws-container .aws-search-form .aws-form-btn {
+                    background: transparent;
+                }
+                .oceanwp-theme #searchform-overlay .aws-container .aws-search-form .aws-form-btn,
+                .oceanwp-theme #icon-searchform-overlay .aws-container .aws-search-form .aws-form-btn {
+                    border: none;
                 }
                 #sidr .aws-container {
                     margin: 30px 20px 0;
                 }
-                #medium-searchform .aws-container,
-                #vertical-searchform .aws-container {
+                #medium-searchform .aws-container .aws-search-form,
+                #vertical-searchform .aws-container .aws-search-form {
                     background: #f5f5f5;
                 }
                 #medium-searchform .aws-container .aws-search-form .aws-search-field {
@@ -652,16 +694,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 window.addEventListener('load', function() {
 
                     window.setTimeout(function(){
-                        var formOverlay = document.querySelector("#searchform-overlay form");
+                        var formOverlay = document.querySelectorAll("#searchform-overlay form, #icon-searchform-overlay form");
                         if ( formOverlay ) {
-                            formOverlay.innerHTML += '<a href="#" class="search-overlay-close"><span></span></a>';
+                            for (var i = 0; i < formOverlay.length; i++) {
+                                formOverlay[i].innerHTML += '<a href="#" class="search-overlay-close"><span></span></a>';
+                            }
                         }
                     }, 300);
 
                     jQuery(document).on( 'click', 'a.search-overlay-close', function (e) {
 
-                        jQuery( '#searchform-overlay' ).removeClass( 'active' );
-                        jQuery( '#searchform-overlay' ).fadeOut( 200 );
+                        jQuery( '#searchform-overlay, #icon-searchform-overlay' ).removeClass( 'active' );
+                        jQuery( '#searchform-overlay, #icon-searchform-overlay' ).fadeOut( 200 );
 
                         setTimeout( function() {
                             jQuery( 'html' ).css( 'overflow', 'visible' );
@@ -1336,6 +1380,55 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * WR Nitro theme styles
+         */
+        public function wr_nitro_wp_head() { ?>
+
+            <style>
+
+                .hb-search-fs .aws-container {
+                    width: 500px;
+                    max-width: 500px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    -webkit-transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%);
+                }
+
+                .wrls-header-outer .aws-container {
+                    width: 650px!important;
+                    margin: 0;
+                    padding: 0 35px 0 10px;
+                    height: 38px;
+                }
+
+            </style>
+
+        <?php }
+
+        /*
+         * Botiga theme fix back to top button
+         */
+        public function botiga_aws_searchbox_markup( $markup ) {
+            $markup = str_replace( '</form>', '<span class="search-submit"></span></form>', $markup );
+            return $markup;
+        }
+
+        /*
+         * Botiga theme fix back to top button
+         */
+        public function botiga_wp_head()  { ?>
+            <style>
+                .header-search-form .aws-container {
+                    max-width: 720px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            </style>
+        <?php }
+
+        /*
          * Exclude product categories
          */
         public function filter_protected_cats_term_exclude( $exclude ) {
@@ -1531,6 +1624,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '#search-form-container form';
             }
 
+            if ( 'WR Nitro' === $this->current_theme ) {
+                $selectors[] = '.search-form-inner form';
+            }
+
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
@@ -1587,7 +1684,9 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                         window.setTimeout(function(){
                             jQuery('.aws-js-seamless').each( function() {
-                                jQuery(this).aws_search();
+                                if ( typeof aws_search !== 'undefined' ) {
+                                    jQuery(this).aws_search();
+                                }
                             });
                         }, 1000);
 
@@ -1728,7 +1827,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          * Avada theme posts per page option
          */
         public function avada_posts_per_page( $posts_per_page ) {
-            $posts_per_page = isset( $_GET['product_count'] ) && intval( sanitize_text_field( $_GET['product_count'] ) ) ? intval( sanitize_text_field( $_GET['product_count'] ) ) : 12;
+            $num = 12;
+            $search_page_res_per_page = AWS()->get_settings( 'search_page_res_per_page' );
+            if ( $search_page_res_per_page ) {
+                $num = intval( $search_page_res_per_page );
+            }
+            $posts_per_page = isset( $_GET['product_count'] ) && intval( sanitize_text_field( $_GET['product_count'] ) ) ? intval( sanitize_text_field( $_GET['product_count'] ) ) : $num;
             return $posts_per_page;
         }
 
@@ -1791,20 +1895,24 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
-         * Avada theme fix search page query
-         */
-        public function avada_modify_s_page_query( $data ) {
-            $data['force_ids'] = true;
-            return $data;
-        }
-
-        /*
          * Electro them update search form markup
          */
         public function electro_searchbox_markup( $markup, $params ) {
             $pattern = '/<div class="aws-search-btn aws-form-btn">[\S\s]*?<\/div>/i';
             $markup = preg_replace( $pattern, '', $markup );
             return $markup;
+        }
+
+        /*
+         * Woodmart theme update search page pagination links
+         */
+        public function woodmart_shop_page_link( $link ) {
+            if ( isset( $_GET['type_aws'] ) && strpos( $link, 'type_aws' ) === false ) {
+                $link = add_query_arg( array(
+                    'type_aws' => 'true',
+                ), $link );
+            }
+            return $link;
         }
 
         /*
@@ -1880,110 +1988,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             return $products;
-
-        }
-
-        /*
-         * WooCommerce Product Filter by WooBeWoo: check for active widget
-         */
-        public function wpf_add_html_before_filter( $html ) {
-            $this->data['wpf_filter'] = true;
-            if ( isset( $_GET['type_aws'] ) ) {
-                $html = str_replace( '&quot;enable_ajax&quot;:&quot;1&quot;', '&quot;enable_ajax&quot;:&quot;0&quot;', $html );
-                $html = str_replace( '"enable_ajax":"1"', '"enable_ajax":"0"', $html );
-            }
-            return $html;
-        }
-
-        /*
-         * WooCommerce Product Filter by WooBeWoo: fix filters display
-         */
-        public function wpf_search_page_custom_data( $data ) {
-            if ( isset( $this->data['wpf_filter'] ) ) {
-                $data['force_ids'] = true;
-            }
-            return $data;
-        }
-
-        /*
-         * WooCommerce Product Filter by WooBeWoo: filter products
-         */
-        public function wpf_search_page_filters( $filters ) {
-
-            foreach ( $_GET as $key => $param ) {
-
-                $isNot = ( substr($param, 0, 1) === '!' );
-
-                if ( strpos($key, 'filter_cat') !== false ) {
-
-                    $idsAnd = explode(',', $param);
-                    $idsOr = explode('|', $param);
-                    $isAnd = count($idsAnd) > count($idsOr);
-                    $operator = $isAnd ? 'AND' : 'OR';
-                    $filters['tax']['product_cat'] = array(
-                        'terms' => $isAnd ? $idsAnd : $idsOr,
-                        'operator' => $operator
-                    );
-
-                }
-                elseif ( strpos($key, 'product_tag') !== false ) {
-
-                    $idsAnd = explode(',', $param);
-                    $idsOr = explode('|', $param);
-                    $isAnd = count($idsAnd) > count($idsOr);
-                    $operator = $isAnd ? 'AND' : 'OR';
-                    $filters['tax']['product_tag'] = array(
-                        'terms' => $isAnd ? $idsAnd : $idsOr,
-                        'operator' => $operator
-                    );
-
-                }
-                elseif ( strpos( $key, 'pr_onsale' ) !== false ) {
-                    $filters['on_sale'] = true;
-                }
-                elseif ( strpos( $key, 'filter_' ) === 0 ) {
-
-                    $taxonomy = str_replace( 'filter_', '', $key );
-                    if ( preg_match( '/([a-z]+?)_[\d]/', $taxonomy, $matches )  ) {
-                        $taxonomy = $matches[1];
-                    }
-
-                    $idsAnd = explode(',', $param);
-                    $idsOr = explode('|', $param);
-                    $isAnd = count($idsAnd) > count($idsOr);
-                    $operator = $isAnd ? 'AND' : 'OR';
-
-                    $terms_arr = $isAnd ? $idsAnd : $idsOr;
-
-                    if ( preg_match( '/[a-z]/', $param ) ) {
-                        $new_terms_arr = array();
-                        foreach ( $terms_arr as $term_slug ) {
-                            $term = get_term_by('slug', $term_slug, $taxonomy );
-                            if ( $term ) {
-                                $new_terms_arr[] = $term->term_id;
-                            }
-                            if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                                $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
-                                if ( $term ) {
-                                    $new_terms_arr[] = $term->term_id;
-                                }
-                            }
-                        }
-                        if ( $new_terms_arr ) {
-                            $terms_arr = $new_terms_arr;
-                        }
-                    }
-
-                    $filters['tax'][$taxonomy] = array(
-                        'terms' => $terms_arr,
-                        'operator' => $operator
-                    );
-
-                }
-
-            }
-
-            return $filters;
 
         }
 
@@ -2069,6 +2073,88 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </script>
 
         <?php }
+
+        /*
+         * WOOCS - WooCommerce Currency Switcher: fix ajax pricing loading
+         */
+        public function woocs_pricing_ajax_fix( $products_array ) {
+            if ( $products_array ) {
+                foreach ( $products_array as $key => $product ) {
+                    if ( $product['price'] && strpos( $product['price'], 'woocs_preloader_ajax' ) !== false ) {
+                        $products_array[$key]['price'] = str_replace( 'woocs_preloader_ajax', '', $product['price'] );
+                    }
+                }
+            }
+            return $products_array;
+        }
+
+        /*
+         * Deals for WooCommerce: Add deals prices
+         */
+        public function dfm_search_pre_filter_products( $products_array ) {
+
+            foreach( $products_array as $key => $pr_arr ) {
+
+                if ( isset( $pr_arr['price'] ) && $pr_arr['price'] && function_exists( 'dfw_get_deal_ids' ) ) {
+
+                    $product = wc_get_product( $pr_arr['id'] );
+                    $deal_html = '';
+
+                    if ( is_a( $product, 'WC_Product' ) && $product->get_type() == 'simple' ) {
+                        $args = array(
+                            'meta_key' => 'dfw_deal_type_id',
+                            'meta_value' => $product->get_id(),
+                        );
+
+                        $deal_ids = dfw_get_deal_ids($args);
+
+                        if ( function_exists( 'dfw_check_is_array' ) && dfw_check_is_array( $deal_ids ) ) {
+
+                            $deal_id = reset($deal_ids);
+                            $deal = function_exists('dfw_get_deal') ? dfw_get_deal($deal_id) : false;
+
+                            if ( is_object( $deal ) ) {
+
+                                if ( 'product' == $deal->get_type() ) {
+                                    $product_id = $deal->get_deal_type_id() ;
+
+                                    if ( 'yes' == get_post_meta( $product_id , 'dfw_enable_deal' , true ) && class_exists('DFW_Product_Handler') ) {
+                                        $matched_data = DFW_Product_Handler::get_matched_rules( $product , $product_id , $deal_id , $deal->get_type() ) ;
+
+                                        if ( function_exists('dfw_check_is_array') && dfw_check_is_array( $matched_data ) ) {
+                                            if ( isset( $matched_data[ 'price' ] ) && isset( $matched_data[ 'rule_id' ] ) ) {
+
+                                                ob_start();
+                                                dfw_get_template( 'product-deals/deal-price.php' , array( 'product' => $product , 'deal_price' => $matched_data[ 'price' ] , 'class_name' => '' ) ) ;
+                                                $deal_html = ob_get_contents();
+                                                ob_end_clean();
+
+                                                $deal_html = str_replace('class="price "', 'class=""', $deal_html );
+                                                $deal_html = str_replace('<p ', '<span ', $deal_html );
+                                                $deal_html = str_replace('</p>', '</span>', $deal_html );
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if ( $deal_html ) {
+                        $products_array[$key]['price'] .= $deal_html;
+                    }
+
+                }
+
+            }
+
+            return $products_array;
+
+        }
 
     }
 

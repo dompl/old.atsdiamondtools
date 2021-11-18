@@ -212,5 +212,39 @@ class AG_ePDQ_Helpers
 
 	}
 
+	/**
+     * Get order currency - used for refund and status check
+	 * @param $order
+	 * @return mixed
+	 */
+	public static function ag_get_order_currency($order) {
+
+	    return $order->get_currency();
+
+	}
+
+	/**
+     * Limit the address fields. ePDQ have a character 34 limit on their end.
+	 * @param $fields
+	 * @return array
+	 */
+	public static function ag_billing_address_limit( $fields ) {
+
+	    $fields['billing']['billing_address_1']['maxlength'] = 34;
+		$fields['billing']['billing_address_2']['maxlength'] = 34;
+
+		return $fields;
+
+	}
+
+	public static function word_translate($translate) {
+
+		$pattern = array("'é'", "'è'", "'ë'", "'ê'", "'É'", "'È'", "'Ë'", "'Ê'", "'á'", "'à'", "'ä'", "'â'", "'å'", "'Á'", "'À'", "'Ä'", "'Â'", "'Å'", "'ó'", "'ò'", "'ö'", "'ô'", "'Ó'", "'Ò'", "'Ö'", "'Ô'", "'í'", "'ì'", "'ï'", "'î'", "'Í'", "'Ì'", "'Ï'", "'Î'", "'ú'", "'ù'", "'ü'", "'û'", "'Ú'", "'Ù'", "'Ü'", "'Û'", "'ý'", "'ÿ'", "'Ý'", "'ø'", "'Ø'", "'œ'", "'Œ'", "'Æ'", "'ç'", "'Ç'");
+		$replace = array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E', 'a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A', 'o', 'o', 'o', 'o', 'O', 'O', 'O', 'O', 'i', 'i', 'i', 'I', 'I', 'I', 'I', 'I', 'u', 'u', 'u', 'u', 'U', 'U', 'U', 'U', 'y', 'y', 'Y', 'o', 'O', 'a', 'A', 'A', 'c', 'C');
+
+		return preg_replace($pattern, $replace, $translate);
+
+	}
+
 
 }

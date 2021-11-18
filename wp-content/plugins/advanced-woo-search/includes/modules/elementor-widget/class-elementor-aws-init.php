@@ -71,7 +71,7 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
 
             wp_enqueue_style(
                 'aws-icons',
-                AWS_URL . '/includes/modules/elementor-widget/elementor.css', array(), AWS_VERSION
+                AWS_URL . 'includes/modules/elementor-widget/elementor.css', array(), AWS_VERSION
             );
 
         }

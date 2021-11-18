@@ -81,12 +81,9 @@ class AG_ePDQ_order_status_check {
                 return;
             }
 
-
-
-
             if (empty($settings['USERID']) || empty($settings['PSWD'])) {
                 AG_ePDQ_Helpers::ag_log('AG Status check failed: API username has not been set.', 'debug', $ePDQ_settings->debug);
-                $order->add_order_note('AG Status check failed: API details not set. <br />Check the guide on hoe to set up <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/how-to-setup-epdq-status-check/" target="_blank">here</a>.');
+                $order->add_order_note('AG Status check failed: API details not set. <br />Check the guide on how to set up <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/how-to-setup-epdq-status-check/" target="_blank">here</a>.');
             }
 
             if (empty($settings['PSWD']) || empty($settings['USERID'])) {
@@ -102,14 +99,15 @@ class AG_ePDQ_order_status_check {
             // Data to send
 			$data_post = array();
 			$data_post['ORDERID'] = $order->get_order_number();
-			if (get_woocommerce_currency() !== 'GBP' && defined('ePDQ_PSPID')) {
+			if (AG_ePDQ_Helpers::ag_get_order_currency($order) !== 'GBP' && defined('ePDQ_PSPID')) {
 				$data_post['PSPID'] = ePDQ_PSPID;
             } else {
 				$data_post['PSPID'] = $key_settings['pspid'];
-                $data_post['PSWD'] = $settings['PSWD'];
-                $data_post['USERID'] = $settings['USERID'];
+			}
+			$data_post['PSWD'] = $settings['PSWD'];
+            $data_post['USERID'] = $settings['USERID'];
 
-            }
+
 
             // Post
             $result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
@@ -214,7 +212,7 @@ class AG_ePDQ_order_status_check {
 
             $settings = ePDQ_crypt::refund_settings();
 
-            // Check order is using our plugin
+	        // Check order is using our plugin
             if($order->get_payment_method() !== 'epdq_checkout') {
                 return;
             }
@@ -278,9 +276,10 @@ class AG_ePDQ_order_status_check {
                 $order->add_order_note('AG Status check failed: API password has not been set.');
             }
 
-            if (empty($settings['PSWD']) && empty($settings['USERID'])) {
-                return;
-            }
+	        if (empty($settings['USERID']) || empty($settings['PSWD'])) {
+		        AG_ePDQ_Helpers::ag_log('AG Status check failed. API details not set.', 'debug', $ePDQ_settings->debug);
+		        $order->add_order_note('AG Status check failed: API details not set. <br />Check the guide on how to set up <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/how-to-setup-epdq-status-check/" target="_blank">here</a>.');
+	        }
 
             // Status check has ran log
             $manual_status_ran = array(
@@ -292,14 +291,16 @@ class AG_ePDQ_order_status_check {
 			$data_post = array();
 			$data_post['ORDERID'] = $order->get_order_number();
 
-			if (get_woocommerce_currency() !== 'GBP' && defined('ePDQ_PSPID')) {
-				$data_post['PSPID'] = ePDQ_PSPID;
-            } else {
-				$data_post['PSPID'] = $key_settings['pspid'];
-                $data_post['PSWD'] = $settings['PSWD'];
-                $data_post['USERID'] = $settings['USERID'];
+	        if (AG_ePDQ_Helpers::ag_get_order_currency($order) !== 'GBP' && defined('ePDQ_PSPID')) {
+		        $data_post['PSPID'] = ePDQ_PSPID;
+	        } else {
+		        $data_post['PSPID'] = $key_settings['pspid'];
+	        }
 
-            }
+	        $data_post['PSWD'] = $settings['PSWD'];
+	        $data_post['USERID'] = $settings['USERID'];
+
+
 
             // Post
             $result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
@@ -489,9 +490,6 @@ class AG_ePDQ_order_status_check {
            
             }
         }
-
-
-
 }
 
 

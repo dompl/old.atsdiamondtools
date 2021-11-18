@@ -1,6 +1,6 @@
 (window["__wcAdmin_webpackJsonp"] = window["__wcAdmin_webpackJsonp"] || []).push([[7],{
 
-/***/ 475:
+/***/ 479:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24,10 +24,10 @@ var external_wp_hooks_ = __webpack_require__(30);
 var external_wp_data_ = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./client/lib/async-requests/index.js
-var async_requests = __webpack_require__(498);
+var async_requests = __webpack_require__(502);
 
 // EXTERNAL MODULE: ./client/customer-effort-score-tracks/data/constants.js
-var constants = __webpack_require__(53);
+var constants = __webpack_require__(55);
 
 // CONCATENATED MODULE: ./client/analytics/report/categories/config.js
 /**
@@ -50,13 +50,13 @@ const {
 } = Object(external_wp_data_["dispatch"])(constants["c" /* STORE_KEY */]);
 const charts = Object(external_wp_hooks_["applyFilters"])(CATEGORY_REPORT_CHARTS_FILTER, [{
   key: 'items_sold',
-  label: Object(external_wp_i18n_["__"])('Items Sold', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('Items sold', 'woocommerce-admin'),
   order: 'desc',
   orderby: 'items_sold',
   type: 'number'
 }, {
   key: 'net_revenue',
-  label: Object(external_wp_i18n_["__"])('Net Sales', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('Net sales', 'woocommerce-admin'),
   order: 'desc',
   orderby: 'net_revenue',
   type: 'currency'
@@ -69,13 +69,13 @@ const charts = Object(external_wp_hooks_["applyFilters"])(CATEGORY_REPORT_CHARTS
 }]);
 const config_advancedFilters = Object(external_wp_hooks_["applyFilters"])(CATEGORY_REPORT_ADVANCED_FILTERS_FILTER, {
   filters: {},
-  title: Object(external_wp_i18n_["_x"])('Categories Match {{select /}} Filters', 'A sentence describing filters for Categories. See screen shot for context: https://cloudup.com/cSsUY9VeCVJ', 'woocommerce-admin')
+  title: Object(external_wp_i18n_["_x"])('Categories match {{select /}} filters', 'A sentence describing filters for Categories. See screen shot for context: https://cloudup.com/cSsUY9VeCVJ', 'woocommerce-admin')
 });
 const filterValues = [{
-  label: Object(external_wp_i18n_["__"])('All Categories', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('All categories', 'woocommerce-admin'),
   value: 'all'
 }, {
-  label: Object(external_wp_i18n_["__"])('Single Category', 'woocommerce-admin'),
+  label: Object(external_wp_i18n_["__"])('Single category', 'woocommerce-admin'),
   value: 'select_category',
   chartMode: 'item-comparison',
   subFilters: [{
@@ -113,7 +113,7 @@ const filterValues = [{
 
 if (Object.keys(config_advancedFilters.filters).length) {
   filterValues.push({
-    label: Object(external_wp_i18n_["__"])('Advanced Filters', 'woocommerce-admin'),
+    label: Object(external_wp_i18n_["__"])('Advanced filters', 'woocommerce-admin'),
     value: 'advanced'
   });
 }
@@ -126,10 +126,10 @@ const config_filters = Object(external_wp_hooks_["applyFilters"])(CATEGORY_REPOR
   filters: filterValues
 }]);
 // EXTERNAL MODULE: external ["wp","compose"]
-var external_wp_compose_ = __webpack_require__(13);
+var external_wp_compose_ = __webpack_require__(14);
 
 // EXTERNAL MODULE: external "lodash"
-var external_lodash_ = __webpack_require__(3);
+var external_lodash_ = __webpack_require__(4);
 
 // EXTERNAL MODULE: external ["wc","navigation"]
 var external_wc_navigation_ = __webpack_require__(12);
@@ -144,13 +144,13 @@ var external_wc_number_ = __webpack_require__(120);
 var external_wc_data_ = __webpack_require__(11);
 
 // EXTERNAL MODULE: ./client/analytics/report/categories/breadcrumbs.js
-var breadcrumbs = __webpack_require__(514);
+var breadcrumbs = __webpack_require__(518);
 
 // EXTERNAL MODULE: ./client/analytics/components/report-table/index.js + 2 modules
-var report_table = __webpack_require__(502);
+var report_table = __webpack_require__(506);
 
 // EXTERNAL MODULE: ./client/lib/currency-context.js
-var currency_context = __webpack_require__(497);
+var currency_context = __webpack_require__(501);
 
 // CONCATENATED MODULE: ./client/analytics/report/categories/table.js
 
@@ -190,14 +190,14 @@ class table_CategoriesReportTable extends external_wp_element_["Component"] {
       isSortable: true,
       isLeftAligned: true
     }, {
-      label: Object(external_wp_i18n_["__"])('Items Sold', 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["__"])('Items sold', 'woocommerce-admin'),
       key: 'items_sold',
       required: true,
       defaultSort: true,
       isSortable: true,
       isNumeric: true
     }, {
-      label: Object(external_wp_i18n_["__"])('Net Sales', 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["__"])('Net sales', 'woocommerce-admin'),
       key: 'net_revenue',
       isSortable: true,
       isNumeric: true
@@ -220,6 +220,15 @@ class table_CategoriesReportTable extends external_wp_element_["Component"] {
       formatDecimal: getCurrencyFormatDecimal,
       getCurrencyConfig
     } = this.context;
+    const {
+      categories,
+      query
+    } = this.props;
+
+    if (!categories) {
+      return [];
+    }
+
     const currency = getCurrencyConfig();
     return Object(external_lodash_["map"])(categoryStats, categoryStat => {
       const {
@@ -229,10 +238,6 @@ class table_CategoriesReportTable extends external_wp_element_["Component"] {
         products_count: productsCount,
         orders_count: ordersCount
       } = categoryStat;
-      const {
-        categories,
-        query
-      } = this.props;
       const category = categories.get(categoryId);
       const persistedQuery = Object(external_wc_navigation_["getPersistedQuery"])(query);
       return [{
@@ -276,16 +281,16 @@ class table_CategoriesReportTable extends external_wp_element_["Component"] {
     } = this.context;
     const currency = getCurrencyConfig();
     return [{
-      label: Object(external_wp_i18n_["_n"])('category', 'categories', totalResults, 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["_n"])('Category', 'Categories', totalResults, 'woocommerce-admin'),
       value: Object(external_wc_number_["formatValue"])(currency, 'number', totalResults)
     }, {
-      label: Object(external_wp_i18n_["_n"])('item sold', 'items sold', itemsSold, 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["_n"])('Item sold', 'Items sold', itemsSold, 'woocommerce-admin'),
       value: Object(external_wc_number_["formatValue"])(currency, 'number', itemsSold)
     }, {
-      label: Object(external_wp_i18n_["__"])('net sales', 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["__"])('Net sales', 'woocommerce-admin'),
       value: formatAmount(netRevenue)
     }, {
-      label: Object(external_wp_i18n_["_n"])('order', 'orders', ordersCount, 'woocommerce-admin'),
+      label: Object(external_wp_i18n_["_n"])('Order', 'Orders', ordersCount, 'woocommerce-admin'),
       value: Object(external_wc_number_["formatValue"])(currency, 'number', ordersCount)
     }];
   }
@@ -356,19 +361,19 @@ table_CategoriesReportTable.contextType = currency_context["a" /* CurrencyContex
   };
 }))(table_CategoriesReportTable));
 // EXTERNAL MODULE: ./client/lib/get-selected-chart/index.js
-var get_selected_chart = __webpack_require__(506);
+var get_selected_chart = __webpack_require__(510);
 
 // EXTERNAL MODULE: ./client/analytics/components/report-chart/index.js + 1 modules
-var report_chart = __webpack_require__(503);
+var report_chart = __webpack_require__(508);
 
 // EXTERNAL MODULE: ./client/analytics/components/report-summary/index.js
-var report_summary = __webpack_require__(507);
+var report_summary = __webpack_require__(511);
 
 // EXTERNAL MODULE: ./client/analytics/report/products/table.js
-var products_table = __webpack_require__(526);
+var products_table = __webpack_require__(530);
 
 // EXTERNAL MODULE: ./client/analytics/components/report-filters/index.js
-var report_filters = __webpack_require__(501);
+var report_filters = __webpack_require__(505);
 
 // CONCATENATED MODULE: ./client/analytics/report/categories/index.js
 
@@ -480,7 +485,7 @@ categories_CategoriesReport.propTypes = {
 
 /***/ }),
 
-/***/ 498:
+/***/ 502:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -493,18 +498,18 @@ categories_CategoriesReport.propTypes = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getTaxRateLabels; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getVariationName; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getVariationLabels; });
-/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
 /* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_url__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_navigation__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
 /* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(15);
-/* harmony import */ var _analytics_report_taxes_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(499);
+/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
+/* harmony import */ var _analytics_report_taxes_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(503);
 /**
  * External dependencies
  */
@@ -586,11 +591,11 @@ function getVariationName({
 }) {
   const separator = Object(_woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_5__[/* getSetting */ "f"])('variationTitleAttributesSeparator', ' - ');
 
-  if (name.indexOf(separator) > -1) {
+  if (name && name.indexOf(separator) > -1) {
     return name;
   }
 
-  const attributeList = attributes.map(({
+  const attributeList = (attributes || []).map(({
     option
   }) => option).join(', ');
   return attributeList ? name + separator + attributeList : name;
@@ -613,7 +618,7 @@ const getVariationLabels = getRequestByIdString(({
 
 /***/ }),
 
-/***/ 499:
+/***/ 503:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -630,7 +635,7 @@ function getTaxCode(tax) {
 
 /***/ }),
 
-/***/ 509:
+/***/ 513:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -652,16 +657,16 @@ function isLowStock(status, quantity, threshold) {
 
 /***/ }),
 
-/***/ 514:
+/***/ 518:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CategoryBreadcrumbs; });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_components__WEBPACK_IMPORTED_MODULE_3__);
@@ -730,7 +735,7 @@ class CategoryBreadcrumbs extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
 
 /***/ }),
 
-/***/ 526:
+/***/ 530:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -738,13 +743,13 @@ class CategoryBreadcrumbs extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
 /* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 /* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
 /* harmony import */ var _woocommerce_navigation__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_navigation__WEBPACK_IMPORTED_MODULE_6__);
@@ -752,14 +757,14 @@ class CategoryBreadcrumbs extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
 /* harmony import */ var _woocommerce_components__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_components__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _woocommerce_number__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(120);
 /* harmony import */ var _woocommerce_number__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_number__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(15);
+/* harmony import */ var _woocommerce_wc_admin_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(13);
 /* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(11);
 /* harmony import */ var _woocommerce_data__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_woocommerce_data__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _categories_breadcrumbs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(514);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(509);
-/* harmony import */ var _components_report_table__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(502);
-/* harmony import */ var _lib_currency_context__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(497);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(527);
+/* harmony import */ var _categories_breadcrumbs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(518);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(513);
+/* harmony import */ var _components_report_table__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(506);
+/* harmony import */ var _lib_currency_context__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(501);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(531);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_style_scss__WEBPACK_IMPORTED_MODULE_15__);
 
 
@@ -799,7 +804,7 @@ class ProductsReportTable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
 
   getHeadersContent() {
     return [{
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Product Title', 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Product title', 'woocommerce-admin'),
       key: 'product_name',
       required: true,
       isLeftAligned: true,
@@ -810,15 +815,15 @@ class ProductsReportTable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
       hiddenByDefault: true,
       isSortable: true
     }, {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Items Sold', 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Items sold', 'woocommerce-admin'),
       key: 'items_sold',
       required: true,
       defaultSort: true,
       isSortable: true,
       isNumeric: true
     }, {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Net Sales', 'woocommerce-admin'),
-      screenReaderLabel: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Net Sales', 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Net sales', 'woocommerce-admin'),
+      screenReaderLabel: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Net sales', 'woocommerce-admin'),
       key: 'net_revenue',
       required: true,
       isSortable: true,
@@ -953,16 +958,16 @@ class ProductsReportTable extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0_
     } = this.context;
     const currency = getCurrencyConfig();
     return [{
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('product', 'products', productsCount, 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('Product', 'Products', productsCount, 'woocommerce-admin'),
       value: Object(_woocommerce_number__WEBPACK_IMPORTED_MODULE_8__["formatValue"])(currency, 'number', productsCount)
     }, {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('item sold', 'items sold', itemsSold, 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('Item sold', 'Items sold', itemsSold, 'woocommerce-admin'),
       value: Object(_woocommerce_number__WEBPACK_IMPORTED_MODULE_8__["formatValue"])(currency, 'number', itemsSold)
     }, {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('net sales', 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Net sales', 'woocommerce-admin'),
       value: formatAmount(netRevenue)
     }, {
-      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('orders', 'orders', ordersCount, 'woocommerce-admin'),
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["_n"])('Orders', 'Orders', ordersCount, 'woocommerce-admin'),
       value: Object(_woocommerce_number__WEBPACK_IMPORTED_MODULE_8__["formatValue"])(currency, 'number', ordersCount)
     }];
   }
@@ -1039,7 +1044,7 @@ ProductsReportTable.contextType = _lib_currency_context__WEBPACK_IMPORTED_MODULE
 
 /***/ }),
 
-/***/ 527:
+/***/ 531:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
