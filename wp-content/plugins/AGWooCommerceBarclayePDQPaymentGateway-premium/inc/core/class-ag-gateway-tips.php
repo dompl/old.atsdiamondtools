@@ -51,7 +51,7 @@ class AG_gateway_tips {
                         'title' =>  AG_ePDQ_Helpers::AG_escape( $post->title->rendered ),
                         'tip_url' => AG_ePDQ_Helpers::AG_escape( $post->link ),
                         'dec' => AG_ePDQ_Helpers::AG_escape( $post->excerpt->rendered ),
-                        'tip_img' => AG_ePDQ_Helpers::AG_escape( $post->_embedded->{'wp:featuredmedia'}[0]->source_url )
+                        //'tip_img' => AG_ePDQ_Helpers::AG_escape( $post->_embedded->{'wp:featuredmedia'}[0]->source_url )
                     );
              
                 }
@@ -81,14 +81,6 @@ class AG_gateway_tips {
 
         <div class="tip-card">
             <div class="card-contents">
-                <div class="card-header">
-                    <a href="<?php echo AG_ePDQ_Helpers::AG_decode( $tip['tip_url'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank">
-                        <img class="plugin-logo" src="<?php echo  AG_ePDQ_Helpers::AG_decode( $tip['tip_img'] ); ?>">
-                        <div class="ag-watermark">
-                            <img src="https://weareag.co.uk/wp/wp-content/themes/AGv5/img/ag-logo.svg">
-                        </div>
-                    </a>
-                </div>
                 <div class="card-body">
                     <h3><?php echo AG_ePDQ_Helpers::AG_decode( $tip['title'] ); ?></h3>
                     <?php echo AG_ePDQ_Helpers::AG_decode( $tip['dec'] ); ?>

@@ -90,10 +90,10 @@ function init_ag_epdq()
 	    public function validate_fields()
 	    {
 
-		    if ( strlen( $_POST['billing_address_1'] ) > 150 ) {
+		    if ( strlen( $_POST['billing_address_1'] ) > 34 ) {
 			    wc_add_notice( 'Your street address is too long, please also use the second address field.', 'error' );
 		    }
-		    if ( strlen( $_POST['billing_address_2'] ) > 150 ) {
+		    if ( strlen( $_POST['billing_address_2'] ) > 34 ) {
 			    wc_add_notice( 'Your second street address is too long. Please shorten your billing address.', 'error' );
 		    }
 

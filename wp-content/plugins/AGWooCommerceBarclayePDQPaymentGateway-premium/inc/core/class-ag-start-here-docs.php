@@ -52,12 +52,12 @@ class AG_start_here_docs {
 
 		    $html = wp_remote_retrieve_body(wp_safe_remote_get(esc_url($url)));
 		    $dom->loadHTML($html);
-		    $docs = $dom->getElementsByTagName('ul');
+		    $docs = $dom->getElementsByTagName('div');
 
 		    foreach ($docs as $doc) {
 			    $classes = $doc->getAttribute('class');
 
-			    if (strpos($classes, 'bpress-section-list') === false) {
+			    if (strpos($classes, 'docs-category-list') === false) {
 				    continue;
 			    }
 
@@ -71,9 +71,10 @@ class AG_start_here_docs {
 				    );
 			    }
 
+
 		    }
 
-		    set_transient($transient_name, $return, 30 * DAY_IN_SECONDS);
+	    set_transient($transient_name, $return, 30 * DAY_IN_SECONDS);
 
 	    }
 

@@ -85,14 +85,12 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             add_action( 'et_pb_shop_before_print_shop', array( $this, 'et_pb_shop_before_print_shop' ) );
             add_action( 'et_pb_shop_after_print_shop', array( $this, 'et_pb_shop_after_print_shop' ) );
 
-            // FacetWP support
-            add_filter( 'facetwp_pre_filtered_post_ids', array( $this, 'facetwp_pre_filtered_post_ids' ), 10, 2 );
-
             // Total number of search results
             add_filter( 'aws_page_results', array( $this, 'aws_page_results' ), 1 );
 
             // Number of search results per page
             add_filter( 'aws_posts_per_page', array( $this, 'aws_posts_per_page' ), 1 );
+            add_filter( 'woocommerce_product_query', array( $this, 'woocommerce_product_query' ), 1 );
 
             // Change default search page query
             add_filter( 'aws_search_page_custom_data', array( $this, 'aws_search_page_custom_data' ), 1 );
@@ -153,9 +151,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
              */
             $this->data = apply_filters( 'aws_search_page_custom_data', $this->data, $query, $posts );
 
-            $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true : false;
+            $post_type_product = $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) );
 
-            if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $query->query_vars['s'] ) && $query->query &&
+            if ( ( $query->is_main_query() || $query->is_search() || isset( $query->query_vars['s'] ) ) && $post_type_product && isset( $_GET['type_aws'] ) && $query->query &&
                 ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
             )
             {
@@ -284,9 +282,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function filter_found_posts( $found_posts, $query ) {
 
-            $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true : false;
+            $post_type_product = $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) );
 
-            if ( $post_type_product && isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] && isset( $query->query_vars['nopaging'] ) && ! $query->query_vars['nopaging'] &&
+            if ( ( $query->is_main_query() || $query->is_search() || isset( $query->query_vars['s'] ) ) && $post_type_product && isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] && isset( $query->query_vars['nopaging'] ) && ! $query->query_vars['nopaging'] &&
                 ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
             ) {
                 $found_posts = count( $this->data['all_products'] );
@@ -294,23 +292,6 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             return $found_posts;
 
-        }
-
-        /*
-         * FacetWP add unfiltered products IDs
-         */
-        public function facetwp_pre_filtered_post_ids( $post_ids, $obj ) {
-            if ( isset( $_GET['type_aws'] ) && isset( $_GET['s'] ) ) {
-                $search_res = $this->search( $obj->query, $obj->query_args['posts_per_page'], $obj->query_args['paged'] );
-                if ( $search_res ) {
-                    $products_ids = array();
-                    foreach ( $search_res['all'] as $product ) {
-                        $products_ids[] = $product['id'];
-                    }
-                    $post_ids = $products_ids;
-                }
-            }
-            return $post_ids;
         }
 
         /**
@@ -321,7 +302,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @param int $paged
          * @return array | bool
          */
-        private function search( $query, $posts_per_page, $paged = 1 ) {
+        public function search( $query, $posts_per_page, $paged = 1 ) {
 
             if ( ! did_action( 'woocommerce_init' ) || ! did_action( 'woocommerce_after_register_taxonomy' ) || ! did_action( 'woocommerce_after_register_post_type' ) ) {
                 return false;
@@ -487,7 +468,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         private function aws_searchpage_enabled( $query ) {
             $enabled = true;
 
-            $post_type_product = ( $query->get( 'post_type' ) && is_string( $query->get( 'post_type' ) ) && $query->get( 'post_type' ) === 'product' ) ? true :
+            $post_type_product = ( $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) ) ) ? true :
                 ( ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' ) ? true : false );
 
             if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
@@ -611,6 +592,15 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 $num = intval( $search_page_res_per_page );
             }
             return $num;
+        }
+
+        /*
+         * Number of search results per page
+         */
+        public function woocommerce_product_query( $query ) {
+            if ( $this->aws_searchpage_enabled( $query ) && $query->get( 'posts_per_page' ) ) {
+                $query->set( 'posts_per_page', $this->aws_posts_per_page( $query->get( 'posts_per_page' ) ) );
+            }
         }
 
         /*

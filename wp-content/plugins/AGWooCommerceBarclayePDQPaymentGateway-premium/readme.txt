@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.8
+Tested up to: 5.9
 Stable tag: 4.2
 
 == Description ==
@@ -38,6 +38,12 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v4.2.7 - 08/12/21 =
+* Checking  - Checking support for new WooCommerce version.
+* Dev       - Removed blog images from welcome screen.
+* Dev       - Changes to doc URLs, we have a new website.
+* Dev       - Changes to the start here links, pulled right from doc site.
+
 = v4.2.6 - 25/10/21 =
 * Fix       - Fixed issue when sending Arabic products to ePDQ.
 * Fix       - Fixed typo in status check error notice.
@@ -52,7 +58,7 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * Change     - Changed doc URL's in debug warnings, we have a new doc site.
 * Change     - Change to start here and troubleshooting links in welcome screen.
 * New        - New setting to disable the auto status check feature from running (Merchants can still do manual checks).
-* Dev        -
+
 
 = v4.2.4 - 08/07/21 =
 * Fix        - Hot-fit for unset in SHA_check().

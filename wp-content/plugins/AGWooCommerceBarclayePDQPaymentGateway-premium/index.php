@@ -10,9 +10,9 @@
  * -----
  * Modified By: Aaron Bowie - We are AG
  * -----
- * Version: 4.2.6
+ * Version: 4.2.7
  * WC requires at least: 3.0.0
- * WC tested up to: 5.6
+ * WC tested up to: 6.0
  * License: GPL3
  */
 
@@ -24,14 +24,14 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  4.2.6
+ * @version  4.2.7
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.2.6";
+	public static $AGversion = "4.2.7";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
