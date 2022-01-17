@@ -12,12 +12,12 @@ if ( !  defined( 'ABSPATH' ) ) {
  */
 
 add_shortcode( 'ats_orders_error', 'ats_test_action_' );
-function ats_test_action_()
-{
+function ats_test_action_() {
     if ( is_admin() ) {
         return;
     }
     $allowed_users = array( 1, 2, 3 );
+    var_dump( $allowed_users );
 
     if ( !  in_array( get_current_user_id(), $allowed_users ) || !  current_user_can( 'administrator' ) ) {
         return;
@@ -26,7 +26,7 @@ function ats_test_action_()
     $guest_orders = wc_get_orders(
         array(
             'type'  => array( 'shop_order' ),
-            'limit' => -1
+            'limit' => 1000
         )
     );
 
@@ -74,20 +74,20 @@ function ats_test_action_()
         }
     }
     $i .= '</table>';
+    $i .= get_next_posts_link();
 
     return $i;
 }
 
 add_shortcode( 'user_reassignment', 'user_reassignment_function' );
-function user_reassignment_function()
-{
+function user_reassignment_function() {
     if ( is_admin() ) {
         return;
     }
     $guest_orders = wc_get_orders(
         array(
             'type'  => array( 'shop_order' ),
-            'limit' => -1
+            'limit' => 1000
         )
     );
 
