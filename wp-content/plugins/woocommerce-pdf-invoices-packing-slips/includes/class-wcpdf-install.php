@@ -360,14 +360,15 @@ class Install {
 		}
 
 		// 2.10.0-dev: migrate template path to template ID
-		if ( version_compare( $installed_version, '2.10.0-dev', '<' ) ) {
+		// 2.11.5: improvements to the migration procedure
+		if ( version_compare( $installed_version, '2.11.5', '<' ) ) {
 			if ( ! empty( WPO_WCPDF()->settings ) && is_callable( array( WPO_WCPDF()->settings, 'maybe_migrate_template_paths' ) ) ) {
 				WPO_WCPDF()->settings->maybe_migrate_template_paths();
 			}
 		}
 
-		// 2.12.0: remove the obsolete .dist font cache file and mustRead.html from local fonts folder
-		if ( version_compare( $installed_version, '2.12.0-dev', '<' ) ) {
+		// 2.11.2: remove the obsolete .dist font cache file and mustRead.html from local fonts folder
+		if ( version_compare( $installed_version, '2.11.2', '<' ) ) {
 			@unlink( trailingslashit( $font_path ) . 'dompdf_font_family_cache.dist.php' );
 			@unlink( trailingslashit( $font_path ) . 'mustRead.html' );
 		}
