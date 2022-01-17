@@ -3,6 +3,8 @@ namespace Automattic\WooCommerce\Blocks\StoreApi\Schemas;
 
 use Automattic\WooCommerce\Blocks\StoreApi\Utilities\CartController;
 use Automattic\WooCommerce\Blocks\Domain\Services\ExtendRestApi;
+use WC_Tax;
+use WP_Error;
 
 
 /**
@@ -31,49 +33,49 @@ class CartSchema extends AbstractSchema {
 	 *
 	 * @var CartItemSchema
 	 */
-	protected $item_schema;
+	public $item_schema;
 
 	/**
 	 * Coupon schema instance.
 	 *
 	 * @var CartCouponSchema
 	 */
-	protected $coupon_schema;
+	public $coupon_schema;
 
 	/**
 	 * Fee schema instance.
 	 *
 	 * @var CartFeeSchema
 	 */
-	protected $fee_schema;
+	public $fee_schema;
 
 	/**
 	 * Shipping rates schema instance.
 	 *
 	 * @var CartShippingRateSchema
 	 */
-	protected $shipping_rate_schema;
+	public $shipping_rate_schema;
 
 	/**
 	 * Shipping address schema instance.
 	 *
 	 * @var ShippingAddressSchema
 	 */
-	protected $shipping_address_schema;
+	public $shipping_address_schema;
 
 	/**
 	 * Billing address schema instance.
 	 *
 	 * @var BillingAddressSchema
 	 */
-	protected $billing_address_schema;
+	public $billing_address_schema;
 
 	/**
 	 * Error schema instance.
 	 *
 	 * @var ErrorSchema
 	 */
-	protected $error_schema;
+	public $error_schema;
 
 	/**
 	 * Constructor.
@@ -286,6 +288,12 @@ class CartSchema extends AbstractSchema {
 										'context'     => [ 'view', 'edit' ],
 										'readonly'    => true,
 									],
+									'rate'  => [
+										'description' => __( 'The rate at which tax is applied.', 'woocommerce' ),
+										'type'        => 'string',
+										'context'     => [ 'view', 'edit' ],
+										'readonly'    => true,
+									],
 								],
 							],
 						],
@@ -381,6 +389,7 @@ class CartSchema extends AbstractSchema {
 			$tax_lines[] = array(
 				'name'  => $cart_tax_total->label,
 				'price' => $this->prepare_money_response( $cart_tax_total->amount, wc_get_price_decimals() ),
+				'rate'  => WC_Tax::get_rate_percent( $cart_tax_total->tax_rate_id ),
 			);
 		}
 
@@ -395,7 +404,12 @@ class CartSchema extends AbstractSchema {
 	 */
 	protected function get_cart_errors( $cart ) {
 		$controller    = new CartController();
-		$item_errors   = $controller->get_cart_item_errors();
+		$item_errors   = array_filter(
+			$controller->get_cart_item_errors(),
+			function ( WP_Error $error ) {
+				return $error->has_errors();
+			}
+		);
 		$coupon_errors = $controller->get_cart_coupon_errors();
 
 		return array_values( array_map( [ $this->error_schema, 'get_item_response' ], array_merge( $item_errors, $coupon_errors ) ) );

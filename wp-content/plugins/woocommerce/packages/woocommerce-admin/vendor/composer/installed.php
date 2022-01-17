@@ -1,8 +1,8 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '2.0.2',
-    'version' => '2.0.2.0',
+    'pretty_version' => '3.0.3',
+    'version' => '3.0.3.0',
     'aliases' => 
     array (
     ),
@@ -13,21 +13,21 @@
   array (
     'automattic/jetpack-autoloader' => 
     array (
-      'pretty_version' => 'v2.9.1',
-      'version' => '2.9.1.0',
+      'pretty_version' => 'v2.10.5',
+      'version' => '2.10.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd6ca2cc26ad6963e1be19b3338a9e98f40d9bd88',
+      'reference' => 'ec66177eefa1126d5319f3135ff3a7185e21a0ba',
     ),
     'composer/installers' => 
     array (
-      'pretty_version' => 'v1.9.0',
-      'version' => '1.9.0.0',
+      'pretty_version' => 'v1.12.0',
+      'version' => '1.12.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b93bcf0fa1fccb0b7d176b0967d969691cd74cca',
+      'reference' => 'd20a64ed3c94748397ff5973488761b22f6d3f19',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -45,8 +45,8 @@
     ),
     'woocommerce/woocommerce-admin' => 
     array (
-      'pretty_version' => '2.0.2',
-      'version' => '2.0.2.0',
+      'pretty_version' => '3.0.3',
+      'version' => '3.0.3.0',
       'aliases' => 
       array (
       ),

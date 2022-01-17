@@ -387,6 +387,7 @@ class WC_Admin_Menus {
 			)
 		);
 	}
+
 }
 
 return new WC_Admin_Menus();
