@@ -51,7 +51,6 @@ class AG_gateway_tips {
                         'title' =>  AG_ePDQ_Helpers::AG_escape( $post->title->rendered ),
                         'tip_url' => AG_ePDQ_Helpers::AG_escape( $post->link ),
                         'dec' => AG_ePDQ_Helpers::AG_escape( $post->excerpt->rendered ),
-                        //'tip_img' => AG_ePDQ_Helpers::AG_escape( $post->_embedded->{'wp:featuredmedia'}[0]->source_url )
                     );
              
                 }
@@ -79,15 +78,19 @@ class AG_gateway_tips {
 
         foreach ( $new_tips as $tip ) { ?>
 
-        <div class="tip-card">
-            <div class="card-contents">
-                <div class="card-body">
-                    <h3><?php echo AG_ePDQ_Helpers::AG_decode( $tip['title'] ); ?></h3>
-                    <?php echo AG_ePDQ_Helpers::AG_decode( $tip['dec'] ); ?>
-                    <a href="<?php echo AG_ePDQ_Helpers::AG_decode( $tip['tip_url'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank" class="ag-button">Find out more</a>
+            <a class="product-card" href="<?php echo AG_ePDQ_Helpers::AG_decode( $tip['tip_url'] ); ?>?utm_source=<?php echo self::$args['plugin_slug']; ?>&utm_medium=plugin_tips" target="_blank" style="width: 378.667px; float: left; margin-right: 32px">
+                <div class="product-card-content">
+                    <div class="product-card-main">
+                        <h3 class="heading-sm"><?php echo AG_ePDQ_Helpers::AG_decode( $tip['title'] ); ?></h3>
+                        <div class="body" style="height: 125px;">
+					        <?php echo AG_ePDQ_Helpers::AG_decode( $tip['dec'] ); ?>
+                        </div>
+                    </div>
+                    <div class="product-card-footer">
+                        <div class="btn btn-sm btn-stroke">View</div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </a>
 
     <?php }
 

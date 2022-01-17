@@ -118,6 +118,7 @@ function init_ag_epdq()
 	        }
 
 	        wp_enqueue_script('ePDQ_settings_script', AG_ePDQ_server_path . 'inc/assets/js/admin-script.js');
+	        wp_enqueue_script('ePDQ_alert', 'https://unpkg.com/sweetalert/dist/sweetalert.min.js');
         }
 
         /**
@@ -645,6 +646,12 @@ function init_ag_epdq()
             extract($args);
 
             $order = new WC_Order($args['idOrder']);
+
+	        // Catch and stop if order is already paid for.
+	        if ($order->has_status( 'completed' )) {
+		        AG_ePDQ_Helpers::ag_log('Aborting, Order #' . $args['idOrder'] . ' is already paid for.', 'debug', 'yes');
+		        exit;
+	        }
 
             $STATUS = $args['STATUS'];
             $NCERROR = $args['NCERROR'];

@@ -103,7 +103,7 @@ if (!class_exists('AWS_FacetWP')) :
          * Update posts query
          */
         public function posts_pre_query( $posts, $query ) {
-            if ( ( $query->is_main_query() || $query->is_search() || isset( $query->query_vars['s'] ) ) && isset( $this->data['filtered_post_ids'] ) && ! empty( $this->data['filtered_post_ids'] ) ) {
+            if ( ( $query->is_main_query() || $query->is_search() ) && isset( $this->data['filtered_post_ids'] ) && ! empty( $this->data['filtered_post_ids'] ) ) {
                 $posts = $this->data['filtered_post_ids'];
             }
             return $posts;

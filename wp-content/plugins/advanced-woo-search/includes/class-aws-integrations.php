@@ -197,6 +197,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'rey_wp_head' ) );
                 }
 
+                if ( 'Orchid Store' === $this->current_theme || function_exists('orchid_store_setup')  ) {
+                    add_action( 'wp_head', array( $this, 'orchid_store_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -1472,6 +1476,31 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
         <?php }
 
+         /*
+          * Orchid store theme search form styles
+          */
+        public function orchid_store_wp_head() { ?>
+            <style>
+                .masterheader .aws-container .aws-search-field {
+                    border: 2px solid #0286e7;
+                    border-radius: 50px !important;
+                }
+                .masterheader .aws-container .aws-search-form {
+                    height: 45px;
+                }
+                .masterheader .aws-container .aws-search-form .aws-form-btn {
+                    background: #0286e7;
+                    border-radius: 50px !important;
+                    margin: 3px 0;
+                }
+                .masterheader .aws-container .aws-search-form .aws-main-filter .aws-main-filter__current,
+                .masterheader .aws-container .aws-search-form .aws-main-filter .aws-main-filter__current:after,
+                .masterheader .aws-container .aws-search-form .aws-search-btn_icon {
+                    color: #fff;
+                }
+            </style>
+        <?php }
+
         /*
          * Exclude product categories
          */
@@ -1673,7 +1702,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             if ( 'Basel' === $this->current_theme ) {
-                $selectors[] = '.basel-search-wrapper #searchform, .secondary-header #searchform';
+                $selectors[] = '.basel-search-wrapper #searchform, .secondary-header #searchform, .mobile-nav #searchform';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace
@@ -1981,6 +2010,8 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $user_role = $roles[0];
             }
 
+            $remove_products = array();
+
             foreach( $products as $key => $product ) {
 
                 $visible_roles = get_post_meta( $product['parent_id'], '_alg_wc_pvbur_visible', true );
@@ -1989,7 +2020,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 if ( is_array( $invisible_roles ) && ! empty( $invisible_roles ) ) {
                     foreach( $invisible_roles as $invisible_role ) {
                         if ( $user_role == $invisible_role ) {
-                            unset( $products[$key] );
+                            $remove_products[] = $key;
                             continue 2;
                         }
                     }
@@ -2004,11 +2035,21 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         }
                     }
                     if ( ! $show ) {
-                        unset( $products[$key] );
+                        $remove_products[] = $key;
                         continue;
                     }
                 }
 
+            }
+
+            if ( ! empty( $remove_products ) ) {
+                $new_products = array();
+                foreach( $products as $key => $product ) {
+                    if ( array_search( $key, $remove_products ) === false ) {
+                        $new_products[] = $product;
+                    }
+                }
+                $products = $new_products;
             }
 
             return $products;

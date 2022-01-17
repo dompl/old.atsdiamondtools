@@ -100,75 +100,109 @@ class AG_welcome_screen {
 				<h2>Account, Licence settings & Affiliation</h2>
 				<div class="section">
 
-				        <div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>License &amp; Billing</h3>
-									<p>Activate or sync your license, cancel your subscription, print invoices, and manage your account information.</p>
-									<a href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-account'); ?>" class="ag-button">Manage Licence &amp; Billing</a>
-								</div>
-							</div>
-						</div>
+                    <a class="product-card" target="_blank" href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-account'); ?>" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('License &amp; Billing', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Activate or sync your license, cancel your subscription, print invoices, and manage your account information.', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Manage Licence & Billing', 'ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
 
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Your Account</h3>
-									<p>Manage all of your AG plugins, subscriptions, renewals, and more.</p>
-									<a target="_blank" href="https://weareag.co.uk/account?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Manage Your Account</a>
-								</div>
-							</div>
-						</div>
+                    <a class="product-card" target="_blank" href="https://weareag.co.uk/account?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Your Account', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Manage all of your AG plugins, subscriptions, renewals, and more.', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Manage Your Account','ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
 
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Affiliate</h3>
-									<p>Become an ambassador for AG and earn 20% commission for each sale!</p>
-									<a href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-affiliation'); ?>" class="ag-button">Find Out More</a>
-								</div>
-							</div>
-						</div>
+                    <a class="product-card" target="_blank" href="<?php echo admin_url('admin.php?page='. self::$args['main_slug'] .'-affiliation'); ?>" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Affiliate', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Become an ambassador for AG and earn 20% commission for each sale!', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Find Out More', 'ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
+
 						<div style="clear: both"></div>
 				</div>
 				<h2>Getting the help you need</h2>
 				<div class="section">
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Getting Support</h3>
-									<p>Get premium support with a valid licence</p>
-									<a target="_blank" href="https://weareag.co.uk/support?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button">Submit a ticket</a>
-								</div>
-							</div>
-						</div>
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Documentation</h3>
-									<p>Have a read of the plugin documentation.</p>
-									<a target="_blank" href="<?php echo self::$AG_doc_url . self::$args['collection']; ?>" class="ag-button" target="_blank">Documentation</a>
-								</div>
-							</div>
-						</div>
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Feature Request</h3>
-									<p>Have a feature you'd love to be part of the plugin?'.</p>
-									<a target="_blank" href="https://weareag.co.uk/feature-requests?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" class="ag-button" target="_blank">Submit a feature request</a>
-								</div>
-							</div>
-						</div>
-						<div class="main-card">
-							<div class="card-contents">
-								<div class="card-body">
-									<h3>Setup Wizard</h3>
-									<p>Struggling to get setup?</p>
-									<a target="_blank" href="<?php echo esc_url_raw( admin_url('?page='.self::$args['plugin_name'].'-wizard') ); ?>" class="ag-button" target="_blank">Use the wizard</a>
-								</div>
-							</div>
-						</div>
+
+                    <a class="product-card" target="_blank" href="https://weareag.co.uk/support?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" target="_blank" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Getting Support', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Get premium support with a valid licence', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Submit a ticket', 'ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="product-card" target="_blank" href="<?php echo self::$AG_doc_url . self::$args['collection']; ?>" target="_blank" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Documentation', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Have a read of the plugin documentation.', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Documentation', 'ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="product-card" target="_blank" href="https://weareag.co.uk/feature-requests?utm_source=<?php echo self::$args['main_slug']; ?>&amp;utm_medium=insideplugin" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Feature Request', 'ag_epdq_server'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Have a feature you\'d love to be part of the plugin?', 'ag_epdq_server'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Submit a feature request', 'ag_epdq_server'); ?></div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="product-card" target="_blank" href="<?php echo esc_url_raw( admin_url('?page=AG_ePDQ-wizard') ); ?>" style="width: 378.667px; float: left; margin-right: 32px">
+                        <div class="product-card-content">
+                            <div class="product-card-main">
+                                <h3 class="heading-sm"><?php echo __('Setup Wizard', 'ag_tyl_checkout'); ?></h3>
+                                <div class="body">
+                                    <p><?php echo __('Struggling to get setup?', 'ag_tyl_checkout'); ?></p>
+                                </div>
+                            </div>
+                            <div class="product-card-footer">
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Use the wizard', 'ag_tyl_checkout'); ?></div>
+                            </div>
+                        </div>
+                    </a>
+
 						<div style="clear: both"></div>
 				</div>
 				<h2>Other AG payment gateways</h2>

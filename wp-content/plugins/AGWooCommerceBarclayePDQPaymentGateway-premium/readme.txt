@@ -17,11 +17,11 @@ Setting up this plugin should only take 30 minutes to complete, follow the steps
 = Does this plugin work with newest WP and WooCommerce versions? =
 Yes, this plugin works really fine with the latest versions!
 
-= I have a problem with the plugin, its not working =
+= I have a problem with the plugin, it's not working =
 Ok not a problem, lets see if you can fix it by following these steps.
 1. Enable the plugins debug mode in the settings page.
 2. Process a test transaction using the gateway.
-3. Check the plugins error logs to see if any errors have been logged, if they have follow the steps to fix.
+3. Check the plugins error logs to see if any errors have been logged, if they have, follow the steps to fix.
 4. Issue is still not fixed? Check the ePDQ error log in the back office.
 5. Follow the steps in the troubleshooting section of the documentation to fix.
 6. Still having issues? Send us a support ticket detailing the issue you have, we may ask for screenshots of the ePDQ back office.
@@ -37,6 +37,14 @@ Yes!
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
 
 == Changelog ==
+
+= v4.2.8 - 06/01/22 =
+* Dev           - Minimised plugin admin CSS file.
+* Dev           - New welcome screen design.
+* Dev           - New dynamic upsell inside welcome screen.
+* Dev           - New logic gate to catch orders already paid for.
+* Change        - Some security and performance improvements to the codebase.
+* Change        - Popup shown when store status changed in settings page.
 
 = v4.2.7 - 08/12/21 =
 * Checking  - Checking support for new WooCommerce version.

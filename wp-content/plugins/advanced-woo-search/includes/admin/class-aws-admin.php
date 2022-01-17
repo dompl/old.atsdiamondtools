@@ -236,6 +236,10 @@ class AWS_Admin {
             return;
         }
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
         $hide_notice = get_option( 'aws_hide_welcome_notice' );
 
         if ( ! $hide_notice || $hide_notice === 'true' ) {
