@@ -232,7 +232,7 @@ class epdq_checkout_subscription extends epdq_checkout
 
         wc_enqueue_js('
                 jQuery("body").block({
-                        message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag-epdq') . '",
+                        message: "' . __('You are now being redirected to Barclaycard to make payment securely.', 'ag-epdq', 'ag_epdq_server') . '",
                         overlayCSS:
                         {
                             background: "#fff",

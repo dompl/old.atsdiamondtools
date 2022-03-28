@@ -192,13 +192,13 @@ class AG_welcome_screen {
                     <a class="product-card" target="_blank" href="<?php echo esc_url_raw( admin_url('?page=AG_ePDQ-wizard') ); ?>" style="width: 378.667px; float: left; margin-right: 32px">
                         <div class="product-card-content">
                             <div class="product-card-main">
-                                <h3 class="heading-sm"><?php echo __('Setup Wizard', 'ag_tyl_checkout'); ?></h3>
+                                <h3 class="heading-sm"><?php echo __('Setup Wizard', 'ag_tyl_checkout', 'ag_epdq_server'); ?></h3>
                                 <div class="body">
-                                    <p><?php echo __('Struggling to get setup?', 'ag_tyl_checkout'); ?></p>
+                                    <p><?php echo __('Struggling to get setup?', 'ag_tyl_checkout', 'ag_epdq_server'); ?></p>
                                 </div>
                             </div>
                             <div class="product-card-footer">
-                                <div class="btn btn-sm btn-stroke"><?php echo __('Use the wizard', 'ag_tyl_checkout'); ?></div>
+                                <div class="btn btn-sm btn-stroke"><?php echo __('Use the wizard', 'ag_tyl_checkout', 'ag_epdq_server'); ?></div>
                             </div>
                         </div>
                     </a>

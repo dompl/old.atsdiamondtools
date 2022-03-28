@@ -83,7 +83,7 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
 
             if ( $this->options['apply_filters'] ) {
                 $content = apply_filters( 'the_content', $content, $data['id'] );
-            } else {
+            } elseif( isset( $this->options['do_shortcodes'] ) && $this->options['do_shortcodes'] ) {
                 $content = do_shortcode( $content );
             }
 
@@ -443,6 +443,11 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
             if ( ! empty( $str_array ) && $str_array ) {
                 foreach( $str_array as $str_item_term => $str_item_num ) {
                     if ( $str_item_term  ) {
+
+                        if ( ! isset( $str_new_array[$str_item_term] ) && preg_match("/es$/", $str_item_term ) ) {
+                            $str_new_array[$str_item_term] = $str_item_num;
+                        }
+
                         $new_array_key = AWS_Plurals::singularize( $str_item_term );
 
                         if ( $new_array_key && strlen( $str_item_term ) > 3 && strlen( $new_array_key ) > 2 ) {

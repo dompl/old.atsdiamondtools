@@ -312,6 +312,32 @@
     background: #f5f5f5;
 }
 
+.aws-search-result .aws_results .aws_result_item {
+    position: relative;
+}
+
+.aws-search-result .aws_result_item .aws_result_link_top {
+    position: absolute;
+    z-index: 1;
+    white-space: nowrap;
+    text-indent: -9999px;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    outline: none;
+    text-decoration: none;
+}
+
+.aws-search-result .aws_result_item a,
+.aws-search-result .aws_result_item button,
+.aws-search-result .aws_result_item span[href],
+.aws-search-result .aws_result_item [data-link] {
+    position: relative;
+    z-index: 2;
+}
 
 .aws-search-result .aws_result_content {
     overflow: hidden;

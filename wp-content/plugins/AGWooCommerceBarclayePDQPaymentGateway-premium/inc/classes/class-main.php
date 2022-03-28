@@ -694,7 +694,7 @@ function init_ag_epdq()
 
                 $interval = date_diff($start, $finish);
                 AG_ePDQ_Helpers::ag_log('Customer took ' . $interval->format('%i Minute %s Seconds') . ' to process through ePDQ', 'debug', $this->debug);
-                $time = __('Customer took ' . $interval->format('%i Minute %s Seconds') . ' to process through ePDQ', 'ag_epdq_direct');
+                $time = __('Customer took ' . $interval->format('%i Minute %s Seconds') . ' to process through ePDQ', 'ag_epdq_direct', 'ag_epdq_server');
                 $order->add_order_note($time);
 
             }
@@ -827,8 +827,9 @@ function init_ag_epdq()
                 return new WP_Error('error', __('Refund failed: API password has not been set.', 'ag_epdq_server'));
             }
 
-            if (AG_ePDQ_Helpers::ag_get_order_currency($order) !== 'GBP' && defined('ePDQ_PSPID')) {
+            if (AG_ePDQ_Helpers::ag_get_order_currency($order) !== 'GBP' && defined('ePDQ_PSPID') && defined('ePDQ_REFID')) {
                 $PSPID = ePDQ_PSPID;
+	            $refund_settings['REFID'] = ePDQ_REFID;
             } else {
                 $PSPID = $settings['pspid'];
             }

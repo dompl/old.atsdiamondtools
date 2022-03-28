@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 5.8
-Stable tag: 2.44
+Tested up to: 5.9
+Stable tag: 2.50
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,44 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.50 ( 2022-03-22 ) =
+* Update - Tested with WC 6.3
+* Update - Integration with Astra theme
+* Dev - Add aws_search_data_parameters filter
+
+= 2.49 ( 2022-03-07 ) =
+* Update - Admin notices
+* Fix - WCFM - WooCommerce Multivendor Marketplace plugin integration. Change store link
+* Fix - Terms scrapping for index table
+* Dev - Add aws_search_pre_filter_single_product filter
+* Dev - Make get_products method public
+
+= 2.48 ( 2022-02-21 ) =
+* Add - New admin notices about integrations
+* Update - Tested with WC 6.2
+* Update - Integration for Woodmart theme
+* Update - Support for WCFM - WooCommerce Multivendor Marketplace plugin
+* Dev - Add aws_seamless_search_form_filter filter
+
+= 2.47 ( 2022-02-07 ) =
+* Update - Do not close AJAX results block when clicking on results item
+* Update - Markup for AJAX search results
+* Update - Styles for admin page welcome message
+* Update - Support for WooCommerce Product Filter by WooBeWoo
+* Fix - Bug with admin page scripts loader
+
+= 2.46 ( 2022-01-26 ) =
+* Update - Divi builder support. Index content from long description fields
+* Fix - Bug with Divi visual builder that trigger error on save
+
+= 2.45 ( 2022-01-24 ) =
+* Update - Tested with WC 6.1
+* Update - Divi theme support. Autofocus on search field in the header
+* Update - Admin page 'Get started' notice
+* Fix - Remove error notice on first search if cache table not exist
+* Dev - Add aws_results_force_position js filter
+* Dev - Remove unused parameter for wp_insert_post hook
 
 = 2.44 ( 2022-01-10 ) =
 * Fix - FacetWP plugin compatibility issue

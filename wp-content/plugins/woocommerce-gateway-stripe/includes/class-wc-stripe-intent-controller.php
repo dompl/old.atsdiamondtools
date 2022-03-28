@@ -407,7 +407,8 @@ class WC_Stripe_Intent_Controller {
 				'amount'      => WC_Stripe_Helper::get_stripe_amount( $amount, strtolower( $currency ) ),
 				'currency'    => strtolower( $currency ),
 				'metadata'    => $gateway->get_metadata_from_order( $order ),
-				'description' => __( 'Stripe - Order', 'woocommerce-gateway-stripe' ) . ' ' . $order->get_id(),
+				/* translators: 1) blog name 2) order number */
+				'description' => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
 			];
 
 			if ( '' !== $selected_upe_payment_type ) {
@@ -575,7 +576,7 @@ class WC_Stripe_Intent_Controller {
 			if ( empty( $intent_id_received ) || $intent_id_received !== $intent_id ) {
 				$note = sprintf(
 					/* translators: %1: transaction ID of the payment or a translated string indicating an unknown ID. */
-					esc_html__( 'A payment with ID %s was used in an attempt to pay for this order. This payment intent ID does not match any payments for this order, so it was ignored and the order was not updated.', 'woocommerce-gateway-stripe' ),
+					__( 'A payment with ID %s was used in an attempt to pay for this order. This payment intent ID does not match any payments for this order, so it was ignored and the order was not updated.', 'woocommerce-gateway-stripe' ),
 					$intent_id_received
 				);
 				$order->add_order_note( $note );

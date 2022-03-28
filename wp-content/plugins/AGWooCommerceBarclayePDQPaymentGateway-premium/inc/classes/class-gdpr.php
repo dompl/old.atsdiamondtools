@@ -82,7 +82,7 @@ class AG_ePDQ_gdpr {
     function plugin_add_suggested_privacy_content()
     {
         $content = $this->plugin_get_default_privacy_content();
-        wp_add_privacy_policy_content( __( 'AG ePDQ Server Gateway' ), $content );
+        wp_add_privacy_policy_content( __( 'AG ePDQ Server Gateway', 'ag_epdq_server' ), $content );
     }
 
  

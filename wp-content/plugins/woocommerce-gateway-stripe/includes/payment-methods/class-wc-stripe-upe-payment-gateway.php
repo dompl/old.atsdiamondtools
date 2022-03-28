@@ -121,7 +121,7 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$this->maybe_init_pre_orders();
 
 		$main_settings              = get_option( 'woocommerce_stripe_settings' );
-		$this->title                = $this->get_option( 'title_upe' );
+		$this->title                = ! empty( $this->get_option( 'title_upe' ) ) ? $this->get_option( 'title_upe' ) : $this->form_fields['title_upe']['default'];
 		$this->description          = '';
 		$this->enabled              = $this->get_option( 'enabled' );
 		$this->saved_cards          = 'yes' === $this->get_option( 'saved_cards' );
@@ -195,7 +195,15 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 	 * Outputs scripts used for stripe payment
 	 */
 	public function payment_scripts() {
-		if ( ! is_cart() && ! is_checkout() && ! isset( $_GET['pay_for_order'] ) && ! is_add_payment_method_page() ) {
+		if (
+			! is_product()
+			&& ! WC_Stripe_Helper::has_cart_or_checkout_on_current_page()
+			&& ! isset( $_GET['pay_for_order'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			&& ! is_add_payment_method_page() ) {
+			return;
+		}
+
+		if ( is_product() && ! WC_Stripe_Helper::should_load_scripts_on_product_page() ) {
 			return;
 		}
 
@@ -426,10 +434,13 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 			<?php if ( $this->testmode ) : ?>
 				<p class="testmode-info">
 					<?php
-					echo sprintf(
-						/* translators: link to Stripe testing page */
-						__( '<strong>Test mode:</strong> use the test VISA card 4242424242424242 with any expiry date and CVC. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed <a href="%s" target="_blank">here</a>.', 'woocommerce-gateway-stripe' ),
-						'https://stripe.com/docs/testing'
+					printf(
+					/* translators: 1) HTML strong open tag 2) HTML strong closing tag 3) HTML anchor open tag 2) HTML anchor closing tag */
+						esc_html__( '%1$sTest mode:%2$s use the test VISA card 4242424242424242 with any expiry date and CVC. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed %3$shere%4$s.', 'woocommerce-gateway-stripe' ),
+						'<strong>',
+						'</strong>',
+						'<a href="https://stripe.com/docs/testing" target="_blank">',
+						'</a>'
 					);
 					?>
 				</p>
@@ -495,6 +506,17 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 		$save_payment_method       = $this->has_subscription( $order_id ) || ! empty( $_POST[ 'wc-' . self::ID . '-new-payment-method' ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$selected_upe_payment_type = ! empty( $_POST['wc_stripe_selected_upe_payment_type'] ) ? wc_clean( wp_unslash( $_POST['wc_stripe_selected_upe_payment_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
+		$statement_descriptor                  = ! empty( $this->get_option( 'statement_descriptor' ) ) ? str_replace( "'", '', $this->get_option( 'statement_descriptor' ) ) : '';
+		$short_statement_descriptor            = ! empty( $this->get_option( 'short_statement_descriptor' ) ) ? str_replace( "'", '', $this->get_option( 'short_statement_descriptor' ) ) : '';
+		$is_short_statement_descriptor_enabled = ! empty( $this->get_option( 'is_short_statement_descriptor_enabled' ) ) && 'yes' === $this->get_option( 'is_short_statement_descriptor_enabled' );
+		$descriptor                            = null;
+		if ( 'card' === $selected_upe_payment_type && $is_short_statement_descriptor_enabled && ! ( empty( $short_statement_descriptor ) && empty( $statement_descriptor ) ) ) {
+			// Use the shortened statement descriptor for card transactions only
+			$descriptor = WC_Stripe_Helper::get_dynamic_statement_descriptor( $short_statement_descriptor, $order, $statement_descriptor );
+		} elseif ( ! empty( $statement_descriptor ) ) {
+			$descriptor = WC_Stripe_Helper::clean_statement_descriptor( $statement_descriptor );
+		}
+
 		if ( $payment_intent_id ) {
 			if ( $payment_needed ) {
 				$amount           = $order->get_total();
@@ -502,10 +524,11 @@ class WC_Stripe_UPE_Payment_Gateway extends WC_Gateway_Stripe {
 				$converted_amount = WC_Stripe_Helper::get_stripe_amount( $amount, $currency );
 
 				$request = [
-					'amount'      => $converted_amount,
-					'currency'    => $currency,
+					'amount'               => $converted_amount,
+					'currency'             => $currency,
+					'statement_descriptor' => $descriptor,
 					/* translators: 1) blog name 2) order number */
-					'description' => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
+					'description'          => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
 				];
 
 				// Get user/customer for order.

@@ -155,7 +155,7 @@ class AG_licence
     
     public static function welcome_link( $html = '' )
     {
-        return $html . sprintf( '<a href="%s" class="button button-secondary">&larr; %s</a>', self::$args['urls']['welcome'], __( 'Back to Welcome page' ) );
+        return $html . sprintf( '<a href="%s" class="button button-secondary">&larr; %s</a>', self::$args['urls']['welcome'], __( 'Back to Welcome page', 'ag_epdq_server' ) );
     }
     
     public function ag_available_checkout( $available_gateways )

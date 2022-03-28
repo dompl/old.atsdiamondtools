@@ -90,7 +90,7 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
         /*
          * Check if cache table exist
          */
-        private function is_cache_table_not_exist() {
+        public function is_cache_table_not_exist() {
 
             global $wpdb;
 
@@ -101,7 +101,7 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
         /*
          * Create cache table
          */
-        private function create_cache_table() {
+        public function create_cache_table() {
 
             global $wpdb;
 

@@ -34,9 +34,16 @@ Yes!
 
 == Upgrade Notice ==
 
-Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you backup your site just in case.
+Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v4.2.10 - 03/03/22 =
+* Dev           - New define defined('ePDQ_REFID') for processing refunds using MC account.
+* Update        - Freemius SDK updated.
+
+= v4.2.9 - 31/01/22 =
+* Fix           - Replaced plugin icon image with updated version.
 
 = v4.2.8 - 06/01/22 =
 * Dev           - Minimised plugin admin CSS file.

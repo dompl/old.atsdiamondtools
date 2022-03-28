@@ -30,7 +30,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             $this->table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
 
-            add_action( 'wp_insert_post', array( $this, 'product_changed' ), 10, 3 );
+            add_action( 'wp_insert_post', array( $this, 'product_changed' ), 10, 2 );
             add_action( 'delete_post', array( $this, 'product_deleted' ), 10, 2 );
 
             add_action( 'create_term', array( &$this, 'term_changed' ), 10, 3 );
@@ -108,6 +108,10 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 $wpdb->query("DROP TABLE IF EXISTS {$this->table_name}");
 
                 $this->create_table();
+
+                if ( AWS()->cache->is_cache_table_not_exist() ) {
+                    AWS()->cache->create_cache_table();
+                }
 
                 $index_meta['found_posts'] = $this->get_number_of_products();
 
@@ -501,8 +505,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         /*
          * Update index table
          */
-        public function product_changed( $post_id, $post, $update ) {
-
+        public function product_changed( $post_id, $post ) {
+            
             $slug = 'product';
 
             if ( $slug != $post->post_type ) {

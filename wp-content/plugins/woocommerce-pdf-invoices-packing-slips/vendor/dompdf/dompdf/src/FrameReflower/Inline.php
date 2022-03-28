@@ -158,10 +158,10 @@ class Inline extends AbstractFrameReflower
             $child->set_containing_block($cb);
             $child->reflow($block);
 
-            // Stop reflow of subsequent children if the frame was split within
-            // child reflow
-            if ($child->get_parent() !== $frame) {
-                break;
+            // Stop reflow if the frame has been reset by a line or page break
+            // due to child reflow
+            if (!$frame->content_set) {
+                return;
             }
         }
 

@@ -70,7 +70,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
                         if ( ! $is_store_offline ) {
 
                             $store_name = wcfm_get_vendor_store_name( absint( $vendor_id ) );
-                            $store_url = $WCFMmp->wcfmmp_store->get_shop_url();
+                            $store_url = function_exists('wcfmmp_get_store_url') && $vendor_id ? wcfmmp_get_store_url( $vendor_id ) : '';
 
                             $logo = '';
 
@@ -82,7 +82,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
                                 $logo = '<img style="margin-right:4px;" width="24px" src="' . $store_logo . '" />';
                             }
 
-                            $excerpt .= '<br><span style="margin-top:4px;display:block;" data-link="' . $store_url . '">' . $logo . $store_name . '</span>';
+                            $excerpt .= '<br><a style="margin-top:4px;display:block;" href="' . $store_url . '">' . $logo . $store_name . '</a>';
 
                         }
 

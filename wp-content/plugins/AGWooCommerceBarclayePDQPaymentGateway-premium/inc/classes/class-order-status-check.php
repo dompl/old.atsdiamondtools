@@ -128,12 +128,12 @@ class AG_ePDQ_order_status_check {
             $NCERRORPLUS = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['NCERRORPLUS']);
             $status = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['STATUS']);
     
-            $status_check = '<p><strong>'. __('AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce', 'ag_epdq_direct');
-            $note = '<p>'. __('ePDQ Status:', 'ag_epdq_direct') .' - ' . AG_errors::get_epdq_status_code($status) . '</p>';
+            $status_check = '<p><strong>'. __('AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce', 'ag_epdq_direct', 'ag_epdq_server');
+            $note = '<p>'. __('ePDQ Status:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . AG_errors::get_epdq_status_code($status) . '</p>';
             $errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror($NCERROR) . '</p>';
             $error_note = '<p>ePDQ NCERROR: - ' . $NCERRORPLUS . '</p>';
-            $note .= '<p>'. __('Order ID:', 'ag_epdq_direct') .' - ' . $order->get_id() . '</p>';
-            $note .= '<p>'. __('Payment Reference In ePDQ System:', 'ag_epdq_direct') .' - ' . $response['PAYID'] . '</p>';   
+            $note .= '<p>'. __('Order ID:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . $order->get_id() . '</p>';
+            $note .= '<p>'. __('Payment Reference In ePDQ System:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . $response['PAYID'] . '</p>';   
 
             if (in_array($status, $accepted)) {
 
@@ -142,9 +142,9 @@ class AG_ePDQ_order_status_check {
                 sleep(1);
 			
                 // 3DS v2 Frictionless flow
-                $noteTitle = __(' and Barclays ePDQ has confirmed the transaction.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has confirmed the transaction.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed (The transaction was a 3DS v2 Frictionless transaction)', 'debug', $ePDQ_settings->debug);
-                $note .= '<p><strong>'. __('Barclays ePDQ transaction is confirmed', 'ag_epdq_direct') .'</strong></p>';
+                $note .= '<p><strong>'. __('Barclays ePDQ transaction is confirmed', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($note);
                 $order->payment_complete($response['PAYID']);
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
@@ -161,7 +161,7 @@ class AG_ePDQ_order_status_check {
                 
             } elseif (in_array($status, array(41, 51, 91))) {
                 
-                $noteTitle = __(' and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 AG_ePDQ_Helpers::ag_log('The data capture will be processed offline. This is the standard response if you have selected offline processing in your account configuration. Check the  the "Global transaction parameters" tab in the ePDQ back office.', 'debug', $ePDQ_settings->debug);
                 $order->update_status('on-hold');
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
@@ -169,7 +169,7 @@ class AG_ePDQ_order_status_check {
     
             } elseif ($status === 2 || $status === 93) {
                 
-                $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct').'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct', 'ag_epdq_server').'</strong></p>';
                 $order->add_order_note($error_note);
                 AG_ePDQ_Helpers::ag_log('The authorisation has been refused by the financial institution. The customer can retry the authorisation process after selecting another card or another payment method.', 'debug', $ePDQ_settings->debug);
                 $order->update_status('failed');
@@ -178,7 +178,7 @@ class AG_ePDQ_order_status_check {
     
             } elseif ($status === 52 || $status === 92) {
                 
-                $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 AG_ePDQ_Helpers::ag_log('A technical problem arose during the authorisation/payment process, giving an unpredictable result.', 'debug', $ePDQ_settings->debug);
@@ -187,7 +187,7 @@ class AG_ePDQ_order_status_check {
     
             } elseif ($status === 1) {
                 
-                $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 $order->update_status('failed');
@@ -196,7 +196,7 @@ class AG_ePDQ_order_status_check {
             
             } elseif ($status === 0 || $status === NULL) {
                 
-                $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 $order->add_order_note($note);
@@ -235,9 +235,9 @@ class AG_ePDQ_order_status_check {
             wp_enqueue_script( self::$args['plugin_name'].'-status-check', AG_ePDQ_server_path . "inc/assets/js/ag-status-check-script.js", array('jquery'), NULL, true );
             wp_localize_script( self::$args['plugin_name'].'-status-check', 'ag_status_var', array( 
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
-                'msg'    => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_direct' ),
+                'msg'    => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_direct', 'ag_epdq_server' ),
                 'nonce'  => wp_create_nonce( self::$args['plugin_name'].'-status-check' ),
-                'error'  => __( 'Something went wrong, and the order status check could not be completed. Please try again.', 'ag_epdq_direct' ),                
+                'error'  => __( 'Something went wrong, and the order status check could not be completed. Please try again.', 'ag_epdq_direct', 'ag_epdq_server' ),                
             ) );
 
         }
@@ -323,19 +323,19 @@ class AG_ePDQ_order_status_check {
             $PAYID = preg_replace('/[^a-zA-Z0-9\s]/', '', $response['PAYID']);
 
     
-            $status_check = '<p><strong>'. __('AG ePDQ order status check was manually checked', 'ag_epdq_direct');
-            $note = '<p>'. __('ePDQ Status:', 'ag_epdq_direct') .' - ' . AG_errors::get_epdq_status_code($status) . '</p>';
+            $status_check = '<p><strong>'. __('AG ePDQ order status check was manually checked', 'ag_epdq_direct', 'ag_epdq_server');
+            $note = '<p>'. __('ePDQ Status:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . AG_errors::get_epdq_status_code($status) . '</p>';
             $errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror($NCERROR) . '</p>';
             $error_note = '<p>ePDQ NCERROR: - ' . $NCERRORPLUS . '</p>';
-            $note .= '<p>'. __('Order ID:', 'ag_epdq_direct') .' - ' . $order->get_id() . '</p>';
-            $note .= '<p>'. __('Payment Reference In ePDQ System:', 'ag_epdq_direct') .' - ' . $PAYID . '</p>';   
+            $note .= '<p>'. __('Order ID:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . $order->get_id() . '</p>';
+            $note .= '<p>'. __('Payment Reference In ePDQ System:', 'ag_epdq_direct', 'ag_epdq_server') .' - ' . $PAYID . '</p>';   
 
             if (in_array($status, $accepted)) {
 			
                 // 3DS v2 Frictionless flow
-                $noteTitle = __(' and Barclays ePDQ has confirmed the transaction.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has confirmed the transaction.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 AG_ePDQ_Helpers::ag_log('Barclays ePDQ transaction is confirmed (The transaction was a 3DS v2 Frictionless transaction)', 'debug', $ePDQ_settings->debug);
-                $note .= '<p><strong>'. __('Barclays ePDQ transaction is confirmed', 'ag_epdq_direct') .'</strong></p>';
+                $note .= '<p><strong>'. __('Barclays ePDQ transaction is confirmed', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($note);
                 $order->payment_complete($PAYID);
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
@@ -351,7 +351,7 @@ class AG_ePDQ_order_status_check {
                 
             } elseif (in_array($status, array(41, 51, 91))) {
                 
-                $noteTitle = __(' and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 AG_ePDQ_Helpers::ag_log('The data capture will be processed offline. This is the standard response if you have selected offline processing in your account configuration. Check the  the "Global transaction parameters" tab in the ePDQ back office.', 'debug', $ePDQ_settings->debug);
                 $order->update_status('on-hold');
                 delete_post_meta($order->get_id(), 'HTML_ANSWER');
@@ -359,7 +359,7 @@ class AG_ePDQ_order_status_check {
    
             } elseif ($status === 2 || $status === 93) {
                 
-                $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct').'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has refused the transaction.', 'ag_epdq_direct', 'ag_epdq_server').'</strong></p>';
                 $order->add_order_note($error_note);
                 AG_ePDQ_Helpers::ag_log('The authorisation has been refused by the financial institution. The customer can retry the authorisation process after selecting another card or another payment method.', 'debug', $ePDQ_settings->debug);
                 $order->update_status('failed');
@@ -368,7 +368,7 @@ class AG_ePDQ_order_status_check {
     
             } elseif ($status === 52 || $status === 92) {
                 
-                $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and Barclays ePDQ has reported the payment is uncertain.', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 AG_ePDQ_Helpers::ag_log('A technical problem arose during the authorisation/payment process, giving an unpredictable result.', 'debug', $ePDQ_settings->debug);
@@ -377,7 +377,7 @@ class AG_ePDQ_order_status_check {
 
             } elseif ($status === 1) {
                 
-                $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and ePDQ has confirmed the customer has cancelled the transaction', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 $order->update_status('failed');
@@ -386,7 +386,7 @@ class AG_ePDQ_order_status_check {
             
             } elseif ($status === 0 || $status === NULL) {
                 
-                $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct') .'</strong></p>';
+                $noteTitle = __(' and has come back as Incomplete or invalid', 'ag_epdq_direct', 'ag_epdq_server') .'</strong></p>';
                 $order->add_order_note($errornote);
                 $order->add_order_note($error_note);
                 $order->add_order_note($note);
@@ -445,7 +445,7 @@ class AG_ePDQ_order_status_check {
            
                if ( $order->get_billing_first_name() || $order->get_billing_last_name() ) {
                    /* translators: 1: first name 2: last name */
-                   $buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'woocommerce' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
+                   $buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'woocommerce', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
                } elseif ( $order->get_billing_company() ) {
                    $buyer = trim( $order->get_billing_company() );
                } elseif ( $order->get_customer_id() ) {
@@ -465,7 +465,7 @@ class AG_ePDQ_order_status_check {
                if ( $order->get_status() === 'trash' ) {
                    echo '<strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong>';
                } else {
-                   echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'woocommerce' ) ) . '">' . esc_html( __( 'Preview', 'woocommerce' ) ) . '</a>';
+                   echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'woocommerce', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'woocommerce', 'ag_epdq_server' ) ) . '</a>';
                    echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $order->get_id() ) ) . '&action=edit' ) . '" class="order-view"><strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong></a>';
                    
                    // Check order is using our plugin

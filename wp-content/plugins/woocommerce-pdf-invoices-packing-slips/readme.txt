@@ -3,9 +3,9 @@ Contributors: pomegranate, alexmigf, yordansoares, kluver, dpeyou
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice, packing slip, export, email, bulk, automatic
 Requires at least: 3.5
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.1
-Stable tag: 2.12.1
+Stable tag: 2.14.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ This WooCommerce extension automatically adds a PDF invoice to the order confirm
 In addition to this, we offer several premium extensions:
 
 * Create/email PDF Proforma Invoices, Credit Notes (for Refunds), email Packing Slips, automatic upload to Dropbox & more with [WooCommerce PDF Invoices & Packing Slips Professional](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-professional/)
-* Automatically send new orders or packing slips to your printer, as soon as the customer orders! [WooCommerce Automatic Order Printing](https://www.simbahosting.co.uk/s3/product/woocommerce-automatic-order-printing/?affiliates=2) (from our partners at Simba Hosting)
+* Automatically send new orders or packing slips to your printer, as soon as the customer orders! [WooCommerce Automatic Order Printing](https://www.simbahosting.co.uk/s3/product/woocommerce-printnode-automatic-order-printing/?affiliates=2) (from our partners at Simba Hosting)
 * More advanced & stylish templates with [WooCommerce PDF Invoices & Packing Slips Premium Templates](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-premium-templates/)
 
 = Fully customizable =
@@ -101,6 +101,42 @@ There's a setting on the Status tab of the settings page that allows you to togg
 6. Set shop name, address, header logo, etc.
 
 == Changelog ==
+
+= 2.14.2 =
+* Fix: unescape text strings entered in the setup wizard
+* Dev: New filter wpo_wcpdf_email_order_object
+* UI: Update setup wizard layout
+* Libraries: updated dompdf to 1.2.1 (addressing potential security vulnerability)
+* Marked tested up to WooCommerce 6.4
+
+= 2.14.1 =
+* New: Relaunch the Setup Wizard manually from the Status tab
+* Fix: Dynamic `wpo_wcpdf_tmp_path_{$type}` filter hook name parsing
+* Fix: removing inline preview for media upload
+* UI: Show sticky save button on settings change
+* UI: Fill in the document icon sheet with white
+
+= 2.14.0 =
+* New: Live preview of PDF document on the settings page
+* Fix: checks if number store table exists before applying DB migration
+* Tweak: Remove i18n for some log strings
+* Marked tested up to WooCommerce 6.3
+
+= 2.13.1 =
+* Fix: load missing non-historical settings for existing invoices
+* Tweak: print file & line number for exceptions in error logs & output
+* Marked tested up to WooCommerce 6.2
+
+= 2.13.0 =
+* New: include dompdf temporary folder in cleanup procedure
+* New: Add CSS row classes for WPC Product Bundles
+* New: filter to override `wc_display_item_meta` arguments
+* Fix: Prevent errors when server doesn't support `.webp` image rendering
+* Fix: change invalid default date 0000-00-00 00:00:00 on number store tables
+* Tweak: Don't store non-historical document settings in order meta
+* Templates: New action hook before the document label (`wpo_wcpdf_before_document_label`)
+* Libraries: updated dompdf to 1.2.0
+* Marked tested up to WP5.9
 
 = 2.12.1 =
 * Fix: Show a feedback notice after saving settings

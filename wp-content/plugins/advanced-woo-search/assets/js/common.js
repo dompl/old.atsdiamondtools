@@ -168,8 +168,9 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                                 resultNum++;
 
-                                html += '<li class="aws_result_item aws_result_tag">';
-                                    html += '<a class="aws_result_link" href="' + taxitem.link + '" >';
+                                html += '<li class="aws_result_item aws_result_tag" style="position:relative;">';
+                                    html += '<div class="aws_result_link">';
+                                        html += '<a class="aws_result_link_top" style="position:absolute;z-index:1;white-space:nowrap;text-indent:-9999px;overflow:hidden;top:0;bottom:0;left:0;right:0;opacity:0;outline:none;text-decoration:none;" href="' + taxitem.link + '">' + taxitem.name + '</a>';
                                         html += '<span class="aws_result_content">';
                                             html += '<span class="aws_result_title">';
                                                 html += taxitem.name;
@@ -181,7 +182,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                                                 html += '<span class="aws_result_excerpt">' + taxitem.excerpt + '</span>';
                                             }
                                         html += '</span>';
-                                    html += '</a>';
+                                    html += '</div>';
                                 html += '</li>';
 
                             });
@@ -197,8 +198,10 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                         resultNum++;
 
-                        html += '<li class="aws_result_item">';
-                        html += '<a class="aws_result_link" href="' + result.link + '" >';
+                        html += '<li class="aws_result_item" style="position:relative;">';
+                        html += '<div class="aws_result_link">';
+
+                        html += '<a class="aws_result_link_top" style="position:absolute;z-index:1;white-space:nowrap;text-indent:-9999px;overflow:hidden;top:0;bottom:0;left:0;right:0;opacity:0;outline:none;text-decoration:none;" href="' + result.link + '">' + result.title.replace(/<(?:.|\n)*?>/gm, '') + '</a>';
 
                         if ( result.image ) {
                             html += '<span class="aws_result_image">';
@@ -242,7 +245,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                             html += '</span>';
                         }
 
-                        html += '</a>';
+                        html += '</div>';
                         html += '</li>';
 
                     });
@@ -316,7 +319,10 @@ AwsHooks.filters = AwsHooks.filters || {};
             },
 
             hideResults: function( event ) {
-                if ( ! $(event.target).closest( ".aws-container" ).length ) {
+                if ( ! $(event.target).closest( ".aws-container" ).length
+                    && ! $(event.target).closest( self ).length
+                    && ! $(event.target).closest( d.resultBlock ).length
+                ) {
                     methods.resultsHide();
                 }
             },
@@ -338,6 +344,9 @@ AwsHooks.filters = AwsHooks.filters || {};
                 var bodyHeight = $(document).height();
                 var resultsHeight = $resultsBlock.height();
 
+                // @since 2.45
+                var forcePosition = AwsHooks.apply_filters( 'aws_results_force_position', false, { resultsBlock: $resultsBlock, form: self } );
+
                 if ( offset && bodyOffset  ) {
 
                     var styles = {
@@ -354,9 +363,9 @@ AwsHooks.filters = AwsHooks.filters || {};
                         styles.left = offset.left;
                     }
 
-                    if ( bodyHeight - offset.top < 500 ) {
+                    if ( ( ( bodyHeight - offset.top < 500 ) && ! forcePosition ) || ( forcePosition && forcePosition == 'top' ) ) {
                         resultsHeight = methods.getResultsBlockHeight();
-                        if ( ( bodyHeight - offset.top < resultsHeight ) && ( offset.top >= resultsHeight ) ) {
+                        if ( ( ( bodyHeight - offset.top < resultsHeight ) && ( offset.top >= resultsHeight ) ) || forcePosition ) {
                             styles.top = styles.top - resultsHeight - $(self).innerHeight();
                         }
                     }

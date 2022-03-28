@@ -53,9 +53,9 @@ class ag_moto
         wp_enqueue_script(self::$args['plugin_name'] . '-moto', AG_ePDQ_server_path . "inc/assets/js/ag-moto-script.js", array('jquery'), NULL, true);
         wp_localize_script(self::$args['plugin_name'] . '-moto', 'ag_status_var', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'msg' => __('Are you sure you wish to check the status of this order?', 'ag_epdq_direct'),
+            'msg' => __('Are you sure you wish to check the status of this order?', 'ag_epdq_direct', 'ag_epdq_server'),
             'nonce' => wp_create_nonce(self::$args['plugin_name'] . '-moto'),
-            'error' => __('Something went wrong, and the MOTO payment could not be completed. Please try again.', 'ag_epdq_direct'),
+            'error' => __('Something went wrong, and the MOTO payment could not be completed. Please try again.', 'ag_epdq_direct', 'ag_epdq_server'),
         ));
 
     }
@@ -86,7 +86,7 @@ class ag_moto
             $order_key = $order->get_order_key();
             $order_key_check = $_GET['key'];
 
-            $error_message = __("This order is a " . self::$args['short_title'] . " MOTO payment. Only store admins or shop managers can process the order.", "woocommerce");
+            $error_message = __("This order is a " . self::$args['short_title'] . " MOTO payment. Only store admins or shop managers can process the order.", "woocommerce", 'ag_epdq_server');
             if (!wc_has_notice($error_message, 'notice')) {
                 wc_add_notice($error_message, 'notice');
             }
@@ -146,7 +146,7 @@ class ag_moto
 
         if (get_post_meta($wp->query_vars['order-pay'], 'is_moto', TRUE) && array_intersect($allowed_roles, $user->roles)) {
 
-            return __(self::$args['short_title'] . " MOTO Checkout", "woocommerce");
+            return __(self::$args['short_title'] . " MOTO Checkout", "woocommerce", 'ag_epdq_server');
 
         }
 

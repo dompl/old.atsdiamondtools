@@ -85,7 +85,8 @@ class Settings_Callbacks {
 			$type = 'text';
 		}
 
-		printf( '<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" size="%5$s" placeholder="%6$s" %7$s/>', esc_attr( $type ), esc_attr( $id ), esc_attr( $setting_name ), esc_attr( $current ), esc_attr( $size ), esc_attr( $placeholder ), ! empty( $disabled ) ? 'disabled="disabled"' : '' );
+		$size = ! empty( $size ) ? sprintf( 'size="%s"', esc_attr( $size ) ) : '';
+		printf( '<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s placeholder="%6$s" %7$s/>', esc_attr( $type ), esc_attr( $id ), esc_attr( $setting_name ), esc_attr( $current ), $size, esc_attr( $placeholder ), ! empty( $disabled ) ? 'disabled="disabled"' : '' );
 	
 		// output description.
 		if ( ! empty( $description ) ) {
@@ -122,6 +123,7 @@ class Settings_Callbacks {
 			'size'			=> isset( $args['text_input_size'] ) ? $args['text_input_size'] : NULL,
 		)  + $args;
 		unset( $input_args['current'] );
+		unset( $input_args['setting_name'] );
 
 		ob_start();
 		$this->text_input( $input_args );
@@ -390,7 +392,18 @@ class Settings_Callbacks {
 				// don't display resolution
 			}
 
-			printf( '<img src="%1$s" style="display:block" id="img-%2$s"/>', esc_attr( $attachment_src ), esc_attr( $id ) );
+			/*
+			 * .webp support can be disabled but still showing the image in settings.
+			 * We should add a notice because this will display an error when redering the PDF using DOMPDF.
+			 */
+			if ( 'webp' === wp_check_filetype( $attachment_src )['ext'] && ! function_exists( 'imagecreatefromwebp' ) ) {
+				printf(
+					'<div class="notice notice-warning inline" style="display:inline-block; width:auto;"><p>%s</p></div>',
+					wp_kses_post( 'File type <strong>webp</strong> is not supported by your server! Please check your <strong>System Configurations</strong> under the <strong>Status</strong> tab.', 'woocommerce-pdf-invoices-packing-slips' )
+				);
+			}
+
+			printf( '<img src="%1$s" style="display:block" id="img-%2$s" class="media-upload-preview"/>', esc_attr( $attachment_src ), esc_attr( $id ) );
 			if ( ! empty( $attachment_height ) && ! empty( $in_height ) ) {
 				$attachment_resolution = round( absint( $attachment_height ) / $in_height );
 				printf(
@@ -411,7 +424,7 @@ class Settings_Callbacks {
 			printf('<span class="button wpo_remove_image_button" data-input_id="%1$s">%2$s</span> ', esc_attr( $id ), esc_attr( $remove_button_text ) );
 		}
 
-		printf( '<input id="%1$s" name="%2$s" type="hidden" value="%3$s" data-settings_callback_args="%4$s" data-ajax_nonce="%5$s"/>', esc_attr( $id ), esc_attr( $setting_name ), esc_attr( $current ), esc_attr( json_encode( $args ) ), wp_create_nonce( "wpo_wcpdf_get_media_upload_setting_html" ) );
+		printf( '<input id="%1$s" name="%2$s" type="hidden" value="%3$s" data-settings_callback_args="%4$s" data-ajax_nonce="%5$s" class="media-upload-id"/>', esc_attr( $id ), esc_attr( $setting_name ), esc_attr( $current ), esc_attr( json_encode( $args ) ), wp_create_nonce( "wpo_wcpdf_get_media_upload_setting_html" ) );
 		
 		printf( '<span class="button wpo_upload_image_button %4$s" data-uploader_title="%1$s" data-uploader_button_text="%2$s" data-remove_button_text="%3$s" data-input_id="%4$s">%2$s</span>', esc_attr( $uploader_title ), esc_attr( $uploader_button_text ), esc_attr( $remove_button_text ), esc_attr( $id ) );
 	

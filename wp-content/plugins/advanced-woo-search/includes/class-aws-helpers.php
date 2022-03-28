@@ -927,6 +927,13 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
              */
             $apply_filters = apply_filters( 'aws_index_apply_filters', false );
 
+            /**
+             * Run or not shortcodes inside product content
+             * @since 2.46
+             * @param bool true
+             */
+            $do_shortcodes = apply_filters( 'aws_index_do_shortcodes', true );
+
             $index_variations_option = AWS()->get_settings( 'index_variations' );
             $index_sources_option = AWS()->get_settings( 'index_sources' );
 
@@ -952,6 +959,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $options = array(
                 'apply_filters' => $apply_filters,
+                'do_shortcodes' => $do_shortcodes,
                 'index'         => $index_vars,
             );
 

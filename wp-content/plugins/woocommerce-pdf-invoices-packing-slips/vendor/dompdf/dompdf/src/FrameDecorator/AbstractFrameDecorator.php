@@ -246,8 +246,12 @@ abstract class AbstractFrameDecorator extends Frame
         if ($this->content_set
             && $this->get_node()->nodeName === "dompdf_generated"
         ) {
-            foreach ($this->get_children() as $child) {
-                $this->remove_child($child);
+            $content = $this->get_style()->content;
+
+            if ($content !== "normal" && $content !== "none") {
+                foreach ($this->get_children() as $child) {
+                    $this->remove_child($child);
+                }
             }
         }
     }
@@ -725,13 +729,6 @@ abstract class AbstractFrameDecorator extends Frame
             $iter = $iter->get_next_sibling();
             $frame->reset();
             $split->append_child($frame);
-
-            // recalculate the float offsets
-            if ($frame instanceof Block) {
-                foreach ($frame->get_line_boxes() as $line_box) {
-                    $line_box->get_float_offsets();
-                }
-            }
         }
 
         $this->get_parent()->split($split, $page_break, $forced);

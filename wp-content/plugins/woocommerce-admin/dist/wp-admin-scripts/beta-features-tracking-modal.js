@@ -82,7 +82,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["betaFeaturesTrackingModal"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 473);
+/******/ 	return __webpack_require__(__webpack_require__.s = 474);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -101,21 +101,21 @@ this["wc"] = this["wc"] || {}; this["wc"]["betaFeaturesTrackingModal"] =
 
 /***/ }),
 
-/***/ 121:
+/***/ 123:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wc"]["explat"]; }());
 
 /***/ }),
 
-/***/ 14:
+/***/ 13:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["compose"]; }());
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wc"]["tracks"]; }());
@@ -136,14 +136,14 @@ this["wc"] = this["wc"] || {}; this["wc"]["betaFeaturesTrackingModal"] =
 
 /***/ }),
 
-/***/ 461:
+/***/ 462:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 473:
+/***/ 474:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -163,16 +163,16 @@ var external_wp_components_ = __webpack_require__(3);
 var external_wp_data_ = __webpack_require__(7);
 
 // EXTERNAL MODULE: external ["wp","compose"]
-var external_wp_compose_ = __webpack_require__(14);
+var external_wp_compose_ = __webpack_require__(13);
 
 // EXTERNAL MODULE: external ["wc","data"]
 var external_wc_data_ = __webpack_require__(11);
 
 // EXTERNAL MODULE: external ["wc","tracks"]
-var external_wc_tracks_ = __webpack_require__(15);
+var external_wc_tracks_ = __webpack_require__(16);
 
 // EXTERNAL MODULE: external ["wc","explat"]
-var external_wc_explat_ = __webpack_require__(121);
+var external_wc_explat_ = __webpack_require__(123);
 
 // CONCATENATED MODULE: ./client/wp-admin-scripts/beta-features-tracking-modal/container.js
 
@@ -279,7 +279,7 @@ const BetaFeaturesTrackingContainer = Object(external_wp_compose_["compose"])(Ob
   };
 }))(BetaFeaturesTrackingModal);
 // EXTERNAL MODULE: ./client/wp-admin-scripts/beta-features-tracking-modal/style.scss
-var style = __webpack_require__(461);
+var style = __webpack_require__(462);
 
 // CONCATENATED MODULE: ./client/wp-admin-scripts/beta-features-tracking-modal/index.js
 

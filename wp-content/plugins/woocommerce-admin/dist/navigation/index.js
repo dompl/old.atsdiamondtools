@@ -82,7 +82,7 @@ this["wc"] = this["wc"] || {}; this["wc"]["navigation"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 469);
+/******/ 	return __webpack_require__(__webpack_require__.s = 470);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -94,14 +94,14 @@ this["wc"] = this["wc"] || {}; this["wc"]["navigation"] =
 
 /***/ }),
 
-/***/ 16:
+/***/ 15:
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["url"]; }());
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -127,14 +127,21 @@ function _extends() {
 /***/ }),
 
 /***/ 28:
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["wp"]["hooks"]; }());
+
+/***/ }),
+
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(56);
-var parse = __webpack_require__(57);
-var formats = __webpack_require__(35);
+var stringify = __webpack_require__(59);
+var parse = __webpack_require__(60);
+var formats = __webpack_require__(36);
 
 module.exports = {
     formats: formats,
@@ -152,14 +159,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["hooks"]; }());
-
-/***/ }),
-
-/***/ 35:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -197,13 +197,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 41:
+/***/ 42:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var formats = __webpack_require__(35);
+var formats = __webpack_require__(36);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -456,7 +456,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -477,7 +477,7 @@ function invariant(condition, message) {
 
 /***/ }),
 
-/***/ 469:
+/***/ 470:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -510,22 +510,22 @@ __webpack_require__.d(__webpack_exports__, "WooNavigationItem", function() { ret
 var external_wp_element_ = __webpack_require__(0);
 
 // EXTERNAL MODULE: external ["wp","url"]
-var external_wp_url_ = __webpack_require__(16);
+var external_wp_url_ = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/qs/lib/index.js
-var lib = __webpack_require__(28);
+var lib = __webpack_require__(29);
 
 // EXTERNAL MODULE: external "lodash"
 var external_lodash_ = __webpack_require__(4);
 
 // EXTERNAL MODULE: external ["wp","hooks"]
-var external_wp_hooks_ = __webpack_require__(31);
+var external_wp_hooks_ = __webpack_require__(28);
 
 // EXTERNAL MODULE: external ["wp","components"]
 var external_wp_components_ = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/history/esm/history.js + 2 modules
-var esm_history = __webpack_require__(52);
+var esm_history = __webpack_require__(54);
 
 // CONCATENATED MODULE: ./packages/navigation/build-module/history.js
 /**
@@ -1053,7 +1053,7 @@ WooNavigationItem.Slot = ({
 
 /***/ }),
 
-/***/ 52:
+/***/ 54:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1068,7 +1068,7 @@ __webpack_require__.d(__webpack_exports__, "d", function() { return /* binding *
 // UNUSED EXPORTS: createHashHistory, parsePath
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(23);
+var esm_extends = __webpack_require__(24);
 
 // CONCATENATED MODULE: ./node_modules/resolve-pathname/esm/resolve-pathname.js
 function isAbsolute(pathname) {
@@ -1186,7 +1186,7 @@ function valueEqual(a, b) {
 /* harmony default export */ var value_equal = (valueEqual);
 
 // EXTERNAL MODULE: ./node_modules/tiny-invariant/dist/tiny-invariant.esm.js
-var tiny_invariant_esm = __webpack_require__(43);
+var tiny_invariant_esm = __webpack_require__(44);
 
 // CONCATENATED MODULE: ./node_modules/history/esm/history.js
 
@@ -2112,14 +2112,14 @@ function createMemoryHistory(props) {
 
 /***/ }),
 
-/***/ 56:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(41);
-var formats = __webpack_require__(35);
+var utils = __webpack_require__(42);
+var formats = __webpack_require__(36);
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
@@ -2398,13 +2398,13 @@ module.exports = function (object, opts) {
 
 /***/ }),
 
-/***/ 57:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(41);
+var utils = __webpack_require__(42);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
