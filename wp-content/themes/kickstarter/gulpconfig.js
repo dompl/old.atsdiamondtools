@@ -1,7 +1,7 @@
 // ==== CONFIGURATION ==== //
 // Project paths
 var theme = "atsdiamondtools", // The directory name for your theme; change this at the very least!
-	server = "http://atsdiamondtools.loc", // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
+	server = "http://atsdiamondtools.test", // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
 	src = "src/", // The raw material of your theme: custom scripts, SCSS source files, PHP files, images, etc.; do not delete this folder!
 	build = "build/", // A temporary directory containing a development version of your theme; delete it anytime
 	dist = "../" + theme + "/", // The distribution package that you'll be uploading to your server; delete it anytime
