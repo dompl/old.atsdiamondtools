@@ -87,6 +87,9 @@ header#page-header {
   animation: snow 30s linear infinite;
   background-color: color(brand);
 }
+.snow_ {
+  background-color: #323636;
+}
 @keyframes snow {
   0% {
     background-position: 0px 0px, 0px 0px, 0px 0px;

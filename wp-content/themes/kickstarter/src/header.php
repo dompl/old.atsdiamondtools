@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!--[if IE 8 ]><html                                                                                                                                             <?php language_attributes();?> class="ie8"><![endif]-->
-<!--[if IE 9 ]><html                                                                                                                                                                 <?php language_attributes();?> class="ie9"><![endif]-->
+<!--[if IE 8 ]><html                                                                                                                                                                 <?php language_attributes();?> class="ie8"><![endif]-->
+<!--[if IE 9 ]><html                                                                                                                                                                                     <?php language_attributes();?> class="ie9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html <?php language_attributes();?> class="no-js">
     <head>
@@ -52,9 +52,9 @@
         <?php do_action( 'test' )?>
         <header id="masthead" class="clx">
             <?php if ( is_front_page() ): ?>
-            <?php if ( mktime( 0, 0, 0, 01, 5, 2022 ) > strtotime( 'now' ) ): ?>
+            <?php // if ( mktime( 0, 0, 0, 01, 5, 2022 ) > strtotime( 'now' ) ): ?>
             <?php get_template_part( 'modules/header/christmas' );?>
-            <?php endif;?>
+            <?php // endif;?>
             <?php endif?>
             <?php // get_template_part( 'modules/header/corona' );?>
             <?php get_template_part( 'modules/header/top' );?>
