@@ -100,11 +100,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'oceanwp_head_action' ) );
                 }
 
-                // Avada theme
-                if ( class_exists( 'Avada' ) ) {
-                    add_action( 'wp_head', array( $this, 'avada_head_action' ) );
-                }
-
                 // Twenty Twenty theme
                 if (  function_exists( 'twentytwenty_theme_support' ) ) {
                     add_action( 'wp_head', array( $this, 'twenty_twenty_head_action' ) );
@@ -197,6 +192,24 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'orchid_store_wp_head' ) );
                 }
 
+                if ( 'Betheme' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'betheme_wp_head' ) );
+                }
+
+                if ( 'Gecko' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'gecko_wp_head' ) );
+                    add_filter( 'aws_js_seamless_searchbox_markup', array( $this, 'gecko_seamless_searchbox_markup' ), 1 );
+                }
+
+                if ( 'Savoy' === $this->current_theme ) {
+                    add_filter( 'aws_js_seamless_searchbox_markup', array( $this, 'savoy_seamless_searchbox_markup' ), 1 );
+                }
+
+                if ( 'Vandana Lite' === $this->current_theme ) {
+                    add_filter( 'aws_searchbox_markup', array( $this, 'vandana_searchbox_markup' ), 1 );
+                    add_action( 'wp_head', array( $this, 'vandana_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -228,12 +241,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Product Sort and Display for WooCommerce plugin
             if ( defined( 'WC_PSAD_NAME' ) ) {
                 add_filter( "option_psad_shop_page_enable", array( $this, 'psad_filter' ) );
-            }
-
-            if ( 'Avada' === $this->current_theme ) {
-                add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 2 );
-                add_filter( 'aws_products_order_by', array( $this, 'avada_aws_products_order_by' ), 1 );
-                add_filter( 'post_class', array( $this, 'avada_post_class' ) );
             }
 
             if ( 'Electro' === $this->current_theme ) {
@@ -367,9 +374,19 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-barn2-protected-categories.php' );
             }
 
+            // Custom Product Tabs for WooCommerce plugin
+            if ( class_exists('YIKES_Custom_Product_Tabs') || class_exists( 'YIKES_Custom_Product_Tabs_Pro' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-custom-tabs.php' );
+            }
+
             // Astra theme
             if ( 'Astra' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-astra.php' );
+            }
+
+            // Avada theme
+            if ( class_exists( 'Avada' ) || 'Avada' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-avada.php' );
             }
 
         }
@@ -667,47 +684,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         jQuery( '.aws-search-result' ).hide();
 
                     } );
-
-                }, false);
-
-            </script>
-
-        <?php }
-
-        /*
-         * Avada wp theme
-         */
-        public function avada_head_action() { ?>
-
-            <style>
-
-                .fusion-flyout-search .aws-container {
-                    margin: 0 auto;
-                    padding: 0;
-                    width: 100%;
-                    width: calc(100% - 40px);
-                    max-width: 600px;
-                    position: absolute;
-                    top: 40%;
-                    left: 20px;
-                    right: 20px;
-                }
-
-            </style>
-
-            <script>
-
-                window.addEventListener('load', function() {
-                    var awsSearch = document.querySelectorAll(".fusion-menu .fusion-main-menu-search a, .fusion-flyout-menu-icons .fusion-icon-search");
-                    if ( awsSearch ) {
-                        for (var i = 0; i < awsSearch.length; i++) {
-                            awsSearch[i].addEventListener('click', function() {
-                                window.setTimeout(function(){
-                                    document.querySelector(".fusion-menu .fusion-main-menu-search .aws-search-field, .fusion-flyout-search .aws-search-field").focus();
-                                }, 100);
-                            }, false);
-                        }
-                    }
 
                 }, false);
 
@@ -1449,6 +1425,127 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Be theme search form styles
+         */
+        public function betheme_wp_head() { ?>
+            <style>
+                #Header_wrapper #searchform {
+                    opacity: 0;
+                }
+                #Side_slide .aws-container .aws-search-field,
+                #Side_slide .aws-container .aws-search-field:focus {
+                    background-color: #191919 !important;
+                    border-color: rgba(255,255,255,.05);
+                }
+            </style>
+        <?php }
+
+        /*
+         * Gecko theme search form
+         */
+        public function gecko_wp_head() { ?>
+            <style>
+                #jas-wrapper .aws-container.header__search {
+                    height: 100%;
+                    width: 100%;
+                    top: 0;
+                    left: 0;
+                    background: rgba(0, 0, 0, .95);
+                    z-index: 9999;
+                }
+                #jas-wrapper .aws-container.header__search .aws-search-form {
+                    max-width: 550px;
+                    top: calc(50% - 125px);
+                    left: 50%;
+                    width: 100%;
+                    -webkit-transform: translateX(-50%);
+                    -moz-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                    -o-transform: translateX(-50%);
+                    transform: translateX(-50%);
+                }
+                #jas-wrapper .aws-container.header__search .aws-search-form .aws-search-field {
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px solid rgba(255, 255, 255, .1);
+                    text-align: center;
+                    font-size: 18px;
+                    color: #fff;
+                }
+            </style>
+
+            <script>
+                window.addEventListener('load', function() {
+                    if ( typeof jQuery !== 'undefined' ) {
+                        jQuery(document).on( 'click', '#jas-header .sf-open, #sf-close', function () {
+                            jQuery('.aws-container').toggleClass('dn');
+                            jQuery('.aws-search-result').hide();
+                            jQuery('.aws-container.header__search .aws-search-field:visible').focus();
+                        } );
+                    }
+                    function aws_results_layout( styles, options ) {
+                        var form = options.form;
+                        var realForm = form.closest('#jas-wrapper').find('.aws-container.header__search .aws-search-form');
+                        if ( options.form.closest('#jas-wrapper').length > 0 && jQuery('.aws-container.header__search').is(':visible') ) {
+                            var offset = parseInt( realForm.css('top') );
+                            var offsetLeft = parseInt( realForm.css('left') );
+                            var bodyOffset = jQuery('body').offset();
+                            styles.top = offset + form.find('.aws-search-field').innerHeight();
+                            styles.width = realForm.outerWidth();
+                            styles.left = offsetLeft - realForm.outerWidth() / 2;
+                        }
+                        return styles;
+                    }
+                    AwsHooks.add_filter( "aws_results_layout", aws_results_layout );
+                }, false);
+            </script>
+
+        <?php }
+
+        /*
+         * Gecko theme markup for seamless js integration
+         */
+        public function gecko_seamless_searchbox_markup( $markup ) {
+            $markup = str_replace( 'aws-container', 'aws-container header__search w__100 dn pf', $markup );
+            $markup = str_replace( '</form>', '</form><a id="sf-close" class="pa" href="#"><i class="pe-7s-close"></i></a>', $markup );
+            return $markup;
+        }
+
+        /*
+         * Savoy theme markup for seamless js integration
+         */
+        public function savoy_seamless_searchbox_markup( $markup ) {
+            $markup = str_replace( 'name="s"', 'name="s" id="nm-header-search-input"', $markup );
+            return $markup;
+        }
+
+        /*
+         * Vandana theme markup changes
+         */
+        public function vandana_searchbox_markup( $markup ) {
+            $markup = str_replace( 'aws-container', 'aws-container search-form', $markup );
+            return $markup;
+        }
+
+        /*
+         * Vandana theme custom styles
+         */
+        public function vandana_wp_head() { ?>
+            <style>
+                .header-search .header-search-wrap .aws-container .aws-show-clear .aws-search-field,
+                .header-search .header-search-wrap .aws-container .aws-search-form .aws-form-btn{
+                    background: transparent;
+                    border: none;
+                    color: #fff;
+                    font-size: 2em;
+                }
+                .header-search .header-search-wrap .aws-container .aws-search-form .aws-search-btn_icon {
+                    color: #fff;
+                }
+            </style>
+        <?php }
+
+        /*
          * Exclude product categories
          */
         public function filter_protected_cats_term_exclude( $exclude ) {
@@ -1682,6 +1779,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '.basel-search-wrapper #searchform, .secondary-header #searchform, .mobile-nav #searchform';
             }
 
+            if ( 'Betheme' === $this->current_theme ) {
+                $selectors[] = '#Header_wrapper #searchform, #side-form';
+            }
+
+            if ( 'Gecko' === $this->current_theme ) {
+                $selectors[] = '#jas-wrapper .header__search';
+            }
+
+            if ( 'Savoy' === $this->current_theme ) {
+                $selectors[] = '#nm-header-search-form';
+            }
+
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
@@ -1873,77 +1982,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 return 'no';
             }
             return $value;
-        }
-
-        /*
-         * Avada theme posts per page option
-         */
-        public function avada_posts_per_page( $posts_per_page ) {
-            $num = 12;
-            $search_page_res_per_page = AWS()->get_settings( 'search_page_res_per_page' );
-            if ( $search_page_res_per_page ) {
-                $num = intval( $search_page_res_per_page );
-            }
-            $posts_per_page = isset( $_GET['product_count'] ) && intval( sanitize_text_field( $_GET['product_count'] ) ) ? intval( sanitize_text_field( $_GET['product_count'] ) ) : $num;
-            return $posts_per_page;
-        }
-
-        /*
-         * Avada theme order by options
-         */
-        public function avada_aws_products_order_by( $order_by ) {
-
-            $order_by_new = '';
-
-            if ( isset( $_GET['product_orderby'] ) ) {
-                switch( sanitize_text_field( $_GET['product_orderby'] ) ) {
-                    case 'name':
-                        $order_by_new = 'title';
-                        break;
-                    case 'price':
-                        $order_by_new = 'price';
-                        break;
-                    case 'date':
-                        $order_by_new = 'date';
-                        break;
-                    case 'popularity':
-                        $order_by_new = 'popularity';
-                        break;
-                    case 'rating':
-                        $order_by_new = 'rating';
-                        break;
-                }
-            }
-
-            if ( isset( $_GET['product_order'] ) && $order_by_new ) {
-                $product_order = sanitize_text_field( $_GET['product_order'] );
-                if ( in_array( $product_order, array( 'asc', 'desc' ) ) ) {
-                    $order_by_new = $order_by_new . '-' . $product_order;
-                }
-
-            }
-
-            if ( $order_by_new ) {
-                $order_by = $order_by_new;
-            }
-
-            return $order_by;
-
-        }
-
-        /*
-         * Avada theme fix for product variations inside list products view
-         */
-        public function avada_post_class( $classes ) {
-            if ( 'product_variation' === get_post_type()  ) {
-                if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-                    parse_str( sanitize_text_field( wp_unslash( $_SERVER['QUERY_STRING'] ) ), $params );
-                    if ( isset( $params['product_view'] ) && $params['product_view'] ) {
-                        $classes[] = 'product-' . $params['product_view'] . '-view';
-                    }
-                }
-            }
-            return $classes;
         }
 
         /*

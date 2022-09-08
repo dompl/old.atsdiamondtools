@@ -80,7 +80,7 @@ if (!class_exists('AWS_Woobewoo_Filters')) :
          * WooCommerce Product Filter by WooBeWoo: filter products
          */
         public function wpf_search_page_filters( $filters ) {
-
+            
             foreach ( $_GET as $key => $param ) {
 
                 $isNot = ( substr($param, 0, 1) === '!' );
@@ -134,12 +134,13 @@ if (!class_exists('AWS_Woobewoo_Filters')) :
                     }
                     $filters['rating'] = $rating;
                 }
-                elseif ( strpos( $key, 'filter_' ) === 0 ) {
+                elseif ( strpos( $key, 'filter_' ) === 0 || strpos( $key, 'wpf_filter_' ) === 0 ) {
 
                     if ( strpos( $key, 'filter_pwb_' ) === 0 ) {
                         $taxonomy = 'pwb-brand';
                     } else {
-                        $taxonomy = str_replace( 'filter_', '', $key );
+                        $taxonomy = str_replace( 'wpf_filter_', '', $key );
+                        $taxonomy = str_replace( 'filter_', '', $taxonomy );
                     }
 
                     if ( preg_match( '/([a-z]+?)_[\d]/', $taxonomy, $matches )  ) {

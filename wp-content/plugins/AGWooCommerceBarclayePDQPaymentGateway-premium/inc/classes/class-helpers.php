@@ -154,9 +154,9 @@ class AG_ePDQ_Helpers
 		
 		<script type="text/javascript">
 	
-			jQuery(document).ready( function () { 
-				jQuery('#woocommerce_epdq_checkout_threeds, [for="woocommerce_epdq_checkout_threeds"]').prop('disabled', true).addClass('disabled');
-			});
+			// jQuery(document).ready( function () { 
+			// 	jQuery('#woocommerce_epdq_checkout_threeds, [for="woocommerce_epdq_checkout_threeds"]').prop('disabled', true).addClass('disabled');
+			// });
 	
 		</script>
 

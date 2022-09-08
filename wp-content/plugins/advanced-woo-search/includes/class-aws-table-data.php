@@ -123,21 +123,6 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
 
             }
 
-            // Get content from Custom Product Tabs
-            if ( $custom_tabs = get_post_meta( $data['id'], 'yikes_woo_products_tabs' ) ) {
-                if ( $custom_tabs && ! empty( $custom_tabs ) ) {
-                    foreach( $custom_tabs as $custom_tab_array ) {
-                        if ( $custom_tab_array && ! empty( $custom_tab_array ) ) {
-                            foreach( $custom_tab_array as $custom_tab ) {
-                                if ( isset( $custom_tab['content'] ) && $custom_tab['content'] ) {
-                                    $content = $content . ' ' . $custom_tab['content'];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
             // WP 4.2 emoji strip
             if ( function_exists( 'wp_encode_emoji' ) ) {
                 $content = wp_encode_emoji( $content );

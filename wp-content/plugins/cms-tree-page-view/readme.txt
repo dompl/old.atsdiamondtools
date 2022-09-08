@@ -4,8 +4,8 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: page, pages, posts, custom posts, tree, cms, dashboard, overview, drag-and-drop, rearrange, management, manage, admin
 Text Domain: cms-tree-page-view
 Requires at least: 3.8
-Tested up to: 5.6.0
-Stable tag: 1.6.4
+Tested up to: 6.0.0
+Stable tag: 1.6.6
 
 Adds a tree view of all pages & custom posts. Get a great overview + options to drag & drop to reorder & option to add multiple pages.
 
@@ -13,10 +13,11 @@ Adds a tree view of all pages & custom posts. Get a great overview + options to 
 
 Adds a CMS-like tree overview of all your pages and custom posts to WordPress - much like the view often found in a page-focused CMS.
 
+Also check out [OrganizeWP](https://organizewp.com/?utm_campaign=migrate&utm_source=cmstpv&utm_medium=readme&utm_content=desclink) if your goal is to incorporate multiple content types into a single view!
+
 Within this tree you can edit pages, view pages, add pages, search pages, and drag and drop pages to rearrange the order.
 
-CMS Tree Page View is a good alternative to plugins such as pageMash, WordPress Page Tree
-and My Page Order.
+CMS Tree Page View is a good alternative to plugins such as pageMash, WordPress Page Tree and My Page Order. For **multiple content types** and other new features check out [OrganizeWP](https://organizewp.com/?utm_campaign=migrate&utm_source=cmstpv&utm_medium=readme&utm_content=desclink) as well.
 
 Page management in WordPress won't get any easier than this!
 
@@ -115,6 +116,15 @@ Now the tree with the pages will be visible both on the dashboard and in the men
 
 
 == Changelog ==
+
+= 1.6.6 (May 2022) =
+
+WordPress 6.0 compatibility
+Adds link to Edit in Elementor.
+
+= 1.6.5 (May 2022) =
+
+PHP8 compatibility update. Props @cjhaas.
 
 = 1.6.4 (December 2020) =
 

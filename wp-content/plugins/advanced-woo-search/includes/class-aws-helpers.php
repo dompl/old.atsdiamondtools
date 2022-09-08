@@ -557,6 +557,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                                     $synonym_words = explode( ' ', $synonym_item );
                                     if ( $synonym_words && ! empty( $synonym_words ) ) {
 
+                                        $synonym_words = array_filter($synonym_words);
                                         $str_array_keys = array_keys( $str_array );
                                         $synonym_prev_word_pos = 0;
                                         $use_this = true;
@@ -871,6 +872,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         static public function page_filter_tax( $product_terms, $filter_terms, $operator = 'OR' ) {
 
             $skip = true;
+            $operator = strtoupper( $operator );
 
             if ( $filter_terms && is_array( $filter_terms ) && ! empty( $filter_terms ) ) {
 
@@ -964,6 +966,34 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             );
 
             return $options;
+
+        }
+
+        /**
+         * Get array of relevance scores
+         * @return array $relevance_array
+         */
+        static public function get_relevance_scores( $data ) {
+
+            $relevance_array = array(
+                'title'   => 200,
+                'content' => 100,
+                'id'      => 300,
+                'sku'     => 300,
+                'other'   => 35
+            );
+
+            /**
+             * Change relevance scores for product search fields
+             * @since 2.53
+             * @param array $relevance_array Array of relevance scores
+             * @param array $data Array of search query related data
+             */
+            $relevance_array_filtered = apply_filters( 'aws_relevance_scores', $relevance_array, $data );
+
+            $relevance_array = shortcode_atts( $relevance_array, $relevance_array_filtered, 'aws_relevance_scores' );
+
+            return $relevance_array;
 
         }
 

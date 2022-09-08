@@ -60,7 +60,8 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 return;
             }
 
-            if ( ! class_exists( 'WCFMmp' ) && ! class_exists('ACF') ) {
+            if ( ! class_exists( 'WCFMmp' ) && ! class_exists('ACF') && ! class_exists('YITH_WCWL') && ! class_exists( 'WooCommerceWholeSalePrices' ) && ! class_exists( 'UM_Functions' ) && ! defined( 'PWB_PLUGIN_VERSION' )
+                && ! defined( 'TINVWL_FVERSION' ) && ! class_exists( 'WeDevs_Dokan' ) ) {
                 return;
             }
 
@@ -79,6 +80,36 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 $notice_id .= 'acf|';
             }
 
+            if ( class_exists( 'YITH_WCWL' ) && ( ! $hide_option || array_search( 'yithwish', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'YITH WooCommerce Wishlist plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/yith-woocommerce-wishlist/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=yithwish">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'yithwish|';
+            }
+
+            if ( class_exists( 'WooCommerceWholeSalePrices' ) && ( ! $hide_option || array_search( 'wholesaleprices', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'Wholesale Prices plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/wholesale-prices/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=wholesaleprices">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'wholesaleprices|';
+            }
+
+            if ( class_exists( 'UM_Functions' ) && ( ! $hide_option || array_search( 'um', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'Ultimate Member plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/ultimate-member/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=um">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'um|';
+            }
+
+            if ( defined( 'PWB_PLUGIN_VERSION' ) && ( ! $hide_option || array_search( 'pwb', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'Perfect Brands for WooCommerce plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/perfect-brands-for-woocommerce/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=pwb">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'pwb|';
+            }
+
+            if ( defined( 'TINVWL_FVERSION' ) && ( ! $hide_option || array_search( 'tinvwl', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'TI WooCommerce Wishlist plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/ti-woocommerce-wishlist/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=tinvwl">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'tinvwl|';
+            }
+
+            if ( class_exists( 'WeDevs_Dokan' ) && ( ! $hide_option || array_search( 'dokan', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'Dokan – WooCommerce Multivendor Marketplace Solution plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/dokan-woocommerce-multivendor-marketplace/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=dokan">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'dokan|';
+            }
+
             $notice_id = 'aws_hide_int_notices=' . urlencode( trim( $notice_id, '|' ) );
 
             if ( $notice_message ) {
@@ -93,7 +124,10 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
 
                 $html = '';
 
-                $html .= '<div class="aws-integration-notice notice notice-success" style="position:relative;">';
+                $html .= '<div class="aws-integration-notice notice notice-success" style="position:relative;display:flex;">';
+                    $html .= '<div style="margin: 20px 20px 0 0;" class="aws-integration-notice--logo">';
+                        $html .= '<img style="max-width:70px;border-radius:3px;" src="' . AWS_URL . 'assets/img/logo.jpeg' . '">';
+                    $html .= '</div>';
                     $html .= '<div class="aws-integration-notice--content">';
                         $html .= '<h2>Advanced Woo Search: ' . __( 'Integrations for your plugins', 'advanced-woo-search' ) . '</h2>';
                         $html .= '<p>' . $notice_top_message. '</p>';

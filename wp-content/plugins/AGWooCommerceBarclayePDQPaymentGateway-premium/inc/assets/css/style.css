@@ -10,19 +10,67 @@
     margin-right: auto;
     display: block;
     float: none !important;
-    max-height: 50px !important; 
+    max-height: 50px !important;
 }
 
-.AG-redirect-notice { 
+.AG-redirect-notice {
     text-align: center;
     padding: 0px 25px 30px 25px;
 }
 
 .ePDQ-card-icons {
-    margin-left:5px; 
+    margin-left: 5px;
     margin-right: 5px;
 }
 
 .wc-block-checkout__payment-method .wc-block-components-radio-control-accordion-option .wc-block-components-radio-control__label .epdq-payment-logo {
     height: 35px;
+}
+
+.ag-select-cards .card-list li {
+    padding: 5px;
+    margin: 0
+}
+
+.ag-select-cards .card-list {
+    margin: 0;
+    padding-top: 5px;
+}
+
+.ag-select-cards .card-list .selected, .ag-select-cards .card-list .ag_cards:checked {
+    background: #ddd;
+}
+
+.ag-select-cards .card-list li p {
+    padding: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ag-select-cards .card-list li p img {
+    margin-left: 5px;
+    margin-right: 15px;
+    width: 38px;
+    vertical-align: middle;
+    float: left !important;
+}
+
+.ag-select-cards .card-list li radio {
+    display: inline-block;
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+.ag-select-cards .card-list li label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ag-select-cards .card-list li label p {
+    margin: 0;
+    margin-left: 15px;
+}
+
+.ag-select-cards .card-list li input:checked > .ag-select-cards .card-list li {
+    background: blue;
 }

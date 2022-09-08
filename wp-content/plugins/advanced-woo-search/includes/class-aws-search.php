@@ -98,7 +98,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $cache = AWS()->get_settings( 'cache' );
 
-            $s = $keyword ? esc_attr( $keyword ) : esc_attr( $_POST['keyword'] );
+            $s = $keyword ? esc_attr( $keyword ) : ( isset( $_POST['keyword'] ) ? esc_attr( $_POST['keyword'] ) : '' );
             $s = htmlspecialchars_decode( $s );
 
             $this->data['s_nonormalize'] = $s;
@@ -305,15 +305,26 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              */
             $this->data['search_terms'] = apply_filters( 'aws_search_terms', $this->data['search_terms'] );
 
+            $relevance_scores = AWS_Helpers::get_relevance_scores( $this->data );
 
             foreach ( $this->data['search_terms'] as $search_term ) {
 
                 $search_term_len = strlen( $search_term );
 
-                $relevance_title        = 200 + 20 * $search_term_len;
-                $relevance_content      = 35 + 4 * $search_term_len;
-                $relevance_title_like   = 40 + 2 * $search_term_len;
-                $relevance_content_like = 35 + 1 * $search_term_len;
+                $relevance_title        = $relevance_scores['title'] + 20 * $search_term_len;
+                $relevance_title_like   = $relevance_scores['title'] / 5 + 2 * $search_term_len;
+
+                $relevance_content      = $relevance_scores['content'] + 4 * $search_term_len;
+                $relevance_content_like = $relevance_scores['content'] + 1 * $search_term_len;
+
+                $relevance_id = $relevance_scores['id'];
+                $relevance_id_like = $relevance_scores['id'] / 10;
+
+                $relevance_sku = $relevance_scores['sku'];
+                $relevance_sku_like = $relevance_scores['sku'] / 5;
+
+                $relevance_other = $relevance_scores['other'];
+                $relevance_other_like = $relevance_scores['other'] / 5;
 
                 $search_term_norm = AWS_Plurals::singularize( $search_term );
 
@@ -353,23 +364,23 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                             break;
 
                         case 'category':
-                            $relevance_array['category'][] = $wpdb->prepare( "( case when ( term_source = 'category' AND term = '%s' ) then 35 else 0 end )", $search_term );
-                            $relevance_array['category'][] = $wpdb->prepare( "( case when ( term_source = 'category' AND term LIKE %s ) then 5 else 0 end )", $like );
+                            $relevance_array['category'][] = $wpdb->prepare( "( case when ( term_source = 'category' AND term = '%s' ) then {$relevance_other} else 0 end )", $search_term );
+                            $relevance_array['category'][] = $wpdb->prepare( "( case when ( term_source = 'category' AND term LIKE %s ) then {$relevance_other_like} else 0 end )", $like );
                             break;
 
                         case 'tag':
-                            $relevance_array['tag'][] = $wpdb->prepare( "( case when ( term_source = 'tag' AND term = '%s' ) then 35 else 0 end )", $search_term );
-                            $relevance_array['tag'][] = $wpdb->prepare( "( case when ( term_source = 'tag' AND term LIKE %s ) then 5 else 0 end )", $like );
+                            $relevance_array['tag'][] = $wpdb->prepare( "( case when ( term_source = 'tag' AND term = '%s' ) then {$relevance_other} else 0 end )", $search_term );
+                            $relevance_array['tag'][] = $wpdb->prepare( "( case when ( term_source = 'tag' AND term LIKE %s ) then {$relevance_other_like} else 0 end )", $like );
                             break;
 
                         case 'sku':
-                            $relevance_array['sku'][] = $wpdb->prepare( "( case when ( term_source = 'sku' AND term = '%s' ) then 300 else 0 end )", $search_term );
-                            $relevance_array['sku'][] = $wpdb->prepare( "( case when ( term_source = 'sku' AND term LIKE %s ) then 50 else 0 end )", $like );
+                            $relevance_array['sku'][] = $wpdb->prepare( "( case when ( term_source = 'sku' AND term = '%s' ) then {$relevance_sku} else 0 end )", $search_term );
+                            $relevance_array['sku'][] = $wpdb->prepare( "( case when ( term_source = 'sku' AND term LIKE %s ) then {$relevance_sku_like} else 0 end )", $like );
                             break;
 
                         case 'id':
-                            $relevance_array['id'][] = $wpdb->prepare( "( case when ( term_source = 'id' AND term = '%s' ) then 300 else 0 end )", $search_term );
-                            $relevance_array['id'][] = $wpdb->prepare( "( case when ( term_source = 'id' AND term LIKE %s ) then 5 else 0 end )", $like );
+                            $relevance_array['id'][] = $wpdb->prepare( "( case when ( term_source = 'id' AND term = '%s' ) then {$relevance_id} else 0 end )", $search_term );
+                            $relevance_array['id'][] = $wpdb->prepare( "( case when ( term_source = 'id' AND term LIKE %s ) then {$relevance_id_like} else 0 end )", $like );
                             break;
 
                     }
@@ -464,7 +475,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              * @param array $query Query string
              */
             $sql = apply_filters( 'aws_search_query_string', $sql );
-
+            
             $this->data['sql'] = $sql;
 
             $posts_ids = $this->get_posts_ids( $sql );
@@ -578,13 +589,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                             if ( $marked_content ) {
                                 $excerpt = $marked_content;
-                            } else {
-                                $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
                             }
 
-                        } else {
-                            $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
                         }
+
+                        $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
 
                     }
 
@@ -628,12 +637,12 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         if ( $product->is_in_stock() ) {
                             $stock_status = array(
                                 'status' => true,
-                                'text'   => esc_html__( 'In stock', 'advanced-woo-search' )
+                                'text'   => esc_html__( 'In stock', 'woocommerce' )
                             );
                         } else {
                             $stock_status = array(
                                 'status' => false,
-                                'text'   => esc_html__( 'Out of stock', 'advanced-woo-search' )
+                                'text'   => esc_html__( 'Out of stock', 'woocommerce' )
                             );
                         }
                     }
@@ -721,6 +730,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $exact_words = array();
             $words = array();
+            $excerpt_length = AWS()->get_settings( 'excerpt_length' );
 
             foreach( $this->data['search_terms'] as $search_in ) {
 
@@ -747,10 +757,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 preg_match( '/([^.?!]*?)(' . $words . '){1}(.*?[.!?])/i', $content, $matches );
             }
 
-            if ( ! isset( $matches[0] ) ) {
-                preg_match( '/([^.?!]*?)(.*?)(.*?[.!?])/i', $content, $matches );
-            }
-
             if ( isset( $matches[0] ) ) {
 
                 $content = $matches[0];
@@ -768,7 +774,29 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             } else {
 
-                $content = '';
+                // Get first N sentences
+                if ( str_word_count( strip_tags( $content ) ) > $excerpt_length ) {
+
+                    $sentences_array = preg_split( "/(?<=[.!?])/", $content, 10, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
+                    $sentences_string = '';
+                    $str_word_count = 0;
+
+                    if ( ! empty( $sentences_array ) ) {
+                        foreach ( $sentences_array as $sentence ) {
+                            $str_word_count = $str_word_count + str_word_count( strip_tags( $sentence ) );
+                            if ( $str_word_count <= $excerpt_length ) {
+                                $sentences_string .= $sentence;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+
+                    if ( $sentences_string ) {
+                        $content = $sentences_string;
+                    }
+
+                }
 
             }
 

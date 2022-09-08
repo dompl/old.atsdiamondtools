@@ -16,17 +16,6 @@ class AG_licence
     public static  $instance = null ;
     public static  $args = array() ;
     public static  $freemius = null ;
-    public static function run_instance( $args = array() )
-    {
-        
-        if ( self::$instance === null ) {
-            self::$args = $args;
-            self::$instance = new self();
-        }
-        
-        return self::$instance;
-    }
-    
     private function __construct()
     {
         self::start_FS();
@@ -44,6 +33,17 @@ class AG_licence
             2
         );
         add_action( 'admin_notices', array( $this, 'ag_admin_notice' ) );
+    }
+    
+    public static function run_instance( $args = array() )
+    {
+        
+        if ( self::$instance === null ) {
+            self::$args = $args;
+            self::$instance = new self();
+        }
+        
+        return self::$instance;
     }
     
     public static function start_FS()
@@ -135,24 +135,6 @@ class AG_licence
         return false;
     }
     
-    public static function new_install()
-    {
-        if ( !class_exists( 'ePDQ_crypt' ) ) {
-            return;
-        }
-        $settings = ePDQ_crypt::key_settings();
-        $name = 'ag_dismiss_warning';
-        
-        if ( empty($settings['pspid']) ) {
-            update_option( $name, false );
-            return false;
-        } else {
-            update_option( $name, true );
-            return true;
-        }
-    
-    }
-    
     public static function welcome_link( $html = '' )
     {
         return $html . sprintf( '<a href="%s" class="button button-secondary">&larr; %s</a>', self::$args['urls']['welcome'], __( 'Back to Welcome page', 'ag_epdq_server' ) );
@@ -163,11 +145,10 @@ class AG_licence
         if ( !self::$freemius->can_use_premium_code() ) {
             unset( $available_gateways['ag_epdq_server'] );
         }
-        $new = AG_licence::new_install();
         $gateway_notice = self::$args['update']['disable_gateway'];
         $name = 'ag_dismiss_warning';
         $dismissed = get_option( $name, false );
-        if ( $gateway_notice === true && $new && $dismissed != '1' ) {
+        if ( $gateway_notice === true && $dismissed !== '1' ) {
             unset( $available_gateways['ag_epdq_server'] );
         }
         return $available_gateways;
@@ -183,43 +164,37 @@ class AG_licence
     
     public function ag_admin_notice()
     {
-        $new = AG_licence::new_install();
-        $screen = get_current_screen();
+        if ( !self::$args['update']['update_notice'] ) {
+            return;
+        }
+        $option_name = self::$args['update']['notice_name'];
+        $dismissed = get_option( $option_name, false );
+        if ( $dismissed ) {
+            return;
+        }
+        $dismiss = filter_input( INPUT_POST, $option_name );
         
-        if ( $new && $screen->id == 'toplevel_page_' . self::$args['freemius']['slug'] ) {
-            if ( !self::$args['update']['update_notice'] ) {
-                return;
-            }
-            $option_name = 'ag_dismiss_warning';
-            $dismissed = get_option( $option_name, false );
-            if ( $dismissed ) {
-                return;
-            }
-            $dismiss = filter_input( INPUT_POST, $option_name );
-            
-            if ( $dismiss ) {
-                update_option( $option_name, true );
-                return;
-            }
-            
-            ?>
-            <div class="ag-notice ag-notice--getting-started">
+        if ( $dismiss ) {
+            update_option( $option_name, true );
+            return;
+        }
+        
+        ?>
+        <div class="ag-notice ag-notice--getting-started">
             <form action="" method="post" class="ag-notice__dismiss">
-					<input type="hidden" name="ag_dismiss_warning" value="1">
-					<button title="Dismiss" class="is-dismissible">
-						Hide <span class="dashicons dashicons-dismiss"></span></button>
-				</form>
-                <p><strong><?php 
-            _e( self::$args['update']['name'], 'ag_epdq_server' );
-            ?></strong></p>
-                <p><?php 
-            _e( self::$args['update']['message'], 'ag_epdq_server' );
-            ?></p>
-            </div>
+                <input type="hidden" name="ag_dismiss_warning" value="1">
+                <button title="Dismiss" class="is-dismissible">
+                    Hide <span class="dashicons dashicons-dismiss"></span></button>
+            </form>
+            <p><strong><?php 
+        _e( self::$args['update']['name'], 'ag_epdq_server' );
+        ?></strong></p>
+            <p><?php 
+        _e( self::$args['update']['message'], 'ag_epdq_server' );
+        ?></p>
+        </div>
 
         <?php 
-        }
-    
     }
 
 }

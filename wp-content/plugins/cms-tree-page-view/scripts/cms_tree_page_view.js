@@ -454,6 +454,11 @@ function cms_tpv_mouseover_li(e) {
 			$edit.attr("href", editlink);
 			$edit.removeClass("hidden");
 
+			$editElementor = div_actions_for_post_type.find(".cms_tpv_action_edit_elementor");
+			if ($editElementor.length) {
+				$editElementor.attr("href", editlink.replace('action=edit', 'action=elementor'));
+			}
+
 			// ..and some extras
 			div_actions_for_post_type.find(".cms_tpv_page_actions_modified_time").text($li.data("modified_time"));
 			div_actions_for_post_type.find(".cms_tpv_page_actions_modified_by").text($li.data("modified_author"));

@@ -89,10 +89,17 @@ class AG_ePDQ_Settings {
 				'default'     => '',
 				'desc_tip'    => true,
 			),
+			'token'        => array(
+				'title'       => __( 'Enable/Disable', 'ag_epdq_server' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Enable Tokenization', 'ag_epdq_server' ),
+				'default'     => 'no',
+				'description' => __( 'Enable to allow customers to save their payment methods for future checkouts. Customers will be able to manage their saved payment methods on the WooCommerce My Account page. <br />When this is enabled, saved credit card information isn’t stored on your site’s server. It is tokenized and stored on ePDQ’s servers.<br /><strong><a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/utilizing-credit-card-tokenization/" target="_blank">Please follow our guide here on the full setup of this feature.</a></strong>', 'ag_epdq_server' ),
+			),
 			'tip'          => array(
 				'title'       => __( 'Tip', 'ag_epdq_server' ),
 				'type'        => 'hidden',
-				'description' => __( 'Want to store your API details in a more secure way, read through our doc <a href="https://we-are-ag.helpscoutdocs.com/article/161-storing-strong-api-credentials" target="_blank">here</a>', 'ag_epdq_server' ),
+				'description' => __( 'Want to store your API details in a more secure way, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/" target="_blank">here</a>', 'ag_epdq_server' ),
 			),
 			'template'     => array(
 				'title'       => __( 'Dynamic template URL', 'ag_epdq_server' ),
@@ -175,10 +182,10 @@ class AG_ePDQ_Settings {
 				'default'  => 'no',
 				'desc_tip' => false
 			),
-			'threeds'     => array(
-				'title'       => __( 'Enable AG 3Ds score report', 'ag_epdq_server' ),
+			'fraudCheck'     => array(
+				'title'       => __( 'Enable AG Fraud Check', 'ag_epdq_server' ),
 				'type'        => 'checkbox',
-				'description' => 'This new feature is coming soon.',
+				'description' => 'You will need to setup some parameters on transaction feedback <a href="https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/"> here</a> to be able to use this',
 				'default'     => 'no',
 				'desc_tip'    => false
 			),

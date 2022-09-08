@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 4.0
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: 4.2
 
 == Description ==
@@ -21,7 +21,7 @@ Yes, this plugin works really fine with the latest versions!
 Ok not a problem, lets see if you can fix it by following these steps.
 1. Enable the plugins debug mode in the settings page.
 2. Process a test transaction using the gateway.
-3. Check the plugins error logs to see if any errors have been logged, if they have, follow the steps to fix.
+3. Check the plugin's error logs to see if any errors have been logged, if they have, follow the steps to fix.
 4. Issue is still not fixed? Check the ePDQ error log in the back office.
 5. Follow the steps in the troubleshooting section of the documentation to fix.
 6. Still having issues? Send us a support ticket detailing the issue you have, we may ask for screenshots of the ePDQ back office.
@@ -29,14 +29,38 @@ Ok not a problem, lets see if you can fix it by following these steps.
 = Can I process refunds using this plugin? =
 Yes! You can process refunds right from the edit order screen.
 
-= Dose this plugin work with WooCommerce Subscriptions? =
-Yes!
 
 == Upgrade Notice ==
 
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v4.4.1 - 01/09/22 =
+* Change        - Removed character limit from address fields.
+
+= v4.4.0 - 11/08/22 =
+* New           - Fraud Check new Feature for Orders.
+* Change        - Bump tested WooCommerce (6.8).
+* Change        - Removed upsell and blog posts in welcome page (help speed up page).
+* Update        - Freemius SDK updated.
+
+= v4.3.4 - 15/06/22 =
+* Change        - Bump tested WooCommerce (6.6.0) and WordPress (6.0) versions.
+
+= v4.3.3 - 26/05/22 =
+* Change        - Changed the character limit on customer address fields from 34 to 50 (limit amount has changed since 2019).
+
+= v4.3.2 - 17/05/22 =
+* Fix           - Fixed issue with refund settings not showing when Product Barcode Generator plugin is active on website.
+
+= v4.3.1 - 06/05/22 =
+* Fix           - Fixed issue with tokenization not displaying on checkout.
+
+= v4.3.0 - 21/04/22 =
+* New           - NEW FEATURE Support for credit card tokenization. Customers can use a saved card at checkout!
+* Dev           - Better error handling for plugin not set up correctly.
+* Fix           - Fixed issue with status check not displaying information for failed orders.
 
 = v4.2.10 - 03/03/22 =
 * Dev           - New define defined('ePDQ_REFID') for processing refunds using MC account.

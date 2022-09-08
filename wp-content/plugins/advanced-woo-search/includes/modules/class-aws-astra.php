@@ -68,11 +68,7 @@ if ( ! class_exists( 'AWS_Astra' ) ) :
          * Markup for seamless js integration
          */
         public function seamless_searchbox_markup( $markup ) {
-            if ( class_exists('Astra_Icons') ) {
-                $close_btn = '<span id="close" class="close">' . Astra_Icons::get_icons( 'close', true ) . '</span>';
-                $markup = str_replace( '</form>',  $close_btn . '</form>', $markup );
-                $markup = str_replace( 'aws-search-field', 'aws-search-field search-field', $markup );
-            }
+            $markup = str_replace( 'aws-search-field', 'aws-search-field search-field', $markup );
             return $markup;
         }
 
@@ -118,6 +114,20 @@ if ( ! class_exists( 'AWS_Astra' ) ) :
                 });
               });
             ';
+
+            if ( function_exists('astra_get_option') && astra_get_option( 'header-search-box-type' ) === 'header-cover' && class_exists('Astra_Icons') ) {
+
+                $close_btn = '<span id="close" class="close">' . Astra_Icons::get_icons( 'close', true ) . '</span>';
+
+                $script .= '
+                 document.addEventListener("awsLoaded", function() {
+                    if ( ! jQuery(".ast-search-box.header-cover .close").length > 0 ) {
+                        jQuery(".ast-search-box.header-cover form").append(\'' . $close_btn . '\');
+                    }
+                  });
+                ';
+
+            }
 
             wp_add_inline_script( 'aws-script', $script);
             wp_add_inline_script( 'aws-pro-script', $script);

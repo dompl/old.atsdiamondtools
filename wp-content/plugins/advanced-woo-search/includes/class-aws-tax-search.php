@@ -124,12 +124,14 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             if ( $lang ) {
                 $terms = get_terms( array(
                     'taxonomy'   => $this->taxonomy,
-                    'hide_empty' => true,
+                    'hide_empty' => false,
                     'fields'     => 'ids',
                     'lang'       => $lang
                 ) );
                 if ( $terms ) {
                     $search_query .= sprintf( " AND ( " . $wpdb->terms . ".term_id IN ( %s ) )", implode( ',', $terms ) );
+                } else {
+                    $search_query .= " AND 1=2";
                 }
             }
 

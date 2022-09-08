@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GSE37FC4Y7CEY
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 5.9
-Stable tag: 2.50
+Tested up to: 6.0
+Stable tag: 2.61
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,8 +64,9 @@ Additional features available only in PRO plugin version.
 * AND or OR search logic
 * **Add to cart** button in search results
 * Support for [WooCommerce Brands plugin](https://woocommerce.com/products/brands/)
-* Support for Advanced Custom Fields plugin
-* Support for WCFM - WooCommerce Multivendor Marketplace plugin
+* Support for **Advanced Custom Fields** plugin
+* Support for **WCFM - WooCommerce Multivendor Marketplace** plugin
+* Support for **Dokan – WooCommerce Multivendor Marketplace** plugin
 
 [Features list](https://advanced-woo-search.com/features/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
@@ -166,6 +167,65 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.61 ( 2022-08-22 ) =
+* Update - Tested with WC 6.8
+* Update - Custom Product Tabs for WooCommerce plugin integration
+
+= 2.60 ( 2022-08-08 ) =
+* Update - Css for media styles
+* Update - Admin dashboard notices style
+* Update - Admin page text
+
+= 2.59 ( 2022-07-25 ) =
+* Add - Support for Vandana theme
+* Update - Tested with WC 6.7
+* Update - Admin dashboard plugin notices
+* Fix - WPML plugin integration bug with taxonomies search
+* Fix - Integration bug for WooCommerce Product Filter by WooBeWoo plugin
+* Dev - Add aws_ajax_request_params js hook
+
+= 2.58 ( 2022-07-11 ) =
+* Fix - Bug with synonyms words indexation
+
+= 2.57 ( 2022-06-27 ) =
+* Update - Integration for BeTheme
+* Update - Tested with WC 6.6
+
+= 2.56 ( 2022-06-13 ) =
+* Fix - Bug with search form shortcodes error when id value is not specified
+
+= 2.55 ( 2022-05-30 ) =
+* Add - Support for Savoy theme
+* Update - Admin page integration notices
+* Update - Search form shortcode parameters
+* Fix - Issue with search results caching for certain user roles
+
+= 2.54 ( 2022-05-16 ) =
+* Add - Support for Gecko theme
+* Update - Tested with WC 6.5
+* Update - Admin page integration notices
+* Update - Support for Be theme
+* Fix - Translations for stock statuses inside search results
+* Fix - Error notice for Elementor plugin search module
+* Fix - Php error notice about default options values
+* Fix - Length of products search results descriptions
+* Dev - Fix error with empty search query for results page
+
+= 2.53 ( 2022-04-25 ) =
+* Update - Tested with WC 6.4
+* Update - Support for Avada theme and Avada Builder
+* Dev - Add aws_relevance_scores filter
+
+= 2.52 ( 2022-04-11 ) =
+* Update - Search results styles
+* Update - Product description scrapper for search results
+* Fix - Remove markup for search form input title
+
+= 2.51 ( 2022-03-28 ) =
+* Update - Hooks for index table products sync
+* Fix - Search results page filters for default WooCommerce filter widgets
+* Fix - Astra theme integration. Bug with search form close button
 
 = 2.50 ( 2022-03-22 ) =
 * Update - Tested with WC 6.3

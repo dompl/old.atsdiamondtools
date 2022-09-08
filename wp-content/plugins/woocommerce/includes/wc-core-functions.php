@@ -801,7 +801,7 @@ function get_woocommerce_currency_symbols() {
 			'SSP' => '&pound;',
 			'STN' => 'Db',
 			'SYP' => '&#x644;.&#x633;',
-			'SZL' => 'L',
+			'SZL' => 'E',
 			'THB' => '&#3647;',
 			'TJS' => '&#x405;&#x41c;',
 			'TMT' => 'm',
@@ -1048,6 +1048,10 @@ function wc_print_js() {
  * @param  bool    $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript. @since 3.6.0.
  */
 function wc_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
+	if ( ! apply_filters( 'woocommerce_set_cookie_enabled', true, $name ,$value, $expire, $secure ) ) {
+		return;
+	}
+
 	if ( ! headers_sent() ) {
 		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'woocommerce_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
 	} elseif ( Constants::is_true( 'WP_DEBUG' ) ) {
@@ -1771,19 +1775,8 @@ function wc_uasort_comparison( $a, $b ) {
  * @return int
  */
 function wc_ascii_uasort_comparison( $a, $b ) {
-	// 'setlocale' is required for compatibility with PHP 8.
-	// Without it, 'iconv' will return '?'s instead of transliterated characters.
-	$prev_locale = setlocale( LC_CTYPE, 0 );
-	setlocale( LC_ALL, 'C.UTF-8' );
-
-	// phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
-	if ( function_exists( 'iconv' ) && defined( 'ICONV_IMPL' ) && @strcasecmp( ICONV_IMPL, 'unknown' ) !== 0 ) {
-		$a = @iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', $a );
-		$b = @iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', $b );
-	}
-	// phpcs:enable WordPress.PHP.NoSilencedErrors.Discouraged
-
-	setlocale( LC_ALL, $prev_locale );
+	$a = remove_accents( $a );
+	$b = remove_accents( $b );
 	return strcmp( $a, $b );
 }
 
