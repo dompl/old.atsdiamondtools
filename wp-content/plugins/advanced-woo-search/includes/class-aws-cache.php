@@ -124,6 +124,8 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
 
             }
 
+            do_action( 'aws_create_cache_table' );
+
         }
 
         /*

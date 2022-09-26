@@ -127,13 +127,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 }
             }
 
-            $search_archives = AWS()->get_settings( 'search_archives' );
-            $show_cats       = ( isset( $search_archives['archive_category'] ) && $search_archives['archive_category'] ) ? 'true' : 'false';
-            $show_tags       = ( isset( $search_archives['archive_tag'] ) && $search_archives['archive_tag'] ) ? 'true' : 'false';
-            $results_num     = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
-            $search_in       = AWS()->get_settings( 'search_in' );
-            $outofstock      = AWS()->get_settings( 'outofstock' );
-            $search_rule     = AWS()->get_settings( 'search_rule' );
+            $search_archives   = AWS()->get_settings( 'search_archives' );
+            $show_cats         = ( isset( $search_archives['archive_category'] ) && $search_archives['archive_category'] ) ? 'true' : 'false';
+            $show_tags         = ( isset( $search_archives['archive_tag'] ) && $search_archives['archive_tag'] ) ? 'true' : 'false';
+            $results_num       = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
+            $pages_results_num = AWS()->get_settings( 'pages_results_num' );
+            $search_in         = AWS()->get_settings( 'search_in' );
+            $outofstock        = AWS()->get_settings( 'outofstock' );
+            $search_rule       = AWS()->get_settings( 'search_rule' );
 
             $search_in_arr = array();
 
@@ -153,6 +154,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $this->data['s'] = $s;
             $this->data['results_num']  = $results_num ? $results_num : 10;
+            $this->data['pages_results_num']  = $pages_results_num;
             $this->data['search_terms'] = array();
             $this->data['search_in']    = $search_in_arr;
             $this->data['outofstock']   = $outofstock;
@@ -440,7 +442,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
 
             if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
-                $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", '%' . $wpdb->esc_like( $current_lang ) . '%' );
+                $query['lang'] = $wpdb->prepare( " AND ( lang = '%s' OR lang = '' )", $current_lang );
             }
 
             /**

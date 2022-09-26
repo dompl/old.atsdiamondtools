@@ -586,9 +586,17 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['results'][] = array(
-                "name"  => __( "Max number of results", "advanced-woo-search" ),
-                "desc"  => __( "Maximum number of displayed search results.", "advanced-woo-search" ),
+                "name"  => __( "Products number", "advanced-woo-search" ),
+                "desc"  => __( "Maximum number of displayed products search results.", "advanced-woo-search" ),
                 "id"    => "results_num",
+                "value" => 10,
+                "type"  => "number"
+            );
+
+            $options['results'][] = array(
+                "name"  => __( "Archive pages number", "advanced-woo-search" ),
+                "desc"  => __( "Maximum number of displayed archive pages search results.", "advanced-woo-search" ),
+                "id"    => "pages_results_num",
                 "value" => 10,
                 "type"  => "number"
             );

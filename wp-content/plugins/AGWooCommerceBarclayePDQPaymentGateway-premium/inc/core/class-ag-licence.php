@@ -35,17 +35,6 @@ class AG_licence
         add_action( 'admin_notices', array( $this, 'ag_admin_notice' ) );
     }
     
-    public static function run_instance( $args = array() )
-    {
-        
-        if ( self::$instance === null ) {
-            self::$args = $args;
-            self::$instance = new self();
-        }
-        
-        return self::$instance;
-    }
-    
     public static function start_FS()
     {
         if ( !is_null( self::$freemius ) ) {
@@ -122,6 +111,17 @@ class AG_licence
         self::$freemius->add_filter( 'hide_account_tabs', '__return_true' );
     }
     
+    public static function run_instance( $args = array() )
+    {
+        
+        if ( self::$instance === null ) {
+            self::$args = $args;
+            self::$instance = new self();
+        }
+        
+        return self::$instance;
+    }
+    
     public static function plugin_icon( $icon )
     {
         return self::$args['paths']['plugin'] . '/inc/assets/img/plugin-icon.png';
@@ -167,22 +167,23 @@ class AG_licence
         if ( !self::$args['update']['update_notice'] ) {
             return;
         }
-        $option_name = self::$args['update']['notice_name'];
-        $dismissed = get_option( $option_name, false );
+        $dismissed = get_option( self::$args['update']['notice_name'], false );
         if ( $dismissed ) {
             return;
         }
-        $dismiss = filter_input( INPUT_POST, $option_name );
+        $dismiss = filter_input( INPUT_POST, self::$args['update']['notice_name'] );
         
         if ( $dismiss ) {
-            update_option( $option_name, true );
+            update_option( self::$args['update']['notice_name'], true );
             return;
         }
         
         ?>
         <div class="ag-notice ag-notice--getting-started">
             <form action="" method="post" class="ag-notice__dismiss">
-                <input type="hidden" name="ag_dismiss_warning" value="1">
+                <input type="hidden" name="<?php 
+        echo  self::$args['update']['notice_name'] ;
+        ?>" value="1">
                 <button title="Dismiss" class="is-dismissible">
                     Hide <span class="dashicons dashicons-dismiss"></span></button>
             </form>
@@ -194,7 +195,7 @@ class AG_licence
         ?></p>
         </div>
 
-        <?php 
+		<?php 
     }
 
 }

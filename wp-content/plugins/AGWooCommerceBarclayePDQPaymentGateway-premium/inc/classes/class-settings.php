@@ -66,13 +66,13 @@ class AG_ePDQ_Settings {
 			),
 			'sha_in'       => array(
 				'title'       => __( 'SHA-IN Passphrase', 'ag_epdq_server' ),
-				'type'        => 'password',
+				'type'        => 'text',
 				'description' => __( 'The SHA-IN signature will encode the data passed to the payment processor to ensure better security.', 'ag_epdq_server' ),
 				//'desc_tip'      => true
 			),
 			'sha_out'      => array(
 				'title'       => __( 'SHA-OUT Passphrase', 'ag_epdq_server' ),
-				'type'        => 'password',
+				'type'        => 'text',
 				'description' => __( 'The SHA-OUT signature will encode the data passed back from the payment processor to ensure better security.', 'ag_epdq_server' ),
 				//'desc_tip'      => true
 			),
@@ -182,7 +182,7 @@ class AG_ePDQ_Settings {
 				'default'  => 'no',
 				'desc_tip' => false
 			),
-			'fraudCheck'     => array(
+			'fraudCheck'  => array(
 				'title'       => __( 'Enable AG Fraud Check', 'ag_epdq_server' ),
 				'type'        => 'checkbox',
 				'description' => 'You will need to setup some parameters on transaction feedback <a href="https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/"> here</a> to be able to use this',

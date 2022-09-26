@@ -418,6 +418,19 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
+                if ( version_compare( $current_version, '2.63', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['pages_results_num'] ) ) {
+                            $settings['pages_results_num'] = 10;
+                            update_option( 'aws_settings', $settings );
+                        }
+                    }
+
+                }
+
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );

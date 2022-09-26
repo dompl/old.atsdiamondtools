@@ -815,3 +815,15 @@ msgstr ""
 
 msgid "Dismiss"
 msgstr ""
+
+msgid "Products number"
+msgstr ""
+
+msgid "Maximum number of displayed products search results."
+msgstr ""
+
+msgid "Archive pages number"
+msgstr ""
+
+msgid "Maximum number of displayed archive pages search results."
+msgstr ""

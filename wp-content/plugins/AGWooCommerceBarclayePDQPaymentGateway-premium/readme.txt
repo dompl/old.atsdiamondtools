@@ -36,6 +36,12 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v.4.4.3 - 20/09/22 =
+* Fix            - Fixed issue with setup wizard on newer versions of WooCommerce.
+
+= v4.4.2 - 05/09/22 =
+* Fix           - Fixed issue with admin notice not dismissing when dismissed.
+
 = v4.4.1 - 01/09/22 =
 * Change        - Removed character limit from address fields.
 

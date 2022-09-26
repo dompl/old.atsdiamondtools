@@ -22,7 +22,6 @@ class AG_ePDQ_Wizard {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'wizard_page' ) );
 		add_action( 'admin_init', array( $this, 'setup_wizard' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_wizard_scripts' ) );
 	}
 
 	/**
@@ -40,21 +39,6 @@ class AG_ePDQ_Wizard {
 	public function wizard_page() {
 		add_submenu_page( null, '', '', 'manage_options', self::$args['plugin_name'] . '-wizard', '' );
 	}
-
-
-	public function enqueue_wizard_scripts() {
-
-		if ( empty( $_GET['page'] ) || self::$args['plugin_name'] . '-wizard' !== $_GET['page'] ) {
-			return;
-		}
-
-		wp_enqueue_style( self::$args['plugin_name'] . '-wizard', AG_ePDQ_server_path . 'inc/assets/css/wizard-style.css', array(
-			'dashicons',
-			'install'
-		), self::$args['plugin_version'] );
-
-	}
-
 
 	public function setup_wizard() {
 		if ( empty( $_GET['page'] ) || self::$args['plugin_name'] . '-wizard' !== $_GET['page'] ) {
@@ -95,10 +79,12 @@ class AG_ePDQ_Wizard {
             <meta name="viewport" content="width=device-width"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <title>AG <?php echo self::$args['plugin_name']; ?> Setup Wizard</title>
-			<?php do_action( 'admin_enqueue_scripts' ); ?>
-			<?php wp_print_scripts( self::$args['plugin_name'] . '-wizard' ); ?>
-			<?php do_action( 'admin_print_styles' ); ?>
-			<?php do_action( 'admin_head' ); ?>
+	        <?php
+	        wp_print_scripts( self::$args['plugin_name'] . '-wizard' );
+	        wp_enqueue_style( self::$args['plugin_name'] . '-wizard', AG_ePDQ_server_path . 'inc/assets/css/wizard-style.css', array( 'dashicons', 'install' ), self::$args['plugin_version'] );
+	        //do_action( 'admin_enqueue_scripts' );
+	        do_action( 'admin_print_styles' );
+	        do_action( 'admin_head' ); ?>
         </head>
         <body class="ag_wizard wp-core-ui <?php echo esc_attr( 'ag_wizard-step__' . $this->step ); ?>">
         <h1 class="ag-logo"><a href="https://weareag.co.uk/"><img src="<?php echo esc_attr( self::$ag_png ); ?>"/></a>

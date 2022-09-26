@@ -31,6 +31,11 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
          */
         private $search_terms;
 
+        /**
+         * @var AWS_Tax_Search Number of search results $results_num
+         */
+        private $results_num = 10;
+
         /*
          * Constructor
          */
@@ -48,6 +53,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             $this->search_string = isset( $data['s'] ) ? $data['s'] : '';
             $this->search_string_unfiltered = isset( $data['s_nonormalize'] ) ? $data['s_nonormalize'] : $this->search_string ;
             $this->search_terms = isset( $data['search_terms'] ) ? $data['search_terms'] : array();
+            $this->results_num = isset( $data['pages_results_num'] ) ? $data['pages_results_num'] : 10;
 
         }
 
@@ -105,7 +111,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
              * @since 1.73
              * @param int
              */
-            $terms_number = apply_filters( 'aws_search_terms_number', 10 );
+            $terms_number = apply_filters( 'aws_search_terms_number', $this->results_num );
 
             $excludes_array = $this->get_excluded_terms();
             if ( $excludes_array && ! empty( $excludes_array ) ) {
