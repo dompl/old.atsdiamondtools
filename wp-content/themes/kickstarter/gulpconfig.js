@@ -1,8 +1,22 @@
 // ==== CONFIGURATION ==== //
+
+var fs = require("fs");
+var is_server = "./is_staging";
+var theme = "atsdiamondtools";
+var staging_domain = "onfrog.co.uk";
+if (fs.existsSync(is_server)) {
+	var server_proxy = "http://" + theme + "." + staging_domain;
+	var server = theme + "." + staging_domain;
+	var server_port = 8914;
+	var is_https = false;
+} else {
+	var server_proxy = theme + ".test";
+	var server = theme + ".test"; // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
+	var server_port = 3000;
+	var is_https = false;
+}
 // Project paths
-var theme = "atsdiamondtools", // The directory name for your theme; change this at the very least!
-	server = "http://atsdiamondtools.test", // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
-	src = "src/", // The raw material of your theme: custom scripts, SCSS source files, PHP files, images, etc.; do not delete this folder!
+var src = "src/", // The raw material of your theme: custom scripts, SCSS source files, PHP files, images, etc.; do not delete this folder!
 	build = "build/", // A temporary directory containing a development version of your theme; delete it anytime
 	dist = "../" + theme + "/", // The distribution package that you'll be uploading to your server; delete it anytime
 	assets = "assets/", // A staging area for assets that require processing before landing in the source folder (example: icons before being added to a sprite sheet)
@@ -18,9 +32,12 @@ module.exports = {
 		files: [build + "/**", "!" + build + "/**.map"], // Exclude map files
 		notify: false, // In-line notifications (the blocks of text saying whether you are connected to the BrowserSync server or not)
 		open: false, // Set to false if you don't like the browser window opening automatically
-		port: 3000, // Port number for the live version of the site; default: 3000
-		proxy: server,
-		reloadDebounce: 200,
+		// Port number for the live version of the site; default: 3000
+		host: server,
+		ghost: true,
+		port: server_port,
+		proxy: server_proxy,
+		https: is_https,
 	},
 	icons: {
 		icon: {
