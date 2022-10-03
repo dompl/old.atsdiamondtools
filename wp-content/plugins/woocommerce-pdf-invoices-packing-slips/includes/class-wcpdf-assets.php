@@ -122,7 +122,7 @@ class Assets {
 			wp_enqueue_script(
 				'wpo-wcpdf-admin',
 				WPO_WCPDF()->plugin_url() . '/assets/js/admin-script'.$suffix.'.js',
-				array( 'jquery', 'wc-enhanced-select', 'jquery-blockui' ),
+				array( 'jquery', 'wc-enhanced-select', 'jquery-blockui', 'jquery-tiptip' ),
 				WPO_WCPDF_VERSION
 			);
 			wp_localize_script(
@@ -145,6 +145,7 @@ class Assets {
 						'reset_number_yearly',
 						'my_account_buttons',
 						'invoice_number_column',
+						'invoice_date_column',
 						'disable_free',
 						'use_latest_settings',
 					) ),
