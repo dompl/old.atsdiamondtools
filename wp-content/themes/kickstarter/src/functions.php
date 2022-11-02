@@ -366,5 +366,5 @@
             endwhile;
             update_option( 'act_product_update', $product_update_version );
         endif;
-    wp_reset_postdata();
-}
+        wp_reset_postdata();
+    }
