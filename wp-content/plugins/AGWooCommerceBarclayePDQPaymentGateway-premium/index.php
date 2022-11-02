@@ -8,10 +8,10 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.4.3
+ * Version: 4.4.4
  * Update URI: https://api.freemius.com
  * WC requires at least: 5.0.
- * WC tested up to: 6.9
+ * WC tested up to: 7.0
  * License: GPL3
  */
 
@@ -21,14 +21,14 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  4.4.3
+ * @version  4.4.4
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.4.3";
+	public static $AGversion = "4.4.4";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
@@ -69,7 +69,7 @@ class AG_ePDQ_server {
 		define( 'AG_ePDQ_blocks', AG_ePDQ_path . 'inc/blocks/' );
 		define( 'AG_ePDQ_token', AG_ePDQ_path . 'inc/classes/Tokenize/' );
 		define( 'AG_ePDQ_admin', admin_url() );
-		define( 'AG_path', plugin_dir_url( __FILE__ ) );
+		define( 'AG_ePDQ_url', plugin_dir_url( __FILE__ ) );
 	}
 
 	/**
@@ -155,15 +155,23 @@ class AG_ePDQ_server {
 		}
 	}
 
+	public static function plugin_url() {
+
+		return untrailingslashit( plugins_url( '/', __FILE__ ) );
+	}
+
 	public function ag_blocks_support() {
+
 		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
-			add_action( 'woocommerce_blocks_payment_method_type_registration',
-				function ( $registry ) {
-					$registry->register( new Automattic\WooCommerce\Blocks\Payments\Integrations\epdq_checkout() );
-				}
-			);
+			require_once AG_ePDQ_blocks . 'ePDQ-class.php';
+
+			add_action( 'woocommerce_blocks_payment_method_type_registration', function ( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+
+				$payment_method_registry->register( new epdq_checkout_block );
+			} );
 		}
 	}
+
 
 	/**
 	 * Register gateway with Woo
@@ -193,29 +201,10 @@ class AG_ePDQ_server {
 		require_once AG_ePDQ_class . 'class-settings.php';
 		require_once AG_ePDQ_class . 'class-crypt.php';
 		require_once AG_ePDQ_class . 'class-order-status-check.php';
-		require_once AG_ePDQ_blocks . 'ePDQ-class.php';
 		require_once AG_ePDQ_token . 'class-tokenization.php';
 		require_once AG_ePDQ_class . 'Fraudchecks/fraud-checks.php';
 
-		//require_once AG_ePDQ_class . 'class-epdq-score.php';
-		//require_once AG_ePDQ_class . 'AG_3DS_Score/class-3d-score.php';
-		//require_once AG_ePDQ_class . 'AG_3DS_Score/class-display-3d-score.php';
-
-
-		//ePDQ_3D_score::run_instance(array(
-		//	'parent_slug'   => self::$AG_ePDQ_slug,
-		//	'plugin_short_title'         => 'Barclays ePDQ',
-		//	'plugin_version'       => self::$AGversion,
-		//	'payment_method_id'		=>	'epdq_checkout',
-		//));
-
-		//ePDQ_Display_Score::run_instance(array(
-		//	'plugin_short_title'         => 'Barclays ePDQ',
-		//	'plugin_version'       => self::$AGversion,
-		//	'payment_method_id'		=>	'epdq_checkout',
-		//));
-
-		ag_fraud_checks::run_instance( array(
+		ag_ePDQ_fraud_checks::run_instance( array(
 			'plugin_name' => self::$pluginName,
 			'short_title' => self::$AG_ePDQ_slug,
 		) );

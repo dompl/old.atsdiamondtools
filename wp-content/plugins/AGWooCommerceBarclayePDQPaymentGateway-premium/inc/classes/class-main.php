@@ -92,10 +92,10 @@ function init_ag_epdq() {
 		public function validate_fields() {
 
 			//if ( strlen( $_POST['billing_address_1'] ) > 35 ) {
-				//wc_add_notice( 'Your street address is too long, please also use the second address field.', 'error' );
+			//wc_add_notice( 'Your street address is too long, please also use the second address field.', 'error' );
 			//}
 			//if ( strlen( $_POST['billing_address_2'] ) > 35 ) {
-				//wc_add_notice( 'Your second street address is too long. Please shorten your billing address.', 'error' );
+			//wc_add_notice( 'Your second street address is too long. Please shorten your billing address.', 'error' );
 			//}
 
 		}
@@ -177,7 +177,7 @@ function init_ag_epdq() {
 
 			// Display token section
 			if ( isset( $this->token ) && $this->token === 'yes' ) {
-				$description .= AG_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
+				$description .= AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
 			}
 
 			return $description;
@@ -346,7 +346,7 @@ function init_ag_epdq() {
 
 			// Get customer token
 			$savedCard     = get_post_meta( $orderID, 'use_saved_card', true );
-			$customerToken = AG_Token::get( get_current_user_id(), is_user_logged_in(), $savedCard );
+			$customerToken = AG_ePDQ_Token::get( get_current_user_id(), is_user_logged_in(), $savedCard );
 			// END
 
 			$fields = array(
@@ -665,13 +665,13 @@ function init_ag_epdq() {
 			// Enable deeper debugging, useful for when the ePDQ team require data to debug.
 			if ( defined( 'ePDQ_support_debug' ) ) {
 				$args = array(
-					'AAVADDRESS' => $datatocheck['AAVADDRESS'],
-					'ACCEPTANCE' => $datatocheck['ACCEPTANCE'],
-					'COMPLUS'    => $datatocheck['COMPLUS'],
-					'NCERROR'    => $datatocheck['NCERROR'],
-					'orderID'    => $datatocheck['orderID'],
-					'PAYID'      => $datatocheck['PAYID'],
-					'STATUS'     => $datatocheck['STATUS']
+					'AAVADDRESS' => $datatocheck['AAVADDRESS'] ?? '',
+					'ACCEPTANCE' => $datatocheck['ACCEPTANCE'] ?? '',
+					'COMPLUS'    => $datatocheck['COMPLUS'] ?? '',
+					'NCERROR'    => $datatocheck['NCERROR'] ?? '',
+					'orderID'    => $datatocheck['orderID'] ?? '',
+					'PAYID'      => $datatocheck['PAYID'] ?? '',
+					'STATUS'     => $datatocheck['STATUS'] ?? ''
 				);
 				AG_ePDQ_Helpers::ag_log( 'Debug data sent back ' . print_r( $args, true ), 'debug', $this->debug );
 			}
@@ -724,7 +724,7 @@ function init_ag_epdq() {
 
 			// Save payment token to user
 			if ( $this->token === 'yes' ) {
-				AG_Token::save( $args, get_current_user_id(), is_user_logged_in() );
+				AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
 				// Drop BIN
 				unset( $args['BIN'] );
 				update_post_meta( $args['idOrder'], 'use_saved_card', '' );

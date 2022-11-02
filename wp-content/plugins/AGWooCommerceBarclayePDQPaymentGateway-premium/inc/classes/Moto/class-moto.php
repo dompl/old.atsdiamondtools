@@ -4,12 +4,12 @@
 /*-----------------------------------------------------------------------------------*/
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
-if ( class_exists( 'ag_moto' ) ) {
+if ( class_exists( 'ag_ePDQ_moto' ) ) {
 	return;
 }
 
 
-class ag_moto {
+class ag_ePDQ_moto {
 
 	public static $single_instance = null;
 	public static $args = array();

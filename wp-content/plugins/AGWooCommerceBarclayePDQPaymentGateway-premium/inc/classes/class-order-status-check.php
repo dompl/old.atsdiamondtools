@@ -230,7 +230,7 @@ class AG_ePDQ_order_status_check {
 
 		if ( 0 < $order->get_total() - $order->get_total_refunded() || 0 < absint( $order->get_item_count() - $order->get_item_count_refunded() ) ) {
 
-			echo '<button id="ag-check-status"  type="button" class="button" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_path . '">AG ePDQ Order Status Check</button>';
+			echo '<button id="ag-check-status"  type="button" class="button" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_url . '">AG ePDQ Order Status Check</button>';
 
 			return;
 

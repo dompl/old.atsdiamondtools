@@ -158,14 +158,18 @@ class AWS_Admin {
     public function admin_enqueue_scripts() {
 
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'aws-options' ) {
-            wp_enqueue_style( 'plugin-admin-style', AWS_URL . 'assets/css/admin.css', array(), AWS_VERSION );
+
+            $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+
+            wp_enqueue_style( 'plugin-admin-style', AWS_URL . 'assets/css/admin' . $suffix . '.css', array(), AWS_VERSION );
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui-sortable' );
-            wp_enqueue_script( 'plugin-admin-scripts', AWS_URL . 'assets/js/admin.js', array('jquery', 'jquery-ui-sortable'), AWS_VERSION );
+            wp_enqueue_script( 'plugin-admin-scripts', AWS_URL . 'assets/js/admin' . $suffix . '.js', array('jquery', 'jquery-ui-sortable'), AWS_VERSION );
             wp_localize_script( 'plugin-admin-scripts', 'aws_vars', array(
                 'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
                 'ajax_nonce' => wp_create_nonce( 'aws_admin_ajax_nonce' ),
             ) );
+
         }
 
     }

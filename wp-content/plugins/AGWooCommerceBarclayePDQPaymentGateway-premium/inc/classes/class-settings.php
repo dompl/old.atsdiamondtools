@@ -66,13 +66,13 @@ class AG_ePDQ_Settings {
 			),
 			'sha_in'       => array(
 				'title'       => __( 'SHA-IN Passphrase', 'ag_epdq_server' ),
-				'type'        => 'text',
+				'type'        => 'password',
 				'description' => __( 'The SHA-IN signature will encode the data passed to the payment processor to ensure better security.', 'ag_epdq_server' ),
 				//'desc_tip'      => true
 			),
 			'sha_out'      => array(
 				'title'       => __( 'SHA-OUT Passphrase', 'ag_epdq_server' ),
-				'type'        => 'text',
+				'type'        => 'password',
 				'description' => __( 'The SHA-OUT signature will encode the data passed back from the payment processor to ensure better security.', 'ag_epdq_server' ),
 				//'desc_tip'      => true
 			),

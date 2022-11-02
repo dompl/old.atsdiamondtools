@@ -1,8 +1,6 @@
 <?php
 namespace WPO\WC\PDF_Invoices;
 
-use WPO\WC\PDF_Invoices\Compatibility\Order as WCX_Order;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -75,7 +73,7 @@ class Endpoint {
 		$debug_settings = get_option( 'wpo_wcpdf_settings_debug', array() );
 		if ( is_user_logged_in() ) {
 			$access_key = wp_create_nonce( $this->action );
-		} elseif ( ! is_user_logged_in() && isset( $debug_settings['guest_access'] ) ) {
+		} elseif ( ! is_user_logged_in() && WPO_WCPDF()->settings->is_guest_access_enabled() ) {
 			$access_key = $order->get_order_key();
 		} else {
 			return '';
@@ -85,7 +83,7 @@ class Endpoint {
 			$parameters = array(
 				$this->get_identifier(),
 				$document_type,
-				WCX_Order::get_id( $order ),
+				$order->get_id(),
 				$access_key,
 			);
 			$document_link = trailingslashit( get_home_url() ) . implode( '/', $parameters );
@@ -93,7 +91,7 @@ class Endpoint {
 			$document_link = add_query_arg( array(
 				'action'        => $this->action,
 				'document_type' => $document_type,
-				'order_ids'     => WCX_Order::get_id( $order ),
+				'order_ids'     => $order->get_id(),
 				'access_key'    => $access_key,
 			), admin_url( 'admin-ajax.php' ) );
 		}

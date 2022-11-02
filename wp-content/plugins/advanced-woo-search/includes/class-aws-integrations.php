@@ -210,6 +210,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'vandana_wp_head' ) );
                 }
 
+                if ( 'Pustaka' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'pustaka_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -1546,6 +1550,31 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Pustaka theme custom styles
+         */
+        public function pustaka_wp_head() { ?>
+            <style>
+                .site-header .searchform {
+                    opacity: 0;
+                }
+                .site-header .aws-container {
+                    width: 100%;
+                }
+                .site-header .aws-container .aws-search-form .aws-search-btn svg {
+                    fill: #CD40E6;
+                }
+                .site-header .aws-container .aws-search-field {
+                    border: none;
+                    padding: 0;
+                }
+                .site-header .aws-container .aws-search-form .aws-form-btn {
+                    border: none;
+                    background: transparent;
+                }
+            </style>
+        <?php }
+
+        /*
          * Exclude product categories
          */
         public function filter_protected_cats_term_exclude( $exclude ) {
@@ -1789,6 +1818,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Savoy' === $this->current_theme ) {
                 $selectors[] = '#nm-header-search-form';
+            }
+
+            if ( 'Pustaka' === $this->current_theme ) {
+                $selectors[] = '.site-header .searchform';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

@@ -36,6 +36,17 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+
+= v.4.4.4 - 19/10/22 =
+* Improvement     - Fraud Check UI.
+* Fix             - ePDQ Change Path.
+* Fix             - Fix to SHA_check() debug log.
+* Fix             - Fixed issue with WooCommerce checkout blocks
+* Change          - Rename of Tokenize class.
+* Removal         - Removed old 3D secure score system, Fraud Checks replaces this.
+* Removal         - Removed upsell from welcome page.
+
+
 = v.4.4.3 - 20/09/22 =
 * Fix            - Fixed issue with setup wizard on newer versions of WooCommerce.
 

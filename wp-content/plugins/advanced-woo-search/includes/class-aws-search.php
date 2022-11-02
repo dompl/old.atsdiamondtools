@@ -442,7 +442,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
 
             if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
-                $query['lang'] = $wpdb->prepare( " AND ( lang = '%s' OR lang = '' )", $current_lang );
+                $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", '%' . $wpdb->esc_like( $current_lang ) . '%' );
             }
 
             /**

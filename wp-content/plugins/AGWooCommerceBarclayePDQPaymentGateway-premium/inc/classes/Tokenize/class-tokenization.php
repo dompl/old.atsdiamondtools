@@ -18,12 +18,12 @@
 /*-----------------------------------------------------------------------------------*/
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
-if ( class_exists( 'AG_Token' ) ) {
+if ( class_exists( 'AG_ePDQ_Token' ) ) {
 	return;
 }
 
 
-class AG_Token {
+class AG_ePDQ_Token {
 
 
 	public static function save( $args, $userID, $login ) {
