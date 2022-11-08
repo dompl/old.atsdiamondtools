@@ -214,6 +214,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'pustaka_wp_head' ) );
                 }
 
+                if ( 'XStore' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'xstore_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -1575,6 +1579,48 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * XStore theme custom styles
+         */
+        public function xstore_wp_head() { ?>
+            <style>
+                #header form[role="search"]:not(.aws-search-form) {
+                    opacity: 0;
+                }
+                #header .aws-container .aws-search-form .aws-form-btn {
+                    background: #fff;
+                }
+                #header .aws-container .aws-search-form .aws-search-btn.aws-form-btn {
+                    background-color: #000000;
+                }
+                #header .aws-container .aws-search-form .aws-main-filter .aws-main-filter__current {
+                    color: #888;
+                }
+                #header .aws-container .aws-search-form .aws-search-btn svg {
+                    fill: #fff;
+                }
+                #header .et-mini-content .aws-container {
+                    width: 100%;
+                    max-width: 750px;
+                    margin-top: 50px;
+                }
+                #header [class*=et-content-]:not(.et-popup_toggle) .et_b_search-icon + .aws-container {
+                    opacity: 0;
+                    visibility: hidden;
+                    top: 100%;
+                    position: absolute;
+                    z-index: 9999;
+                    right: 0;
+                    width: 100%;
+                    min-width: 310px;
+                }
+                #header [class*=et-content-]:not(.et-popup_toggle):hover .et_b_search-icon + .aws-container {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            </style>
+        <?php }
+
+        /*
          * Exclude product categories
          */
         public function filter_protected_cats_term_exclude( $exclude ) {
@@ -1822,6 +1868,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Pustaka' === $this->current_theme ) {
                 $selectors[] = '.site-header .searchform';
+            }
+
+            if ( 'XStore' === $this->current_theme ) {
+                $selectors[] = "#header form[role='search']";
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

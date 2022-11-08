@@ -37,6 +37,10 @@ Automatic updates should work like a charm; as always though, update on a stagin
 == Changelog ==
 
 
+
+= v.4.4.5 - 31/10/22 =
+* Improvement     - WooCommerce checkout blocks
+
 = v.4.4.4 - 19/10/22 =
 * Improvement     - Fraud Check UI.
 * Fix             - ePDQ Change Path.

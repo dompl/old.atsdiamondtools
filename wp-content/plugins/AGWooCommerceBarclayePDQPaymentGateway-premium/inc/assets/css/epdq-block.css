@@ -1,0 +1,9 @@
+.ag-epdq-checkout-title-wrapper, .ag-epdq-checkout-icon-wrapper {
+    width: 100%;
+}
+
+.ag-epdq-checkout-icon-wrapper img {
+    float:        left;
+    margin-right: 5px;
+    margin-top:   8px;
+}

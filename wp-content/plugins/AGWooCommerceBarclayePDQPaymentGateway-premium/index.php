@@ -8,9 +8,9 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.4.4
+ * Version: 4.4.5
  * Update URI: https://api.freemius.com
- * WC requires at least: 5.0.
+ * WC requires at least: 5.0
  * WC tested up to: 7.0
  * License: GPL3
  */
@@ -21,14 +21,14 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 /**
  * AG ePDQ server
  * @class    AG_ePDQ_server
- * @version  4.4.4
+ * @version  4.4.5
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.4.4";
+	public static $AGversion = "4.4.5";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
@@ -46,6 +46,11 @@ class AG_ePDQ_server {
 		add_action( 'plugins_loaded', array( $this, 'woocommerce_ag_epdq_init' ), 0 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'ag_admin_css' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'ag_checkout_css' ) );
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
+
+
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'woocommerce_add_epdq_gateway' ) );
 
 		// If the site supports Gutenberg Blocks, support the Checkout block
@@ -188,6 +193,14 @@ class AG_ePDQ_server {
 
 	public function ag_checkout_css() {
 		wp_enqueue_style( 'ag-ePDQ', AG_ePDQ_server_path . 'inc/assets/css/style.css', false, self::$AGversion );
+	}
+
+	public function ag_epdq_block_css() {
+
+		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+			wp_enqueue_style( 'ag-block', AG_ePDQ_server_path . 'inc/assets/css/epdq-block.css', false, self::$AGversion );
+		}
+
 	}
 
 	public function woocommerce_ag_epdq_init() {

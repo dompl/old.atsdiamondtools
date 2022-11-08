@@ -136,7 +136,7 @@ if (!class_exists('AWS_Woobewoo_Filters')) :
                 }
                 elseif ( strpos( $key, 'filter_' ) === 0 || strpos( $key, 'wpf_filter_' ) === 0 ) {
 
-                    if ( strpos( $key, 'filter_pwb_' ) === 0 ) {
+                    if ( strpos( $key, 'filter_pwb_' ) === 0 || strpos( $key, 'wpf_filter_pwb_' ) === 0 ) {
                         $taxonomy = 'pwb-brand';
                     } else {
                         $taxonomy = str_replace( 'wpf_filter_', '', $key );

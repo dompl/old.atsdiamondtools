@@ -44,14 +44,6 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             add_action( 'edit_term', array( &$this, 'term_changed' ), 10, 3 );
 
             add_action( 'delete_term', array( $this, 'term_deleted' ), 10, 4 );
-           
-            if ( defined('WOOCOMMERCE_VERSION') ) {              
-                if ( version_compare( WOOCOMMERCE_VERSION, '3.0', ">=" ) ) {
-                    add_action( 'woocommerce_variable_product_sync_data', array( $this, 'variable_product_changed' ) );
-                } else {
-                    add_action( 'woocommerce_variable_product_sync', array( $this, 'variable_product_changed' ), 10, 2 );  
-                }
-            }
 
             add_action( 'woocommerce_product_set_stock_status', array( $this, 'stock_status_changes' ), 10, 3 );
 
@@ -572,23 +564,6 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             $this->update_table( $post_id );
-
-        }
-
-        /*
-         * Fires when products variations are changed
-         */
-        public function variable_product_changed( $product, $children = null ) {
-
-            $product_id = '';
-
-            if ( is_object( $product ) ) {
-                $product_id = $product->get_id();
-            } else {
-                $product_id = $product;
-            }
-
-            $this->update_table( $product_id );
 
         }
 

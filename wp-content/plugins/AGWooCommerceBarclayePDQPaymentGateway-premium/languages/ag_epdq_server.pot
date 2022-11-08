@@ -2,14 +2,14 @@
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.4.3\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.4.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-10-19T12:54:59+00:00\n"
+"POT-Creation-Date: 2022-10-28T14:11:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: ag_epdq_server\n"
@@ -28,6 +28,25 @@ msgstr ""
 
 #. Author of the plugin
 msgid "We are AG"
+msgstr ""
+
+#: inc/blocks/ePDQ-class.php:77
+#: inc/classes/class-settings.php:138
+msgid "Visa"
+msgstr ""
+
+#: inc/blocks/ePDQ-class.php:81
+#: inc/classes/class-settings.php:137
+msgid "Maestro"
+msgstr ""
+
+#: inc/blocks/ePDQ-class.php:85
+#: inc/classes/class-settings.php:136
+msgid "American Express"
+msgstr ""
+
+#: inc/blocks/ePDQ-class.php:89
+msgid "Mastercard"
 msgstr ""
 
 #: inc/classes/class-epdq-error-codes.php:28
@@ -2542,18 +2561,6 @@ msgstr ""
 msgid "MasterCard"
 msgstr ""
 
-#: inc/classes/class-settings.php:136
-msgid "American Express"
-msgstr ""
-
-#: inc/classes/class-settings.php:137
-msgid "Maestro"
-msgstr ""
-
-#: inc/classes/class-settings.php:138
-msgid "Visa"
-msgstr ""
-
 #: inc/classes/class-settings.php:139
 msgid "JCB"
 msgstr ""
@@ -2820,10 +2827,10 @@ msgstr ""
 msgid "Use the wizard"
 msgstr ""
 
-#: inc/blocks/js/wc-payment-method-epdq.js:12
+#: inc/blocks/js/wc-payment-method-epdq.js:13
 msgid "AG ePDQ"
 msgstr ""
 
-#: inc/blocks/js/wc-payment-method-epdq.js:57
+#: inc/blocks/js/wc-payment-method-epdq.js:51
 msgid "Pay using ePDQ"
 msgstr ""
