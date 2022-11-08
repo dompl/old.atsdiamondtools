@@ -5,7 +5,7 @@ import {
 	act,
 	render,
 	screen,
-	fireEvent,
+	queryByText,
 	waitFor,
 	waitForElementToBeRemoved,
 } from '@testing-library/react';
@@ -14,12 +14,13 @@ import { dispatch } from '@wordpress/data';
 import { CART_STORE_KEY as storeKey } from '@woocommerce/block-data';
 import { SlotFillProvider } from '@woocommerce/blocks-checkout';
 import { default as fetchMock } from 'jest-fetch-mock';
+import userEvent from '@testing-library/user-event';
 
 /**
  * Internal dependencies
  */
 import Block from '../block';
-import { defaultCartState } from '../../../../data/default-states';
+import { defaultCartState } from '../../../data/default-states';
 
 const MiniCartBlock = ( props ) => (
 	<SlotFillProvider>
@@ -32,7 +33,7 @@ const MiniCartBlock = ( props ) => (
 
 const mockEmptyCart = () => {
 	fetchMock.mockResponse( ( req ) => {
-		if ( req.url.match( /wc\/store\/cart/ ) ) {
+		if ( req.url.match( /wc\/store\/v1\/cart/ ) ) {
 			return Promise.resolve(
 				JSON.stringify( defaultCartState.cartData )
 			);
@@ -43,7 +44,7 @@ const mockEmptyCart = () => {
 
 const mockFullCart = () => {
 	fetchMock.mockResponse( ( req ) => {
-		if ( req.url.match( /wc\/store\/cart/ ) ) {
+		if ( req.url.match( /wc\/store\/v1\/cart/ ) ) {
 			return Promise.resolve( JSON.stringify( previewCart ) );
 		}
 		return Promise.resolve( '' );
@@ -51,11 +52,13 @@ const mockFullCart = () => {
 };
 
 describe( 'Testing Mini Cart', () => {
-	beforeEach( async () => {
-		mockFullCart();
-		// need to clear the store resolution state between tests.
-		await dispatch( storeKey ).invalidateResolutionForStore();
-		await dispatch( storeKey ).receiveCart( defaultCartState.cartData );
+	beforeEach( () => {
+		act( () => {
+			mockFullCart();
+			// need to clear the store resolution state between tests.
+			dispatch( storeKey ).invalidateResolutionForStore();
+			dispatch( storeKey ).receiveCart( defaultCartState.cartData );
+		} );
 	} );
 
 	afterEach( () => {
@@ -65,12 +68,9 @@ describe( 'Testing Mini Cart', () => {
 	it( 'opens Mini Cart drawer when clicking on button', async () => {
 		render( <MiniCartBlock /> );
 		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
-		fireEvent.click( screen.getByLabelText( /items/i ) );
+		userEvent.click( screen.getByLabelText( /items/i ) );
 
-		expect( screen.getByText( /Your cart/i ) ).toBeInTheDocument();
 		expect( fetchMock ).toHaveBeenCalledTimes( 1 );
-		// ["`select` control in `@wordpress/data-controls` is deprecated. Please use built-in `resolveSelect` control in `@wordpress/data` instead."]
-		expect( console ).toHaveWarned();
 	} );
 
 	it( 'renders empty cart if there are no items in the cart', async () => {
@@ -78,9 +78,8 @@ describe( 'Testing Mini Cart', () => {
 		render( <MiniCartBlock /> );
 
 		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
-		fireEvent.click( screen.getByLabelText( /items/i ) );
+		userEvent.click( screen.getByLabelText( /items/i ) );
 
-		expect( screen.getByText( /Cart is empty/i ) ).toBeInTheDocument();
 		expect( fetchMock ).toHaveBeenCalledTimes( 1 );
 	} );
 
@@ -124,6 +123,28 @@ describe( 'Testing Mini Cart', () => {
 			expect(
 				screen.getByLabelText( /3 items in cart/i )
 			).toBeInTheDocument()
+		);
+	} );
+
+	it( 'renders cart price if "Hide Cart Price" setting is not enabled', async () => {
+		mockEmptyCart();
+		render( <MiniCartBlock /> );
+		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+
+		await waitFor( () =>
+			expect( screen.getByText( '$0.00' ) ).toBeInTheDocument()
+		);
+	} );
+
+	it( 'does not render cart price if "Hide Cart Price" setting is enabled', async () => {
+		mockEmptyCart();
+		const { container } = render(
+			<MiniCartBlock hasHiddenPrice={ true } />
+		);
+		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+
+		await waitFor( () =>
+			expect( queryByText( container, '$0.00' ) ).not.toBeInTheDocument()
 		);
 	} );
 } );

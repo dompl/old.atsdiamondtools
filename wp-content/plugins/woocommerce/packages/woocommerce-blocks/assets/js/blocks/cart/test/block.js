@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { previewCart } from '@woocommerce/resource-previews';
 import { dispatch } from '@wordpress/data';
 import { CART_STORE_KEY as storeKey } from '@woocommerce/block-data';
@@ -9,8 +9,8 @@ import { default as fetchMock } from 'jest-fetch-mock';
 /**
  * Internal dependencies
  */
-import { defaultCartState } from '../../../../data/default-states';
-import { allSettings } from '../../../../settings/shared/settings-init';
+import { defaultCartState } from '../../../data/default-states';
+import { allSettings } from '../../../settings/shared/settings-init';
 
 import Cart from '../block';
 
@@ -21,10 +21,14 @@ import ItemsBlock from '../inner-blocks/cart-items-block/frontend';
 import TotalsBlock from '../inner-blocks/cart-totals-block/frontend';
 
 import LineItemsBlock from '../inner-blocks/cart-line-items-block/block';
-import OrderSummaryBlock from '../inner-blocks/cart-order-summary-block/block';
+import OrderSummaryBlock from '../inner-blocks/cart-order-summary-block/frontend';
 import ExpressPaymentBlock from '../inner-blocks/cart-express-payment-block/block';
 import ProceedToCheckoutBlock from '../inner-blocks/proceed-to-checkout-block/block';
 import AcceptedPaymentMethodsIcons from '../inner-blocks/cart-accepted-payment-methods-block/block';
+import OrderSummaryHeadingBlock from '../inner-blocks/cart-order-summary-heading/frontend';
+import OrderSummarySubtotalBlock from '../inner-blocks/cart-order-summary-subtotal/frontend';
+import OrderSummaryShippingBlock from '../inner-blocks/cart-order-summary-shipping/frontend';
+import OrderSummaryTaxesBlock from '../inner-blocks/cart-order-summary-taxes/frontend';
 
 const CartBlock = ( {
 	attributes = {
@@ -45,12 +49,18 @@ const CartBlock = ( {
 					<LineItemsBlock />
 				</ItemsBlock>
 				<TotalsBlock>
-					<OrderSummaryBlock
-						showRateAfterTaxName={ showRateAfterTaxName }
-						isShippingCalculatorEnabled={
-							isShippingCalculatorEnabled
-						}
-					/>
+					<OrderSummaryBlock>
+						<OrderSummaryHeadingBlock />
+						<OrderSummarySubtotalBlock />
+						<OrderSummaryShippingBlock
+							isShippingCalculatorEnabled={
+								isShippingCalculatorEnabled
+							}
+						/>
+						<OrderSummaryTaxesBlock
+							showRateAfterTaxName={ showRateAfterTaxName }
+						/>
+					</OrderSummaryBlock>
 					<ExpressPaymentBlock />
 					<ProceedToCheckoutBlock checkoutPageId={ checkoutPageId } />
 					<AcceptedPaymentMethodsIcons />
@@ -64,16 +74,18 @@ const CartBlock = ( {
 };
 
 describe( 'Testing cart', () => {
-	beforeEach( async () => {
-		fetchMock.mockResponse( ( req ) => {
-			if ( req.url.match( /wc\/store\/cart/ ) ) {
-				return Promise.resolve( JSON.stringify( previewCart ) );
-			}
-			return Promise.resolve( '' );
+	beforeEach( () => {
+		act( () => {
+			fetchMock.mockResponse( ( req ) => {
+				if ( req.url.match( /wc\/store\/v1\/cart/ ) ) {
+					return Promise.resolve( JSON.stringify( previewCart ) );
+				}
+				return Promise.resolve( '' );
+			} );
+			// need to clear the store resolution state between tests.
+			dispatch( storeKey ).invalidateResolutionForStore();
+			dispatch( storeKey ).receiveCart( defaultCartState.cartData );
 		} );
-		// need to clear the store resolution state between tests.
-		await dispatch( storeKey ).invalidateResolutionForStore();
-		await dispatch( storeKey ).receiveCart( defaultCartState.cartData );
 	} );
 
 	afterEach( () => {
@@ -83,13 +95,12 @@ describe( 'Testing cart', () => {
 	it( 'renders cart if there are items in the cart', async () => {
 		render( <CartBlock /> );
 		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+
 		expect(
 			screen.getByText( /Proceed to Checkout/i )
 		).toBeInTheDocument();
 
 		expect( fetchMock ).toHaveBeenCalledTimes( 1 );
-		// ["`select` control in `@wordpress/data-controls` is deprecated. Please use built-in `resolveSelect` control in `@wordpress/data` instead."]
-		expect( console ).toHaveWarned();
 	} );
 
 	it( 'Contains a Taxes section if Core options are set to show it', async () => {
@@ -100,6 +111,20 @@ describe( 'Testing cart', () => {
 
 		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
 		expect( screen.getByText( /Tax/i ) ).toBeInTheDocument();
+	} );
+
+	it( 'Contains a Order summary header', async () => {
+		render( <CartBlock /> );
+
+		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+		expect( screen.getByText( /Cart totals/i ) ).toBeInTheDocument();
+	} );
+
+	it( 'Contains a Order summary Subtotal section', async () => {
+		render( <CartBlock /> );
+
+		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+		expect( screen.getByText( /Subtotal/i ) ).toBeInTheDocument();
 	} );
 
 	it( 'Shows individual tax lines if the store is set to do so', async () => {
@@ -131,13 +156,15 @@ describe( 'Testing cart', () => {
 	} );
 
 	it( 'renders empty cart if there are no items in the cart', async () => {
-		fetchMock.mockResponse( ( req ) => {
-			if ( req.url.match( /wc\/store\/cart/ ) ) {
-				return Promise.resolve(
-					JSON.stringify( defaultCartState.cartData )
-				);
-			}
-			return Promise.resolve( '' );
+		act( () => {
+			fetchMock.mockResponse( ( req ) => {
+				if ( req.url.match( /wc\/store\/v1\/cart/ ) ) {
+					return Promise.resolve(
+						JSON.stringify( defaultCartState.cartData )
+					);
+				}
+				return Promise.resolve( '' );
+			} );
 		} );
 		render( <CartBlock /> );
 
@@ -148,7 +175,7 @@ describe( 'Testing cart', () => {
 
 	it( 'renders correct cart line subtotal when currency has 0 decimals', async () => {
 		fetchMock.mockResponse( ( req ) => {
-			if ( req.url.match( /wc\/store\/cart/ ) ) {
+			if ( req.url.match( /wc\/store\/v1\/cart/ ) ) {
 				const cart = {
 					...previewCart,
 					// Make it so there is only one item to simplify things.
@@ -175,5 +202,32 @@ describe( 'Testing cart', () => {
 
 		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
 		expect( screen.getAllByRole( 'cell' )[ 1 ] ).toHaveTextContent( '16€' );
+	} );
+
+	it( 'updates quantity when changed in server', async () => {
+		const cart = {
+			...previewCart,
+			// Make it so there is only one item to simplify things.
+			items: [
+				{
+					...previewCart.items[ 0 ],
+					quantity: 5,
+				},
+			],
+		};
+		const itemName = cart.items[ 0 ].name;
+		render( <CartBlock /> );
+
+		await waitFor( () => expect( fetchMock ).toHaveBeenCalled() );
+		const quantityInput = screen.getByLabelText(
+			`Quantity of ${ itemName } in your cart.`
+		);
+		expect( quantityInput.value ).toBe( '2' );
+
+		act( () => {
+			dispatch( storeKey ).receiveCart( cart );
+		} );
+
+		expect( quantityInput.value ).toBe( '5' );
 	} );
 } );
