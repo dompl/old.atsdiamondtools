@@ -77,6 +77,19 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 	);
 
 	/**
+	 * Custom setters for props. Add key here if it has corresponding set_ and get_ method present.
+	 *
+	 * @var string[]
+	 */
+	protected $internal_data_store_key_getters = array(
+		'_download_permissions_granted' => 'download_permissions_granted',
+		'_recorded_sales'               => 'recorded_sales',
+		'_recorded_coupon_usage_counts' => 'recorded_coupon_usage_counts',
+		'_order_stock_reduced'          => 'stock_reduced',
+		'_new_order_email_sent'         => 'email_sent',
+	);
+
+	/**
 	 * Method to create a new order in the database.
 	 *
 	 * @param WC_Order $order Order object.
@@ -284,7 +297,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 		}
 
 		// If customer changed, update any downloadable permissions.
-		if ( in_array( 'customer_id', $updated_props ) || in_array( 'billing_email', $updated_props ) ) {
+		if ( in_array( 'customer_id', $updated_props, true ) || in_array( 'billing_email', $updated_props, true ) ) {
 			$data_store = WC_Data_Store::load( 'customer-download' );
 			$data_store->update_user_by_order_id( $id, $order->get_customer_id(), $order->get_billing_email() );
 		}
@@ -364,7 +377,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 				AND order_itemmeta.meta_key IN ('tax_amount', 'shipping_tax_amount')",
 				$order->get_id()
 			)
-		);
+		) ?? 0;
 
 		return abs( $total );
 	}
@@ -388,7 +401,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 				AND order_itemmeta.meta_key IN ('cost')",
 				$order->get_id()
 			)
-		);
+		) ?? 0;
 
 		return abs( $total );
 	}
@@ -631,6 +644,29 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 	}
 
 	/**
+	 * Whether email have been sent for this order.
+	 *
+	 * @param WC_Order|int $order Order ID or order object.
+	 *
+	 * @return bool               Whether email is sent.
+	 */
+	public function get_email_sent( $order ) {
+		$order_id = WC_Order_Factory::get_order_id( $order );
+		return wc_string_to_bool( get_post_meta( $order_id, '_new_order_email_sent', true ) );
+	}
+
+	/**
+	 * Stores information about whether email was sent.
+	 *
+	 * @param WC_Order|int $order Order ID or order object.
+	 * @param bool         $set True or false.
+	 */
+	public function set_email_sent( $order, $set ) {
+		$order_id = WC_Order_Factory::get_order_id( $order );
+		update_post_meta( $order_id, '_new_order_email_sent', wc_bool_to_string( $set ) );
+	}
+
+	/**
 	 * Return array of coupon_code => meta_key for coupon which have usage limit and have tentative keys.
 	 * Pass $coupon_id if key for only one of the coupon is needed.
 	 *
@@ -793,6 +829,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 			$wp_query_args['date_query'] = array();
 		}
 		if ( ! isset( $wp_query_args['meta_query'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			$wp_query_args['meta_query'] = array();
 		}
 
@@ -874,7 +911,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 		} else {
 			update_post_caches( $query->posts ); // We already fetching posts, might as well hydrate some caches.
 			$order_ids = wp_list_pluck( $query->posts, 'ID' );
-			$orders = $this->compile_orders( $order_ids, $query_vars, $query );
+			$orders    = $this->compile_orders( $order_ids, $query_vars, $query );
 		}
 
 		if ( isset( $query_vars['paginate'] ) && $query_vars['paginate'] ) {
@@ -933,7 +970,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 			return;
 		}
 		if ( isset( $query_vars['fields'] ) && 'all' !== $query_vars['fields'] ) {
-			if ( is_array( $query_vars['fields'] ) && ! in_array( 'refunds', $query_vars['fields'] ) ) {
+			if ( is_array( $query_vars['fields'] ) && ! in_array( 'refunds', $query_vars['fields'], true ) ) {
 				return;
 			}
 		}
@@ -942,7 +979,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 			$cache_keys_mapping[ $order_id ] = WC_Cache_Helper::get_cache_prefix( 'orders' ) . 'refunds' . $order_id;
 		}
 		$non_cached_ids = array();
-		$cache_values = wc_cache_get_multiple( array_values( $cache_keys_mapping ), 'orders' );
+		$cache_values   = wc_cache_get_multiple( array_values( $cache_keys_mapping ), 'orders' );
 		foreach ( $order_ids as $order_id ) {
 			if ( false === $cache_values[ $cache_keys_mapping[ $order_id ] ] ) {
 				$non_cached_ids[] = $order_id;
@@ -952,11 +989,11 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 			return;
 		}
 
-		$refunds = wc_get_orders(
+		$refunds       = wc_get_orders(
 			array(
-				'type'   => 'shop_order_refund',
+				'type'            => 'shop_order_refund',
 				'post_parent__in' => $non_cached_ids,
-				'limit'  => - 1,
+				'limit'           => - 1,
 			)
 		);
 		$order_refunds = array_reduce(
@@ -1002,13 +1039,13 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 				return;
 			}
 		}
-		$cache_keys = array_map(
+		$cache_keys     = array_map(
 			function ( $order_id ) {
 				return 'order-items-' . $order_id;
 			},
 			$order_ids
 		);
-		$cache_values = wc_cache_get_multiple( $cache_keys, 'orders' );
+		$cache_values   = wc_cache_get_multiple( $cache_keys, 'orders' );
 		$non_cached_ids = array();
 		foreach ( $order_ids as $order_id ) {
 			if ( false === $cache_values[ 'order-items-' . $order_id ] ) {
@@ -1019,9 +1056,9 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 			return;
 		}
 
-		$non_cached_ids       = esc_sql( $non_cached_ids );
+		$non_cached_ids        = esc_sql( $non_cached_ids );
 		$non_cached_ids_string = implode( ',', $non_cached_ids );
-		$order_items = $wpdb->get_results(
+		$order_items           = $wpdb->get_results(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT order_item_type, order_item_id, order_id, order_item_name FROM {$wpdb->prefix}woocommerce_order_items WHERE order_id in ( $non_cached_ids_string ) ORDER BY order_item_id;"
 		);
@@ -1059,7 +1096,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 		global $wpdb;
 
 		if ( isset( $query_vars['fields'] ) && 'all' !== $query_vars['fields'] ) {
-			if ( is_array( $query_vars['fields'] ) && ! in_array( 'meta_data', $query_vars['fields'] ) ) {
+			if ( is_array( $query_vars['fields'] ) && ! in_array( 'meta_data', $query_vars['fields'], true ) ) {
 				return;
 			}
 		}
@@ -1068,7 +1105,7 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 		foreach ( $order_ids as $order_id ) {
 			$cache_keys_mapping[ $order_id ] = WC_Order::generate_meta_cache_key( $order_id, 'orders' );
 		}
-		$cache_values = wc_cache_get_multiple( array_values( $cache_keys_mapping ), 'orders' );
+		$cache_values   = wc_cache_get_multiple( array_values( $cache_keys_mapping ), 'orders' );
 		$non_cached_ids = array();
 		foreach ( $order_ids as $order_id ) {
 			if ( false === $cache_values[ $cache_keys_mapping[ $order_id ] ] ) {
@@ -1078,8 +1115,8 @@ class WC_Order_Data_Store_CPT extends Abstract_WC_Order_Data_Store_CPT implement
 		if ( empty( $non_cached_ids ) ) {
 			return;
 		}
-		$order_ids     = esc_sql( $non_cached_ids );
-		$order_ids_in  = "'" . implode( "', '", $order_ids ) . "'";
+		$order_ids           = esc_sql( $non_cached_ids );
+		$order_ids_in        = "'" . implode( "', '", $order_ids ) . "'";
 		$raw_meta_data_array = $wpdb->get_results(
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT post_id as object_id, meta_id, meta_key, meta_value

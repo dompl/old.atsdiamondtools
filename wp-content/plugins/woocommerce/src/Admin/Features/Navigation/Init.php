@@ -24,11 +24,19 @@ class Init {
 	const TOGGLE_OPTION_NAME = 'woocommerce_navigation_enabled';
 
 	/**
+	 * Determines if the feature has been toggled on or off.
+	 *
+	 * @var boolean
+	 */
+	protected static $is_updated = false;
+
+	/**
 	 * Hook into WooCommerce.
 	 */
 	public function __construct() {
 		add_filter( 'woocommerce_settings_features', array( $this, 'add_feature_toggle' ) );
 		add_action( 'update_option_' . self::TOGGLE_OPTION_NAME, array( $this, 'reload_page_on_toggle' ), 10, 2 );
+		add_action( 'woocommerce_settings_saved', array( $this, 'maybe_reload_page' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'maybe_enqueue_opt_out_scripts' ) );
 
 		if ( Features::is_enabled( 'navigation' ) ) {
@@ -111,21 +119,30 @@ class Init {
 			return;
 		}
 
-		if ( 'yes' !== $value ) {
+		if ( $value !== 'yes' ) {
 			update_option( 'woocommerce_navigation_show_opt_out', 'yes' );
 		}
 
-		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-			wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
-			exit();
+		self::$is_updated = true;
+	}
+
+	/**
+	 * Reload the page if the setting has been updated.
+	 */
+	public static function maybe_reload_page() {
+		if ( ! isset( $_SERVER['REQUEST_URI'] ) || ! self::$is_updated ) {
+			return;
 		}
+
+		wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+		exit();
 	}
 
 	/**
 	 * Enqueue the opt out scripts.
 	 */
 	public function maybe_enqueue_opt_out_scripts() {
-		if ( 'yes' !== get_option( 'woocommerce_navigation_show_opt_out', 'no' ) ) {
+		if ( get_option( 'woocommerce_navigation_show_opt_out', 'no' ) !== 'yes' ) {
 			return;
 		}
 
@@ -137,17 +154,7 @@ class Init {
 			WCAdminAssets::get_file_version( 'css' )
 		);
 
-		$script_assets_filename = WCAdminAssets::get_script_asset_filename( 'wp-admin-scripts', 'navigation-opt-out' );
-		$script_assets          = require WC_ADMIN_ABSPATH . WC_ADMIN_DIST_JS_FOLDER . 'wp-admin-scripts/' . $script_assets_filename;
-
-		wp_enqueue_script(
-			'wc-admin-navigation-opt-out',
-			WCAdminAssets::get_url( 'wp-admin-scripts/navigation-opt-out', 'js' ),
-			array_merge( array( WC_ADMIN_APP ), $script_assets ['dependencies'] ),
-			WCAdminAssets::get_file_version( 'js' ),
-			true
-		);
-
+		WCAdminAssets::register_script( 'wp-admin-scripts', 'navigation-opt-out', true );
 		wp_localize_script(
 			'wc-admin-navigation-opt-out',
 			'surveyData',
@@ -155,7 +162,6 @@ class Init {
 				'url' => Survey::get_url( '/new-navigation-opt-out' ),
 			)
 		);
-
 		delete_option( 'woocommerce_navigation_show_opt_out' );
 	}
 }
