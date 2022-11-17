@@ -233,11 +233,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_posts_per_page', array( $this, 'wc_product_table_posts_per_page' ) );
             }
 
-            // Flatsome theme remove search page blocl
-            if ( isset( $_GET['type_aws'] ) && function_exists( 'flatsome_pages_in_search_results' ) ) {
-                remove_action('woocommerce_after_main_content','flatsome_pages_in_search_results', 10);
-            }
-
             // WP all import finish
             //add_action( 'pmxi_after_xml_import', array( $this, 'pmxi_after_xml_import' ) );
 
@@ -395,6 +390,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Avada theme
             if ( class_exists( 'Avada' ) || 'Avada' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-avada.php' );
+            }
+
+            // Flatsome theme
+            if ( 'Flatsome' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-flatsome.php' );
             }
 
         }

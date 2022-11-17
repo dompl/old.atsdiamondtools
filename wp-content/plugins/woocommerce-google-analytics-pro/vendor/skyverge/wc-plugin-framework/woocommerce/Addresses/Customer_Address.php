@@ -18,26 +18,23 @@
  *
  * @package   SkyVerge/WooCommerce/Plugin/Classes
  * @author    SkyVerge
- * @copyright Copyright (c) 2013-2018, SkyVerge, Inc.
+ * @copyright Copyright (c) 2013-2022, SkyVerge, Inc.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_3_0\Addresses;
-use SkyVerge\WooCommerce\PluginFramework\v5_3_0 as Framework;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_10_12\Addresses;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_3_0\\Addresses\\Customer_Address' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_12\\Addresses\\Customer_Address' ) ) :
+
 
 /**
  * The customer address data class.
  *
- * Adds customer-specific data to a base address, as used for a billing or shipping address that can include first
- * and last name.
+ * Adds customer-specific data to a base address, as used for a billing or shipping address that can include first and last name.
  *
- * @see Address
- *
- * @since 5.3.0-dev
+ * @since 5.3.0
  */
 class Customer_Address extends Address {
 
@@ -55,7 +52,7 @@ class Customer_Address extends Address {
 	/**
 	 * Gets the customer first name.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @return string
 	 */
@@ -68,7 +65,7 @@ class Customer_Address extends Address {
 	/**
 	 * Gets the customer first name.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @return string
 	 */
@@ -83,19 +80,17 @@ class Customer_Address extends Address {
 	 *
 	 * @see Address::get_hash_data()
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @return string[]
 	 */
 	protected function get_hash_data() {
 
 		// add the first & last name to data used to generate the hash
-		$data = array_merge( array(
+		return array_merge( [
 			$this->get_first_name(),
 			$this->get_last_name(),
-		), parent::get_hash_data() );
-
-		return $data;
+		], parent::get_hash_data() );
 	}
 
 
@@ -105,7 +100,7 @@ class Customer_Address extends Address {
 	/**
 	 * Sets the customer first name.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @param string $value first name value
 	 */
@@ -118,7 +113,7 @@ class Customer_Address extends Address {
 	/**
 	 * Sets the customer last name.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @param string $value first name value
 	 */
@@ -131,24 +126,25 @@ class Customer_Address extends Address {
 	/**
 	 * Sets the full address based on a WooCommerce order.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @param \WC_Order $order WooCommerce order object
 	 * @param string $type address type, like billing or shipping
 	 */
 	public function set_from_order( \WC_Order $order, $type = 'billing' ) {
 
-		$this->set_first_name( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_first_name" ) );
-		$this->set_last_name( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_last_name" ) );
-		$this->set_line_1( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_address_1" ) );
-		$this->set_line_2( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_address_2" ) );
-		$this->set_locality( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_city" ) );
-		$this->set_region( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_state" ) );
-		$this->set_country( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_country" ) );
-		$this->set_postcode( Framework\SV_WC_Order_Compatibility::get_prop( $order, "{$type}_postcode" ) );
+		$this->set_first_name( $order->{"get_{$type}_first_name"}() );
+		$this->set_last_name( $order->{"get_{$type}_last_name"}() );
+		$this->set_line_1( $order->{"get_{$type}_address_1"}() );
+		$this->set_line_2( $order->{"get_{$type}_address_2"}() );
+		$this->set_locality( $order->{"get_{$type}_city"}() );
+		$this->set_region( $order->{"get_{$type}_state"}() );
+		$this->set_country( $order->{"get_{$type}_country"}() );
+		$this->set_postcode( $order->{"get_{$type}_postcode"}() );
 	}
 
 
 }
+
 
 endif;

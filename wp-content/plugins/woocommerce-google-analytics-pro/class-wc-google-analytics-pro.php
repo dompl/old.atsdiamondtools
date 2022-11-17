@@ -16,15 +16,14 @@
  * versions in the future. If you wish to customize WooCommerce Google Analytics Pro for your
  * needs please refer to http://docs.woocommerce.com/document/woocommerce-google-analytics-pro/ for more information.
  *
- * @package     WC-Google-Analytics-Pro/Classes
  * @author      SkyVerge
- * @copyright   Copyright (c) 2015-2018, SkyVerge, Inc.
+ * @copyright   Copyright (c) 2015-2022, SkyVerge, Inc.
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
 defined( 'ABSPATH' ) or exit;
 
-use SkyVerge\WooCommerce\PluginFramework\v5_3_0 as Framework;
+use SkyVerge\WooCommerce\PluginFramework\v5_10_12 as Framework;
 
 /**
  * # WooCommerce Google Analytics Pro Main Plugin Class.
@@ -35,7 +34,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 
 	/** plugin version number */
-	const VERSION = '1.6.4';
+	const VERSION = '1.12.0';
 
 	/** @var \WC_Google_Analytics_Pro the singleton instance of the plugin */
 	protected static $instance;
@@ -75,11 +74,13 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 		);
 
 		// loads handlers a bit earlier than the standard framework initialization
-		remove_action( 'init', array( $this, 'init_plugin' ), 0 );
-		add_action( 'after_setup_theme', array( $this, 'init_plugin' ), 0 );
+		// make sure that the add_action() call in SV_WC_Plugin::add_hooks() in v5_4_1 matches the remove_action() call below
+		if ( remove_action( 'plugins_loaded', [ $this, 'init_plugin' ], 15 ) ) {
+			add_action( 'after_setup_theme', [ $this, 'init_plugin' ], 0 );
+		}
 
 		// add the plugin to available WooCommerce integrations
-		add_filter( 'woocommerce_integrations', array( $this, 'load_integration' ) );
+		add_filter( 'woocommerce_integrations', [ $this, 'load_integration' ], PHP_INT_MAX );
 	}
 
 
@@ -90,7 +91,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 	 */
 	protected function init_lifecycle_handler() {
 
-		require_once( $this->get_plugin_path() . '/includes/class-wc-google-analytics-pro-lifecycle.php' );
+		require_once( $this->get_plugin_path() . '/src/class-wc-google-analytics-pro-lifecycle.php' );
 
 		$this->lifecycle_handler = new \SkyVerge\WooCommerce\Google_Analytics_Pro\Lifecycle( $this );
 	}
@@ -104,6 +105,9 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 	 * @since 1.6.0
 	 */
 	public function init_plugin() {
+
+		// NOTE: since the plugin is loaded earlier than usual, we need to make sure the translations textdomain is available before gettext strings are loaded below
+		$this->load_plugin_textdomain();
 
 		$this->includes();
 
@@ -129,12 +133,12 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 		// load subscriptions integration
 		if ( $this->is_plugin_active( 'woocommerce-subscriptions.php' ) ) {
-			$this->subscriptions_integration = $this->load_class( '/includes/class-wc-google-analytics-pro-subscriptions-integration.php', 'WC_Google_Analytics_Pro_Subscriptions_Integration' );
+			$this->subscriptions_integration = $this->load_class( '/src/class-wc-google-analytics-pro-subscriptions-integration.php', 'WC_Google_Analytics_Pro_Subscriptions_Integration' );
 		}
 
 		// AJAX includes
-		if ( is_ajax() ) {
-			$this->load_class( '/includes/class-wc-google-analytics-pro-ajax.php', 'WC_Google_Analytics_Pro_AJAX' );
+		if ( wp_doing_ajax() ) {
+			$this->load_class( '/src/class-wc-google-analytics-pro-ajax.php', 'WC_Google_Analytics_Pro_AJAX' );
 		}
 	}
 
@@ -151,19 +155,13 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 	 */
 	public function load_integration( $integrations = array() ) {
 
-		// ensure the required Google client API library is available
-		if ( $this->is_plugin_settings() && ! class_exists( 'Google_Client' ) ) {
-			require_once( $this->get_plugin_path() . '/vendor/autoload.php' );
-		}
-
 		if ( ! class_exists( self::INTEGRATION_CLASS ) ) {
-			require_once( $this->get_plugin_path() . '/includes/class-sv-wc-tracking-integration.php' );
-			require_once( $this->get_plugin_path() . '/includes/class-wc-google-analytics-pro-integration.php' );
+			require_once( $this->get_plugin_path() . '/src/class-sv-wc-tracking-integration.php' );
+			require_once( $this->get_plugin_path() . '/src/class-wc-google-analytics-pro-integration.php' );
 		}
 
 		if ( ! in_array( self::INTEGRATION_CLASS, $integrations, true ) ) {
-
-			$integrations[ self::PLUGIN_ID ] = self::INTEGRATION_CLASS;
+			$integrations = array_merge( [ self::PLUGIN_ID => self::INTEGRATION_CLASS ], $integrations );
 		}
 
 		return $integrations;
@@ -181,7 +179,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 		if ( null === $this->integration ) {
 
-			$integrations = WC()->integrations->get_integrations();
+			$integrations = null === WC()->integrations ? [] : WC()->integrations->get_integrations();
 			$integration  = self::INTEGRATION_CLASS;
 
 			if ( isset( $integrations[ self::PLUGIN_ID ] ) && $integrations[ self::PLUGIN_ID ] instanceof $integration ) {
@@ -289,7 +287,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 	 */
 	public function get_documentation_url() {
 
-		return 'http://docs.woocommerce.com/document/woocommerce-google-analytics-pro/';
+		return 'https://docs.woocommerce.com/document/woocommerce-google-analytics-pro/';
 	}
 
 
@@ -369,7 +367,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 		$settings = get_option( 'woocommerce_google_analytics_pro_settings', array() );
 
-		if ( ! isset( $settings['debug_mode'] ) || 'off' === $settings['debug_mode'] ) {
+		if ( ! isset( $settings['debug_mode'] ) || 'no' === $settings['debug_mode'] ) {
 			return;
 		}
 
@@ -391,7 +389,7 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 		// hide the free integration's connection notice, if it hasn't already been dismissed
 		wc_enqueue_js( "
-			jQuery( document ).ready( function( $ ) {
+			jQuery( function( $ ) {
 				$( 'a[href$=\"page=wc-settings&tab=integration&section=google_analytics\"]' ).closest( 'div.updated' ).hide();
 			} );
 		" );
@@ -420,8 +418,10 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 		// show any dependency notices
 		parent::add_admin_notices();
 
+		$integration = $this->get_integration();
+		
 		// onboarding notice
-		if ( ! $this->get_integration()->get_access_token() && 'yes' !== $this->get_integration()->get_option( 'use_manual_tracking_id' ) ) {
+		if ( ! $integration->is_connected() ) {
 
 			if ( $this->is_plugin_settings() ) {
 
@@ -495,6 +495,19 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 				);
 			}
 		}
+
+		// show a notice if we detect that the web property is being tracked more than once
+		if ( 'yes' === get_transient( 'wc_' . $this->get_id() . '_site_has_duplicate_tracking_codes' ) ) {
+
+			$this->get_admin_notice_handler()->add_admin_notice(
+				'<strong>' . __( 'Google Analytics Pro:', 'woocommerce-google-analytics-pro' ) . '</strong>' . ' ' .
+				__( "Heads up! We've detected that another plugin is sending duplicated events to Google Analytics, which can result in duplicated tracking data. Please disable any other plugins tracking events in Google Analytics while using Google Analytics Pro.", 'woocommerce-google-analytics-pro' ),
+				'duplicate-google-analytics-tracking-code',
+				[
+					'notice_class' => 'error',
+				]
+			);
+		}
 	}
 
 
@@ -534,15 +547,15 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 	private function check_analytics_profile_settings() {
 
 		if (    ! $this->has_run_analytics_profile_checks
-			 &&   $this->is_plugin_settings() ) {
+		     &&   $this->is_plugin_settings() ) {
 
 			$integration = $this->get_integration();
 
 			if (    $integration
-				 && $integration->get_access_token()
-				 && 'yes' !== $integration->get_option( 'use_manual_tracking_id', 'no' ) ) {
+			     && $integration->get_access_token()
+			     && '' !== $integration->get_tracking_id() ) {
 
-				$analytics   = $integration->get_analytics();
+				$analytics   = $integration->get_management_api();
 				$account_id  = $integration->get_ga_account_id();
 				$property_id = $integration->get_ga_property_id();
 
@@ -550,19 +563,23 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 
 					try {
 
-						$profiles          = $analytics->management_profiles->listManagementProfiles( $account_id, $property_id );
-						$ec_disabled       = array();
-						$currency_mismatch = array();
+						$views       = $analytics->get_profiles( $account_id, $property_id );
+						$profiles    = $views->list_views();
+						$ec_disabled = $currency_mismatch =[];
 
 						foreach ( $profiles as $profile ) {
 
-							$profile_id           = $profile->getId();
-							$property_internal_id = $profile->getInternalWebPropertyId();
+							if ( ! isset( $profile->id, $profile->internalWebPropertyId, $profile->name ) ) {
+								continue;
+							}
 
-							if ( ! $profile->getEnhancedECommerceTracking() ) {
+							$profile_id           = $profile->id;
+							$property_internal_id = $profile->internalWebPropertyId;
 
-								$url  = "https://www.google.com/analytics/web/?hl=en#management/Settings/a{$account_id}w{$property_internal_id}p{$profile_id}/%3Fm.page%3DEcommerceSettings/";
-								$link = '<a href="' . $url . '" target="_blank">' . $profile->getName() . '</a>';
+							if ( empty( $profile->eCommerceTracking ) ) {
+
+								$url  = "https://analytics.google.com/analytics/web/?authuser=1#/a{$account_id}w{$property_internal_id}p{$profile_id}/admin/ecommerce/settings";
+								$link = '<a href="' . $url . '" target="_blank">' . $profile->name . '</a>';
 
 								$ec_disabled[] = array(
 									'url'  => $url,
@@ -570,34 +587,40 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 								);
 							}
 
-							if ( $profile->getCurrency() !== get_woocommerce_currency() ) {
+							if ( isset( $profile->currency ) && $profile->currency !== get_woocommerce_currency() ) {
 
-								$url  = "https://www.google.com/analytics/web/?hl=en#management/Settings/a{$account_id}w{$property_internal_id}p{$profile_id}/%3Fm.page%3DProfileSettings/";
-								$link = '<a href="' . $url . '" target="_blank">' . $profile->getName() . '</a>';
+								$url  = "https://analytics.google.com/analytics/web/?authuser=1#/a{$account_id}w{$property_internal_id}p{$profile_id}/admin/view/settings";
+								$link = '<a href="' . $url . '" target="_blank">' . $profile->name . '</a>';
 
 								$currency_mismatch[] = array(
 									'url'      => $url,
 									'link'     => $link,
-									'currency' => $profile->getCurrency(),
+									'currency' => $profile->currency,
 								);
 							}
 						}
 
+						$plugin_name = '<strong>' . $this->get_plugin_name() . '</strong>';
+
 						if ( ! empty( $ec_disabled ) ) {
 
 							if ( 1 === count( $ec_disabled ) ) {
-								/* translators: Placeholders: %1$s - <a> tag, %2$s - </a> tag */
-								$message = sprintf( __( 'WooCommerce Google Analytics Pro requires Enhanced Ecommerce to be enabled. Please enable Enhanced Ecommerce on your %1$sGoogle Analytics View%2$s.', 'woocommerce-google-analytics-pro' ), '<a href="' . $ec_disabled[0]['url'] . '" target="_blank">', '</a>' );
-
+								$message = sprintf(
+									/* translators: Placeholders: %1$s - plugin name (bold), %2$s - opening HTML <a> link tag, %3$s - closing HTML </a> link tag */
+									__( '%1$s: WooCommerce Google Analytics Pro requires Enhanced Ecommerce to be enabled. Please enable Enhanced Ecommerce on your %2$sGoogle Analytics View%3$s.', 'woocommerce-google-analytics-pro' ),
+									$plugin_name,
+									'<a href="' . $ec_disabled[0]['url'] . '" target="_blank">', '</a>'
+								);
 							} else {
-
-								$views   = '<ul><li>' . implode( '</li><li>', wp_list_pluck( $ec_disabled, 'link' ) ) . '</li></ul>';
-								/* translators: Placeholders: %s - a list of links */
-								$message = sprintf( __( 'WooCommerce Google Analytics Pro requires Enhanced Ecommerce to be enabled. Please enable Enhanced Ecommerce on the following Google Analytics Views: %s', 'woocommerce-google-analytics-pro' ), $views );
+								$message = sprintf(
+									/* translators: Placeholders: %1$s - plugin name (bold), %2$s - a list of links */
+									__( '%1$s: WooCommerce Google Analytics Pro requires Enhanced Ecommerce to be enabled. Please enable Enhanced Ecommerce on the following Google Analytics Views: %2$s', 'woocommerce-google-analytics-pro' ),
+									$plugin_name,
+									'<ul><li>' . implode( '</li><li>', wp_list_pluck( $ec_disabled, 'link' ) ) . '</li></ul>'
+								);
 							}
 
 							$this->get_admin_notice_handler()->add_admin_notice(
-								'<strong>' . $this->get_plugin_name() . ':</strong> ' .
 								$message,
 								'enhanced-ecommerce-not-enabled'
 							);
@@ -606,26 +629,37 @@ class WC_Google_Analytics_Pro extends Framework\SV_WC_Plugin {
 						if ( ! empty( $currency_mismatch ) ) {
 
 							if ( 1 === count( $currency_mismatch ) ) {
-								/* translators: Placeholders: %1$s and %2$s - currency code, e.g. USD, %3$s - <a> tag, %4$s - </a> tag */
-								$message = sprintf( __( 'Your Google Analytics View currency (%1$s) does not match WooCommerce currency (%2$s). You can change it %3$son your Google Analytics View%4$s.', 'woocommerce-google-analytics-pro' ), $profile->getCurrency(), get_woocommerce_currency(), '<a href="' . $url . '" target="_blank">', '</a>' );
+								$message = sprintf(
+									/* translators: Placeholders: %1$s - plugin name, %2$s and %3$s - currency code, e.g. USD, %4$s - <a> tag, %5$s - </a> tag */
+									__( '%1$s: Your Google Analytics View currency (%2$s) does not match WooCommerce currency (%3$s). You can change it %4$son your Google Analytics View%5$s.', 'woocommerce-google-analytics-pro' ),
+									$plugin_name,
+									$currency_mismatch[0]['currency'],
+									get_woocommerce_currency(),
+									'<a href="' . $currency_mismatch[0]['url'] . '" target="_blank">', '</a>'
+								);
 							} else {
-
-								$views   = '<ul><li>' . implode( '</li><li>', wp_list_pluck( $currency_mismatch, 'link' ) ) . '</li></ul>';
-								/* translators: Placeholders: %1$s - currency code, %2$s - a list of links */
-								$message = sprintf( __( 'Your Google Analytics Views currencies does not match WooCommerce currency (%1$s). You can change it on the following Google Analytics Views: %2$s', 'woocommerce-google-analytics-pro' ), get_woocommerce_currency(), $views );
+								$message = sprintf(
+									/* translators: Placeholders: %1$s - plugin name, %2$s - currency code, %3$s - a list of links */
+									__( '%1$s: Your Google Analytics Views currencies does not match WooCommerce currency (%2$s). You can change it on the following Google Analytics Views: %3$s', 'woocommerce-google-analytics-pro' ),
+									$plugin_name,
+									get_woocommerce_currency(),
+									'<ul><li>' . implode( '</li><li>', wp_list_pluck( $currency_mismatch, 'link' ) ) . '</li></ul>'
+								);
 							}
 
 							$this->get_admin_notice_handler()->add_admin_notice(
-								'<strong>' . $this->get_plugin_name() . ':</strong> ' .
 								$message,
 								'analytics-currency-mismatch',
-								array( 'dismissible' => true, 'always_show_on_settings' => false )
+								[
+									'dismissible'             => true,
+									'always_show_on_settings' => false
+								]
 							);
 						}
 
 						$this->has_run_analytics_profile_checks = true;
 
-					} catch ( Exception $e ) {
+					} catch ( \Exception $e ) {
 
 						$this->log( $e->getMessage() );
 					}

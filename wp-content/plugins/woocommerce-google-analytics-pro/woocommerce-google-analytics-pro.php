@@ -2,44 +2,30 @@
 /**
  * Plugin Name: WooCommerce Google Analytics Pro
  * Plugin URI: http://www.woocommerce.com/products/woocommerce-google-analytics-pro/
+ * Documentation URI: https://docs.woocommerce.com/document/woocommerce-google-analytics-pro/
  * Description: Supercharge your Google Analytics tracking with enhanced eCommerce tracking and custom event tracking
  * Author: SkyVerge
  * Author URI: http://www.skyverge.com
- * Version: 1.6.4
+ * Version: 1.12.0
  * Text Domain: woocommerce-google-analytics-pro
  * Domain Path: /i18n/languages/
  *
- * Copyright: (c) 2015-2018, SkyVerge, Inc.
+ * Copyright: (c) 2015-2022, SkyVerge, Inc.
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
- * @package   WC-Google-Analytics-Pro
  * @author    SkyVerge
  * @category  Integration
- * @copyright Copyright (c) 2015-2018, SkyVerge, Inc.
+ * @copyright Copyright (c) 2015-2022, SkyVerge, Inc.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  * Woo: 1312497:d8aed8b7306b509eec1589e59abe319f
- * WC requires at least: 2.6.14
- * WC tested up to: 3.5.0
+ * WC requires at least: 3.9.4
+ * WC tested up to: 6.3.1
  */
 
 defined( 'ABSPATH' ) or exit;
-
-// Required functions
-if ( ! function_exists( 'woothemes_queue_update' ) ) {
-	require_once( plugin_dir_path( __FILE__ ) . 'woo-includes/woo-functions.php' );
-}
-
-// Plugin updates
-woothemes_queue_update( plugin_basename( __FILE__ ), 'd8aed8b7306b509eec1589e59abe319f', '1312497' );
-
-// WC active check
-if ( ! is_woocommerce_active() ) {
-	return;
-}
-
 
 /**
  * WooCommerce Google Analytics Pro loader.
@@ -50,22 +36,22 @@ class WC_Google_Analytics_Pro_Loader {
 
 
 	/** minimum PHP version required by this plugin */
-	const MINIMUM_PHP_VERSION = '5.4.0';
+	const MINIMUM_PHP_VERSION = '7.0';
 
 	/** minimum WordPress version required by this plugin */
-	const MINIMUM_WP_VERSION = '4.4';
+	const MINIMUM_WP_VERSION = '5.2';
 
 	/** minimum WooCommerce version required by this plugin */
-	const MINIMUM_WC_VERSION = '2.6';
+	const MINIMUM_WC_VERSION = '3.9.4';
 
 	/** SkyVerge plugin framework version used by this plugin */
-	const FRAMEWORK_VERSION = '5.3.0';
+	const FRAMEWORK_VERSION = '5.10.12';
 
 	/** the plugin name, for displaying notices */
 	const PLUGIN_NAME = 'WooCommerce Google Analytics Pro';
 
 
-	/** @var SV_WC_Plugin_Loader single instance of this class */
+	/** @var \WC_Google_Analytics_Pro_Loader single instance of this class */
 	protected static $instance;
 
 	/** @var array the admin notices to add */
@@ -85,8 +71,11 @@ class WC_Google_Analytics_Pro_Loader {
 		add_action( 'admin_init',    array( $this, 'add_plugin_notices' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ), 15 );
 
+		add_filter( 'extra_plugin_headers', array( $this, 'add_documentation_header' ) );
+
 		// if the environment check fails, initialize the plugin
 		if ( $this->is_environment_compatible() ) {
+
 			add_action( 'plugins_loaded', array( $this, 'init_plugin' ) );
 		}
 	}
@@ -329,6 +318,24 @@ class WC_Google_Analytics_Pro_Loader {
 			<?php
 
 		endforeach;
+	}
+
+
+	/**
+	 * Adds the Documentation URI header.
+	 *
+	 * @internal
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param string[] $headers original headers
+	 * @return string[]
+	 */
+	public function add_documentation_header( $headers ) {
+
+		$headers[] = 'Documentation URI';
+
+		return $headers;
 	}
 
 

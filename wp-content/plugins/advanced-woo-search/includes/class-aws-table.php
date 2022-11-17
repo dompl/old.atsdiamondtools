@@ -599,13 +599,21 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
             global $wpdb;
 
-            $sunc = AWS()->get_settings( 'autoupdates' );
+            $sync = AWS()->get_settings( 'autoupdates' );
+
+            /**
+             * Enable or not automatical product data sync with index table
+             * @since 2.67
+             * @param boolean $sync
+             * @param integer $product_id
+             */
+            $sync = apply_filters( 'aws_sync_index_table', $sync, $product_id );
 
             if ( AWS_Helpers::is_table_not_exist() ) {
                 $this->create_table();
             }
 
-            if ( $sunc === 'false' ) {
+            if ( $sync === 'false' ) {
                 return;
             }
 

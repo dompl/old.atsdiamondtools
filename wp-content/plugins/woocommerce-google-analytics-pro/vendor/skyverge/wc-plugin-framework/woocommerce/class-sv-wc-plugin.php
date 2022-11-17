@@ -18,15 +18,16 @@
  *
  * @package   SkyVerge/WooCommerce/Plugin/Classes
  * @author    SkyVerge
- * @copyright Copyright (c) 2013-2018, SkyVerge, Inc.
+ * @copyright Copyright (c) 2013-2022, SkyVerge, Inc.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_3_0;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_10_12;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_3_0\\SV_WC_Plugin' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_12\\SV_WC_Plugin' ) ) :
+
 
 /**
  * # WooCommerce Plugin Framework
@@ -36,13 +37,13 @@ if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_3_0\\SV_WC_Pl
  * plugin.  This class handles all the "non-feature" support tasks such
  * as verifying dependencies are met, loading the text domain, etc.
  *
- * @version 5.3.0
+ * @version 5.8.0
  */
 abstract class SV_WC_Plugin {
 
 
 	/** Plugin Framework Version */
-	const VERSION = '5.3.0';
+	const VERSION = '5.10.12';
 
 	/** @var object single instance of plugin */
 	protected static $instance;
@@ -53,11 +54,14 @@ abstract class SV_WC_Plugin {
 	/** @var string version number */
 	private $version;
 
-	/** @var string plugin path without trailing slash */
+	/** @var string plugin path, without trailing slash */
 	private $plugin_path;
 
-	/** @var string plugin uri */
+	/** @var string plugin URL */
 	private $plugin_url;
+
+	/** @var string template path, without trailing slash */
+	private $template_path;
 
 	/** @var \WC_Logger instance */
 	private $logger;
@@ -67,6 +71,9 @@ abstract class SV_WC_Plugin {
 
 	/** @var string the plugin text domain */
 	private $text_domain;
+
+	/** @var array memoized list of active plugins */
+	private $active_plugins = [];
 
 	/** @var SV_WC_Plugin_Dependencies dependency handler instance */
 	private $dependency_handler;
@@ -99,6 +106,7 @@ abstract class SV_WC_Plugin {
 	 * @param array $args {
 	 *     optional plugin arguments
 	 *
+	 *     @type int|float $latest_wc_versions the last supported versions of WooCommerce, as a major.minor float relative to the latest available version
 	 *     @type string $text_domain the plugin textdomain, used to set up translations
 	 *     @type array  $dependencies {
 	 *         PHP extension, function, and settings dependencies
@@ -109,16 +117,16 @@ abstract class SV_WC_Plugin {
 	 *     }
 	 * }
 	 */
-	public function __construct( $id, $version, $args = array() ) {
+	public function __construct( $id, $version, $args = [] ) {
 
 		// required params
 		$this->id      = $id;
 		$this->version = $version;
 
-		$args = wp_parse_args( $args, array(
-			'text_domain'  => '',
-			'dependencies' => array(),
-		) );
+		$args = wp_parse_args( $args, [
+			'text_domain'   => '',
+			'dependencies'  => [],
+		] );
 
 		$this->text_domain = $args['text_domain'];
 
@@ -208,7 +216,7 @@ abstract class SV_WC_Plugin {
 	 */
 	protected function init_hook_deprecator() {
 
-		$this->hook_deprecator = new SV_WC_Hook_Deprecator( $this->get_plugin_name(), $this->get_deprecated_hooks() );
+		$this->hook_deprecator = new SV_WC_Hook_Deprecator( $this->get_plugin_name(), array_merge( $this->get_framework_deprecated_hooks(), $this->get_deprecated_hooks() ) );
 	}
 
 
@@ -244,7 +252,7 @@ abstract class SV_WC_Plugin {
 	 *
 	 * Plugins can override and extend this method to add their own setup wizard.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 */
 	protected function init_setup_wizard_handler() {
 
@@ -265,7 +273,7 @@ abstract class SV_WC_Plugin {
 		// initialize the plugin admin
 		add_action( 'admin_init', array( $this, 'init_admin' ), 0 );
 
-		// hook for translations seperately to ensure they're loaded
+		// hook for translations separately to ensure they're loaded
 		add_action( 'init', array( $this, 'load_translations' ) );
 
 		// add the admin notices
@@ -279,11 +287,7 @@ abstract class SV_WC_Plugin {
 		$this->add_api_request_logging();
 
 		// add any PHP incompatibilities to the system status report
-		if ( SV_WC_Plugin_Compatibility::is_wc_version_gte_3_0() ) {
-			add_filter( 'woocommerce_system_status_environment_rows', array( $this, 'add_system_status_php_information' ) );
-		} else {
-			add_filter( 'woocommerce_debug_posting', array( $this, 'add_system_status_php_information' ) );
-		}
+		add_filter( 'woocommerce_system_status_environment_rows', array( $this, 'add_system_status_php_information' ) );
 	}
 
 
@@ -383,8 +387,7 @@ abstract class SV_WC_Plugin {
 	/**
 	 * Initializes the plugin admin.
 	 *
-	 * Plugins can override this to set up any handlers after the WordPress
-	 * admin is ready.
+	 * Plugins can override this to set up any handlers after the WordPress admin is ready.
 	 *
 	 * @since 5.2.0
 	 */
@@ -410,8 +413,15 @@ abstract class SV_WC_Plugin {
 		require_once(  $framework_path . '/Addresses/Address.php' );
 		require_once(  $framework_path . '/Addresses/Customer_Address.php' );
 
+		// Settings API
+		require_once( $framework_path . '/Settings_API/Abstract_Settings.php' );
+		require_once( $framework_path . '/Settings_API/Setting.php' );
+		require_once( $framework_path . '/Settings_API/Control.php' );
+
 		// common utility methods
 		require_once( $framework_path . '/class-sv-wc-helper.php' );
+		require_once( $framework_path . '/Country_Helper.php' );
+		require_once( $framework_path . '/admin/Notes_Helper.php' );
 
 		// backwards compatibility for older WC versions
 		require_once( $framework_path . '/class-sv-wc-plugin-compatibility.php' );
@@ -436,7 +446,15 @@ abstract class SV_WC_Plugin {
 		require_once( $framework_path . '/api/abstract-sv-wc-api-json-request.php' );
 		require_once( $framework_path . '/api/abstract-sv-wc-api-json-response.php' );
 
+		// Cacheable API
+		require_once( $framework_path . '/api/traits/Cacheable_Request_Trait.php' );
+		require_once( $framework_path . '/api/Abstract_Cacheable_API_Base.php' );
+
+		// REST API Controllers
+		require_once( $framework_path . '/rest-api/Controllers/Settings.php' );
+
 		// Handlers
+		require_once( $framework_path . '/Handlers/Script_Handler.php' );
 		require_once( $framework_path . '/class-sv-wc-plugin-dependencies.php' );
 		require_once( $framework_path . '/class-sv-wc-hook-deprecator.php' );
 		require_once( $framework_path . '/class-sv-wp-admin-message-handler.php' );
@@ -447,8 +465,49 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Return deprecated/removed hooks. Implementing classes should override this
-	 * and return an array of deprecated/removed hooks in the following format:
+	 * Gets a list of framework deprecated/removed hooks.
+	 *
+	 * @see SV_WC_Plugin::init_hook_deprecator()
+	 * @see SV_WC_Plugin::get_deprecated_hooks()
+	 *
+	 * @since 5.8.0
+	 *
+	 * @return array associative array
+	 */
+	private function get_framework_deprecated_hooks() {
+
+		$plugin_id          = $this->get_id();
+		$deprecated_hooks   = [];
+		$deprecated_filters = [
+			/** @see SV_WC_Payment_Gateway_My_Payment_Methods handler - once migrated to WC core tokens UI, we removed these and have no replacement */
+			// TODO: remove deprecated hooks handling by version 6.0.0 or by 2021-02-25 {FN 2020-02-25}
+			"wc_{$plugin_id}_my_payment_methods_table_html",
+			"wc_{$plugin_id}_my_payment_methods_table_head_html",
+			"wc_{$plugin_id}_my_payment_methods_table_title",
+			"wc_{$plugin_id}_my_payment_methods_table_title_html",
+			"wc_{$plugin_id}_my_payment_methods_table_row_html",
+			"wc_{$plugin_id}_my_payment_methods_table_body_html",
+			"wc_{$plugin_id}_my_payment_methods_table_body_row_data",
+			"wc_{$plugin_id}_my_payment_methods_table_method_expiry_html",
+			"wc_{$plugin_id}_my_payment_methods_table_actions_html",
+		];
+
+		foreach ( $deprecated_filters as $deprecated_filter ) {
+			$deprecated_hooks[ $deprecated_filter ] = [
+				'removed'     => true,
+				'replacement' => false,
+				'version'     => '5.8.1'
+			];
+		}
+
+		return $deprecated_hooks;
+	}
+
+
+	/**
+	 * Gets a list of the plugin's deprecated/removed hooks.
+	 *
+	 * Implementing classes should override this and return an array of deprecated/removed hooks in the following format:
 	 *
 	 * $old_hook_name = array {
 	 *   @type string $version version the hook was deprecated/removed in
@@ -458,12 +517,13 @@ abstract class SV_WC_Plugin {
 	 * }
 	 *
 	 * @since 4.3.0
+	 *
 	 * @return array
 	 */
 	protected function get_deprecated_hooks() {
 
 		// stub method
-		return array();
+		return [];
 	}
 
 
@@ -483,15 +543,14 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Checks if required PHP extensions are loaded and adds an admin notice
-	 * for any missing extensions.  Also plugin settings can be checked
-	 * as well.
+	 * Adds admin notices upon initialization.
+	 *
+	 * @internal
 	 *
 	 * @since 3.0.0
 	 */
 	public function add_admin_notices() {
-
-
+		// stub method
 	}
 
 
@@ -593,7 +652,14 @@ abstract class SV_WC_Plugin {
 		$messages[] = isset( $data['uri'] ) && $data['uri'] ? 'Request' : 'Response';
 
 		foreach ( (array) $data as $key => $value ) {
-			$messages[] = trim( sprintf( '%s: %s', $key, is_array( $value ) || ( is_object( $value ) && 'stdClass' == get_class( $value ) ) ? print_r( (array) $value, true ) : $value ) );
+
+			if ( is_array( $value ) || ( is_object( $value ) && 'stdClass' === get_class( $value ) ) ) {
+				$value = print_r( (array) $value, true );
+			} elseif ( is_bool( $value ) ) {
+				$value = wc_bool_to_string( $value );
+			}
+
+			$messages[] = trim( sprintf( '%s: %s', $key, $value ) );
 		}
 
 		return implode( "\n", $messages ) . "\n";
@@ -679,6 +745,48 @@ abstract class SV_WC_Plugin {
 		require_once( $this->get_plugin_path() . $local_path );
 
 		return new $class_name;
+	}
+
+
+	/**
+	 * Determines if TLS v1.2 is required for API requests.
+	 *
+	 * Subclasses should override this to return true if TLS v1.2 is required.
+	 *
+	 * @since 5.5.2
+	 *
+	 * @return bool
+	 */
+	public function require_tls_1_2() {
+
+		return false;
+	}
+
+
+	/**
+	 * Determines if TLS 1.2 is available.
+	 *
+	 * @since 5.5.2
+	 *
+	 * @return bool
+	 */
+	public function is_tls_1_2_available() {
+
+		// assume availability to avoid notices for unknown SSL types
+		$is_available = true;
+
+		// check the cURL version if installed
+		if ( is_callable( 'curl_version' ) ) {
+
+			$versions = curl_version();
+
+			// cURL 7.34.0 is considered the minimum version that supports TLS 1.2
+			if ( version_compare( $versions['version'], '7.34.0', '<' ) ) {
+				$is_available = false;
+			}
+		}
+
+		return $is_available;
 	}
 
 
@@ -776,7 +884,7 @@ abstract class SV_WC_Plugin {
 	/**
 	 * Gets the Setup Wizard handler instance.
 	 *
-	 * @since 5.3.0-dev
+	 * @since 5.3.0
 	 *
 	 * @return null|Admin\Setup_Wizard
 	 */
@@ -809,6 +917,21 @@ abstract class SV_WC_Plugin {
 	public function get_admin_notice_handler() {
 
 		return $this->admin_notice_handler;
+	}
+
+
+	/**
+	 * Gets the settings API handler instance.
+	 *
+	 * Plugins can use this to init the settings API handler.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @return void|Settings_API\Abstract_Settings
+	 */
+	public function get_settings_handler() {
+
+		return;
 	}
 
 
@@ -953,48 +1076,56 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Returns the plugin's path without a trailing slash, i.e.
-	 * /path/to/wp-content/plugins/plugin-directory
+	 * Gets the plugin's path without a trailing slash.
+	 *
+	 * e.g. /path/to/wp-content/plugins/plugin-directory
 	 *
 	 * @since 2.0.0
-	 * @return string the plugin path
+	 *
+	 * @return string
 	 */
 	public function get_plugin_path() {
 
-		if ( $this->plugin_path ) {
-			return $this->plugin_path;
+		if ( null === $this->plugin_path ) {
+			$this->plugin_path = untrailingslashit( plugin_dir_path( $this->get_file() ) );
 		}
 
-		return $this->plugin_path = untrailingslashit( plugin_dir_path( $this->get_file() ) );
+		return $this->plugin_path;
 	}
 
 
 	/**
-	 * Returns the plugin's url without a trailing slash, i.e.
-	 * http://skyverge.com/wp-content/plugins/plugin-directory
+	 * Gets the plugin's URL without a trailing slash.
+	 *
+	 * E.g. http://skyverge.com/wp-content/plugins/plugin-directory
 	 *
 	 * @since 2.0.0
-	 * @return string the plugin URL
+	 *
+	 * @return string
 	 */
 	public function get_plugin_url() {
 
-		if ( $this->plugin_url ) {
-			return $this->plugin_url;
+		if ( null === $this->plugin_url ) {
+			$this->plugin_url = untrailingslashit( plugins_url( '/', $this->get_file() ) );
 		}
 
-		return $this->plugin_url = untrailingslashit( plugins_url( '/', $this->get_file() ) );
+		return $this->plugin_url;
 	}
 
 
 	/**
-	 * Returns the woocommerce uploads path, without trailing slash.  Oddly WooCommerce
-	 * core does not provide a way to get this
+	 * Gets the woocommerce uploads path, without trailing slash.
+	 *
+	 * Oddly WooCommerce core does not provide a way to get this.
 	 *
 	 * @since 2.0.0
-	 * @return string upload path for woocommerce
+	 *
+	 * @return string
 	 */
 	public static function get_woocommerce_uploads_path() {
+
 		$upload_dir = wp_upload_dir();
+
 		return $upload_dir['basedir'] . '/woocommerce_uploads';
 	}
 
@@ -1012,8 +1143,9 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Returns the loaded framework path, without trailing slash. Ths is the highest
-	 * version framework that was loaded by the bootstrap.
+	 * Gets the loaded framework path, without trailing slash.
+	 *
+	 * This matches the path to the highest version of the framework currently loaded.
 	 *
 	 * @since 4.0.0
 	 * @return string
@@ -1025,10 +1157,10 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Returns the absolute path to the loaded framework image directory, without a
-	 * trailing slash
+	 * Gets the absolute path to the loaded framework image directory, without a trailing slash.
 	 *
 	 * @since 4.0.0
+	 *
 	 * @return string
 	 */
 	public function get_framework_assets_path() {
@@ -1038,9 +1170,10 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Returns the loaded framework assets URL without a trailing slash
+	 * Gets the loaded framework assets URL without a trailing slash.
 	 *
 	 * @since 4.0.0
+	 *
 	 * @return string
 	 */
 	public function get_framework_assets_url() {
@@ -1050,39 +1183,91 @@ abstract class SV_WC_Plugin {
 
 
 	/**
-	 * Helper function to determine whether a plugin is active
+	 * Gets the plugin default template path, without a trailing slash.
+	 *
+	 * @since 5.5.0
+	 *
+	 * @return string
+	 */
+	public function get_template_path() {
+
+		if ( null === $this->template_path ) {
+			$this->template_path = $this->get_plugin_path() . '/templates';
+		}
+
+		return $this->template_path;
+	}
+
+
+	/**
+	 * Loads and outputs a template file HTML.
+	 *
+	 * @see \wc_get_template() except we define automatically the default path
+	 *
+	 * @since 5.5.0
+	 *
+	 * @param string $template template name/part
+	 * @param array $args associative array of optional template arguments
+	 * @param string $path optional template path, can be empty, as themes can override this
+	 * @param string $default_path optional default template path, will normally use the plugin's own template path unless overridden
+	 */
+	public function load_template( $template, array $args = [], $path = '', $default_path = '' ) {
+
+		if ( '' === $default_path || ! is_string( $default_path ) ) {
+			$default_path = trailingslashit( $this->get_template_path() );
+		}
+
+		wc_get_template( $template, $args, $path, $default_path );
+	}
+
+
+	/**
+	 * Determines whether a plugin is active.
 	 *
 	 * @since 2.0.0
+	 *
 	 * @param string $plugin_name plugin name, as the plugin-filename.php
 	 * @return boolean true if the named plugin is installed and active
 	 */
 	public function is_plugin_active( $plugin_name ) {
 
-		$active_plugins = (array) get_option( 'active_plugins', array() );
+		$is_active = false;
 
-		if ( is_multisite() ) {
-			$active_plugins = array_merge( $active_plugins, array_keys( get_site_option( 'active_sitewide_plugins', array() ) ) );
-		}
+		if ( is_string( $plugin_name ) ) {
 
-		$plugin_filenames = array();
+			if ( ! array_key_exists( $plugin_name, $this->active_plugins ) ) {
 
-		foreach ( $active_plugins as $plugin ) {
+				$active_plugins = (array) get_option( 'active_plugins', array() );
 
-			if ( SV_WC_Helper::str_exists( $plugin, '/' ) ) {
+				if ( is_multisite() ) {
+					$active_plugins = array_merge( $active_plugins, array_keys( get_site_option( 'active_sitewide_plugins', array() ) ) );
+				}
 
-				// normal plugin name (plugin-dir/plugin-filename.php)
-				list( , $filename ) = explode( '/', $plugin );
+				$plugin_filenames = array();
 
-			} else {
+				foreach ( $active_plugins as $plugin ) {
 
-				// no directory, just plugin file
-				$filename = $plugin;
+					if ( SV_WC_Helper::str_exists( $plugin, '/' ) ) {
+
+						// normal plugin name (plugin-dir/plugin-filename.php)
+						list( , $filename ) = explode( '/', $plugin );
+
+					} else {
+
+						// no directory, just plugin file
+						$filename = $plugin;
+					}
+
+					$plugin_filenames[] = $filename;
+				}
+
+				$this->active_plugins[ $plugin_name ] = in_array( $plugin_name, $plugin_filenames, true );
 			}
 
-			$plugin_filenames[] = $filename;
+			$is_active = (bool) $this->active_plugins[ $plugin_name ];
 		}
 
-		return in_array( $plugin_name, $plugin_filenames );
+		return $is_active;
 	}
 
 
@@ -1097,7 +1282,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function do_install() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_lifecycle_handler() ) . '::init()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_lifecycle_handler() ) . '::init()' );
 
 		$this->get_lifecycle_handler()->init();
 	}
@@ -1113,7 +1298,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function install_default_settings( array $settings ) {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_lifecycle_handler() ) . '::install_default_settings()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_lifecycle_handler() ) . '::install_default_settings()' );
 
 		$this->get_lifecycle_handler()->install_default_settings( $settings );
 	}
@@ -1128,7 +1313,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function activate() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0' );
+		wc_deprecated_function( __METHOD__, '5.2.0' );
 	}
 
 
@@ -1140,7 +1325,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function deactivate() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0' );
+		wc_deprecated_function( __METHOD__, '5.2.0' );
 	}
 
 
@@ -1154,7 +1339,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function get_missing_extension_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_missing_php_extensions()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_missing_php_extensions()' );
 
 		return $this->get_dependency_handler()->get_missing_php_extensions();
 	}
@@ -1170,7 +1355,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function get_missing_function_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_missing_php_functions()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_missing_php_functions()' );
 
 		return $this->get_dependency_handler()->get_missing_php_functions();
 	}
@@ -1186,7 +1371,7 @@ abstract class SV_WC_Plugin {
 	 */
 	public function get_incompatible_php_settings() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_incompatible_php_settings()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_incompatible_php_settings()' );
 
 		return $this->get_dependency_handler()->get_incompatible_php_settings();
 	}
@@ -1202,7 +1387,7 @@ abstract class SV_WC_Plugin {
 	 */
 	protected function get_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0' );
+		wc_deprecated_function( __METHOD__, '5.2.0' );
 
 		return array();
 	}
@@ -1218,7 +1403,7 @@ abstract class SV_WC_Plugin {
 	 */
 	protected function get_extension_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_extensions()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_extensions()' );
 
 		return $this->get_dependency_handler()->get_php_extensions();
 	}
@@ -1234,7 +1419,7 @@ abstract class SV_WC_Plugin {
 	 */
 	protected function get_function_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_functions()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_functions()' );
 
 		return $this->get_dependency_handler()->get_php_functions();
 	}
@@ -1250,7 +1435,7 @@ abstract class SV_WC_Plugin {
 	 */
 	protected function get_php_settings_dependencies() {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_settings()' );
+		wc_deprecated_function( __METHOD__, '5.2.0', get_class( $this->get_dependency_handler() ) . '::get_php_settings()' );
 
 		return $this->get_dependency_handler()->get_php_settings();
 	}
@@ -1264,12 +1449,13 @@ abstract class SV_WC_Plugin {
 	 *
 	 * @param array $dependencies the environment dependencies
 	 */
-	protected function set_dependencies( $dependencies = array() ) {
+	protected function set_dependencies( $dependencies = [] ) {
 
-		SV_WC_Plugin_Compatibility::wc_deprecated_function( __METHOD__, '5.2.0' );
+		wc_deprecated_function( __METHOD__, '5.2.0' );
 	}
 
 
 }
 
-endif; // Class exists check
+
+endif;

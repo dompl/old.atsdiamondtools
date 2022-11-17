@@ -18,19 +18,21 @@
  *
  * @package   SkyVerge/WooCommerce/Exceptions
  * @author    SkyVerge
- * @copyright Copyright (c) 2013-2018, SkyVerge, Inc.
+ * @copyright Copyright (c) 2013-2022, SkyVerge, Inc.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  */
 
-namespace SkyVerge\WooCommerce\PluginFramework\v5_3_0;
+namespace SkyVerge\WooCommerce\PluginFramework\v5_10_12;
 
 defined( 'ABSPATH' ) or exit;
 
-if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_3_0\\SV_WC_Plugin_Exception' ) ) :
+if ( ! class_exists( '\\SkyVerge\\WooCommerce\\PluginFramework\\v5_10_12\\SV_WC_Plugin_Exception' ) ) :
 
-	/**
-	 * Plugin Framework Exception - generic Exception
-	 */
-	class SV_WC_Plugin_Exception extends \Exception { }
 
-endif;  // class exists check
+/**
+ * Plugin Framework Exception - generic Exception
+ */
+class SV_WC_Plugin_Exception extends \Exception { }
+
+
+endif;
