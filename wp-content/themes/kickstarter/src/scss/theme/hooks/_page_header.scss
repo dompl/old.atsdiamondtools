@@ -137,6 +137,30 @@ header#page-header {
   color: white;
   margin-left: auto;
   margin-right: auto;
+  .paypal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    img {
+    }
+    .image {
+      text-align: center;
+    }
+    @include breakpoint(min-width $md) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .image {
+        vertical-align: bottom;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        img {
+          vertical-align: bottom;
+        }
+      }
+    }
+  }
   a {
     color: white;
     display: inline-block;
