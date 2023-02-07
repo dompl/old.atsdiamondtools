@@ -1,0 +1,1 @@
+export const PAYMENT_METHOD_NAME = 'epdq_checkout';
