@@ -3,12 +3,12 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 2.67
+Version: 2.83
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 WC requires at least: 3.0.0
-WC tested up to: 7.1.0
+WC tested up to: 7.8.0
 */
 
 
@@ -84,6 +84,8 @@ final class AWS_Main {
 
         add_filter( 'wcml_multi_currency_ajax_actions', array( $this, 'add_wpml_ajax_actions' ) );
 
+        add_action( 'before_woocommerce_init', array( $this, 'declare_wc_features_support' ) );
+
         if ( $this->get_settings('seamless') === 'true' ) {
             add_filter( 'get_search_form', array( $this, 'markup_filter' ), 999999 );
             add_filter( 'get_product_search_form', array( $this, 'markup_filter' ), 999999 );
@@ -96,7 +98,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '2.67' );
+        $this->define( 'AWS_VERSION', '2.83' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -200,8 +202,8 @@ final class AWS_Main {
         wp_localize_script('aws-script', 'aws_vars', array(
             'sale'       => __('Sale!', 'advanced-woo-search'),
             'sku'        => __('SKU', 'advanced-woo-search') . ': ',
-            'showmore'   => $this->get_settings('show_more_text') ? AWS_Helpers::translate( 'show_more_text', stripslashes( $this->get_settings('show_more_text') ) ) : __('View all results', 'advanced-woo-search'),
-            'noresults'  => $this->get_settings('not_found_text') ? AWS_Helpers::translate( 'not_found_text', stripslashes( $this->get_settings('not_found_text') ) ) : __('Nothing found', 'advanced-woo-search'),
+            'showmore'   => $this->get_settings('show_more_text') ? AWS_Helpers::translate( 'show_more_text', stripslashes( strip_tags( html_entity_decode( $this->get_settings('show_more_text') ) ) ) ) : __('View all results', 'advanced-woo-search'),
+            'noresults'  => $this->get_settings('not_found_text') ? AWS_Helpers::translate( 'not_found_text', stripslashes( wp_kses( html_entity_decode( $this->get_settings('not_found_text') ), AWS_Helpers::get_kses( AWS_Helpers::kses_textarea_allowed_tags() ) ) ) ) : __('Nothing found', 'advanced-woo-search'),
         ));
 	}
 
@@ -246,6 +248,15 @@ final class AWS_Main {
     function add_wpml_ajax_actions( $actions ){
         $actions[] = 'aws_action';
         return $actions;
+    }
+
+    /*
+     * Declare support for WooCommerce features
+     */
+    public function declare_wc_features_support() {
+        if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+        }
     }
 
 }

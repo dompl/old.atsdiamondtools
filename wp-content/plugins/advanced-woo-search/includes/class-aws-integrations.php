@@ -68,12 +68,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'woocommerce_currency_symbol', array( $this, 'dfrapi_set_currency_symbol_filter' ), 10, 2 );
             }
 
-            // WC Marketplace - https://wc-marketplace.com/
-            if ( defined( 'WCMp_PLUGIN_VERSION' ) ) {
-                add_filter( 'aws_search_data_params', array( $this, 'wc_marketplace_filter' ), 10, 3 );
-                add_filter( 'aws_search_pre_filter_products', array( $this, 'wc_marketplace_products_filter' ), 10, 2 );
-            }
-
             // Maya shop theme
             if ( defined( 'YIW_THEME_PATH' ) ) {
                 add_action( 'wp_head', array( $this, 'myashop_head_action' ) );
@@ -87,13 +81,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                 add_filter( 'aws_js_seamless_selectors', array( $this, 'js_seamless_selectors' ) );
 
-                add_filter( 'et_html_main_header', array( $this, 'et_html_main_header' ) );
-                add_filter( 'et_html_slide_header', array( $this, 'et_html_main_header' ) );
-                add_action( 'wp_head', array( $this, 'divi_wp_head' ) );
                 add_filter( 'generate_navigation_search_output', array( $this, 'generate_navigation_search_output' ) );
-                add_filter( 'et_pb_search_shortcode_output', array( $this, 'divi_builder_search_module' ) );
-                add_filter( 'et_pb_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
-                add_filter( 'et_pb_fullwidth_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
 
                 // Ocean wp theme
                 if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
@@ -218,6 +206,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'xstore_wp_head' ) );
                 }
 
+                if ( 'Blocksy' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'blocksy_wp_head' ) );
+                }
+
+                // WP Bottom Menu
+                if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
+                    add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
+                }
+
             }
 
             add_action( 'wp_head', array( $this, 'head_js_integration' ) );
@@ -295,6 +292,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
          * Include files
          */
         public function includes() {
+
+            // WP-CLI
+            if ( defined( 'WP_CLI' ) && WP_CLI ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-wp-cli.php' );
+            }
 
             // Getenberg block
             if ( function_exists( 'register_block_type' ) ) {
@@ -377,14 +379,31 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-barn2-protected-categories.php' );
             }
 
+            // WC Marketplace - https://wc-marketplace.com/
+            if ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-multivendorx.php' );
+            }
+
             // Custom Product Tabs for WooCommerce plugin
             if ( class_exists('YIKES_Custom_Product_Tabs') || class_exists( 'YIKES_Custom_Product_Tabs_Pro' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-custom-tabs.php' );
             }
 
+            // Perfect Brands for WooCommerce
+            if ( defined( 'PWB_PLUGIN_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-pwb.php' );
+            }
+
             // Astra theme
             if ( 'Astra' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-astra.php' );
+            }
+
+            // Bricks Builder theme
+            if ( class_exists( '\Bricks\Elements' ) ) {
+                add_action( 'init', function() {
+                    \Bricks\Elements::register_element( AWS_DIR . '/includes/modules/class-aws-bricks-builder.php' );
+                }, 11 );
             }
 
             // Avada theme
@@ -395,6 +414,16 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Flatsome theme
             if ( 'Flatsome' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-flatsome.php' );
+            }
+
+            // Product Filters for WooCommerce
+            if ( defined( 'WC_PRODUCT_FILTER_VERSION' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-pfw.php' );
+            }
+
+            // WooCommerce Product Bundles
+            if ( class_exists( 'WC_Bundles' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-product-bundles.php' );
             }
 
         }
@@ -485,93 +514,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
             $currency_symbol = dfrapi_currency_code_to_sign( $fields['currency'] );
             return $currency_symbol;
-
-        }
-
-        /*
-         * WC Marketplace plugin support
-         */
-        public function wc_marketplace_filter( $data, $post_id, $product ) {
-
-            $wcmp_spmv_map_id = get_post_meta( $post_id, '_wcmp_spmv_map_id', true );
-
-            if ( $wcmp_spmv_map_id ) {
-
-                if ( isset( $data['wcmp_price'] ) && isset( $data['wcmp_price'][$wcmp_spmv_map_id] )  ) {
-
-                    if ( $product->get_price() < $data['wcmp_price'][$wcmp_spmv_map_id] ) {
-                        $data['wcmp_price'][$wcmp_spmv_map_id] = $product->get_price();
-                        $data['wcmp_lowest_price_id'][$wcmp_spmv_map_id] = $post_id;
-                    }
-
-                } else {
-                    $data['wcmp_price'][$wcmp_spmv_map_id] = $product->get_price();
-                }
-
-                $data['wcmp_spmv_product_id'][$wcmp_spmv_map_id][] = $post_id;
-
-            }
-
-            return $data;
-
-        }
-
-        /*
-         * WC Marketplace plugin products filter
-         */
-        public function wc_marketplace_products_filter( $products_array, $data ) {
-
-            $wcmp_spmv_exclude_ids = array();
-
-            if ( isset( $data['wcmp_spmv_product_id'] ) ) {
-
-                foreach( $data['wcmp_spmv_product_id'] as $wcmp_spmv_map_id => $wcmp_spmv_product_id ) {
-
-                    if ( count( $wcmp_spmv_product_id ) > 1 ) {
-
-                        if ( isset( $data['wcmp_lowest_price_id'] ) && isset( $data['wcmp_lowest_price_id'][$wcmp_spmv_map_id] ) ) {
-
-                            foreach ( $wcmp_spmv_product_id as $wcmp_spmv_product_id_n ) {
-
-                                if ( $wcmp_spmv_product_id_n === $data['wcmp_lowest_price_id'][$wcmp_spmv_map_id] ) {
-                                    continue;
-                                }
-
-                                $wcmp_spmv_exclude_ids[] = $wcmp_spmv_product_id_n;
-
-                            }
-
-                        } else {
-
-                            foreach ( $wcmp_spmv_product_id as $key => $wcmp_spmv_product_id_n ) {
-
-                                if ( $key === 0 ) {
-                                    continue;
-                                }
-
-                                $wcmp_spmv_exclude_ids[] = $wcmp_spmv_product_id_n;
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            $new_product_array = array();
-
-            foreach( $products_array as $key => $pr_arr ) {
-
-                if ( ! in_array( $pr_arr['id'], $wcmp_spmv_exclude_ids ) ) {
-                    $new_product_array[] = $pr_arr;
-                }
-
-            }
-
-            return $new_product_array;
 
         }
 
@@ -1621,6 +1563,62 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Blocksy theme custom styles
+         */
+        public function blocksy_wp_head() { ?>
+            <style>
+                #search-modal .aws-container {
+                    width: 100%;
+                    margin: 0 auto;
+                    max-width: 800px;
+                }
+                #search-modal .aws-container .aws-search-form {
+                    background-color: transparent;
+                    height: 60px;
+                }
+                #search-modal .aws-container .aws-search-form .aws-search-field {
+                    border: none;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                    font-size: 26px;
+                    background-color: transparent;
+                }
+                #search-modal .aws-container .aws-search-form .aws-form-btn {
+                    border: none;
+                    background-color: #585a5c;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                }
+                #search-modal .aws-container .aws-search-form .aws-form-btn:hover {
+                    background-color: #ccc;
+                }
+                #search-modal .aws-container .aws-search-form .aws-main-filter .aws-main-filter__current {
+                    color: #000;
+                }
+                #search-modal .aws-container .aws-search-form .aws-search-btn svg {
+                    fill: #222;
+                }
+            </style>
+        <?php }
+
+        /*
+         * WP Bottom Menu
+         */
+        public function wp_bottom_menu_wp_head() { ?>
+
+            <script>
+                window.addEventListener('load', function() {
+                    function wpbottom_aws_results_force_position( forcePosition, options ) {
+                        if ( options.form.closest('#wp-bottom-menu-search-form-wrapper').length > 0 ) {
+                            forcePosition = 'top';
+                        }
+                        return forcePosition;
+                    }
+                    AwsHooks.add_filter( "aws_results_force_position", wpbottom_aws_results_force_position );
+                }, false);
+            </script>
+
+        <?php }
+
+        /*
          * Exclude product categories
          */
         public function filter_protected_cats_term_exclude( $exclude ) {
@@ -1681,57 +1679,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
-         * Divi theme seamless integration for header
-         */
-        public function et_html_main_header( $html ) {
-            if ( function_exists( 'aws_get_search_form' ) ) {
-
-                $pattern = '/(<form[\s\S]*?<\/form>)/i';
-                $form = aws_get_search_form(false);
-
-                if ( strpos( $html, 'aws-container' ) !== false ) {
-                    $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
-                }
-
-                $html = '<style>.et_search_outer .aws-container { position: absolute;right: 40px;top: 20px; top: calc( 100% - 60px ); }</style>' . $html;
-                $html = trim(preg_replace('/\s\s+/', ' ', $html));
-                $html = preg_replace( $pattern, $form, $html );
-
-            }
-            return $html;
-        }
-
-        /*
-         * Divi theme: focus search field on icon click
-         */
-        public function divi_wp_head() {
-
-            $html = '
-                <script>
-                
-                    window.addEventListener("load", function() {
-                        
-                        var awsDiviSearch = document.querySelectorAll("header .et_pb_menu__search-button");
-                        if ( awsDiviSearch ) {
-                            for (var i = 0; i < awsDiviSearch.length; i++) {
-                                awsDiviSearch[i].addEventListener("click", function() {
-                                    window.setTimeout(function(){
-                                        document.querySelector(".et_pb_menu__search-container .aws-container .aws-search-field").focus();
-                                        jQuery( ".aws-search-result" ).hide();
-                                    }, 100);
-                                }, false);
-                            }
-                        }
-
-                    }, false);
-
-                </script>';
-
-            echo $html;
-
-        }
-
-        /*
          * Generatepress theme support
          */
         public function generate_navigation_search_output( $html ) {
@@ -1751,26 +1698,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $html = str_replace( 'aws-search-field', 'aws-search-field search-field', $html );
             }
             return $html;
-        }
-
-        /*
-         * Divi builder replace search module
-         */
-        public function divi_builder_search_module( $output ) {
-            if ( function_exists( 'aws_get_search_form' ) && is_string( $output ) ) {
-
-                $pattern = '/(<form[\s\S]*?<\/form>)/i';
-                $form = aws_get_search_form(false);
-
-                if ( strpos( $output, 'aws-container' ) !== false ) {
-                    $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
-                }
-
-                $output = trim(preg_replace('/\s\s+/', ' ', $output));
-                $output = preg_replace( $pattern, $form, $output );
-
-            }
-            return $output;
         }
 
         /*
@@ -1877,6 +1804,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
+            }
+
+            // WP Bottom Menu
+            if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
+                $selectors[] = '#wp-bottom-menu-search-form-wrapper form';
             }
 
             return $selectors;

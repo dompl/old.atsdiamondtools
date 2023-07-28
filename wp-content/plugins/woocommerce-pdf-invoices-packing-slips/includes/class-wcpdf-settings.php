@@ -2,26 +2,45 @@
 namespace WPO\WC\PDF_Invoices;
 
 use WPO\WC\PDF_Invoices\Documents\Sequential_Number_Store;
+use WPO\WC\PDF_Invoices\Updraft_Semaphore_3_0 as Semaphore;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( !class_exists( '\\WPO\\WC\\PDF_Invoices\\Settings' ) ) :
+if ( ! class_exists( '\\WPO\\WC\\PDF_Invoices\\Settings' ) ) :
 
 class Settings {
+	
 	public $options_page_hook;
+	public $callbacks;
+	public $general;
+	public $documents;
+	public $debug;
+	public $general_settings;
+	public $debug_settings;
+	public $lock_name;
+	public $lock_context;
+	public $lock_time;
+	public $lock_retries;
 	private $installed_templates = array();
-	private $installed_templates_cache = array();
+	private $template_list_cache = array();
+
 	
 	function __construct()	{
-		$this->callbacks = include( 'class-wcpdf-settings-callbacks.php' );
-
-		// include settings classes
-		$this->general = include( 'class-wcpdf-settings-general.php' );
-		$this->documents = include( 'class-wcpdf-settings-documents.php' );
-		$this->debug = include( 'class-wcpdf-settings-debug.php' );
-
+		$this->callbacks        = include( 'class-wcpdf-settings-callbacks.php' );
+		$this->general          = include( 'class-wcpdf-settings-general.php' );
+		$this->documents        = include( 'class-wcpdf-settings-documents.php' );
+		$this->debug            = include( 'class-wcpdf-settings-debug.php' );
+		$this->upgrade          = include( 'class-wcpdf-settings-upgrade.php' );
+		
+		$this->general_settings = get_option( 'wpo_wcpdf_settings_general' );
+		$this->debug_settings   = get_option( 'wpo_wcpdf_settings_debug' );
+		
+		$this->lock_name        = 'wpo_wcpdf_semaphore_lock';
+		$this->lock_context     = array( 'source' => 'wpo-wcpdf-semaphore' );
+		$this->lock_time        = apply_filters( 'wpo_wcpdf_semaphore_lock_time', 2 );
+		$this->lock_retries     = apply_filters( 'wpo_wcpdf_semaphore_lock_retries', 0 );
 
 		// Settings menu item
 		add_action( 'admin_menu', array( $this, 'menu' ), 999 ); // Add menu
@@ -30,10 +49,7 @@ class Settings {
 		add_filter( 'plugin_row_meta', array( $this, 'add_support_links' ), 10, 2 );
 
 		// settings capabilities
-		add_filter( 'option_page_capability_wpo_wcpdf_general_settings', array( $this, 'settings_capabilities' ) );
-
-		$this->general_settings		= get_option('wpo_wcpdf_settings_general');
-		$this->debug_settings		= get_option('wpo_wcpdf_settings_debug');
+		add_filter( 'option_page_capability_wpo_wcpdf_general_settings', array( $this, 'user_settings_capability' ) );
 
 		// admin notice for auto_increment_increment
 		// add_action( 'admin_notices', array( $this, 'check_auto_increment_increment') );
@@ -56,6 +72,9 @@ class Settings {
 		add_action( 'wp_ajax_wpo_wcpdf_preview', array( $this, 'ajax_preview' ) );
 		// AJAX preview order search
 		add_action( 'wp_ajax_wpo_wcpdf_preview_order_search', array( $this, 'preview_order_search' ) );
+		
+		// schedule yearly reset numbers
+		add_action( 'wpo_wcpdf_schedule_yearly_reset_numbers', array( $this, 'yearly_reset_numbers' ) );
 	}
 
 	public function menu() {
@@ -65,7 +84,7 @@ class Settings {
 			$parent_slug,
 			esc_html__( 'PDF Invoices', 'woocommerce-pdf-invoices-packing-slips' ),
 			esc_html__( 'PDF Invoices', 'woocommerce-pdf-invoices-packing-slips' ),
-			'manage_woocommerce',
+			$this->user_settings_capability(),
 			'wpo_wcpdf_options_page',
 			array( $this, 'settings_page' )
 		);
@@ -97,6 +116,32 @@ class Settings {
 		}
 		return (array) $links;
 	}
+	
+	/**
+	 * Get a valid user role settings capability.
+	 * @return string
+	 */
+	public function user_settings_capability() {
+		$user_capability       = 'manage_woocommerce';
+		$capabilities_to_check = apply_filters( 'wpo_wcpdf_settings_user_role_capabilities', array( $user_capability ) );
+
+		foreach ( $capabilities_to_check as $capability ) {
+			if ( current_user_can( $capability ) ) {
+				$user_capability = $capability;
+				break;
+			}
+		}
+		
+		return $user_capability;
+	}
+	
+	/**
+	 * Check if user role can manage settings.
+	 * @return bool
+	 */
+	public function user_can_manage_settings() {
+		return current_user_can( $this->user_settings_capability() );
+	}
 
 	function check_auto_increment_increment() {
 		global $wpdb;
@@ -124,9 +169,14 @@ class Settings {
 			),
 		) );
 
-		// add status tab last in row
+		// add status and upgrade tabs last in row
 		$settings_tabs['debug'] = array(
 			'title'          => __( 'Status', 'woocommerce-pdf-invoices-packing-slips' ),
+			'preview_states' => 1,
+		);
+
+		$settings_tabs['upgrade'] = array(
+			'title'          => __( 'Upgrade', 'woocommerce-pdf-invoices-packing-slips' ),
 			'preview_states' => 1,
 		);
 
@@ -158,7 +208,7 @@ class Settings {
 
 		try {
 			// check permissions
-			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			if ( ! $this->user_can_manage_settings() ) {
 				throw new \Exception( esc_html__( 'You do not have sufficient permissions to access this page.', 'woocommerce-pdf-invoices-packing-slips' ), 403 );
 			}
 
@@ -172,6 +222,18 @@ class Settings {
 			// get order ID
 			if ( ! empty( $_POST['order_id'] ) ) {
 				$order_id = sanitize_text_field( $_POST['order_id'] );
+				
+				if ( $document_type == 'credit-note' ) {
+					// get last refund ID of the order if available
+					$refund = wc_get_orders(
+						array(
+							'type'   => 'shop_order_refund',
+							'parent' => $order_id,
+							'limit'  => 1,
+						)
+					);
+					$order_id = ! empty( $refund ) ? $refund[0]->get_id() : $order_id;
+				}
 			} else {
 				// default to last order
 				$default_order_id = wc_get_orders( apply_filters( 'wpo_wcpdf_preview_default_order_id_query_args', array(
@@ -216,8 +278,10 @@ class Settings {
 					// reload settings
 					$this->general_settings = get_option( 'wpo_wcpdf_settings_general' );
 					$this->debug_settings   = get_option( 'wpo_wcpdf_settings_debug' );
+					
+					do_action( 'wpo_wcpdf_preview_after_reload_settings' );
 				}
-
+				
 				$document = wcpdf_get_document( $document_type, $order );
 
 				if ( $document ) {
@@ -278,7 +342,7 @@ class Settings {
 
 		try {
 			// check permissions
-			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			if ( ! $this->user_can_manage_settings() ) {
 				throw new \Exception( esc_html__( 'You do not have sufficient permissions to access this page.', 'woocommerce-pdf-invoices-packing-slips' ), 403 );
 			}
 
@@ -401,15 +465,8 @@ class Settings {
 		}
 		// $page, $option_group & $option_name are all the same...
 		register_setting( $option_group, $option_name, array( $this->callbacks, 'validate' ) );
-		add_filter( 'option_page_capability_'.$page, array( $this, 'settings_capabilities' ) );
+		add_filter( 'option_page_capability_'.$page, array( $this, 'user_settings_capability' ) );
 
-	}
-
-	/**
-	 * Set capability for settings page
-	 */
-	public function settings_capabilities() {
-		return 'manage_woocommerce';
 	}
 
 	public function get_common_document_settings() {
@@ -669,15 +726,17 @@ class Settings {
 	public function set_number_store() {
 		check_ajax_referer( "wpo_wcpdf_next_{$_POST['store']}", 'security' );
 		// check permissions
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		if ( ! $this->user_can_manage_settings() ) {
 			die(); 
 		}
 
-		$number = isset( $_POST['number'] ) ? (int) $_POST['number'] : 0;
-		$number_store_method = $this->get_sequential_number_store_method();
-		$number_store = new Sequential_Number_Store( $_POST['store'], $number_store_method );
-		$number_store->set_next( $number );
-		echo wp_kses_post( "next number ({$_POST['store']}) set to {$number}" );
+		$number = ! empty( $_POST['number'] ) ? (int) $_POST['number'] : 0;
+		if ( $number > 0 ) {
+			$number_store_method = $this->get_sequential_number_store_method();
+			$number_store = new Sequential_Number_Store( $_POST['store'], $number_store_method );
+			$number_store->set_next( $number );
+			echo wp_kses_post( "next number ({$_POST['store']}) set to {$number}" );
+		}
 		die();
 	}
 
@@ -693,11 +752,161 @@ class Settings {
 
 		return $method;		
 	}
+	
+	public function schedule_yearly_reset_numbers() {
+		if ( ! $this->maybe_schedule_yearly_reset_numbers() ) {
+			return;
+		}
+		
+		// checks AS functions existence
+		if ( ! function_exists( 'as_schedule_single_action' ) || ! function_exists( 'as_get_scheduled_actions' ) ) {
+			return;
+		}
+		
+		$next_year = strval( intval( current_time( 'Y' ) ) + 1 );
+		$datetime  = new \WC_DateTime( "{$next_year}-01-01 00:00:01", new \DateTimeZone( wc_timezone_string() ) );
+		$lock      = new Semaphore( $this->lock_name, $this->lock_time, array( wc_get_logger() ), $this->lock_context );
+		$hook      = 'wpo_wcpdf_schedule_yearly_reset_numbers';
+		
+		// checks if there are pending actions
+		$scheduled_actions = count( as_get_scheduled_actions( array(
+			'hook'   => $hook,
+			'status' => \ActionScheduler_Store::STATUS_PENDING,
+		) ) );
+		
+		// if no concurrent actions sets the action
+		if ( $scheduled_actions < 1 ) {
+			if ( $lock->lock( $this->lock_retries ) ) {
+				try {
+					$action_id = as_schedule_single_action( $datetime->getTimestamp(), $hook );
+					if ( ! empty( $action_id ) ) {
+						wcpdf_log_error(
+							"Yearly document numbers reset scheduled with the action id: {$action_id}",
+							'info'
+						);
+					} else {
+						wcpdf_log_error(
+							'The yearly document numbers reset action schedule failed!',
+							'critical'
+						);
+					}
+				} catch ( \Exception $e ) {
+					$lock->log( $e, 'critical' );
+				} catch ( \Error $e ) {
+					$lock->log( $e, 'critical' );
+				}
+	
+				$lock->release();
+			} else {
+				$lock->log( "Couldn't get the lock!", 'critical' );
+			}
+		} else {
+			wcpdf_log_error(
+				"Number of concurrent yearly document numbers reset actions found: {$scheduled_actions}",
+				'error'
+			);
+			
+			if ( function_exists( 'as_unschedule_all_actions' ) ) {
+				as_unschedule_all_actions( $hook );
+			}
+
+			// reschedule
+			$this->schedule_yearly_reset_numbers();
+		}
+	}
+
+	public function yearly_reset_numbers() {
+		$lock = new Semaphore( $this->lock_name, $this->lock_time, array( wc_get_logger() ), $this->lock_context );
+
+		if ( $lock->lock( $this->lock_retries ) ) {
+			try {
+				// reset numbers
+				$documents     = WPO_WCPDF()->documents->get_documents( 'all' );
+				$number_stores = array();
+				foreach ( $documents as $document ) {
+					if ( is_callable( array( $document, 'get_sequential_number_store' ) ) ) {
+						$number_stores[$document->get_type()] = $document->get_sequential_number_store();
+					}
+				}
+
+				// log reset number events
+				if ( ! empty( $number_stores ) ) {
+					foreach( $number_stores as $document_type => $number_store ) {
+						if ( $number_store->get_next() === 1 ) {
+							wcpdf_log_error(
+								"Yearly number reset succeed for '{$document_type}' with database table name: {$number_store->table_name}",
+								'info'
+							);
+						} else {
+							wcpdf_log_error(
+								"An error ocurred while trying to reset yearly number for '{$document_type}' with database table name: {$number_store->table_name}",
+								'error'
+							);
+						}
+					}
+				}
+			} catch ( \Exception $e ) {
+				$lock->log( $e, 'critical' );
+			} catch ( \Error $e ) {
+				$lock->log( $e, 'critical' );
+			}
+
+			$lock->release();
+			
+		} else {
+			$lock->log( "Couldn't get the lock!", 'critical' );
+		}
+		
+		// reschedule the action for the next year
+		$this->schedule_yearly_reset_numbers();
+	}
+	
+	public function maybe_schedule_yearly_reset_numbers() {
+		$schedule = false;
+		
+		foreach ( WPO_WCPDF()->documents->get_documents( 'all' ) as $document ) {
+			if ( isset( $document->settings['reset_number_yearly'] ) ) {
+				$schedule = true;
+				break;
+			}
+		}
+		
+		// unschedule existing actions
+		if ( ! $schedule && function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( 'wpo_wcpdf_schedule_yearly_reset_numbers' );
+		}
+		
+		return $schedule;
+	}
+	
+	public function yearly_reset_action_is_scheduled() {
+		$is_scheduled      = false;
+		$scheduled_actions = as_get_scheduled_actions( array(
+			'hook'   => 'wpo_wcpdf_schedule_yearly_reset_numbers',
+			'status' => \ActionScheduler_Store::STATUS_PENDING,
+		) );
+		
+		if ( ! empty( $scheduled_actions ) ) {
+			$total_actions = count( $scheduled_actions );
+			if ( $total_actions === 1 ) {
+				$is_scheduled = true;
+			} else {
+				$message = sprintf(
+					/* translators: total scheduled actions */
+					__( 'Only 1 scheduled action should exist for the yearly reset of the numbering system, but %s were found', 'woocommerce-pdf-invoices-packing-slips' ),
+					$total_actions
+				);
+				wcpdf_log_error( $message );
+			}
+		}
+		
+		return $is_scheduled;
+	}
 
 	public function get_media_upload_setting_html() {
 		check_ajax_referer( 'wpo_wcpdf_get_media_upload_setting_html', 'security' );
 		// check permissions
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		if ( ! $this->user_can_manage_settings() ) {
 			wp_send_json_error(); 
 		}
 

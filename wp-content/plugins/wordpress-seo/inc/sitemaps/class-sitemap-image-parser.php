@@ -203,7 +203,7 @@ class WPSEO_Sitemap_Image_Parser {
 				$src          = $this->image_url( $matches['id'] );
 
 				if ( $query_params ) {
-					$src = $src . '?' . $query_params;
+					$src .= '?' . $query_params;
 				}
 			}
 
@@ -457,7 +457,7 @@ class WPSEO_Sitemap_Image_Parser {
 		);
 
 		$gallery_attachments = [];
-		foreach ( $attachments as $key => $val ) {
+		foreach ( $attachments as $val ) {
 			$gallery_attachments[ $val->ID ] = $val;
 		}
 

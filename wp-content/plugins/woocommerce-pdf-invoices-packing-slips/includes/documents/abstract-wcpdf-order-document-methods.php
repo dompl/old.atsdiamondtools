@@ -364,19 +364,19 @@ abstract class Order_Document_Methods extends Order_Document {
 	 */		
 	public function get_order_notes( $filter = 'customer', $include_system_notes = true ) {
 		if ( $this->is_refund( $this->order ) ) {
-			$post_id = $this->get_refund_parent_id( $this->order );
+			$order_id = $this->get_refund_parent_id( $this->order );
 		} else {
-			$post_id = $this->order_id;
+			$order_id = $this->order_id;
 		}
 
-		if ( empty( $post_id ) ) {
+		if ( empty( $order_id ) ) {
 			return; // prevent order notes from all orders showing when document is not loaded properly
 		}
 
 		if ( function_exists('wc_get_order_notes') ) { // WC3.2+
 			$type = ( $filter == 'private' ) ? 'internal' : $filter;
 			$notes = wc_get_order_notes( array(
-				'order_id' => $post_id,
+				'order_id' => $order_id,
 				'type'     => $type, // use 'internal' for admin and system notes, empty for all
 			) );
 
@@ -392,9 +392,9 @@ abstract class Order_Document_Methods extends Order_Document {
 		} else {
 
 			$args = array(
-				'post_id' 	=> $post_id,
-				'approve' 	=> 'approve',
-				'type' 		=> 'order_note'
+				'post_id' => $order_id,
+				'approve' => 'approve',
+				'type'    => 'order_note',
 			);
 
 			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
@@ -1183,8 +1183,39 @@ abstract class Order_Document_Methods extends Order_Document {
 			echo $document_notes;
 		}
 	}
+	
+	public function document_display_date() {
+		$document_display_date = $this->get_display_date( $this->get_type() );
 
+		//If display date data is not available in order meta (for older orders), get the display date information from document settings order meta.
+		if ( empty( $document_display_date ) ) {
+			$document_settings = $this->settings;
+			if( isset( $document_settings['display_date'] ) ) {
+				$document_display_date = $document_settings['display_date'];
+			}
+			else {
+				$document_display_date = 'invoice_date';	
+			}
+		} 
 
+		$formatted_value = $this->get_display_date_label( $document_display_date );
+		return $formatted_value;
+	}
+
+	public function get_display_date_label( $date_string ) {
+		
+		$date_labels = array(
+			'invoice_date'	=> __( 'Invoice Date' , 'woocommerce-pdf-invoices-packing-slips' ),
+			'order_date'	=> __( 'Order Date' , 'woocommerce-pdf-invoices-packing-slips' ),
+		);
+		if( isset( $date_labels[$date_string] ) ) {
+			return $date_labels[ $date_string ];	
+		} else {
+			return '';
+		}
+		
+	}
+	
 }
 
 endif; // class_exists

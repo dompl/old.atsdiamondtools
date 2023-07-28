@@ -32,6 +32,11 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
         private $search_terms;
 
         /**
+         * @var array AWS_Tax_Search Normalized search terms array
+         */
+        private $search_terms_normalized;
+
+        /**
          * @var AWS_Tax_Search Number of search results $results_num
          */
         private $results_num = 10;
@@ -53,6 +58,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             $this->search_string = isset( $data['s'] ) ? $data['s'] : '';
             $this->search_string_unfiltered = isset( $data['s_nonormalize'] ) ? $data['s_nonormalize'] : $this->search_string ;
             $this->search_terms = isset( $data['search_terms'] ) ? $data['search_terms'] : array();
+            $this->search_terms_normalized = array();
             $this->results_num = isset( $data['pages_results_num'] ) ? $data['pages_results_num'] : 10;
 
         }
@@ -76,6 +82,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             $search_array = array_map( array( 'AWS_Helpers', 'singularize' ), $this->search_terms  );
             $search_array = $this->synonyms( $search_array );
+            $this->search_terms_normalized = $search_array;
             $search_array = $this->get_search_array( $search_array );
 
             $search_array_chars = $this->get_unfiltered_search_array();
@@ -163,7 +170,6 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
 
             $sql = trim( preg_replace( '/\s+/', ' ', $sql ) );
-
 
             /**
              * Filter terms search query
@@ -340,13 +346,13 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             if ( $search_array_chars ) {
                 foreach ( $search_array_chars as $search_array_chars_index => $search_array_chars_term ) {
-                    if ( array_search( $search_array_chars_term, $this->search_terms ) ) {
+                    if ( array_search( $search_array_chars_term, $this->search_terms_normalized ) !== false ) {
                         unset( $search_array_chars[$search_array_chars_index] );
                     }
                 }
             }
 
-            if ( count( $search_array_chars ) === 1 && $search_array_chars[0] === $this->search_string_unfiltered ) {
+            if ( count( $search_array_chars ) === 1 && array_values($search_array_chars)[0] === $this->search_string_unfiltered ) {
                 $search_array_chars = array();
             }
 

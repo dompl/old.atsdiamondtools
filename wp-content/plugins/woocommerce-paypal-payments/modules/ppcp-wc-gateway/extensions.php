@@ -15,7 +15,7 @@ use WooCommerce\PayPalCommerce\Session\SessionHandler;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 use WooCommerce\WooCommerce\Logging\Logger\NullLogger;
 use WooCommerce\WooCommerce\Logging\Logger\WooCommerceLogger;
-use Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 return array(
@@ -99,5 +99,13 @@ return array(
 		);
 	},
 
-	'wcgateway.settings.fields'      => require __DIR__ . '/connection-tab-settings.php',
+	'wcgateway.settings.fields'      => function ( ContainerInterface $container, array $fields ): array {
+		$get_connection_tab_fields = require __DIR__ . '/connection-tab-settings.php';
+		$connection_tab_fields = $get_connection_tab_fields( $container, $fields ) ?? array();
+
+		$get_pay_later_tab_fields = require __DIR__ . '/pay-later-tab-settings.php';
+		$pay_later_tab_fields = $get_pay_later_tab_fields( $container, $fields ) ?? array();
+
+		return array_merge( $connection_tab_fields, $pay_later_tab_fields );
+	},
 );

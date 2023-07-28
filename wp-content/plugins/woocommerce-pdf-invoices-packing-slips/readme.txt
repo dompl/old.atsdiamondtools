@@ -3,9 +3,9 @@ Contributors: pomegranate, alexmigf, yordansoares, kluver, dpeyou, dwpriv, jhosa
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice, packing slip, export, email, bulk, automatic
 Requires at least: 3.5
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 3.2.4
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,97 @@ There's a setting on the Status tab of the settings page that allows you to togg
 6. Set shop name, address, header logo, etc.
 
 == Changelog ==
+
+= 3.5.6 (2023-06-21) =
+* New: adds a generic shortcode `[wcpdf_download_pdf]` for PDF download links 
+* New: bump preview PDFJS library to v3.7.107
+* Tweak: optimize PDFJS library size
+* Tweak: remove WPO hiring banner from the Status tab
+* Tweak: composer dependencies update
+* Fix: font deletion bug after plugin upgrade
+* Fix: bug on previewing Credit Note if the order has multiple refunds
+* Fix: PHP error on `log_document_creation_trigger_to_order_meta()` function when trying to get order ID and type
+* Translations: Updated translation template (POT)
+* Tested up to WooCommerce 7.8
+
+= 3.5.5 (2023-06-01) =
+* New: toggle display date and created via on document data
+* New: adds support for legacy Sidekick activated licenses in Upgrade tab
+* Tweak: log invoice number generation on setting
+
+= 3.5.4 (2023-05-19) =
+* Tweak: improves code for the upgrade tab get license info function
+* Fix: bug on templates using legacy versions of the Premium Templates extension
+* Fix: string translation issues & updated POT
+* Fix: bug in slug property not set when defining the document number lock name
+
+= 3.5.3 (2023-05-15) =
+* New: display creation trigger in document data and order meta
+* New: detects the extension license status in the Upgrade tab
+* New: invoice number search document setting
+* New: adds new filter to stick Document data metabox: `wpo_wcpdf_sticky_document_data_metabox`
+* Fix: adds semaphore to Invoice number init to prevent concurrent number issues
+* Fix: invoice column hooks only on setting condition
+* Tested up to WooCommerce 7.7
+
+= 3.5.2 (2023-04-12) =
+* New: added upgrade tab
+
+= 3.5.1 (2023-04-07) =
+* Tweak: adds user permission check on AJAX document printed
+* Fix: bug on trying to save bulk document setting on `document_can_be_manually_marked_printed()`
+* Fix: disallow document creation for anonymized orders
+
+= 3.5.0 (2023-04-05) =
+* New: save invoice display date option
+* New: mark/unmark Invoice as printed
+* New: adds notice when RTL is detected
+* New: `wpo_wcpdf_preview_after_reload_settings` action
+* New: `wpo_wcpdf_export_settings` filter
+* Fix: fatal error on WC deactivation
+* Fix: invoice number/date screen options bug with HPOS enabled
+* Tested up to WooCommerce 7.6 & WordPress 6.2
+
+= 3.4.0 (2023-02-20) =
+* New: filter `wpo_wcpdf_settings_user_role_capabilities` to change role capabilities to access plugin settings
+* New: improved debug tools UI
+* New: import/export settings tools
+* New: dompdf upgrade to v2.0.3
+* Fix: save document settings in order meta only on document init
+* Tested up to WooCommerce 7.4
+
+= 3.3.2 (2023-02-03) =
+* New: dompdf upgrade to v2.0.2
+* New: filter to control the value returned by `is_woocommerce_activated()`
+* Fix: JS undefined error when trying to retrieve preview gutter texts
+
+= 3.3.1 (2023-01-20) =
+* Fix: applies `overflow-wrap:anywhere;` to the Simple template `body` in CSS styles
+* Fix: displays a message if the typed next number is superior to MySQL INT max
+* Fix: allow preview gutters text to be translated
+* Fix: settings forms background color issue
+* Fix: PHP notice for undefined index `exists`
+* Fix the year in the date release of v3.3.0 in readme.txt
+
+= 3.3.0 (2023-01-16) =
+* New: WooCommerce HPOS compatibility (beta)
+* New: reschedule the yearly reset of the numbering system on a button from the Status page
+* New: document status table in the Status page
+* New: adds document object argument to PDF maker class constructor
+* New: filter to allow user to disable the documents private data removal: `wpo_wcpdf_remove_order_personal_data`
+* Tweak: optimizes `$wpdb` use on `Sequential_Number_store` class
+* Tweak: improves yearly reset number with Action Scheduler and Updraft Plus Semaphore
+* Fix: replaces the use of the deprecated `wcs_` filter hooks from WooCommerce Subscriptions plugin
+* Fix: bail if document data is empty when saving order
+* Fix: add nonces to several admin unsecure requests
+* Tested up to WooCommerce 7.3
+
+= 3.2.6 (2022-12-15) =
+* Fix: adds nonce check in hide link for attachments hint in admin
+* Tested up to WooCommerce 7.2
+
+= 3.2.5 (2022-11-22) =
+* Fix: allow for WooCommerce Booking without order
 
 = 3.2.4 (2022-11-07) =
 * Tweak: update translation template and files

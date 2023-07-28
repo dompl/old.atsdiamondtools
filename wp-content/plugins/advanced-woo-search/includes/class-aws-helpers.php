@@ -257,6 +257,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 '&#8364;', //euro sign
                 '&euro;', //euro sign
                 '&#8482;', //trade mark sign
+                '&#215;', // multiplication sign
                 '!', //exclamation point
                 '"', //double quotes
                 '#', //number sign
@@ -428,6 +429,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $special_chars = AWS_Helpers::get_special_chars();
 
             $string = AWS_Helpers::html2txt( $string );
+            $string = str_replace( array( '&#215;', '&times;', '×' ), 'x', $string );
             $string = str_replace( $special_chars, '', $string );
             $string = str_replace( array( '&#160;', '&nbsp;' ), ' ', $string );
             $string = trim( $string );
@@ -674,7 +676,9 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             }
 
             foreach ( $options_to_reg as $key => $option ) {
-                icl_register_string( 'aws', $key, $params[$key] );
+                if ( isset( $params[$key] ) ) {
+                    icl_register_string( 'aws', $key, $params[$key] );
+                }
             }
 
         }
@@ -863,6 +867,14 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /**
+         * Get array of default allowed tags for textarea
+         * @return array $tags
+         */
+        static public function kses_textarea_allowed_tags() {
+            return array( 'a', 'br', 'em', 'strong', 'b', 'code', 'blockquote', 'p', 'i' );
+        }
+
+        /**
          * Filter search page results by taxonomies
          * @param array $product_terms Available product terms
          * @param array $filter_terms Filter terms
@@ -922,6 +934,12 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function get_index_options() {
 
+            $index_variations_option = AWS()->get_settings( 'index_variations' );
+            $index_sources_option = AWS()->get_settings( 'index_sources' );
+            $index_shortcodes_option = AWS()->get_settings( 'index_shortcodes' );
+
+            $index_shortcodes = $index_shortcodes_option && $index_shortcodes_option === 'false' ? false : true;
+
             /**
              * Apply or not WP filters to indexed content
              * @since 1.82
@@ -934,10 +952,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
              * @since 2.46
              * @param bool true
              */
-            $do_shortcodes = apply_filters( 'aws_index_do_shortcodes', true );
-
-            $index_variations_option = AWS()->get_settings( 'index_variations' );
-            $index_sources_option = AWS()->get_settings( 'index_sources' );
+            $do_shortcodes = apply_filters( 'aws_index_do_shortcodes', $index_shortcodes );
 
             $index_variations = $index_variations_option && $index_variations_option === 'false' ? false : true;
             $index_title = is_array( $index_sources_option ) && isset( $index_sources_option['title'] ) && ! $index_sources_option['title']  ? false : true;
@@ -976,7 +991,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         static public function get_relevance_scores( $data ) {
 
             $relevance_array = array(
-                'title'   => 200,
+                'title'   => 350,
                 'content' => 100,
                 'id'      => 300,
                 'sku'     => 300,

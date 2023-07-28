@@ -70,26 +70,34 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 
 	private function get_icons() {
 
-		$icons_src = [
-			'visa'       => [
-				'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/visa.png',
-				'alt' => __( 'Visa', 'ag_epdq_server' ),
-			],
-			'maestro'    => [
-				'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/maestro.png',
-				'alt' => __( 'Maestro', 'ag_epdq_server' ),
-			],
-			'amex'       => [
-				'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/amex.png',
-				'alt' => __( 'American Express', 'ag_epdq_server' ),
-			],
-			'mastercard' => [
-				'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/mastercard.png',
-				'alt' => __( 'Mastercard', 'ag_epdq_server' ),
-			]
-		];
+
+		$epdq_settings = new epdq_checkout();
+		$icons_src = array();
+		if( ! $epdq_settings->cardtypes ) {
+
+			$icons_src = [
+				$epdq_settings->title => [
+					'src' => AG_ePDQ_server_path . 'inc/assets/img/new_cards.png',
+					'alt' => $epdq_settings->title,
+				],
+			];
+
+		} else {
+
+			foreach( $epdq_settings->cardtypes as $cardtype ) {
+
+				$icons_src[ strtolower( $cardtype ) ] = array(
+					'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $cardtype ) . '.png',
+					'alt' => $cardtype,
+				);
+
+			}
+
+		}
 
 		return $icons_src;
+
+
 	}
 
 

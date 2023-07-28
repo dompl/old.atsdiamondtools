@@ -31,6 +31,11 @@ class Ignition_Updater_Admin {
 
 	private $my_account_url;
 	private $my_subscriptions_url;
+	
+	public $licence_hash;
+	public $product_id;
+	public $slug;
+	public $dir;
 
 	/**
 	 * Constructor.

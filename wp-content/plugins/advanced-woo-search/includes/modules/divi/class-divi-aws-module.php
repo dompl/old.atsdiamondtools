@@ -3,7 +3,7 @@
 add_action('et_builder_ready', 'aws_divi_register_modules');
 function aws_divi_register_modules() {
 
-    if ( class_exists( 'ET_Builder_Module' ) ):
+    if ( class_exists( 'ET_Builder_Module' ) && ! class_exists( 'Divi_AWS_Module' ) ):
 
         class Divi_AWS_Module extends ET_Builder_Module {
 

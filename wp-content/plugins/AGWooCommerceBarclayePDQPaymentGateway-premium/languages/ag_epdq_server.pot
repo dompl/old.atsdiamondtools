@@ -1,15 +1,15 @@
-# Copyright (C) 2022 We are AG
+# Copyright (C) 2023 We are AG
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.4.4\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.5.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-10-28T14:11:23+00:00\n"
+"POT-Creation-Date: 2023-06-02T14:20:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: ag_epdq_server\n"
@@ -30,27 +30,20 @@ msgstr ""
 msgid "We are AG"
 msgstr ""
 
-#: inc/blocks/ePDQ-class.php:77
-#: inc/classes/class-settings.php:138
-msgid "Visa"
+#: inc/classes/class-epdq-authorization-capture.php:86
+msgid "Are you sure you wish to check the status of this order? "
 msgstr ""
 
-#: inc/blocks/ePDQ-class.php:81
-#: inc/classes/class-settings.php:137
-msgid "Maestro"
+#: inc/classes/class-epdq-authorization-capture.php:88
+msgid "Something went wrong, and the capture of payment could not be completed. Please try again. "
 msgstr ""
 
-#: inc/blocks/ePDQ-class.php:85
-#: inc/classes/class-settings.php:136
-msgid "American Express"
-msgstr ""
-
-#: inc/blocks/ePDQ-class.php:89
-msgid "Mastercard"
+#: inc/classes/class-epdq-authorization-capture.php:118
+msgid "PAYID is missing from this order, you will need to manually refund this order in the ePDQ back office."
 msgstr ""
 
 #: inc/classes/class-epdq-error-codes.php:28
-#: inc/classes/class-main.php:855
+#: inc/classes/class-order.php:143
 msgid "Incomplete or invalid"
 msgstr ""
 
@@ -1934,31 +1927,31 @@ msgstr ""
 msgid "Payer's account number not know."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:44
+#: inc/classes/class-epdq-wizard.php:43
 msgid "Step One"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:49
+#: inc/classes/class-epdq-wizard.php:48
 msgid "Step Two"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:54
+#: inc/classes/class-epdq-wizard.php:53
 msgid "Step Three"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:59
+#: inc/classes/class-epdq-wizard.php:58
 msgid "Step Four"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:64
+#: inc/classes/class-epdq-wizard.php:63
 msgid "Step Five"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:69
+#: inc/classes/class-epdq-wizard.php:68
 msgid "Step Six"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:74
+#: inc/classes/class-epdq-wizard.php:73
 msgid "Finish"
 msgstr ""
 
@@ -1970,267 +1963,267 @@ msgstr ""
 msgid "Get your payment gateway up and running in no time. Go grab a cuppa and click the button when you are ready."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:110
+#: inc/classes/class-epdq-wizard.php:111
 msgid "Step 1"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:112
+#: inc/classes/class-epdq-wizard.php:113
 msgid ""
 "The ePDQ team will supply you with two logins, one for test and the other for live.<br/>\n"
 "                It is always best practice when setting up a payment gateway to do this in test mode first and run several orders before switching to live mode."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:116
-#: inc/classes/class-epdq-wizard.php:134
-#: inc/classes/class-epdq-wizard.php:147
-#: inc/classes/class-epdq-wizard.php:216
-#: inc/classes/class-epdq-wizard.php:271
-#: inc/classes/class-epdq-wizard.php:356
-#: inc/classes/class-epdq-wizard.php:421
-#: inc/classes/class-epdq-wizard.php:438
-#: inc/classes/class-epdq-wizard.php:471
-#: inc/classes/class-epdq-wizard.php:551
+#: inc/classes/class-epdq-wizard.php:117
+#: inc/classes/class-epdq-wizard.php:136
+#: inc/classes/class-epdq-wizard.php:149
+#: inc/classes/class-epdq-wizard.php:219
+#: inc/classes/class-epdq-wizard.php:274
+#: inc/classes/class-epdq-wizard.php:361
+#: inc/classes/class-epdq-wizard.php:430
+#: inc/classes/class-epdq-wizard.php:448
+#: inc/classes/class-epdq-wizard.php:483
+#: inc/classes/class-epdq-wizard.php:569
 msgid "Note"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:117
+#: inc/classes/class-epdq-wizard.php:118
 msgid "You must first do a test transaction using the test ePDQ account."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:118
+#: inc/classes/class-epdq-wizard.php:119
 msgid "Whatever changes to make in the ePDQ test account you must match in the ePDQ live account."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:122
+#: inc/classes/class-epdq-wizard.php:123
 msgid ""
 "We now need to make changes to your test ePDQ account, you can login to the test account <a target=\"_blank\" href=\"https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/\">here</a>.<br /><br /> \n"
 "            Once logged in you will see something like below."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:135
+#: inc/classes/class-epdq-wizard.php:137
 msgid "As mentioned above its important to make sure you use the plugin in test mode and use the ePDQ test account, linking the plugin in test mode to the live ePDQ account will not work."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:139
+#: inc/classes/class-epdq-wizard.php:141
 msgid "How to know if you are using the ePDQ test account? When you have logged in look to the Barclaycard logo, to the right of it you will see TEST in red like this:"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:148
+#: inc/classes/class-epdq-wizard.php:150
 msgid "If you don’t have access to the test account, you/your client will need to email the ePDQ team here: <a href=\"mailto:epdqsupport@barclaycard.co.uk\">epdqsupport@barclaycard.co.uk</a> and ask for logins again. Its also important to note that if the ePDQ account is new you won’t be able to switch to live mode until you have done several test orders and applied to go live (You will see the option the main ePDQ Home screen)."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:152
+#: inc/classes/class-epdq-wizard.php:154
 msgid "Lets start with your PSPID, this is your ePDQ login ID."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:193
+#: inc/classes/class-epdq-wizard.php:195
 msgid "Step 2"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:195
+#: inc/classes/class-epdq-wizard.php:197
 msgid ""
 "In this section, we pick and match the SHA encryption method we set in the plugin settings.<br/>\n"
 "                Technical information > Global transaction parameters to set this in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:207
+#: inc/classes/class-epdq-wizard.php:210
 msgid "Based on these two steps, you can choose between two default operation codes:"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:211
+#: inc/classes/class-epdq-wizard.php:214
 msgid "<strong>Authorisation</strong>:&nbsp;our system will only ask for an authorisation, in order to have the authorisation and data capture (payment request) steps performed separately at different times (the money remains in the customer’s account until a data capture (payment request) has been performed)."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:212
+#: inc/classes/class-epdq-wizard.php:215
 msgid "<li><strong>Sale</strong>:&nbsp;our system automatically requests the payment (transfer of the amount) immediately after a successful authorisation. This procedure is often used for goods/services delivered online."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:217
+#: inc/classes/class-epdq-wizard.php:220
 msgid "If you are unsure what to enable ask your client what they have been using, most users enable the sale method but it is down to how the business operates."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:257
+#: inc/classes/class-epdq-wizard.php:259
 msgid "Step 3"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:259
+#: inc/classes/class-epdq-wizard.php:261
 msgid ""
 "Next we are going to pick the SHA encryption method.<br />\n"
 "                Technical information > Global security parameters to set this in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:272
+#: inc/classes/class-epdq-wizard.php:275
 msgid "We recommend using SHA-256 or SHA-512."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:276
-#: inc/classes/class-settings.php:80
+#: inc/classes/class-epdq-wizard.php:279
+#: inc/classes/class-settings.php:79
 msgid "SHA encryption method"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:280
+#: inc/classes/class-epdq-wizard.php:283
 msgid "Select One"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:322
+#: inc/classes/class-epdq-wizard.php:324
 msgid "Step 4"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:324
+#: inc/classes/class-epdq-wizard.php:326
 msgid ""
 "Next we are going to set the SHA-IN pass phrase and the URL of the merchant page.<br />\n"
 "                Technical information > Data and origin verification to set this in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:329
+#: inc/classes/class-epdq-wizard.php:331
 msgid "The first item is setting the payment page URL, this is the domain before the customer is sent to the ePDQ servers to make the payment, It normally looks like the following:"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:333
+#: inc/classes/class-epdq-wizard.php:336
 msgid "without this set correctly the payment gateway will not work, it is possible to have multiple domains/websites in this field also. Simply add a ; between the URLs as shown."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:344
+#: inc/classes/class-epdq-wizard.php:348
 msgid "Next item here is the SHA-IN (this is a basically a password), this must match what you have in the plugin settings, We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:357
+#: inc/classes/class-epdq-wizard.php:362
 msgid ""
 "You only need to edit the top two fields \"URL of the merchant page containing the payment form that will call the page...\" and the \"SHA-IN pass phrase\".<br />\n"
 "                <strong>Do not</strong> place the SHA-IN pass phrase on the fields under the \"Checks For Barclaycard Direct Link\" as this may cause your payments to not go through."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:398
+#: inc/classes/class-epdq-wizard.php:403
 msgid "Step 5"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:400
+#: inc/classes/class-epdq-wizard.php:405
 msgid ""
 "Next we we have a few settings to set in the transaction feedback section.<br />\n"
 "                Technical information > Transaction feedback to set this in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:412
+#: inc/classes/class-epdq-wizard.php:418
 msgid "First we need to make sure that the tick box labelled \"I would like to receive transaction feedback parameters on the redirection URLs.\" is ticked."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:416
+#: inc/classes/class-epdq-wizard.php:422
 msgid "I have ticked the checkbox in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:422
+#: inc/classes/class-epdq-wizard.php:431
 msgid "Without this ticked the ePDQ system wont send data back to the website. This means you will get orders with pending payment and then fail."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:423
+#: inc/classes/class-epdq-wizard.php:432
 msgid "There should be nothing in the four fields above this tick box, the plugin will do all the hard work of setting these URLs on its own."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:427
+#: inc/classes/class-epdq-wizard.php:436
 msgid "Next we are going to set the SHA-OUT, you will need to scroll down a little to see the option."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:439
+#: inc/classes/class-epdq-wizard.php:449
 msgid "We recommend that you use letters and numbers only in this setting and that it has a maximum of 16 characters."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:448
+#: inc/classes/class-epdq-wizard.php:459
 msgid ""
 "The final item in this step is setting the parameters which will be sent back to the website.<br />\n"
 "                This is in the Dynamic e-Commerce parameters section."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:460
+#: inc/classes/class-epdq-wizard.php:472
 msgid "You <strong>only</strong> want the following in the selected section:<br />"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:472
+#: inc/classes/class-epdq-wizard.php:484
 msgid "On PC/Windows you can select multiple by holding CTRL and clicking the items you want."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:473
+#: inc/classes/class-epdq-wizard.php:485
 msgid "On Mac you can select multiple by holding Command key and clicking the items you want."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:477
+#: inc/classes/class-epdq-wizard.php:489
 msgid "I have set the correct parameters in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:520
+#: inc/classes/class-epdq-wizard.php:534
 msgid "Step 6"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:522
+#: inc/classes/class-epdq-wizard.php:536
 msgid " We are almost done now, well done!"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:525
+#: inc/classes/class-epdq-wizard.php:539
 msgid ""
 "We now need to make sure that we have 3D Secure enabled.<br />\n"
 "                Advanced > Fraud detection to set this in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:537
+#: inc/classes/class-epdq-wizard.php:552
 msgid "The key here is to make sure that 3D secure is active on the card brands you wish to use on the website."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:541
+#: inc/classes/class-epdq-wizard.php:556
 msgid "I have 3D Secure enabled in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:546
+#: inc/classes/class-epdq-wizard.php:564
 msgid ""
 "Now the important thing to do is test the payment gateway a few times before going live.<br /><br/>\n"
 "                If you have any errors/issues you first want to check the ePDQ error log section in the back office."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:552
+#: inc/classes/class-epdq-wizard.php:570
 msgid "In the description field, you will most likely find an error code, something like <strong>unknown order/1/r</strong> if you do you can have a look <a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/error-codes/\" target=\"_blank\">here</a> at the troubleshooting error codes. There you will find out what the issues is and what is needed to fix it."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:556
+#: inc/classes/class-epdq-wizard.php:574
 msgid "The plugin has a debug log system that catches most errors or issues, this is a good starting point should you have any issues."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:560
+#: inc/classes/class-epdq-wizard.php:578
 msgid "I would like to enable the plugins error log."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:567
+#: inc/classes/class-epdq-wizard.php:587
 msgid "I would like to add a test product."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:631
+#: inc/classes/class-epdq-wizard.php:653
 msgid "Congratulations! 🎉"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:633
+#: inc/classes/class-epdq-wizard.php:655
 msgid ""
 "The plugin has been setup and your gateways is ready.<br />\n"
 "                Tell the world how easy this setup was!"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:664
+#: inc/classes/class-epdq-wizard.php:686
 msgid "Please come back and <a href=\"https://weareag.co.uk/product/ag-barclays-epdq-payment-gateway-woocommerce/\" target=\"_blank\">leave a 5-star rating</a> if you are happy with this plugin."
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:669
+#: inc/classes/class-epdq-wizard.php:690
 msgid "More Resources"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:673
+#: inc/classes/class-epdq-wizard.php:694
 msgid "Read the Documentation"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:678
+#: inc/classes/class-epdq-wizard.php:699
 msgid "See the troubleshooting section"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:683
+#: inc/classes/class-epdq-wizard.php:705
 msgid "Leave a review"
 msgstr ""
 
-#: inc/classes/class-epdq-wizard.php:688
+#: inc/classes/class-epdq-wizard.php:710
 msgid "Get Help and Support"
 msgstr ""
 
@@ -2248,279 +2241,334 @@ msgstr ""
 msgid "AG ePDQ Server Gateway"
 msgstr ""
 
-#: inc/classes/class-helpers.php:148
-msgid "<strong>%s</strong> is enabled, but you dont have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
+#: inc/classes/class-helpers.php:125
+msgid "<strong>%s</strong> is enabled, but you don't have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
 msgstr ""
 
-#: inc/classes/class-main.php:140
+#: inc/classes/class-main.php:131
 msgid "<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target=\"_blank\" href=\"%s\">here</a> for more card numbers, steps on setting up and troubleshooting."
 msgstr ""
 
-#: inc/classes/class-main.php:151
+#: inc/classes/class-main.php:142
 msgid "<span class=\"AG-redirect-icon\"><img src=\"%s\" /></span>"
 msgstr ""
 
-#: inc/classes/class-main.php:152
+#: inc/classes/class-main.php:143
 msgid "<p class=\"AG-redirect-notice\">After clicking \"Place order\", you will be redirected to Barclays to complete your purchase securely.</p>"
 msgstr ""
 
-#: inc/classes/class-main.php:219
+#: inc/classes/class-main.php:207
 msgid "AG ePDQ Checkout Settings"
 msgstr ""
 
-#: inc/classes/class-main.php:220
+#: inc/classes/class-main.php:208
 msgid "This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website."
 msgstr ""
 
-#: inc/classes/class-main.php:222
+#: inc/classes/class-main.php:210
 msgid "Having issues setting up the plugin? Why not try the setup wizard <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:481
-#: inc/classes/class-wc-subscriptions.php:228
+#: inc/classes/class-main.php:453
 msgid "Pay securely"
 msgstr ""
 
-#: inc/classes/class-main.php:482
-#: inc/classes/class-wc-subscriptions.php:229
-msgid "Cancel order &amp; restore cart"
-msgstr ""
-
-#: inc/classes/class-main.php:486
+#: inc/classes/class-main.php:458
 msgid "You are now being redirected to Barclaycard to make payment securely."
 msgstr ""
 
-#: inc/classes/class-main.php:776
+#: inc/classes/class-main.php:640
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:806
-msgid "Barclays ePDQ transaction is confirmed."
-msgstr ""
-
-#: inc/classes/class-main.php:817
-msgid "Barclays ePDQ transaction is awaiting for confirmation."
-msgstr ""
-
-#: inc/classes/class-main.php:825
-msgid "Barclays ePDQ transaction was refused."
-msgstr ""
-
-#: inc/classes/class-main.php:835
-msgid "Barclays ePDQ payment uncertain."
-msgstr ""
-
-#: inc/classes/class-main.php:844
-msgid "The customer has cancelled the transaction"
-msgstr ""
-
-#: inc/classes/class-main.php:897
+#: inc/classes/class-main.php:683
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:902
+#: inc/classes/class-main.php:688
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:908
+#: inc/classes/class-main.php:694
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:914
+#: inc/classes/class-main.php:700
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:978
-msgid "Refund successful"
+#: inc/classes/class-main.php:744
+msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:979
+#: inc/classes/class-main.php:744
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:980
+#: inc/classes/class-main.php:744
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:981
-#: inc/classes/class-main.php:987
+#: inc/classes/class-main.php:744
+#: inc/classes/class-main.php:749
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:987
+#: inc/classes/class-main.php:749
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:988
+#: inc/classes/class-main.php:750
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:988
+#: inc/classes/class-main.php:750
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:992
-#: inc/classes/class-main.php:998
+#: inc/classes/class-main.php:754
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:128
+#: inc/classes/class-order-status-check.php:113
 msgid "AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:129
-#: inc/classes/class-order-status-check.php:334
+#: inc/classes/class-order-status-check.php:114
+#: inc/classes/class-order-status-check.php:332
+#: inc/classes/class-order.php:42
 msgid "ePDQ Status:"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:136
-#: inc/classes/class-order-status-check.php:341
+#: inc/classes/class-order-status-check.php:119
+#: inc/classes/class-order-status-check.php:337
 msgid "Order ID:"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:137
-#: inc/classes/class-order-status-check.php:342
+#: inc/classes/class-order-status-check.php:120
+#: inc/classes/class-order-status-check.php:338
 msgid "Payment Reference In ePDQ System:"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:146
-#: inc/classes/class-order-status-check.php:347
+#: inc/classes/class-order-status-check.php:129
+#: inc/classes/class-order-status-check.php:343
 msgid " and Barclays ePDQ has confirmed the transaction."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:148
-#: inc/classes/class-order-status-check.php:349
+#: inc/classes/class-order-status-check.php:131
+#: inc/classes/class-order-status-check.php:345
 msgid "Barclays ePDQ transaction is confirmed"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:165
-#: inc/classes/class-order-status-check.php:365
+#: inc/classes/class-order-status-check.php:148
+#: inc/classes/class-order-status-check.php:361
 msgid " and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:173
-#: inc/classes/class-order-status-check.php:373
+#: inc/classes/class-order-status-check.php:156
+#: inc/classes/class-order-status-check.php:369
+msgid " and You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:165
+#: inc/classes/class-order-status-check.php:378
 msgid " and Barclays ePDQ has refused the transaction."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:182
-#: inc/classes/class-order-status-check.php:382
+#: inc/classes/class-order-status-check.php:174
+#: inc/classes/class-order-status-check.php:387
 msgid " and Barclays ePDQ has reported the payment is uncertain."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:193
-#: inc/classes/class-order-status-check.php:393
+#: inc/classes/class-order-status-check.php:185
+#: inc/classes/class-order-status-check.php:398
 msgid " and ePDQ has confirmed the customer has cancelled the transaction"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:204
-#: inc/classes/class-order-status-check.php:407
+#: inc/classes/class-order-status-check.php:196
+#: inc/classes/class-order.php:70
+msgid "Barclays ePDQ transaction has been Authorised."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:199
+#: inc/classes/class-order-status-check.php:412
+#: inc/classes/class-order.php:71
+msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:211
+#: inc/classes/class-order-status-check.php:425
 msgid " and has come back as Incomplete or invalid"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:246
+#: inc/classes/class-order-status-check.php:253
 #: inc/classes/Moto/class-moto.php:69
 msgid "Are you sure you wish to check the status of this order?"
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:248
+#: inc/classes/class-order-status-check.php:255
 msgid "Something went wrong, and the order status check could not be completed. Please try again."
 msgstr ""
 
-#: inc/classes/class-order-status-check.php:333
+#: inc/classes/class-order-status-check.php:331
 msgid "AG ePDQ order status check was manually checked"
 msgstr ""
 
-#: inc/classes/class-settings.php:24
-#: inc/classes/class-settings.php:93
+#: inc/classes/class-order.php:43
+msgid "ePDQ NCERROR:"
+msgstr ""
+
+#: inc/classes/class-order.php:59
+msgid "Barclays ePDQ transaction is confirmed."
+msgstr ""
+
+#: inc/classes/class-order.php:61
+msgid "This was a MOTO payment."
+msgstr ""
+
+#: inc/classes/class-order.php:78
+msgid "The authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
+msgstr ""
+
+#: inc/classes/class-order.php:82
+#: inc/classes/class-order.php:91
+msgid "The data capture will be processed offline."
+msgstr ""
+
+#: inc/classes/class-order.php:87
+msgid "Barclays ePDQ capture is processing."
+msgstr ""
+
+#: inc/classes/class-order.php:89
+msgid "It can take upto 15 minutes for the capture processing to complete on the ePDQ platform. If you have our webhook enabled in your ePDQ back office, the order will auto update. Without the webhook you will need to manually check the status of the order using the \"Status Check\" feature after 15 minutes of capturing the payment to double check the order."
+msgstr ""
+
+#: inc/classes/class-order.php:97
+msgid "Barclays ePDQ transaction was refused."
+msgstr ""
+
+#: inc/classes/class-order.php:102
+msgid "The authorisation has been refused by the financial institution, please try again."
+msgstr ""
+
+#: inc/classes/class-order.php:108
+msgid "Barclays ePDQ payment uncertain."
+msgstr ""
+
+#: inc/classes/class-order.php:113
+msgid "A technical problem arose during the authorisation/payment process, giving an unpredictable result."
+msgstr ""
+
+#: inc/classes/class-order.php:120
+msgid "Barclays ePDQ refund has been processed."
+msgstr ""
+
+#: inc/classes/class-order.php:128
+msgid "There was an issue processing the Barclays ePDQ refund."
+msgstr ""
+
+#: inc/classes/class-order.php:132
+msgid "The customer has cancelled the transaction"
+msgstr ""
+
+#: inc/classes/class-settings.php:23
+#: inc/classes/class-settings.php:92
 msgid "Enable/Disable"
 msgstr ""
 
-#: inc/classes/class-settings.php:26
+#: inc/classes/class-settings.php:25
 msgid "Enable ePDQ Checkout"
 msgstr ""
 
-#: inc/classes/class-settings.php:30
+#: inc/classes/class-settings.php:29
 msgid "Logo for payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:32
+#: inc/classes/class-settings.php:31
 msgid "Upload image for payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:38
+#: inc/classes/class-settings.php:37
 msgid "Title"
 msgstr ""
 
-#: inc/classes/class-settings.php:40
+#: inc/classes/class-settings.php:39
 msgid "Title of the payment process. This name will be visible throughout the site and the payment page."
 msgstr ""
 
-#: inc/classes/class-settings.php:45
+#: inc/classes/class-settings.php:44
 msgid "Description"
 msgstr ""
 
-#: inc/classes/class-settings.php:47
+#: inc/classes/class-settings.php:46
 msgid "Description of the payment process. This description will be visible throughout the site and the payment page."
 msgstr ""
 
-#: inc/classes/class-settings.php:52
+#: inc/classes/class-settings.php:51
 msgid "PSPID"
 msgstr ""
 
-#: inc/classes/class-settings.php:54
+#: inc/classes/class-settings.php:53
 msgid "The PSPID for your barclays account. This is the id which you use to login the admin panel of the barclays bank. <small><strong>Remember you must test using the test ePDQ account Barclays supply you</strong></small>"
 msgstr ""
 
-#: inc/classes/class-settings.php:59
+#: inc/classes/class-settings.php:58
 msgid "Store Status"
 msgstr ""
 
-#: inc/classes/class-settings.php:62
+#: inc/classes/class-settings.php:61
 msgid "The status of your store tells that are you actually ready to run your shop or its still a test environment. If the test is selected then no payments will be processed. For details please refer to the user guide provided by the Barclays EPDQ servise."
 msgstr ""
 
-#: inc/classes/class-settings.php:68
+#: inc/classes/class-settings.php:67
 msgid "SHA-IN Passphrase"
 msgstr ""
 
-#: inc/classes/class-settings.php:70
+#: inc/classes/class-settings.php:69
 msgid "The SHA-IN signature will encode the data passed to the payment processor to ensure better security."
 msgstr ""
 
-#: inc/classes/class-settings.php:74
+#: inc/classes/class-settings.php:73
 msgid "SHA-OUT Passphrase"
 msgstr ""
 
-#: inc/classes/class-settings.php:76
+#: inc/classes/class-settings.php:75
 msgid "The SHA-OUT signature will encode the data passed back from the payment processor to ensure better security."
 msgstr ""
 
-#: inc/classes/class-settings.php:88
+#: inc/classes/class-settings.php:87
 msgid "Sha encryption method - this needs to match what you have set in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-settings.php:95
+#: inc/classes/class-settings.php:94
 msgid "Enable Tokenization"
 msgstr ""
 
-#: inc/classes/class-settings.php:97
+#: inc/classes/class-settings.php:96
 msgid "Enable to allow customers to save their payment methods for future checkouts. Customers will be able to manage their saved payment methods on the WooCommerce My Account page. <br />When this is enabled, saved credit card information isn’t stored on your site’s server. It is tokenized and stored on ePDQ’s servers.<br /><strong><a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/utilizing-credit-card-tokenization/\" target=\"_blank\">Please follow our guide here on the full setup of this feature.</a></strong>"
 msgstr ""
 
-#: inc/classes/class-settings.php:100
+#: inc/classes/class-settings.php:99
 msgid "Tip"
 msgstr ""
 
-#: inc/classes/class-settings.php:102
+#: inc/classes/class-settings.php:101
 msgid "Want to store your API details in a more secure way, read through our doc <a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/\" target=\"_blank\">here</a>"
 msgstr ""
 
-#: inc/classes/class-settings.php:105
+#: inc/classes/class-settings.php:104
+msgid "Webhook"
+msgstr ""
+
+#: inc/classes/class-settings.php:106
+msgid "The plugin now has a custom webhook, read through our doc <a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/webhook/setting-up-the-new-webhook-feature/\" target=\"_blank\">here</a>.<br />Your URL for the ePDQ back office is: <strong>"
+msgstr ""
+
+#: inc/classes/class-settings.php:109
 msgid "Dynamic template URL"
 msgstr ""
 
-#: inc/classes/class-settings.php:107
+#: inc/classes/class-settings.php:111
 msgid ""
 "The dynamic template page allows you to customise the design of the payment pages in a more advanced way than the static template does.\n"
 "\n"
@@ -2529,196 +2577,205 @@ msgid ""
 "                    Please bear in mind that using a dynamic template page involves an additional request from our system to look up your template page. This increases the time needed for the payment process."
 msgstr ""
 
-#: inc/classes/class-settings.php:115
+#: inc/classes/class-settings.php:119
 msgid "Layout of the payment methods"
 msgstr ""
 
-#: inc/classes/class-settings.php:119
+#: inc/classes/class-settings.php:123
 msgid "You can arrange the layout/list of the payment methods on Barclays payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:122
+#: inc/classes/class-settings.php:126
 msgid "Horizontally grouped logos with the group name on the left (default value)"
 msgstr ""
 
-#: inc/classes/class-settings.php:123
+#: inc/classes/class-settings.php:127
 msgid "Horizontally grouped logos with no group names"
 msgstr ""
 
-#: inc/classes/class-settings.php:124
+#: inc/classes/class-settings.php:128
 msgid "Vertical list of logos with specific payment method or brand name"
 msgstr ""
 
-#: inc/classes/class-settings.php:128
+#: inc/classes/class-settings.php:132
 msgid "Accepted Cards"
 msgstr ""
 
-#: inc/classes/class-settings.php:132
+#: inc/classes/class-settings.php:136
 msgid "Select which card types to accept. This is to show card icons on the checkout only."
 msgstr ""
 
-#: inc/classes/class-settings.php:135
+#: inc/classes/class-settings.php:139
 msgid "MasterCard"
 msgstr ""
 
-#: inc/classes/class-settings.php:139
-msgid "JCB"
-msgstr ""
-
 #: inc/classes/class-settings.php:140
-msgid "Diners"
+msgid "American Express"
 msgstr ""
 
 #: inc/classes/class-settings.php:141
-msgid "Discover"
+msgid "Maestro"
+msgstr ""
+
+#: inc/classes/class-settings.php:142
+msgid "Visa"
+msgstr ""
+
+#: inc/classes/class-settings.php:143
+msgid "JCB"
+msgstr ""
+
+#: inc/classes/class-settings.php:144
+msgid "Diners"
 msgstr ""
 
 #: inc/classes/class-settings.php:145
+msgid "Discover"
+msgstr ""
+
+#: inc/classes/class-settings.php:149
 msgid "Enable the redirect notice"
 msgstr ""
 
-#: inc/classes/class-settings.php:147
+#: inc/classes/class-settings.php:151
 msgid "Show customers a notice at checkout that they will be redirected to Barclays server to complete the payment securely"
 msgstr ""
 
-#: inc/classes/class-settings.php:151
+#: inc/classes/class-settings.php:155
 msgid "Enable Debug"
 msgstr ""
 
-#: inc/classes/class-settings.php:159
+#: inc/classes/class-settings.php:163
 msgid "Refunds & Status Check API Details"
 msgstr ""
 
-#: inc/classes/class-settings.php:161
+#: inc/classes/class-settings.php:165
 msgid "Enable refunds and status check via website."
 msgstr ""
 
-#: inc/classes/class-settings.php:165
+#: inc/classes/class-settings.php:169
 msgid "API User IDs"
 msgstr ""
 
-#: inc/classes/class-settings.php:169
+#: inc/classes/class-settings.php:173
 msgid "API User Password"
 msgstr ""
 
-#: inc/classes/class-settings.php:173
+#: inc/classes/class-settings.php:177
 msgid "API REFID"
 msgstr ""
 
-#: inc/classes/class-settings.php:175
+#: inc/classes/class-settings.php:179
 msgid "you will find this under the user ID in edit user on the ePDQ back office."
 msgstr ""
 
-#: inc/classes/class-settings.php:179
+#: inc/classes/class-settings.php:183
 msgid "Disable auto status check"
 msgstr ""
 
-#: inc/classes/class-settings.php:186
+#: inc/classes/class-settings.php:191
 msgid "Enable AG Fraud Check"
 msgstr ""
 
 #: inc/classes/Fraudchecks/fraud-checks.php:50
-msgid "AG Order Check"
+#: inc/classes/Fraudchecks/fraud-checks.php:429
+msgid "AG Traffic Light System"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:257
+#: inc/classes/Fraudchecks/fraud-checks.php:251
 msgid "The Address is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:260
+#: inc/classes/Fraudchecks/fraud-checks.php:254
 msgid "The address has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:263
+#: inc/classes/Fraudchecks/fraud-checks.php:257
 msgid "Invalid or no Address has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:272
+#: inc/classes/Fraudchecks/fraud-checks.php:266
 msgid "The Postal Code is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:275
+#: inc/classes/Fraudchecks/fraud-checks.php:269
 msgid "The Postal Code has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:278
+#: inc/classes/Fraudchecks/fraud-checks.php:272
 msgid "Invalid or no Postal Code has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:281
+#: inc/classes/Fraudchecks/fraud-checks.php:275
 msgid "Parameters for Postal Code has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:287
+#: inc/classes/Fraudchecks/fraud-checks.php:281
 msgid "The CVC has been sent and the acquirer has given a positive response to the CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:290
+#: inc/classes/Fraudchecks/fraud-checks.php:284
 msgid "The CVC has been sent but the acquirer has given a negative response to the CVC check, i.e. the CVC is wrong."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:293
+#: inc/classes/Fraudchecks/fraud-checks.php:287
 msgid "Invalid or no CVC has been transmitted"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:296
+#: inc/classes/Fraudchecks/fraud-checks.php:290
 msgid "Parameters for CVC has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:319
+#: inc/classes/Fraudchecks/fraud-checks.php:313
 msgid "Address Check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:322
+#: inc/classes/Fraudchecks/fraud-checks.php:316
 msgid "Postcode check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:325
+#: inc/classes/Fraudchecks/fraud-checks.php:319
 msgid "CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:328
+#: inc/classes/Fraudchecks/fraud-checks.php:322
 msgid "3D Secure check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:365
+#: inc/classes/Fraudchecks/fraud-checks.php:368
 msgid "Manually keyed (MOTO) (card not present)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:369
+#: inc/classes/Fraudchecks/fraud-checks.php:372
 msgid "Recurring (from MOTO)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:373
+#: inc/classes/Fraudchecks/fraud-checks.php:376
 msgid "Installment payments"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:377
+#: inc/classes/Fraudchecks/fraud-checks.php:380
 msgid "Manually keyed, card present"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:381
+#: inc/classes/Fraudchecks/fraud-checks.php:384
 msgid "Cardholder identification successful"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:385
+#: inc/classes/Fraudchecks/fraud-checks.php:388
 msgid "Merchant supports identification but not cardholder,"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:389
+#: inc/classes/Fraudchecks/fraud-checks.php:392
 msgid "E-commerce with SSL encryption"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:393
+#: inc/classes/Fraudchecks/fraud-checks.php:396
 msgid "Recurring (from e-commerce)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:397
+#: inc/classes/Fraudchecks/fraud-checks.php:400
 msgid "Parameters for 3D has not been set."
-msgstr ""
-
-#: inc/classes/Fraudchecks/fraud-checks.php:426
-msgid "AG Order Checks"
 msgstr ""
 
 #: inc/classes/Moto/class-moto.php:71

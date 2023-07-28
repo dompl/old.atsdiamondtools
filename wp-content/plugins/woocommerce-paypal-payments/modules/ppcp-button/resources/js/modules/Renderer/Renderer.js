@@ -32,7 +32,11 @@ class Renderer {
                 if (fundingSource !== 'paypal') {
                     style = {
                         shape: style.shape,
+                        color: style.color,
                     };
+                    if (fundingSource !== 'paylater') {
+                        delete style.color;
+                    }
                 }
 
                 this.renderButtons(
@@ -45,7 +49,9 @@ class Renderer {
             }
         }
 
-        this.creditCardRenderer.render(settings.hosted_fields.wrapper, contextConfig);
+        if (this.creditCardRenderer) {
+            this.creditCardRenderer.render(settings.hosted_fields.wrapper, contextConfig);
+        }
 
         for (const [fundingSource, data] of Object.entries(enabledSeparateGateways)) {
             this.renderButtons(

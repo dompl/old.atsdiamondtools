@@ -762,6 +762,12 @@ msgstr ""
 msgid "Index or not content of product variations."
 msgstr ""
 
+msgid "Run shortcodes"
+msgstr ""
+
+msgid "Execute or not any shortcodes inside product content."
+msgstr ""
+
 msgid "Search results page"
 msgstr ""
 

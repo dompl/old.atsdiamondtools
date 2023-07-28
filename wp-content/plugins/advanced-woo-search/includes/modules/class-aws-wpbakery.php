@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'AWS_WPBakery' ) ) :
+if ( ! class_exists( 'AWS_WPBakery' ) && class_exists('WPBakeryShortCode') ) :
 
 class AWS_WPBakery extends WPBakeryShortCode {
 
@@ -86,6 +86,6 @@ class AWS_WPBakery extends WPBakeryShortCode {
 
 }
 
-endif;
-
 new AWS_WPBakery();
+
+endif;

@@ -403,7 +403,7 @@ SQL;
         $stats['timezone']        = get_option('timezone_string');
         $stats['timezone_offset'] = get_option('gmt_offset');
         $stats['server_ip']       = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : null;
-        $stats['hostname']        = php_uname('n');
+        $stats['hostname']        = $this->get_hostname();
         $stats['db_name']         = $this->get_active_db();
         $stats['db_prefix']       = $wpdb->prefix;
         $stats['content_path']    = WP_CONTENT_DIR;
@@ -631,7 +631,11 @@ SQL;
 
     public function cmp_posts_worker($a, $b)
     {
-        return ($a->post_date < $b->post_date);
+        if ($a->post_date === $b->post_date) {
+            return 0;
+        }
+
+        return ($a->post_date < $b->post_date) ? 1 : -1;
     }
 
     public function trim_content($content = '', $length = 200)
@@ -643,5 +647,18 @@ SQL;
         }
 
         return $content;
+    }
+
+    private function get_hostname()
+    {
+        if (function_exists('php_uname')) {
+            return php_uname('n');
+        }
+
+        if (function_exists('gethostname')) {
+            return gethostname();
+        }
+
+        return 'none';
     }
 }

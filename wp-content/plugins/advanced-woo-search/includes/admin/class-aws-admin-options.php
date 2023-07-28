@@ -46,7 +46,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     }
 
                     if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                        $default_settings[$values['id']] = (string) addslashes( wp_kses( stripslashes( $values['value'] ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                        $default_settings[$values['id']] = (string) addslashes( wp_kses( stripslashes( html_entity_decode( $values['value'] ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
                         continue;
                     }
 
@@ -105,7 +105,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 $new_value = isset( $_POST[ $values['id'] ] ) ? $_POST[ $values['id'] ] : '';
 
                 if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                    $update_settings[ $values['id'] ] = (string) addslashes( wp_kses( stripslashes( $new_value ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                    $update_settings[ $values['id'] ] = (string) addslashes( wp_kses( stripslashes( html_entity_decode( $new_value ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
                     continue;
                 }
 
@@ -445,6 +445,19 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            $options['performance'][] = array(
+                "name"  => __( "Run shortcodes", "advanced-woo-search" ),
+                "desc"  => __( "Execute or not any shortcodes inside product content.", "advanced-woo-search" ),
+                "id"    => "index_shortcodes",
+                "value" => 'true',
+                "inherit" => "true",
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
             // Search Form Settings
             $options['form'][] = array(
                 "name"  => __( "Text for search field", "advanced-woo-search" ),
@@ -468,7 +481,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "id"    => "not_found_text",
                 "value" => __( "Nothing found", "advanced-woo-search" ),
                 "type"  => "textarea",
-                'allow_tags' => array( 'a', 'br', 'em', 'strong', 'b', 'code', 'blockquote', 'p', 'i' )
+                'allow_tags' => AWS_Helpers::kses_textarea_allowed_tags()
             );
 
             $options['form'][] = array(

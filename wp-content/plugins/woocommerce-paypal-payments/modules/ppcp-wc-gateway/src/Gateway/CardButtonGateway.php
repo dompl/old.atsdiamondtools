@@ -23,7 +23,7 @@ use WooCommerce\PayPalCommerce\Vaulting\PaymentTokenRepository;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\GatewayGenericException;
 use WooCommerce\PayPalCommerce\WcGateway\Processor\OrderProcessor;
 use WooCommerce\PayPalCommerce\WcGateway\Processor\RefundProcessor;
-use Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\SettingsRenderer;
 
 /**
@@ -196,7 +196,7 @@ class CardButtonGateway extends \WC_Payment_Gateway {
 			);
 		}
 
-		$this->method_title       = __( 'Advanced Card Processing', 'woocommerce-paypal-payments' );
+		$this->method_title       = __( 'Standard Card Button', 'woocommerce-paypal-payments' );
 		$this->method_description = __( 'The separate payment gateway with the card button. If disabled, the button is included in the PayPal gateway.', 'woocommerce-paypal-payments' );
 		$this->title              = $this->get_option( 'title', __( 'Debit & Credit Cards', 'woocommerce-paypal-payments' ) );
 		$this->description        = $this->get_option( 'description', '' );
@@ -230,7 +230,7 @@ class CardButtonGateway extends \WC_Payment_Gateway {
 			'enabled'     => array(
 				'title'       => __( 'Enable/Disable', 'woocommerce-paypal-payments' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Enable Advanced Card Processing', 'woocommerce-paypal-payments' ),
+				'label'       => __( 'Enable Standard Card Button gateway', 'woocommerce-paypal-payments' ),
 				'default'     => $this->default_enabled ? 'yes' : 'no',
 				'desc_tip'    => true,
 				'description' => __( 'Enable/Disable the separate payment gateway with the card button.', 'woocommerce-paypal-payments' ),
@@ -275,9 +275,11 @@ class CardButtonGateway extends \WC_Payment_Gateway {
 		 * If customer has chosen change Subscription payment.
 		 */
 		if ( $this->subscription_helper->has_subscription( $order_id ) && $this->subscription_helper->is_subscription_change_payment() ) {
-			$saved_paypal_payment = filter_input( INPUT_POST, 'saved_paypal_payment', FILTER_SANITIZE_STRING );
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$saved_paypal_payment = wc_clean( wp_unslash( $_POST['saved_paypal_payment'] ?? '' ) );
 			if ( $saved_paypal_payment ) {
-				update_post_meta( $order_id, 'payment_token_id', $saved_paypal_payment );
+				$wc_order->update_meta_data( 'payment_token_id', $saved_paypal_payment );
+				$wc_order->save();
 
 				return $this->handle_payment_success( $wc_order );
 			}

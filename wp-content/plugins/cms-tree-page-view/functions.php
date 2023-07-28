@@ -100,11 +100,15 @@ function cms_tpv_add_pages() {
 	)
 	*/
 
-	$post_position 	= $_POST["cms_tpv_add_type"];
-	$post_status 	= $_POST["cms_tpv_add_status"];
+	$post_position 	= esc_attr($_POST["cms_tpv_add_type"]);
+	$post_status 	= esc_attr($_POST["cms_tpv_add_status"]);
 	$post_names 	= (array) $_POST["cms_tpv_add_new_pages_names"];
-	$ref_post_id	= (int) $_POST["ref_post_id"];
-	$lang 			= $_POST["lang"];
+	$ref_post_id	= (int) esc_attr($_POST["ref_post_id"]);
+	$lang 			= esc_attr($_POST["lang"]);
+
+	for ($i = 0; $i < count($post_names); $i++) {
+		$post_names[$i] = esc_attr($post_names[$i]);
+	}
 
 	// Check nonce
 	if ( ! check_admin_referer("cms-tpv-add-pages") ) {
@@ -280,7 +284,7 @@ function cms_tpv_admin_head() {
 
 	global $cms_tpv_view;
 	if (isset($_GET["cms_tpv_view"])) {
-		$cms_tpv_view = htmlspecialchars($_GET["cms_tpv_view"]);
+		$cms_tpv_view = esc_attr(htmlspecialchars($_GET["cms_tpv_view"]));
 	} else {
 		$cms_tpv_view = "all";
 	}
@@ -890,11 +894,11 @@ function cms_tpv_get_selected_post_type() {
 	// http://localhost/wp-admin/admin.php?page=cms-tpv-page-movies
 	$post_type = NULL;
 	if (isset($_GET["post_type"])) {
-		$post_type = $_GET["post_type"];
+		$post_type = esc_attr($_GET["post_type"]);
 	}
 	if (!$post_type) {
 		// no post type, happens with ozh admin drop down, so get it via page instead
-		$page = isset($_GET["page"]) ? $_GET["page"] : "";
+		$page = isset($_GET["page"]) ? esc_attr($_GET["page"]) : "";
 		$post_type = str_replace("cms-tpv-page-", "", $page);
 	}
 
@@ -1593,10 +1597,10 @@ function cms_tpv_get_childs() {
 
 	check_ajax_referer('cms-tpv-ajax', 'cms-tpv-nonce');
 
-	$action = $_GET["action"];
-	$view = $_GET["view"]; // all | public | trash
-	$post_type = (isset($_GET["post_type"])) ? $_GET["post_type"] : null;
-	$search = (isset($_GET["search_string"])) ? trim($_GET["search_string"]) : ""; // exits if we're doing a search
+	$action = esc_attr($_GET["action"]);
+	$view = esc_attr($_GET["view"]); // all | public | trash
+	$post_type = (isset($_GET["post_type"])) ? esc_attr($_GET["post_type"]) : null;
+	$search = (isset($_GET["search_string"])) ? esc_attr(trim($_GET["search_string"])) : ""; // exits if we're doing a search
 
 	// Check if user is allowed to get the list. For example subscribers should not be allowed to
 	// Use same capability that is required to add the menu
@@ -1669,7 +1673,7 @@ function cms_tpv_get_childs() {
 
 			// regular get
 
-			$id = (isset($_GET["id"])) ? $_GET["id"] : null;
+			$id = (isset($_GET["id"])) ? esc_attr($_GET["id"]) : null;
 			$id = (int) str_replace("cms-tpv-", "", $id);
 
 			$jstree_open = array();
@@ -1702,9 +1706,9 @@ function cms_tpv_move_page() {
 
 	global $wpdb;
 
-	$node_id = $_POST["node_id"]; // the node that was moved
-	$ref_node_id = $_POST["ref_node_id"];
-	$type = $_POST["type"];
+	$node_id = esc_attr($_POST["node_id"]); // the node that was moved
+	$ref_node_id = esc_attr($_POST["ref_node_id"]);
+	$type = esc_attr($_POST["type"]);
 
 	$node_id = str_replace("cms-tpv-", "", $node_id);
 	$ref_node_id = str_replace("cms-tpv-", "", $ref_node_id);

@@ -401,9 +401,10 @@ class Front_End_Integration implements Integration_Interface {
 		/**
 		 * Filter 'wpseo_frontend_presenter_classes' - Allow filtering presenters in or out of the request.
 		 *
-		 * @api array List of presenters.
+		 * @param array  $presenters List of presenters.
+		 * @param string $page_type  The current page type.
 		 */
-		$presenters = \apply_filters( 'wpseo_frontend_presenter_classes', $presenters );
+		$presenters = \apply_filters( 'wpseo_frontend_presenter_classes', $presenters, $page_type );
 
 		return $presenters;
 	}
@@ -432,6 +433,11 @@ class Front_End_Integration implements Integration_Interface {
 		// Filter out the presenters only needed for singular pages on non-singular pages.
 		if ( ! \in_array( $page_type, [ 'Post_Type', 'Static_Home_Page' ], true ) ) {
 			$presenters = \array_diff( $presenters, $this->singular_presenters );
+		}
+
+		// Filter out `twitter:data` presenters for static home pages.
+		if ( $page_type === 'Static_Home_Page' ) {
+			$presenters = \array_diff( $presenters, $this->slack_presenters );
 		}
 
 		return $presenters;

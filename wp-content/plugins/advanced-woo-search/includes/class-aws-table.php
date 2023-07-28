@@ -36,6 +36,9 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             // Change product status
             add_action( 'wp_insert_post', array( $this, 'product_changed' ), 10, 3 );
 
+            // Scheduled products
+            add_action( 'wp_after_insert_post', array( $this, 'wp_after_insert_post' ), 10, 4 );
+
             // Delete product
             add_action( 'delete_post', array( $this, 'product_deleted' ), 10, 2 );
 
@@ -52,6 +55,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             add_action( 'aws_reindex_table', array( $this, 'reindex_table_job' ) );
 
             add_action( 'aws_reindex_product', array( $this, 'reindex_product_action' ) );
+
+            add_action( 'aws_force_reindex_product', array( $this, 'force_reindex_product_action' ) );
 
         }
 
@@ -527,6 +532,17 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         }
 
         /*
+         * Update index table for scheduled products
+         */
+        public function wp_after_insert_post( $post_id, $post, $update, $post_before ) {
+
+            if ( $update && $post->post_type === 'product' && $post_before && $post_before->post_status === 'future' ) {
+                $this->update_table( $post_id );
+            }
+
+        }
+
+        /*
          * Update index table
          */
         public function woocommerce_after_product_object_save( $product ) {
@@ -593,9 +609,16 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         }
 
         /*
+         * Re-index single product action. Always runs without looking into 'autoupdates' option
+         */
+        public function force_reindex_product_action( $product_id ) {
+            $this->update_table( $product_id, true );
+        }
+
+        /*
          * Update index table
          */
-        private function update_table( $product_id ) {
+        private function update_table( $product_id, $force = false ) {
 
             global $wpdb;
 
@@ -607,7 +630,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
              * @param boolean $sync
              * @param integer $product_id
              */
-            $sync = apply_filters( 'aws_sync_index_table', $sync, $product_id );
+            $sync = $force ? 'true' : apply_filters( 'aws_sync_index_table', $sync, $product_id );
 
             if ( AWS_Helpers::is_table_not_exist() ) {
                 $this->create_table();

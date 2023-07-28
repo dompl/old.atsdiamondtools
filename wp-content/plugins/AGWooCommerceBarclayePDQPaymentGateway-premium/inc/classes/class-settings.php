@@ -1,9 +1,9 @@
 <?php
 /*-----------------------------------------------------------------------------------*/
+
 /*	AG ePDQ settings
 /*-----------------------------------------------------------------------------------*/
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
-
 
 if ( class_exists( 'AG_ePDQ_Settings' ) ) {
 	return;
@@ -17,7 +17,6 @@ class AG_ePDQ_Settings {
 	 * @return array[]
 	 */
 	public static function form_fields() {
-
 
 		return array(
 			'enabled'      => array(
@@ -101,6 +100,11 @@ class AG_ePDQ_Settings {
 				'type'        => 'hidden',
 				'description' => __( 'Want to store your API details in a more secure way, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/" target="_blank">here</a>', 'ag_epdq_server' ),
 			),
+			'webhook'      => array(
+				'title'       => __( 'Webhook', 'ag_epdq_server' ),
+				'type'        => 'hidden',
+				'description' => __( 'The plugin now has a custom webhook, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/webhook/setting-up-the-new-webhook-feature/" target="_blank">here</a>.<br />Your URL for the ePDQ back office is: <strong>' . WC()->api_request_url( 'epdq_checkout_webhook' ) . '</strong>', 'ag_epdq_server' ),
+			),
 			'template'     => array(
 				'title'       => __( 'Dynamic template URL', 'ag_epdq_server' ),
 				'type'        => 'text',
@@ -182,7 +186,8 @@ class AG_ePDQ_Settings {
 				'default'  => 'no',
 				'desc_tip' => false
 			),
-			'fraudCheck'  => array(
+
+			'fraudCheck' => array(
 				'title'       => __( 'Enable AG Fraud Check', 'ag_epdq_server' ),
 				'type'        => 'checkbox',
 				'description' => 'You will need to setup some parameters on transaction feedback <a href="https://mdepayments.epdq.co.uk/Ncol/Test/BackOffice/login/"> here</a> to be able to use this',
@@ -192,4 +197,5 @@ class AG_ePDQ_Settings {
 
 		);
 	}
+
 }

@@ -290,7 +290,11 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                     $order_by = 'price';
                 }
 
-                if ( isset( $query->query_vars['order'] ) ) {
+                if ( is_array( $order_by ) ) {
+                    $order_by = isset( $order_by[0] ) ? $order_by[0] : '';
+                }
+
+                if ( $order_by && isset( $query->query_vars['order'] ) ) {
                     $order_by = $order_by . '-' . strtolower( $query->query_vars['order'] );
                 }
 

@@ -123,7 +123,7 @@ abstract class Order_Document {
 
 		// load settings
 		$this->init_settings_data();
-		$this->save_settings();
+		// check enable
 		$this->enabled = $this->get_setting( 'enabled', false );
 	}
 
@@ -195,6 +195,15 @@ abstract class Order_Document {
 			// in both cases, we store the document settings
 			// exclude non historical settings from being saved in order meta
 			$this->order->update_meta_data( "_wcpdf_{$this->slug}_settings", array_diff_key( $settings, array_flip( $this->get_non_historical_settings() ) ) );
+
+			if ( 'invoice' == $this->slug ) {
+				if ( isset( $settings['display_date'] ) && $settings['display_date'] == 'order_date' ) {
+					$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'order_date' );
+				} else {
+					$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'invoice_date' );
+				}
+			}
+			
 			$this->order->save_meta_data();
 		}
 	}
@@ -263,17 +272,18 @@ abstract class Order_Document {
 		// pass data to setter functions
 		$this->set_data( array(
 			// always load date before number, because date is used in number formatting
-			'date'   => $order->get_meta( "_wcpdf_{$this->slug}_date" ),
-			'number' => $number,
-			'notes'  => $order->get_meta( "_wcpdf_{$this->slug}_notes" ),
+			'date'             => $order->get_meta( "_wcpdf_{$this->slug}_date" ),
+			'number'           => $number,
+			'notes'            => $order->get_meta( "_wcpdf_{$this->slug}_notes" ),
+			'display_date'	   => $order->get_meta( "_wcpdf_{$this->slug}_display_date" ),
+			'creation_trigger' => $order->get_meta( "_wcpdf_{$this->slug}_creation_trigger" ),
 		), $order );
 
 		return;
 	}
 
 	public function init() {
-		// init settings
-		$this->init_settings_data();
+		// save settings
 		$this->save_settings();
 
 		$this->set_date( current_time( 'timestamp', true ) );
@@ -295,9 +305,10 @@ abstract class Order_Document {
 					$order->delete_meta_data( "_wcpdf_{$this->slug}_{$key}_data" );
 					// deleting the number = deleting the document, so also delete document settings
 					$order->delete_meta_data( "_wcpdf_{$this->slug}_settings" );
-				} elseif ( $key == 'notes' ) {
+				} elseif ( $key == 'notes' || $key == 'display_date') {
 					$order->delete_meta_data( "_wcpdf_{$this->slug}_{$key}" );
 				}
+				
 			} else {
 				if ( $key == 'date' ) {
 					// store dates as timestamp and formatted as mysql time
@@ -307,10 +318,11 @@ abstract class Order_Document {
 					// store both formatted number and number data
 					$order->update_meta_data( "_wcpdf_{$this->slug}_{$key}", $value->formatted_number );
 					$order->update_meta_data( "_wcpdf_{$this->slug}_{$key}_data", $value->to_array() );
-				} elseif ( $key == 'notes' ) {
+				} elseif ( $key == 'notes' || $key == 'display_date' ) {
 					// store notes
 					$order->update_meta_data( "_wcpdf_{$this->slug}_{$key}", $value );
 				}
+				
 			}
 		}
 
@@ -332,6 +344,9 @@ abstract class Order_Document {
 			'number',
 			'number_data',
 			'notes',
+			'printed',
+			'display_date',
+			'creation_trigger',
 		), $this );
 		foreach ( $data_to_remove as $data_key ) {
 			$order->delete_meta_data( "_wcpdf_{$this->slug}_{$data_key}" );
@@ -354,8 +369,7 @@ abstract class Order_Document {
 			$this->save();
 		}
 
-		// init settings
-		$this->init_settings_data();
+		// save settings
 		$this->save_settings( true );
 
 		//Add order note
@@ -375,13 +389,13 @@ abstract class Order_Document {
 	public function is_allowed() {
 		$allowed = true;
 		// Check if document is enabled
-		if ( !$this->is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			$allowed = false;
 		// Check disabled for statuses
-		} elseif ( !$this->exists() && !empty( $this->settings['disable_for_statuses'] ) && !empty( $this->order ) && is_callable( array( $this->order, 'get_status' ) ) ) {
+		} elseif ( ! $this->exists() && ! empty( $this->settings['disable_for_statuses'] ) && ! empty( $this->order ) && is_callable( array( $this->order, 'get_status' ) ) ) {
 			$status = $this->order->get_status();
 
-			$disabled_statuses = array_map( function($status){
+			$disabled_statuses = array_map( function ( $status ) {
 				$status = 'wc-' === substr( $status, 0, 3 ) ? substr( $status, 3 ) : $status;
 				return $status;
 			}, $this->settings['disable_for_statuses'] );
@@ -396,12 +410,20 @@ abstract class Order_Document {
 	public function exists() {
 		return !empty( $this->data['date'] );
 	}
+	
+	public function printed() {
+		return WPO_WCPDF()->main->is_document_printed( $this );
+	}
 
 	/*
 	|--------------------------------------------------------------------------
 	| Data getters
 	|--------------------------------------------------------------------------
 	*/
+	
+	public function get_printed_data() {
+		return WPO_WCPDF()->main->get_document_printed_data( $this );
+	}
 
 	public function get_data( $key, $document_type = '', $order = null, $context = 'view' ) {
 		$document_type = empty( $document_type ) ? $this->type : $document_type;
@@ -446,6 +468,14 @@ abstract class Order_Document {
 		return $this->get_data( 'notes', $document_type, $order, $context );
 	}
 
+	public function get_display_date( $document_type = '', $order = null, $context = 'view'  ) {
+		return $this->get_data( 'display_date', $document_type, $order, $context );
+	}
+
+	public function get_creation_trigger( $document_type = '', $order = null, $context = 'view'  ) {
+		return $this->get_data( 'creation_trigger', $document_type, $order, $context );
+	}
+	
 	public function get_title() {
 		return apply_filters( "wpo_wcpdf_{$this->slug}_title", $this->title, $this );
 	}
@@ -563,6 +593,23 @@ abstract class Order_Document {
 			}
 
 			$this->data[ 'notes' ] = $value;
+		} catch ( \Exception $e ) {
+			wcpdf_log_error( $e->getMessage() );
+		} catch ( \Error $e ) {
+			wcpdf_log_error( $e->getMessage() );
+		}
+	}
+
+	public function set_display_date( $value, $order = null ) {
+		$order = empty( $order ) ? $this->order : $order;
+
+		try {
+			if ( empty( $value ) ) {
+				$this->data['display_date'] = null;
+				return;
+			}
+			
+			$this->data['display_date'] = $value;
 		} catch ( \Exception $e ) {
 			wcpdf_log_error( $e->getMessage() );
 		} catch ( \Error $e ) {
@@ -795,7 +842,7 @@ abstract class Order_Document {
 			'paper_orientation'	=> apply_filters( 'wpo_wcpdf_paper_orientation', 'portrait', $this->get_type(), $this ),
 			'font_subsetting'	=> $this->get_setting( 'font_subsetting', false ),
 		);
-		$pdf_maker    = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings );
+		$pdf_maker    = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings, $this );
 		$pdf          = $pdf_maker->output();
 		
 		do_action( 'wpo_wcpdf_after_pdf', $this->get_type(), $this );
@@ -820,7 +867,7 @@ abstract class Order_Document {
 			'paper_orientation'	=> apply_filters( 'wpo_wcpdf_paper_orientation', 'portrait', $this->get_type(), $this ),
 			'font_subsetting'	=> $this->get_setting( 'font_subsetting', false ),
 		);
-		$pdf_maker    = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings );
+		$pdf_maker    = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings, $this );
 		$pdf          = $pdf_maker->output();
 		
 		return $pdf;
@@ -888,7 +935,8 @@ abstract class Order_Document {
 		$order_count = isset($args['order_ids']) ? count($args['order_ids']) : 1;
 
 		$name = $this->get_type();
-		if ( get_post_type( $this->order_id ) == 'shop_order_refund' ) {
+
+		if ( is_callable( array( $this->order, 'get_type' ) ) && $this->order->get_type() == 'shop_order_refund' ) {
 			$number = $this->order_id;
 		} else {
 			$number = is_callable( array( $this->order, 'get_order_number' ) ) ? $this->order->get_order_number() : '';
@@ -1028,10 +1076,16 @@ abstract class Order_Document {
 		$now                 = new \WC_DateTime( 'now', new \DateTimeZone( 'UTC' ) ); // for settings callback
 	
 		// reset: on
-		if( $reset_number_yearly ) {
-			if( ! ( $date = $this->get_date() ) ) {
+		if ( $reset_number_yearly ) {
+			if ( ! ( $date = $this->get_date() ) ) {
 				$date = $now;
 			}
+			
+			// for yearly reset debugging only
+			if ( apply_filters( 'wpo_wcpdf_enable_yearly_reset_debug', false ) ) {
+				$date = new \WC_DateTime( '1st January Next Year' );
+			}
+			
 			$store_name   = $this->get_sequential_number_store_name( $date, $method, $reset_number_yearly );
 			$number_store = new Sequential_Number_Store( $store_name, $method );	
 	
@@ -1112,6 +1166,12 @@ abstract class Order_Document {
 		
 		$default_table_name = $this->get_number_store_table_default_name( $store_base_name, $method );
 		$now                = new \WC_DateTime( 'now', new \DateTimeZone( 'UTC' ) );
+		
+		// for yearly reset debugging only
+		if ( apply_filters( 'wpo_wcpdf_enable_yearly_reset_debug', false ) ) {
+			$now = new \WC_DateTime( '1st January Next Year' );
+		}
+		
 		$current_year       = intval( $now->date_i18n( 'Y' ) );
 		$current_store_year = intval( $this->get_number_store_year( $default_table_name ) );
 		$requested_year     = intval( $date->date_i18n( 'Y' ) );
@@ -1178,6 +1238,13 @@ abstract class Order_Document {
 		$was_showing_errors = $wpdb->hide_errors(); // if we encounter errors, we'll log them instead
 
 		$current_year = date_i18n( 'Y' );
+		
+		// for yearly reset debugging only
+		if ( apply_filters( 'wpo_wcpdf_enable_yearly_reset_debug', false ) ) {
+			$next_year    = new \WC_DateTime( '1st January Next Year' );
+			$current_year = intval( $next_year->date_i18n( 'Y' ) );
+		}
+		
 		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'") == $table_name; 
 		if( $table_exists ) {
 			// get year for the last row

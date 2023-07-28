@@ -32,7 +32,9 @@ jQuery( function( $ ) {
 		}
 	} );
 
-	$( '#wpo_wcpdf-data-input-box' ).insertAfter('#woocommerce-order-data');
+	if ( wpo_wcpdf_ajax.sticky_document_data_metabox ) {
+		$( '#wpo_wcpdf-data-input-box' ).insertAfter('#woocommerce-order-data');
+	}
 	
 	// enable invoice number edit if user initiated
 	$( '#wpo_wcpdf-data-input-box' ).on( 'click', '.wpo-wcpdf-set-date-number, .wpo-wcpdf-edit-date-number, .wpo-wcpdf-edit-document-notes', function() {
@@ -152,4 +154,17 @@ jQuery( function( $ ) {
 		}
 	}
 
+	$( '#wpo_wcpdf-data-input-box' ).on( 'click', '.view-more, .hide-details', function( e ) {
+		e.preventDefault();
+		
+		$( this ).hide();
+		$( '.pdf-more-details' ).slideToggle( 'slow' );
+		
+		if ( $( this ).hasClass( 'view-more' ) ) {
+			$( '.hide-details' ).show();
+		} else {
+			$( '.view-more' ).show();
+		}
+	} );
+	
 } );

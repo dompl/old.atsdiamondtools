@@ -3,7 +3,7 @@
  * Plugin Name: IgniteWoo Updater
  * Plugin URI: https://ignitewoo.com/
  * Description: Helps you manage your IgniteWoo software licenses and receive important updates for your IgniteWoo products.
- * Version: 3.0.3
+ * Version: 3.0.4
  * Author: IgniteWoo.com
  * Author URI: https://ignitewoo.com/
  * Network: true
@@ -72,7 +72,11 @@ function __ignition_updater () {
 	$ignition_updater = new IgniteWoo_Updater( __FILE__, $version ); // ENSURE THE VERSION IS CORRECT AND MATCHES THIS PLUGIN VERSION
 
 	//$ignition_updater->version = '3.0'; // Must be a string, not a float.
-
+	if ( empty( $ignition_updater->admin ) ) { 
+		require_once( 'classes/class-ignition-updater-admin.php' );
+		$ignition_updater->admin = new Ignition_Updater_Admin( __FILE__ );
+	}
+	
 	@$ignition_updater->admin->product_id = 'Updater';
 	@$ignition_updater->admin->licence_hash = '6471fb9bec3ef8e9dcafe3ba5bd994c8';
 	@$ignition_updater->admin->slug = plugin_basename( __FILE__ );

@@ -197,6 +197,10 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
                             $translated_post = get_post( $lang_obj->element_id );
                             if ( $translated_post && !empty( $translated_post ) ) {
 
+                                if ( ! $this->options['index']['variations'] && $translated_post->post_type === 'product_variation' ) {
+                                    continue;
+                                }
+
                                 $translated_post_data = array();
                                 $translated_post_data['id'] = $translated_post->ID;
                                 $translated_post_data['in_stock'] = $data['in_stock'];

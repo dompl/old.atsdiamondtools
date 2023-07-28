@@ -39,7 +39,12 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
          */
         public function __construct() {
 
-            add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widgets' ) );
+            if ( defined('ELEMENTOR_VERSION') && version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
+                add_action( 'elementor/widgets/register', array( $this, 'register_elementor_widgets' ) );
+            } else {
+                add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widgets' ) );
+            }
+
             add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'filter_editor_styles' ) );
             add_action( 'elementor/preview/enqueue_styles', array( $this, 'filter_editor_styles' ) );
 
@@ -185,7 +190,7 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
                     if (window.jQuery) {
                         jQuery( document ).on( 'elementor/popup/show', function() {
                             window.setTimeout(function(){
-                                jQuery('.elementor-container .aws-container').each( function() {
+                                jQuery('.elementor-container .aws-container, .elementor-popup-modal .aws-container').each( function() {
                                     jQuery(this).aws_search();
                                 });
                             }, 1000);

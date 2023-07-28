@@ -568,7 +568,9 @@ function acf_rendered_block( $attributes, $content = '', $is_preview = false, $p
 		// Capture block render output.
 		acf_render_block( $attributes, $content, $is_preview, $post_id, $wp_block, $context );
 	}
+
 	$html = ob_get_clean();
+	$html = is_string( $html ) ? $html : '';
 
 	// Replace <InnerBlocks /> placeholder on front-end, or if we're rendering an ACF block inside another ACF block template.
 	if ( ! $is_preview || doing_action( 'acf_block_render_template' ) ) {
@@ -731,7 +733,14 @@ function acf_enqueue_block_assets() {
 	);
 
 	// Get block types.
-	$block_types = acf_get_block_types();
+	$block_types = array_map(
+		function( $block ) {
+			// Render Callback may contain a incompatible class for JSON encoding. Turn it into a boolean for the frontend.
+			$block['render_callback'] = ! empty( $block['render_callback'] );
+			return $block;
+		},
+		acf_get_block_types()
+	);
 
 	// Localize data.
 	acf_localize_data(
@@ -930,7 +939,6 @@ acf_register_ajax( 'fetch-block', 'acf_ajax_fetch_block' );
  * @return  string The html that makes up a block form with no fields.
  */
 function acf_get_empty_block_form_html( $block_name ) {
-	$html = '<div class="acf-block-fields acf-fields acf-empty-block-fields">';
 
 	$message = __( 'This block contains no editable fields.', 'acf' );
 
@@ -943,10 +951,9 @@ function acf_get_empty_block_form_html( $block_name ) {
 		);
 	}
 
-	$html .= apply_filters( 'acf/blocks/no_fields_assigned_message', $message, $block_name );
+	$message = apply_filters( 'acf/blocks/no_fields_assigned_message', $message, $block_name );
 
-	$html .= '</div>';
-	return acf_esc_html( $html );
+	return empty( $message ) ? '' : acf_esc_html( '<div class="acf-block-fields acf-fields acf-empty-block-fields">' . $message . '</div>' );
 }
 
 /**
@@ -967,6 +974,7 @@ function acf_parse_save_blocks( $text = '' ) {
 			stripslashes( $text )
 		)
 	);
+
 }
 
 // Hook into saving process.

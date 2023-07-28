@@ -36,39 +36,42 @@ function init_ag_epdq() {
 
 		public function __construct() {
 
-			$this->id           = 'epdq_checkout';
+			$this->id = 'epdq_checkout';
 			$this->method_title = 'AG ePDQ Checkout';
-			$this->icon         = apply_filters( 'woocommerce_epdq_checkout_icon', '' );
-			$this->has_fields   = false;
-			$this->notice       = 'no';
-			$this->status       = 'test';
+			$this->icon = apply_filters( 'woocommerce_epdq_checkout_icon', '' );
+			$this->has_fields = FALSE;
+			$this->notice = 'no';
+			$this->status = 'test';
 
-
-			if ( ! AG_licence::valid_licence() ) {
+			if( ! AG_licence::valid_licence() ) {
 				return;
 			}
 
 			$this->init_form_fields();
 			$this->init_settings();
 
-
 			// Turn settings into variables we can use
-			foreach ( $this->settings as $setting_key => $value ) {
+			foreach( $this->settings as $setting_key => $value ) {
 				$this->$setting_key = $value;
 			}
 
 			//$this->sha_method 	= ($this->sha_method != '') ? $this->sha_method : 2;
-			$this->notice      = ( $this->notice !== '' ) ? $this->notice : 'no';
-			$this->threeds     = $this->get_option( 'threeds' ) ?: 'no';
+			$this->notice = ( $this->notice !== '' ) ? $this->notice : 'no';
+			$this->threeds = $this->get_option( 'threeds' ) ? : 'no';
 			$this->description = $this->display_checkout_description();
-			$this->fraudCheck  = $this->get_option( 'fraudCheck' ) ?: 'no';
+			$this->fraudCheck = $this->get_option( 'fraudCheck' ) ? : 'no';
 
 			$this->supports = array(
 				'products',
 				'refunds',
+				'tokenization',
 				'subscriptions',
-				'gateway_scheduled_payments',
-				'tokenization'
+				'subscription_cancellation',
+				'subscription_suspension',
+				'subscription_reactivation',
+				'subscription_amount_changes',
+				'subscription_date_changes',
+				'multiple_subscriptions',
 			);
 
 			// Save options
@@ -78,27 +81,23 @@ function init_ag_epdq() {
 			) );
 
 			// Payment listener/API hook
-			add_action( 'woocommerce_receipt_epdq_checkout', array( $this, 'receipt_page' ) );
-			add_action( 'woocommerce_api_epdq_checkout', array( $this, 'check_response' ) );
+			add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
+			add_action( 'woocommerce_api_' . $this->id, array( $this, 'check_response' ) );
+			add_action( 'woocommerce_api_' . $this->id . '_webhook', array( 'ag_epdq_webhook', 'webhook' ) );
 
-			add_action( 'admin_head', array( 'AG_ePDQ_Helpers', 'add_disable_to_input' ) );
+			add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array(
+				'ePDQ_Sub',
+				'process_subscription_payment'
+			), 10, 2 );
+			add_action( 'woocommerce_order_action_wcs_retry_renewal_payment', array(
+				'ePDQ_Sub',
+				'ag_store_process_retry_renewal_payment'
+			), 20, 1 );
+
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_script' ) );
 
 		}
 
-		/**
-		 * Validate customer billing address, there is a character limit of 34 for each, this is set by the ePDQ platform.
-		 */
-		public function validate_fields() {
-
-			//if ( strlen( $_POST['billing_address_1'] ) > 35 ) {
-			//wc_add_notice( 'Your street address is too long, please also use the second address field.', 'error' );
-			//}
-			//if ( strlen( $_POST['billing_address_2'] ) > 35 ) {
-			//wc_add_notice( 'Your second street address is too long. Please shorten your billing address.', 'error' );
-			//}
-
-		}
 
 		/**
 		 * Plugin settings
@@ -106,6 +105,7 @@ function init_ag_epdq() {
 		 * @return void
 		 */
 		public function init_form_fields() {
+
 			$this->form_fields = AG_ePDQ_Settings::form_fields();
 		}
 
@@ -113,21 +113,12 @@ function init_ag_epdq() {
 
 			$screen = get_current_screen();
 
-			if ( 'woocommerce_page_wc-settings' !== $screen->base ) {
+			if( 'woocommerce_page_wc-settings' !== $screen->base ) {
 				return;
 			}
 
 			wp_enqueue_script( 'ePDQ_settings_script', AG_ePDQ_server_path . 'inc/assets/js/admin-script.js' );
 			wp_enqueue_script( 'ePDQ_alert', 'https://unpkg.com/sweetalert/dist/sweetalert.min.js' );
-		}
-
-		/**
-		 * Plugin settings with refund option
-		 *
-		 * @return void
-		 */
-		public function init_form_fields_refund() {
-			//$this->form_fields = AG_ePDQ_Settings::form_fields_refund();
 		}
 
 		/**
@@ -164,19 +155,18 @@ function init_ag_epdq() {
 
 			$description = '';
 
-			if ( $this->notice === 'yes' ) {
+			if( $this->notice === 'yes' ) {
 				$description .= $this->display_redirect_message();
 			} else {
 				$description .= $this->get_option( 'description' );
 			}
 
-			/** @noinspection PhpUndefinedFieldInspection */
-			if ( $this->status === 'test' ) {
+			if( $this->status === 'test' ) {
 				$description .= $this->display_test_message();
 			}
 
 			// Display token section
-			if ( isset( $this->token ) && $this->token === 'yes' ) {
+			if( isset( $this->token ) && $this->token === 'yes' ) {
 				$description .= AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
 			}
 
@@ -193,14 +183,13 @@ function init_ag_epdq() {
 		public function get_icon() {
 
 			$cardTypes = ( $this->cardtypes ?? '' );
-			$icon      = '';
-			if ( ! $cardTypes ) {
+			$icon = '';
+			if( ! $cardTypes ) {
 				// default behavior
 				$icon = '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/cards.gif" alt="' . $this->title . '" />';
-			} elseif ( $cardTypes ) {
+			} elseif( $cardTypes ) {
 				// display icons for the selected card types
-				$icon = '';
-				foreach ( $cardTypes as $cardtype ) {
+				foreach( $cardTypes as $cardtype ) {
 					$icon .= '<img class="ePDQ-card-icons" src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $cardtype ) . '.png" alt="' . strtolower( $cardtype ) . '" />';
 				}
 			}
@@ -213,22 +202,16 @@ function init_ag_epdq() {
 		 *
 		 * @return void
 		 */
-		public function admin_options() {
-			?>
+		public function admin_options() { ?>
 
-            <h3><?php echo __( 'AG ePDQ Checkout Settings', 'ag_epdq_server' ); ?></h3>
-            <p><?php echo __( 'This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_server' ) ?></p>
-            <p>
+            <h3><?php echo __( 'AG ePDQ Checkout Settings', 'ag_epdq_server' ); ?></h3>            <p><?php echo __( 'This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_server' ) ?></p>            <p>
                 <i><?php echo __( 'Having issues setting up the plugin? Why not try the setup wizard <a href="' . admin_url( '?page=AG_ePDQ-wizard' ) . '">here</a>.', 'ag_epdq_server' ) ?></i>
             </p>
             <table class="form-table">
 				<?php $this->generate_settings_html(); ?>
-            </table>
-            <!--/.form-table-->
+            </table><!--/.form-table-->
 
-            <p><strong>Need some help setting up this plugin?</strong> <a
-                        href="<?php echo admin_url( 'admin.php?page=AGWooCommerceBarclayePDQPaymentGateway' ); ?>">Click
-                    here</a></p>
+            <p><strong>Need some help setting up this plugin?</strong> <a href="<?php echo admin_url( 'admin.php?page=AGWooCommerceBarclayePDQPaymentGateway' ); ?>">Click here</a></p>
 
 			<?php
 
@@ -241,6 +224,7 @@ function init_ag_epdq() {
 		 *
 		 * @return array
 		 */
+
 		public function process_payment( $order_id ) {
 
 			$order = new WC_Order( $order_id );
@@ -251,21 +235,25 @@ function init_ag_epdq() {
 				'AG_sent_to_ePDQ'     => date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ),
 			);
 
-			AG_ePDQ_Helpers::update_order_meta_data( $order_id, $orderdata );
+			AG_ePDQ_Helpers::update_order_meta_data( $order_id, $orderdata, $order );
 
-			if ( isset( $this->token ) && $this->token === 'yes' && isset( $_POST['saved_cards'] ) ) {
-				$saved_cards = (int) $_POST['saved_cards'];
-				update_post_meta( $order_id, 'use_saved_card', $saved_cards ?? null );
+			$order->update_meta_data( 'save_card', '' );
+			$order->save();
+
+			if( isset( $this->token ) && $this->token === 'yes' && isset( $_POST['saved_cards'] ) ) {
+				$saved_cards = AG_ePDQ_Helpers::AG_decode( $_POST['saved_cards'] );
+				$order->update_meta_data( 'use_saved_card', $saved_cards ?? NULL );
+				$order->save();
 			}
 
 			// This is for debugging customer device type.
-			if ( defined( 'ePDQ_support_debug' ) ) {
+			if( defined( 'ag_support_debug' ) ) {
 				AG_ePDQ_Helpers::ag_log( $_SERVER['HTTP_USER_AGENT'], 'debug', $this->debug );
 			}
 
 			return array(
 				'result'   => 'success',
-				'redirect' => $order->get_checkout_payment_url( true )
+				'redirect' => $order->get_checkout_payment_url( TRUE )
 			);
 		}
 
@@ -278,51 +266,52 @@ function init_ag_epdq() {
 		 */
 		public function receipt_page( $order_id ) {
 
-			$order              = new WC_Order( $order_id );
-			$settings           = ePDQ_crypt::key_settings();
+			$order = new WC_Order( $order_id );
+			$settings = ePDQ_crypt::key_settings();
 			$order_received_url = WC()->api_request_url( 'epdq_checkout' ) . '?idOrder=' . $order->get_id();
-			$cancel_order_url   = $order->get_cancel_order_url_raw();
+			$cancel_order_url = $order->get_cancel_order_url_raw();
 
-			$hash_fields      = array(
+			$hash_fields = array(
 				$settings['pspid'],
 				date( 'Y:m:d' ),
 				$order->get_order_number(),
-				$settings['shain']
+				$settings['shain'],
+				get_bloginfo( 'name' )
 			);
 			$encrypted_string = ePDQ_crypt::ripemd_crypt( implode( $hash_fields ), $settings['shain'] );
 
 			$fullName = remove_accents( $order->get_billing_first_name() . ' ' . str_replace( "'", "", $order->get_billing_last_name() ) );
 
 			// Currency
-			if ( get_woocommerce_currency() !== 'GBP' && defined( 'ePDQ_PSPID' ) ) {
+			if( get_woocommerce_currency() !== 'GBP' && defined( 'ePDQ_PSPID' ) ) {
 				$PSPID = ePDQ_PSPID;
 			} else {
 				$PSPID = $settings['pspid'];
 			}
 
 			// Use different PSPID (This is useful for stores that are franchisees)
-			$ePDQ_PSPID  = null;
+			$ePDQ_PSPID = NULL;
 			$multi_PSPID = apply_filters( 'ePDQ_PSPID', $ePDQ_PSPID );
-			if ( ! empty( $multi_PSPID ) ) {
+			if( ! empty( $multi_PSPID ) ) {
 				$PSPID = $multi_PSPID;
 			}
 
 			// Products
 			$order_item = $order->get_items();
-			foreach ( $order_item as $product ) {
+			foreach( $order_item as $product ) {
 				$product_name[] = preg_replace( "/[^a-zA-Z0-9\s]/", "", str_replace( array(
 						"-",
 						" "
 					), "", $product['name'] ) ) . " x" . $product['qty'];
-				$product_ids[]  = str_replace( '&', 'and', $product['product_id'] ) . " x" . $product['qty'];
+				$product_ids[] = str_replace( '&', 'and', $product['product_id'] ) . " x" . $product['qty'];
 			}
 			$product_list_string = implode( ',', $product_name );
-			$product_id_string   = implode( ',', $product_ids );
+			$product_id_string = implode( ',', $product_ids );
 
 			// If the items in the cart add to more than the character limit set by ePDQ then switch to product id.
-			if ( strlen( $product_list_string ) < 99 && get_locale() !== 'ar' ) {
+			if( strlen( $product_list_string ) < 99 && get_locale() !== 'ar' ) {
 				$product_list = $product_list_string;
-			} elseif ( strlen( $product_id_string ) < 99 ) {
+			} elseif( strlen( $product_id_string ) < 99 ) {
 				$product_list = $product_id_string;
 			} else {
 				// Fallback if both products name/id is more than character limit.
@@ -331,96 +320,77 @@ function init_ag_epdq() {
 			}
 
 			// Custom product data - this could be for custom meta data
-			if ( defined( 'ePDQ_custom_product_data' ) ) {
+			if( defined( 'ePDQ_custom_product_data' ) ) {
 				$com = apply_filters( 'ePDQ_custom_product_data', $order );
 			} else {
 				$com = $product_list;
 			}
 
 			// Custom Merchant Ref - this could be for custom meta data
-			if ( defined( 'ePDQ_custom_order_id' ) ) {
+			if( defined( 'ePDQ_custom_order_id' ) ) {
 				$orderID = apply_filters( 'ePDQ_custom_order_id', $order );
 			} else {
 				$orderID = $order->get_order_number();
 			}
 
 			// Get customer token
-			$savedCard     = get_post_meta( $orderID, 'use_saved_card', true );
+			$savedCard = $order->get_meta( 'use_saved_card' );
 			$customerToken = AG_ePDQ_Token::get( get_current_user_id(), is_user_logged_in(), $savedCard );
 			// END
 
-			$fields = array(
-				'PSPID'         => $PSPID,
-				'ORDERID'       => $orderID,
-				'AMOUNT'        => $order->get_total() * 100,
-				'COMPLUS'       => $encrypted_string,
-				'CURRENCY'      => get_woocommerce_currency(),
-				'LANGUAGE'      => get_locale(),
-				'CN'            => $fullName,
-				'COM'           => $com,
-				'EMAIL'         => $order->get_billing_email(),
-				'OWNERZIP'      => preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_postcode() ),
-				'OWNERADDRESS'  => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_1() ), 0, 34 ),
-				'OWNERADDRESS2' => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_2() ), 0, 34 ),
-				'OWNERCTY'      => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_country() ), 0, 34 ),
-				'OWNERTOWN'     => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_city() ), 0, 34 ),
-				'OWNERTELNO'    => $order->get_billing_phone(),
-				'ACCEPTURL'     => $order_received_url,
-				'DECLINEURL'    => $cancel_order_url,
-				'HOMEURL'       => $cancel_order_url,
-				'TP'            => ( $this->template ?? '' ),
-				'LOGO'          => ( $this->logo ?? '' ),
-				'TITLE'         => '',
-			);
-
-			if ( isset( $this->token ) && $this->token === 'yes' ) {
-				$fields['ALIAS']          = $customerToken['token'] ?? '';
-				$fields['ALIASOPERATION'] = 'BYPSP';
-				$fields['ALIASUSAGE']     = get_bloginfo( 'name' );
-				$fields['COF_INITIATOR']  = 'CIT';
-				$fields['BRAND']          = $customerToken['brand'] ?? '';
-				$fields['PM']             = $customerToken['brand'] = 'CreditCard' ?? '';
+			// Challenge Indicator
+			if( ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order_id ) ) || ( isset( $this->token ) && $this->token === 'yes' ) ) {
+				$ChallengeIndicator = 04;
+			} else {
+				$ChallengeIndicator = 03;
 			}
 
-			if ( class_exists( 'WC_Subscriptions_Order' ) && AG_ePDQ_Helpers::order_contains_subscription( $order ) ) {
-				//$price_per_period = WC_Subscription::get_total();
-				$billing_period = WC_Subscriptions_Order::get_subscription_period( $order );
-				switch ( strtolower( $billing_period ) ) {
-					case 'day':
-						$billing_period        = 'd';
-						$subscription_interval = WC_Subscriptions_Order::get_subscription_interval( $order );
-						break;
-					case 'week':
-						$billing_period        = 'ww';
-						$subscription_interval = WC_Subscriptions_Order::get_subscription_interval( $order );
-						break;
-					case 'year':
-						$billing_period        = 'm';
-						$subscription_interval = WC_Subscriptions_Order::get_subscription_interval( $order );;
-						//$adv = strtotime("+12 Months");
-						break;
-					case 'month':
-					default:
-						$billing_period        = 'm';
-						$subscription_interval = WC_Subscriptions_Order::get_subscription_interval( $order );
-						//$adv = strtotime("+1 Months");
-						break;
-				}
+			$fields = array(
+				'PSPID'                                  => $PSPID,
+				'ORDERID'                                => $orderID,
+				'AMOUNT'                                 => $order->get_total() * 100,
+				'COMPLUS'                                => $encrypted_string,
+				'CURRENCY'                               => get_woocommerce_currency(),
+				'LANGUAGE'                               => get_locale(),
+				'CN'                                     => $fullName,
+				'COM'                                    => $com,
+				'EMAIL'                                  => $order->get_billing_email(),
+				'OWNERZIP'                               => preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_postcode() ),
+				'OWNERADDRESS'                           => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_1() ), 0, 34 ),
+				'OWNERADDRESS2'                          => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_2() ), 0, 34 ),
+				'OWNERCTY'                               => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_country() ), 0, 34 ),
+				'OWNERTOWN'                              => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_city() ), 0, 34 ),
+				'OWNERTELNO'                             => $order->get_billing_phone(),
+				'ACCEPTURL'                              => $order_received_url,
+				'DECLINEURL'                             => $cancel_order_url,
+				'HOMEURL'                                => $cancel_order_url,
+				'TP'                                     => ( $this->template ?? '' ),
+				'LOGO'                                   => ( $this->logo ?? '' ),
+				'TITLE'                                  => '',
+				'FLAG3D'                                 => 'Y',
+				'MPI.THREEDSREQUESTORCHALLENGEINDICATOR' => $ChallengeIndicator
+			);
 
-				// todo $adv is a hot fix from Ross Davidson, Will need to work out the strtotime for day, week and year and test.
+			if( isset( $this->token ) && $this->token === 'yes' && ( class_exists( 'WC_Subscriptions_Order' ) && ! wcs_order_contains_subscription( $order_id ) ) ) {
+				$fields['ALIAS'] = $customerToken['token'] ?? '';
+				$fields['ALIASOPERATION'] = 'BYPSP';
+				$fields['ALIASUSAGE'] = get_bloginfo( 'name' );
+				$fields['COF_INITIATOR'] = 'CIT';
+				$fields['BRAND'] = $customerToken['brand'] ?? '';
+				$fields['PM'] = $customerToken['brand'] = 'CreditCard' ?? '';
+			}
 
+			if( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order_id ) ) {
 
-				// Recurring payment
-				$fields['SUBSCRIPTION_ID']   = $order->get_order_number();
-				$fields['SUB_AMOUNT']        = $order->get_total() * 100;
-				$fields['SUB_COM']           = 'order description';
-				$fields['SUB_COMMENT']       = 'Recurring payment';
-				$fields['SUB_ORDERID']       = $order->get_order_number();
-				$fields['SUB_PERIOD_MOMENT'] = date( 'd' );
-				$fields['SUB_PERIOD_NUMBER'] = $subscription_interval;
-				$fields['SUB_PERIOD_UNIT']   = $billing_period;
-				$fields['SUB_STARTDATE']     = date( "Y-m-d", $adv );
-				$fields['SUB_STATUS']        = '1';
+				$fields['ALIAS'] = 'VALUE';
+				$fields['ALIASOPERATION'] = 'BYPSP';
+				$fields['ALIASUSAGE'] = 'Setting up subscription for use on ' . get_bloginfo( 'name' ) . ' Website. Please authorise Barclaycard to store your details for your renewal payments.';
+				$fields['COF_INITIATOR'] = 'CIT';
+				$fields['COF_TRANSACTION'] = 'FIRST';
+				$fields['COF_SCHEDULE'] = 'SCHED';
+				$fields['BRAND'] = $customerToken['brand'] ?? '';
+				$fields['PM'] = $customerToken['brand'] = 'CreditCard' ?? '';
+
 			}
 
 			//Server-to-server parameter
@@ -436,8 +406,8 @@ function init_ag_epdq() {
 
 			$shasign_arg = array();
 			ksort( $fields );
-			foreach ( $fields as $key => $value ) {
-				if ( $value == '' ) {
+			foreach( $fields as $key => $value ) {
+				if( $value == '' ) {
 					continue;
 				}
 				$shasign_arg[] = $key . '=' . $value;
@@ -446,71 +416,70 @@ function init_ag_epdq() {
 			$shasign = hash( ePDQ_crypt::get_sha_method(), implode( $settings['shain'], $shasign_arg ) . $settings['shain'] );
 
 			// Enable deeper debugging, useful for when the ePDQ team require data to debug.
-			if ( defined( 'ePDQ_support_debug' ) ) {
-				AG_ePDQ_Helpers::ag_log( print_r( $fields, true ) . ' ' . print_r( $shasign, true ), 'debug', $this->debug );
+			if( defined( 'ag_support_debug' ) ) {
+				AG_ePDQ_Helpers::ag_log( print_r( $fields, TRUE ) . ' ' . print_r( $shasign, TRUE ), 'debug', $this->debug );
 			}
 
 			$epdq_args = array();
-			foreach ( $fields as $key => $value ) {
-				if ( $value === '' ) {
+			foreach( $fields as $key => $value ) {
+				if( $value === '' ) {
 					continue;
 				}
-				$epdq_args[] = '<input type="hidden" name="' . sanitize_text_field( $key ) . '" value="' . $value . '"/>';
+				$epdq_args[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
 			}
 
-			if ( empty( $this->access_key ) || empty( $this->sha_in ) ) {
+			if( empty( $this->access_key ) || empty( $this->sha_in ) ) {
 
 				AG_ePDQ_Helpers::ag_log( 'You are missing your PSPID and or SHA-IN', 'debug', $this->debug );
 				wc_add_notice( 'ePDQ Bad Setup: You are missing your PSPID and or SHA-IN', 'error' );
 
 				return;
 			}
+			$ag_form_displayed = FALSE;
+			if( ! $ag_form_displayed ) {
+				if( isset( $this->status ) && ( $this->status === 'test' || $this->status === 'live' ) ) {
+					if( $this->status === 'test' ) {
+						$url = self::$test_url;
+					}
+					if( $this->status === 'live' ) {
+						$url = self::$live_url;
+					}
 
-			if ( isset( $this->status ) && ( $this->status === 'test' || $this->status === 'live' ) ) {
-				if ( $this->status === 'test' ) {
-					$url = self::$test_url;
+					echo '<form action="' . esc_url_raw( $url ) . '" method="post" id="epdq_payment_form">';
+					echo implode( '', $epdq_args );
+					echo '<input type="hidden" name="SHASIGN" value="' . $shasign . '"/>';
+					echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce( 'generate-nonce' ) . '" />';
+					echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __( 'Pay securely', 'ag_epdq_server' ) . '" />';
+					echo '</form>';
+
+					wc_enqueue_js( '
+                    $("body").block({
+                            message: "' . __( 'You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server' ) . '",
+                            overlayCSS:
+                            {
+                                background: "#fff",
+                                opacity: 0.6
+                            },
+                            css: {
+                                        padding:        20,
+                                        textAlign:      "center",
+                                        color:          "#555",
+                                        border:         "3px solid #aaa",
+                                        backgroundColor:"#fff",
+                                        cursor:         "wait",
+                                        lineHeight:		"32px"
+                                }
+                        });
+                    $("#submit_epdq_payment_form").click();
+                ' );
+
+				} else {
+
+					AG_ePDQ_Helpers::ag_log( 'Please double check the ePDQ plugin settings, something is not quite right...', 'debug', $this->debug );
+					wc_add_notice( 'ePDQ Bad Setup: Please double check the ePDQ plugin settings, something is not quite right...', 'error' );
+
 				}
-				if ( $this->status === 'live' ) {
-					$url = self::$live_url;
-				}
-
-				echo '<form action="' . esc_url_raw( $url ) . '" method="post" id="epdq_payment_form">';
-				echo implode( '', $epdq_args );
-				echo '<input type="hidden" name="SHASIGN" value="' . sanitize_text_field( $shasign ) . '"/>';
-				echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce( 'generate-nonce' ) . '" />';
-				echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __( 'Pay securely', 'ag_epdq_server' ) . '" />';
-				echo '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __( 'Cancel order &amp; restore cart', 'ag_epdq_server' ) . '</a></form>';
-
-				wc_enqueue_js( '
-				$("body").block({
-						message: "' . __( 'You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server' ) . '",
-						overlayCSS:
-						{
-							background: "#fff",
-							opacity: 0.6
-						},
-						css: {
-									padding:        20,
-									textAlign:      "center",
-									color:          "#555",
-									border:         "3px solid #aaa",
-									backgroundColor:"#fff",
-									cursor:         "wait",
-									lineHeight:		"32px"
-							}
-					});
-				$("#submit_epdq_payment_form").click();
-			' );
-
-				return;
-
-			} else {
-
-				AG_ePDQ_Helpers::ag_log( 'Please double check the ePDQ plugin settings, something is not quite right...', 'debug', $this->debug );
-				wc_add_notice( 'ePDQ Bad Setup: Please double check the ePDQ plugin settings, something is not quite right...', 'error' );
-
-				return;
-
+				$ag_form_displayed = TRUE;
 			}
 
 		}
@@ -524,96 +493,42 @@ function init_ag_epdq() {
 
 			ob_clean();
 			header( 'HTTP/1.1 200 OK' );
-
-			$nonce = AG_ePDQ_Helpers::AG_escape( $_REQUEST['COMPLUS'] );
-
-			// Store 3D secure data
-			//ePDQ_Display_Score::AG_sore_PSP_returned_data($_REQUEST);
-
 			$check_data = array();
-			$data       = $_REQUEST;
-			$settings   = ePDQ_crypt::key_settings();
 
-			foreach ( $data as $key => $value ) {
-				if ( $value == "" ) {
+			foreach( $_REQUEST as $key => $value ) {
+				if( $value == "" ) {
 					continue;
 				}
-				$check_data[ $key ]              = AG_ePDQ_Helpers::AG_escape( $value );
-				$datacheck[ strtoupper( $key ) ] = AG_ePDQ_Helpers::AG_escape( strtoupper( $value ) );
+				$check_data[ AG_ePDQ_Helpers::AG_escape( $key ) ] = AG_ePDQ_Helpers::AG_escape( $value );
+				$datacheck[ AG_ePDQ_Helpers::AG_escape( strtoupper( $key ) ) ] = AG_ePDQ_Helpers::AG_escape( strtoupper( $value ) );
 			}
 
-			// Server-to-server API callback
-			if ( null !== AG_ePDQ_Helpers::AG_get_request( 'callback' ) ) {
-				AG_ePDQ_Helpers::ag_log( 'API call back happened', 'warning', $this->debug );
-
-				// Passing id
-				if ( ! isset( $datacheck['PARAMVAR'] ) ) {
-					AG_ePDQ_Helpers::ag_log( 'PARAMVAR parameter is missing, please read the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/pending-failed-transactions/', 'warning', $this->debug );
-				} else {
-					$check_data['idOrder'] = AG_ePDQ_Helpers::AG_get_request( 'PARAMVAR' );
-				}
-
-			}
-
-
-			//if (class_exists('WC_Subscriptions_Order') && AG_ePDQ_Helpers::order_contains_subscription($order) ) {
-			//$check_data['SUBSCRIPTION_ID'] = isset($check_data['subscription_id']) ? $check_data['subscription_id'] : '';
-			//$check_data['CREATION_STATUS'] = isset($check_data['creation_status']) ? $check_data['creation_status'] : '';
-			//}
-
-
-			// Hash
-			if ( defined( 'ePDQ_custom_order_id' ) ) {
-				$hash_fields = array(
-					$settings['pspid'],
-					date( 'Y:m:d' ),
-					AG_ePDQ_Helpers::AG_get_request( 'idOrder' ),
-					$settings['shain']
-				);
-			} else {
-				$hash_fields = array(
-					$settings['pspid'],
-					date( 'Y:m:d' ),
-					AG_ePDQ_Helpers::AG_get_request( 'orderID' ),
-					$settings['shain']
-				);
-			}
-			$encrypted_string = ePDQ_crypt::ripemd_crypt( implode( $hash_fields ), $settings['shain'] );
-
-
-			if ( null !== AG_ePDQ_Helpers::AG_get_request( 'STATUS' ) ) {
-
-				if ( hash_equals( $encrypted_string, $nonce ) ) {
-					if ( ! empty( $this->sha_out ) ) {
-						$SHA_check = $this->SHA_check( $check_data );
-						if ( $SHA_check ) {
-							$this->successful_transaction( $check_data );
-						} else {
-							if ( $this->threeds === 'yes' ) {
-								AG_ePDQ_Helpers::ag_log( 'Extra parameters are required to be sent back when using the AG 3D secure score system, please check through the trouble shooting in the plugin docs.', 'warning', $this->debug );
-							} else {
-								AG_ePDQ_Helpers::ag_log( 'Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/transaction-is-unsuccessful-due-to-a-sha-out-issue/', 'warning', $this->debug );
-							}
-							// SHA-Out check fail
-							wp_die( 'Transaction is unsuccessful due to a SHA-Out issue' );
-						}
-					} else {
-						// SHA-Out not set
-						AG_ePDQ_Helpers::ag_log( 'You dont have SHA-out set, for improved security we recommend you set this. Please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/transaction-is-unsuccessful-due-to-a-sha-out-issue/', 'warning', $this->debug );
-						$this->successful_transaction( $check_data );
-					}
-				} else {
-					// Nonce check fail
-					AG_ePDQ_Helpers::ag_log( 'Security check fail, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/security-check-fail/', 'warning', $this->debug );
-					wp_die( 'Security check fail.' );
-				}
-			} else {
-
+			if( NULL === AG_ePDQ_Helpers::AG_get_request( 'STATUS' ) ) {
 				AG_ePDQ_Helpers::ag_log( 'The transaction failed, ePDQ didn\'t send any data back. Please check you have setup the plugin correctly.', 'warning', $this->debug );
-				//wp_die('Transaction fail.');
+				wp_die( 'No data returned.' );
 			}
-		}
 
+			// Check if the nonce is valid
+			$nonce = AG_ePDQ_Helpers::AG_escape( $_REQUEST['COMPLUS'] );
+			$encrypted_string = ePDQ_crypt::complus_decrypt();
+			if( ! hash_equals( $encrypted_string, $nonce ) ) {
+				// Nonce check fail
+				AG_ePDQ_Helpers::ag_log( 'Security check fail, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/security-check-fail/', 'warning', $this->debug );
+				wp_die( 'Security check fail.' );
+			}
+
+			$SHA_check = $this->SHA_check( $check_data );
+			if( $SHA_check ) {
+				// Process
+				$this->successful_transaction( $check_data );
+			} else {
+
+				AG_ePDQ_Helpers::ag_log( 'Transaction is unsuccessful due to a SHA-Out issue, please check the docs ' . self::$AG_ePDQ_doc . 'barclays-epdq-payment-gateway/troubleshooting-barclays-epdq-payment-gateway/transaction-is-unsuccessful-due-to-a-sha-out-issue/', 'warning', $this->debug );
+				wp_die( 'Transaction is unsuccessful due to a SHA-Out issue' );
+
+			}
+
+		}
 
 		/**
 		 * Check SHA data
@@ -623,47 +538,18 @@ function init_ag_epdq() {
 		 * @return bool
 		 */
 		protected function SHA_check( $datatocheck ) {
+
 			$settings = ePDQ_crypt::key_settings();
-			$SHA_out  = $settings['shaout'];
-			$origsig  = $datatocheck['SHASIGN'];
+			$SHA_out = $settings['shaout'];
+			$origsig = $datatocheck['SHASIGN'];
 
 			// Remove parameters before doing decryption
-			unset(
-				$datatocheck['SHASIGN'],
-				$datatocheck['wc-api'],
-				$datatocheck['idOrder'],
-				$datatocheck['PARAMVAR'],
-				$datatocheck['callback'],
-				$datatocheck['doing_wp_cron'],
-				$datatocheck['woocs_order_emails_is_sending'],
-				$datatocheck['q'],
-				$datatocheck['somdn_error_logs_export_errors'],
-				$datatocheck['inner_section'],
-				$datatocheck['woof_parse_query']
-			);
-
-			// 3D score check
-			if ( $this->threeds !== 'yes' && isset( $datatocheck['SCORING'] ) ) {
-				unset(
-					$datatocheck['CCCTY'],
-					$datatocheck['ECI'],
-					$datatocheck['CVCCheck'],
-					$datatocheck['AAVCheck'],
-					$datatocheck['VC'],
-					$datatocheck['AAVZIP'],
-					$datatocheck['AAVADDRESS'],
-					$datatocheck['AAVNAME'],
-					$datatocheck['AAVPHONE'],
-					$datatocheck['AAVMAIL'],
-					$datatocheck['SCORING']
-				);
-			}
-			// END
+			unset( $datatocheck['SHASIGN'], $datatocheck['wc-api'], $datatocheck['idOrder'], $datatocheck['PARAMVAR'], $datatocheck['callback'], $datatocheck['doing_wp_cron'], $datatocheck['woocs_order_emails_is_sending'], $datatocheck['q'], $datatocheck['somdn_error_logs_export_errors'], $datatocheck['inner_section'], $datatocheck['woof_parse_query'] );
 
 			uksort( $datatocheck, 'strcasecmp' );
 
 			// Enable deeper debugging, useful for when the ePDQ team require data to debug.
-			if ( defined( 'ePDQ_support_debug' ) ) {
+			if( defined( 'ag_support_debug' ) ) {
 				$args = array(
 					'AAVADDRESS' => $datatocheck['AAVADDRESS'] ?? '',
 					'ACCEPTANCE' => $datatocheck['ACCEPTANCE'] ?? '',
@@ -673,25 +559,23 @@ function init_ag_epdq() {
 					'PAYID'      => $datatocheck['PAYID'] ?? '',
 					'STATUS'     => $datatocheck['STATUS'] ?? ''
 				);
-				AG_ePDQ_Helpers::ag_log( 'Debug data sent back ' . print_r( $args, true ), 'debug', $this->debug );
+				AG_ePDQ_Helpers::ag_log( 'Debug data sent back ' . print_r( $args, TRUE ), 'debug', $this->debug );
 			}
 
-
 			$SHAsig = '';
-			foreach ( $datatocheck as $key => $value ) {
+			foreach( $datatocheck as $key => $value ) {
 				$SHAsig .= trim( strtoupper( $key ) ) . '=' . utf8_encode( trim( $value ) ) . $SHA_out;
 			}
 
 			$SHAsig = strtoupper( hash( ePDQ_crypt::get_sha_method(), $SHAsig ) );
 
-			if ( hash_equals( $SHAsig, $origsig ) ) {
-				return true;
+			if( hash_equals( $SHAsig, $origsig ) ) {
+				return TRUE;
 			}
 
-			return false;
+			return FALSE;
 
 		}
-
 
 		/**
 		 * Successful transaction
@@ -703,40 +587,27 @@ function init_ag_epdq() {
 		public function successful_transaction( $args ) {
 
 			global $woocommerce;
-
-			foreach ( $args as $key => $value ) {
-				if ( $value == "" ) {
-					continue;
-				}
-				$args[ $key ] = AG_ePDQ_Helpers::AG_escape( $value );
-			}
-
-			extract( $args );
-
 			$order = new WC_Order( $args['idOrder'] );
 
 			// Catch and stop if order is already paid for.
-			if ( $order->has_status( array( 'processing', 'completed' ) ) ) {
+			if( $order->has_status( array( 'processing', 'completed' ) ) ) {
 				AG_ePDQ_Helpers::ag_log( 'Aborting, Order #' . $args['idOrder'] . ' is already paid for.', 'debug', 'yes' );
 				wp_redirect( $order->get_checkout_order_received_url() );
 				exit;
 			}
 
 			// Save payment token to user
-			if ( $this->token === 'yes' ) {
+			if( $this->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) {
 				AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
 				// Drop BIN
 				unset( $args['BIN'] );
-				update_post_meta( $args['idOrder'], 'use_saved_card', '' );
+				$order->update_meta_data( 'use_saved_card', '' );
+				$order->save();
 			}
 			// END
 
-
-			$STATUS    = $args['STATUS'];
-			$NCERROR   = $args['NCERROR'];
-			$note      = 'ePDQ Status: - ' . AG_errors::get_epdq_status_code( $STATUS ) . '</p>';
-			$errornote = 'ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $NCERROR ) . '</p>';
-
+			$note = 'ePDQ Status: - ' . AG_errors::get_epdq_status_code( $args['STATUS'] ) . '</p>';
+			$errornote = 'ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $args['NCERROR'] ) . '</p>';
 
 			$order_notes = array(
 				'Order ID                            : ' => $args['ORDERID'] ?? '',
@@ -755,21 +626,15 @@ function init_ag_epdq() {
 				'AAV Result For Postcode             : ' => $args['AAVZIP'] = $args['AAVZIP'] ?? '',
 			);
 
-			if ( class_exists( 'WC_Subscriptions_Order' ) && AG_ePDQ_Helpers::order_contains_subscription( $order ) ) {
-				$order_notes['Subscription ID: ']     = $args['subscription_id'] ?? '';
-				$order_notes['Subscription status: '] = $args['creation_status'] ?? '';
-			}
-
-
 			AG_ePDQ_Helpers::update_order_notes( $order, $order_notes );
 
-
 			// Time customer took to process through ePDQ
-			update_post_meta( $order->get_id(), 'AG_returned_back', date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ) );
-			$start  = new DateTime( get_post_meta( $order->get_id(), 'AG_sent_to_ePDQ', true ) );
-			$finish = new DateTime( get_post_meta( $order->get_id(), 'AG_returned_back', true ) );
+			$order->update_meta_data( 'AG_returned_back', date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ) );
+			$order->save();
+			$start = new DateTime( $order->get_meta( 'AG_sent_to_ePDQ' ) );
+			$finish = new DateTime( $order->get_meta( 'AG_returned_back' ) );
 
-			if ( $start !== null && $finish !== null ) { //if(!empty($start) && !empty($finish)) {
+			if( $start !== NULL && $finish !== NULL ) {
 
 				$interval = date_diff( $start, $finish );
 				AG_ePDQ_Helpers::ag_log( 'Customer took ' . $interval->format( '%i Minute %s Seconds' ) . ' to process through ePDQ', 'debug', $this->debug );
@@ -778,88 +643,11 @@ function init_ag_epdq() {
 
 			}
 
-			$order_data = array();
 			unset( $args['SHASIGN'], $args['COMPLUS'], $args['CARDNO'], $args['ALIAS'] );
-			foreach ( $args as $key => $value ) {
-				if ( $value == "" ) {
-					continue;
-				}
-				$order_data[ $key ] = $value;
-			}
+			AG_ePDQ_Helpers::update_order_meta_data( $args['idOrder'], $args, $order );
 
-			if ( class_exists( 'WC_Subscriptions_Order' ) && AG_ePDQ_Helpers::order_contains_subscription( $order ) ) {
-				$order_data['SUBSCRIPTION_ID'] = $args['subscription_id'] ?? '';
-				$order_data['CREATION_STATUS'] = $args['creation_status'] ?? '';
-			}
-
-			// Storing meta if customer canceled order.
-			$orderCancel = array(
-				'customer_canceled_order' => true,
-			);
-
-			AG_ePDQ_Helpers::update_order_meta_data( $args['idOrder'], $order_data );
-
-			switch ( $STATUS ): case '4':
-				case '5':
-				case '9':
-					if ( ! $order->has_status( array( 'processing', 'completed' ) ) ) {
-						$noteTitle = __( 'Barclays ePDQ transaction is confirmed.', 'ag_epdq_server' );
-						AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ transaction is confirmed. No issues to report.', 'debug', $this->debug );
-						$order->add_order_note( $noteTitle );
-						$order->add_order_note( $note );
-						$order->payment_complete( $args['PAYID'] );
-					}
-					break;
-
-				case '41':
-				case '51':
-				case '91':
-					$noteTitle = __( 'Barclays ePDQ transaction is awaiting for confirmation.', 'ag_epdq_server' );
-					AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ transaction is awaiting for confirmation. No issues to report.', 'debug', $this->debug );
-					$order->add_order_note( $noteTitle );
-					$order->update_status( 'on-hold', $note );
-					break;
-
-				case '2':
-				case '93':
-					$noteTitle = __( 'Barclays ePDQ transaction was refused.', 'ag_epdq_server' );
-					$order->add_order_note( $noteTitle );
-					$order->add_order_note( $errornote );
-					AG_ePDQ_Helpers::ag_log( 'The authorisation has been refused by the financial institution. The customer can retry the authorisation process after selecting another card or another payment method.', 'notice', $this->debug );
-					$order->update_status( 'failed', $note );
-					$woocommerce->cart->empty_cart();
-					break;
-
-				case '52':
-				case '92':
-					$noteTitle = __( 'Barclays ePDQ payment uncertain.', 'ag_epdq_server' );
-					$order->add_order_note( $noteTitle );
-					$order->add_order_note( $errornote );
-					AG_ePDQ_Helpers::ag_log( 'A technical problem arose during the authorisation/payment process, giving an unpredictable result.', 'notice', $this->debug );
-					$order->update_status( 'failed', $note );
-					$woocommerce->cart->empty_cart();
-					break;
-
-				case '1':
-					$noteTitle = __( 'The customer has cancelled the transaction', 'ag_epdq_server' );
-					$order->add_order_note( $noteTitle );
-					$order->add_order_note( $errornote );
-					$order->update_status( 'cancelled', $note );
-
-					AG_ePDQ_Helpers::update_order_meta_data( $args['idOrder'], $orderCancel );
-
-					$woocommerce->cart->empty_cart();
-					break;
-
-				case '0':
-					$noteTitle = __( 'Incomplete or invalid', 'ag_epdq_server' );
-					$order->add_order_note( $noteTitle );
-					$order->add_order_note( $errornote );
-					$order->update_status( 'failed', $note );
-					$woocommerce->cart->empty_cart();
-					break;
-
-			endswitch;
+			// Process order data and update order status
+			epdq_order::process( $args, '[Payment] ', $order );
 
 			wp_redirect( $order->get_checkout_order_received_url() );
 		}
@@ -873,130 +661,99 @@ function init_ag_epdq() {
 		 *
 		 * @return bool
 		 */
-		function process_refund( $order_id, $amount = null, $reason = '' ) {
+		function process_refund( $order_id, $amount = NULL, $reason = '' ) {
 
-			$order           = new WC_Order( $order_id );
-			$settings        = ePDQ_crypt::key_settings();
+			$order = new WC_Order( $order_id );
+			$settings = ePDQ_crypt::key_settings();
 			$refund_settings = ePDQ_crypt::refund_settings();
 			$environment_url = AG_ePDQ_Helpers::get_enviroment_url( 'maintenancedirect' );
 
+			$refund_amount = $amount * 100;
+			$transaction_id = $order->get_meta( 'PAYID' );
 
-			$refund_amount  = $amount * 100;
-			$transaction_id = get_post_meta( $order_id, 'PAYID', true );
-
-			if ( $this->status === 'test' ) {
+			if( $this->status === 'test' ) {
 				$environment_url = self::$refund_test;
 			}
-			if ( $this->status === 'live' ) {
+			if( $this->status === 'live' ) {
 				$environment_url = self::$refund_live;
 			}
 
-			if ( ! $transaction_id ) {
+			if( ! $transaction_id ) {
 				AG_ePDQ_Helpers::ag_log( 'Refund failed: Transaction ID not found.', 'debug', $this->debug );
 
 				return new WP_Error( 'error', __( 'Refund failed: Transaction ID not found.', 'ag_epdq_server' ) );
 			}
-			if ( ! $refund_amount ) {
+			if( ! $refund_amount ) {
 				AG_ePDQ_Helpers::ag_log( 'Refund failed: Amount invalid.', 'debug', $this->debug );
 
 				return new WP_Error( 'error', __( 'Refund failed: Amount invalid.', 'ag_epdq_server' ) );
 			}
 
-			if ( empty( $refund_settings['USERID'] ) ) {
+			if( empty( $refund_settings['USERID'] ) ) {
 				AG_ePDQ_Helpers::ag_log( 'Refund failed: API username has not been set.', 'debug', $this->debug );
 
 				return new WP_Error( 'error', __( 'Refund failed: API username has not been set.', 'ag_epdq_server' ) );
 			}
 
-			if ( empty( $refund_settings['PSWD'] ) ) {
+			if( empty( $refund_settings['PSWD'] ) ) {
 				AG_ePDQ_Helpers::ag_log( 'Refund failed: API password has not been set.', 'debug', $this->debug );
 
 				return new WP_Error( 'error', __( 'Refund failed: API password has not been set.', 'ag_epdq_server' ) );
 			}
 
-			if ( AG_ePDQ_Helpers::ag_get_order_currency( $order ) !== 'GBP' && defined( 'ePDQ_PSPID' ) && defined( 'ePDQ_REFID' ) ) {
-				$PSPID                    = ePDQ_PSPID;
+			if( AG_ePDQ_Helpers::ag_get_order_currency( $order ) !== 'GBP' && defined( 'ePDQ_PSPID' ) && defined( 'ePDQ_REFID' ) ) {
+				$PSPID = ePDQ_PSPID;
 				$refund_settings['REFID'] = ePDQ_REFID;
 			} else {
 				$PSPID = $settings['pspid'];
 			}
 
-			$data_post              = array();
-			$data_post['AMOUNT']    = $refund_amount;
-			$data_post['PAYID']     = $transaction_id;
+			$data_post = array();
+			$data_post['AMOUNT'] = $refund_amount;
+			$data_post['PAYID'] = $transaction_id;
 			$data_post['OPERATION'] = 'RFD';
-			$data_post['ORDERID']   = $order_id;
-			$data_post['PSPID']     = $PSPID;
-			$data_post['PSWD']      = $refund_settings['PSWD'];
-			$data_post['REFID']     = $refund_settings['REFID'];
-			$data_post['USERID']    = $refund_settings['USERID'];
+			$data_post['ORDERID'] = $order_id;
+			$data_post['PSPID'] = $PSPID;
+			$data_post['PSWD'] = $refund_settings['PSWD'];
+			$data_post['REFID'] = $refund_settings['REFID'];
+			$data_post['USERID'] = $refund_settings['USERID'];
 
 			$shasign_arg = array();
-			if ( isset( $settings['shain'] ) ) {
 
-				ksort( $data_post );
-				foreach ( $data_post as $key => $value ) {
-					if ( $value == '' ) {
-						continue;
-					}
-					$shasign_arg[] = $key . '=' . $value;
+			ksort( $data_post );
+			foreach( $data_post as $key => $value ) {
+				if( $value == '' ) {
+					continue;
 				}
-
-				$SHAsig               = hash( ePDQ_crypt::get_sha_method(), implode( $settings['shain'], $shasign_arg ) . $settings['shain'] );
-				$data_post['SHASIGN'] = $SHAsig;
-
+				$shasign_arg[] = $key . '=' . $value;
 			}
 
+			$SHAsig = hash( ePDQ_crypt::get_sha_method(), implode( $settings['shain'], $shasign_arg ) . $settings['shain'] );
+			$data_post['SHASIGN'] = $SHAsig;
 
 			// Enable deeper debugging, useful for when the ePDQ team require data to debug.
-			if ( defined( 'ePDQ_support_debug' ) ) {
-				AG_ePDQ_Helpers::ag_log( print_r( $data_post, true ), 'debug', $this->debug );
+			if( defined( 'ag_support_debug' ) ) {
+				AG_ePDQ_Helpers::ag_log( print_r( $data_post, TRUE ), 'debug', $this->debug );
 			}
 
 			// Post
 			$result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
 
-			$lines    = preg_split( '/\r\n|\r|\n/', $result['body'] );
-			$response = array();
-			foreach ( $lines as $line ) {
-				$key_value = preg_split( '/=/', $line, 2 );
-				if ( count( $key_value ) > 1 ) {
-					$response[ trim( $key_value[0] ) ] = trim( $key_value[1] );
-				}
+			$accepted = array( 8, 81, 85 ); // OK
+			$string = implode( '|', $result );
+			if( in_array( $result['STATUS'], $accepted ) ) {
+				$order->add_order_note( __( 'Refund request successful', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
+
+				return TRUE;
 			}
 
-			$accepted  = array( 8, 81, 85 ); // OK
-			$status    = preg_replace( '/[^a-zA-Z0-9\s]/', '', $response['STATUS'] );
-			$fullError = preg_replace( '/[^a-zA-Z0-9\s]/', '', $response['NCERRORPLUS'] );
+			$order->add_order_note( __( 'Refund failed', 'ag_epdq_server' ) . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '<br />' );
+			$order->add_order_note( __( 'Refund Note', 'ag_epdq_server' ) . '<br /><strong>' . __( 'Error: ', 'ag_epdq_server' ) . $result['NCERRORPLUS'] . '</strong><br />' );
+			// Log refund error
+			AG_ePDQ_Helpers::ag_log( $string, 'debug', $this->debug );
 
-
-			$string = implode( '|', $response );
-
-			if ( ! is_wp_error( $result ) && $result['response']['code'] >= 200 && $result['response']['code'] < 300 ) {
-				if ( in_array( $status, $accepted ) ) {
-					$order->add_order_note(
-						__( 'Refund successful', 'ag_epdq_server' ) . '<br />' .
-						__( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' .
-						__( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' .
-						__( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $status ) . ' '
-					);
-
-					return true;
-				} else {
-
-					$order->add_order_note( __( 'Refund failed', 'ag_epdq_server' ) . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $status ) . '<br />' );
-					$order->add_order_note( __( 'Refund Note', 'ag_epdq_server' ) . '<br /><strong>' . __( 'Error: ', 'ag_epdq_server' ) . $fullError . '</strong><br />' );
-					// Log refund error
-					AG_ePDQ_Helpers::ag_log( $string, 'debug', $this->debug );
-
-					return new WP_Error( 'error', __( 'Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server' ) );
-				}
-			} else {
-				// Log refund error
-				AG_ePDQ_Helpers::ag_log( $string, 'debug', $this->debug );
-
-				return new WP_Error( 'error', __( 'Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server' ) );
-			}
+			return new WP_Error( 'error', __( 'Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server' ) );
 		}
+
 	}
 }

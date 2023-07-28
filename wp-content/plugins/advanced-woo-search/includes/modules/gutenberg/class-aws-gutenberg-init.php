@@ -109,16 +109,19 @@ if (!class_exists('AWS_Gutenberg_Init')) :
          * Add new blocks category
          */
         public function add_block_category( $categories ) {
-            return array_merge(
-                $categories,
-                array(
+            if ( is_array( $categories ) ) {
+                $categories = array_merge(
+                    $categories,
                     array(
-                        'slug'  => 'aws',
-                        'title' => 'Advanced Woo Search',
-                        'icon'  => 'search',
-                    ),
-                )
-            );
+                        array(
+                            'slug'  => 'aws',
+                            'title' => 'Advanced Woo Search',
+                            'icon'  => 'search',
+                        ),
+                    )
+                );
+            }
+            return $categories;
         }
 
     }

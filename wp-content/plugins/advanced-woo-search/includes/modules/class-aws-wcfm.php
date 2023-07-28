@@ -49,6 +49,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             add_filter( 'aws_search_query_array', array( $this, 'wcfm_search_query_array' ), 1 );
             add_filter( 'aws_terms_search_query', array( $this, 'wcfm_terms_search_query' ), 1, 2 );
             add_filter( 'aws_search_tax_results', array( $this, 'wcfm_search_tax_results' ), 1 );
+            add_action( 'wp_head', array( $this, 'wp_head' ), 1 );
         }
 
         /*
@@ -231,6 +232,36 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             return $result_array;
 
         }
+
+        /*
+         * Limit search inside vendor shop page
+         */
+        function wp_head() {
+
+            $store = $this->get_current_store();
+            if ( ! $store ) {
+                return;
+            }
+
+            $form_action = AWS_Helpers::get_search_url();
+
+            ?>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let $awsForms = jQuery(".aws-container");
+                    if ( $awsForms.length > 0 ) {
+                        $awsForms.each(function( index ) {
+                            if ( ! jQuery(this).closest("#wcfmmp-store").length > 0 && ! jQuery(this).closest("#wcfmmp-store-content").length > 0 ) {
+                                jQuery(this).find('form').attr('action', '<?php echo $form_action; ?>');
+                                jQuery(this).data('tax', '');
+                            }
+                        });
+                    }
+                });
+            </script>
+
+        <?php }
 
         /*
          * Get current store object

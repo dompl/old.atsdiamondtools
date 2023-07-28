@@ -116,6 +116,8 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             ajaxRequest: function() {
 
+                methods.analytics( searchFor, false );
+
                 var data = {
                     action: 'aws_action',
                     keyword : searchFor,
@@ -142,8 +144,6 @@ AwsHooks.filters = AwsHooks.filters || {};
                             methods.showResults( response );
 
                             methods.showResultsBlock();
-
-                            methods.analytics( searchFor );
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -214,10 +214,10 @@ AwsHooks.filters = AwsHooks.filters || {};
                         html += '<span class="aws_result_content">';
 
                         html += '<span class="aws_result_title">';
+                            html += result.title;
                             if ( result.featured ) {
                                 html += '<span class="aws_result_featured" title="Featured"><svg version="1.1" viewBox="0 0 20 21" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill-rule="evenodd" stroke="none" stroke-width="1"><g transform="translate(-296.000000, -422.000000)"><g transform="translate(296.000000, 422.500000)"><path d="M10,15.273 L16.18,19 L14.545,11.971 L20,7.244 L12.809,6.627 L10,0 L7.191,6.627 L0,7.244 L5.455,11.971 L3.82,19 L10,15.273 Z"/></g></g></g></svg></span>';
                             }
-                            html += result.title;
                         html += '</span>';
 
                         if ( result.stock_status ) {
@@ -428,37 +428,47 @@ AwsHooks.filters = AwsHooks.filters || {};
                 return isFixed;
             },
 
-            analytics: function( label ) {
+            analytics: function( label, submit ) {
                 if ( d.useAnalytics ) {
                     try {
-                        var sPage = '/?s=' + encodeURIComponent( 'ajax-search:' + label );
+                        var sPage = submit ? '' : '/?s=' + encodeURIComponent( 'ajax-search:' + label );
                         if ( typeof gtag !== 'undefined' && gtag !== null ) {
                             gtag('event', 'AWS search', {
                                 'event_label': label,
                                 'event_category': 'AWS Search Term',
                                 'transport_type' : 'beacon'
                             });
-                            gtag('event', 'page_view', {
-                                'page_path': sPage,
-                                'page_title' : 'AWS search'
-                            });
+                            if ( sPage ) {
+                                gtag('event', 'page_view', {
+                                    'page_path': sPage,
+                                    'page_title' : 'AWS search'
+                                });
+                            }
                         }
                         if ( typeof ga !== 'undefined' && ga !== null ) {
                             ga('send', 'event', 'AWS search', 'AWS Search Term', label);
-                            ga( 'send', 'pageview', sPage );
+                            if ( sPage ) {
+                                ga( 'send', 'pageview', sPage );
+                            }
                         }
                         if ( typeof pageTracker !== "undefined" && pageTracker !== null ) {
-                            pageTracker._trackPageview( sPage );
+                            if ( sPage ) {
+                                pageTracker._trackPageview( sPage );
+                            }
                             pageTracker._trackEvent( 'AWS search', 'AWS search', 'AWS Search Term', label )
                         }
                         if ( typeof _gaq !== 'undefined' && _gaq !== null ) {
                             _gaq.push(['_trackEvent', 'AWS search', 'AWS Search Term', label ]);
-                            _gaq.push(['_trackPageview', sPage]);
+                            if ( sPage ) {
+                                _gaq.push(['_trackPageview', sPage]);
+                            }
                         }
                         // This uses Monster Insights method of tracking Google Analytics.
                         if ( typeof __gaTracker !== 'undefined' && __gaTracker !== null ) {
                             __gaTracker( 'send', 'event', 'AWS search', 'AWS Search Term', label );
-                            __gaTracker( 'send', 'pageview', sPage );
+                            if ( sPage ) {
+                                __gaTracker( 'send', 'pageview', sPage );
+                            }
                         }
                     }
                     catch (error) {
@@ -603,6 +613,13 @@ AwsHooks.filters = AwsHooks.filters || {};
             methods.resultsHide();
             $(d.resultBlock).html('');
             searchFor = '';
+        });
+
+
+        $searchForm.on( 'submit', function(e) {
+            if ( ! d.ajaxSearch ) {
+                methods.analytics( $searchField.val(), true );
+            }
         });
 
 

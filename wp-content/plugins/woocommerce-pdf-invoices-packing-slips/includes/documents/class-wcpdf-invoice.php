@@ -1,6 +1,8 @@
 <?php
 namespace WPO\WC\PDF_Invoices\Documents;
 
+use WPO\WC\PDF_Invoices\Updraft_Semaphore_3_0 as Semaphore;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -17,6 +19,16 @@ if ( !class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Invoice' ) ) :
  */
 
 class Invoice extends Order_Document_Methods {
+	
+	public $type;
+	public $title;
+	public $icon;
+	public $slug;
+	public $lock_name;
+	public $lock_context;
+	public $lock_time;
+	public $lock_retries;
+	
 	/**
 	 * Init/load the order object.
 	 *
@@ -24,10 +36,17 @@ class Invoice extends Order_Document_Methods {
 	 */
 	public function __construct( $order = 0 ) {
 		// set properties
-		$this->type		= 'invoice';
-		$this->title	= __( 'Invoice', 'woocommerce-pdf-invoices-packing-slips' );
-		$this->icon		= WPO_WCPDF()->plugin_url() . "/assets/images/invoice.svg";
-
+		$this->type         = 'invoice';
+		$this->title        = __( 'Invoice', 'woocommerce-pdf-invoices-packing-slips' );
+		$this->icon         = WPO_WCPDF()->plugin_url() . "/assets/images/invoice.svg";
+		$this->slug         = str_replace( '-', '_', $this->type );
+		
+		// semaphore
+		$this->lock_name    = "wpo_wcpdf_{$this->slug}_number_lock";
+		$this->lock_context = array( 'source' => "wpo-wcpdf-{$this->type}-semaphore" );
+		$this->lock_time    = apply_filters( "wpo_wcpdf_{$this->type}_number_lock_time", 2 );
+		$this->lock_retries = apply_filters( "wpo_wcpdf_{$this->type}_number_lock_retries", 0 );
+		
 		// Call parent constructor
 		parent::__construct( $order );
 	}
@@ -53,16 +72,18 @@ class Invoice extends Order_Document_Methods {
 	}
 
 	public function init() {
-		// init settings
-		$this->init_settings_data();
+		// save settings
 		$this->save_settings();
 
 		if ( isset( $this->settings['display_date'] ) && $this->settings['display_date'] == 'order_date' && !empty( $this->order ) ) {
 			$this->set_date( $this->order->get_date_created() );
+			$this->set_display_date( 'order_date' );	
 		} elseif( empty( $this->get_date() ) ) {
 			$this->set_date( current_time( 'timestamp', true ) );
+			$this->set_display_date( 'invoice_date' );	
 		}
 
+		
 		$this->init_number();
 
 		do_action( 'wpo_wcpdf_init_document', $this );
@@ -73,34 +94,50 @@ class Invoice extends Order_Document_Methods {
 	}
 
 	public function init_number() {
-		global $wpdb;
-		// If a third-party plugin claims to generate invoice numbers, trigger this instead
-		if ( apply_filters( 'woocommerce_invoice_number_by_plugin', false ) || apply_filters( 'wpo_wcpdf_external_invoice_number_enabled', false, $this ) ) {
-			$invoice_number = apply_filters( 'woocommerce_generate_invoice_number', null, $this->order );
-			$invoice_number = apply_filters( 'wpo_wcpdf_external_invoice_number', $invoice_number, $this );
-		} elseif ( isset( $this->settings['display_number'] ) && $this->settings['display_number'] == 'order_number' && !empty( $this->order ) ) {
-			$invoice_number = $this->order->get_order_number();
-		}
+		$logger         = isset( $this->settings['log_number_generation'] ) ? [ wc_get_logger() ] : [];
+		$lock           = new Semaphore( $this->lock_name, $this->lock_time, $logger, $this->lock_context );
+		$invoice_number = null;
+		
+		if ( $lock->lock( $this->lock_retries ) ) {
+			
+			try {
+				// If a third-party plugin claims to generate invoice numbers, trigger this instead
+				if ( apply_filters( 'woocommerce_invoice_number_by_plugin', false ) || apply_filters( 'wpo_wcpdf_external_invoice_number_enabled', false, $this ) ) {
+					$invoice_number = apply_filters( 'woocommerce_generate_invoice_number', null, $this->order );
+					$invoice_number = apply_filters( 'wpo_wcpdf_external_invoice_number', $invoice_number, $this );
+				} elseif ( isset( $this->settings['display_number'] ) && $this->settings['display_number'] == 'order_number' && ! empty( $this->order ) ) {
+					$invoice_number = $this->order->get_order_number();
+				}
 
-		if ( !empty( $invoice_number ) ) { // overriden by plugin or set to order number
-			if ( is_numeric($invoice_number) || $invoice_number instanceof Document_Number ) {
-				$this->set_number( $invoice_number );
-			} else {
-				// invoice number is not numeric, treat as formatted
-				// try to extract meaningful number data
-				$formatted_number = $invoice_number;
-				$number = (int) preg_replace('/\D/', '', $invoice_number);
-				$invoice_number = compact( 'number', 'formatted_number' );
-				$this->set_number( $invoice_number );
+				if ( ! empty( $invoice_number ) ) { // overriden by plugin or set to order number
+					if ( ! is_numeric( $invoice_number ) && ! ( $invoice_number instanceof Document_Number ) ) {
+						// invoice number is not numeric, treat as formatted
+						// try to extract meaningful number data
+						$formatted_number = $invoice_number;
+						$number           = (int) preg_replace( '/\D/', '', $invoice_number );
+						$invoice_number   = compact( 'number', 'formatted_number' );
+					}
+				} else {
+					$number_store   = $this->get_sequential_number_store();
+					$invoice_number = $number_store->increment( intval( $this->order_id ), $this->get_date()->date_i18n( 'Y-m-d H:i:s' ) );
+				}
+				
+				if ( ! is_null( $invoice_number ) ) {
+					$this->set_number( $invoice_number );
+				}
+				
+			} catch ( \Exception $e ) {
+				$lock->log( $e, 'critical' );
+			} catch ( \Error $e ) {
+				$lock->log( $e, 'critical' );
 			}
-			return $invoice_number;
+
+			$lock->release();
+			
+		} else {
+			$lock->log( "Couldn't get the Invoice Number lock!", 'critical' );
 		}
-
-		$number_store   = $this->get_sequential_number_store();
-		$invoice_number = $number_store->increment( intval( $this->order_id ), $this->get_date()->date_i18n( 'Y-m-d H:i:s' ) );
-
-		$this->set_number( $invoice_number );
-
+		
 		return $invoice_number;
 	}
 
@@ -354,6 +391,22 @@ class Invoice extends Order_Document_Methods {
 			),
 			array(
 				'type'			=> 'setting',
+				'id'			=> 'log_number_generation',
+				'title'			=> __( 'Log invoice number generation', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'invoice',
+				'args'			=> array(
+					'option_name'	=> $option_name,
+					'id'			=> 'log_number_generation',
+					'description'	=> sprintf(
+						/* translators: here link */
+						__( 'Enables the invoice number generation logs %s. Helpful for debugging numbering issues.', 'woocommerce-pdf-invoices-packing-slips' ),
+						'<a href="'.esc_url( admin_url( 'admin.php?page=wc-status&tab=logs' ) ).'">'.__( 'here', 'woocommerce-pdf-invoices-packing-slips' ).'</a>'
+					),
+				)
+			),
+			array(
+				'type'			=> 'setting',
 				'id'			=> 'my_account_buttons',
 				'title'			=> __( 'Allow My Account invoice download', 'woocommerce-pdf-invoices-packing-slips' ),
 				'callback'		=> 'select',
@@ -401,6 +454,18 @@ class Invoice extends Order_Document_Methods {
 			),
 			array(
 				'type'			=> 'setting',
+				'id'			=> 'invoice_number_search',
+				'title'			=> __( 'Enable invoice number search in the orders list', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback'		=> 'checkbox',
+				'section'		=> 'invoice',
+				'args'			=> array(
+					'option_name'	=> $option_name,
+					'id'			=> 'invoice_number_search',
+					'description'   => __( 'Can potentially slow down the search process.', 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
+			array(
+				'type'			=> 'setting',
 				'id'			=> 'disable_free',
 				'title'			=> __( 'Disable for free orders', 'woocommerce-pdf-invoices-packing-slips' ),
 				'callback'		=> 'checkbox',
@@ -410,6 +475,44 @@ class Invoice extends Order_Document_Methods {
 					'id'			=> 'disable_free',
 					/* translators: zero number */
 					'description'	=> sprintf(__( "Disable document when the order total is %s", 'woocommerce-pdf-invoices-packing-slips' ), function_exists('wc_price') ? wc_price( 0 ) : 0 ),
+				)
+			),
+			array(
+				'type'     => 'setting',
+				'id'       => 'mark_printed',
+				'title'    => __( 'Mark as printed', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback' => 'select',
+				'section'  => 'invoice',
+				'args'     => array(
+					'option_name' => $option_name,
+					'id'          => 'mark_printed',
+					'options'     => array_merge(
+						[
+							'manually' => __( 'Manually', 'woocommerce-pdf-invoices-packing-slips' ),
+						],
+						apply_filters( 'wpo_wcpdf_document_triggers', [
+							'single'           => __( 'On single order action', 'woocommerce-pdf-invoices-packing-slips' ),
+							'bulk'             => __( 'On bulk order action', 'woocommerce-pdf-invoices-packing-slips' ),
+							'my_account'       => __( 'On my account', 'woocommerce-pdf-invoices-packing-slips' ),
+							'email_attachment' => __( 'On email attachment', 'woocommerce-pdf-invoices-packing-slips' ),
+							'document_data'    => __( 'On order document data (number and/or date set manually)', 'woocommerce-pdf-invoices-packing-slips' ),
+						] )
+					),
+					'multiple'         => true,
+					'enhanced_select'  => true,
+					'description'      => __( 'Allows you to mark the document as printed, manually (in the order page) or automatically (based on the document creation context you have selected).', 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
+			array(
+				'type'     => 'setting',
+				'id'       => 'unmark_printed',
+				'title'    => __( 'Unmark as printed', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback' => 'checkbox',
+				'section'  => 'invoice',
+				'args'     => array(
+					'option_name' => $option_name,
+					'id'          => 'unmark_printed',
+					'description' => __( 'Adds a link in the order page to allow to remove the printed mark.', 'woocommerce-pdf-invoices-packing-slips' ),
 				)
 			),
 			array(

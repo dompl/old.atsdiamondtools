@@ -1,3 +1,7 @@
+Version 3.0.4 - December 12, 2022
+
+	Fix fatal error when using PHP 8.1
+
 Version 3.0.3 - June 29, 2021
 
 	Disable message saying that a license will expire soon, not necessary with subscriptions

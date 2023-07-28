@@ -30,9 +30,15 @@ $review_invitation = sprintf(
 	do_action( 'wpo_wcpdf_before_settings_page', $active_tab, $active_section );
 
 	// save or check option to hide extensions ad
-	if ( isset( $_GET['wpo_wcpdf_hide_extensions_ad'] ) ) {
-		update_option( 'wpo_wcpdf_hide_extensions_ad', true );
-		$hide_ad = true;
+	if ( isset( $_REQUEST['wpo_wcpdf_hide_extensions_ad'] ) && isset( $_REQUEST['_wpnonce'] ) ) {
+		// validate nonce
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'hide_extensions_ad_nonce' ) ) {
+			wcpdf_log_error( 'You do not have sufficient permissions to perform this action: wpo_wcpdf_hide_extensions_ad' );
+			$hide_ad = false;
+		} else {
+			update_option( 'wpo_wcpdf_hide_extensions_ad', true );
+			$hide_ad = true;
+		}
 	} else {
 		$hide_ad = get_option( 'wpo_wcpdf_hide_extensions_ad' );
 	}
@@ -120,7 +126,6 @@ $review_invitation = sprintf(
 			<input type="hidden" name="document_type" data-default="<?php esc_attr_e( $document_type ); ?>" value="<?php esc_attr_e( $document_type ); ?>">
 			<input type="hidden" name="order_id" value="">
 			<input type="hidden" name="nonce" value="<?php echo wp_create_nonce( 'wpo_wcpdf_preview' ); ?>">
-			<script src="<?php echo WPO_WCPDF()->plugin_url() ?>/assets/js/pdf_js/pdf.js"></script>
 			<div class="preview"></div>
 		</div>
 

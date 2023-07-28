@@ -4,7 +4,6 @@ namespace Yoast\WP\SEO\Actions\Wincher;
 
 use Exception;
 use WP_Post;
-use WPSEO_Meta;
 use WPSEO_Utils;
 use Yoast\WP\SEO\Config\Wincher_Client;
 use Yoast\WP\SEO\Helpers\Options_Helper;
@@ -276,8 +275,6 @@ class Wincher_Keyphrases_Action {
 	 * @return array
 	 */
 	protected function collect_all_keyphrases() {
-		global $wpdb;
-
 		// Collect primary keyphrases first.
 		$keyphrases = \array_column(
 			$this->indexable_repository
@@ -348,7 +345,7 @@ class Wincher_Keyphrases_Action {
 	 */
 	protected function to_result_object( $result ) {
 		if ( \array_key_exists( 'data', $result ) ) {
-			$result['results'] = $result['data'];
+			$result['results'] = (object) $result['data'];
 
 			unset( $result['data'] );
 		}

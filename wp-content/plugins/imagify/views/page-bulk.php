@@ -96,11 +96,6 @@ defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 							</p>
 						</div>
 						<a href="<?php echo esc_url( imagify_get_external_url( 'subscription' ) ); ?>" target="_blank"><?php _e( 'View your profile', 'imagify' ); ?></a>
-
-						<p class="imagify-meteo-subs">
-							<span class="screen-reader-text"><?php _e( 'Your subscription:', 'imagify' ); ?></span>
-							<strong class="imagify-user-plan imagify-user-plan-label"><?php echo $user->plan_label; ?></strong>
-						</p>
 					</div>
 
 					<?php if ( $user && 1 === $user->plan_id ) { ?>
@@ -177,8 +172,22 @@ defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 			<div class="imagify-pr2">
 				<p>
 					<?php wp_nonce_field( 'imagify-bulk-optimize', 'imagifybulkuploadnonce' ); ?>
-					<button id="imagify-bulk-action" type="button" class="button button-primary">
-						<span class="dashicons dashicons-admin-generic"></span>
+					<?php
+					$disabled = '';
+					$class    = '';
+
+					if (
+						false !== get_transient( 'imagify_wp_optimize_running' )
+						||
+						false !== get_transient( 'imagify_custom-folders_optimize_running' )
+					) {
+						$disabled = 'disabled="disabled"';
+						$class    = 'rotate';
+					}
+
+					?>
+					<button id="imagify-bulk-action" type="button" class="button button-primary" <?php echo $disabled; ?>>
+						<span class="dashicons dashicons-admin-generic <?php echo $class; ?>"></span>
 						<span class="button-text"><?php _e( 'Imagif’em all', 'imagify' ); ?></span>
 					</button>
 				</p>
@@ -224,9 +233,5 @@ defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 		}
 	}
 	?>
-
-	<script type="text/html" id="tmpl-imagify-spinner">
-		<?php $this->print_template( 'part-bulk-optimization-spinner' ); ?>
-	</script>
 </div>
 <?php

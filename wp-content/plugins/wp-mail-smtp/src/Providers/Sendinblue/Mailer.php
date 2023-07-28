@@ -51,22 +51,6 @@ class Mailer extends MailerAbstract {
 	// @formatter:on
 
 	/**
-	 * Mailer constructor.
-	 *
-	 * @since 1.6.0
-	 *
-	 * @param MailCatcherInterface $phpmailer The MailCatcher object.
-	 */
-	public function __construct( $phpmailer ) {
-
-		parent::__construct( $phpmailer );
-
-		if ( ! $this->is_php_compatible() ) {
-			return;
-		}
-	}
-
-	/**
 	 * @inheritDoc
 	 *
 	 * @since 1.6.0
@@ -304,12 +288,12 @@ class Mailer extends MailerAbstract {
 	public function send() {
 
 		try {
-			$api = new Api();
+			$api = new Api( $this->connection );
 
 			$response = $api->get_smtp_client()->sendTransacEmail( $this->get_body() );
 
 			DebugEvents::add_debug(
-				esc_html__( 'An email request was sent to the Sendinblue API.', 'wp-mail-smtp' )
+				esc_html__( 'An email request was sent to the Brevo API.', 'wp-mail-smtp' )
 			);
 
 			$this->process_response( $response );
@@ -388,7 +372,7 @@ class Mailer extends MailerAbstract {
 	 */
 	public function is_mailer_complete() {
 
-		$options = $this->options->get_group( $this->mailer );
+		$options = $this->connection_options->get_group( $this->mailer );
 
 		// API key is the only required option.
 		if ( ! empty( $options['api_key'] ) ) {

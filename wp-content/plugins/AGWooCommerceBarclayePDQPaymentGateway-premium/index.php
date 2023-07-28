@@ -8,27 +8,29 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.4.5
+ * Version: 4.5.6
  * Update URI: https://api.freemius.com
- * WC requires at least: 5.0
- * WC tested up to: 7.0
+ * WC requires at least: 6.0
+ * WC tested up to: 7.8
  * License: GPL3
  */
 
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 /**
  * AG ePDQ server
+ *
  * @class    AG_ePDQ_server
- * @version  4.4.5
+ * @version  4.5.6
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.4.5";
+	public static $AGversion = "4.5.6";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
@@ -39,7 +41,7 @@ class AG_ePDQ_server {
 	 */
 	public function __construct() {
 
-		load_plugin_textdomain( 'ag_epdq_server', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( 'ag_epdq_server', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 		$this->define_constants();
 
@@ -50,23 +52,29 @@ class AG_ePDQ_server {
 		add_action( 'wp_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
 
-
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'woocommerce_add_epdq_gateway' ) );
 
 		// If the site supports Gutenberg Blocks, support the Checkout block
 		add_action( 'woocommerce_blocks_loaded', array( $this, 'ag_blocks_support' ) );
 
+		// Support for HPOS
+		add_action( 'before_woocommerce_init', function() {
+
+			if( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, TRUE );
+			}
+		} );
 
 		$this->AG_classes();
 
-
-		if ( ! AG_licence::valid_licence() ) {
+		if( ! AG_licence::valid_licence() ) {
 			return;
 		}
 
 	}
 
 	private function define_constants() {
+
 		define( 'AG_ePDQ_server_path', plugin_dir_url( __FILE__ ) );
 		define( 'AG_ePDQ_path', plugin_dir_path( __FILE__ ) );
 		define( 'AG_ePDQ_class', AG_ePDQ_path . 'inc/classes/' );
@@ -75,6 +83,9 @@ class AG_ePDQ_server {
 		define( 'AG_ePDQ_token', AG_ePDQ_path . 'inc/classes/Tokenize/' );
 		define( 'AG_ePDQ_admin', admin_url() );
 		define( 'AG_ePDQ_url', plugin_dir_url( __FILE__ ) );
+		define( 'AG_ePDQ_sub', AG_ePDQ_path . 'inc/classes/Subscriptions/' );
+		define( 'AG_ePDQ_webhook', AG_ePDQ_path . 'inc/classes/Webhook/' );
+
 	}
 
 	/**
@@ -95,7 +106,6 @@ class AG_ePDQ_server {
 			'plugin_name'    => self::$pluginName,
 		) );
 
-
 		AG_licence::run_instance( array(
 			'basename' => plugin_basename( __FILE__ ),
 			'urls'     => array(
@@ -112,7 +122,7 @@ class AG_ePDQ_server {
 				'public_key'      => 'pk_8024ebca6d61cc1b38ff7a933bc15',
 				'trial'           => array(
 					'days'               => 7,
-					'is_require_payment' => true,
+					'is_require_payment' => TRUE,
 				),
 				'has_affiliation' => 'customers',
 				'menu'            => array(
@@ -127,10 +137,10 @@ class AG_ePDQ_server {
 			'update' => array(
 				'plugin'          => 'AGWooCommerceBarclayePDQPaymentGateway',
 				'name'            => 'Barclays ePDQ payment gateway (Barclaycard) for WooCommerce',
-				'update_notice'   => true,
-				'message'         => 'Hey, why not check out our new feature. AG Order Check, with this enable you will be able to view important information about orders at a quick glance.<br />Please check the setup guide <a target="_blank" href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/setting-up-ag-order-check/">here</a> on how to set up AG Order Check',
-				'notice_name'     => 'ag_order_check',
-				'disable_gateway' => false,
+				'update_notice'   => FALSE,
+				'message'         => 'We have added support for a new custom webhook, the webhook will help automatically capture data sent from the ePDQ platform, this will help limit issues with no data sent to update customer orders.<br />Please check the setup guide <a target="_blank" href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/setting-up-the-new-webhook-feature/">here</a> on how to set up the new webhook',
+				'notice_name'     => 'ag_webhook',
+				'disable_gateway' => FALSE,
 			),
 
 			'plugin_name' => self::$pluginName,
@@ -151,12 +161,12 @@ class AG_ePDQ_server {
 			'plugin_slug'     => self::$AG_ePDQ_slug
 		) );
 
-
 	}
 
 	public static function activate() {
-		if ( ! get_option( 'AG_ePDQ_server' ) ) {
-			add_option( 'AG_ePDQ_server', true );
+
+		if( ! get_option( 'AG_ePDQ_server' ) ) {
+			add_option( 'AG_ePDQ_server', TRUE );
 		}
 	}
 
@@ -167,10 +177,10 @@ class AG_ePDQ_server {
 
 	public function ag_blocks_support() {
 
-		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+		if( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 			require_once AG_ePDQ_blocks . 'ePDQ-class.php';
 
-			add_action( 'woocommerce_blocks_payment_method_type_registration', function ( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+			add_action( 'woocommerce_blocks_payment_method_type_registration', function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
 
 				$payment_method_registry->register( new epdq_checkout_block );
 			} );
@@ -182,29 +192,33 @@ class AG_ePDQ_server {
 	 * Register gateway with Woo
 	 */
 	public function woocommerce_add_epdq_gateway( $methods ) {
+
 		$methods[] = 'epdq_checkout';
 
 		return $methods;
 	}
 
 	public function ag_admin_css() {
-		wp_enqueue_style( 'ag-admin', AG_ePDQ_server_path . 'inc/assets/css/admin-style.css', false, self::$AGversion );
+
+		wp_enqueue_style( 'ag-admin', AG_ePDQ_server_path . 'inc/assets/css/admin-style.css', FALSE, self::$AGversion );
 	}
 
 	public function ag_checkout_css() {
-		wp_enqueue_style( 'ag-ePDQ', AG_ePDQ_server_path . 'inc/assets/css/style.css', false, self::$AGversion );
+
+		wp_enqueue_style( 'ag-ePDQ', AG_ePDQ_server_path . 'inc/assets/css/style.css', FALSE, self::$AGversion );
 	}
 
 	public function ag_epdq_block_css() {
 
-		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
-			wp_enqueue_style( 'ag-block', AG_ePDQ_server_path . 'inc/assets/css/epdq-block.css', false, self::$AGversion );
+		if( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+			wp_enqueue_style( 'ag-block', AG_ePDQ_server_path . 'inc/assets/css/epdq-block.css', FALSE, self::$AGversion );
 		}
 
 	}
 
 	public function woocommerce_ag_epdq_init() {
-		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+
+		if( ! class_exists( 'WC_Payment_Gateway' ) ) {
 			return;
 		}
 
@@ -216,6 +230,10 @@ class AG_ePDQ_server {
 		require_once AG_ePDQ_class . 'class-order-status-check.php';
 		require_once AG_ePDQ_token . 'class-tokenization.php';
 		require_once AG_ePDQ_class . 'Fraudchecks/fraud-checks.php';
+		require_once AG_ePDQ_class . 'class-epdq-authorization-capture.php';
+		require_once AG_ePDQ_sub . 'class-subscriptions.php';
+		require_once AG_ePDQ_webhook . 'class-webhook.php';
+		require_once AG_ePDQ_class . 'class-order.php';
 
 		ag_ePDQ_fraud_checks::run_instance( array(
 			'plugin_name' => self::$pluginName,
@@ -229,6 +247,12 @@ class AG_ePDQ_server {
 		) );
 
 		AG_ePDQ_order_status_check::run_instance( array(
+			'plugin_slug'    => self::$AG_ePDQ_slug,
+			'plugin_version' => self::$AGversion,
+			'plugin_name'    => self::$pluginName,
+		) );
+
+		ag_capture::run_instance( array(
 			'plugin_slug'    => self::$AG_ePDQ_slug,
 			'plugin_version' => self::$AGversion,
 			'plugin_name'    => self::$pluginName,

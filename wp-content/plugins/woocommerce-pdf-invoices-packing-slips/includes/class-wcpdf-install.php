@@ -186,6 +186,11 @@ class Install {
 
 		// set transient for wizard notification
 		set_transient( 'wpo_wcpdf_new_install', 'yes', DAY_IN_SECONDS * 2 );
+
+		// schedule the yearly reset number action
+		if ( ! empty( WPO_WCPDF()->settings ) && is_callable( array( WPO_WCPDF()->settings, 'schedule_yearly_reset_numbers' ) ) ) {
+			WPO_WCPDF()->settings->schedule_yearly_reset_numbers();
+		}
 	}
 
 	/**
@@ -211,9 +216,12 @@ class Install {
 		} else {
 			// don't try merging fonts with local when updating pre 2.0
 			$pre_2 = ( $installed_version == 'versionless' || version_compare( $installed_version, '2.0-dev', '<' ) );
-			$merge_with_local = $pre_2 ? false : true;
+			$merge_with_local = !$pre_2;
 			WPO_WCPDF()->main->copy_fonts( $font_path, $merge_with_local );
 		}
+
+        // to ensure fonts will be copied to the upload directory
+        delete_transient( 'wpo_wcpdf_subfolder_fonts_has_files' );
 		
 		// 1.5.28 update: copy next invoice number to separate setting
 		if ( $installed_version == 'versionless' || version_compare( $installed_version, '1.5.28', '<' ) ) {
@@ -410,6 +418,13 @@ class Install {
 			if ( ! empty( $debug_settings['use_html5_parser'] ) ) {
 				unset( $debug_settings['use_html5_parser'] );
 				update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
+			}
+		}
+		
+		// 3.3.0-dev-1: schedule the yearly reset number action
+		if ( version_compare( $installed_version, '3.3.0-dev-1', '<' ) ) {
+			if ( ! empty( WPO_WCPDF()->settings ) && is_callable( array( WPO_WCPDF()->settings, 'schedule_yearly_reset_numbers' ) ) ) {
+				WPO_WCPDF()->settings->schedule_yearly_reset_numbers();
 			}
 		}
 	}

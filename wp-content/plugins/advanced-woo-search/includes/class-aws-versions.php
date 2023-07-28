@@ -98,7 +98,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                     if ( $settings ) {
                         if ( ! isset( $settings['stopwords'] ) ) {
-                            $settings['stopwords'] = 'a, also, am, an, and, are, as, at, be, but, by, call, can, co, con, de, do, due, eg, eight, etc, even, ever, every, for, from, full, go, had, has, hasnt, have, he, hence, her, here, his, how, ie, if, in, inc, into, is, it, its, ltd, me, my, no, none, nor, not, now, of, off, on, once, one, only, onto, or, our, ours, out, over, own, part, per, put, re, see, so, some, ten, than, that, the, their, there, these, they, this, three, thru, thus, to, too, top, un, up, us, very, via, was, we, well, were, what, when, where, who, why, will';
+                            $settings['stopwords'] = 'a, also, am, an, and, are, as, at, be, but, by, call, can, co, con, de, do, due, eg, eight, etc, even, ever, every, for, from, full, go, had, has, hasnt, have, he, hence, her, here, his, how, ie, if, in, inc, into, is, it, its, ltd, me, my, no, none, nor, not, now, of, off, on, once, one, only, onto, or, our, ours, out, over, own, part, per, put, re, see, so, some, ten, than, that, the, their, there, these, they, this, three, thru, thus, to, too, un, up, us, very, via, was, we, well, were, what, when, where, who, why, will';
                             update_option( 'aws_settings', $settings );
                         }
                     }
@@ -427,6 +427,20 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
                             $settings['pages_results_num'] = 10;
                             update_option( 'aws_settings', $settings );
                         }
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '2.76', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['index_shortcodes'] ) ) {
+                            $settings['index_shortcodes'] = 'true';
+                            update_option( 'aws_settings', $settings );
+                        }
+
                     }
 
                 }

@@ -61,7 +61,8 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
             }
 
             if ( ! class_exists( 'WCFMmp' ) && ! class_exists('ACF') && ! class_exists('YITH_WCWL') && ! class_exists( 'WooCommerceWholeSalePrices' ) && ! class_exists( 'UM_Functions' ) && ! defined( 'PWB_PLUGIN_VERSION' )
-                && ! defined( 'TINVWL_FVERSION' ) && ! class_exists( 'WeDevs_Dokan' ) ) {
+                && ! defined( 'TINVWL_FVERSION' ) && ! class_exists( 'WeDevs_Dokan' )
+                && ! ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) ) ) {
                 return;
             }
 
@@ -108,6 +109,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
             if ( class_exists( 'WeDevs_Dokan' ) && ( ! $hide_option || array_search( 'dokan', $hide_option ) === false ) ) {
                 $notice_message .= '<li>' . __( 'Dokan – WooCommerce Multivendor Marketplace Solution plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/dokan-woocommerce-multivendor-marketplace/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=dokan">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
                 $notice_id .= 'dokan|';
+            }
+
+            if ( ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) ) && ( ! $hide_option || array_search( 'multivendorx', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'MultiVendorX – WooCommerce Multivendor Marketplace plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/multivendorx/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=multivendorx">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'multivendorx|';
             }
 
             $notice_id = 'aws_hide_int_notices=' . urlencode( trim( $notice_id, '|' ) );

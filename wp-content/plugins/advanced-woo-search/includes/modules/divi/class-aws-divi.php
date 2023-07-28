@@ -48,6 +48,19 @@ if ( ! class_exists( 'AWS_Divi' ) ) :
             add_filter( 'aws_index_do_shortcodes', array( $this, 'divi_builder_index_do_shortcodes' ) );
             add_filter( 'aws_indexed_content', array( $this, 'aws_indexed_content' ), 10, 3 );
 
+            if ( AWS()->get_settings( 'seamless' ) === 'true' ) {
+
+                add_action( 'wp_head', array( $this, 'wp_head' ) );
+
+                add_filter( 'et_html_main_header', array( $this, 'et_html_main_header' ) );
+                add_filter( 'et_html_slide_header', array( $this, 'et_html_main_header' ) );
+
+                add_filter( 'et_pb_search_shortcode_output', array( $this, 'divi_builder_search_module' ) );
+                add_filter( 'et_pb_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
+                add_filter( 'et_pb_fullwidth_menu_shortcode_output', array( $this, 'divi_builder_search_module' ) );
+
+            }
+
         }
 
         /*
@@ -83,6 +96,77 @@ if ( ! class_exists( 'AWS_Divi' ) ) :
 
             return $content;
 
+        }
+
+        /*
+         * Focus search field on icon click
+         */
+        public function wp_head() {
+
+            $html = '
+                <script>
+                
+                    window.addEventListener("load", function() {
+                        
+                        var awsDiviSearch = document.querySelectorAll("header .et_pb_menu__search-button");
+                        if ( awsDiviSearch ) {
+                            for (var i = 0; i < awsDiviSearch.length; i++) {
+                                awsDiviSearch[i].addEventListener("click", function() {
+                                    window.setTimeout(function(){
+                                        document.querySelector(".et_pb_menu__search-container .aws-container .aws-search-field").focus();
+                                        jQuery( ".aws-search-result" ).hide();
+                                    }, 100);
+                                }, false);
+                            }
+                        }
+
+                    }, false);
+
+                </script>';
+
+            echo $html;
+
+        }
+
+        /*
+         * Seamless integration for header
+         */
+        public function et_html_main_header( $html ) {
+            if ( function_exists( 'aws_get_search_form' ) ) {
+
+                $pattern = '/(<form[\s\S]*?<\/form>)/i';
+                $form = aws_get_search_form(false);
+
+                if ( strpos( $html, 'aws-container' ) !== false ) {
+                    $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
+                }
+
+                $html = '<style>.et_search_outer .aws-container { position: absolute;right: 40px;top: 20px; top: calc( 100% - 60px ); }</style>' . $html;
+                $html = trim(preg_replace('/\s\s+/', ' ', $html));
+                $html = preg_replace( $pattern, $form, $html );
+
+            }
+            return $html;
+        }
+
+        /*
+         * Divi builder replace search module
+         */
+        public function divi_builder_search_module( $output ) {
+            if ( function_exists( 'aws_get_search_form' ) && is_string( $output ) ) {
+
+                $pattern = '/(<form[\s\S]*?<\/form>)/i';
+                $form = aws_get_search_form(false);
+
+                if ( strpos( $output, 'aws-container' ) !== false ) {
+                    $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
+                }
+
+                $output = trim(preg_replace('/\s\s+/', ' ', $output));
+                $output = preg_replace( $pattern, $form, $output );
+
+            }
+            return $output;
         }
 
     }

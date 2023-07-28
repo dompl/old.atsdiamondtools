@@ -1,17 +1,18 @@
 <?php
 /*-----------------------------------------------------------------------------------*/
+
 /*	Authipay Moto
 /*-----------------------------------------------------------------------------------*/
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
-if ( class_exists( 'ag_ePDQ_moto' ) ) {
+if( class_exists( 'ag_ePDQ_moto' ) ) {
 	return;
 }
 
 
 class ag_ePDQ_moto {
 
-	public static $single_instance = null;
+	public static $single_instance = NULL;
 	public static $args = array();
 
 	public function __construct() {
@@ -27,15 +28,15 @@ class ag_ePDQ_moto {
 		// Change Moto checkout title.
 		add_filter( 'woocommerce_endpoint_order-pay_title', array( $this, 'change_checkout_order_pay_title' ) );
 
-
 	}
 
 	/**
 	 * run
 	 */
 	public static function run_instance( $args = array() ) {
-		if ( self::$single_instance === null ) {
-			self::$args            = $args;
+
+		if( self::$single_instance === NULL ) {
+			self::$args = $args;
 			self::$single_instance = new self();
 		}
 
@@ -49,11 +50,11 @@ class ag_ePDQ_moto {
 	 */
 	public static function moto_button( $order ) {
 
-		if ( $order->get_status() !== 'pending' ) {
+		if( $order->get_status() !== 'pending' ) {
 			return;
 		}
 
-		if ( ! $order->get_date_paid() ) {
+		if( ! $order->get_date_paid() ) {
 			// $on_checkout = false
 			echo '<button style="background: #007cba; color: white;" type="button" id="ag-moto" class="button ag-moto" data-order_url="' . esc_attr( $order->get_checkout_payment_url() ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '">AG MOTO Payment</button>';
 
@@ -63,7 +64,7 @@ class ag_ePDQ_moto {
 
 	public function moto_ajax_call() {
 
-		wp_enqueue_script( self::$args['plugin_name'] . '-moto', AG_ePDQ_server_path . "inc/assets/js/ag-moto-script.js", array( 'jquery' ), null, true );
+		wp_enqueue_script( self::$args['plugin_name'] . '-moto', AG_ePDQ_server_path . "inc/assets/js/ag-moto-script.js", array( 'jquery' ), NULL, TRUE );
 		wp_localize_script( self::$args['plugin_name'] . '-moto', 'ag_status_var', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
@@ -78,31 +79,31 @@ class ag_ePDQ_moto {
 	 */
 	public function ag_allow_admin_to_pay_for_order( $allcaps, $caps, $args ) {
 
-		$user          = wp_get_current_user();
+		$user = wp_get_current_user();
 		$allowed_roles = array( 'administrator', 'shop_manager' );
 
 		// Check we are looking at the WooCommerce Pay For Order Page
-		if ( ! isset( $caps[0] ) || $caps[0] !== 'pay_for_order' ) {
+		if( ! isset( $caps[0] ) || $caps[0] !== 'pay_for_order' ) {
 			return $allcaps;
 		}
 		// Check that a Key is provided
-		if ( ! isset( $_GET['key'] ) ) {
+		if( ! isset( $_GET['key'] ) ) {
 			return $allcaps;
 		}
 
 		// Find the Related Order
 		$order = wc_get_order( $args[2] );
-		if ( ! $order ) {
+		if( ! $order ) {
 			return $allcaps;
 		} # Invalid Order
 
-		if ( get_post_meta( $order->get_id(), 'is_moto', true ) && array_intersect( $allowed_roles, $user->roles ) ) {
+		if( $order->get_meta( 'is_moto' ) && array_intersect( $allowed_roles, $user->roles ) ) {
 
-			$order_key       = $order->get_order_key();
+			$order_key = $order->get_order_key();
 			$order_key_check = $_GET['key'];
 
 			$error_message = __( "This order is a " . self::$args['short_title'] . " MOTO payment. Only store admins or shop managers can process the order.", 'ag_epdq_server' );
-			if ( ! wc_has_notice( $error_message, 'notice' ) ) {
+			if( ! wc_has_notice( $error_message, 'notice' ) ) {
 				wc_add_notice( $error_message, 'notice' );
 			}
 
@@ -112,7 +113,6 @@ class ag_ePDQ_moto {
 
 		return $allcaps;
 
-
 	}
 
 	public function ag_pre_moto_call() {
@@ -120,11 +120,11 @@ class ag_ePDQ_moto {
 		check_ajax_referer( self::$args['plugin_name'] . '-moto', 'nonce' );
 
 		// the data from the ajax call
-		$order_id = (int) $_POST['order_id'];
-		$order    = new WC_Order( $order_id );
+		$order_id = AG_ePDQ_Helpers::AG_decode( $_POST['order_id'] );
+		$order = new WC_Order( $order_id );
 
 		// Is MOTO order
-		$order->update_meta_data( 'is_moto', true );
+		$order->update_meta_data( 'is_moto', TRUE );
 		$order->save();
 
 	}
@@ -133,10 +133,12 @@ class ag_ePDQ_moto {
 	public function change_checkout_order_pay_title( $title ) {
 
 		global $wp;
-		$user          = wp_get_current_user();
-		$allowed_roles = array( 'administrator', 'shop_manager' );
+		$user = wp_get_current_user();
+		$default_roles = array( 'administrator', 'shop_manager' );
+		$allowed_roles = apply_filters( 'ag_moto_role', $default_roles );
+		$order = new WC_Order( $wp->query_vars['order-pay'] );
 
-		if ( get_post_meta( $wp->query_vars['order-pay'], 'is_moto', true ) && array_intersect( $allowed_roles, $user->roles ) ) {
+		if( $order->get_meta( 'is_moto' ) && array_intersect( $allowed_roles, $user->roles ) ) {
 
 			return __( self::$args['short_title'] . " MOTO Checkout", 'ag_epdq_server' );
 

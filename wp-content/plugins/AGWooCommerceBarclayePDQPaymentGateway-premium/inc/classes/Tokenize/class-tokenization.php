@@ -18,7 +18,7 @@
 /*-----------------------------------------------------------------------------------*/
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
-if ( class_exists( 'AG_ePDQ_Token' ) ) {
+if( class_exists( 'AG_ePDQ_Token' ) ) {
 	return;
 }
 
@@ -28,22 +28,30 @@ class AG_ePDQ_Token {
 
 	public static function save( $args, $userID, $login ) {
 
-		if ( empty( $args['ALIAS'] ) || empty( $userID ) || $login === false ) {
+		if( empty( $args['ALIAS'] ) ) {
 			return;
+		}
+		$order = new WC_Order( $args['orderID'] );
+		$customer_id = $order->get_user_id();
+
+		// Catch and stop if order is already paid for or is processing.
+		if( $order->has_status( array( 'processing', 'completed', 'on-hold', 'failed' ) ) ) {
+			AG_ePDQ_Helpers::ag_log( 'Aborting, token save for #' . $args['orderID'] . ' is already paid for.', 'debug', 'yes' );
+			wp_redirect( $order->get_checkout_order_received_url() );
+			exit;
 		}
 
 		// Used token before
-		$savedCard     = get_post_meta( $args['orderID'], 'use_saved_card', true );
-		$customerToken = self::check( $login, $savedCard );
-		if ( isset( $customerToken ) || ! empty( $customerToken ) ) {
+		$savedCard = $order->get_meta( 'use_saved_card' );
+		$customerToken = self::check( $customer_id, $savedCard );
+		if( isset( $customerToken ) || ! empty( $customerToken ) ) {
 			$middle = strlen( $args['ED'] ) / 2;
-			$brand  = $args['BRAND'];
+			$brand = $args['BRAND'];
 
 			// Customer token already stored, change default to just used card.
-			if ( isset( $savedCard ) && $customerToken->get_last4() === substr( $args['CARDNO'], - 4 ) && $customerToken->get_expiry_month() === substr( $args['ED'], 0, $middle )
-			     && $customerToken->get_expiry_year() === '20' . substr( $args['ED'], 2, $middle ) && $brand === $customerToken->get_card_type() ) {
+			if( isset( $savedCard ) && $customerToken->get_last4() === substr( $args['CARDNO'], - 4 ) && $customerToken->get_expiry_month() === substr( $args['ED'], 0, $middle ) && $customerToken->get_expiry_year() === '20' . substr( $args['ED'], 2, $middle ) && $brand === $customerToken->get_card_type() ) {
 				$token = WC_Payment_Tokens::get( $savedCard );
-				$token->set_default( true );
+				$token->set_default( TRUE );
 				$token->save();
 
 				return;
@@ -51,10 +59,9 @@ class AG_ePDQ_Token {
 
 		}
 
-
 		// Check that brand is supported Woo brand for token
 		$brand = $args['BRAND'];
-		if ( ! in_array( $brand, array( 'american express', 'jcb', 'MasterCard', 'VISA' ) ) ) {
+		if( ! in_array( $brand, array( 'american express', 'jcb', 'MasterCard', 'VISA' ) ) ) {
 			AG_ePDQ_Helpers::ag_log( 'The card brand selected is not supported for token right now.', 'debug', 'yes' );
 
 			return;
@@ -70,19 +77,19 @@ class AG_ePDQ_Token {
 		$token->set_expiry_year( '20' . substr( $args['ED'], 2, $middle ) );
 		$token->set_expiry_month( substr( $args['ED'], 0, $middle ) );
 		$token->set_card_type( $brand );
-		$token->set_user_id( $userID );
+		$token->set_user_id( $customer_id );
 		// Save the new token to the database
 		$token->save();
 		AG_ePDQ_Helpers::ag_log( 'Token saved.', 'debug', 'yes' );
 		// Set this token as the users new default token
-		WC_Payment_Tokens::set_users_default( $userID, $token->get_id() );
+		WC_Payment_Tokens::set_users_default( $customer_id, $token->get_id() );
 
 	}
 
 	public static function check( $login, $savedCard ) {
 
-		if ( $login === false || empty( $savedCard ) ) {
-			return null;
+		if( $login === FALSE || empty( $savedCard ) ) {
+			return NULL;
 		}
 
 		return WC_Payment_Tokens::get( $savedCard );
@@ -90,14 +97,14 @@ class AG_ePDQ_Token {
 
 	public static function get( $userID, $login, $savedCard ) {
 
-		if ( empty( $userID ) || $login === false || empty( $savedCard ) ) {
-			return null;
+		if( empty( $userID ) || $login === FALSE || empty( $savedCard ) ) {
+			return NULL;
 		}
 
 		$token = WC_Payment_Tokens::get( $savedCard );
 
-		$customerToken = array( 'token' => null, 'brand' => null );
-		if ( $token ) {
+		$customerToken = array( 'token' => NULL, 'brand' => NULL );
+		if( $token ) {
 			$customerToken['token'] = $token->get_token();
 			$customerToken['brand'] = $token->get_card_type();
 		}
@@ -109,7 +116,7 @@ class AG_ePDQ_Token {
 
 		$tokens = WC_Payment_Tokens::get_customer_tokens( $userID, 'epdq_checkout' );
 
-		if ( $tokens ) {
+		if( $tokens ) {
 
 			return '<div class="ag-select-cards">
 				<p>' . __( 'Your credit cards: ', 'ag_epdq_server' ) . '</p>
@@ -132,24 +139,24 @@ class AG_ePDQ_Token {
 
 	public static function displayCards( $userID, $login, $tokens ) {
 
-		if ( empty( $userID ) || $login === false || empty( $tokens ) ) {
-			return null;
+		if( empty( $userID ) || $login === FALSE || empty( $tokens ) ) {
+			return NULL;
 		}
 
 		$getCards = array();
 
-		foreach ( $tokens as $token ) {
+		foreach( $tokens as $token ) {
 
-			if ( $token->is_default() ) {
+			if( $token->is_default() ) {
 
 				$getCards[] = '<li><input type="radio" id="cards-1" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' );
 
 			}
 		}
 
-		foreach ( $tokens as $token ) {
+		foreach( $tokens as $token ) {
 
-			if ( ! $token->is_default() ) {
+			if( ! $token->is_default() ) {
 
 				$getCards[] = '<li><input type="radio" id="cards" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' );
 

@@ -66,7 +66,7 @@ class Settings_General {
 					'id'               => 'template_path',
 					'options_callback' => array( $this, 'get_installed_templates_list' ),
 					/* translators: 1,2. template paths */
-					'description'      => sprintf( __( 'Want to use your own template? Copy all the files from <code>%1$s</code> to your (child) theme in <code>%2$s</code> to customize them' , 'woocommerce-pdf-invoices-packing-slips' ), $plugin_template_path, $theme_template_path),
+					'description'      => sprintf( __( 'Want to use your own template? Copy all the files from %1$s to your (child) theme in %2$s to customize them' , 'woocommerce-pdf-invoices-packing-slips' ), '<code>'.$plugin_template_path.'</code>', '<code>'.$theme_template_path.'</code>' ),
 				)
 			),
 			array(
@@ -252,9 +252,15 @@ class Settings_General {
 
 	public function attachment_settings_hint( $active_tab, $active_section ) {
 		// save or check option to hide attachments settings hint
-		if ( isset( $_GET['wpo_wcpdf_hide_attachments_hint'] ) ) {
-			update_option( 'wpo_wcpdf_hide_attachments_hint', true );
-			$hide_hint = true;
+		if ( isset( $_REQUEST['wpo_wcpdf_hide_attachments_hint'] ) && isset( $_REQUEST['_wpnonce'] ) ) {
+			// validate nonce
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'hide_attachments_hint_nonce' ) ) {
+				wcpdf_log_error( 'You do not have sufficient permissions to perform this action: wpo_wcpdf_hide_attachments_hint' );
+				$hide_hint = false;
+			} else {
+				update_option( 'wpo_wcpdf_hide_attachments_hint', true );
+				$hide_hint = true;
+			}
 		} else {
 			$hide_hint = get_option( 'wpo_wcpdf_hide_attachments_hint' );
 		}

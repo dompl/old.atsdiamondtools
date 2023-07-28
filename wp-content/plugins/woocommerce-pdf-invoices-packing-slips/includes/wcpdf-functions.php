@@ -16,8 +16,8 @@ function wcpdf_filter_order_ids( $order_ids, $document_type ) {
 	$order_ids = apply_filters( 'wpo_wcpdf_process_order_ids', $order_ids, $document_type );
 	// filter out trashed orders.
 	foreach ( $order_ids as $key => $order_id ) {
-		$order_status = get_post_status( $order_id );
-		if ( $order_status == 'trash' ) {
+		$order = wc_get_order( $order_id );
+		if ( ! empty( $order ) && is_callable( array( $order, 'get_status' ) ) && $order->get_status() == 'trash' ) {
 			unset( $order_ids[ $key ] );
 		}
 	}
@@ -113,16 +113,17 @@ function wcpdf_get_packing_slip( $order, $init = false ) {
  * Load HTML into (pluggable) PDF library, DomPDF 1.0.2 by default
  * Use wpo_wcpdf_pdf_maker filter to change the PDF class (which can wrap another PDF library).
  * 
- * @param string $html
- * @param array  $settings
+ * @param string       $html
+ * @param array        $settings
+ * @param null|object  $document
  * @return WPO\WC\PDF_Invoices\PDF_Maker
  */
-function wcpdf_get_pdf_maker( $html, $settings = array() ) {
+function wcpdf_get_pdf_maker( $html, $settings = array(), $document = null ) {
 	if ( ! class_exists( '\\WPO\\WC\\PDF_Invoices\\PDF_Maker' ) ) {
 		include_once( WPO_WCPDF()->plugin_path() . '/includes/class-wcpdf-pdf-maker.php' );
 	}
 	$class = apply_filters( 'wpo_wcpdf_pdf_maker', '\\WPO\\WC\\PDF_Invoices\\PDF_Maker' );
-	return new $class( $html, $settings );
+	return new $class( $html, $settings, $document );
 }
 
 /**
@@ -289,3 +290,4 @@ function wcpdf_catch_db_object_errors( $wpdb ) {
 
 	return $errors;
 }
+

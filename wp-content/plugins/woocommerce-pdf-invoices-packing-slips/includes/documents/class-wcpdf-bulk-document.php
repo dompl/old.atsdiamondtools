@@ -38,9 +38,9 @@ class Bulk_Document {
 	public $order_ids;
 
 	public function __construct( $document_type, $order_ids = array() ) {
-		$this->type = $document_type;
+		$this->type      = $document_type;
 		$this->order_ids = $order_ids;
-		$this->is_bulk = true;
+		$this->is_bulk   = true;
 	}
 
 	public function get_type() {
@@ -60,7 +60,7 @@ class Bulk_Document {
 			'paper_orientation'	=> apply_filters( 'wpo_wcpdf_paper_orientation', 'portrait', $this->get_type(), $this ),
 			'font_subsetting'	=> $this->wrapper_document->get_setting( 'font_subsetting', false ),
 		);
-		$pdf_maker = wcpdf_get_pdf_maker( $html, $pdf_settings );
+		$pdf_maker = wcpdf_get_pdf_maker( $html, $pdf_settings, $this );
 		$pdf = apply_filters( 'wpo_wcpdf_pdf_data', $pdf_maker->output(), $this );
 		
 		do_action( 'wpo_wcpdf_after_pdf', $this->get_type(), $this );

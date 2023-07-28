@@ -136,22 +136,6 @@ class ePDQ_crypt {
 		return $cipher;
 	}
 
-	/**
-	 * RIPEMD 160 encryption function
-	 *
-	 * @param $input
-	 * @param $password
-	 *
-	 * @return string
-	 */
-	public static function ripemd_crypt( $input, $password ) {
-
-		$key       = hash( 'sha256', $password );
-		$encrypted = base64_encode( hash_hmac( 'ripemd160', $input, $key ) );
-
-		return $key . $encrypted;
-	}
-
 	public static function refund_settings() {
 
 		if ( defined( 'secure_ePDQ_PSPID' ) && defined( 'secure_ePDQ_SHA_in' ) && defined( 'secure_ePDQ_SHA_out' ) && defined( 'secure_ePDQ_SHA_method' ) ) {
@@ -176,6 +160,49 @@ class ePDQ_crypt {
 
 		return $settings;
 
+	}
+
+	public static function complus_decrypt() {
+
+		$settings = ePDQ_crypt::key_settings();
+
+		// Hash
+		if ( defined( 'ePDQ_custom_order_id' ) ) {
+			$hash_fields = array(
+				$settings['pspid'],
+				date( 'Y:m:d' ),
+				AG_ePDQ_Helpers::AG_get_request( 'idOrder' ),
+				$settings['shain'],
+				get_bloginfo( 'name' )
+			);
+		} else {
+			$hash_fields = array(
+				$settings['pspid'],
+				date( 'Y:m:d' ),
+				AG_ePDQ_Helpers::AG_get_request( 'orderID' ),
+				$settings['shain'],
+				get_bloginfo( 'name' )
+			);
+		}
+
+		return ePDQ_crypt::ripemd_crypt( implode( $hash_fields ), $settings['shain'] );
+
+	}
+
+	/**
+	 * RIPEMD 160 encryption function
+	 *
+	 * @param $input
+	 * @param $password
+	 *
+	 * @return string
+	 */
+	public static function ripemd_crypt( $input, $password ) {
+
+		$key       = hash( 'sha256', $password );
+		$encrypted = base64_encode( hash_hmac( 'ripemd160', $input, $key ) );
+
+		return $key . $encrypted;
 	}
 
 

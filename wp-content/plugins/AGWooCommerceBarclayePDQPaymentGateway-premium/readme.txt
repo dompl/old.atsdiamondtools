@@ -1,8 +1,8 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
-Requires at least: 4.0
-Tested up to: 6.0
-Stable tag: 4.2
+Requires at least: 6.0
+Tested up to: 6.2.2
+Stable tag: 6.2
 
 == Description ==
 
@@ -26,16 +26,73 @@ Ok not a problem, lets see if you can fix it by following these steps.
 5. Follow the steps in the troubleshooting section of the documentation to fix.
 6. Still having issues? Send us a support ticket detailing the issue you have, we may ask for screenshots of the ePDQ back office.
 
-= Can I process refunds using this plugin? =
-Yes! You can process refunds right from the edit order screen.
-
-
 == Upgrade Notice ==
 
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
 
+= v.4.5.6 - 11/07/23 =
+* Dev             - Catch issues with Status Check and display the error message in order notes.
+* Dev             - Support added for subscriptions tokenization to be opt-out.
+* Fix             - Fixed issue saving metadata for HPOS.
+
+= v.4.5.5 - 05/07/23 =
+* New             - Support for WooCommerce HPOS - Coming in Woo 8.0.
+* Dev             - Refactored process_payment() to handle token payments better.
+* Update          - Freemius SDK updated.
+
+= v.4.5.4 - 23/06/23 =
+* Fix              - Fixed issue with doc URL in webhook class.
+* Dev              - Improvement to how subscription renewals are processed.
+* Change           - Bump tested WooCommerce (7.8).
+* Update           - Freemius SDK updated.
+
+= v.4.5.3.1 - 31/05/23 =
+* Fix              - Fixed issue when renewal payment returns Incomplete or invalid and emptying the cart.
+* Dev              - New logic to detect if customer has a saved token when processing a renewal payment, if not, an order note is added to the order and the renewal is aborted.
+* Change           - Added option for subscriptions to have their renewal amount changed.
+
+= v.4.5.3 - 11/05/23 =
+* Change           - Bump tested WooCommerce (7.7).
+* Update           - Freemius SDK updated.
+
+= v.4.5.2.1 - 25/04/23 =
+* Fix              - Fixed issue SHA-IN on settings page.
+* Dev              - New logic to catch when webhook fails to send COMPLUS due to server 403 error.
+
+= v.4.5.1 - 14/04/23 =
+* Fix              - Fixed issue with redirect to ePDQ not working.
+* Dev              - Removed tests folder from plugin release.
+* Change           - Bump tested WooCommerce (7.6).
+
+= v.4.5.0 - 11/04/23 =
+* New              - Support for WooCommerce Subscription payments.
+* New              - Support for shop workers to retry "On Hold" renewal payments on behalf of customers.
+* New              - Support for customers to retry "On Hold" renewal payments on their account.
+* New              - New webhook to capture payment data from ePDQ.
+* Dev              - Improvements to remote_post() function.
+* Dev              - Improvements to status check function.
+* Dev              - SHA_check() refactored.
+* Dev              - check_response() refactored.
+* Dev              - successful_transaction() refactored.
+* Dev              - process_refund() refactored.
+* Dev              - ag_manually_capture() refactored.
+* Dev              - New method to stop page builders showing payment form multiple times.
+* Change           - Improvements to MOTO, Capture and Status Check Ajax scripts.
+* Change           - Bump tested WooCommerce (7.5).
+* Update           - Freemius SDK updated.
+
+= v.4.4.7 - 23/02/23 =
+* Fix              - Fixed issue with deleting the HTML_ANSWER.
+* Change           - Removed validate_fields() as is no longer used.
+* Change           - Bump tested WooCommerce (7.4).
+
+= v.4.4.6 - 16/01/23 =
+* Fix              - Remove dummy logs on fraud check
+* New              - Capture pre-auth payments from within WooCommerce.
+* Change           - Change deeper debugging to ag_support_debug.
+* Update           - Freemius SDK updated.
 
 
 = v.4.4.5 - 31/10/22 =

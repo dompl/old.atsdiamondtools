@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
+class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -18,6 +18,7 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
             'WooCommerce\\WooCommerce\\Logging\\' => 32,
             'WooCommerce\\PayPalCommerce\\Webhooks\\' => 36,
             'WooCommerce\\PayPalCommerce\\WcGateway\\' => 37,
+            'WooCommerce\\PayPalCommerce\\Vendor\\' => 34,
             'WooCommerce\\PayPalCommerce\\Vaulting\\' => 36,
             'WooCommerce\\PayPalCommerce\\Subscription\\' => 40,
             'WooCommerce\\PayPalCommerce\\StatusReport\\' => 40,
@@ -29,7 +30,7 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
             'WooCommerce\\PayPalCommerce\\ApiClient\\' => 37,
             'WooCommerce\\PayPalCommerce\\AdminNotices\\' => 40,
             'WooCommerce\\PayPalCommerce\\' => 27,
-            'Wikimedia\\Composer\\' => 19,
+            'Wikimedia\\Composer\\Merge\\V2\\' => 28,
         ),
         'S' => 
         array (
@@ -51,8 +52,6 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
             'Dhii\\Util\\String\\' => 17,
             'Dhii\\Package\\' => 13,
             'Dhii\\Modular\\Module\\' => 20,
-            'Dhii\\Container\\' => 15,
-            'Dhii\\Collection\\' => 16,
         ),
     );
 
@@ -72,6 +71,10 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
         'WooCommerce\\PayPalCommerce\\WcGateway\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-wc-gateway/src',
+        ),
+        'WooCommerce\\PayPalCommerce\\Vendor\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/lib/packages',
         ),
         'WooCommerce\\PayPalCommerce\\Vaulting\\' => 
         array (
@@ -117,7 +120,7 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Wikimedia\\Composer\\' => 
+        'Wikimedia\\Composer\\Merge\\V2\\' => 
         array (
             0 => __DIR__ . '/..' . '/wikimedia/composer-merge-plugin/src',
         ),
@@ -157,14 +160,6 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
         array (
             0 => __DIR__ . '/..' . '/dhii/module-interface/src',
         ),
-        'Dhii\\Container\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dhii/containers/src',
-        ),
-        'Dhii\\Collection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dhii/collections-interface/src',
-        ),
     );
 
     public static $classMap = array (
@@ -178,9 +173,9 @@ class ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1a8c86e25bbcf00e1cae24192c8a742f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$classMap;
 
         }, null, ClassLoader::class);
     }
