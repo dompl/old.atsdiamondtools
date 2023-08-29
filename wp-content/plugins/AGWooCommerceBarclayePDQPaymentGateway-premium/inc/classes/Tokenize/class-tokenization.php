@@ -32,7 +32,7 @@ class AG_ePDQ_Token {
 			return;
 		}
 		$order = new WC_Order( $args['orderID'] );
-		$customer_id = $order->get_user_id();
+		//$customer_id = $order->get_user_id();
 
 		// Catch and stop if order is already paid for or is processing.
 		if( $order->has_status( array( 'processing', 'completed', 'on-hold', 'failed' ) ) ) {
@@ -43,7 +43,7 @@ class AG_ePDQ_Token {
 
 		// Used token before
 		$savedCard = $order->get_meta( 'use_saved_card' );
-		$customerToken = self::check( $customer_id, $savedCard );
+		$customerToken = self::check( $login, $savedCard );
 		if( isset( $customerToken ) || ! empty( $customerToken ) ) {
 			$middle = strlen( $args['ED'] ) / 2;
 			$brand = $args['BRAND'];
@@ -77,12 +77,12 @@ class AG_ePDQ_Token {
 		$token->set_expiry_year( '20' . substr( $args['ED'], 2, $middle ) );
 		$token->set_expiry_month( substr( $args['ED'], 0, $middle ) );
 		$token->set_card_type( $brand );
-		$token->set_user_id( $customer_id );
+		$token->set_user_id( $userID );
 		// Save the new token to the database
 		$token->save();
 		AG_ePDQ_Helpers::ag_log( 'Token saved.', 'debug', 'yes' );
 		// Set this token as the users new default token
-		WC_Payment_Tokens::set_users_default( $customer_id, $token->get_id() );
+		WC_Payment_Tokens::set_users_default( $userID, $token->get_id() );
 
 	}
 

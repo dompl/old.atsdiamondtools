@@ -326,12 +326,8 @@ function init_ag_epdq() {
 				$com = $product_list;
 			}
 
-			// Custom Merchant Ref - this could be for custom meta data
-			if( defined( 'ePDQ_custom_order_id' ) ) {
-				$orderID = apply_filters( 'ePDQ_custom_order_id', $order );
-			} else {
-				$orderID = $order->get_order_number();
-			}
+			// Custom Merchant Ref - this could be for custom metadata
+			$orderID = AG_ePDQ_Helpers::ag_get_order_id( $order );
 
 			// Get customer token
 			$savedCard = $order->get_meta( 'use_saved_card' );
@@ -371,10 +367,14 @@ function init_ag_epdq() {
 				'MPI.THREEDSREQUESTORCHALLENGEINDICATOR' => $ChallengeIndicator
 			);
 
+			$site_name = get_bloginfo( 'name' );
+			$m_site_name = preg_replace( "/[^a-zA-Z0-9]/", "", $site_name );
+			$modified_site_name = str_replace( "039", "", $m_site_name );
+
 			if( isset( $this->token ) && $this->token === 'yes' && ( class_exists( 'WC_Subscriptions_Order' ) && ! wcs_order_contains_subscription( $order_id ) ) ) {
 				$fields['ALIAS'] = $customerToken['token'] ?? '';
 				$fields['ALIASOPERATION'] = 'BYPSP';
-				$fields['ALIASUSAGE'] = get_bloginfo( 'name' );
+				$fields['ALIASUSAGE'] = $modified_site_name;
 				$fields['COF_INITIATOR'] = 'CIT';
 				$fields['BRAND'] = $customerToken['brand'] ?? '';
 				$fields['PM'] = $customerToken['brand'] = 'CreditCard' ?? '';
@@ -384,7 +384,7 @@ function init_ag_epdq() {
 
 				$fields['ALIAS'] = 'VALUE';
 				$fields['ALIASOPERATION'] = 'BYPSP';
-				$fields['ALIASUSAGE'] = 'Setting up subscription for use on ' . get_bloginfo( 'name' ) . ' Website. Please authorise Barclaycard to store your details for your renewal payments.';
+				$fields['ALIASUSAGE'] = 'Setting up subscription for use on ' . $modified_site_name . ' Websites. Please authorise Barclaycard to store your details for your renewal payments.';
 				$fields['COF_INITIATOR'] = 'CIT';
 				$fields['COF_TRANSACTION'] = 'FIRST';
 				$fields['COF_SCHEDULE'] = 'SCHED';

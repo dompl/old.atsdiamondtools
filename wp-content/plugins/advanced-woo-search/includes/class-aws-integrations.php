@@ -81,14 +81,12 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                 add_filter( 'aws_js_seamless_selectors', array( $this, 'js_seamless_selectors' ) );
 
-                add_filter( 'generate_navigation_search_output', array( $this, 'generate_navigation_search_output' ) );
-
                 // Ocean wp theme
                 if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
                     add_action( 'wp_head', array( $this, 'oceanwp_head_action' ) );
                 }
 
-                // Twenty Twenty theme
+                // TwentyTwenty theme
                 if (  function_exists( 'twentytwenty_theme_support' ) ) {
                     add_action( 'wp_head', array( $this, 'twenty_twenty_head_action' ) );
                 }
@@ -416,6 +414,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-flatsome.php' );
             }
 
+            // GeneratePress theme
+            if ( 'GeneratePress' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-generatepress.php' );
+            }
+
             // Product Filters for WooCommerce
             if ( defined( 'WC_PRODUCT_FILTER_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-pfw.php' );
@@ -424,6 +427,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WooCommerce Product Bundles
             if ( class_exists( 'WC_Bundles' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-product-bundles.php' );
+            }
+
+            // Shopengine plugin
+            if ( class_exists( 'ShopEngine' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-shopengine.php' );
             }
 
         }
@@ -1676,28 +1684,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             update_option( 'aws_search_query_args', $query_args_options );
 
-        }
-
-        /*
-         * Generatepress theme support
-         */
-        public function generate_navigation_search_output( $html ) {
-            if ( function_exists( 'aws_get_search_form' ) ) {
-                $html = '<style>.navigation-search .aws-container .aws-search-form{height: 60px;} .navigation-search .aws-container{margin-right: 60px;} .navigation-search .aws-container .search-field{border:none;} </style>';
-                $html .= '<script>
-                     window.addEventListener("awsShowingResults", function(e) {
-                         var links = document.querySelectorAll(".aws_result_link");
-                         if ( links ) {
-                            for (var i = 0; i < links.length; i++) {
-                                links[i].className += " search-item";
-                            }
-                        }
-                     }, false);
-                    </script>';
-                $html .= '<div class="navigation-search">' . aws_get_search_form( false ) . '</div>';
-                $html = str_replace( 'aws-search-field', 'aws-search-field search-field', $html );
-            }
-            return $html;
         }
 
         /*

@@ -426,9 +426,19 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function normalize_string( $string ) {
 
+            /**
+             * Filters string before normalization
+             * @since 2.84
+             * @param string $string
+             */
+            $string = apply_filters( 'aws_pre_normalize_string', $string );
+
             $special_chars = AWS_Helpers::get_special_chars();
 
             $string = AWS_Helpers::html2txt( $string );
+            if ( array_search( '&#44;', $special_chars ) !== false || array_search( ',', $special_chars ) !== false ) {
+                $string = str_replace( array( '&#44;', ',' ), ' ', $string );
+            }
             $string = str_replace( array( '&#215;', '&times;', '×' ), 'x', $string );
             $string = str_replace( $special_chars, '', $string );
             $string = str_replace( array( '&#160;', '&nbsp;' ), ' ', $string );

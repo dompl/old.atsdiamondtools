@@ -3,9 +3,9 @@ Contributors: pomegranate, alexmigf, yordansoares, kluver, dpeyou, dwpriv, jhosa
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice, packing slip, export, email, bulk, automatic
 Requires at least: 3.5
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.1
-Stable tag: 3.5.6
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,35 @@ There's a setting on the Status tab of the settings page that allows you to togg
 
 == Changelog ==
 
+= 3.6.2 (2023-08-23) =
+* New `wcpdf_document_link` shortcode
+* New: parameters to download PDF shortcode
+* New: adds notice for the upcoming PHP 7.2 requirement
+* New: filter hook to strip HTML tags from Shipping Notes `wpo_wcpdf_shipping_notes_strip_all_tags`
+* Fix: bug of passing the wrong variable for the filtered order emails
+* Fix: remove old temporary directory when generating new one from status tool
+* Fix: displays always the Generate random temporary directory tool
+* Fix: issue with Shipping Notes line breaks
+
+= 3.6.1 (2023-08-16) =
+* Fix: string encoding issues in PDF
+
+= 3.6.0 (2023-08-15) =
+* New: setting for improved document link access type
+* New: implemented autoloader for plugin classes
+* New: adds a new Status tool to reset plugin settings
+* New: invoice number column added to the WooCommerce order analytics
+* Fix: replaces `utf8_decode()` which is deprecated in PHP 8.2 
+* Fix: allows the translation for the Shipping Notes strings
+* Fix: bug when trying to delete temporary files when using mPDF extension
+* Fix: bug on `$updater` returning `null` in Upgrade tab function
+* Fix: deprecates `woocommerce_resend_order_emails_available` filter
+* Fix: several string typos
+* Fix: revert breaking long characters in order data labels
+* Fix: PHP8.2 creation of dynamic property deprecated warnings
+* Translations: Updated translation template (POT)
+* Tested up to WooCommerce 8.0 & WordPress 6.3
+
 = 3.5.6 (2023-06-21) =
 * New: adds a generic shortcode `[wcpdf_download_pdf]` for PDF download links 
 * New: bump preview PDFJS library to v3.7.107
@@ -197,7 +226,7 @@ There's a setting on the Status tab of the settings page that allows you to togg
 * Tweak: update translation template and files
 * Fix: break long URLs in different lines if it reaches the available space in Simple template
 * Fix: restore deleted strings and load them using standalone strings.php file 
-* Fix: warning on deprecated argument from product get_dimentions() method
+* Fix: warning on deprecated argument from product get_dimensions() method
 * Tested up to WooCommerce 7.1
 
 = 3.2.3 (2022-10-28) =
@@ -493,7 +522,7 @@ There's a setting on the Status tab of the settings page that allows you to togg
 
 = 2.5.4 =
 * Fix: check for existence of WooCommerce functions preventing incidental crashes in specific deployment setups
-* Fix: documents could still be generated programmatically when document disabled and not specifically checking for `$documment->is_allowed()`
+* Fix: documents could still be generated programmatically when document disabled and not specifically checking for `$document->is_allowed()`
 * Dev: Filter to disable reloading attachment translations
 * Tested up to WooCommerce 4.4 & WP 5.5
 
@@ -672,7 +701,7 @@ There's a setting on the Status tab of the settings page that allows you to togg
 * Feature: Test mode to automatically apply updated settings to existing documents
 * Feature: Admin bar indicator for debug mode setting
 * Fix: always use latest email settings
-* Fix: WooCommerce Composit Products item name compatibility
+* Fix: WooCommerce Composite Products item name compatibility
 * Fix: Use woocommerce_thumbnail for WC3.3+
 * Tweak: apply woocommerce_order_item_name filter (fixes compatibility with WooCommerce Product Addons 3.0)
 * Tweak: Use WooCommerce date format instead of WP date format
@@ -707,7 +736,7 @@ There's a setting on the Status tab of the settings page that allows you to togg
 * Feature: Include invoice number and date in WooCommerce data remover and exporter 
 * Fix: Row class for Chained Products compatibility
 * Fix: Improved compatibility with Advanced Custom Fields
-* Fix: Setting for diabling for free invoices should be applied even when other plugins are applying rules
+* Fix: Setting for disabling for free invoices should be applied even when other plugins are applying rules
 
 = 2.1.9 =
 * Feature: Automatic cleanup of temporary attachments folder (settings in Status tab)

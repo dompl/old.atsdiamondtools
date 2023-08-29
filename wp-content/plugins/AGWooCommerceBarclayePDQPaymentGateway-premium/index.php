@@ -8,10 +8,10 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.5.6
+ * Version: 4.5.11
  * Update URI: https://api.freemius.com
- * WC requires at least: 6.0
- * WC tested up to: 7.8
+ * WC requires at least: 7.0
+ * WC tested up to: 7.9
  * License: GPL3
  */
 
@@ -23,14 +23,14 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.5.6
+ * @version  4.5.11
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.5.6";
+	public static $AGversion = "4.5.11";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
@@ -53,6 +53,9 @@ class AG_ePDQ_server {
 		add_action( 'admin_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
 
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'woocommerce_add_epdq_gateway' ) );
+
+		add_action( 'admin_init', array( 'AG_ePDQ_Helpers', 'schedule_delete_old_log_files' ) );
+		add_action( 'delete_old_log_files_event', array( 'AG_ePDQ_Helpers', 'delete_old_log_files' ) );
 
 		// If the site supports Gutenberg Blocks, support the Checkout block
 		add_action( 'woocommerce_blocks_loaded', array( $this, 'ag_blocks_support' ) );
@@ -227,8 +230,9 @@ class AG_ePDQ_server {
 		require_once AG_ePDQ_class . 'class-gdpr.php';
 		require_once AG_ePDQ_class . 'class-settings.php';
 		require_once AG_ePDQ_class . 'class-crypt.php';
-		require_once AG_ePDQ_class . 'class-order-status-check.php';
+		require_once AG_ePDQ_class . 'StatusCheck/class-order-status-check.php';
 		require_once AG_ePDQ_token . 'class-tokenization.php';
+		require_once AG_ePDQ_class . 'Moto/class-moto.php';
 		require_once AG_ePDQ_class . 'Fraudchecks/fraud-checks.php';
 		require_once AG_ePDQ_class . 'class-epdq-authorization-capture.php';
 		require_once AG_ePDQ_sub . 'class-subscriptions.php';
@@ -256,6 +260,11 @@ class AG_ePDQ_server {
 			'plugin_slug'    => self::$AG_ePDQ_slug,
 			'plugin_version' => self::$AGversion,
 			'plugin_name'    => self::$pluginName,
+		) );
+
+		ag_ePDQ_moto::run_instance( array(
+			'plugin_name' => self::$AG_ePDQ_slug,
+			'short_title' => self::$pluginName,
 		) );
 
 		//if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {

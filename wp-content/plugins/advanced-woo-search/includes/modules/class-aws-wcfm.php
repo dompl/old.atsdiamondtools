@@ -131,6 +131,8 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
          */
         public function wcfm_search_query_array( $query ) {
 
+            global $wpdb;
+
             $vendor_id = false;
 
             if ( isset( $_REQUEST['aws_tax'] ) && $_REQUEST['aws_tax'] && strpos( $_REQUEST['aws_tax'], 'store:' ) !== false ) {
@@ -144,23 +146,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
 
             if ( $vendor_id ) {
 
-                $store_products = get_posts( array(
-                    'posts_per_page'      => -1,
-                    'fields'              => 'ids',
-                    'post_type'           => 'product',
-                    'post_status'         => 'publish',
-                    'ignore_sticky_posts' => true,
-                    'suppress_filters'    => true,
-                    'no_found_rows'       => 1,
-                    'orderby'             => 'ID',
-                    'order'               => 'DESC',
-                    'lang'                => '',
-                    'author'              => $vendor_id
-                ) );
-
-                if ( $store_products ) {
-                    $query['search'] .= " AND ( id IN ( " . implode( ',', $store_products ) . " ) )";
-                }
+                $query['search'] .= " AND ( id IN ( SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_author = {$vendor_id} ) )";
 
             }
 
@@ -173,7 +159,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
          */
         public function wcfm_terms_search_query( $sql, $taxonomy ) {
 
-            global $wpdb;
+            global $wpdb, $WCFMmp;
 
             $store = false;
 
@@ -187,8 +173,13 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             if ( $store ) {
                 $all_vendor_tax = array();
                 foreach ( $taxonomy as $taxonomy_slug ) {
-                    $vendor_tax = $store->get_store_taxonomies( $taxonomy_slug );
+                    $vendor_tax = $WCFMmp->wcfmmp_vendor->wcfmmp_get_vendor_taxonomy( $vendor_id, $taxonomy_slug );
                     if ( ! empty( $vendor_tax) ) {
+                        foreach ( $vendor_tax as $vendor_tax_key => $vendor_tax_i ) {
+                            if ( is_array( $vendor_tax_i ) ) {
+                                $vendor_tax[$vendor_tax_key] = implode('', array_values($vendor_tax_i) );
+                            }
+                        }
                         $all_vendor_tax = array_merge( $all_vendor_tax, $vendor_tax );
                     }
                 }

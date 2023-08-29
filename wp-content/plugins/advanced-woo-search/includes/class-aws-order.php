@@ -225,7 +225,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                                         if ( ! is_wp_error( $product_terms ) && ! empty( $product_terms ) ) {
                                             foreach ( $product_terms as $product_term ) {
-                                                $product_terms_array[] = ! empty( $attr_filter[$attr_name]['terms'] ) && preg_match( '/[a-z]/', $attr_filter[$attr_name]['terms'][0] ) ? $product_term->slug : $product_term->term_id;
+                                                $product_terms_array[] = ! empty( $attr_filter[$attr_name]['terms'] ) && preg_match( '/[a-z\-\.\,]/i', $attr_filter[$attr_name]['terms'][0] ) ? $product_term->slug : $product_term->term_id;
                                             }
                                         }
 

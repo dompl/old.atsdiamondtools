@@ -605,7 +605,13 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          * Re-index single product action
          */
         public function reindex_product_action( $product_id ) {
-            $this->update_table( $product_id );
+            if ( is_array( $product_id ) ) {
+                foreach ( $product_id as $product_i ) {
+                    $this->update_table( $product_i );
+                }
+            } else {
+                $this->update_table( $product_id );
+            }
         }
 
         /*

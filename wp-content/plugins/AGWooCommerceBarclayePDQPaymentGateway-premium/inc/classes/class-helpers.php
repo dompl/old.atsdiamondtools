@@ -272,121 +272,53 @@ class AG_ePDQ_Helpers {
 
 	}
 
-	// Not used.
-	public static function word_translate( $translate ) {
+	/**
+	 * Get order ID
+	 *
+	 * @param $order
+	 *
+	 * @return string
+	 */
+	public static function ag_get_order_id( $order ) {
 
-		$pattern = array(
-			"'é'",
-			"'è'",
-			"'ë'",
-			"'ê'",
-			"'É'",
-			"'È'",
-			"'Ë'",
-			"'Ê'",
-			"'á'",
-			"'à'",
-			"'ä'",
-			"'â'",
-			"'å'",
-			"'Á'",
-			"'À'",
-			"'Ä'",
-			"'Â'",
-			"'Å'",
-			"'ó'",
-			"'ò'",
-			"'ö'",
-			"'ô'",
-			"'Ó'",
-			"'Ò'",
-			"'Ö'",
-			"'Ô'",
-			"'í'",
-			"'ì'",
-			"'ï'",
-			"'î'",
-			"'Í'",
-			"'Ì'",
-			"'Ï'",
-			"'Î'",
-			"'ú'",
-			"'ù'",
-			"'ü'",
-			"'û'",
-			"'Ú'",
-			"'Ù'",
-			"'Ü'",
-			"'Û'",
-			"'ý'",
-			"'ÿ'",
-			"'Ý'",
-			"'ø'",
-			"'Ø'",
-			"'œ'",
-			"'Œ'",
-			"'Æ'",
-			"'ç'",
-			"'Ç'"
-		);
-		$replace = array(
-			'e',
-			'e',
-			'e',
-			'e',
-			'E',
-			'E',
-			'E',
-			'E',
-			'a',
-			'a',
-			'a',
-			'a',
-			'a',
-			'A',
-			'A',
-			'A',
-			'A',
-			'A',
-			'o',
-			'o',
-			'o',
-			'o',
-			'O',
-			'O',
-			'O',
-			'O',
-			'i',
-			'i',
-			'i',
-			'I',
-			'I',
-			'I',
-			'I',
-			'I',
-			'u',
-			'u',
-			'u',
-			'u',
-			'U',
-			'U',
-			'U',
-			'U',
-			'y',
-			'y',
-			'Y',
-			'o',
-			'O',
-			'a',
-			'A',
-			'A',
-			'c',
-			'C'
-		);
+		// If merchant is using custom order id filter
+		if( defined( 'ePDQ_custom_order_id' ) ) {
+			return apply_filters( 'ePDQ_custom_order_id', $order );
+		}
 
-		return preg_replace( $pattern, $replace, $translate );
+		return $order->get_order_number();
 
 	}
 
+	public static function schedule_delete_old_log_files() {
+
+		if( ! wp_next_scheduled( 'delete_old_log_files_event' ) ) {
+			wp_schedule_event( strtotime( '2:00 AM' ), 'daily', 'delete_old_log_files_event' );
+		}
+	}
+
+	// Function to delete old log files
+	public static function delete_old_log_files() {
+
+		$log_dir = WC_LOG_DIR;
+
+		$files = glob( $log_dir . '/AG-WooCommerce-Barclays-ePDQ-Payment-Gateway-*.log' );
+
+		$one_week_ago = strtotime( '-1 week' ); // Calculate the timestamp for one week ago
+
+		foreach( $files as $file ) {
+			$filename = basename( $file );
+			$pattern = '/AG-WooCommerce-Barclays-ePDQ-Payment-Gateway-(\d{4}-\d{2}-\d{2})-.+\.log/';
+			preg_match( $pattern, $filename, $matches );
+
+			if( isset( $matches[1] ) ) {
+				$file_date = strtotime( $matches[1] );
+
+				if( $file_date < $one_week_ago ) {
+					unlink( $file );
+				}
+			}
+		}
+	}
 
 }

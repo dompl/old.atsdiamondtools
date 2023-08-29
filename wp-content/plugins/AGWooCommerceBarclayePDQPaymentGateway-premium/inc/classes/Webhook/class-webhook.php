@@ -117,7 +117,7 @@ class ag_epdq_webhook {
 		$origsig = $datatocheck['SHASIGN'];
 
 		// Remove parameters before doing decryption
-		unset( $datatocheck['SHASIGN'], $datatocheck['wc-api'], $datatocheck['idOrder'], $datatocheck['PARAMVAR'], $datatocheck['callback'], $datatocheck['doing_wp_cron'], $datatocheck['woocs_order_emails_is_sending'], $datatocheck['q'], $datatocheck['somdn_error_logs_export_errors'], $datatocheck['inner_section'], $datatocheck['woof_parse_query'] );
+		unset( $datatocheck['CN'], $datatocheck['SHASIGN'], $datatocheck['wc-api'], $datatocheck['idOrder'], $datatocheck['PARAMVAR'], $datatocheck['callback'], $datatocheck['doing_wp_cron'], $datatocheck['woocs_order_emails_is_sending'], $datatocheck['q'], $datatocheck['somdn_error_logs_export_errors'], $datatocheck['inner_section'], $datatocheck['woof_parse_query'] );
 
 		uksort( $datatocheck, 'strcasecmp' );
 

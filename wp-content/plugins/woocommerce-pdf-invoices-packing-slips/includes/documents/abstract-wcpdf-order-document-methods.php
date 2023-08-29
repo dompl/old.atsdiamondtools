@@ -5,21 +5,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( !class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Order_Document_Methods' ) ) :
+if ( ! class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Order_Document_Methods' ) ) :
 
 /**
  * Abstract Order Methods
  *
  * Collection of methods to be used on orders within a Document
  * Created as abstract rather than traits to support PHP versions older than 5.4
- *
- * @class       \WPO\WC\PDF_Invoices\Documents\Order_Document_Methods
- * @version     2.0
- * @category    Class
- * @author      Ewout Fernhout
  */
 
 abstract class Order_Document_Methods extends Order_Document {
+	
 	public function is_refund( $order ) {
 		return $order->get_type() == 'shop_order_refund';
 	}
@@ -534,7 +530,7 @@ abstract class Order_Document_Methods extends Order_Document {
 				$data['product_id'] = $item['product_id'];
 				$data['variation_id'] = $item['variation_id'];
 
-				// Compatibility: WooCommerce Composit Products uses a workaround for
+				// Compatibility: WooCommerce Composite Products uses a workaround for
 				// setting the order before the item name filter, so we run this first
 				if ( class_exists('WC_Composite_Products') ) {
 					$order_item_class = apply_filters( 'woocommerce_order_item_class', '', $item, $this->order );
@@ -579,7 +575,7 @@ abstract class Order_Document_Methods extends Order_Document {
 					$product = null;
 				}
 				
-				// Checking fo existance, thanks to MDesigner0 
+				// Checking for existence, thanks to MDesigner0
 				if( !empty( $product ) ) {
 					// Thumbnail (full img tag)
 					$data['thumbnail'] = $this->get_thumbnail( $product );
@@ -1091,10 +1087,16 @@ abstract class Order_Document_Methods extends Order_Document {
 		}
 
 		// check document specific setting
-		if( isset($this->settings['display_customer_notes']) && $this->settings['display_customer_notes'] == 0 ) {
-			$shipping_notes = false;
+		if ( isset( $this->settings['display_customer_notes'] ) && $this->settings['display_customer_notes'] == 0 ) {
+			$shipping_notes = '';
 		}
-
+		
+		if ( apply_filters( 'wpo_wcpdf_shipping_notes_strip_all_tags', false ) ) {
+			$shipping_notes = wp_strip_all_tags( $shipping_notes );
+		}
+		
+		$shipping_notes = ! empty( $shipping_notes ) ? __( $shipping_notes, 'woocommerce-pdf-invoices-packing-slips' ) : false;
+		
 		return apply_filters( 'wpo_wcpdf_shipping_notes', $shipping_notes, $this );
 	}
 	public function shipping_notes() {

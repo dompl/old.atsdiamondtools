@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 6.2
-Stable tag: 2.83
+Tested up to: 6.3
+Stable tag: 2.86
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,24 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.86 ( 2023-08-21 ) =
+* Update - Tested with WC 8.0
+* Update - Integration with WCFM plugin. Speed up SQL queries inside the vendor shop page
+* Fix - Attributes filters for search results
+* Fix - Search terms tracking for GA4. Update tracking code
+* Dev - Update aws_reindex_product action. Allow to use array of IDs as parameter
+
+= 2.85 ( 2023-08-07 ) =
+* Update - Special characters scrapping. Replace comma char with space
+* Fix - Bug with search form inside WCFM plugin vendor shop page
+
+= 2.84 ( 2023-07-24 ) =
+* Add - Support for ShopEngine plugin
+* Update - Support for GeneratePress theme
+* Update - Tested with WC 7.9
+* Dev - Add aws_pre_normalize_string filter
+
 
 = 2.83 ( 2023-07-10 ) =
 * Add - Support for WooCommerce Product Bundles plugin

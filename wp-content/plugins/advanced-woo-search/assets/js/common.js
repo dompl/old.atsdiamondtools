@@ -430,27 +430,38 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             analytics: function( label, submit ) {
                 if ( d.useAnalytics ) {
+
                     try {
                         var sPage = submit ? '' : '/?s=' + encodeURIComponent( 'ajax-search:' + label );
+
+                        var tagF = false;
                         if ( typeof gtag !== 'undefined' && gtag !== null ) {
-                            gtag('event', 'AWS search', {
+                            tagF = gtag;
+                        } else if ( typeof window.dataLayer !== 'undefined' && window.dataLayer !== null ) {
+                            tagF = function () { window.dataLayer.push(arguments) };
+                        }
+
+                        if ( tagF ) {
+                            tagF('event', 'AWS search', {
                                 'event_label': label,
                                 'event_category': 'AWS Search Term',
                                 'transport_type' : 'beacon'
                             });
                             if ( sPage ) {
-                                gtag('event', 'page_view', {
+                                tagF('event', 'page_view', {
                                     'page_path': sPage,
                                     'page_title' : 'AWS search'
                                 });
                             }
                         }
+
                         if ( typeof ga !== 'undefined' && ga !== null ) {
                             ga('send', 'event', 'AWS search', 'AWS Search Term', label);
                             if ( sPage ) {
                                 ga( 'send', 'pageview', sPage );
                             }
                         }
+
                         if ( typeof pageTracker !== "undefined" && pageTracker !== null ) {
                             if ( sPage ) {
                                 pageTracker._trackPageview( sPage );

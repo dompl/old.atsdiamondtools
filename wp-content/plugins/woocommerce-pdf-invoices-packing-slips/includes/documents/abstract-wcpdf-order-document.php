@@ -5,21 +5,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( !class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Order_Document' ) ) :
+if ( ! class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Order_Document' ) ) :
 
 /**
  * Abstract Document
  *
  * Handles generic pdf document & order data and database interaction
  * which is extended by both Invoices & Packing Slips
- *
- * @class       \WPO\WC\PDF_Invoices\Documents\Order_Document
- * @version     2.0
- * @category    Class
- * @author      Ewout Fernhout
  */
 
 abstract class Order_Document {
+	
 	/**
 	 * Document type.
 	 * @var String
@@ -164,7 +160,7 @@ abstract class Order_Document {
 					// automatically be applied to existing orders too. However, doing this by combining arrays is not
 					// possible because the way settings are currently stored means unchecked options are not included.
 					// This means there is no way to tell whether an option didn't exist yet (in which case the new
-					// option should be added) or whether the option was simly unchecked (in which case it should not
+					// option should be added) or whether the option was simply unchecked (in which case it should not
 					// be overwritten). This can only be address by storing unchecked checkboxes too.
 					$settings = (array) $this->order_settings + array_intersect_key( (array) $settings, array_flip( $this->get_non_historical_settings() ) );
 				}
@@ -890,13 +886,14 @@ abstract class Order_Document {
 				'order_id' => $this->order_id,
 			)
 		);
-		if ($args['wrap_html_content']) {
+		
+		if ( $args['wrap_html_content'] ) {
 			$html = $this->wrap_html_content( $html );
 		}
 
 		// clean up special characters
-		if ( apply_filters( 'wpo_wcpdf_convert_encoding', function_exists('utf8_decode') && function_exists('mb_convert_encoding') ) ) {
-			$html = utf8_decode(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+		if ( apply_filters( 'wpo_wcpdf_convert_encoding', function_exists( 'htmlspecialchars_decode' ) ) ) {
+			$html = htmlspecialchars_decode( wcpdf_convert_encoding( $html ), ENT_QUOTES );
 		}
 
 		do_action( 'wpo_wcpdf_after_html', $this->get_type(), $this );
@@ -1138,7 +1135,7 @@ abstract class Order_Document {
 	/**
 	 * Get the default table name of the Sequential Number Store
 	 * @param  string $store_base_name
-	 * @param  string $metod
+	 * @param  string $method
 	 * 
 	 * @return string $table_name
 	 */
@@ -1249,7 +1246,7 @@ abstract class Order_Document {
 		if( $table_exists ) {
 			// get year for the last row
 			$year = $wpdb->get_var( "SELECT YEAR(date) FROM {$table_name} ORDER BY id DESC LIMIT 1" );
-			// default to currenty year if no results
+			// default to current year if no results
 			if( ! $year ) {
 				$year = $current_year;
 				// if we don't get a result, this could either mean there's an error,

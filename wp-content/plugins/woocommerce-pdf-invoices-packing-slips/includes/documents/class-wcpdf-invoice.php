@@ -7,15 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( !class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Invoice' ) ) :
+if ( ! class_exists( '\\WPO\\WC\\PDF_Invoices\\Documents\\Invoice' ) ) :
 
 /**
  * Invoice Document
- * 
- * @class       \WPO\WC\PDF_Invoices\Documents\Invoice
- * @version     2.0
- * @category    Class
- * @author      Ewout Fernhout
  */
 
 class Invoice extends Order_Document_Methods {
@@ -109,7 +104,7 @@ class Invoice extends Order_Document_Methods {
 					$invoice_number = $this->order->get_order_number();
 				}
 
-				if ( ! empty( $invoice_number ) ) { // overriden by plugin or set to order number
+				if ( ! empty( $invoice_number ) ) { // overridden by plugin or set to order number
 					if ( ! is_numeric( $invoice_number ) && ! ( $invoice_number instanceof Document_Number ) ) {
 						// invoice number is not numeric, treat as formatted
 						// try to extract meaningful number data
@@ -575,5 +570,3 @@ class Invoice extends Order_Document_Methods {
 }
 
 endif; // class_exists
-
-return new Invoice();

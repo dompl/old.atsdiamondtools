@@ -71,6 +71,9 @@ class ag_capture {
 			return;
 		}
 
+		if( $order->has_status( array( 'processing', 'completed' ) ) ) {
+			return;
+		}
 		echo '<button style="background: #007cba; color: white;" type="button" id="ag-capture" class="button ag-capture" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '">ePDQ Capture Payment</button > ';
 
 	}

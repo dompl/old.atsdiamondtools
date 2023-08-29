@@ -17,6 +17,7 @@ Setting up this plugin should only take 30 minutes to complete, follow the steps
 = Does this plugin work with newest WP and WooCommerce versions? =
 Yes, this plugin works really fine with the latest versions!
 
+
 = I have a problem with the plugin, it's not working =
 Ok not a problem, lets see if you can fix it by following these steps.
 1. Enable the plugins debug mode in the settings page.
@@ -31,6 +32,24 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.5.11 - 08/08/23 =
+* New              - New helper function for merchants who use ePDQ_custom_order_id filter to process Status Checks.
+* Dev              - New helper function to clear old logs.
+
+= v.4.5.10 - 03/08/23 =
+* Fix              - Fixed issue on main order overview page, where status check notice would not display.
+
+= v.4.5.9 - 31/07/23 =
+* Fix              - Fix Capture button still showing on Orders Processing Status.
+* Fix              - Fixed issue with token saving for HPOS.
+
+= v.4.5.8 - 26/07/23 =
+* Change           - Removed customer name from decryption.
+
+= v.4.5.7 - 24/07/23 =
+* Fix              - Fixed issue when site title contains special characters.
+* Change           - Bump tested WooCommerce (7.9).
 
 = v.4.5.6 - 11/07/23 =
 * Dev             - Catch issues with Status Check and display the error message in order notes.
