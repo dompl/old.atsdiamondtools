@@ -348,6 +348,8 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		 * @param boolean $is_cacheable The list of script dependencies.
 		 * @param array $query_args Query args for the products query passed to BlocksWpQuery.
 		 * @return array True to enable cache, false to disable cache.
+		 *
+		 * @since 2.5.0
 		 */
 		$is_cacheable      = (bool) apply_filters( 'woocommerce_blocks_product_grid_is_cacheable', true, $this->query_args );
 		$transient_version = \WC_Cache_Helper::get_transient_version( 'product_query' );
@@ -504,6 +506,8 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		 * @param array $data Product data passed to the template.
 		 * @param \WC_Product $product Product object.
 		 * @return string Updated product grid item HTML.
+		 *
+		 * @since 2.2.0
 		 */
 		return apply_filters(
 			'woocommerce_blocks_product_grid_item_html',
@@ -572,7 +576,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			return '';
 		}
 		$rating_count = $product->get_rating_count();
-		$review_count = $product->get_review_count();
 		$average      = $product->get_average_rating();
 
 		if ( $rating_count > 0 ) {
@@ -682,5 +685,15 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		$this->asset_data_registry->add( 'max_rows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
 		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
 		$this->asset_data_registry->add( 'stock_status_options', wc_get_product_stock_status_options(), true );
+	}
+
+	/**
+	 * Get the frontend style handle for this block type.
+	 *
+	 * @return string[]
+	 */
+	protected function get_block_type_style() {
+		// Currently these blocks rely on the styles from the All Products block.
+		return [ 'wc-blocks-style', 'wc-blocks-style-all-products' ];
 	}
 }

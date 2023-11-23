@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    $('.add-items').on('click', '#ag-check-status', function () {
+    $('.add-items').on('click', '#ag-check-status-epdq', function () {
 
         // get the order_id from the button tag
         var order_url = $(this).data('order_url');
@@ -10,11 +10,11 @@
 
         $.ajax({
             type: 'POST',
-            url: ag_status_var.ajaxurl,
+            url: ag_epdq_status_var.ajaxurl,
             dataType: 'json',
             data: {
-                action: 'ag_manually_check_status_call',
-                nonce: ag_status_var.nonce,
+                action: 'ag_epdq_manually_check_status_call',
+                nonce: ag_epdq_status_var.nonce,
                 order_url: order_url,
                 order_id: order_id,
             },
@@ -34,12 +34,11 @@
                 $('#fade').hide();
                 $('#modal').hide();
 
-                alert(ag_status_var.error);
+                alert(ag_epdq_status_var.error);
 
             }
         });
 
     });
-
 
 })(jQuery);

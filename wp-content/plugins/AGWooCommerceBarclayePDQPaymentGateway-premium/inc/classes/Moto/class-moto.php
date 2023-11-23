@@ -1,8 +1,11 @@
 <?php
 /*-----------------------------------------------------------------------------------*/
 
-/*	Authipay Moto
+/*	ePDQ Moto
 /*-----------------------------------------------------------------------------------*/
+
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 if( class_exists( 'ag_ePDQ_moto' ) ) {
@@ -22,7 +25,7 @@ class ag_ePDQ_moto {
 		// Moto Ajax Call
 		add_action( 'admin_enqueue_scripts', array( $this, 'moto_ajax_call' ) );
 		// Ajax callback
-		add_action( 'wp_ajax_ag_pre_moto_call', array( $this, 'ag_pre_moto_call' ) );
+		add_action( 'wp_ajax_ag_epdq_pre_moto_call', array( $this, 'ag_epdq_pre_moto_call' ) );
 		// Allow admins to process customer orders on account.
 		add_action( 'user_has_cap', array( $this, 'ag_allow_admin_to_pay_for_order' ), 10, 3 );
 		// Change Moto checkout title.
@@ -56,23 +59,39 @@ class ag_ePDQ_moto {
 
 		if( ! $order->get_date_paid() ) {
 			// $on_checkout = false
-			echo '<button style="background: #007cba; color: white;" type="button" id="ag-moto" class="button ag-moto" data-order_url="' . esc_attr( $order->get_checkout_payment_url() ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '"> MOTO Payment</button>';
-
+			echo '<button style="background: #007cba; color: white;" type="button" id="ag-moto-epdq" class="button ag-moto" data-order_url="' . esc_attr( $order->get_checkout_payment_url() ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '"> MOTO Payment</button>';
 
 		}
 
 	}
 
-	
-	public function moto_ajax_call() {
 
-		wp_enqueue_script( self::$args['plugin_name'] . '-moto', AG_ePDQ_server_path . "inc/assets/js/ag-moto-script.js", array( 'jquery' ), NULL, TRUE );
-		wp_localize_script( self::$args['plugin_name'] . '-moto', 'ag_moto_var', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
-			'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-moto' ),
-			'error'   => __( 'Something went wrong, and the MOTO payment could not be completed. Please try again.', 'ag_epdq_server' ),
-		) );
+	public function moto_ajax_call( $hook ) {
+
+		global $post;
+
+		if( 'post.php' == $hook && 'shop_order' == $post->post_type && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
+
+			if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+				$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
+			} else {
+				global $post;
+				$order = wc_get_order( $post->ID );
+			}
+
+			if( $order->get_payment_method() !== 'epdq_checkout' ) {
+				return;
+			}
+
+			wp_enqueue_script( self::$args['plugin_name'] . '-moto', AG_ePDQ_server_path . "inc/assets/js/ag-moto-script.js", array( 'jquery' ), NULL, TRUE );
+			wp_localize_script( self::$args['plugin_name'] . '-moto', 'ag_epdq_moto_var', array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
+				'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-moto' ),
+				'error'   => __( 'Something went wrong, and the MOTO payment could not be completed. Please try again.', 'ag_epdq_server' ),
+			) );
+
+		}
 
 	}
 
@@ -117,7 +136,7 @@ class ag_ePDQ_moto {
 
 	}
 
-	public function ag_pre_moto_call() {
+	public function ag_epdq_pre_moto_call() {
 
 		check_ajax_referer( self::$args['plugin_name'] . '-moto', 'nonce' );
 

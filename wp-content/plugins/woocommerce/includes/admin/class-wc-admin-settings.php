@@ -7,7 +7,6 @@
  */
 
 use Automattic\Jetpack\Constants;
-use Automattic\WooCommerce\Utilities\ArrayUtil;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -430,8 +429,9 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 
 					// Radio inputs.
 					case 'radio':
-						$option_value = $value['value'];
-						$disabled_values = ArrayUtil::get_value_or_default($value, 'disabled', array());
+						$option_value     = $value['value'];
+						$disabled_values  = $value['disabled'] ?? array();
+						$show_desc_at_end = $value['desc_at_end'] ?? false;
 
 						?>
 						<tr valign="top">
@@ -440,7 +440,11 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 							</th>
 							<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 								<fieldset>
-									<?php echo $description; // WPCS: XSS ok. ?>
+									<?php
+									if ( ! $show_desc_at_end ) {
+										echo wp_kses_post( $description );
+									}
+									?>
 									<ul>
 									<?php
 									foreach ( $value['options'] as $key => $val ) {
@@ -458,6 +462,9 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 												/> <?php echo esc_html( $val ); ?></label>
 										</li>
 										<?php
+									}
+									if ( $show_desc_at_end ) {
+										echo wp_kses_post( "<p class='description description-thin'>{$description}</p>" );
 									}
 									?>
 									</ul>
@@ -488,11 +495,18 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 							$visibility_class[] = 'show_options_if_checked';
 						}
 
+						$must_disable = $value['disabled'] ?? false;
+
 						if ( ! isset( $value['checkboxgroup'] ) || 'start' === $value['checkboxgroup'] ) {
+							$has_tooltip             = isset( $value['tooltip'] ) && '' !== $value['tooltip'];
+							$tooltip_container_class = $has_tooltip ? 'with-tooltip' : '';
 							?>
 								<tr valign="top" class="<?php echo esc_attr( implode( ' ', $visibility_class ) ); ?>">
 									<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?></th>
-									<td class="forminp forminp-checkbox">
+									<td class="forminp forminp-checkbox <?php echo esc_html( $tooltip_container_class ); ?>">
+										<?php if ( $has_tooltip ) : ?>
+											<span class="help-tooltip"><?php echo wc_help_tip( esc_html( $value['tooltip'] ) ); ?></span>
+										<?php endif; ?>
 										<fieldset>
 							<?php
 						} else {
@@ -510,6 +524,7 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 						?>
 							<label for="<?php echo esc_attr( $value['id'] ); ?>">
 								<input
+									<?php echo $must_disable ? 'disabled' : ''; ?>
 									name="<?php echo esc_attr( $value['field_name'] ); ?>"
 									id="<?php echo esc_attr( $value['id'] ); ?>"
 									type="checkbox"

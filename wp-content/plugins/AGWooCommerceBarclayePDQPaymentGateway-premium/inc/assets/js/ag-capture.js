@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    $('#ag-capture').on('click', function () {
+    $('#ag-capture-epdq').on('click', function () {
 
         // get the order_id from the button tag
         var order_url = $(this).data('order_url');
@@ -10,8 +10,8 @@
 
         // send the data via ajax to the sever
         $.ajax({
-            type: 'POST', url: ag_capture_var.ajaxurl, dataType: 'json', data: {
-                action: 'ag_manually_capture', nonce: ag_capture_var.nonce, order_id: order_id,
+            type: 'POST', url: ag_epdq_capture_var.ajaxurl, dataType: 'json', data: {
+                action: 'ag_epdq_manually_capture', nonce: ag_epdq_capture_var.nonce, order_id: order_id,
             },
             beforeSend: function () {
                 $('html,body').scrollTop(0);
@@ -29,7 +29,7 @@
                 $('#fade').hide();
                 $('#modal').hide();
 
-                alert(ag_capture_var.error);
+                alert(ag_epdq_capture_var.error);
             }
         });
 

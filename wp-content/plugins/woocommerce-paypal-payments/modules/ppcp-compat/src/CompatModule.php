@@ -20,12 +20,16 @@ use WC_Order;
 use WooCommerce\PayPalCommerce\Compat\Assets\CompatAssets;
 use WooCommerce\PayPalCommerce\OrderTracking\Endpoint\OrderTrackingEndpoint;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
+use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
+use WP_Theme;
 
 /**
  * Class CompatModule
  */
 class CompatModule implements ModuleInterface {
+
+	use AdminContextTrait;
 
 	/**
 	 * Setup the compatibility module.
@@ -47,15 +51,13 @@ class CompatModule implements ModuleInterface {
 	public function run( ContainerInterface $c ): void {
 		$this->initialize_ppec_compat_layer( $c );
 		$this->fix_site_ground_optimizer_compatibility( $c );
+
 		$this->initialize_gzd_compat_layer( $c );
 
-		$asset_loader = $c->get( 'compat.assets' );
-		assert( $asset_loader instanceof CompatAssets );
-
-		add_action( 'init', array( $asset_loader, 'register' ) );
-		add_action( 'admin_enqueue_scripts', array( $asset_loader, 'enqueue' ) );
-
 		$this->migrate_pay_later_settings( $c );
+		$this->migrate_smart_button_settings( $c );
+
+		$this->fix_page_builders();
 	}
 
 	/**
@@ -124,23 +126,36 @@ class CompatModule implements ModuleInterface {
 			return;
 		}
 
+		add_action(
+			'admin_enqueue_scripts',
+			/**
+			 * Param types removed to avoid third-party issues.
+			 *
+			 * @psalm-suppress MissingClosureParamType
+			 */
+			function( $hook ) use ( $c ): void {
+				if ( $hook !== 'post.php' || ! $this->is_paypal_order_edit_page() ) {
+					return;
+				}
+
+				$asset_loader = $c->get( 'compat.assets' );
+				assert( $asset_loader instanceof CompatAssets );
+
+				$asset_loader->register();
+				$asset_loader->enqueue();
+			}
+		);
+
 		$endpoint = $c->get( 'order-tracking.endpoint.controller' );
 		assert( $endpoint instanceof OrderTrackingEndpoint );
 
 		$logger = $c->get( 'woocommerce.logger.woocommerce' );
 		assert( $logger instanceof LoggerInterface );
 
-		$status_map = $c->get( 'compat.gzd.tracking_statuses_map' );
-
 		add_action(
-			'woocommerce_gzd_shipment_after_save',
-			static function( Shipment $shipment ) use ( $endpoint, $logger, $status_map ) {
+			'woocommerce_gzd_shipment_status_shipped',
+			static function( int $shipment_id, Shipment $shipment ) use ( $endpoint, $logger ) {
 				if ( ! apply_filters( 'woocommerce_paypal_payments_sync_gzd_tracking', true ) ) {
-					return;
-				}
-
-				$gzd_shipment_status = $shipment->get_status();
-				if ( ! array_key_exists( $gzd_shipment_status, $status_map ) ) {
 					return;
 				}
 
@@ -156,12 +171,16 @@ class CompatModule implements ModuleInterface {
 
 				$tracking_data = array(
 					'transaction_id' => $transaction_id,
-					'status'         => (string) $status_map[ $gzd_shipment_status ],
+					'status'         => 'SHIPPED',
 				);
 
 				$provider = $shipment->get_shipping_provider();
 				if ( ! empty( $provider ) && $provider !== 'none' ) {
-					$tracking_data['carrier'] = 'DHL_DEUTSCHE_POST';
+					/**
+					 * The filter allowing to change the default Germanized carrier for order tracking,
+					 * such as DHL_DEUTSCHE_POST, DPD_DE, ...
+					 */
+					$tracking_data['carrier'] = (string) apply_filters( 'woocommerce_paypal_payments_default_gzd_carrier', 'DHL_DEUTSCHE_POST', $provider );
 				}
 
 				try {
@@ -169,17 +188,17 @@ class CompatModule implements ModuleInterface {
 
 					$tracking_data['tracking_number'] = $tracking_information['tracking_number'] ?? '';
 
-					if ( $shipment->has_tracking() ) {
+					if ( $shipment->get_tracking_id() ) {
 						$tracking_data['tracking_number'] = $shipment->get_tracking_id();
 					}
 
 					! $tracking_information ? $endpoint->add_tracking_information( $tracking_data, $wc_order->get_id() ) : $endpoint->update_tracking_information( $tracking_data, $wc_order->get_id() );
 				} catch ( Exception $exception ) {
 					$logger->error( "Couldn't sync tracking information: " . $exception->getMessage() );
-					$shipment->add_note( "Couldn't sync tracking information: " . $exception->getMessage() );
-					throw $exception;
 				}
-			}
+			},
+			500,
+			2
 		);
 	}
 
@@ -208,19 +227,19 @@ class CompatModule implements ModuleInterface {
 				$disable_funding = $settings->has( 'disable_funding' ) ? $settings->get( 'disable_funding' ) : array();
 
 				$available_messaging_locations = array_keys( $c->get( 'wcgateway.settings.pay-later.messaging-locations' ) );
-				$available_button_locations    = array_merge( $available_messaging_locations, array( 'mini-cart' ) );
+				$available_button_locations    = array_keys( $c->get( 'wcgateway.button.locations' ) );
 
 				if ( in_array( 'credit', $disable_funding, true ) ) {
 					$settings->set( 'pay_later_button_enabled', false );
 				} else {
 					$settings->set( 'pay_later_button_enabled', true );
-					$selected_button_locations = $this->pay_later_selected_locations( $settings, $available_button_locations, 'button' );
+					$selected_button_locations = $this->selected_locations( $settings, $available_button_locations, 'button' );
 					if ( ! empty( $selected_button_locations ) ) {
 						$settings->set( 'pay_later_button_locations', $selected_button_locations );
 					}
 				}
 
-				$selected_messaging_locations = $this->pay_later_selected_locations( $settings, $available_messaging_locations, 'message' );
+				$selected_messaging_locations = $this->selected_locations( $settings, $available_messaging_locations, 'message' );
 
 				if ( ! empty( $selected_messaging_locations ) ) {
 					$settings->set( 'pay_later_messaging_enabled', true );
@@ -268,26 +287,100 @@ class CompatModule implements ModuleInterface {
 	}
 
 	/**
-	 * Finds from old settings the locations, which should be selected for new Pay Later tab settings.
+	 * Finds from old settings the selected locations for given type.
 	 *
 	 * @param Settings $settings The settings.
 	 * @param string[] $all_locations The list of all available locations.
-	 * @param string   $setting The setting: 'button' or 'message'.
+	 * @param string   $type The setting type: 'button' or 'message'.
 	 * @return string[] The list of locations, which should be selected.
-	 * @throws NotFoundException When setting was not found.
 	 */
-	protected function pay_later_selected_locations( Settings $settings, array $all_locations, string $setting ): array {
-		$pay_later_locations = array();
+	protected function selected_locations( Settings $settings, array $all_locations, string $type ): array {
+		$button_locations = array();
 
 		foreach ( $all_locations as $location ) {
 			$location_setting_name_part = $location === 'checkout' ? '' : "_{$location}";
-			$setting_name               = "{$setting}{$location_setting_name_part}_enabled";
+			$setting_name               = "{$type}{$location_setting_name_part}_enabled";
 
 			if ( $settings->has( $setting_name ) && $settings->get( $setting_name ) ) {
-				$pay_later_locations[] = $location;
+				$button_locations[] = $location;
 			}
 		}
 
-		return $pay_later_locations;
+		return $button_locations;
+	}
+
+	/**
+	 * Migrates the old smart button settings.
+	 *
+	 * The migration will be done on plugin upgrade if it hasn't already done.
+	 *
+	 * @param ContainerInterface $c The Container.
+	 */
+	protected function migrate_smart_button_settings( ContainerInterface $c ): void {
+		$is_smart_button_settings_migrated_option_name = 'woocommerce_ppcp-is_smart_button_settings_migrated';
+		$is_smart_button_settings_migrated             = get_option( $is_smart_button_settings_migrated_option_name );
+
+		if ( $is_smart_button_settings_migrated ) {
+			return;
+		}
+
+		add_action(
+			'woocommerce_paypal_payments_gateway_migrate_on_update',
+			function () use ( $c, $is_smart_button_settings_migrated_option_name ) {
+				$settings = $c->get( 'wcgateway.settings' );
+				assert( $settings instanceof Settings );
+
+				$available_button_locations = array_keys( $c->get( 'wcgateway.button.locations' ) );
+				$selected_button_locations  = $this->selected_locations( $settings, $available_button_locations, 'button' );
+				if ( ! empty( $selected_button_locations ) ) {
+					$settings->set( 'smart_button_locations', $selected_button_locations );
+					$settings->persist();
+				}
+
+				update_option( $is_smart_button_settings_migrated_option_name, true );
+			}
+		);
+	}
+
+	/**
+	 * Changes the button rendering place for page builders
+	 * that do not work well with our default places.
+	 *
+	 * @return void
+	 */
+	protected function fix_page_builders(): void {
+		add_action(
+			'init',
+			function() {
+				if ( $this->is_elementor_pro_active() || $this->is_divi_theme_active() ) {
+					add_filter(
+						'woocommerce_paypal_payments_single_product_renderer_hook',
+						function(): string {
+							return 'woocommerce_after_add_to_cart_form';
+						},
+						5
+					);
+				}
+			}
+		);
+	}
+
+	/**
+	 * Checks whether the Elementor Pro plugins (allowing integrations with WC) is active.
+	 *
+	 * @return bool
+	 */
+	protected function is_elementor_pro_active(): bool {
+		return is_plugin_active( 'elementor-pro/elementor-pro.php' );
+	}
+
+	/**
+	 * Checks whether the Divi theme is currently used.
+	 *
+	 * @return bool
+	 */
+	protected function is_divi_theme_active(): bool {
+		$theme = wp_get_theme();
+		return $theme->get( 'Name' ) === 'Divi';
 	}
 }

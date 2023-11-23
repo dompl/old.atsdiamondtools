@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.2.2
+Tested up to: 6.4
 Stable tag: 6.2
 
 == Description ==
@@ -10,7 +10,7 @@ We are AG's flagship plugin (where it all began), this plugin will allow you to 
 
 == Installation ==
 
-Setting up this plugin should only take 30 minutes to complete, follow the steps over at the plugin documentation page [here] (https://we-are-ag.helpscoutdocs.com/article/45-setup)
+Setting up this plugin should only take 30 minutes to complete, follow the steps over at the plugin documentation page [here] (https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/setup/)
 
 == Frequently Asked Questions ==
 
@@ -31,7 +31,26 @@ Ok not a problem, lets see if you can fix it by following these steps.
 
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
+
 == Changelog ==
+
+= v.4.6.0 - 15/11/23 =
+* New             - Customers now have the ability to add new cards for tokenization directly from their account page, which is particularly valuable for managing subscriptions and token payments.
+* New             - The redirection to ePDQ during the order placement process has been optimized, eliminating the need for an extra page to appear when the "Place Order" button is clicked.
+
+= v.4.5.14 - 09/11/23 =
+* Fix             - Fix a support for orders have prefix.
+* Fix             - Fix with Webhook URL in plugin settings, URL was missing information.
+* Update          - Support HPOS for Status Check.
+* Change          - Bump tested WooCommerce (8.2).
+
+= v.4.5.13 - 14/09/23 =
+* Dev             - Function renaming to help with conflicts with other AG plugins.
+
+= v.4.5.12 - 08/09/23 =
+* Fix              - Fixed issue when ePDQ is activated with another AG plugin (issue with Status Check, MOTO & Capture calls).
+* Change           - Bump tested WooCommerce (8.0).
+* Update           - Freemius SDK updated.
 
 = v.4.5.11 - 08/08/23 =
 * New              - New helper function for merchants who use ePDQ_custom_order_id filter to process Status Checks.

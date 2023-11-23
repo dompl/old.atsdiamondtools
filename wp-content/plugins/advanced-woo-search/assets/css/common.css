@@ -36,6 +36,7 @@
     vertical-align: top;
     padding: 0;
     width: 100%;
+    overflow: hidden;
 }
 
 .aws-container .aws-search-form .aws-loader {

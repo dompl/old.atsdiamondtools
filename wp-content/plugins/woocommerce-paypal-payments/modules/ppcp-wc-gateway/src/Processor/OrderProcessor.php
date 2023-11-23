@@ -10,9 +10,11 @@ declare(strict_types=1);
 namespace WooCommerce\PayPalCommerce\WcGateway\Processor;
 
 use Psr\Log\LoggerInterface;
+use WC_Order;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\OrderEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\Order;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\OrderStatus;
+use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
 use WooCommerce\PayPalCommerce\ApiClient\Factory\OrderFactory;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\OrderHelper;
 use WooCommerce\PayPalCommerce\Button\Helper\ThreeDSecure;
@@ -161,11 +163,31 @@ class OrderProcessor {
 	 * @return bool
 	 */
 	public function process( \WC_Order $wc_order ): bool {
-		$order_id = $wc_order->get_meta( PayPalGateway::ORDER_ID_META_KEY );
-		$order    = $this->session_handler->order() ?? $this->order_endpoint->order( $order_id );
+		// phpcs:ignore WordPress.Security.NonceVerification
+		$order_id = $wc_order->get_meta( PayPalGateway::ORDER_ID_META_KEY ) ?: wc_clean( wp_unslash( $_POST['paypal_order_id'] ?? '' ) );
+		$order    = $this->session_handler->order();
+		if ( ! $order && is_string( $order_id ) && $order_id ) {
+			$order = $this->order_endpoint->order( $order_id );
+		}
 		if ( ! $order ) {
-			$this->last_error = __( 'No PayPal order found in the current WooCommerce session.', 'woocommerce-paypal-payments' );
-			return false;
+			$order_id = $wc_order->get_meta( PayPalGateway::ORDER_ID_META_KEY );
+			if ( ! $order_id ) {
+				$this->logger->warning(
+					sprintf(
+						'No PayPal order ID found in order #%d meta.',
+						$wc_order->get_id()
+					)
+				);
+				$this->last_error = __( 'Could not retrieve order. Maybe it was already completed or this browser is not supported. Please check your email or try again with a different browser.', 'woocommerce-paypal-payments' );
+				return false;
+			}
+
+			try {
+				$order = $this->order_endpoint->order( $order_id );
+			} catch ( RuntimeException $exception ) {
+				$this->last_error = __( 'Could not retrieve PayPal order.', 'woocommerce-paypal-payments' );
+				return false;
+			}
 		}
 
 		$this->add_paypal_meta( $wc_order, $order, $this->environment );

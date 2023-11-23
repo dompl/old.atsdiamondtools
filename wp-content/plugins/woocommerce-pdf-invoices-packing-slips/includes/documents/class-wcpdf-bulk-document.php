@@ -32,11 +32,39 @@ class Bulk_Document {
 	 * @var array
 	 */
 	public $order_ids;
+	
+	public $is_bulk;
+	
+	public $output_formats;
 
 	public function __construct( $document_type, $order_ids = array() ) {
 		$this->type      = $document_type;
 		$this->order_ids = $order_ids;
 		$this->is_bulk   = true;
+		
+		// output formats (placed after parent construct to override the abstract default)
+		$this->output_formats = apply_filters( "wpo_wcpdf_{$this->type}_output_formats", array( 'pdf' ), $this );
+	}
+	
+	public function exists() {
+		$exists = false;
+		
+		foreach ( $this->order_ids as $order_id ) {
+			$document = wcpdf_get_document( $this->type, $order_id );
+			if ( $document && is_callable( array( $document, 'exists' ) ) && $document->exists() ) {
+				$exists = true;
+				break;
+			}
+		}
+		
+		return $exists;
+	}
+	
+	public function is_enabled( $output_format = 'pdf' ) {
+		if ( in_array( $output_format, $this->output_formats ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	public function get_type() {
@@ -68,11 +96,11 @@ class Bulk_Document {
 	}
 
 	public function get_html() {
-		do_action( 'wpo_wcpdf_before_html', $this->get_type(), $this );
-
 		// temporarily apply filters that need to be removed again after the html is generated
 		$html_filters = apply_filters( 'wpo_wcpdf_html_filters', array(), $this );
 		$this->add_filters( $html_filters );
+
+		do_action( 'wpo_wcpdf_before_html', $this->get_type(), $this );
 
 		$html_content = array();
 		foreach ( $this->order_ids as $key => $order_id ) {
@@ -88,6 +116,7 @@ class Bulk_Document {
 		// get wrapper document & insert body content
 		$this->wrapper_document = wcpdf_get_document( $this->get_type(), null );
 		$html = $this->wrapper_document->wrap_html_content( $this->merge_documents( $html_content ) );
+		
 		do_action( 'wpo_wcpdf_after_html', $this->get_type(), $this );
 
 		// remove temporary filters

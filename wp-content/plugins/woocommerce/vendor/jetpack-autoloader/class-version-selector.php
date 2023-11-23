@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jpbcaf172af4c305a2967aa4ee5f73b7e1;
+namespace Automattic\Jetpack\Autoloader\jpf04c068a64cbaa8c2d8666c9e308f28d;
 
  // phpcs:ignore
 
@@ -29,7 +29,7 @@ class Version_Selector {
 	public function is_version_update_required( $selected_version, $compare_version ) {
 		$use_dev_versions = defined( 'JETPACK_AUTOLOAD_DEV' ) && JETPACK_AUTOLOAD_DEV;
 
-		if ( is_null( $selected_version ) ) {
+		if ( $selected_version === null ) {
 			return true;
 		}
 

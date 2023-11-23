@@ -6,7 +6,6 @@
  */
 
 use Automattic\Jetpack\Constants;
-use Automattic\WooCommerce\Internal\ProductDownloads\ApprovedDirectories\Register as Download_Directories;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,7 +38,10 @@ $untested_plugins   = $plugin_updates->get_untested_plugins( WC()->version, Cons
 	<div id="debug-report">
 		<textarea readonly="readonly"></textarea>
 		<p class="submit">
-			<button id="copy-for-support" class="button-primary" href="#" data-tip="<?php esc_attr_e( 'Copied!', 'woocommerce' ); ?>">
+			<button id="download-for-support" class="button-primary" href="#">
+				<?php esc_html_e( 'Download for support', 'woocommerce' ); ?>
+			</button>
+			<button id="copy-for-support" class="button" href="#" data-tip="<?php esc_attr_e( 'Copied!', 'woocommerce' ); ?>">
 				<?php esc_html_e( 'Copy for support', 'woocommerce' ); ?>
 			</button>
 		</p>
@@ -727,7 +729,7 @@ if ( 0 < count( $dropins_mu_plugins['mu_plugins'] ) ) :
 			<td><?php echo esc_html( $settings['number_of_decimals'] ); ?></td>
 		</tr>
 		<tr>
-			<td data-export-label="Taxonomies: Product Types"><?php esc_html_e( 'Taxonomies: Product types', 'woocommerce' ); ?></th>
+			<td data-export-label="Taxonomies: Product Types"><?php esc_html_e( 'Taxonomies: Product types', 'woocommerce' ); ?></td>
 			<td class="help"><?php echo wc_help_tip( esc_html__( 'A list of taxonomy terms that can be used in regard to order/product statuses.', 'woocommerce' ) ); /* phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped */ ?></td>
 			<td>
 				<?php
@@ -740,7 +742,7 @@ if ( 0 < count( $dropins_mu_plugins['mu_plugins'] ) ) :
 			</td>
 		</tr>
 		<tr>
-			<td data-export-label="Taxonomies: Product Visibility"><?php esc_html_e( 'Taxonomies: Product visibility', 'woocommerce' ); ?></th>
+			<td data-export-label="Taxonomies: Product Visibility"><?php esc_html_e( 'Taxonomies: Product visibility', 'woocommerce' ); ?></td>
 			<td class="help"><?php echo wc_help_tip( esc_html__( 'A list of taxonomy terms used for product visibility.', 'woocommerce' ) ); /* phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped */ ?></td>
 			<td>
 				<?php
@@ -760,8 +762,30 @@ if ( 0 < count( $dropins_mu_plugins['mu_plugins'] ) ) :
 		<tr>
 			<td data-export-label="Enforce Approved Product Download Directories"><?php esc_html_e( 'Enforce Approved Product Download Directories', 'woocommerce' ); ?>:</td>
 			<td class="help"><?php echo wc_help_tip( esc_html__( 'Is your site enforcing the use of Approved Product Download Directories?', 'woocommerce' ) ); /* phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped */ ?></td>
-			<td><?php echo wc_get_container()->get( Download_Directories::class )->get_mode() === Download_Directories::MODE_ENABLED ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+			<td><?php echo $settings['enforce_approved_download_dirs'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
 		</tr>
+
+		<tr>
+			<td data-export-label="HPOS feature screen enabled"><?php esc_html_e( 'HPOS feature screen enabled:', 'woocommerce' ); ?></td>
+			<td class="help"><?php echo wc_help_tip( esc_html__( 'Is HPOS feature screen enabled?', 'woocommerce' ) ); ?></td>
+			<td><?php echo $settings['HPOS_feature_screen_enabled'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="HPOS feature enabled"><?php esc_html_e( 'HPOS enabled:', 'woocommerce' ); ?></td>
+			<td class="help"><?php echo wc_help_tip( esc_html__( 'Is HPOS enabled?', 'woocommerce' ) ); ?></td>
+			<td><?php echo $settings['HPOS_enabled'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="Order datastore"><?php esc_html_e( 'Order datastore:', 'woocommerce' ); ?></td>
+			<td class="help"><?php echo wc_help_tip( esc_html__( 'Datastore currently in use for orders.', 'woocommerce' ) ); ?></td>
+			<td><?php echo esc_html( $settings['order_datastore'] ); ?></td>
+		</tr>
+		<tr>
+			<td data-export-label="HPOS data sync enabled"><?php esc_html_e( 'HPOS data sync enabled:', 'woocommerce' ); ?></td>
+			<td class="help"><?php echo wc_help_tip( esc_html__( 'Is data sync enabled for HPOS?', 'woocommerce' ) ); ?></td>
+			<td><?php echo $settings['HPOS_sync_enabled'] ? '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>' : '<mark class="no">&ndash;</mark>'; ?></td>
+		</tr>
+
 	</tbody>
 </table>
 <table class="wc_status_table widefat" cellspacing="0">

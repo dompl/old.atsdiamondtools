@@ -103,7 +103,7 @@ class AG_ePDQ_Settings {
 			'webhook'      => array(
 				'title'       => __( 'Webhook', 'ag_epdq_server' ),
 				'type'        => 'hidden',
-				'description' => __( 'The plugin now has a custom webhook, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/webhook/setting-up-the-new-webhook-feature/" target="_blank">here</a>.<br />Your URL for the ePDQ back office is: <strong>' . WC()->api_request_url( 'epdq_checkout_webhook' ) . '</strong>', 'ag_epdq_server' ),
+				'description' => __( 'The plugin now has a custom webhook, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/webhook/setting-up-the-new-webhook-feature/" target="_blank">here</a>.<br />Your URL for the ePDQ back office is: <strong>' . rtrim( WC()->api_request_url( 'epdq_checkout_webhook/?PARAMVAR=' . htmlspecialchars( '<PARAMVAR>' ) ), '/' ) . '</strong>', 'ag_epdq_server' ),
 			),
 			'template'     => array(
 				'title'       => __( 'Dynamic template URL', 'ag_epdq_server' ),

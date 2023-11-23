@@ -2,8 +2,11 @@
 /*-----------------------------------------------------------------------------------*/
 
 /*	AG ePDQ order status check
-    Fallback for when ePDQ Direct HTTP server-to-server request fails due to website host issues.
+    Fallback for when ePDQ HTTP server-to-server request fails due to website host issues.
 /*-----------------------------------------------------------------------------------*/
+
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 if( class_exists( 'AG_ePDQ_order_status_check' ) ) {
@@ -19,12 +22,19 @@ class AG_ePDQ_order_status_check {
 	public function __construct() {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'status_check_js' ) );
-		add_action( 'woocommerce_order_status_cancelled', array( $this, 'check' ) );
+		add_action( 'woocommerce_order_status_cancelled', array( $this, 'epdq_check' ) );
 		add_action( 'woocommerce_order_item_add_action_buttons', array( $this, 'callback_button' ) );
-		add_action( 'wp_ajax_ag_manually_check_status_call', array( $this, 'ag_manually_check_status_call' ) );
-		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'show_status_check_order_screen' ) );
-		add_filter( 'manage_edit-shop_order_columns', array( $this, 'ag_change_order_column' ) );
+		add_action( 'wp_ajax_ag_epdq_manually_check_status_call', array( $this, 'ag_epdq_manually_check_status_call' ) );
 		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'ag_set_sortable_columns' ) );
+
+		if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			add_filter( 'woocommerce_shop_order_list_table_columns', array( $this, 'ag_change_order_column_HPOS' ), 20 );
+			add_action( 'woocommerce_shop_order_list_table_custom_column', array( $this, 'show_status_check_order_screen_HPOS' ), 10, 2 );
+		} {
+			add_action( 'manage_shop_order_posts_custom_column', array( $this, 'show_status_check_order_screen' ) );
+			add_filter( 'manage_edit-shop_order_columns', array( $this, 'ag_change_order_column' ) );
+		}
+
 
 	}
 
@@ -46,7 +56,7 @@ class AG_ePDQ_order_status_check {
 	 *
 	 * @param $order_id
 	 */
-	public static function check( $order_id ) {
+	public static function epdq_check( $order_id ) {
 
 		$order = new WC_Order( $order_id );
 		$ePDQ_settings = new epdq_checkout();
@@ -247,7 +257,7 @@ class AG_ePDQ_order_status_check {
 
 		if( 0 < $order->get_total() - $order->get_total_refunded() || 0 < absint( $order->get_item_count() - $order->get_item_count_refunded() ) ) {
 
-			echo '<button id="ag-check-status"  type="button" id="ag-status" class="button ag-status" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_url . '">AG ePDQ Order Status Check</button>';
+			echo '<button id="ag-check-status-epdq"  type="button" id="ag-status" class="button ag-status" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_url . '">AG ePDQ Order Status Check</button>';
 
 			return;
 
@@ -255,15 +265,32 @@ class AG_ePDQ_order_status_check {
 
 	}
 
-	public function status_check_js() {
+	public function status_check_js( $hook ) {
 
-		wp_enqueue_script( self::$args['plugin_name'] . '-status-check', AG_ePDQ_server_path . "inc/assets/js/ag-status-check-script.js", array( 'jquery' ), NULL, TRUE );
-		wp_localize_script( self::$args['plugin_name'] . '-status-check', 'ag_status_var', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
-			'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-status-check' ),
-			'error'   => __( 'Something went wrong, and the order status check could not be completed. Please try again.', 'ag_epdq_server' ),
-		) );
+		global $post;
+
+		// if( 'post.php' == $hook && 'shop_order' == $post->post_type && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
+
+			// if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+			// 	$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
+			// } else {
+				// global $post;
+				// $order = wc_get_order( $post->ID );
+			// }
+
+			// if( $order->get_payment_method() !== 'epdq_checkout' ) {
+			// 	return;
+			// }
+
+			wp_enqueue_script( self::$args['plugin_name'] . '-status-check', AG_ePDQ_server_path . "inc/assets/js/ag-status-check-script.js", array( 'jquery' ), NULL, TRUE );
+			wp_localize_script( self::$args['plugin_name'] . '-status-check', 'ag_epdq_status_var', array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
+				'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-status-check' ),
+				'error'   => __( 'Something went wrong, and the order status check could not be completed. Please try again.', 'ag_epdq_server' ),
+			) );
+
+		// }
 
 	}
 
@@ -271,7 +298,7 @@ class AG_ePDQ_order_status_check {
 	/**
 	 * Ajax
 	 */
-	function ag_manually_check_status_call() {
+	function ag_epdq_manually_check_status_call() {
 
 		check_ajax_referer( self::$args['plugin_name'] . '-status-check', 'nonce' );
 
@@ -488,7 +515,28 @@ class AG_ePDQ_order_status_check {
 
 		return $new_columns;
 	}
+	
+	
+	public function ag_change_order_column_HPOS( $columns ) {
 
+
+		// Disable new column from showing.
+		if( defined( 'AG_disable_column' ) ) {
+			return $columns;
+		}
+
+		$new_columns = [];
+
+		foreach( $columns as $key => $column ) {
+			if( $key === 'order_number' ) {
+				$new_columns['order_number_new'] = $column;
+			} else {
+				$new_columns[ $key ] = $column;
+			}
+		}
+
+		return $new_columns;
+	}
 
 	public function show_status_check_order_screen( $column ) {
 
@@ -544,6 +592,65 @@ class AG_ePDQ_order_status_check {
 
 				}
 			}
+		}
+	}
+
+	public function show_status_check_order_screen_HPOS( $column, $order ) {
+
+		if( 'order_number_new' === $column ) {
+			$buyer = '';
+
+			if( $order->get_billing_first_name() || $order->get_billing_last_name() ) {
+				/* translators: 1: first name 2: last name */
+				$buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'ag_epdq_direct', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
+			} elseif( $order->get_billing_company() ) {
+				$buyer = trim( $order->get_billing_company() );
+			} elseif( $order->get_customer_id() ) {
+				$user = get_user_by( 'id', $order->get_customer_id() );
+				$buyer = ucwords( $user->display_name );
+			}
+
+			/**
+			 * Filter buyer name in list table orders.
+			 *
+			 * @param string $buyer Buyer name.
+			 * @param WC_Order $order Order data.
+			 *
+			 * @since 3.7.0
+			 */
+			$buyer = apply_filters( 'woocommerce_admin_order_buyer_name', $buyer, $order );
+
+			if( $order->get_status() === 'trash' ) {
+				echo '<strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong>';
+			} else {
+				echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'ag_epdq_direct', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'ag_epdq_direct', 'ag_epdq_server' ) ) . '</a>';
+				echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $order->get_id() ) ) . '&action=edit' ) . '" class="order-view"><strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong></a>';
+
+
+				
+				// Check order is using our plugin
+				if( $order->get_payment_method() !== 'epdq_checkout' ) {
+					return;
+				}
+
+				$keys = array_column( $order->get_meta_data(), 'key' );
+				$ag_auto_check_ran = array_search( 'ag_auto_check_ran', $keys, TRUE );
+				$ag_ag_manual_check_ran = array_search( 'ag_manual_check_ran', $keys, TRUE );
+
+
+
+				if( $ag_auto_check_ran ) {
+
+					echo '<p title="The AG auto status check has already ran on this order and updated it status.">AG Auto Status Check &#10004;</p>';
+
+				} elseif( $ag_ag_manual_check_ran ) {
+
+					echo '<p title="The AG manual status check has already ran on this order and updated it status.">AG Manual Status Check &#10004;</p>';
+
+				}
+
+			}
+
 		}
 	}
 

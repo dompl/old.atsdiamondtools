@@ -23,10 +23,22 @@ export const getActiveFilters = (
 		? params.split( ',' )
 		: ( params as string[] );
 
-	return Object.keys( filters ).filter( ( filter ) =>
-		parsedParams.includes( filter )
-	);
+	const filterKeys = Object.keys( filters );
+
+	return parsedParams.filter( ( param ) => filterKeys.includes( param ) );
 };
+
+export function generateUniqueId() {
+	return Math.floor( Math.random() * Date.now() );
+}
+
+export const formatSlug = ( slug: string ) =>
+	slug
+		.trim()
+		.replace( /\s/g, '' )
+		.replace( /_/g, '-' )
+		.replace( /-+/g, '-' )
+		.replace( /[^a-zA-Z0-9-]/g, '' );
 
 export const parseAttributes = ( data: Record< string, unknown > ) => {
 	return {
@@ -36,7 +48,13 @@ export const parseAttributes = ( data: Record< string, unknown > ) => {
 				parseInt( data.headingLevel, 10 ) ) ||
 			metadata.attributes.headingLevel.default,
 		showFilterButton: data?.showFilterButton === 'true',
-		showCounts: data?.showCounts !== 'false',
+		showCounts: data?.showCounts === 'true',
 		isPreview: false,
+		displayStyle:
+			( isString( data?.displayStyle ) && data.displayStyle ) ||
+			metadata.attributes.displayStyle.default,
+		selectType:
+			( isString( data?.selectType ) && data.selectType ) ||
+			metadata.attributes.selectType.default,
 	};
 };

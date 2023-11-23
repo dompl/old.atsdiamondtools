@@ -1,3 +1,6 @@
+import {loadScript} from "@paypal/paypal-js";
+import widgetBuilder from "./Renderer/WidgetBuilder";
+
 const storageKey = 'ppcp-data-client-id';
 
 const validateToken = (token, user) => {
@@ -24,9 +27,12 @@ const storeToken = (token) => {
     sessionStorage.setItem(storageKey, JSON.stringify(token));
 }
 
-const dataClientIdAttributeHandler = (script, config) => {
+const dataClientIdAttributeHandler = (scriptOptions, config, callback) => {
     fetch(config.endpoint, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         credentials: 'same-origin',
         body: JSON.stringify({
             nonce: config.nonce
@@ -39,8 +45,14 @@ const dataClientIdAttributeHandler = (script, config) => {
             return;
         }
         storeToken(data);
-        script.setAttribute('data-client-token', data.token);
-        document.body.appendChild(script);
+
+        scriptOptions['data-client-token'] = data.token;
+
+        loadScript(scriptOptions).then((paypal) => {
+            if (typeof callback === 'function') {
+                callback(paypal);
+            }
+        });
     });
 }
 

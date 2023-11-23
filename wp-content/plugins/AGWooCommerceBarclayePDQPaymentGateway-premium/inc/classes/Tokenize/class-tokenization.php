@@ -25,6 +25,8 @@ if( class_exists( 'AG_ePDQ_Token' ) ) {
 
 class AG_ePDQ_Token {
 
+	private static $test_url = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
+	private static $live_url = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
 
 	public static function save( $args, $userID, $login ) {
 
@@ -164,6 +166,93 @@ class AG_ePDQ_Token {
 		}
 
 		return implode( $getCards );
+
+	}
+
+	public static function addNewCard() {
+
+		$user_id = get_current_user_id();
+		$wc_customer = new \WC_Customer( $user_id );
+		$ePDQ_settings = new epdq_checkout();
+		$settings = ePDQ_crypt::key_settings();
+		if( get_woocommerce_currency() !== 'GBP' && defined( 'ePDQ_PSPID' ) ) {
+			$PSPID = ePDQ_PSPID;
+		} else {
+			$PSPID = $settings['pspid'];
+		}
+
+		// Use different PSPID (This is useful for stores that are franchisees)
+		$ePDQ_PSPID = NULL;
+		$multi_PSPID = apply_filters( 'ePDQ_PSPID', $ePDQ_PSPID );
+		if( ! empty( $multi_PSPID ) ) {
+			$PSPID = $multi_PSPID;
+		}
+
+		$site_name = get_bloginfo( 'name' );
+		$m_site_name = preg_replace( "/[^a-zA-Z0-9]/", "", $site_name );
+		$modified_site_name = str_replace( "039", "", $m_site_name );
+
+		$fields = array(
+			'PSPID'                                  => $PSPID,
+			'ORDERID'                                => 'AGDT-' . $user_id . '-' . mt_rand(),
+			'AMOUNT'                                 => '0',
+			'CURRENCY'                               => get_woocommerce_currency(),
+			'LANGUAGE'                               => get_locale(),
+			'CN'                                     => $wc_customer->get_first_name() . ' ' . $wc_customer->get_last_name(),
+			'COM'                                    => 'Customer is adding a new card to token',
+			'EMAIL'                                  => $wc_customer->get_email(),
+			'OWNERZIP'                               => $wc_customer->get_billing_postcode(),
+			'OWNERADDRESS'                           => $wc_customer->get_billing_address_1(),
+			'OWNERADDRESS2'                          => substr( $wc_customer->get_billing_address_2(), 0, 34 ),
+			'OWNERCTY'                               => $wc_customer->get_billing_country(),
+			'OWNERTOWN'                              => $wc_customer->get_billing_city(),
+			'OWNERTELNO'                             => $wc_customer->get_billing_phone(),
+			'ACCEPTURL'                              => WC()->api_request_url( 'epdq_checkout_token' ),
+			'DECLINEURL'                             => wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=0',
+			'HOMEURL'                                => wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=0',
+			'TP'                                     => ( $ePDQ_settings->template ?? '' ),
+			'LOGO'                                   => ( $ePDQ_settings->logo ?? '' ),
+			'TITLE'                                  => '',
+			'FLAG3D'                                 => 'Y',
+			'MPI.THREEDSREQUESTORCHALLENGEINDICATOR' => 04
+		);
+		$fields['ALIAS'] = 'VALUE';
+		$fields['ALIASOPERATION'] = 'BYPSP';
+		$fields['ALIASUSAGE'] = 'Saving a new card for use on ' . $modified_site_name . ' Website. Please authorise Barclaycard to store your details for your future payments.';
+		$fields['COF_INITIATOR'] = 'CIT';
+		$fields['COF_TRANSACTION'] = 'FIRST';
+		$fields['COF_SCHEDULE'] = 'SCHED';
+		$fields['BRAND'] = '';
+		$fields['PM'] = 'CreditCard';
+
+		$shasign_arg = array();
+		ksort( $fields );
+		foreach( $fields as $key => $value ) {
+			if( $value == '' ) {
+				continue;
+			}
+			$shasign_arg[] = $key . '=' . $value;
+		}
+
+		$shasign = hash( ePDQ_crypt::get_sha_method(), implode( $settings['shain'], $shasign_arg ) . $settings['shain'] );
+		$fields['SHASIGN'] = $shasign;
+
+		if( $ePDQ_settings->status === 'test' ) {
+			$redirect_url = self::$test_url;
+		}
+		if( $ePDQ_settings->status === 'live' ) {
+			$redirect_url = self::$live_url;
+		}
+
+		// Construct the query string from your $fields array
+		$query_string = http_build_query( $fields );
+
+		// Combine the PSP URL and query string
+		$redirect_url .= '?' . $query_string;
+
+		// Perform the redirect
+		header( 'Location: ' . $redirect_url );
+		exit;
 
 	}
 

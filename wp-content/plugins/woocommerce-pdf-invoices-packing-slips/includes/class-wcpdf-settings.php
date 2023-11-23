@@ -18,8 +18,10 @@ class Settings {
 	public $documents;
 	public $debug;
 	public $upgrade;
+	public $ubl;
 	public $general_settings;
 	public $debug_settings;
+	public $ubl_tax_settings;
 	public $lock_name;
 	public $lock_context;
 	public $lock_time;
@@ -42,10 +44,12 @@ class Settings {
 		$this->general          = \WPO\WC\PDF_Invoices\Settings\Settings_General::instance();
 		$this->documents        = \WPO\WC\PDF_Invoices\Settings\Settings_Documents::instance();
 		$this->debug            = \WPO\WC\PDF_Invoices\Settings\Settings_Debug::instance();
+		$this->ubl              = \WPO\WC\PDF_Invoices\Settings\Settings_UBL::instance();
 		$this->upgrade          = \WPO\WC\PDF_Invoices\Settings\Settings_Upgrade::instance();
 		
 		$this->general_settings = get_option( 'wpo_wcpdf_settings_general' );
 		$this->debug_settings   = get_option( 'wpo_wcpdf_settings_debug' );
+		$this->ubl_tax_settings = get_option( 'wpo_wcpdf_settings_ubl_taxes' );
 		
 		$this->lock_name        = 'wpo_wcpdf_semaphore_lock';
 		$this->lock_context     = array( 'source' => 'wpo-wcpdf-semaphore' );
@@ -158,7 +162,7 @@ class Settings {
 		$row = $wpdb->get_row( "SHOW VARIABLES LIKE 'auto_increment_increment'" );
 		if ( ! empty( $row ) && ! empty( $row->Value ) && $row->Value != 1 ) {
 			/* translators: database row value */
-			$error = wp_kses_post( sprintf( __( "<strong>Warning!</strong> Your database has an AUTO_INCREMENT step size of %d, your invoice numbers may not be sequential. Enable the 'Calculate document numbers (slow)' setting in the Status tab to use an alternate method." , 'woocommerce-pdf-invoices-packing-slips' ), intval( $row->Value ) ) );
+			$error = wp_kses_post( sprintf( __( "<strong>Warning!</strong> Your database has an AUTO_INCREMENT step size of %d, your invoice numbers may not be sequential. Enable the 'Calculate document numbers (slow)' setting in the Advanced tab to use an alternate method." , 'woocommerce-pdf-invoices-packing-slips' ), intval( $row->Value ) ) );
 			printf( '<div class="error"><p>%s</p></div>', $error );
 		}
 	}
@@ -169,19 +173,24 @@ class Settings {
 		settings_errors();
 
 		$settings_tabs = apply_filters( 'wpo_wcpdf_settings_tabs', array(
-			'general'   => array(
+			'general' => array(
 				'title'          => __( 'General', 'woocommerce-pdf-invoices-packing-slips' ),
 				'preview_states' => 3,
 			),
-			'documents'	=> array(
+			'documents' => array(
 				'title'          => __( 'Documents', 'woocommerce-pdf-invoices-packing-slips' ),
 				'preview_states' => 3,
+			),
+			'ubl' => array(
+				'title'          => __( 'UBL', 'woocommerce-pdf-invoices-packing-slips' ),
+				'preview_states' => 1,
+				'beta'           => true,
 			),
 		) );
 
 		// add status and upgrade tabs last in row
 		$settings_tabs['debug'] = array(
-			'title'          => __( 'Status', 'woocommerce-pdf-invoices-packing-slips' ),
+			'title'          => __( 'Advanced', 'woocommerce-pdf-invoices-packing-slips' ),
 			'preview_states' => 1,
 		);
 
@@ -195,7 +204,7 @@ class Settings {
 		$active_tab     = isset( $_GET[ 'tab' ] ) ? sanitize_text_field( $_GET[ 'tab' ] ) : $default_tab;
 		$active_section = isset( $_GET[ 'section' ] ) ? sanitize_text_field( $_GET[ 'section' ] ) : '';
 
-		include( 'views/wcpdf-settings-page.php' );
+		include( 'views/settings-page.php' );
 	}
 
 	public function maybe_disable_preview_on_settings_tabs( $settings_tabs ) {
@@ -272,12 +281,12 @@ class Settings {
 					$form_data = stripslashes_deep( $form_data );
 
 					foreach ( $form_data as $option_key => $form_settings ) {
-						if ( apply_filters( 'wpo_wcpdf_preview_filter_option', strpos( $option_key, 'wpo_wcpdf' ) === 0, $option_key ) === false ) {
+						if ( ! empty( $option_key ) && false === apply_filters( 'wpo_wcpdf_preview_filter_option', 0 === strpos( $option_key, 'wpo_wcpdf' ), $option_key ) ) {
 							continue; // not our business
 						}
 
 						// validate option values
-						$form_settings = WPO_WCPDF()->settings->callbacks->validate( $form_settings );
+						$form_settings = $this->callbacks->validate( $form_settings );
 
 						// filter the options
 						add_filter( "option_{$option_key}", function( $value, $option ) use ( $form_settings ) {
@@ -297,7 +306,7 @@ class Settings {
 				if ( $document ) {
 					if ( ! $document->exists() ) {
 						$document->set_date( current_time( 'timestamp', true ) );
-						$number_store_method = WPO_WCPDF()->settings->get_sequential_number_store_method();
+						$number_store_method = $this->get_sequential_number_store_method();
 						$number_store_name   = apply_filters( 'wpo_wcpdf_document_sequential_number_store', "{$document->slug}_number", $document );
 						$number_store        = new Sequential_Number_Store( $number_store_name, $number_store_method );
 						$document->set_number( $number_store->get_next() );
@@ -314,9 +323,21 @@ class Settings {
 					}
 
 					// preview
-					$pdf_data = $document->preview_pdf();
+					$output_format = ( ! empty( $_REQUEST['output_format'] ) && $_REQUEST['output_format'] != 'pdf' && in_array( $_REQUEST['output_format'], $document->output_formats ) ) ? esc_attr( $_REQUEST['output_format'] ) : 'pdf';
+					switch ( $output_format ) {
+						default:
+						case 'pdf':
+							$preview_data = base64_encode( $document->preview_pdf() );
+							break;
+						case 'ubl':
+							$preview_data = $document->preview_ubl();
+							break;
+					}
 
-					wp_send_json_success( array( 'pdf_data' => base64_encode( $pdf_data ) ) );
+					wp_send_json_success( array(
+						'preview_data'  => $preview_data,
+						'output_format' => $output_format,
+					) );
 				} else {
 					wp_send_json_error(
 						array(
@@ -481,42 +502,47 @@ class Settings {
 
 	public function get_common_document_settings() {
 		$common_settings = array(
-			'paper_size'			=> isset( $this->general_settings['paper_size'] ) ? $this->general_settings['paper_size'] : '',
-			'font_subsetting'		=> isset( $this->general_settings['font_subsetting'] ) || ( defined("DOMPDF_ENABLE_FONTSUBSETTING") && DOMPDF_ENABLE_FONTSUBSETTING === true ) ? true : false,
-			'header_logo'			=> isset( $this->general_settings['header_logo'] ) ? $this->general_settings['header_logo'] : '',
-			'header_logo_height'	=> isset( $this->general_settings['header_logo_height'] ) ? $this->general_settings['header_logo_height'] : '',
-			'shop_name'				=> isset( $this->general_settings['shop_name'] ) ? $this->general_settings['shop_name'] : '',
-			'shop_address'			=> isset( $this->general_settings['shop_address'] ) ? $this->general_settings['shop_address'] : '',
-			'footer'				=> isset( $this->general_settings['footer'] ) ? $this->general_settings['footer'] : '',
-			'extra_1'				=> isset( $this->general_settings['extra_1'] ) ? $this->general_settings['extra_1'] : '',
-			'extra_2'				=> isset( $this->general_settings['extra_2'] ) ? $this->general_settings['extra_2'] : '',
-			'extra_3'				=> isset( $this->general_settings['extra_3'] ) ? $this->general_settings['extra_3'] : '',
+			'paper_size'         => isset( $this->general_settings['paper_size'] ) ? $this->general_settings['paper_size'] : '',
+			'font_subsetting'    => isset( $this->general_settings['font_subsetting'] ) || ( defined("DOMPDF_ENABLE_FONTSUBSETTING") && DOMPDF_ENABLE_FONTSUBSETTING === true ) ? true : false,
+			'header_logo'        => isset( $this->general_settings['header_logo'] ) ? $this->general_settings['header_logo'] : '',
+			'header_logo_height' => isset( $this->general_settings['header_logo_height'] ) ? $this->general_settings['header_logo_height'] : '',
+			'shop_name'          => isset( $this->general_settings['shop_name'] ) ? $this->general_settings['shop_name'] : '',
+			'shop_address'       => isset( $this->general_settings['shop_address'] ) ? $this->general_settings['shop_address'] : '',
+			'footer'             => isset( $this->general_settings['footer'] ) ? $this->general_settings['footer'] : '',
+			'extra_1'            => isset( $this->general_settings['extra_1'] ) ? $this->general_settings['extra_1'] : '',
+			'extra_2'            => isset( $this->general_settings['extra_2'] ) ? $this->general_settings['extra_2'] : '',
+			'extra_3'            => isset( $this->general_settings['extra_3'] ) ? $this->general_settings['extra_3'] : '',
 		);
 		return $common_settings;
 	}
 
-	public function get_document_settings( $document_type ) {
-		$documents = WPO_WCPDF()->documents->get_documents( 'all' );
-		foreach ( $documents as $document ) {
-			if ( $document->get_type() == $document_type ) {
-				return $document->settings;
-			}
+	public function get_document_settings( $document_type, $output_format = 'pdf' ) {
+		if ( ! empty( $document_type ) ) {
+			$option_name = ( 'pdf' === $output_format ) ? "wpo_wcpdf_documents_settings_{$document_type}" : "wpo_wcpdf_documents_settings_{$document_type}_{$output_format}";
+			return get_option( $option_name, array() );	
+		} else {
+			return false;
 		}
-		return false;
 	}
 
-	public function get_output_format( $document_type = null ) {
-		if ( isset( $this->debug_settings['html_output'] ) ) {
+	public function get_output_format( $document = null ) {
+		$output_format = 'pdf'; // default
+		
+		if ( isset( $this->debug_settings['html_output'] ) || ( isset( $_REQUEST['output'] ) && 'html' === $_REQUEST['output'] ) ) {
 			$output_format = 'html';
-		} else {
-			$output_format = 'pdf';
+		} elseif ( isset( $_REQUEST['output'] ) && ! empty( $_REQUEST['output'] ) && ! empty( $document ) && in_array( $_REQUEST['output'], $document->output_formats ) ) {
+			$document_settings = $this->get_document_settings( $document->get_type(), esc_attr( $_REQUEST['output'] ) );
+			if ( isset( $document_settings['enabled'] ) ) {
+				$output_format = esc_attr( $_REQUEST['output'] );
+			}
 		}
-		return apply_filters( 'wpo_wcpdf_output_format', $output_format, $document_type );
+		
+		return apply_filters( 'wpo_wcpdf_output_format', $output_format, $document );
 	}
 
 	public function get_output_mode() {
-		if ( isset( WPO_WCPDF()->settings->general_settings['download_display'] ) ) {
-			switch ( WPO_WCPDF()->settings->general_settings['download_display'] ) {
+		if ( isset( $this->general_settings['download_display'] ) ) {
+			switch ( $this->general_settings['download_display'] ) {
 				case 'display':
 					$output_mode = 'inline';
 					break;
@@ -534,7 +560,7 @@ class Settings {
 	public function get_template_path() {
 		// return default path if no template selected
 		if ( empty( $this->general_settings['template_path'] ) ) {
-			return $this->normalize_path( WPO_WCPDF()->plugin_path() . '/templates/Simple' );
+			return wp_normalize_path( WPO_WCPDF()->plugin_path() . '/templates/Simple' );
 		}
 
 		$installed_templates = $this->get_installed_templates();
@@ -542,19 +568,19 @@ class Settings {
 		if ( in_array( $selected_template, $installed_templates ) ) {
 			return array_search( $selected_template, $installed_templates );
 		} else {
-			// unknown template or full template path (legacy settings or filter override)
-			$template_path = $this->normalize_path( $selected_template );
+			// unknown template or full template path (filter override)
+			$template_path = wp_normalize_path( $selected_template );
 			
 			// add base path, checking if it's not already there
 			// alternative setups like Bedrock have WP_CONTENT_DIR & ABSPATH separated
-			if ( defined( 'WP_CONTENT_DIR' ) && strpos( WP_CONTENT_DIR, ABSPATH ) !== false ) {
-				$base_path = $this->normalize_path( ABSPATH );
+			if ( defined( 'WP_CONTENT_DIR' ) && ! empty( WP_CONTENT_DIR ) && false !== strpos( WP_CONTENT_DIR, ABSPATH ) ) {
+				$base_path = wp_normalize_path( ABSPATH );
 			} else {
-				$base_path = $this->normalize_path( WP_CONTENT_DIR );
+				$base_path = wp_normalize_path( WP_CONTENT_DIR );
 			}
 			
-			if ( strpos( $template_path, $base_path ) === false ) {
-				$template_path = $this->normalize_path( $base_path . $template_path );
+			if ( ! empty( $template_path ) && false === strpos( $template_path, $base_path ) ) {
+				$template_path = wp_normalize_path( $base_path . $template_path );
 			}
 		}
 
@@ -590,7 +616,7 @@ class Settings {
 			$dirs = (array) glob( $template_path . '*' , GLOB_ONLYDIR );
 			
 			foreach ( $dirs as $dir ) {
-				$clean_dir     = $this->normalize_path( $dir );
+				$clean_dir     = wp_normalize_path( $dir );
 				$template_name = basename( $clean_dir );
 				// let child theme override parent theme
 				$group = ( $template_source == 'child-theme' ) ? 'theme' : $template_source;
@@ -600,7 +626,7 @@ class Settings {
 
 		if ( empty( $installed_templates ) ) {
 			// fallback to Simple template for servers with glob() disabled
-			$simple_template_path = $this->normalize_path( $template_paths['default'] . 'Simple' );
+			$simple_template_path = wp_normalize_path( $template_paths['default'] . 'Simple' );
 			$installed_templates[$simple_template_path] = 'default/Simple';
 		}
 
@@ -630,7 +656,7 @@ class Settings {
 				$outdated = true;
 				// folder does not exist, try replacing base if we can locate wp-content
 				$wp_content_folder = 'wp-content';
-				if ( strpos( $path, $wp_content_folder ) !== false && defined( WP_CONTENT_DIR ) ) {
+				if ( ! empty( $path ) && false !== strpos( $path, $wp_content_folder ) && defined( WP_CONTENT_DIR ) ) {
 					// try wp-content
 					$relative_path = substr( $path, strrpos( $path, $wp_content_folder ) + strlen( $wp_content_folder ) );
 					$new_path = WP_CONTENT_DIR . $relative_path;
@@ -682,16 +708,12 @@ class Settings {
 	}
 
 	public function get_relative_template_path( $absolute_path ) {
-		if ( defined('WP_CONTENT_DIR') && strpos( WP_CONTENT_DIR, ABSPATH ) !== false ) {
-			$base_path = $this->normalize_path( ABSPATH );
+		if ( defined( 'WP_CONTENT_DIR' ) && ! empty( WP_CONTENT_DIR ) && false !== strpos( WP_CONTENT_DIR, ABSPATH ) ) {
+			$base_path = wp_normalize_path( ABSPATH );
 		} else {
-			$base_path = $this->normalize_path( WP_CONTENT_DIR );
+			$base_path = wp_normalize_path( WP_CONTENT_DIR );
 		}
-		return str_replace( $base_path, '', $this->normalize_path( $absolute_path ) );
-	}
-
-	public function normalize_path( $path ) {
-		return function_exists( 'wp_normalize_path' ) ? wp_normalize_path( $path ) : str_replace('\\','/', $path );
+		return str_replace( $base_path, '', wp_normalize_path( $absolute_path ) );
 	}
 
 	public function maybe_migrate_template_paths( $settings_section = null ) {
@@ -701,12 +723,12 @@ class Settings {
 		}
 
 		$installed_templates = $this->get_installed_templates( true );
-		$selected_template = $this->normalize_path( $this->general_settings['template_path'] );
+		$selected_template = wp_normalize_path( $this->general_settings['template_path'] );
 		$template_match = '';
 		if ( ! in_array( $selected_template, $installed_templates ) && substr_count( $selected_template, '/' ) > 1 ) {
 			// search for path match
 			foreach ( $installed_templates as $path => $template_id ) {
-				$path = $this->normalize_path( $path );
+				$path = wp_normalize_path( $path );
 				// check if the last part of the path matches
 				if ( substr( $path, -strlen( $selected_template ) ) === $selected_template ) {
 					$template_match = $template_id;

@@ -2,16 +2,16 @@
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.5.8\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.5.14\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-28T11:38:47+00:00\n"
+"POT-Creation-Date: 2023-11-09T10:58:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: ag_epdq_server\n"
 
 #. Plugin Name of the plugin
@@ -30,15 +30,15 @@ msgstr ""
 msgid "We are AG"
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:86
+#: inc/classes/class-epdq-authorization-capture.php:104
 msgid "Are you sure you wish to check the status of this order? "
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:88
+#: inc/classes/class-epdq-authorization-capture.php:106
 msgid "Something went wrong, and the capture of payment could not be completed. Please try again. "
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:118
+#: inc/classes/class-epdq-authorization-capture.php:138
 msgid "PAYID is missing from this order, you will need to manually refund this order in the ePDQ back office."
 msgstr ""
 
@@ -2269,70 +2269,70 @@ msgstr ""
 msgid "Having issues setting up the plugin? Why not try the setup wizard <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:456
+#: inc/classes/class-main.php:452
 msgid "Pay securely"
 msgstr ""
 
-#: inc/classes/class-main.php:461
+#: inc/classes/class-main.php:457
 msgid "You are now being redirected to Barclaycard to make payment securely."
 msgstr ""
 
-#: inc/classes/class-main.php:645
+#: inc/classes/class-main.php:641
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:688
+#: inc/classes/class-main.php:684
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:693
+#: inc/classes/class-main.php:689
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:699
+#: inc/classes/class-main.php:695
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:705
+#: inc/classes/class-main.php:701
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:749
+#: inc/classes/class-main.php:745
 msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:749
+#: inc/classes/class-main.php:745
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:749
+#: inc/classes/class-main.php:745
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:749
-#: inc/classes/class-main.php:754
+#: inc/classes/class-main.php:745
+#: inc/classes/class-main.php:750
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:754
+#: inc/classes/class-main.php:750
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:755
+#: inc/classes/class-main.php:751
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:755
+#: inc/classes/class-main.php:751
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:759
+#: inc/classes/class-main.php:755
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
 #: inc/classes/class-order.php:42
-#: inc/classes/StatusCheck/class-order-status-check.php:112
-#: inc/classes/StatusCheck/class-order-status-check.php:340
+#: inc/classes/StatusCheck/class-order-status-check.php:122
+#: inc/classes/StatusCheck/class-order-status-check.php:367
 msgid "ePDQ Status:"
 msgstr ""
 
@@ -2349,13 +2349,13 @@ msgid "This was a MOTO payment."
 msgstr ""
 
 #: inc/classes/class-order.php:70
-#: inc/classes/StatusCheck/class-order-status-check.php:196
+#: inc/classes/StatusCheck/class-order-status-check.php:206
 msgid "Barclays ePDQ transaction has been Authorised."
 msgstr ""
 
 #: inc/classes/class-order.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:199
-#: inc/classes/StatusCheck/class-order-status-check.php:423
+#: inc/classes/StatusCheck/class-order-status-check.php:209
+#: inc/classes/StatusCheck/class-order-status-check.php:450
 msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
 msgstr ""
 
@@ -2711,79 +2711,79 @@ msgstr ""
 msgid "Parameters for 3D has not been set."
 msgstr ""
 
-#: inc/classes/Moto/class-moto.php:72
-#: inc/classes/StatusCheck/class-order-status-check.php:263
+#: inc/classes/Moto/class-moto.php:89
+#: inc/classes/StatusCheck/class-order-status-check.php:288
 msgid "Are you sure you wish to check the status of this order?"
 msgstr ""
 
-#: inc/classes/Moto/class-moto.php:74
+#: inc/classes/Moto/class-moto.php:91
 msgid "Something went wrong, and the MOTO payment could not be completed. Please try again."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:111
+#: inc/classes/StatusCheck/class-order-status-check.php:121
 msgid "AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:117
-#: inc/classes/StatusCheck/class-order-status-check.php:345
+#: inc/classes/StatusCheck/class-order-status-check.php:127
+#: inc/classes/StatusCheck/class-order-status-check.php:372
 msgid "Order ID:"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:118
-#: inc/classes/StatusCheck/class-order-status-check.php:346
+#: inc/classes/StatusCheck/class-order-status-check.php:128
+#: inc/classes/StatusCheck/class-order-status-check.php:373
 msgid "Payment Reference In ePDQ System:"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:127
-#: inc/classes/StatusCheck/class-order-status-check.php:351
+#: inc/classes/StatusCheck/class-order-status-check.php:137
+#: inc/classes/StatusCheck/class-order-status-check.php:378
 msgid " and Barclays ePDQ has confirmed the transaction."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:129
-#: inc/classes/StatusCheck/class-order-status-check.php:353
+#: inc/classes/StatusCheck/class-order-status-check.php:139
+#: inc/classes/StatusCheck/class-order-status-check.php:380
 msgid "Barclays ePDQ transaction is confirmed"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:145
-#: inc/classes/StatusCheck/class-order-status-check.php:369
+#: inc/classes/StatusCheck/class-order-status-check.php:155
+#: inc/classes/StatusCheck/class-order-status-check.php:396
 msgid " and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:154
-#: inc/classes/StatusCheck/class-order-status-check.php:378
+#: inc/classes/StatusCheck/class-order-status-check.php:164
+#: inc/classes/StatusCheck/class-order-status-check.php:405
 msgid " and You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:164
-#: inc/classes/StatusCheck/class-order-status-check.php:388
+#: inc/classes/StatusCheck/class-order-status-check.php:174
+#: inc/classes/StatusCheck/class-order-status-check.php:415
 msgid " and Barclays ePDQ has refused the transaction."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:174
-#: inc/classes/StatusCheck/class-order-status-check.php:398
+#: inc/classes/StatusCheck/class-order-status-check.php:184
+#: inc/classes/StatusCheck/class-order-status-check.php:425
 msgid " and Barclays ePDQ has reported the payment is uncertain."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:185
-#: inc/classes/StatusCheck/class-order-status-check.php:409
+#: inc/classes/StatusCheck/class-order-status-check.php:195
+#: inc/classes/StatusCheck/class-order-status-check.php:436
 msgid " and ePDQ has confirmed the customer has cancelled the transaction"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:211
-#: inc/classes/StatusCheck/class-order-status-check.php:435
+#: inc/classes/StatusCheck/class-order-status-check.php:221
+#: inc/classes/StatusCheck/class-order-status-check.php:462
 msgid " and has come back as Incomplete or invalid"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:224
-#: inc/classes/StatusCheck/class-order-status-check.php:448
+#: inc/classes/StatusCheck/class-order-status-check.php:234
+#: inc/classes/StatusCheck/class-order-status-check.php:475
 msgid " and has come back with an issue"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:265
+#: inc/classes/StatusCheck/class-order-status-check.php:290
 msgid "Something went wrong, and the order status check could not be completed. Please try again."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:339
+#: inc/classes/StatusCheck/class-order-status-check.php:366
 msgid "AG ePDQ order status check was manually checked"
 msgstr ""
 

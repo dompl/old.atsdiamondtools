@@ -95,6 +95,8 @@ class Api {
 			);
 
 			if ( file_exists( $asset_path ) ) {
+				// The following require is safe because we are checking if the file exists and it is not a user input.
+				// nosemgrep audit.php.lang.security.file.inclusion-arg.
 				$asset        = require $asset_path;
 				$dependencies = isset( $asset['dependencies'] ) ? array_merge( $asset['dependencies'], $dependencies ) : $dependencies;
 				$version      = ! empty( $asset['version'] ) ? $asset['version'] : $this->get_file_version( $relative_src );
@@ -150,6 +152,8 @@ class Api {
 		/**
 		 * Filters the list of script dependencies.
 		 *
+		 * @since 3.0.0
+		 *
 		 * @param array $dependencies The list of script dependencies.
 		 * @param string $handle The script's handle.
 		 * @return array
@@ -169,34 +173,33 @@ class Api {
 	 * @since 2.5.0
 	 * @since 2.6.0 Change src to be relative source.
 	 *
-	 * @param string $handle       Name of the stylesheet. Should be unique.
-	 * @param string $relative_src Relative source of the stylesheet to the plugin path.
-	 * @param array  $deps         Optional. An array of registered stylesheet handles this stylesheet depends on. Default empty array.
-	 * @param string $media        Optional. The media for which this stylesheet has been defined. Default 'all'. Accepts media types like
-	 *                             'all', 'print' and 'screen', or media queries like '(orientation: portrait)' and '(max-width: 640px)'.
+	 * @param string  $handle       Name of the stylesheet. Should be unique.
+	 * @param string  $relative_src Relative source of the stylesheet to the plugin path.
+	 * @param array   $deps         Optional. An array of registered stylesheet handles this stylesheet depends on. Default empty array.
+	 * @param string  $media        Optional. The media for which this stylesheet has been defined. Default 'all'. Accepts media types like
+	 *                              'all', 'print' and 'screen', or media queries like '(orientation: portrait)' and '(max-width: 640px)'.
+	 * @param boolean $rtl   Optional. Whether or not to register RTL styles.
 	 */
-	public function register_style( $handle, $relative_src, $deps = [], $media = 'all' ) {
+	public function register_style( $handle, $relative_src, $deps = [], $media = 'all', $rtl = false ) {
 		$filename = str_replace( plugins_url( '/', __DIR__ ), '', $relative_src );
 		$src      = $this->get_asset_url( $relative_src );
 		$ver      = $this->get_file_version( $filename );
 		wp_register_style( $handle, $src, $deps, $ver, $media );
+
+		if ( $rtl ) {
+			wp_style_add_data( $handle, 'rtl', 'replace' );
+		}
 	}
 
 	/**
-	 * Returns the appropriate asset path for loading either legacy builds or
-	 * current builds.
+	 * Returns the appropriate asset path for current builds.
 	 *
 	 * @param   string $filename  Filename for asset path (without extension).
 	 * @param   string $type      File type (.css or .js).
-	 *
 	 * @return  string             The generated path.
 	 */
 	public function get_block_asset_build_path( $filename, $type = 'js' ) {
-		global $wp_version;
-		$suffix = version_compare( $wp_version, '5.3', '>=' )
-			? ''
-			: '-legacy';
-		return "build/$filename$suffix.$type";
+		return "build/$filename.$type";
 	}
 
 	/**

@@ -345,6 +345,16 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     ),
                 );
 
+                /**
+                 * Array of relevance parameters
+                 * @since 2.88
+                 * @param array $relevance_params Array of relevance parameters
+                 * @param array $relevance_scores Array of relevance scores
+                 * @param string $search_term Search term
+                 * @param array $data Array of search query related data
+                 */
+                $relevance_params = apply_filters( 'aws_relevance_parameters', $relevance_params, $relevance_scores, $search_term, $this->data );
+
                 $search_term_norm = AWS_Plurals::singularize( $search_term );
 
                 if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
@@ -626,8 +636,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $featured = $product->is_featured();
                     }
 
+                    if ( method_exists( $product, 'get_stock_status' ) ) {
+                        $product_stock_status = $product->get_stock_status();
+                    } else {
+                        $product_stock_status = false;
+                    }
+
                     if ( $show_stock_status === 'true' ) {
-                        if ( $product->is_in_stock() ) {
+                        if ( $product->is_in_stock() && $product_stock_status !== 'onbackorder' ) {
                             $stock_status = array(
                                 'status' => true,
                                 'text'   => esc_html__( 'In stock', 'woocommerce' )
@@ -635,7 +651,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         } else {
                             $stock_status = array(
                                 'status' => false,
-                                'text'   => esc_html__( 'Out of stock', 'woocommerce' )
+                                'text'   => $product_stock_status === 'onbackorder' ? esc_html__( 'On backorder', 'woocommerce' ) : esc_html__( 'Out of stock', 'woocommerce' )
                             );
                         }
                     }

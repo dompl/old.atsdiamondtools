@@ -6,7 +6,6 @@ import { useQueryStateByKey } from '@woocommerce/base-context/hooks';
 import { getSetting, getSettingWithCoercion } from '@woocommerce/settings';
 import { useMemo, useEffect, useState } from '@wordpress/element';
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 import Label from '@woocommerce/base-components/label';
 import {
 	isAttributeQueryCollection,
@@ -18,6 +17,7 @@ import {
 import { getUrlParameter } from '@woocommerce/utils';
 import FilterTitlePlaceholder from '@woocommerce/base-components/filter-placeholder';
 import { useIsMounted } from '@woocommerce/base-hooks';
+import type { BlockAttributes } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -31,26 +31,30 @@ import {
 	cleanFilterUrl,
 	maybeUrlContainsFilters,
 	urlContainsAttributeFilter,
+	StoreAttributes,
 } from './utils';
 import ActiveAttributeFilters from './active-attribute-filters';
 import FilterPlaceholders from './filter-placeholders';
-import { Attributes } from './types';
 import { useSetWraperVisibility } from '../filter-wrapper/context';
+
+interface ActiveFiltersBlockProps {
+	/**
+	 * The attributes for this block.
+	 */
+	attributes: BlockAttributes;
+	/**
+	 * Whether it's in the editor or frontend display.
+	 */
+	isEditor: boolean;
+}
 
 /**
  * Component displaying active filters.
- *
- * @param {Object}  props            Incoming props for the component.
- * @param {Object}  props.attributes Incoming attributes for the block.
- * @param {boolean} props.isEditor   Whether or not in the editor context.
  */
 const ActiveFiltersBlock = ( {
 	attributes: blockAttributes,
 	isEditor = false,
-}: {
-	attributes: Attributes;
-	isEditor?: boolean;
-} ) => {
+}: ActiveFiltersBlockProps ) => {
 	const setWrapperVisibility = useSetWraperVisibility();
 	const isMounted = useIsMounted();
 	const componentHasMounted = isMounted();
@@ -63,7 +67,7 @@ const ActiveFiltersBlock = ( {
 	/*
 		activeAttributeFilters is the only async query in this block. Because of this the rest of the filters will render null
 		when in a loading state and activeAttributeFilters renders the placeholders.
-	 */
+	*/
 	const shouldShowLoadingPlaceholders =
 		maybeUrlContainsFilters() && ! isEditor && isLoading;
 	const [ productAttributes, setProductAttributes ] = useQueryStateByKey(
@@ -81,7 +85,7 @@ const ActiveFiltersBlock = ( {
 		useQueryStateByKey( 'rating' );
 
 	const STOCK_STATUS_OPTIONS = getSetting( 'stockStatusOptions', [] );
-	const STORE_ATTRIBUTES = getSetting( 'attributes', [] );
+	const STORE_ATTRIBUTES: StoreAttributes[] = getSetting( 'attributes', [] );
 	const activeStockStatusFilters = useMemo( () => {
 		if (
 			shouldShowLoadingPlaceholders ||
@@ -92,26 +96,42 @@ const ActiveFiltersBlock = ( {
 			return null;
 		}
 
-		return productStockStatus.map( ( slug ) => {
-			return renderRemovableListItem( {
-				type: __( 'Stock Status', 'woo-gutenberg-products-block' ),
-				name: STOCK_STATUS_OPTIONS[ slug ],
-				removeCallback: () => {
-					removeArgsFromFilterUrl( {
-						filter_stock_status: slug,
-					} );
-					if ( ! filteringForPhpTemplate ) {
-						const newStatuses = productStockStatus.filter(
-							( status ) => {
-								return status !== slug;
-							}
-						);
-						setProductStockStatus( newStatuses );
-					}
-				},
-				displayStyle: blockAttributes.displayStyle,
-			} );
-		} );
+		const stockStatusLabel = __(
+			'Stock Status',
+			'woo-gutenberg-products-block'
+		);
+
+		return (
+			<li>
+				<span className="wc-block-active-filters__list-item-type">
+					{ stockStatusLabel }:
+				</span>
+				<ul>
+					{ productStockStatus.map( ( slug ) => {
+						return renderRemovableListItem( {
+							type: stockStatusLabel,
+							name: STOCK_STATUS_OPTIONS[ slug ],
+							removeCallback: () => {
+								removeArgsFromFilterUrl( {
+									filter_stock_status: slug,
+								} );
+								if ( ! filteringForPhpTemplate ) {
+									const newStatuses =
+										productStockStatus.filter(
+											( status ) => {
+												return status !== slug;
+											}
+										);
+									setProductStockStatus( newStatuses );
+								}
+							},
+							showLabel: false,
+							displayStyle: blockAttributes.displayStyle,
+						} );
+					} ) }
+				</ul>
+			</li>
+		);
 	}, [
 		shouldShowLoadingPlaceholders,
 		STOCK_STATUS_OPTIONS,
@@ -225,28 +245,45 @@ const ActiveFiltersBlock = ( {
 			return null;
 		}
 
-		return productRatings.map( ( slug ) => {
-			return renderRemovableListItem( {
-				type: __( 'Rating', 'woo-gutenberg-products-block' ),
-				name: sprintf(
-					/* translators: %s is referring to the average rating value */
-					__( 'Rated %s out of 5', 'woo-gutenberg-products-block' ),
-					slug
-				),
-				removeCallback: () => {
-					if ( filteringForPhpTemplate ) {
-						return removeArgsFromFilterUrl( {
-							rating_filter: slug,
+		const ratingLabel = __( 'Rating', 'woo-gutenberg-products-block' );
+
+		return (
+			<li>
+				<span className="wc-block-active-filters__list-item-type">
+					{ ratingLabel }:
+				</span>
+				<ul>
+					{ productRatings.map( ( slug ) => {
+						return renderRemovableListItem( {
+							type: ratingLabel,
+							name: sprintf(
+								/* translators: %s is referring to the average rating value */
+								__(
+									'Rated %s out of 5',
+									'woo-gutenberg-products-block'
+								),
+								slug
+							),
+							removeCallback: () => {
+								removeArgsFromFilterUrl( {
+									rating_filter: slug,
+								} );
+								if ( ! filteringForPhpTemplate ) {
+									const newRatings = productRatings.filter(
+										( rating ) => {
+											return rating !== slug;
+										}
+									);
+									setProductRatings( newRatings );
+								}
+							},
+							showLabel: false,
+							displayStyle: blockAttributes.displayStyle,
 						} );
-					}
-					const newRatings = productRatings.filter( ( rating ) => {
-						return rating !== slug;
-					} );
-					setProductRatings( newRatings );
-				},
-				displayStyle: blockAttributes.displayStyle,
-			} );
-		} );
+					} ) }
+				</ul>
+			</li>
+		);
 	}, [
 		shouldShowLoadingPlaceholders,
 		productRatings,
@@ -378,17 +415,6 @@ const ActiveFiltersBlock = ( {
 			</div>
 		</>
 	);
-};
-
-ActiveFiltersBlock.propTypes = {
-	/**
-	 * The attributes for this block.
-	 */
-	attributes: PropTypes.object.isRequired,
-	/**
-	 * Whether it's in the editor or frontend display.
-	 */
-	isEditor: PropTypes.bool,
 };
 
 export default ActiveFiltersBlock;

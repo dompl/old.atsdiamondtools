@@ -4,11 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
+class ComposerStaticInita7c14807788ff38a21dc774bab6b2298
 {
     public static $files = array (
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'ad27a566e2c29b3589d96cf971fa8042' => __DIR__ . '/../..' . '/api/order-functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -20,6 +21,7 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
             'WooCommerce\\PayPalCommerce\\WcGateway\\' => 37,
             'WooCommerce\\PayPalCommerce\\Vendor\\' => 34,
             'WooCommerce\\PayPalCommerce\\Vaulting\\' => 36,
+            'WooCommerce\\PayPalCommerce\\Uninstall\\' => 37,
             'WooCommerce\\PayPalCommerce\\Subscription\\' => 40,
             'WooCommerce\\PayPalCommerce\\StatusReport\\' => 40,
             'WooCommerce\\PayPalCommerce\\Session\\' => 35,
@@ -27,6 +29,7 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
             'WooCommerce\\PayPalCommerce\\Onboarding\\' => 38,
             'WooCommerce\\PayPalCommerce\\Compat\\' => 34,
             'WooCommerce\\PayPalCommerce\\Button\\' => 34,
+            'WooCommerce\\PayPalCommerce\\Blocks\\' => 34,
             'WooCommerce\\PayPalCommerce\\ApiClient\\' => 37,
             'WooCommerce\\PayPalCommerce\\AdminNotices\\' => 40,
             'WooCommerce\\PayPalCommerce\\' => 27,
@@ -80,6 +83,10 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-vaulting/src',
         ),
+        'WooCommerce\\PayPalCommerce\\Uninstall\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/ppcp-uninstall/src',
+        ),
         'WooCommerce\\PayPalCommerce\\Subscription\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-subscription/src',
@@ -107,6 +114,10 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
         'WooCommerce\\PayPalCommerce\\Button\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-button/src',
+        ),
+        'WooCommerce\\PayPalCommerce\\Blocks\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/ppcp-blocks/src',
         ),
         'WooCommerce\\PayPalCommerce\\ApiClient\\' => 
         array (
@@ -164,6 +175,7 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
@@ -173,9 +185,9 @@ class ComposerStaticInit4fa944cc74ebb2035158feea545c7870
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4fa944cc74ebb2035158feea545c7870::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$classMap;
 
         }, null, ClassLoader::class);
     }

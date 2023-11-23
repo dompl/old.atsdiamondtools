@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wc-tracks'), 'version' => '8f429a0f70006d2e294c5e6c631ba49e');
+<?php return array('dependencies' => array('wc-customer-effort-score', 'wc-tracks'), 'version' => 'dccbdd902469c5a2f7218c2e1e8c3f56');

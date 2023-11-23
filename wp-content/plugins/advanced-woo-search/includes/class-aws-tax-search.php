@@ -222,6 +222,15 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                         'parent'   => $parent
                     );
 
+                    /**
+                     * Filters taxonomy term result
+                     * @since 2.87
+                     * @param array $new_result Taxonomy term result
+                     * @param object $term Term object
+                     * @param string $taxonomy Name of taxonomy
+                     */
+                    $new_result = apply_filters( 'aws_search_tax_result_item', $new_result, $term, $result->taxonomy );
+
                     $result_array[$result->taxonomy][] = $new_result;
 
                 }

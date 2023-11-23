@@ -8,10 +8,10 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.5.11
+ * Version: 4.6.0
  * Update URI: https://api.freemius.com
- * WC requires at least: 7.0
- * WC tested up to: 7.9
+ * WC requires at least: 7.1
+ * WC tested up to: 8.2
  * License: GPL3
  */
 
@@ -23,14 +23,14 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.5.11
+ * @version  4.6.0
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
 
-	public static $AGversion = "4.5.11";
+	public static $AGversion = "4.6.0";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 	public static $short_title = 'AG ePDQ';
@@ -141,7 +141,7 @@ class AG_ePDQ_server {
 				'plugin'          => 'AGWooCommerceBarclayePDQPaymentGateway',
 				'name'            => 'Barclays ePDQ payment gateway (Barclaycard) for WooCommerce',
 				'update_notice'   => FALSE,
-				'message'         => 'We have added support for a new custom webhook, the webhook will help automatically capture data sent from the ePDQ platform, this will help limit issues with no data sent to update customer orders.<br />Please check the setup guide <a target="_blank" href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/setting-up-the-new-webhook-feature/">here</a> on how to set up the new webhook',
+				'message'         => '',
 				'notice_name'     => 'ag_webhook',
 				'disable_gateway' => FALSE,
 			),

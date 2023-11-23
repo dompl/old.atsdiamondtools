@@ -22,6 +22,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         private $current_theme = '';
 
         /**
+         * @var AWS_Integrations Child theme name
+         */
+        private $child_theme = '';
+
+        /**
          * @var AWS_Integrations The single instance of the class
          */
         protected static $_instance = null;
@@ -208,6 +213,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'blocksy_wp_head' ) );
                 }
 
+                if ( 'Kapee' === $this->current_theme ) {
+                    add_action( 'kapee_get_template_before', array( $this, 'kapee_get_template_before' ), 10, 3 );
+                }
+
+                if ( 'Hestia' === $this->current_theme ) {
+                    add_filter( 'hestia_after_primary_navigation_addons', array( $this, 'hestia_after_primary_navigation_addons' ), 1 );
+                    add_action( 'wp_enqueue_scripts', array( $this, 'hestia_wp_enqueue_scripts' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -230,11 +244,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             // WP all import finish
             //add_action( 'pmxi_after_xml_import', array( $this, 'pmxi_after_xml_import' ) );
-
-            // BeRocket WooCommerce AJAX Products Filter
-            if ( defined( 'BeRocket_AJAX_filters_version' ) ) {
-                add_filter( 'aws_search_page_filters', array( $this, 'berocket_search_page_filters' ) );
-            }
 
             // Product Sort and Display for WooCommerce plugin
             if ( defined( 'WC_PSAD_NAME' ) ) {
@@ -353,6 +362,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-products-visibility.php' );
             }
 
+            // WooCommerce Products Visibility
+            if ( class_exists('WooCommerce_Products_Visibility') ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-wcpv.php' );
+            }
+
             // WPBakery plugin
             if ( defined( 'WPB_VC_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-wpbakery.php' );
@@ -432,6 +446,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // Shopengine plugin
             if ( class_exists( 'ShopEngine' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-shopengine.php' );
+            }
+
+            // BeRocket WooCommerce AJAX Products Filter
+            if ( defined( 'BeRocket_AJAX_filters_version' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-berocket-filters.php' );
             }
 
         }
@@ -1608,6 +1627,49 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         <?php }
 
         /*
+         * Kapee theme header search form replace
+         */
+        public function kapee_get_template_before( $located, $templates, $args ) {
+            if ( $templates === 'template-parts/header/elements/ajax-search.php' && ! isset( $this->data['kapee_form'] ) ) {
+                aws_get_search_form();
+                $this->data['kapee_form'] = true;
+                echo '<style>.kapee-ajax-search { display:none; } .header-main .aws-container, .header-col .aws-container { width:100%; }</style>';
+            }
+
+        }
+
+        /*
+         * Hestia them fix header search form
+         */
+        public function hestia_after_primary_navigation_addons( $form ) {
+            $form = str_replace('class="aws-wrapper', ' style="height:35px;" class="aws-wrapper', $form );
+            $output  = '';
+            $output .= '<li class="hestia-search-in-menu">';
+                $output .= '<div class="hestia-nav-search">';
+                    $output .= $form;
+                $output .= '</div>';
+                $output .= '<a class="hestia-toggle-search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></a>';
+            $output .= '</li>';
+            return $output;
+        }
+        public function hestia_wp_enqueue_scripts() {
+            if ( wp_is_mobile() ) {
+                return;
+            }
+            $script = '
+                function aws_results_layout( styles, options ) {
+                    styles.width = 200;
+                    styles.left = styles.left - 200;
+                    styles.top = styles.top + 40;
+                    return styles;
+                }
+                AwsHooks.add_filter( "aws_results_layout", aws_results_layout );
+            ';
+            wp_add_inline_script( 'aws-script', $script);
+            wp_add_inline_script( 'aws-pro-script', $script);
+        }
+
+        /*
          * WP Bottom Menu
          */
         public function wp_bottom_menu_wp_head() { ?>
@@ -1787,6 +1849,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = "#header form[role='search']";
             }
 
+            if ( 'Kapee' === $this->current_theme ) {
+                $selectors[] = ".kapee-ajax-search";
+            }
+
+            if ( 'Sinatra' === $this->current_theme ) {
+                $selectors[] = '.si-header-widgets .si-search-form';
+            }
+
             // WCFM - WooCommerce Multivendor Marketplace
             if ( class_exists( 'WCFMmp' ) ) {
                 $selectors[] = '#wcfmmp-store .woocommerce-product-search';
@@ -1912,68 +1982,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
         }
 
-        /*
-         * BeRocket WooCommerce AJAX Products Filter
-         */
-        public function berocket_search_page_filters( $filters ) {
-
-            if ( isset( $_GET['filters'] ) ) {
-
-                $get_filters = explode( '|', $_GET['filters'] );
-
-                foreach( $get_filters as $get_filter ) {
-
-                    if ( $get_filter === '_stock_status[1]' ) {
-                        $filters['in_status'] = true;
-                    } elseif ( $get_filter === '_stock_status[2]' ) {
-                        $filters['in_status'] = false;
-                    } elseif ( $get_filter === '_sale[1]' ) {
-                        $filters['on_sale'] = true;
-                    } elseif ( $get_filter === '_sale[2]' ) {
-                        $filters['on_sale'] = false;
-                    } elseif ( strpos( $get_filter, 'price[' ) === 0 ) {
-                        if ( preg_match( '/([\w]+)\[(\d+)_(\d+)\]/', $get_filter, $matches ) ) {
-                            $filters['price_min'] = intval( $matches[2] );
-                            $filters['price_max'] = intval( $matches[3] );
-                        }
-                    } elseif ( preg_match( '/(.+)\[(.+?)\]/', $get_filter, $matches ) ) {
-                        $taxonomy = $matches[1];
-                        $operator = strpos( $matches[2], '-' ) !== false ? 'OR' : 'AND';
-                        $explode_char = strpos( $matches[2], '-' ) !== false ? '-' : '+';
-                        $terms_arr = explode( $explode_char, $matches[2] );
-                        // if used slugs instead of IDs for terms
-                        if ( preg_match( '/[a-z]/', $matches[2] ) ) {
-                            $new_terms_arr = array();
-                            foreach ( $terms_arr as $term_slug ) {
-                                $term = get_term_by('slug', $term_slug, $taxonomy );
-                                if ( $term ) {
-                                    $new_terms_arr[] = $term->term_id;
-                                }
-                                if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                                    $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
-                                    if ( $term ) {
-                                        $new_terms_arr[] = $term->term_id;
-                                    }
-                                }
-                            }
-                            if ( $new_terms_arr ) {
-                                $terms_arr = $new_terms_arr;
-                            }
-                        }
-                        $filters['tax'][$taxonomy] = array(
-                            'terms' => $terms_arr,
-                            'operator' => $operator,
-                            'include_parent' => true,
-                        );
-                    }
-
-                }
-
-            }
-
-            return $filters;
-
-        }
 
         /*
          * Product Sort and Display for WooCommerce plugin disable on search page

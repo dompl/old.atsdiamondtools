@@ -212,6 +212,15 @@ class PurchaseUnit {
 	}
 
 	/**
+	 * Sets the custom ID.
+	 *
+	 * @param string $custom_id The value to set.
+	 */
+	public function set_custom_id( string $custom_id ): void {
+		$this->custom_id = $custom_id;
+	}
+
+	/**
 	 * Returns the invoice id.
 	 *
 	 * @return string
@@ -284,7 +293,14 @@ class PurchaseUnit {
 				$this->items()
 			),
 		);
-		if ( $ditch_items_when_mismatch && $this->ditch_items_when_mismatch( $this->amount(), ...$this->items() ) ) {
+
+		$ditch = $ditch_items_when_mismatch && $this->ditch_items_when_mismatch( $this->amount(), ...$this->items() );
+		/**
+		 * The filter can be used to control when the items and totals breakdown are removed from PayPal order info.
+		 */
+		$ditch = apply_filters( 'ppcp_ditch_items_breakdown', $ditch, $this );
+
+		if ( $ditch ) {
 			unset( $purchase_unit['items'] );
 			unset( $purchase_unit['amount']['breakdown'] );
 		}

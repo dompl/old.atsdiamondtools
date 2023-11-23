@@ -77,7 +77,7 @@ function formatPrice( value: unknown, minorUnit: number ) {
  *
  * @param {Object}  props            Component props.
  * @param {Object}  props.attributes Incoming block attributes.
- * @param {boolean} props.isEditor   Whether in editor context or not.
+ * @param {boolean} props.isEditor   Whether the component is being rendered in the editor.
  */
 const PriceFilterBlock = ( {
 	attributes,
@@ -108,6 +108,7 @@ const PriceFilterBlock = ( {
 	const { results, isLoading } = useCollectionData( {
 		queryPrices: true,
 		queryState,
+		isEditor,
 	} );
 
 	const currency = getCurrencyFromPriceResponse(
@@ -347,6 +348,7 @@ const PriceFilterBlock = ( {
 					onSubmit={ () => onSubmit( minPrice, maxPrice ) }
 					isLoading={ isLoading }
 					isUpdating={ isUpdating }
+					isEditor={ isEditor }
 				/>
 			</div>
 		</>

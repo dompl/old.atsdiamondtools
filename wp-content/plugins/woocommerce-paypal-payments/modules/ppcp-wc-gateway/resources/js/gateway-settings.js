@@ -2,9 +2,10 @@ import { loadScript } from "@paypal/paypal-js";
 import {debounce} from "./helper/debounce";
 import Renderer from '../../../ppcp-button/resources/js/modules/Renderer/Renderer'
 import MessageRenderer from "../../../ppcp-button/resources/js/modules/Renderer/MessageRenderer";
-import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/modules/Helper/Hiding"
+import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/modules/Helper/Hiding";
+import widgetBuilder from "../../../ppcp-button/resources/js/modules/Renderer/WidgetBuilder";
 
-;document.addEventListener(
+document.addEventListener(
     'DOMContentLoaded',
     () => {
         function disableAll(nodeList){
@@ -45,11 +46,13 @@ import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/mo
         if (separateCardButtonCheckbox) {
             separateCardButtonCheckbox.addEventListener('change', () => {
                 setVisibleByClass('#field-button_layout', !separateCardButtonCheckbox.checked, 'hide');
+                setVisibleByClass('#field-button_general_layout', !separateCardButtonCheckbox.checked, 'hide');
             });
         }
 
         [
             {layoutSelector: '#ppcp-button_layout', taglineSelector: '#field-button_tagline', canHaveSeparateButtons: true},
+            {layoutSelector: '#ppcp-button_general_layout', taglineSelector: '#field-button_general_tagline', canHaveSeparateButtons: true},
             {layoutSelector: '#ppcp-button_product_layout', taglineSelector: '#field-button_product_tagline'},
             {layoutSelector: '#ppcp-button_cart_layout', taglineSelector: '#field-button_cart_tagline'},
             {layoutSelector: '#ppcp-button_mini-cart_layout', taglineSelector: '#field-button_mini-cart_tagline'},
@@ -112,10 +115,13 @@ import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/mo
                 'integration-date': PayPalCommerceGatewaySettings.integration_date,
                 'components': ['buttons', 'funding-eligibility', 'messages'],
                 'enable-funding': ['venmo', 'paylater'],
-                'buyer-country': PayPalCommerceGatewaySettings.country,
             };
 
-            if(payLaterButtonPreview?.length) {
+            if (PayPalCommerceGatewaySettings.environment === 'sandbox') {
+                settings['buyer-country'] = PayPalCommerceGatewaySettings.country;
+            }
+
+            if (payLaterButtonPreview?.length) {
                 disabledSources = Object.keys(PayPalCommerceGatewaySettings.all_funding_sources);
             }
 
@@ -133,6 +139,8 @@ import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/mo
         function loadPaypalScript(settings, onLoaded = () => {}) {
             loadScript(JSON.parse(JSON.stringify(settings))) // clone the object to prevent modification
                 .then(paypal => {
+                    widgetBuilder.setPaypal(paypal);
+
                     document.dispatchEvent(new CustomEvent('ppcp_paypal_script_loaded'));
 
                     onLoaded(paypal);
@@ -262,7 +270,7 @@ import {setVisibleByClass, isVisible} from "../../../ppcp-button/resources/js/mo
 
             loadPaypalScript(oldScriptSettings, () => {
                 const payLaterMessagingLocations = ['product', 'cart', 'checkout', 'general'];
-                const paypalButtonLocations = ['product', 'cart', 'checkout', 'mini-cart'];
+                const paypalButtonLocations = ['product', 'cart', 'checkout', 'mini-cart', 'general'];
 
                 paypalButtonLocations.forEach((location) => {
                     const inputNamePrefix = location === 'checkout' ? '#ppcp-button' : '#ppcp-button_' + location;

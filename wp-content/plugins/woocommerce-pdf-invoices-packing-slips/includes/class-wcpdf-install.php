@@ -36,11 +36,11 @@ class Install {
 	 */
 	public function do_install() {
 		// only install when woocommerce is active
-		if ( !WPO_WCPDF()->is_woocommerce_activated() ) {
+		if ( ! WPO_WCPDF()->is_woocommerce_activated() ) {
 			return;
 		}
 
-		$version_setting = 'wpo_wcpdf_version';
+		$version_setting   = 'wpo_wcpdf_version';
 		$installed_version = get_option( $version_setting );
 
 		// installed version lower than plugin version?
@@ -71,6 +71,9 @@ class Install {
 			// downgrade version number
 			update_option( $version_setting, WPO_WCPDF_VERSION );
 		}
+		
+		// deactivate legacy addons
+		add_action( 'admin_init', array( WPO_WCPDF(), 'deactivate_legacy_addons') );
 	}
 
 
@@ -268,12 +271,14 @@ class Install {
 
 			// Migrate template path
 			// forward slash for consistency/compatibility
-			$template_path = str_replace('\\','/', $old_settings['wpo_wcpdf_template_settings']['template_path']);
-			// strip abspath (forward slashed) if included
-			$template_path = str_replace( str_replace('\\','/', ABSPATH), '', $template_path );
-			// strip pdf subfolder from templates path
-			$template_path = str_replace( '/templates/pdf/', '/templates/', $template_path );
-			$old_settings['wpo_wcpdf_template_settings']['template_path'] = $template_path;
+			if ( ! empty( $old_settings['wpo_wcpdf_template_settings']['template_path'] ) ) {
+				$template_path = str_replace( '\\', '/', $old_settings['wpo_wcpdf_template_settings']['template_path'] );
+				// strip abspath (forward slashed) if included
+				$template_path = str_replace( str_replace('\\','/', ABSPATH), '', $template_path );
+				// strip pdf subfolder from templates path
+				$template_path = str_replace( '/templates/pdf/', '/templates/', $template_path );
+				$old_settings['wpo_wcpdf_template_settings']['template_path'] = $template_path;
+			}
 
 			// map new settings to old
 			$settings_map = array(
@@ -336,11 +341,6 @@ class Install {
 				$enabled = array( 'wpo_wcpdf_documents_settings_invoice', 'wpo_wcpdf_documents_settings_packing-slip' );
 				if ( in_array( $new_option, $enabled ) ) {
 					${$new_option}['enabled'] = 1;
-				}
-
-				// auto enable legacy mode
-				if ( $new_option == 'wpo_wcpdf_settings_debug' ) {
-					${$new_option}['legacy_mode'] = 1;
 				}
 
 				// merge with existing settings
@@ -443,6 +443,98 @@ class Install {
 				update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
 			}
 		}
+		
+		// 3.6.3-dev-1: check if 'legacy_mode' is enabled, and disable it
+		if ( version_compare( $installed_version, '3.6.3-dev-1', '<' ) ) {
+			$debug_settings = get_option( 'wpo_wcpdf_settings_debug', array() );
+			$update         = false;
+			
+			if ( ! empty( $debug_settings['legacy_mode'] ) ) {
+				unset( $debug_settings['legacy_mode'] );
+				$update = true;
+			}
+			
+			if ( ! empty( $debug_settings['legacy_textdomain'] ) ) {
+				unset( $debug_settings['legacy_textdomain'] );
+				$update = true;
+			}
+			
+			if ( $update ) {
+				update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
+			}
+		}
+		
+		
+		// 3.7.0-beta-4: deactivate legacy ubl addon and migrate settings
+		if ( version_compare( $installed_version, '3.7.0-beta-4', '<' ) ) {
+			// deactivate legacy ubl addon
+			WPO_WCPDF()->deactivate_ubl_addon();
+			
+			// legacy ubl general/invoice settings
+			$legacy_ubl_general_settings = get_option( 'ubl_wc_general', [] );
+			$general_settings            = get_option( 'wpo_wcpdf_settings_general', [] );
+			$invoice_ubl_settings        = get_option( 'wpo_wcpdf_documents_settings_invoice_ubl', [] );
+			
+			$settings_to_migrate = [
+				'vat_number'            => 'general',
+				'coc_number'            => 'general',
+				'company_name'          => 'general', // corresponds to 'shop_name' in the General Settings
+				'attach_to_email_ids'   => 'invoice_ubl',
+				'include_encrypted_pdf' => 'invoice_ubl',
+			];
+			
+			foreach ( $settings_to_migrate as $setting => $type ) {
+				$update = [];
+				
+				switch ( $type ) {
+					case 'general':
+						if ( isset( $legacy_ubl_general_settings[$setting] ) ) {
+							$legacy_ubl_setting_value = $legacy_ubl_general_settings[$setting];
+							$setting                  = ( 'company_name' === $setting && ! isset( $general_settings['shop_name'] ) ) ? 'shop_name' : $setting;
+							
+							if ( 'company_name' !== $setting ) {
+								$general_settings[$setting] = $legacy_ubl_setting_value;
+								$update[]                   = $type;
+							}
+						}
+						break;
+					case 'invoice_ubl':
+						if ( isset( $legacy_ubl_general_settings[$setting] ) ) {
+							$invoice_ubl_settings[$setting] = $legacy_ubl_general_settings[$setting];
+							$update[]                       = $type;
+						}
+						break;
+				}
+				
+				if ( ! empty( $update ) ) {
+					$update = array_unique( $update );
+					foreach ( $update as $type ) {
+						switch ( $type ) {
+							case 'general':
+								update_option( 'wpo_wcpdf_settings_general', $general_settings );
+								break;
+							case 'invoice_ubl':
+								$invoice_ubl_settings['enabled'] = '1';
+								update_option( 'wpo_wcpdf_documents_settings_invoice_ubl', $invoice_ubl_settings );
+								break;
+						}
+					}
+				}
+			}
+			
+			
+			// legacy ubl tax settings
+			$legacy_ubl_tax_setings = get_option( 'ubl_wc_taxes', [] );
+			if ( ! empty( $legacy_ubl_tax_setings ) ) {
+				update_option( 'wpo_wcpdf_settings_ubl_taxes', $legacy_ubl_tax_setings );
+			}
+			
+			// set transient to flush rewrite rules if pretty links are enabled
+			if ( WPO_WCPDF()->endpoint->pretty_links_enabled() ) {
+				set_transient( 'wpo_wcpdf_flush_rewrite_rules', 'yes', HOUR_IN_SECONDS );
+			}
+		}
+		
 	}
 
 	/**

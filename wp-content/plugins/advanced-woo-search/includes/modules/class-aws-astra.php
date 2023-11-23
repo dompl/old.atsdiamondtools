@@ -117,13 +117,13 @@ if ( ! class_exists( 'AWS_Astra' ) ) :
 
             if ( function_exists('astra_get_option') && astra_get_option( 'header-search-box-type' ) === 'header-cover' && class_exists('Astra_Icons') ) {
 
-                $close_btn = '<span id="close" class="close">' . Astra_Icons::get_icons( 'close', true ) . '</span>';
+                $close_btn = '<span id="close" class="close">' . str_replace(array("\r", "\n"), '', Astra_Icons::get_icons( 'close', false )) . '</span>';
 
                 $script .= '
-                 document.addEventListener("awsLoaded", function() {
-                    if ( ! jQuery(".ast-search-box.header-cover .close").length > 0 ) {
-                        jQuery(".ast-search-box.header-cover form").append(\'' . $close_btn . '\');
-                    }
+                document.addEventListener("awsLoaded", function() {
+                      if ( ! jQuery(".ast-search-box.header-cover .close").length > 0 ) {
+                          jQuery(".ast-search-box.header-cover form").append(\'' . $close_btn . '\');
+                      }
                   });
                 ';
 

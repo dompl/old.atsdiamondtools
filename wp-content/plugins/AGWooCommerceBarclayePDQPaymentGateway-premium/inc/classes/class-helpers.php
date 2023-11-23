@@ -286,7 +286,8 @@ class AG_ePDQ_Helpers {
 			return apply_filters( 'ePDQ_custom_order_id', $order );
 		}
 
-		return $order->get_order_number();
+		// return $order->get_order_number();
+		return $order->get_id();
 
 	}
 

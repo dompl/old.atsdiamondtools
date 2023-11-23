@@ -49,20 +49,14 @@ return array(
 			'ppcp-gateway-settings',
 			'ppcp-webhooks-status-page',
 			'ppcp-tracking',
+			'ppcp-fraudnet',
+			'ppcp-gzd-compat',
+			'ppcp-clear-db',
 		);
 	},
 
 	'compat.gzd.is_supported_plugin_version_active' => function (): bool {
 		return function_exists( 'wc_gzd_get_shipments_by_order' ); // 3.0+
-	},
-
-	'compat.gzd.tracking_statuses_map'              => function ( ContainerInterface $container ): array {
-		return array(
-			'draft'      => 'ON_HOLD',
-			'processing' => 'SHIPPED',
-			'shipped'    => 'SHIPPED',
-			'delivered'  => 'DELIVERED',
-		);
 	},
 
 	'compat.module.url'                             => static function ( ContainerInterface $container ): string {
@@ -81,7 +75,7 @@ return array(
 		return new CompatAssets(
 			$container->get( 'compat.module.url' ),
 			$container->get( 'ppcp.asset-version' ),
-			$container->get( 'order-tracking.is-paypal-order-edit-page' ) && $container->get( 'compat.should-initialize-gzd-compat-layer' )
+			$container->get( 'compat.should-initialize-gzd-compat-layer' )
 		);
 	},
 

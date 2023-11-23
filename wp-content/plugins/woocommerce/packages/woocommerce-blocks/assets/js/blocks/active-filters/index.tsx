@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { createBlock, registerBlockType } from '@wordpress/blocks';
+import { registerBlockType } from '@wordpress/blocks';
 import { toggle } from '@woocommerce/icons';
 import { Icon } from '@wordpress/icons';
 import classNames from 'classnames';
@@ -15,6 +14,7 @@ import edit from './edit';
 import metadata from './block.json';
 import { blockAttributes } from './attributes';
 import { Attributes } from './types';
+import deprecated from './deprecated';
 
 registerBlockType( metadata, {
 	icon: {
@@ -29,51 +29,23 @@ registerBlockType( metadata, {
 		...metadata.attributes,
 		...blockAttributes,
 	},
-	transforms: {
-		from: [
-			{
-				type: 'block',
-				blocks: [ 'core/legacy-widget' ],
-				// We can't transform if raw instance isn't shown in the REST API.
-				isMatch: ( { idBase, instance } ) =>
-					idBase === 'woocommerce_layered_nav_filters' &&
-					!! instance?.raw,
-				transform: ( { instance } ) =>
-					createBlock( 'woocommerce/active-filters', {
-						displayStyle: 'list',
-						heading:
-							instance?.raw?.title ||
-							__(
-								'Active filters',
-								'woo-gutenberg-products-block'
-							),
-						headingLevel: 3,
-					} ),
-			},
-		],
-	},
 	edit,
 	// Save the props to post content.
 	save( { attributes }: { attributes: Attributes } ) {
-		const { className, displayStyle, heading, headingLevel } = attributes;
-		const data = {
-			'data-display-style': displayStyle,
-			'data-heading': heading,
-			'data-heading-level': headingLevel,
-		};
+		const { className } = attributes;
 
 		return (
 			<div
 				{ ...useBlockProps.save( {
 					className: classNames( 'is-loading', className ),
 				} ) }
-				{ ...data }
 			>
 				<span
 					aria-hidden
-					className="wc-block-active-product-filters__placeholder"
+					className="wc-block-active-filters__placeholder"
 				/>
 			</div>
 		);
 	},
+	deprecated,
 } );

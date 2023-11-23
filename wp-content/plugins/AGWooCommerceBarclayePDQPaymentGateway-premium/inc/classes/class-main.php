@@ -84,6 +84,7 @@ function init_ag_epdq() {
 			add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 			add_action( 'woocommerce_api_' . $this->id, array( $this, 'check_response' ) );
 			add_action( 'woocommerce_api_' . $this->id . '_webhook', array( 'ag_epdq_webhook', 'webhook' ) );
+			add_action( 'woocommerce_api_' . $this->id . '_token', array( 'ag_epdq_webhook', 'token' ) );
 
 			add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array(
 				'ePDQ_Sub',
@@ -96,8 +97,29 @@ function init_ag_epdq() {
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_script' ) );
 
+			add_action( 'woocommerce_before_account_payment_methods', array( $this, 'display_success_message' ) );
+
 		}
 
+
+		public function display_success_message() {
+
+			if( isset( $_GET['token_success'] ) && $_GET['token_success'] === '1' ) {
+				wc_add_notice( 'Payment method added successfully!', 'success' );
+			}
+			if( isset( $_GET['token_success'] ) && $_GET['token_success'] === '0' ) {
+				wc_add_notice( 'There was an issue adding your payment method!', 'error' );
+			}
+			wc_print_notices();
+
+		}
+
+
+		public function add_payment_method() {
+
+			AG_ePDQ_Token::addNewCard();
+
+		}
 
 		/**
 		 * Plugin settings
@@ -274,7 +296,7 @@ function init_ag_epdq() {
 			$hash_fields = array(
 				$settings['pspid'],
 				date( 'Y:m:d' ),
-				$order->get_order_number(),
+				$order->get_id(),
 				$settings['shain'],
 				get_bloginfo( 'name' )
 			);
@@ -402,8 +424,6 @@ function init_ag_epdq() {
 			// Hook to add extra para
 			do_action( 'AG_ePDQ_extra_parameters' );
 
-			AG_ePDQ_Helpers::ag_log( 'Debug URL ' . $order_received_url, 'debug', $this->debug );
-
 			$shasign_arg = array();
 			ksort( $fields );
 			foreach( $fields as $key => $value ) {
@@ -414,18 +434,11 @@ function init_ag_epdq() {
 			}
 
 			$shasign = hash( ePDQ_crypt::get_sha_method(), implode( $settings['shain'], $shasign_arg ) . $settings['shain'] );
+			$fields['SHASIGN'] = $shasign;
 
 			// Enable deeper debugging, useful for when the ePDQ team require data to debug.
 			if( defined( 'ag_support_debug' ) ) {
 				AG_ePDQ_Helpers::ag_log( print_r( $fields, TRUE ) . ' ' . print_r( $shasign, TRUE ), 'debug', $this->debug );
-			}
-
-			$epdq_args = array();
-			foreach( $fields as $key => $value ) {
-				if( $value === '' ) {
-					continue;
-				}
-				$epdq_args[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
 			}
 
 			if( empty( $this->access_key ) || empty( $this->sha_in ) ) {
@@ -435,52 +448,20 @@ function init_ag_epdq() {
 
 				return;
 			}
-			$ag_form_displayed = FALSE;
-			if( ! $ag_form_displayed ) {
-				if( isset( $this->status ) && ( $this->status === 'test' || $this->status === 'live' ) ) {
-					if( $this->status === 'test' ) {
-						$url = self::$test_url;
-					}
-					if( $this->status === 'live' ) {
-						$url = self::$live_url;
-					}
 
-					echo '<form action="' . esc_url_raw( $url ) . '" method="post" id="epdq_payment_form">';
-					echo implode( '', $epdq_args );
-					echo '<input type="hidden" name="SHASIGN" value="' . $shasign . '"/>';
-					echo '<input type="hidden" id="register_nonce" name="register_nonce" value="' . wp_create_nonce( 'generate-nonce' ) . '" />';
-					echo '<input type="submit" class="button alt" id="submit_epdq_payment_form" value="' . __( 'Pay securely', 'ag_epdq_server' ) . '" />';
-					echo '</form>';
-
-					wc_enqueue_js( '
-                    $("body").block({
-                            message: "' . __( 'You are now being redirected to Barclaycard to make payment securely.', 'ag_epdq_server' ) . '",
-                            overlayCSS:
-                            {
-                                background: "#fff",
-                                opacity: 0.6
-                            },
-                            css: {
-                                        padding:        20,
-                                        textAlign:      "center",
-                                        color:          "#555",
-                                        border:         "3px solid #aaa",
-                                        backgroundColor:"#fff",
-                                        cursor:         "wait",
-                                        lineHeight:		"32px"
-                                }
-                        });
-                    $("#submit_epdq_payment_form").click();
-                ' );
-
-				} else {
-
-					AG_ePDQ_Helpers::ag_log( 'Please double check the ePDQ plugin settings, something is not quite right...', 'debug', $this->debug );
-					wc_add_notice( 'ePDQ Bad Setup: Please double check the ePDQ plugin settings, something is not quite right...', 'error' );
-
-				}
-				$ag_form_displayed = TRUE;
+			if( $this->status === 'test' ) {
+				$redirect_url = self::$test_url;
 			}
+			if( $this->status === 'live' ) {
+				$redirect_url = self::$live_url;
+			}
+
+			$query_string = http_build_query( $fields );
+			$redirect_url .= '?' . $query_string;
+
+			// Perform the redirect
+			header( 'Location: ' . $redirect_url );
+			exit;
 
 		}
 

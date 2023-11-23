@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
-Tested up to: 6.3
-Stable tag: 2.86
+Tested up to: 6.4
+Stable tag: 2.92
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,35 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.92 ( 2023-11-14 ) =
+* Add - Support for Hestia theme
+
+= 2.91 ( 2023-10-30 ) =
+* Update - Support for Astra theme. Fix broken search form in the header
+
+= 2.90 ( 2023-10-16 ) =
+* Update - Tested with WC 8.2
+* Fix - Pricing filter for default WooCommerce widgets
+
+= 2.89 ( 2023-09-29 ) =
+* Add - Support for Sinatra theme. Enable seamless integration for search form in the header
+* Update - Add taxonomies class names inside search results blocks
+
+= 2.88 ( 2023-09-18 ) =
+* Add - Support for Kapee theme
+* Update - Tested with WC 8.1
+* Fix - Fix label search form styles for mobile devices
+* Dev - Fix php notice with dynamically created child_theme property
+* Dev - Add aws_relevance_parameters filter
+
+= 2.87 ( 2023-09-04 ) =
+* Add - Support for WooCommerce Products Visibility plugin
+* Update - Support for BeRocket WooCommerce AJAX Products Filter plugin. Fix filters when nice URLs is enabled
+* Update - Support for HUSKY plugin. Fix filtering issue for custom taxonomies
+* Fix - Display On backorder product stock status when needed
+* Dev - Update aws_results_html js hook. Add new property - translate
+* Dev - Add aws_search_tax_result_item filter
 
 = 2.86 ( 2023-08-21 ) =
 * Update - Tested with WC 8.0

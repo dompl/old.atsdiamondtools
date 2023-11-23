@@ -1,6 +1,9 @@
 <?php
 namespace WPO\WC\PDF_Invoices\Documents;
 
+use WPO\WC\UBL\Builders\SabreBuilder;
+use WPO\WC\UBL\Documents\UblDocument;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -53,7 +56,7 @@ abstract class Order_Document {
 	public $order_id;
 
 	/**
-	 * Document settings.
+	 * PDF document settings.
 	 * @var array
 	 */
 	public $settings;
@@ -71,10 +74,16 @@ abstract class Order_Document {
 	public $order_settings;
 
 	/**
-	 * TRUE if document is enabled.
+	 * TRUE if PDF document is enabled.
 	 * @var bool
 	 */
 	public $enabled;
+	
+	/**
+	 * Linked output formats.
+	 * @var array
+	 */
+	public $output_formats = array();
 
 	/**
 	 * Linked documents, used for data retrieval
@@ -103,22 +112,19 @@ abstract class Order_Document {
 		}
 
 		// set properties
-		$this->slug = str_replace('-', '_', $this->type);
+		$this->slug = ! empty( $this->type ) ? str_replace(  '-', '_', $this->type ) : '';
+		
+		// output formats
+		$this->output_formats = apply_filters( "wpo_wcpdf_{$this->type}_output_formats", array( 'pdf' ), $this  );
 
 		// load data
 		if ( $this->order ) {
 			$this->read_data( $this->order );
-			if ( WPO_WCPDF()->legacy_mode_enabled() ) {
-				global $wpo_wcpdf;
-				$wpo_wcpdf->export->order = $this->order;
-				$wpo_wcpdf->export->document = $this;
-				$wpo_wcpdf->export->order_id = $this->order_id;
-				$wpo_wcpdf->export->template_type = $this->type;
-			}
 		}
 
 		// load settings
 		$this->init_settings_data();
+		
 		// check enable
 		$this->enabled = $this->get_setting( 'enabled', false );
 	}
@@ -128,9 +134,19 @@ abstract class Order_Document {
 	}
 
 	public function init_settings_data() {
+		// don't override/save settings on Preview requests
+		if ( isset( $_REQUEST['action'] ) && 'wpo_wcpdf_preview' === $_REQUEST['action'] ) {
+			return;
+		}
+		
+		// order
 		$this->order_settings  = $this->get_order_settings();
+		// pdf
 		$this->settings        = $this->get_settings();
 		$this->latest_settings = $this->get_settings( true );
+		
+		// save settings
+		$this->save_settings( $this->maybe_use_latest_settings() );
 	}
 
 	public function get_order_settings() {
@@ -146,24 +162,22 @@ abstract class Order_Document {
 		return $order_settings;
 	}
 
-	public function get_settings( $latest = false ) {
+	public function get_settings( $latest = false, $output_format = 'pdf' ) {
 		// get most current settings
 		$common_settings   = WPO_WCPDF()->settings->get_common_document_settings();
-		$document_settings = get_option( 'wpo_wcpdf_documents_settings_'.$this->get_type() );
+		$document_settings = WPO_WCPDF()->settings->get_document_settings( $this->get_type(), $output_format );
 		$settings          = (array) $document_settings + (array) $common_settings;
 
-		if ( $latest != true ) {
+		if ( ! $latest ) {
 			// get historical settings if enabled
-			if ( ! empty( $this->order ) && $this->use_historical_settings() == true ) {
-				if ( ! empty( $this->order_settings ) && is_array( $this->order_settings ) ) {
-					// ideally we should combine the order settings with the latest settings, so that new settings will
-					// automatically be applied to existing orders too. However, doing this by combining arrays is not
-					// possible because the way settings are currently stored means unchecked options are not included.
-					// This means there is no way to tell whether an option didn't exist yet (in which case the new
-					// option should be added) or whether the option was simply unchecked (in which case it should not
-					// be overwritten). This can only be address by storing unchecked checkboxes too.
-					$settings = (array) $this->order_settings + array_intersect_key( (array) $settings, array_flip( $this->get_non_historical_settings() ) );
-				}
+			if ( ! empty( $this->order ) && $this->use_historical_settings() && ! empty( $this->order_settings ) ) {
+				// ideally we should combine the order settings with the latest settings, so that new settings will
+				// automatically be applied to existing orders too. However, doing this by combining arrays is not
+				// possible because the way settings are currently stored means unchecked options are not included.
+				// This means there is no way to tell whether an option didn't exist yet (in which case the new
+				// option should be added) or whether the option was simply unchecked (in which case it should not
+				// be overwritten). This can only be address by storing unchecked checkboxes too.
+				$settings = (array) $this->order_settings + array_intersect_key( (array) $settings, array_flip( $this->get_non_historical_settings() ) );
 			}
 		}
 
@@ -184,26 +198,37 @@ abstract class Order_Document {
 			$this->init_settings_data();
 		}
 
-		$settings = ( $latest === true ) ? $this->latest_settings : $this->settings;
+		$settings = $latest ? $this->latest_settings : $this->settings;
+		$update   = true;
 
 		if ( $this->storing_settings_enabled() && ( empty( $this->order_settings ) || $latest ) && ! empty( $settings ) && ! empty( $this->order ) ) {
-			// this is either the first time the document is generated, or historical settings are disabled
-			// in both cases, we store the document settings
-			// exclude non historical settings from being saved in order meta
-			$this->order->update_meta_data( "_wcpdf_{$this->slug}_settings", array_diff_key( $settings, array_flip( $this->get_non_historical_settings() ) ) );
-
-			if ( 'invoice' == $this->slug ) {
-				if ( isset( $settings['display_date'] ) && $settings['display_date'] == 'order_date' ) {
-					$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'order_date' );
-				} else {
-					$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'invoice_date' );
-				}
+			if ( ! empty( $this->order_settings ) ) {
+				$update = 0 !== strcmp( serialize( (array) $this->order_settings ), serialize( (array) $settings ) );
 			}
 			
-			$this->order->save_meta_data();
+			if ( $update ) {
+				// this is either the first time the document is generated, or historical settings are disabled
+				// in both cases, we store the document settings
+				// exclude non historical settings from being saved in order meta
+				$this->order->update_meta_data( "_wcpdf_{$this->slug}_settings", array_diff_key( (array) $settings, array_flip( $this->get_non_historical_settings() ) ) );
+
+				if ( 'invoice' === $this->slug ) {
+					if ( isset( $settings['display_date'] ) && 'order_date' === $settings['display_date'] ) {
+						$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'order_date' );
+					} else {
+						$this->order->update_meta_data( "_wcpdf_{$this->slug}_display_date", 'invoice_date' );
+					}
+				}
+				
+				$this->order->save_meta_data();
+			}
 		}
 	}
 
+	public function maybe_use_latest_settings() {
+		return ! $this->use_historical_settings();
+	}
+	
 	public function use_historical_settings() {
 		return apply_filters( 'wpo_wcpdf_document_use_historical_settings', false, $this );
 	}
@@ -224,30 +249,44 @@ abstract class Order_Document {
 			'invoice_date_column',
 			'paper_size',
 			'font_subsetting',
+			'include_encrypted_pdf',
 		), $this );
 	}
 
-	public function get_setting( $key, $default = '' ) {
-		$non_historical_settings = $this->get_non_historical_settings();
-		if ( in_array( $key, $non_historical_settings ) && isset( $this->latest_settings ) ) {
-			$setting = isset( $this->latest_settings[$key] ) ? $this->latest_settings[$key] : $default;
+	public function get_setting( $key, $default = '', $output_format = 'pdf' ) {
+		if ( in_array( $output_format, $this->output_formats ) ) {
+			$settings        = $this->get_settings( false, $output_format );
+			$latest_settings = $this->get_settings( true, $output_format );
 		} else {
-			$setting = isset( $this->settings[$key] ) ? $this->settings[$key] : $default;
+			$settings        = $this->settings;
+			$latest_settings = $this->latest_settings;
 		}
+		
+		$non_historical_settings = $this->get_non_historical_settings();
+		
+		if ( in_array( $key, $non_historical_settings ) && isset( $latest_settings ) ) {
+			$setting = isset( $latest_settings[$key] ) ? $latest_settings[$key] : $default;
+		} else {
+			$setting = isset( $settings[$key] ) ? $settings[$key] : $default;
+		}
+		
 		return $setting;
 	}
 
-	public function get_attach_to_email_ids() {
-		$email_ids = isset( $this->settings['attach_to_email_ids'] ) ? array_keys( array_filter( $this->settings['attach_to_email_ids'] ) ) : array();
-		return $email_ids;  
+	public function get_attach_to_email_ids( $output_format = 'pdf' ) {
+		$settings = $this->get_settings( false, $output_format );
+		
+		return isset( $settings['attach_to_email_ids'] ) ? array_keys( array_filter( $settings['attach_to_email_ids'] ) ) : array();
 	}
 
 	public function get_type() {
 		return $this->type;
 	}
 
-	public function is_enabled() {
-		return apply_filters( 'wpo_wcpdf_document_is_enabled', $this->enabled, $this->type );
+	public function is_enabled( $output_format = 'pdf' ) {
+		$is_enabled = $this->get_setting( 'enabled', false, $output_format );
+		
+		return apply_filters( 'wpo_wcpdf_document_is_enabled', $is_enabled, $this->type, $output_format );
 	}
 
 	public function get_hook_prefix() {
@@ -492,6 +531,11 @@ abstract class Order_Document {
 		return apply_filters( "wpo_wcpdf_{$this->slug}_date_title", $date_title, $this );
 	}
 
+	public function get_due_date_title() {
+		$due_date_title = __( 'Due Date:', 'woocommerce-pdf-invoices-packing-slips' );
+		return apply_filters( "wpo_wcpdf_{$this->slug}_due_date_title", $due_date_title, $this );
+	}
+
 	/*
 	|--------------------------------------------------------------------------
 	| Data setters
@@ -620,9 +664,9 @@ abstract class Order_Document {
 	*/
 
 	public function get_number_settings() {
-		if (empty($this->settings)) {
-			$settings = $this->get_settings( true ); // we always want the latest settings
-			$number_settings = isset($settings['number_format'])?$settings['number_format']:array();
+		if ( empty( $this->settings ) ) {
+			$settings        = $this->get_settings( true ); // we always want the latest settings
+			$number_settings = isset( $settings['number_format'] ) ? $settings['number_format'] : array();
 		} else {
 			$number_settings = $this->get_setting( 'number_format', array() );
 		}
@@ -662,7 +706,7 @@ abstract class Order_Document {
 	 * Return logo height
 	 */
 	public function get_header_logo_height() {
-		if ( !empty( $this->settings['header_logo_height'] ) ) {
+		if ( ! empty( $this->settings['header_logo_height'] ) ) {
 			return apply_filters( 'wpo_wcpdf_header_logo_height', str_replace( ' ', '', $this->settings['header_logo_height'] ), $this );
 		}
 	}
@@ -751,6 +795,26 @@ abstract class Order_Document {
 	}
 	public function shop_name() {
 		echo $this->get_shop_name();
+	}
+	
+	/**
+	 * Return/Show company VAT number
+	 */
+	public function get_shop_vat_number() {
+		return $this->get_settings_text( 'vat_number', '', false );
+	}
+	public function shop_vat_number() {
+		echo $this->get_shop_vat_number();
+	}
+	
+	/**
+	 * Return/Show company COC number
+	 */
+	public function get_shop_coc_number() {
+		return $this->get_settings_text( 'coc_number', '', false );
+	}
+	public function shop_coc_number() {
+		echo $this->get_shop_coc_number();
 	}
 	
 	/**
@@ -863,18 +927,18 @@ abstract class Order_Document {
 			'paper_orientation'	=> apply_filters( 'wpo_wcpdf_paper_orientation', 'portrait', $this->get_type(), $this ),
 			'font_subsetting'	=> $this->get_setting( 'font_subsetting', false ),
 		);
-		$pdf_maker    = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings, $this );
-		$pdf          = $pdf_maker->output();
+		$pdf_maker = wcpdf_get_pdf_maker( $this->get_html(), $pdf_settings, $this );
+		$pdf       = $pdf_maker->output();
 		
 		return $pdf;
 	}
 
 	public function get_html( $args = array() ) {
-		do_action( 'wpo_wcpdf_before_html', $this->get_type(), $this );
-
 		// temporarily apply filters that need to be removed again after the html is generated
 		$html_filters = apply_filters( 'wpo_wcpdf_html_filters', array(), $this );
 		$this->add_filters( $html_filters );
+
+		do_action( 'wpo_wcpdf_before_html', $this->get_type(), $this );
 
 		$default_args = array (
 			'wrap_html_content'	=> true,
@@ -908,19 +972,58 @@ abstract class Order_Document {
 		$pdf = $this->get_pdf();
 		wcpdf_pdf_headers( $this->get_filename(), $output_mode, $pdf );
 		echo $pdf;
-		die();
+		exit();
 	}
 
 	public function output_html() {
 		echo $this->get_html();
-		die();
+	}
+	
+	public function preview_ubl() {
+		// get last settings
+		$this->settings = $this->get_settings( true, 'ubl' );
+		
+		return $this->output_ubl( true );
+	}
+	
+	public function output_ubl( $contents_only = false ) {
+		$ubl_maker    = wcpdf_get_ubl_maker();
+		$ubl_document = new UblDocument();
+		
+		$ubl_document->set_order( $this->order );
+		
+		$document = $contents_only ? $this : wcpdf_get_document( $this->get_type(), $this->order, true );
+		
+		if ( $document ) {
+			$ubl_document->set_order_document( $document );
+		} else {
+			wcpdf_log_error( 'Error generating order document for UBL!', 'error' );
+			exit();
+		}
+
+		$builder  = new SabreBuilder();
+		$contents = $builder->build( $ubl_document );
+		
+		if ( $contents_only ) {
+			return $contents;
+		}
+		
+		$filename      = $document->get_filename( 'download', array( 'output' => 'ubl' ) );
+		$full_filename = $ubl_maker->write( $filename, $contents );
+		$quoted        = sprintf( '"%s"', addcslashes( basename( $full_filename ), '"\\' ) );
+		$size          = filesize( $full_filename );
+
+		wcpdf_ubl_headers( $quoted, $size );
+
+		ob_clean();
+		flush();
+		@readfile( $full_filename );
+		@unlink( $full_filename );
+
+		exit();
 	}
 
 	public function wrap_html_content( $content ) {
-		if ( WPO_WCPDF()->legacy_mode_enabled() ) {
-			$GLOBALS['wpo_wcpdf']->export->output_body = $content;
-		}
-
 		$html = $this->render_template( $this->locate_template_file( "html-document-wrapper.php" ), array(
 				'content' => apply_filters( 'wpo_wcpdf_html_content', $content ),
 			)
@@ -944,15 +1047,31 @@ abstract class Order_Document {
 		} else {
 			$suffix = date('Y-m-d'); // 2020-11-11
 		}
-
-		$filename = $name . '-' . $suffix . '.pdf';
+		
+		// get filename
+		$output_format = ! empty( $args['output'] ) ? esc_attr( $args['output'] ) : 'pdf';
+		$filename      = $name . '-' . $suffix . $this->get_output_format_extension( $output_format );
 
 		// Filter filename
-		$order_ids = isset($args['order_ids']) ? $args['order_ids'] : array( $this->order_id );
-		$filename = apply_filters( 'wpo_wcpdf_filename', $filename, $this->get_type(), $order_ids, $context );
+		$order_ids = isset( $args['order_ids'] ) ? $args['order_ids'] : array( $this->order_id );
+		$filename  = apply_filters( 'wpo_wcpdf_filename', $filename, $this->get_type(), $order_ids, $context );
 
 		// sanitize filename (after filters to prevent human errors)!
 		return sanitize_file_name( $filename );
+	}
+	
+	public function get_output_format_extension( $output_format ) {
+		switch ( $output_format ) {
+			default:
+			case 'pdf':
+				$extension = '.pdf';
+				break;
+			case 'ubl':
+				$extension = '.xml';
+				break;
+		}
+		
+		return $extension;
 	}
 
 	public function get_template_path() {
@@ -1265,6 +1384,28 @@ abstract class Order_Document {
 		}
 
 		return intval( $year );
+	}
+
+	/**
+	 * Returns the due date timestamp.
+	 *
+	 * @return int
+	 */
+	public function get_due_date(): int {
+		if ( empty( $this->order ) || empty( $this->settings['due_date'] ) ) {
+			return 0;
+		}
+
+		$due_date_days = apply_filters( 'wpo_wcpdf_due_date_days', $this->settings['due_date'], $this->type, $this );
+
+		if ( 0 >= intval( $due_date_days ) ) {
+			return 0;
+		}
+
+		$base_date         = apply_filters( 'wpo_wcpdf_due_date_base_date', $this->order->get_date_created(), $this->type, $this );
+		$due_date_datetime = $base_date->modify( "+$due_date_days days" );
+
+		return apply_filters( 'wpo_wcpdf_due_date', $due_date_datetime->getTimestamp() ?? 0, $this->type, $this );
 	}
 
 	protected function add_filters( $filters ) {

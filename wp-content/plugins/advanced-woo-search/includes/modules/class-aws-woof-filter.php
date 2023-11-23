@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AWS plugin WOOF - WooCommerce Products Filter integration
+ * AWS plugin WOOF ( HUSKY ) - WooCommerce Products Filter integration
  */
 
 if (!defined('ABSPATH')) {
@@ -65,9 +65,19 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
         public function woof_search_page_filters( $filters ) {
 
             if ( isset( $_GET['swoof'] ) || isset( $_GET['woof_text'] ) ) {
+
+                $taxonomy_objects = get_object_taxonomies( 'product', 'objects' );
+                $taxonomies_names = array();
+
+                if ( $taxonomy_objects ) {
+                    foreach( $taxonomy_objects as $taxonomy_object ) {
+                        $taxonomies_names[] = $taxonomy_object->name;
+                    }
+                }
+
                 foreach ( $_GET as $key => $param ) {
 
-                    if ( $key === 'product_cat' || $key === 'product_tag' || strpos($key, 'pa_') !== false ) {
+                    if ( array_search( $key, $taxonomies_names ) !== false || strpos($key, 'pa_') !== false ) {
 
                         $slugs_arr = explode(',', $param);
                         $term_ids = array();
@@ -81,11 +91,14 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
                             }
                         }
 
-                        $operator = 'OR';
-                        $filters['tax'][$key] = array(
-                            'terms' => $term_ids,
-                            'operator' => $operator
-                        );
+                        if ( ! empty( $term_ids ) ) {
+                            $operator = 'OR';
+                            $filters['tax'][$key] = array(
+                                'terms' => $term_ids,
+                                'operator' => $operator
+                            );
+                        }
+
                     }
 
                 }
@@ -156,7 +169,8 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
             $this->data = $data;
             return $data;
         }
-        
+
+
     }
 
 

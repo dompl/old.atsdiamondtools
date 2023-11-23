@@ -115,6 +115,35 @@ class Settings_Callbacks {
 			printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
 		}
 	}
+	
+	/**
+	 * URL input callback.
+	 *
+	 * args:
+	 *   option_name - name of the main option
+	 *   id          - key of the setting
+	 *   size        - size of the text input (em)
+	 *   default     - default setting (optional)
+	 *   description - description (optional)
+	 *   type        - type (optional)
+	 *
+	 * @return void.
+	 */
+	public function url_input( $args ) {
+		extract( $this->normalize_settings_args( $args ) );
+
+		if ( empty( $type ) ) {
+			$type = 'url';
+		}
+
+		$size = ! empty( $size ) ? sprintf( 'size="%s"', esc_attr( $size ) ) : '';
+		printf( '<input type="%1$s" id="%2$s" name="%3$s" value="%4$s" %5$s placeholder="%6$s" %7$s/>', esc_attr( $type ), esc_attr( $id ), esc_attr( $setting_name ), sanitize_url( $current ), $size, esc_attr( $placeholder ), ! empty( $disabled ) ? 'disabled="disabled"' : '' );
+	
+		// output description.
+		if ( ! empty( $description ) ) {
+			printf( '<p class="description">%s</p>', wp_kses_post( $description ) );
+		}
+	}
 
 	/**
 	 * Combined checkbox & text input callback.
@@ -424,7 +453,7 @@ class Settings_Callbacks {
 			if ( 'webp' === wp_check_filetype( $attachment_src )['ext'] && ! function_exists( 'imagecreatefromwebp' ) ) {
 				printf(
 					'<div class="notice notice-warning inline" style="display:inline-block; width:auto;"><p>%s</p></div>',
-					wp_kses_post( 'File type <strong>webp</strong> is not supported by your server! Please check your <strong>System Configurations</strong> under the <strong>Status</strong> tab.', 'woocommerce-pdf-invoices-packing-slips' )
+					wp_kses_post( 'File type <strong>webp</strong> is not supported by your server! Please check your <strong>System Configurations</strong> under the <strong>Advanced</strong> tab.', 'woocommerce-pdf-invoices-packing-slips' )
 				);
 			}
 

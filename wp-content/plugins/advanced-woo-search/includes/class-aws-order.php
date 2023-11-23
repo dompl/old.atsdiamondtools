@@ -63,6 +63,13 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 $filters['price_max'] = sanitize_text_field( $_GET['max_price'] );
             }
 
+            if ( isset( $filters['price_min'] ) && ! isset( $filters['price_max'] ) ) {
+                $filters['price_max'] = 99999;
+            }
+            if ( ! isset( $filters['price_min'] ) && isset( $filters['price_max'] ) ) {
+                $filters['price_min'] = 0;
+            }
+
             if ( isset( $_GET['rating_filter'] ) && $_GET['rating_filter'] ) {
                 $filters['rating'] = explode( ',', sanitize_text_field( $_GET['rating_filter'] ) );
             }

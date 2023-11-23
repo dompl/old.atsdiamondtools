@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Subscription;
 
+use WC_Subscription;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\OrderEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\Order;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\PaymentToken;
@@ -139,8 +140,16 @@ class RenewalHandler {
 	 *
 	 * @param \WC_Order $wc_order The WooCommerce order.
 	 */
-	public function renew( \WC_Order $wc_order ) {
+	public function renew( \WC_Order $wc_order ): void {
 		try {
+			$subscription = wcs_get_subscription( $wc_order->get_id() );
+			if ( is_a( $subscription, WC_Subscription::class ) ) {
+				$subscription_id = $subscription->get_meta( 'ppcp_subscription' ) ?? '';
+				if ( $subscription_id ) {
+					return;
+				}
+			}
+
 			$this->process_order( $wc_order );
 		} catch ( \Exception $exception ) {
 			$error = $exception->getMessage();
@@ -162,13 +171,6 @@ class RenewalHandler {
 
 			return;
 		}
-
-		$this->logger->info(
-			sprintf(
-				'Renewal for order %d is completed.',
-				$wc_order->get_id()
-			)
-		);
 	}
 
 	/**
@@ -186,6 +188,7 @@ class RenewalHandler {
 		if ( ! $token ) {
 			return;
 		}
+
 		$purchase_unit       = $this->purchase_unit_factory->from_wc_order( $wc_order );
 		$payer               = $this->payer_factory->from_customer( $customer );
 		$shipping_preference = $this->shipping_preference_factory->from_state(
@@ -217,6 +220,13 @@ class RenewalHandler {
 		if ( $this->capture_authorized_downloads( $order ) ) {
 			$this->authorized_payments_processor->capture_authorized_payment( $wc_order );
 		}
+
+		$this->logger->info(
+			sprintf(
+				'Renewal for order %d is completed.',
+				$wc_order->get_id()
+			)
+		);
 	}
 
 	/**
@@ -254,8 +264,7 @@ class RenewalHandler {
 
 		$subscription = function_exists( 'wcs_get_subscription' ) ? wcs_get_subscription( $wc_order->get_meta( '_subscription_renewal' ) ) : null;
 		if ( $subscription ) {
-			$subscription_id = $subscription->get_id();
-			$token_id        = get_post_meta( $subscription_id, 'payment_token_id', true );
+			$token_id = $subscription->get_meta( 'payment_token_id' );
 			if ( $token_id ) {
 				foreach ( $tokens as $token ) {
 					if ( $token_id === $token->id() ) {

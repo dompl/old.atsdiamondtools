@@ -86,6 +86,38 @@ class ag_epdq_webhook {
 		exit;
 	}
 
+	public static function token() {
+
+		header( 'HTTP/1.1 200 OK' );
+		$epdq_settings = new epdq_checkout();
+
+		$datacheck = array();
+		foreach( $_REQUEST as $key => $value ) {
+			if( $value == "" ) {
+				continue;
+			}
+			$datacheck[ AG_ePDQ_Helpers::AG_decode( $key ) ] = AG_ePDQ_Helpers::AG_decode( $value );
+		}
+
+		if( ! isset( $datacheck['STATUS'] ) ) {
+			AG_ePDQ_Helpers::ag_log( '[Webhook] The request failed, ePDQ didn\'t send any data back. Please check the email ePDQ send you.', 'warning', $epdq_settings->debug );
+			AG_ePDQ_Helpers::ag_log( print_r( $datacheck, TRUE ), 'warning', $epdq_settings->debug );
+			wp_die( 'Webhook - There was an issue processing the request on the website. Please check the debug logs' );
+		}
+
+		$result = self::decrypt_webhook( $datacheck );
+
+		if( $result['STATUS'] === '5' ) {
+			AG_ePDQ_Token::save( $result, get_current_user_id(), is_user_logged_in() );
+			$url = wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=1';
+		} else {
+			$url = wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=0';
+		}
+		wp_redirect( $url );
+		exit;
+
+	}
+
 	public static function decrypt_webhook( $args ) {
 
 		$epdq_settings = new epdq_checkout();

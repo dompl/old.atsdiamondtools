@@ -193,7 +193,8 @@ class WC_Settings_Payment_Gateways extends WC_Settings_Page {
 											echo '<a class="button alignright" aria-label="' . esc_attr( sprintf( __( 'Manage the "%s" payment method', 'woocommerce' ), $method_title ) ) . '" href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . strtolower( $gateway->id ) ) ) . '">' . esc_html__( 'Manage', 'woocommerce' ) . '</a>';
 										} else {
 											if (
-												'WooCommerce Payments' === $method_title &&
+												// Keep old brand name for backwards compatibility.
+												( 'WooCommerce Payments' === $method_title || 'WooPayments' === $method_title ) &&
 												class_exists( 'WC_Payments_Account' )
 											) {
 												$setup_url = WC_Payments_Account::get_connect_url();
@@ -267,7 +268,7 @@ class WC_Settings_Payment_Gateways extends WC_Settings_Page {
 								foreach ( $plugin_suggestions as $plugin_suggestion ) {
 									$alt = str_replace( '.png', '', basename( $plugin_suggestion->image_72x72 ) );
 									// phpcs:ignore
-									echo "<img src='{$plugin_suggestion->image_72x72}' alt='${alt}' width='24' height='24' style='vertical-align: middle; margin-right: 8px;'/>";
+									echo "<img src='{$plugin_suggestion->image_72x72}' alt='{$alt}' width='24' height='24' style='vertical-align: middle; margin-right: 8px;'/>";
 								}
 								echo '& more.';
 							}

@@ -5,16 +5,19 @@ import { __ } from '@wordpress/i18n';
 import { useStoreCart } from '@woocommerce/base-context/hooks';
 import { useEffect } from '@wordpress/element';
 import LoadingMask from '@woocommerce/base-components/loading-mask';
-import {
-	StoreNoticesContainer,
-	SnackbarNoticesContainer,
-} from '@woocommerce/base-context';
 import { CURRENT_USER_IS_ADMIN } from '@woocommerce/settings';
 import BlockErrorBoundary from '@woocommerce/base-components/block-error-boundary';
 import { translateJQueryEventToNative } from '@woocommerce/base-utils';
 import withScrollToTop from '@woocommerce/base-hocs/with-scroll-to-top';
-import { CartProvider } from '@woocommerce/base-context/providers';
-import { SlotFillProvider } from '@woocommerce/blocks-checkout';
+import {
+	CartEventsProvider,
+	CartProvider,
+	noticeContexts,
+} from '@woocommerce/base-context';
+import {
+	SlotFillProvider,
+	StoreNoticesContainer,
+} from '@woocommerce/blocks-checkout';
 
 /**
  * Internal dependencies
@@ -83,12 +86,13 @@ const Block = ( { attributes, children, scrollToTop } ) => (
 		}
 		showErrorMessage={ CURRENT_USER_IS_ADMIN }
 	>
-		<SnackbarNoticesContainer context="wc/cart" />
-		<StoreNoticesContainer context="wc/cart" />
+		<StoreNoticesContainer context={ noticeContexts.CART } />
 		<SlotFillProvider>
 			<CartProvider>
-				<Cart attributes={ attributes }>{ children }</Cart>
-				<ScrollOnError scrollToTop={ scrollToTop } />
+				<CartEventsProvider>
+					<Cart attributes={ attributes }>{ children }</Cart>
+					<ScrollOnError scrollToTop={ scrollToTop } />
+				</CartEventsProvider>
 			</CartProvider>
 		</SlotFillProvider>
 	</BlockErrorBoundary>
