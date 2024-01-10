@@ -9,8 +9,8 @@ import { getSetting } from '@woocommerce/settings';
 import { DEFAULT_PRODUCT_LIST_LAYOUT } from '../base-utils';
 
 export default {
-	columns: getSetting( 'defaultColumns', 3 ),
-	rows: getSetting( 'defaultRows', 3 ),
+	columns: getSetting( 'default_columns', 3 ),
+	rows: getSetting( 'default_rows', 3 ),
 	alignButtons: false,
 	contentVisibility: {
 		orderBy: true,

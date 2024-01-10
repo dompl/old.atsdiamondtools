@@ -144,6 +144,15 @@ class GFCampaignMonitor extends GFFeedAddOn {
 	protected $_capabilities = array( 'gravityforms_campaignmonitor', 'gravityforms_campaignmonitor_uninstall' );
 
 	/**
+	 * Enabling background feed processing to prevent performance issues delaying form submission completion.
+	 *
+	 * @since 4.0
+	 *
+	 * @var bool
+	 */
+	protected $_async_feed_processing = true;
+
+	/**
 	 * Contains an instance of the Campaign Monitor API library, if available.
 	 *
 	 * @since  3.5

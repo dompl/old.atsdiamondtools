@@ -31,13 +31,6 @@ class DataStore extends SqlQuery {
 	protected $cache_timeout = 3600;
 
 	/**
-	 * Cache identifier.
-	 *
-	 * @var string
-	 */
-	protected $cache_key = '';
-
-	/**
 	 * Table used as a data store for this report.
 	 *
 	 * @var string

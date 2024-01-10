@@ -17,7 +17,7 @@ export default {
 	 */
 	columns: {
 		type: 'number',
-		default: getSetting( 'defaultColumns', 3 ),
+		default: getSetting( 'default_columns', 3 ),
 	},
 
 	/**
@@ -25,7 +25,7 @@ export default {
 	 */
 	rows: {
 		type: 'number',
-		default: getSetting( 'defaultRows', 3 ),
+		default: getSetting( 'default_rows', 3 ),
 	},
 
 	/**

@@ -76,7 +76,6 @@ class DefaultFreeExtensions {
 						self::get_plugin( 'mailpoet' ),
 						self::get_plugin( 'google-listings-and-ads' ),
 						self::get_plugin( 'woocommerce-services:tax' ),
-						self::get_plugin( 'tiktok-for-business' ),
 					)
 				),
 			),
@@ -399,16 +398,6 @@ class DefaultFreeExtensions {
 							array(
 								'type'      => 'base_location_country',
 								'value'     => 'SE',
-								'operation' => '=',
-							),
-							array(
-								'type'      => 'base_location_country',
-								'value'     => 'JP',
-								'operation' => '=',
-							),
-							array(
-								'type'      => 'base_location_country',
-								'value'     => 'AE',
 								'operation' => '=',
 							),
 						),
@@ -886,9 +875,9 @@ class DefaultFreeExtensions {
 				'install_priority' => 3,
 			),
 			'jetpack'                       => array(
-				'label'            => __( 'Boost content creation with Jetpack AI Assistant', 'woocommerce' ),
+				'label'            => __( 'Enhance security with Jetpack', 'woocommerce' ),
 				'image_url'        => plugins_url( '/assets/images/core-profiler/logo-jetpack.svg', WC_PLUGIN_FILE ),
-				'description'      => __( 'Save time on content creation — unlock high-quality blog posts and pages using AI.', 'woocommerce' ),
+				'description'      => __( 'Get auto real-time backups, malware scans, and spam protection.', 'woocommerce' ),
 				'learn_more_link'  => 'https://woocommerce.com/products/jetpack',
 				'install_priority' => 8,
 			),

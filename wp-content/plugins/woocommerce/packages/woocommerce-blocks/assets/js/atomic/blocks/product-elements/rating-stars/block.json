@@ -1,6 +1,7 @@
 {
 	"name": "woocommerce/product-rating-stars",
 	"version": "1.0.0",
+	"icon": "info",
 	"title": "Product Rating Stars",
 	"description": "Display the average rating of a product with stars",
 	"attributes": {
@@ -31,7 +32,6 @@
 	"supports": {
 		"align": true
 	},
-	"ancestor": [ "woocommerce/single-product" ],
 	"textdomain": "woocommerce",
 	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"

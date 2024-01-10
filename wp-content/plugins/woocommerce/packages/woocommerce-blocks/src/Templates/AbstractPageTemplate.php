@@ -23,6 +23,7 @@ abstract class AbstractPageTemplate {
 	 */
 	protected function init() {
 		add_filter( 'page_template_hierarchy', array( $this, 'page_template_hierarchy' ), 1 );
+		add_action( 'current_screen', array( $this, 'page_template_editor_redirect' ) );
 		add_filter( 'pre_get_document_title', array( $this, 'page_template_title' ) );
 	}
 
@@ -38,7 +39,14 @@ abstract class AbstractPageTemplate {
 	 *
 	 * @return \WP_Post|null Post object or null.
 	 */
-	abstract protected function get_placeholder_page();
+	abstract public static function get_placeholder_page();
+
+	/**
+	 * Should return the title of the page.
+	 *
+	 * @return string
+	 */
+	abstract public static function get_template_title();
 
 	/**
 	 * Should return true on pages/endpoints/routes where the template should be shown.
@@ -48,12 +56,12 @@ abstract class AbstractPageTemplate {
 	abstract protected function is_active_template();
 
 	/**
-	 * Should return the title of the page, or an empty string if the page title should not be changed.
+	 * Returns the URL to edit the template.
 	 *
 	 * @return string
 	 */
-	public static function get_template_title() {
-		return '';
+	protected function get_edit_template_url() {
+		return admin_url( 'site-editor.php?postType=wp_template&postId=woocommerce%2Fwoocommerce%2F%2F' . $this->get_slug() );
 	}
 
 	/**
@@ -73,13 +81,28 @@ abstract class AbstractPageTemplate {
 	}
 
 	/**
+	 * Redirect the edit page screen to the template editor.
+	 *
+	 * @param \WP_Screen $current_screen Current screen information.
+	 */
+	public function page_template_editor_redirect( \WP_Screen $current_screen ) {
+		$page         = $this->get_placeholder_page();
+		$edit_page_id = 'page' === $current_screen->id && ! empty( $_GET['post'] ) ? absint( $_GET['post'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( $page && $edit_page_id === $page->ID ) {
+			wp_safe_redirect( $this->get_edit_template_url() );
+			exit;
+		}
+	}
+
+	/**
 	 * Filter the page title when the template is active.
 	 *
 	 * @param string $title Page title.
 	 * @return string
 	 */
 	public function page_template_title( $title ) {
-		if ( $this->is_active_template() && $this->get_template_title() ) {
+		if ( $this->is_active_template() ) {
 			return $this->get_template_title();
 		}
 		return $title;

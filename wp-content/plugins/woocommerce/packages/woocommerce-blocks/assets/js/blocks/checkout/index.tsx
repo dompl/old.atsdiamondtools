@@ -31,24 +31,6 @@ const settings = {
 	},
 	edit: Edit,
 	save: Save,
-	transforms: {
-		to: [
-			{
-				type: 'block',
-				blocks: [ 'woocommerce/classic-shortcode' ],
-				transform: ( attributes ) => {
-					return createBlock(
-						'woocommerce/classic-shortcode',
-						{
-							shortcode: 'checkout',
-							align: attributes.align,
-						},
-						[]
-					);
-				},
-			},
-		],
-	},
 	// Migrates v1 to v2 checkout.
 	deprecated: [
 		{

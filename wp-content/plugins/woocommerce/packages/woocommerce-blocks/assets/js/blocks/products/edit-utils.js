@@ -22,7 +22,6 @@ export const renderNoProductsPlaceholder = ( blockTitle, blockIcon ) => (
 			className="wc-block-products__add-product-button"
 			isSecondary
 			href={ ADMIN_URL + 'post-new.php?post_type=product' }
-			target="_top"
 		>
 			{ __( 'Add new product', 'woocommerce' ) + ' ' }
 			<Icon icon={ external } />
@@ -31,7 +30,6 @@ export const renderNoProductsPlaceholder = ( blockTitle, blockIcon ) => (
 			className="wc-block-products__read_more_button"
 			isTertiary
 			href="https://docs.woocommerce.com/document/managing-products/"
-			target="_blank"
 		>
 			{ __( 'Learn more', 'woocommerce' ) }
 		</Button>

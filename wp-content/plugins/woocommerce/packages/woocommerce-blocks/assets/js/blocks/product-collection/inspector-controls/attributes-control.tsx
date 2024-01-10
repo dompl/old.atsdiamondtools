@@ -3,6 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import ProductAttributeTermControl from '@woocommerce/editor-components/product-attribute-term-control';
+import { AttributeMetadata } from '@woocommerce/types';
 import { SearchListItem } from '@woocommerce/editor-components/search-list-control/types';
 import { ADMIN_URL } from '@woocommerce/settings';
 import {
@@ -15,15 +16,19 @@ import {
 /**
  * Internal dependencies
  */
-import { QueryControlProps } from '../types';
+import { ProductCollectionQuery } from '../types';
 
 const EDIT_ATTRIBUTES_URL = `${ ADMIN_URL }edit.php?post_type=product&page=product_attributes`;
 
+interface AttributesControlProps {
+	woocommerceAttributes?: AttributeMetadata[];
+	setQueryAttribute: ( value: Partial< ProductCollectionQuery > ) => void;
+}
+
 const AttributesControl = ( {
-	query,
+	woocommerceAttributes,
 	setQueryAttribute,
-}: QueryControlProps ) => {
-	const woocommerceAttributes = query.woocommerceAttributes || [];
+}: AttributesControlProps ) => {
 	const selectedAttributes = woocommerceAttributes?.map(
 		( { termId: id } ) => ( {
 			id,

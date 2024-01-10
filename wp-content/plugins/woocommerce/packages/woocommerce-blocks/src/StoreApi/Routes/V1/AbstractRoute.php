@@ -163,10 +163,9 @@ abstract class AbstractRoute implements RouteInterface {
 	 *
 	 * @throws RouteException On error.
 	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
 	 */
 	protected function get_route_response( \WP_REST_Request $request ) {
-		return $this->get_route_error_response( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
+		throw new RouteException( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
 	}
 
 	/**
@@ -176,10 +175,9 @@ abstract class AbstractRoute implements RouteInterface {
 	 *
 	 * @throws RouteException On error.
 	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
 	 */
 	protected function get_route_post_response( \WP_REST_Request $request ) {
-		return $this->get_route_error_response( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
+		throw new RouteException( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
 	}
 
 	/**
@@ -189,10 +187,9 @@ abstract class AbstractRoute implements RouteInterface {
 	 *
 	 * @throws RouteException On error.
 	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
 	 */
 	protected function get_route_update_response( \WP_REST_Request $request ) {
-		return $this->get_route_error_response( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
+		throw new RouteException( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
 	}
 
 	/**
@@ -202,10 +199,9 @@ abstract class AbstractRoute implements RouteInterface {
 	 *
 	 * @throws RouteException On error.
 	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
 	 */
 	protected function get_route_delete_response( \WP_REST_Request $request ) {
-		return $this->get_route_error_response( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
+		throw new RouteException( 'woocommerce_rest_invalid_endpoint', __( 'Method not implemented', 'woocommerce' ), 404 );
 	}
 
 	/**

@@ -6,7 +6,7 @@ import { useQueryStateByKey } from '@woocommerce/base-context/hooks';
 import { getSetting, getSettingWithCoercion } from '@woocommerce/settings';
 import { useMemo, useEffect, useState } from '@wordpress/element';
 import classnames from 'classnames';
-import { Label } from '@woocommerce/blocks-components';
+import Label from '@woocommerce/base-components/label';
 import {
 	isAttributeQueryCollection,
 	isBoolean,
@@ -59,7 +59,7 @@ const ActiveFiltersBlock = ( {
 	const isMounted = useIsMounted();
 	const componentHasMounted = isMounted();
 	const filteringForPhpTemplate = getSettingWithCoercion(
-		'isRenderingPhpTemplate',
+		'is_rendering_php_template',
 		false,
 		isBoolean
 	);
@@ -323,7 +323,7 @@ const ActiveFiltersBlock = ( {
 	);
 
 	const hasFilterableProducts = getSettingWithCoercion(
-		'hasFilterableProducts',
+		'has_filterable_products',
 		false,
 		isBoolean
 	);

@@ -50,15 +50,9 @@ const renderMiniCartFrontend = () => {
 				miniCartIcon: el.dataset.miniCartIcon,
 				addToCartBehaviour: el.dataset.addToCartBehaviour || 'none',
 				hasHiddenPrice: el.dataset.hasHiddenPrice,
-				priceColor: el.dataset.priceColor
-					? JSON.parse( el.dataset.priceColor )
-					: {},
-				iconColor: el.dataset.iconColor
-					? JSON.parse( el.dataset.iconColor )
-					: {},
-				productCountColor: el.dataset.productCountColor
-					? JSON.parse( el.dataset.productCountColor )
-					: {},
+				priceColorValue: el.dataset.priceColorValue,
+				iconColorValue: el.dataset.iconColorValue,
+				productCountColorValue: el.dataset.productCountColorValue,
 				contents:
 					el.querySelector( '.wc-block-mini-cart__template-part' )
 						?.innerHTML ?? '',

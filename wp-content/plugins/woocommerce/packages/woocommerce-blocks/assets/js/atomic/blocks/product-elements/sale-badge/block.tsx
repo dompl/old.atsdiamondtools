@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import classnames from 'classnames';
-import { Label } from '@woocommerce/blocks-components';
+import Label from '@woocommerce/base-components/label';
 import {
 	useInnerBlockLayoutContext,
 	useProductDataContext,
@@ -26,10 +26,7 @@ export const Block = ( props: Props ): JSX.Element | null => {
 	const { parentClassName } = useInnerBlockLayoutContext();
 	const { product } = useProductDataContext();
 
-	if (
-		( ! product.id || ! product.on_sale ) &&
-		! props.isDescendentOfSingleProductTemplate
-	) {
+	if ( ! product.id || ! product.on_sale ) {
 		return null;
 	}
 

@@ -391,7 +391,6 @@ class OnboardingProfile extends \WC_REST_Data_Controller {
 				'items'             => array(
 					'enum' => array(
 						'jetpack',
-						'jetpack-boost',
 						'woocommerce-services',
 						'woocommerce-payments',
 						'mailchimp-for-woocommerce',

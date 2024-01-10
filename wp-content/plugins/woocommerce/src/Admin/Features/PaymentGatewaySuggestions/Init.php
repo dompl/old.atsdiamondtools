@@ -25,7 +25,6 @@ class Init {
 	 */
 	public function __construct() {
 		PaymentGatewaysController::init();
-		add_action( 'update_option_woocommerce_default_country', array( $this, 'delete_specs_transient' ) );
 	}
 
 	/**

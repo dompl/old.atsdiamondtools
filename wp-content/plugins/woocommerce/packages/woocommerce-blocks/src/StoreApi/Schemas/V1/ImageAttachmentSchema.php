@@ -70,7 +70,7 @@ class ImageAttachmentSchema extends AbstractSchema {
 	 * Convert a WooCommerce product into an object suitable for the response.
 	 *
 	 * @param int $attachment_id Image attachment ID.
-	 * @return object|null
+	 * @return array|null
 	 */
 	public function get_item_response( $attachment_id ) {
 		if ( ! $attachment_id ) {
@@ -80,12 +80,12 @@ class ImageAttachmentSchema extends AbstractSchema {
 		$attachment = wp_get_attachment_image_src( $attachment_id, 'full' );
 
 		if ( ! is_array( $attachment ) ) {
-			return null;
+			return [];
 		}
 
 		$thumbnail = wp_get_attachment_image_src( $attachment_id, 'woocommerce_thumbnail' );
 
-		return (object) [
+		return [
 			'id'        => (int) $attachment_id,
 			'src'       => current( $attachment ),
 			'thumbnail' => current( $thumbnail ),

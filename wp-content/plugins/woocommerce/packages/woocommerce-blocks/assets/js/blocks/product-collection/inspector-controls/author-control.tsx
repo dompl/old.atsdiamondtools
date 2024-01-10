@@ -13,7 +13,7 @@ import {
 /**
  * Internal dependencies
  */
-import { QueryControlProps } from '../types';
+import { ProductCollectionQuery } from '../types';
 
 interface Author {
 	id: string;
@@ -25,6 +25,11 @@ interface AuthorsInfo {
 	mapById: Map< number, Author >;
 	mapByName: Map< string, Author >;
 	names: string[];
+}
+
+interface AuthorControlProps {
+	value: string;
+	setQueryAttribute: ( value: Partial< ProductCollectionQuery > ) => void;
 }
 
 const AUTHORS_QUERY = {
@@ -63,8 +68,7 @@ const getIdByValue = (
 	if ( id ) return id;
 };
 
-function AuthorControl( { query, setQueryAttribute }: QueryControlProps ) {
-	const value = query.author;
+function AuthorControl( { value, setQueryAttribute }: AuthorControlProps ) {
 	const { records: authorsList, error } = useEntityRecords< Author[] >(
 		'root',
 		'user',

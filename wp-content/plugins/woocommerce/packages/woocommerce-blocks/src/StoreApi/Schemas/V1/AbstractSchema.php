@@ -64,16 +64,6 @@ abstract class AbstractSchema {
 	}
 
 	/**
-	 * Returns the full item response.
-	 *
-	 * @param mixed $item Item to get response for.
-	 * @return array|stdClass
-	 */
-	public function get_item_response( $item ) {
-		return [];
-	}
-
-	/**
 	 * Return schema properties.
 	 *
 	 * @return array

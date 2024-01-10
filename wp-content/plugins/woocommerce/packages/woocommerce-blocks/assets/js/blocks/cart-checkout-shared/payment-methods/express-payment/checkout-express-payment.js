@@ -91,7 +91,7 @@ const CheckoutExpressPayment = () => {
 							headingLevel="2"
 						>
 							{ __(
-								'Express Checkout',
+								'Express checkout',
 								'woocommerce'
 							) }
 						</Title>

@@ -36,10 +36,6 @@ const CONTENT_CONFIG = {
 		'No product is selected.',
 		'woo-gutenberg-products-block'
 	),
-	noSelectionButtonLabel: __(
-		'Select a product',
-		'woo-gutenberg-products-block'
-	),
 };
 
 const EDIT_MODE_CONFIG = {

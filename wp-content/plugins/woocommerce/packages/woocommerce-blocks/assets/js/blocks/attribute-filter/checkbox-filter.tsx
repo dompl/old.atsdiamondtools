@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-import { CheckboxList } from '@woocommerce/blocks-components';
-
+import CheckboxList from '@woocommerce/base-components/checkbox-list';
 /**
  * Internal dependencies
  */

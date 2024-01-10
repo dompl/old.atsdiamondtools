@@ -2,19 +2,18 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { Placeholder, Button, PanelBody } from '@wordpress/components';
 import { withProduct } from '@woocommerce/block-hocs';
 import BlockErrorBoundary from '@woocommerce/base-components/block-error-boundary';
 import EditProductLink from '@woocommerce/editor-components/edit-product-link';
+import { singleProductBlockPreview } from '@woocommerce/resource-previews';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { ProductResponseItem } from '@woocommerce/types';
 import ErrorPlaceholder, {
 	ErrorObject,
 } from '@woocommerce/editor-components/error-placeholder';
 
-import { PRODUCTS_STORE_NAME, Product } from '@woocommerce/data';
-import { useSelect } from '@wordpress/data';
 /**
  * Internal dependencies
  */
@@ -53,29 +52,9 @@ const Editor = ( {
 	const [ isEditing, setIsEditing ] = useState( ! productId );
 	const blockProps = useBlockProps();
 
-	const productPreview = useSelect( ( select ) => {
-		if ( ! isPreview ) {
-			return null;
-		}
-		return select( PRODUCTS_STORE_NAME ).getProducts< Array< Product > >( {
-			per_page: 1,
-		} );
-	} );
-
-	useEffect( () => {
-		const productPreviewId = productPreview
-			? productPreview[ 0 ]?.id
-			: null;
-		if ( ! productPreviewId ) {
-			return;
-		}
-
-		setAttributes( {
-			...attributes,
-			productId: productPreviewId,
-		} );
-		setIsEditing( false );
-	}, [ attributes, productPreview, setAttributes ] );
+	if ( isPreview ) {
+		return singleProductBlockPreview;
+	}
 
 	if ( error ) {
 		return (

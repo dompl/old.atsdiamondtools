@@ -2,12 +2,10 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import {
-	RadioControl,
+import RadioControl, {
 	RadioControlOptionLayout,
-} from '@woocommerce/blocks-components';
+} from '@woocommerce/base-components/radio-control';
 import type { CartShippingPackageShippingRate } from '@woocommerce/types';
-import { usePrevious } from '@woocommerce/base-hooks';
 
 /**
  * Internal dependencies
@@ -22,7 +20,6 @@ interface PackageRates {
 	className?: string;
 	noResultsMessage: JSX.Element;
 	selectedRate: CartShippingPackageShippingRate | undefined;
-	disabled?: boolean;
 }
 
 const PackageRates = ( {
@@ -32,37 +29,34 @@ const PackageRates = ( {
 	rates,
 	renderOption = renderPackageRateOption,
 	selectedRate,
-	disabled = false,
 }: PackageRates ): JSX.Element => {
 	const selectedRateId = selectedRate?.rate_id || '';
-	const previousSelectedRateId = usePrevious( selectedRateId );
 
 	// Store selected rate ID in local state so shipping rates changes are shown in the UI instantly.
-	const [ selectedOption, setSelectedOption ] = useState( () => {
-		if ( selectedRateId ) {
-			return selectedRateId;
-		}
-		// Default to first rate if no rate is selected.
-		return rates[ 0 ]?.rate_id;
-	} );
+	const [ selectedOption, setSelectedOption ] = useState( selectedRateId );
 
-	// Update the selected option if cart state changes in the data store.
+	// Update the selected option if cart state changes in the data stores.
 	useEffect( () => {
-		if (
-			selectedRateId &&
-			selectedRateId !== previousSelectedRateId &&
-			selectedRateId !== selectedOption
-		) {
+		if ( selectedRateId ) {
 			setSelectedOption( selectedRateId );
 		}
-	}, [ selectedRateId, selectedOption, previousSelectedRateId ] );
+	}, [ selectedRateId ] );
 
-	// Update the data store when the local selected rate changes.
+	// Update the selected option if there is no rate selected on mount.
 	useEffect( () => {
-		if ( selectedOption ) {
-			onSelectRate( selectedOption );
+		// Check the rates to see if any are marked as selected. At least one should be. If no rate is selected, it could be
+		// that the user toggled quickly from local pickup back to shipping.
+		const isRateSelectedInDataStore = rates.some(
+			( { selected } ) => selected
+		);
+		if (
+			( ! selectedOption && rates[ 0 ] ) ||
+			! isRateSelectedInDataStore
+		) {
+			setSelectedOption( rates[ 0 ]?.rate_id );
+			onSelectRate( rates[ 0 ]?.rate_id );
 		}
-	}, [ onSelectRate, selectedOption ] );
+	}, [ onSelectRate, rates, selectedOption ] );
 
 	if ( rates.length === 0 ) {
 		return noResultsMessage;
@@ -76,7 +70,6 @@ const PackageRates = ( {
 					setSelectedOption( value );
 					onSelectRate( value );
 				} }
-				disabled={ disabled }
 				selected={ selectedOption }
 				options={ rates.map( renderOption ) }
 			/>

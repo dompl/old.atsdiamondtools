@@ -3,10 +3,10 @@
     "apiVersion": 2,
     "name": "woocommerce/product-collection",
     "version": "1.0.0",
-    "title": "Product Collection (Beta)",
+    "title": "Product Collection",
     "description": "Display a collection of products from your store.",
     "category": "woocommerce",
-    "keywords": [ "WooCommerce", "Products (Beta)" ],
+    "keywords": [ "WooCommerce" ],
     "textdomain": "woocommerce",
 	"attributes": {
 		"queryId": {
@@ -20,10 +20,6 @@
 		},
 		"displayLayout": {
 			"type": "object"
-		},
-		"convertedFromProducts": {
-			"type": "boolean",
-			"default": false
 		}
 	},
 	"providesContext": {

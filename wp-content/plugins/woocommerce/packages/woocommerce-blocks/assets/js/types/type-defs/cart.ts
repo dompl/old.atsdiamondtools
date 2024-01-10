@@ -123,7 +123,6 @@ export type CatalogVisibility = 'catalog' | 'hidden' | 'search' | 'visible';
 export interface CartItem {
 	key: string;
 	id: number;
-	type: string;
 	quantity: number;
 	catalog_visibility: CatalogVisibility;
 	quantity_limits: {

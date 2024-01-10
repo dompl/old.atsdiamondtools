@@ -9,6 +9,7 @@ import { registerBlockType } from '@wordpress/blocks';
  * Internal dependencies
  */
 import { Edit, Save } from './edit';
+import attributes from './attributes';
 
 registerBlockType( 'woocommerce/cart-order-summary-shipping-block', {
 	icon: {
@@ -19,6 +20,7 @@ registerBlockType( 'woocommerce/cart-order-summary-shipping-block', {
 			/>
 		),
 	},
+	attributes,
 	edit: Edit,
 	save: Save,
 } );

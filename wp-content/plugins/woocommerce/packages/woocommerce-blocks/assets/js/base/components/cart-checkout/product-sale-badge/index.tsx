@@ -3,7 +3,7 @@
  */
 import { createInterpolateElement } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { FormattedMonetaryAmount } from '@woocommerce/blocks-components';
+import FormattedMonetaryAmount from '@woocommerce/base-components/formatted-monetary-amount';
 import type { Currency } from '@woocommerce/price-format';
 
 /**

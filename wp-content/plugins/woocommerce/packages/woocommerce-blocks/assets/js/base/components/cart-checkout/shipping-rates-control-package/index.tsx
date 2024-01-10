@@ -5,10 +5,14 @@ import classNames from 'classnames';
 import { _n, sprintf } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Panel } from '@woocommerce/blocks-checkout';
-import { Label } from '@woocommerce/blocks-components';
+import Label from '@woocommerce/base-components/label';
 import { useCallback } from '@wordpress/element';
-import { useShippingData } from '@woocommerce/base-context/hooks';
+import {
+	useShippingData,
+	useStoreEvents,
+} from '@woocommerce/base-context/hooks';
 import { sanitizeHTML } from '@woocommerce/utils';
+import { useDebouncedCallback } from 'use-debounce';
 import type { ReactElement } from 'react';
 
 /**
@@ -27,7 +31,8 @@ export const ShippingRatesControlPackage = ( {
 	collapsible,
 	showItems,
 }: PackageProps ): ReactElement => {
-	const { selectShippingRate, isSelectingRate } = useShippingData();
+	const { selectShippingRate } = useShippingData();
+	const { dispatchCheckoutEvent } = useStoreEvents();
 	const multiplePackages =
 		document.querySelectorAll(
 			'.wc-block-components-shipping-rates-control__package'
@@ -90,32 +95,28 @@ export const ShippingRatesControlPackage = ( {
 	const onSelectRate = useCallback(
 		( newShippingRateId: string ) => {
 			selectShippingRate( newShippingRateId, packageId );
+			dispatchCheckoutEvent( 'set-selected-shipping-rate', {
+				shippingRateId: newShippingRateId,
+			} );
 		},
-		[ packageId, selectShippingRate ]
+		[ dispatchCheckoutEvent, packageId, selectShippingRate ]
 	);
+	const debouncedOnSelectRate = useDebouncedCallback( onSelectRate, 1000 );
 	const packageRatesProps = {
 		className,
 		noResultsMessage,
 		rates: packageData.shipping_rates,
-		onSelectRate,
+		onSelectRate: debouncedOnSelectRate,
 		selectedRate: packageData.shipping_rates.find(
 			( rate ) => rate.selected
 		),
 		renderOption,
-		disabled: isSelectingRate,
 	};
 
 	if ( shouldBeCollapsible ) {
 		return (
 			<Panel
-				className={ classNames(
-					'wc-block-components-shipping-rates-control__package',
-					className,
-					{
-						'wc-block-components-shipping-rates-control__package--disabled':
-							isSelectingRate,
-					}
-				) }
+				className="wc-block-components-shipping-rates-control__package"
 				// initialOpen remembers only the first value provided to it, so by the
 				// time we know we have several packages, initialOpen would be hardcoded to true.
 				// If we're rendering a panel, we're more likely rendering several
@@ -132,11 +133,7 @@ export const ShippingRatesControlPackage = ( {
 		<div
 			className={ classNames(
 				'wc-block-components-shipping-rates-control__package',
-				className,
-				{
-					'wc-block-components-shipping-rates-control__package--disabled':
-						isSelectingRate,
-				}
+				className
 			) }
 		>
 			{ header }

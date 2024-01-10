@@ -22,16 +22,13 @@ class GoogleAnalytics {
 	 */
 	public function __construct( AssetApi $asset_api ) {
 		$this->asset_api = $asset_api;
+		$this->init();
 	}
 
 	/**
 	 * Hook into WP.
 	 */
-	public function init() {
-		// Require Google Analytics Integration to be activated.
-		if ( ! class_exists( 'WC_Google_Analytics_Integration', false ) ) {
-			return;
-		}
+	protected function init() {
 		add_action( 'init', array( $this, 'register_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'script_loader_tag', array( $this, 'async_script_loader_tags' ), 10, 3 );

@@ -159,7 +159,26 @@ class ePDQ_Sub {
 			AG_ePDQ_Helpers::ag_log( '[Subscriptions] data returned' . print_r( $result, TRUE ), 'debug', $ePDQ_settings->debug );
 		}
 
-		AG_ePDQ_Helpers::update_order_meta_data( $order->get_order_number(), $result, $order );
+		$order_notes = array(
+			'Order ID                            : ' => $result['ORDERID'] ?? '',
+			'Amount                              : ' => $result['AMOUNT'] ?? '',
+			'Order Currency                      : ' => $result['CURRENCY'] ?? '',
+			'Payment Method                      : ' => $result['PM'] ?? '',
+			'Acceptance Code Returned By Acquirer: ' => $result['ACCEPTANCE'] ?? '',
+			'Payment Reference In ePDQ System    : ' => $result['PAYID'] ?? '',
+			'Error Code                          : ' => $result['NCERROR'] ?? '',
+			'Card Brand                          : ' => $result['BRAND'] ?? '',
+			'Transaction Date                    : ' => $result['TRXDATE'] ?? '',
+			'Cardholder/Customer Name            : ' => $result['CN'] ?? '',
+			'Customer IP                         : ' => $result['IP'] ?? '',
+			'AAV Result For Address              : ' => $result['AAVADDRESS'] ?? '',
+			'Result for AAV Check                : ' => $result['AAVCHECK'] ?? '',
+			'AAV Result For Postcode             : ' => $result['AAVZIP'] ?? '',
+		);
+
+		AG_ePDQ_Helpers::update_order_notes( $order, $order_notes );
+
+		AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $result, $order );
 
 		// Process order data and update order status
 		epdq_order::process( $result, '[Subscriptions renewal] ', $order );

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.5.14\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-09T10:58:56+00:00\n"
+"POT-Creation-Date: 2023-11-21T11:55:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: ag_epdq_server\n"
@@ -2245,88 +2245,80 @@ msgstr ""
 msgid "<strong>%s</strong> is enabled, but you don't have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
 msgstr ""
 
-#: inc/classes/class-main.php:131
+#: inc/classes/class-main.php:153
 msgid "<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target=\"_blank\" href=\"%s\">here</a> for more card numbers, steps on setting up and troubleshooting."
 msgstr ""
 
-#: inc/classes/class-main.php:142
+#: inc/classes/class-main.php:164
 msgid "<span class=\"AG-redirect-icon\"><img src=\"%s\" /></span>"
 msgstr ""
 
-#: inc/classes/class-main.php:143
+#: inc/classes/class-main.php:165
 msgid "<p class=\"AG-redirect-notice\">After clicking \"Place order\", you will be redirected to Barclays to complete your purchase securely.</p>"
 msgstr ""
 
-#: inc/classes/class-main.php:207
+#: inc/classes/class-main.php:229
 msgid "AG ePDQ Checkout Settings"
 msgstr ""
 
-#: inc/classes/class-main.php:207
+#: inc/classes/class-main.php:229
 msgid "This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website."
 msgstr ""
 
-#: inc/classes/class-main.php:208
+#: inc/classes/class-main.php:230
 msgid "Having issues setting up the plugin? Why not try the setup wizard <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:452
-msgid "Pay securely"
-msgstr ""
-
-#: inc/classes/class-main.php:457
-msgid "You are now being redirected to Barclaycard to make payment securely."
-msgstr ""
-
-#: inc/classes/class-main.php:641
+#: inc/classes/class-main.php:622
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:684
+#: inc/classes/class-main.php:665
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:689
+#: inc/classes/class-main.php:670
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:695
+#: inc/classes/class-main.php:676
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:701
+#: inc/classes/class-main.php:682
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:745
+#: inc/classes/class-main.php:726
 msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:745
+#: inc/classes/class-main.php:726
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:745
+#: inc/classes/class-main.php:726
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:745
-#: inc/classes/class-main.php:750
+#: inc/classes/class-main.php:726
+#: inc/classes/class-main.php:731
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:750
+#: inc/classes/class-main.php:731
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:751
+#: inc/classes/class-main.php:732
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:751
+#: inc/classes/class-main.php:732
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:755
+#: inc/classes/class-main.php:736
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
@@ -2787,16 +2779,16 @@ msgstr ""
 msgid "AG ePDQ order status check was manually checked"
 msgstr ""
 
-#: inc/classes/Tokenize/class-tokenization.php:122
+#: inc/classes/Tokenize/class-tokenization.php:124
 msgid "Your credit cards: "
 msgstr ""
 
-#: inc/classes/Tokenize/class-tokenization.php:125
+#: inc/classes/Tokenize/class-tokenization.php:127
 msgid "Use a new card"
 msgstr ""
 
-#: inc/classes/Tokenize/class-tokenization.php:152
-#: inc/classes/Tokenize/class-tokenization.php:161
+#: inc/classes/Tokenize/class-tokenization.php:154
+#: inc/classes/Tokenize/class-tokenization.php:163
 msgid "%1$s %2$s ending in %3$s %4$s"
 msgstr ""
 

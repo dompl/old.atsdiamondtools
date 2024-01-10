@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { isNumber, isEmpty } from '@woocommerce/types';
+import { isNumber } from '@woocommerce/types';
 import {
 	BlockAttributes,
 	BlockConfiguration,
@@ -80,17 +80,19 @@ export const registerBlockSingleProductTemplate = ( {
 
 		if ( ! isBlockRegistered ) {
 			if ( isVariationBlock ) {
-				// @ts-expect-error: `registerBlockType` is not typed in WordPress core
-				registerBlockVariation( blockName, blockSettings );
+				registerBlockVariation( blockName, {
+					...blockSettings,
+					// @ts-expect-error: `ancestor` key is typed in WordPress core
+					ancestor: ! currentTemplateId?.includes( 'single-product' )
+						? blockSettings?.ancestor
+						: undefined,
+				} );
 			} else {
-				const ancestor = isEmpty( blockSettings?.ancestor )
-					? [ 'woocommerce/single-product' ]
-					: blockSettings?.ancestor;
-				// @ts-expect-error: `registerBlockType` is not typed in WordPress core
+				// @ts-expect-error: `registerBlockType` is typed in WordPress core
 				registerBlockType( blockMetadata, {
 					...blockSettings,
 					ancestor: ! currentTemplateId?.includes( 'single-product' )
-						? ancestor
+						? blockSettings?.ancestor
 						: undefined,
 				} );
 			}

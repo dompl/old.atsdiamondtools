@@ -1,6 +1,6 @@
 export interface ProductsByTagBlockProps {
 	attributes: {
-		tags: ( number | string )[];
+		tags: number[];
 		tagOperator: string;
 		columns: number;
 		rows: number;

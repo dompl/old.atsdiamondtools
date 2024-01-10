@@ -1,94 +1,94 @@
 .fraud-badge {
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    line-height: 19px;
-
-    background: #c6e1c6;
-    text-align: center;
+    width:         20px;
+    height:        20px;
+    padding:       8px;
+    margin-right:  4px;
+    display:       inline-block;
+    line-height:   19px;
+    box-sizing:    content-box;
+    background:    #c6e1c6;
+    text-align:    center;
 }
 
 .fraud-badge-success {
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    line-height: 19px;
-
-    background: #c6e1c6;
-    border: 2px solid #c6e1c6;
-    color: #5b841b;
-    text-align: center;
+    width:         20px;
+    height:        20px;
+    padding:       8px;
+    margin-right:  4px;
+    display:       inline-block;
+    line-height:   19px;
+    box-sizing:    content-box;
+    background:    #c6e1c6;
+    border:        2px solid #c6e1c6;
+    color:         #5b841b;
+    text-align:    center;
 }
 
 .fraud-badge-sub {
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    line-height: 19px;
-    background: #ccc;
-    border: 2px solid #ccc;
-    text-align: center;
-
+    width:         20px;
+    height:        20px;
+    padding:       8px;
+    margin-right:  4px;
+    display:       inline-block;
+    line-height:   19px;
+    background:    #ccc;
+    border:        2px solid #ccc;
+    text-align:    center;
+    box-sizing:    content-box;
 }
 
 .fraud-badge-warning {
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    line-height: 19px;
-
-    background: #fff8c4;
-    border: 2px solid #fff8c4;
-    color: #e3b000;
-    text-align: center;
-
+    width:         20px;
+    height:        20px;
+    padding:       8px;
+    margin-right:  4px;
+    display:       inline-block;
+    line-height:   19px;
+    box-sizing:    content-box;
+    background:    #fff8c4;
+    border:        2px solid #fff8c4;
+    color:         #e3b000;
+    text-align:    center;
+    box-sizing:    content-box;
 }
 
 .fraud-badge-danger {
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    line-height: 19px;
-
-    background: #eba3a3;
-    border: 2px solid #eba3a3;
-    color: #dc3545;
-    text-align: center;
+    width:         20px;
+    height:        20px;
+    padding:       8px;
+    margin-right:  4px;
+    display:       inline-block;
+    line-height:   19px;
+    box-sizing:    content-box;
+    background:    #eba3a3;
+    border:        2px solid #eba3a3;
+    color:         #dc3545;
+    text-align:    center;
 }
 
 .fraud-tooltip {
     position: relative;
-    display: inline-block;
+    display:  inline-block;
 }
 
 .fraud-tooltip .fraud-tooltiptext {
-    visibility: hidden;
-    width: 108px;
+    visibility:       hidden;
+    width:            108px;
     background-color: gray;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
+    color:            #fff;
+    text-align:       center;
+    padding:          5px 0;
+    border-radius:    6px;
 
-    position: absolute;
-    z-index: 1;
-    left: 2px;
-    top: 30px;
+    position:         absolute;
+    z-index:          1;
+    left:             2px;
+    top:              30px;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
@@ -102,51 +102,51 @@
 
 .fraud-message {
     padding-bottom: 10px;
-    margin-bottom: 100px;
+    margin-bottom:  100px;
 }
 
 .is-loading span {
 
-    background: #eee;
-    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
-    border-radius: 5px;
+    background:      #eee;
+    background:      linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    border-radius:   5px;
     background-size: 200% 100%;
-    animation: 1.5s shine linear infinite;
+    animation:       1.5s shine linear infinite;
 }
 
 .is-loading .fraud-message {
-    background: #eee;
-    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
-    border-radius: 5px;
+    background:      #eee;
+    background:      linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    border-radius:   5px;
     background-size: 200% 100%;
-    animation: 1.5s shine linear infinite;
+    animation:       1.5s shine linear infinite;
 
-    padding: 8px;
-    margin-right: 4px;
-    margin-bottom: 5px;
-    display: inline-block;
-    text-align: center;
-    height: 10px;
-    width: 170px;
+    padding:         8px;
+    margin-right:    4px;
+    margin-bottom:   5px;
+    display:         inline-block;
+    text-align:      center;
+    height:          10px;
+    width:           170px;
 }
 
 
 .overlay-loading {
-    width: 80%; /* Full width (cover the whole page) */
-    height: 90%; /* Full height (cover the whole page) */
+    width:   80%; /* Full width (cover the whole page) */
+    height:  90%; /* Full height (cover the whole page) */
     /* background-color: rgba(0,0,0,0.2);  */
     /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
+    cursor:  pointer; /* Add a pointer on hover */
 }
 
 .overlay-text {
-    position: absolute;
-    top: 50%;
-    left: 40%;
-    font-size: 20px;
-    color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-    transform: translate(-50%, -50%);
+    position:      absolute;
+    top:           50%;
+    left:          40%;
+    font-size:     20px;
+    color:         rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    transform:     translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
 

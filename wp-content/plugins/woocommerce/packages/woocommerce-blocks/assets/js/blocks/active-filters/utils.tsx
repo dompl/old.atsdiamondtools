@@ -3,7 +3,8 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { formatPrice } from '@woocommerce/price-format';
-import { Label, RemovableChip } from '@woocommerce/blocks-components';
+import { RemovableChip } from '@woocommerce/base-components/chip';
+import Label from '@woocommerce/base-components/label';
 import { getQueryArgs, addQueryArgs, removeQueryArgs } from '@wordpress/url';
 import { changeUrl } from '@woocommerce/utils';
 import { Icon, closeSmall } from '@wordpress/icons';

@@ -1,11 +1,6 @@
-$line-height: 1.618;
-
 .wc-block-components-product-rating {
 	display: block;
-
-	span {
-		line-height: $line-height;
-	}
+	line-height: 1;
 
 	&__stars {
 		display: inline-block;
@@ -13,7 +8,7 @@ $line-height: 1.618;
 		position: relative;
 		width: 5.3em;
 		height: 1.618em;
-		line-height: $line-height;
+		line-height: 1.618;
 		font-size: 1em;
 		/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
 		font-family: star;
@@ -25,7 +20,6 @@ $line-height: 1.618;
 
 		&::before {
 			content: "\53\53\53\53\53";
-			line-height: $line-height;
 			top: 0;
 			left: 0;
 			right: 0;
@@ -50,7 +44,6 @@ $line-height: 1.618;
 			right: 0;
 			position: absolute;
 			color: inherit;
-			line-height: $line-height;
 			white-space: nowrap;
 		}
 	}
@@ -61,13 +54,9 @@ $line-height: 1.618;
 	}
 
 	&__container {
-		> * {
-			vertical-align: middle;
-		}
-	}
-
-	&__stars + &__reviews_count {
-		margin-left: $gap-smaller;
+		display: flex;
+		align-items: center;
+		column-gap: $gap-smaller;
 	}
 
 	&__norating-container {
@@ -83,7 +72,7 @@ $line-height: 1.618;
 		position: relative;
 		width: 1.5em;
 		height: 1.618em;
-		line-height: $line-height;
+		line-height: 1.618;
 		font-size: 1em;
 		/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
 		font-family: star;

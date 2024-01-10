@@ -124,7 +124,11 @@ export const useShippingData = (): ShippingData => {
 					processErrorResponse( error );
 				} );
 		},
-		[ dispatchSelectShippingRate, dispatchCheckoutEvent ]
+		[
+			hasSelectedLocalPickup,
+			dispatchSelectShippingRate,
+			dispatchCheckoutEvent,
+		]
 	);
 
 	return {

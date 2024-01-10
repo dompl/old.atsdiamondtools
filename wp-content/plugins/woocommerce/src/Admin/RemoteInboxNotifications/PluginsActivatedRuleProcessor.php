@@ -13,14 +13,6 @@ use Automattic\WooCommerce\Admin\PluginsProvider\PluginsProvider;
  * Rule processor for sending when the provided plugins are activated.
  */
 class PluginsActivatedRuleProcessor implements RuleProcessorInterface {
-
-	/**
-	 * The plugins provider.
-	 *
-	 * @var PluginsProviderInterface
-	 */
-	protected $plugins_provider;
-
 	/**
 	 * Constructor.
 	 *

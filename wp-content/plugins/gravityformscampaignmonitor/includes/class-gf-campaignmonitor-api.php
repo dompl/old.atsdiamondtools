@@ -20,6 +20,24 @@ class GF_CampaignMonitor_API {
 	public static $api_url = 'https://api.createsend.com/api/v3.1/';
 
 	/**
+	 * Campaign Monitor API key.
+	 *
+	 * @since 4.0 Previously a dynamic property.
+	 *
+	 * @var string
+	 */
+	private $api_key = '';
+
+	/**
+	 * Campaign Monitor Client ID.
+	 *
+	 * @since 4.0 Previously a dynamic property.
+	 *
+	 * @var string
+	 */
+	private $client_id = '';
+
+	/**
 	 * Initialize Campaign Monitor API library.
 	 *
 	 * @since  3.5

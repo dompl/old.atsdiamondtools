@@ -116,6 +116,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
                 $index_meta['found_posts'] = $this->get_number_of_products();
 
+                do_action( 'aws_index_started', $index_meta );
+
             } else if ( ! empty( $index_meta['site_stack'] ) && $index_meta['offset'] >= $index_meta['found_posts'] ) {
                 $status = 'start';
 

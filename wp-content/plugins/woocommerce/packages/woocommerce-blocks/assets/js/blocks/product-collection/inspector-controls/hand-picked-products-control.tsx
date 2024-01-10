@@ -15,7 +15,12 @@ import {
 /**
  * Internal dependencies
  */
-import { QueryControlProps } from '../types';
+import { ProductCollectionQuery } from '../types';
+
+interface HandPickedProductsControlProps {
+	setQueryAttribute: ( value: Partial< ProductCollectionQuery > ) => void;
+	selectedProductIds?: string[] | undefined;
+}
 
 /**
  * Returns:
@@ -50,10 +55,9 @@ function useProducts() {
 }
 
 const HandPickedProductsControl = ( {
-	query,
+	selectedProductIds,
 	setQueryAttribute,
-}: QueryControlProps ) => {
-	const selectedProductIds = query.woocommerceHandPickedProducts;
+}: HandPickedProductsControlProps ) => {
 	const { productsMap, productsList } = useProducts();
 
 	const onTokenChange = useCallback(
@@ -134,7 +138,6 @@ const HandPickedProductsControl = ( {
 						? [ __( 'Loading…', 'woo-gutenberg-products-block' ) ]
 						: selectedProductIds || []
 				}
-				__experimentalExpandOnFocus={ true }
 			/>
 		</ToolsPanelItem>
 	);

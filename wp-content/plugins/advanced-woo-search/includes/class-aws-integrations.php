@@ -258,6 +258,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'woodmart_shop_page_link', array( $this, 'woodmart_shop_page_link' ), 9999 );
             }
 
+            if ( 'Elessi Theme' === $this->current_theme ) {
+                add_action( 'wp_enqueue_scripts', array( $this,  'elessi_wp_enqueue_scripts' ), 9999999 );
+            }
+
             // Product Visibility by User Role for WooCommerce plugin
             if ( class_exists( 'Alg_WC_PVBUR' ) ) {
                 add_filter( 'aws_search_results_products', array( $this, 'pvbur_aws_search_results_products' ), 1 );
@@ -451,6 +455,16 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // BeRocket WooCommerce AJAX Products Filter
             if ( defined( 'BeRocket_AJAX_filters_version' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-berocket-filters.php' );
+            }
+
+            // WooCommerce Memberships
+            if ( class_exists( 'WC_Memberships' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-woo-memberships.php' );
+            }
+
+            // WooCommerce Show Single Variations by Iconic
+            if ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-single-variations.php' );
             }
 
         }
@@ -2012,6 +2026,20 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 ), $link );
             }
             return $link;
+        }
+
+        /*
+         * Elessi Theme fix for shop filters
+         */
+        public function elessi_wp_enqueue_scripts() {
+            $script = "
+               jQuery('body').on( 'nasa_store_filter_ajax', function(e) { 
+                    window.setTimeout(function(){
+                        jQuery('.aws-container').aws_search();     
+                    }, 3000);          
+               });
+            ";
+            wp_add_inline_script( 'aws-script', $script);
         }
 
         /*

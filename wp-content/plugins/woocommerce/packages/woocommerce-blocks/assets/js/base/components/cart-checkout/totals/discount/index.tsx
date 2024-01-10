@@ -3,7 +3,7 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import LoadingMask from '@woocommerce/base-components/loading-mask';
-import { RemovableChip } from '@woocommerce/blocks-components';
+import { RemovableChip } from '@woocommerce/base-components/chip';
 import { applyCheckoutFilter, TotalsItem } from '@woocommerce/blocks-checkout';
 import { getSetting } from '@woocommerce/settings';
 import {

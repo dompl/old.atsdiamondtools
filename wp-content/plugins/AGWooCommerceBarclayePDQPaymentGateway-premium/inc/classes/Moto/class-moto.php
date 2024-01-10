@@ -57,12 +57,10 @@ class ag_ePDQ_moto {
 			return;
 		}
 
-		if( ! $order->get_date_paid() ) {
-			// $on_checkout = false
+		if( $order->get_payment_method() === 'epdq_checkout' ) {
 			echo '<button style="background: #007cba; color: white;" type="button" id="ag-moto-epdq" class="button ag-moto" data-order_url="' . esc_attr( $order->get_checkout_payment_url() ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '"> MOTO Payment</button>';
-
 		}
-
+		
 	}
 
 

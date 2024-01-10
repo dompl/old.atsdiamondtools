@@ -142,15 +142,6 @@ class Init {
 	}
 
 	/**
-	 * Get merchant WooPay eligibility.
-	 */
-	public static function is_woopay_eligible() {
-		$wcpay_promotion = self::get_wc_pay_promotion_spec();
-
-		return $wcpay_promotion && 'woocommerce_payments:woopay' === $wcpay_promotion->id;
-	}
-
-	/**
 	 * Delete the specs transient.
 	 */
 	public static function delete_specs_transient() {

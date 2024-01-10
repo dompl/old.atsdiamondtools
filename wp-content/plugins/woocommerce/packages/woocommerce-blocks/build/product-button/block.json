@@ -34,7 +34,6 @@
 			"background": false,
 			"link": true
 		},
-		"interactivity": true,
 		"html": false,
 		"typography": {
 			"fontSize": true,
@@ -57,9 +56,6 @@
 			"name": "outline",
 			"label": "Outline"
 		}
-	],
-	"viewScript": [
-		"wc-product-button-interactivity-frontend"
 	],
 	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"

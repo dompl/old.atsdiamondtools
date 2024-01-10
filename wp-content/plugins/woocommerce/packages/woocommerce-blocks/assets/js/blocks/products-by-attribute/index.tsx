@@ -25,11 +25,11 @@ registerBlockType( metadata, {
 		...metadata.attributes,
 		columns: {
 			type: 'number',
-			default: getSetting( 'defaultColumns', 3 ),
+			default: getSetting( 'default_columns', 3 ),
 		},
 		rows: {
 			type: 'number',
-			default: getSetting( 'defaultRows', 3 ),
+			default: getSetting( 'default_rows', 3 ),
 		},
 		stockStatus: {
 			type: 'array',

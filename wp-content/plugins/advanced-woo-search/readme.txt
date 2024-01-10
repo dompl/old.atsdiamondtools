@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 6.4
-Stable tag: 2.92
+Stable tag: 2.95
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,22 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 2.95 ( 2023-12-25 ) =
+* Add - Support for WooCommerce Show Single Variations by Iconic plugin
+* Update - Tested with WC 8.4
+* Update - Integration with GA4
+* Dev - Add awsAnalytics js event
+
+= 2.94 ( 2023-12-12 ) =
+* Add - Support for WooCommerce Memberships plugin
+* Update - Notices about plugin integrations
+
+= 2.93 ( 2023-11-27 ) =
+* Update - WCFM plugin integration. Fix search form on stores list page sidebar
+* Update - Tested with WC 8.3
+* Fix - Integration with Elessi theme. Fix search form after using shop filters
+* Dev - Add aws_index_started action
 
 = 2.92 ( 2023-11-14 ) =
 * Add - Support for Hestia theme

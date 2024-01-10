@@ -10,13 +10,11 @@ import {
 } from '@wordpress/element';
 import { useShippingData, useStoreCart } from '@woocommerce/base-context/hooks';
 import { getCurrencyFromPriceResponse } from '@woocommerce/price-format';
-import {
-	FormattedMonetaryAmount,
-	RadioControlOptionType,
-} from '@woocommerce/blocks-components';
+import FormattedMonetaryAmount from '@woocommerce/base-components/formatted-monetary-amount';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getSetting } from '@woocommerce/settings';
 import { Icon, mapMarker } from '@wordpress/icons';
+import type { RadioControlOption } from '@woocommerce/base-components/radio-control/types';
 import { CartShippingPackageShippingRate } from '@woocommerce/types';
 import {
 	isPackageRateCollectable,
@@ -69,7 +67,7 @@ const getPickupDetails = (
 const renderPickupLocation = (
 	option: CartShippingPackageShippingRate,
 	packageCount: number
-): RadioControlOptionType => {
+): RadioControlOption => {
 	const priceWithTaxes = getSetting( 'displayCartPricesIncludingTax', false )
 		? parseInt( option.price, 10 ) + parseInt( option.taxes, 10 )
 		: option.price;

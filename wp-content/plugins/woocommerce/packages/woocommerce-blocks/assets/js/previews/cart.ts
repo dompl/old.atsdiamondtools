@@ -39,7 +39,6 @@ export const previewCart: CartResponse = {
 		{
 			key: '1',
 			id: 1,
-			type: 'simple',
 			quantity: 2,
 			catalog_visibility: 'visible',
 			name: __( 'Beanie', 'woo-gutenberg-products-block' ),
@@ -121,7 +120,6 @@ export const previewCart: CartResponse = {
 		{
 			key: '2',
 			id: 2,
-			type: 'simple',
 			quantity: 1,
 			catalog_visibility: 'visible',
 			name: __( 'Cap', 'woo-gutenberg-products-block' ),

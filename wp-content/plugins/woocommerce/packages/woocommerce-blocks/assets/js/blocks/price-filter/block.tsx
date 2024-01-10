@@ -11,6 +11,7 @@ import { useCallback, useState, useEffect } from '@wordpress/element';
 import PriceSlider from '@woocommerce/base-components/price-slider';
 import FilterTitlePlaceholder from '@woocommerce/base-components/filter-placeholder';
 import { useDebouncedCallback } from 'use-debounce';
+import PropTypes from 'prop-types';
 import { getCurrencyFromPriceResponse } from '@woocommerce/price-format';
 import { getSettingWithCoercion } from '@woocommerce/settings';
 import { addQueryArgs, removeQueryArgs } from '@wordpress/url';
@@ -71,17 +72,6 @@ function formatPrice( value: unknown, minorUnit: number ) {
 	return Number( value ) * 10 ** minorUnit;
 }
 
-interface PriceFilterBlockProps {
-	/**
-	 * The attributes for this block.
-	 */
-	attributes: Attributes;
-	/**
-	 * Whether it's in the editor or frontend display.
-	 */
-	isEditor: boolean;
-}
-
 /**
  * Component displaying a price filter.
  *
@@ -92,16 +82,19 @@ interface PriceFilterBlockProps {
 const PriceFilterBlock = ( {
 	attributes,
 	isEditor = false,
-}: PriceFilterBlockProps ) => {
+}: {
+	attributes: Attributes;
+	isEditor: boolean;
+} ) => {
 	const setWrapperVisibility = useSetWraperVisibility();
 	const hasFilterableProducts = getSettingWithCoercion(
-		'hasFilterableProducts',
+		'has_filterable_products',
 		false,
 		isBoolean
 	);
 
 	const filteringForPhpTemplate = getSettingWithCoercion(
-		'isRenderingPhpTemplate',
+		'is_rendering_php_template',
 		false,
 		isBoolean
 	);
@@ -360,6 +353,17 @@ const PriceFilterBlock = ( {
 			</div>
 		</>
 	);
+};
+
+PriceFilterBlock.propTypes = {
+	/**
+	 * The attributes for this block.
+	 */
+	attributes: PropTypes.object.isRequired,
+	/**
+	 * Whether it's in the editor or frontend display.
+	 */
+	isEditor: PropTypes.bool,
 };
 
 export default PriceFilterBlock;

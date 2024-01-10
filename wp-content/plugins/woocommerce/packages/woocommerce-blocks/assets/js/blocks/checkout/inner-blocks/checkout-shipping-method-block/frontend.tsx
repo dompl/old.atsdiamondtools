@@ -3,7 +3,7 @@
  */
 import classnames from 'classnames';
 import { withFilteredAttributes } from '@woocommerce/shared-hocs';
-import { FormStep } from '@woocommerce/blocks-components';
+import { FormStep } from '@woocommerce/base-components/cart-checkout';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { CHECKOUT_STORE_KEY } from '@woocommerce/block-data';
 import { useShippingData } from '@woocommerce/base-context/hooks';
@@ -25,10 +25,12 @@ const FrontendBlock = ( {
 	showIcon,
 	shippingText,
 	localPickupText,
+	shippingCostRequiresAddress,
 }: {
 	title: string;
 	description: string;
 	showStepNumber: boolean;
+	shippingCostRequiresAddress: boolean;
 	children: JSX.Element;
 	className?: string;
 	showPrice: boolean;
@@ -90,6 +92,7 @@ const FrontendBlock = ( {
 				showIcon={ showIcon }
 				localPickupText={ localPickupText }
 				shippingText={ shippingText }
+				shippingCostRequiresAddress={ shippingCostRequiresAddress }
 			/>
 			{ children }
 		</FormStep>

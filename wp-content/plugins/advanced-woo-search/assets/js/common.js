@@ -116,8 +116,6 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             ajaxRequest: function() {
 
-                methods.analytics( searchFor, false );
-
                 var data = {
                     action: 'aws_action',
                     keyword : searchFor,
@@ -138,6 +136,8 @@ AwsHooks.filters = AwsHooks.filters || {};
                         data: data,
                         dataType: 'json',
                         success: function( response ) {
+
+                            methods.analytics( searchFor, false );
 
                             cachedResponse[searchFor] = response;
 
@@ -433,6 +433,10 @@ AwsHooks.filters = AwsHooks.filters || {};
             },
 
             analytics: function( label, submit ) {
+
+                /* from 2.95 */
+                methods.createAndDispatchEvent( document, 'awsAnalytics', { term: label, instance: instance, form: self, data: d } );
+
                 if ( d.useAnalytics ) {
 
                     try {
@@ -446,17 +450,24 @@ AwsHooks.filters = AwsHooks.filters || {};
                         }
 
                         if ( tagF ) {
+
                             tagF('event', 'AWS search', {
                                 'event_label': label,
                                 'event_category': 'AWS Search Term',
                                 'transport_type' : 'beacon'
                             });
+
+                            tagF('event', 'aws_search', {
+                                'aws_search_term': label
+                            });
+
                             if ( sPage ) {
                                 tagF('event', 'page_view', {
                                     'page_path': sPage,
                                     'page_title' : 'AWS search'
                                 });
                             }
+
                         }
 
                         if ( typeof ga !== 'undefined' && ga !== null ) {

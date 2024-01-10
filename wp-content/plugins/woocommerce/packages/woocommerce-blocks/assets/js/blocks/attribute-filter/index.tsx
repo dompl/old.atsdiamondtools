@@ -3,6 +3,7 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
+import { isFeaturePluginBuild } from '@woocommerce/block-settings';
 import { Icon, category } from '@wordpress/icons';
 import classNames from 'classnames';
 
@@ -26,6 +27,13 @@ registerBlockType( metadata, {
 	},
 	supports: {
 		...metadata.supports,
+		...( isFeaturePluginBuild() && {
+			__experimentalBorder: {
+				radius: false,
+				color: true,
+				width: false,
+			},
+		} ),
 	},
 	attributes: {
 		...metadata.attributes,

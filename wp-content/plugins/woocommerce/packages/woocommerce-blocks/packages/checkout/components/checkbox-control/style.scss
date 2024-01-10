@@ -9,7 +9,6 @@
 		position: relative;
 		cursor: pointer;
 		@include font-size(small);
-		margin-bottom: 0 !important;
 
 		input[type="checkbox"] {
 			cursor: inherit;
@@ -20,7 +19,7 @@
 		font-size: 1em;
 		appearance: none;
 		border: 2px solid $input-border-gray;
-		border-radius: $universal-border-radius;
+		border-radius: 2px;
 		box-sizing: border-box;
 		height: em(24px);
 		width: em(24px);

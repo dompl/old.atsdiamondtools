@@ -567,7 +567,6 @@ function init_ag_epdq() {
 		 */
 		public function successful_transaction( $args ) {
 
-			global $woocommerce;
 			$order = new WC_Order( $args['idOrder'] );
 
 			// Catch and stop if order is already paid for.
@@ -587,24 +586,21 @@ function init_ag_epdq() {
 			}
 			// END
 
-			$note = 'ePDQ Status: - ' . AG_errors::get_epdq_status_code( $args['STATUS'] ) . '</p>';
-			$errornote = 'ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $args['NCERROR'] ) . '</p>';
-
 			$order_notes = array(
 				'Order ID                            : ' => $args['ORDERID'] ?? '',
-				'Amount                              : ' => $args['AMOUNT'] = $args['AMOUNT'] ?? '',
-				'Order Currency                      : ' => $args['CURRENCY'] = $args['CURRENCY'] ?? '',
-				'Payment Method                      : ' => $args['PM'] = $args['PM'] ?? '',
-				'Acceptance Code Returned By Acquirer: ' => $args['ACCEPTANCE'] = $args['ACCEPTANCE'] ?? '',
-				'Payment Reference In ePDQ System    : ' => $args['PAYID'] = $args['PAYID'] ?? '',
-				'Error Code                          : ' => $args['NCERROR'] = $args['NCERROR'] ?? '',
-				'Card Brand                          : ' => $args['BRAND'] = $args['BRAND'] ?? '',
-				'Transaction Date                    : ' => $args['TRXDATE'] = $args['TRXDATE'] ?? '',
-				'Cardholder/Customer Name            : ' => $args['CN'] = $args['CN'] ?? '',
-				'Customer IP                         : ' => $args['IP'] = $args['IP'] ?? '',
-				'AAV Result For Address              : ' => $args['AAVADDRESS'] = $args['AAVADDRESS'] ?? '',
-				'Result for AAV Check                : ' => $args['AAVCHECK'] = $args['AAVCHECK'] ?? '',
-				'AAV Result For Postcode             : ' => $args['AAVZIP'] = $args['AAVZIP'] ?? '',
+				'Amount                              : ' => $args['AMOUNT'] ?? '',
+				'Order Currency                      : ' => $args['CURRENCY'] ?? '',
+				'Payment Method                      : ' => $args['PM'] ?? '',
+				'Acceptance Code Returned By Acquirer: ' => $args['ACCEPTANCE'] ?? '',
+				'Payment Reference In ePDQ System    : ' => $args['PAYID'] ?? '',
+				'Error Code                          : ' => $args['NCERROR'] ?? '',
+				'Card Brand                          : ' => $args['BRAND'] ?? '',
+				'Transaction Date                    : ' => $args['TRXDATE'] ?? '',
+				'Cardholder/Customer Name            : ' => $args['CN'] ?? '',
+				'Customer IP                         : ' => $args['IP'] ?? '',
+				'AAV Result For Address              : ' => $args['AAVADDRESS'] ?? '',
+				'Result for AAV Check                : ' => $args['AAVCHECK'] ?? '',
+				'AAV Result For Postcode             : ' => $args['AAVZIP'] ?? '',
 			);
 
 			AG_ePDQ_Helpers::update_order_notes( $order, $order_notes );

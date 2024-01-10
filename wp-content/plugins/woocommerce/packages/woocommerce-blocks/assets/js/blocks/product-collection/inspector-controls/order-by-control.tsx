@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { BlockEditProps } from '@wordpress/blocks';
 import {
 	SelectControl,
 	// @ts-expect-error Using experimental features
@@ -13,11 +14,11 @@ import {
  * Internal dependencies
  */
 import {
+	ProductCollectionAttributes,
 	TProductCollectionOrder,
 	TProductCollectionOrderBy,
-	QueryControlProps,
 } from '../types';
-import { getDefaultQuery } from '../constants';
+import { getDefaultSettings } from '../constants';
 
 const orderOptions = [
 	{
@@ -46,21 +47,27 @@ const orderOptions = [
 	},
 ];
 
-const OrderByControl = ( props: QueryControlProps ) => {
-	const { query, setQueryAttribute } = props;
-	const { order, orderBy } = query;
-	const defaultQuery = getDefaultQuery( query );
+const OrderByControl = (
+	props: BlockEditProps< ProductCollectionAttributes >
+) => {
+	const { order, orderBy } = props.attributes.query;
+	const defaultSettings = getDefaultSettings( props.attributes );
 
 	return (
 		<ToolsPanelItem
 			label={ __( 'Order by', 'woo-gutenberg-products-block' ) }
 			hasValue={ () =>
-				order !== defaultQuery?.order ||
-				orderBy !== defaultQuery?.orderBy
+				order !== defaultSettings.query?.order ||
+				orderBy !== defaultSettings.query?.orderBy
 			}
 			isShownByDefault
 			onDeselect={ () => {
-				setQueryAttribute( defaultQuery );
+				props.setAttributes( {
+					query: {
+						...props.attributes.query,
+						...defaultSettings.query,
+					},
+				} );
 			} }
 		>
 			<SelectControl
@@ -69,9 +76,12 @@ const OrderByControl = ( props: QueryControlProps ) => {
 				label={ __( 'Order by', 'woo-gutenberg-products-block' ) }
 				onChange={ ( value ) => {
 					const [ newOrderBy, newOrder ] = value.split( '/' );
-					setQueryAttribute( {
-						order: newOrder as TProductCollectionOrder,
-						orderBy: newOrderBy as TProductCollectionOrderBy,
+					props.setAttributes( {
+						query: {
+							...props.attributes.query,
+							order: newOrder as TProductCollectionOrder,
+							orderBy: newOrderBy as TProductCollectionOrderBy,
+						},
 					} );
 				} }
 			/>

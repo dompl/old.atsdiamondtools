@@ -230,17 +230,6 @@ class ListTable extends WP_List_Table {
 		$title         = esc_html( $post_type->labels->name );
 		$add_new       = esc_html( $post_type->labels->add_new );
 		$new_page_link = $this->page_controller->get_new_page_url( $this->order_type );
-		$search_label  = '';
-
-		if ( ! empty( $this->order_query_args['s'] ) ) {
-			$search_label  = '<span class="subtitle">';
-			$search_label .= sprintf(
-				/* translators: %s: Search query. */
-				__( 'Search results for: %s', 'woocommerce' ),
-				'<strong>' . esc_html( $this->order_query_args['s'] ) . '</strong>'
-			);
-			$search_label .= '</span>';
-		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo wp_kses_post(
@@ -248,7 +237,6 @@ class ListTable extends WP_List_Table {
 			<div class='wrap'>
 				<h1 class='wp-heading-inline'>{$title}</h1>
 				<a href='" . esc_url( $new_page_link ) . "' class='page-title-action'>{$add_new}</a>
-				{$search_label}
 				<hr class='wp-header-end'>"
 		);
 
@@ -723,15 +711,20 @@ class ListTable extends WP_List_Table {
 		global $wpdb;
 
 		$orders_table = esc_sql( OrdersTableDataStore::get_orders_table_name() );
-		$utc_offset = wc_timezone_offset();
 
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$order_dates = $wpdb->get_results(
 			"
-				SELECT DISTINCT YEAR( t.date_created_local ) AS year,
-								MONTH( t.date_created_local ) AS month
-				FROM ( SELECT DATE_ADD( date_created_gmt, INTERVAL $utc_offset SECOND ) AS date_created_local FROM $orders_table WHERE status != 'trash' ) t
-				ORDER BY year DESC, month DESC
+				SELECT DISTINCT YEAR( date_created_gmt ) AS year,
+								MONTH( date_created_gmt ) AS month
+
+				FROM $orders_table
+
+				WHERE status NOT IN (
+					'trash'
+				)
+
+				ORDER BY year DESC, month DESC;
 			"
 		);
 
@@ -874,7 +867,7 @@ class ListTable extends WP_List_Table {
 	public function column_cb( $item ) {
 		ob_start();
 		?>
-		<input id="cb-select-<?php echo esc_attr( $item->get_id() ); ?>" type="checkbox" name="id[]" value="<?php echo esc_attr( $item->get_id() ); ?>" />
+		<input id="cb-select-<?php echo esc_attr( $item->get_id() ); ?>" type="checkbox" name="<?php echo esc_attr( $this->_args['singular'] ); ?>[]" value="<?php echo esc_attr( $item->get_id() ); ?>" />
 
 		<div class="locked-indicator">
 			<span class="locked-indicator-icon" aria-hidden="true"></span>
@@ -1204,7 +1197,7 @@ class ListTable extends WP_List_Table {
 
 			$action = 'delete';
 		} else {
-			$ids = isset( $_REQUEST['id'] ) ? array_reverse( array_map( 'absint', (array) $_REQUEST['id'] ) ) : array();
+			$ids = isset( $_REQUEST['order'] ) ? array_reverse( array_map( 'absint', (array) $_REQUEST['order'] ) ) : array();
 		}
 
 		/**
@@ -1347,11 +1340,13 @@ class ListTable extends WP_List_Table {
 	 * @return int Number of orders that were trashed.
 	 */
 	private function do_delete( array $ids, bool $force_delete = false ): int {
+		$orders_store = wc_get_container()->get( OrdersTableDataStore::class );
+		$delete_args  = $force_delete ? array( 'force_delete' => true ) : array();
 		$changed      = 0;
 
 		foreach ( $ids as $id ) {
 			$order = wc_get_order( $id );
-			$order->delete( $force_delete );
+			$orders_store->delete( $order, $delete_args );
 			$updated_order = wc_get_order( $id );
 
 			if ( ( $force_delete && false === $updated_order ) || ( ! $force_delete && $updated_order->get_status() === 'trash' ) ) {

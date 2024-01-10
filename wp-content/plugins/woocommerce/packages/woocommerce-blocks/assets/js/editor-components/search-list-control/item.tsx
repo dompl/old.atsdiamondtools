@@ -40,7 +40,7 @@ const ItemLabel = ( props: { item: SearchListItemProps; search: string } ) => {
 	);
 };
 
-export const SearchListItem = < T extends object = object >( {
+export const SearchListItem = ( {
 	countLabel,
 	className,
 	depth = 0,
@@ -53,7 +53,7 @@ export const SearchListItem = < T extends object = object >( {
 	selected,
 	useExpandedPanelId,
 	...props
-}: renderItemArgs< T > ): JSX.Element => {
+}: renderItemArgs ): JSX.Element => {
 	const [ expandedPanelId, setExpandedPanelId ] = useExpandedPanelId;
 	const showCount =
 		countLabel !== undefined &&
@@ -128,10 +128,7 @@ export const SearchListItem = < T extends object = object >( {
 						)
 							? { indeterminate: true }
 							: {} ) }
-						label={ getHighlightedName(
-							decodeEntities( item.name ),
-							search
-						) }
+						label={ getHighlightedName( item.name, search ) }
 						onChange={ () => {
 							if ( isSelected ) {
 								onSelect(
@@ -163,35 +160,30 @@ export const SearchListItem = < T extends object = object >( {
 	) : (
 		<label htmlFor={ id } className={ classes }>
 			{ isSingle ? (
-				<>
-					<input
-						{ ...props }
-						type="radio"
-						id={ id }
-						name={ name }
-						value={ item.value }
-						onChange={ onSelect( item ) }
-						checked={ isSelected }
-						className="woocommerce-search-list__item-input"
-					></input>
-
-					<ItemLabel item={ item } search={ search } />
-				</>
-			) : (
-				<CheckboxControl
-					{ ...props }
+				<input
+					type="radio"
 					id={ id }
 					name={ name }
-					className="woocommerce-search-list__item-input"
-					value={ decodeEntities( item.value ) }
-					label={ getHighlightedName(
-						decodeEntities( item.name ),
-						search
-					) }
+					value={ item.value }
 					onChange={ onSelect( item ) }
 					checked={ isSelected }
-				/>
+					className="woocommerce-search-list__item-input"
+					{ ...props }
+				></input>
+			) : (
+				<input
+					type="checkbox"
+					id={ id }
+					name={ name }
+					value={ item.value }
+					onChange={ onSelect( item ) }
+					checked={ isSelected }
+					className="woocommerce-search-list__item-input"
+					{ ...props }
+				></input>
 			) }
+
+			<ItemLabel item={ item } search={ search } />
 
 			{ showCount ? <Count label={ countLabel || item.count } /> : null }
 		</label>

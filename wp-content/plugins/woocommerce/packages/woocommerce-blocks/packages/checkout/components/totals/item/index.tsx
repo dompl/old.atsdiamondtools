@@ -3,6 +3,7 @@
  */
 import classnames from 'classnames';
 import { isValidElement } from '@wordpress/element';
+import FormattedMonetaryAmount from '@woocommerce/base-components/formatted-monetary-amount';
 import type { ReactElement, ReactNode } from 'react';
 import type { Currency } from '@woocommerce/price-format';
 
@@ -10,7 +11,6 @@ import type { Currency } from '@woocommerce/price-format';
  * Internal dependencies
  */
 import './style.scss';
-import FormattedMonetaryAmount from '../../../../components/formatted-monetary-amount';
 
 export interface TotalsItemProps {
 	className?: string;

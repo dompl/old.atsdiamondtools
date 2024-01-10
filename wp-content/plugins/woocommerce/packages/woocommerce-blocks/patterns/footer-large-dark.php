@@ -7,8 +7,10 @@
  */
 ?>
 
-<!-- wp:group {"className":"wc-blocks-footer-pattern","align":"full","style":{"spacing":{"padding":{"top":"32px","right":"4%","bottom":"32px","left":"4%"},"blockGap":"40px"},"elements":{"link":{"color":{"text":"var:preset|color|background"}}}},"backgroundColor":"black","textColor":"white"} -->
-<div class="wc-blocks-footer-pattern wp-block-group alignfull has-background-color has-white-color has-black-background-color has-text-color has-background has-link-color" style="padding-top:32px;padding-right:4%;padding-bottom:32px;padding-left:4%">
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"32px","right":"4%","bottom":"32px","left":"4%"},"blockGap":"40px"},"elements":{"link":{"color":{"text":"var:preset|color|background"}}}},"backgroundColor":"black","textColor":"white"} -->
+<div
+	class="wp-block-group alignfull has-background-color has-white-color has-black-background-color has-text-color has-background has-link-color"
+	style="padding-top:32px;padding-right:4%;padding-bottom:32px;padding-left:4%">
 	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":"16px"}}} -->
 	<div class="wp-block-columns alignwide">
 		<!-- wp:column {"width":"45%","style":{"spacing":{"padding":{"right":"50px"}}}} -->
@@ -22,11 +24,11 @@
 				<!-- /wp:spacer -->
 
 				<!-- wp:heading {"level":5} -->
-				<h5><?php esc_html_e( 'Join the community', 'woocommerce' ); ?></h5>
+				<h5>Join the community</h5>
 				<!-- /wp:heading -->
 
 				<!-- wp:paragraph -->
-				<p><?php esc_html_e( 'Learn about new products and discounts!', 'woocommerce' ); ?></p>
+				<p>Learn about new products and discounts!</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:spacer {"height":"20px"} -->
@@ -58,7 +60,7 @@
 
 		<!-- wp:column {"verticalAlignment":"top","width":"20%","style":{"spacing":{"blockGap":"16px"}}} -->
 		<div class="wp-block-column is-vertically-aligned-top" style="flex-basis:20%">
-			<!-- wp:woocommerce/customer-account {"displayStyle":"text_only","fontSize":"small"} /-->
+			<!-- wp:woocommerce/customer-account {"displayStyle":"text_only"} /-->
 		</div>
 		<!-- /wp:column -->
 	</div>
@@ -68,23 +70,15 @@
 	<div class="wp-block-group alignfull has-background-color has-text-color" style="padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px">
 		<!-- wp:group {"style":{"spacing":{"blockGap":"8px"},"elements":{"link":{"color":{"text":"var:preset|color|background"}}}},"textColor":"background","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group has-background-color has-text-color has-link-color">
-			<!-- wp:paragraph -->
-			<p>@ <?php echo esc_html( gmdate( 'Y' ) ); ?></p>
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"12px"}}} -->
+			<p style="font-size:12px">@ 2022</p>
 			<!-- /wp:paragraph -->
-			<!-- wp:site-title /-->
+			<!-- wp:site-title {"style":{"typography":{"fontStyle":"normal","fontWeight":"400","fontSize":"12px"}}} /-->
 		</div>
 		<!-- /wp:group -->
 
-		<!-- wp:paragraph -->
-		<p><em>
-			<?php
-			echo sprintf(
-				/* translators: %s WooCommerce link */
-				esc_html__( 'Built with %s', 'woocommerce' ),
-				'<a href="https://woocommerce.com/" target="_blank" rel="noreferrer nofollow">WooCommerce</a>'
-			);
-			?>
-		</em></p>
+		<!-- wp:paragraph {"style":{"typography":{"fontSize":"14px"}}} -->
+		<p style="font-size:14px"><em>Built with <a href="https://woocommerce.com/">WooCommerce</a> </em></p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->

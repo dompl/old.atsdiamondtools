@@ -65,7 +65,7 @@ const defaultTemplate = [
 	[
 		'woocommerce/product-new',
 		{
-			columns: 4,
+			columns: 3,
 			rows: 1,
 		},
 	],

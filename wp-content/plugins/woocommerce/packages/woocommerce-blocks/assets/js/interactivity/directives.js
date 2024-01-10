@@ -1,8 +1,11 @@
-import { useContext, useMemo, useEffect, useLayoutEffect } from 'preact/hooks';
+import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { deepSignal, peek } from 'deepsignal';
 import { useSignalEffect } from './utils';
 import { directive } from './hooks';
-import { prefetch, navigate } from './router';
+import { prefetch, navigate, canDoClientSideNavigation } from './router';
+
+// Check if current page can do client-side navigation.
+const clientSideNavigation = canDoClientSideNavigation( document.head );
 
 const isObject = ( item ) =>
 	item && typeof item === 'object' && ! Array.isArray( item );
@@ -56,23 +59,6 @@ export default () => {
 			} );
 		} );
 	} );
-
-	// data-wc-layout-init--[name]
-	directive(
-		'layout-init',
-		( {
-			directives: { 'layout-init': layoutInit },
-			context,
-			evaluate,
-		} ) => {
-			const contextValue = useContext( context );
-			Object.values( layoutInit ).forEach( ( path ) => {
-				useLayoutEffect( () => {
-					return evaluate( path, { context: contextValue } );
-				}, [] );
-			} );
-		}
-	);
 
 	// data-wc-on--[event]
 	directive( 'on', ( { directives: { on }, element, evaluate, context } ) => {
@@ -165,25 +151,25 @@ export default () => {
 		}
 	);
 
-	// data-wc-navigation-link
+	// data-wc-link
 	directive(
-		'navigation-link',
+		'link',
 		( {
 			directives: {
-				'navigation-link': { default: link },
+				link: { default: link },
 			},
 			props: { href },
 			element,
 		} ) => {
 			useEffect( () => {
 				// Prefetch the page if it is in the directive options.
-				if ( link?.prefetch ) {
+				if ( clientSideNavigation && link?.prefetch ) {
 					prefetch( href );
 				}
 			} );
 
 			// Don't do anything if it's falsy.
-			if ( link !== false ) {
+			if ( clientSideNavigation && link !== false ) {
 				element.props.onclick = async ( event ) => {
 					event.preventDefault();
 

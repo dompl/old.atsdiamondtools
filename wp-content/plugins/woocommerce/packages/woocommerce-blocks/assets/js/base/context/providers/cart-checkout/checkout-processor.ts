@@ -58,7 +58,6 @@ const CheckoutProcessor = () => {
 		orderNotes,
 		shouldCreateAccount,
 		extensionData,
-		customerId,
 	} = useSelect( ( select ) => {
 		const store = select( CHECKOUT_STORE_KEY );
 		return {
@@ -70,7 +69,6 @@ const CheckoutProcessor = () => {
 			orderNotes: store.getOrderNotes(),
 			shouldCreateAccount: store.getShouldCreateAccount(),
 			extensionData: store.getExtensionData(),
-			customerId: store.getCustomerId(),
 		};
 	} );
 
@@ -295,20 +293,12 @@ const CheckoutProcessor = () => {
 							__internalProcessCheckoutResponse( response );
 						} );
 				} catch {
-					let errorMessage = __(
-						'Something went wrong when placing the order. Check your email for order updates before retrying.',
-						'woo-gutenberg-products-block'
-					);
-
-					if ( customerId !== 0 ) {
-						errorMessage = __(
-							"Something went wrong when placing the order. Check your account's order history or your email for order updates before retrying.",
-							'woo-gutenberg-products-block'
-						);
-					}
 					processErrorResponse( {
 						code: 'unknown_error',
-						message: errorMessage,
+						message: __(
+							'Something went wrong. Please try placing your order again.',
+							'woo-gutenberg-products-block'
+						),
 						data: null,
 					} );
 				}

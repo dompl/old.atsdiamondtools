@@ -42,7 +42,7 @@
 		width: 100%;
 		box-sizing: border-box;
 		background-color: $gray-100;
-		border-radius: $universal-border-radius;
+		border-radius: 4px;
 		padding: 1px em($gap-small);
 		margin-top: em($gap-smaller);
 		@include font-size(regular);

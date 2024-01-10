@@ -34,6 +34,18 @@ Automatic updates should work like a charm; as always though, update on a stagin
 
 == Changelog ==
 
+= v.4.6.2 - 11/12/23 =
+* Dev             - CSS fix for traffic light system, third party plugin changing style of TLS.
+* Update          - Freemius SDK updated.
+
+= v.4.6.1 - 23/11/23 =
+* Fix             - Fix issue where TLS data would not save for Subscription renewal payments.
+* Fix             - Fixed issue with setup wizard.
+* Fix             - Fixed issue with MOTO button displaying on pending orders which have not been set as ePDQ payment orders.
+* Dev             - Improvement to logic for saving order notes data.
+* Change          - Changed URL for feature request on welcome page.
+* Change          - Bump tested WooCommerce (8.3).
+
 = v.4.6.0 - 15/11/23 =
 * New             - Customers now have the ability to add new cards for tokenization directly from their account page, which is particularly valuable for managing subscriptions and token payments.
 * New             - The redirection to ePDQ during the order placement process has been optimized, eliminating the need for an extra page to appear when the "Place Order" button is clicked.

@@ -50,14 +50,12 @@ const NoRating = ( { parentClassName }: { parentClassName: string } ) => {
 	return (
 		<div
 			className={ classnames(
-				'wc-block-components-product-rating-stars__norating-container',
-				`${ parentClassName }-product-rating-stars__norating-container`
+				'wc-block-components-product-rating__norating-container',
+				`${ parentClassName }-product-rating__norating-container`
 			) }
 		>
 			<div
-				className={
-					'wc-block-components-product-rating-stars__norating'
-				}
+				className={ 'wc-block-components-product-rating__norating' }
 				role="img"
 			>
 				<span style={ starStyle } />
@@ -94,8 +92,8 @@ const Rating = ( props: RatingProps ): JSX.Element => {
 	return (
 		<div
 			className={ classnames(
-				'wc-block-components-product-rating-stars__stars',
-				`${ parentClassName }__product-rating-stars__stars`
+				'wc-block-components-product-rating__stars',
+				`${ parentClassName }__product-rating__stars`
 			) }
 			role="img"
 			aria-label={ ratingText }
@@ -126,7 +124,7 @@ export const Block = ( props: ProductRatingStarsProps ): JSX.Element | null => {
 
 	const className = classnames(
 		styleProps.className,
-		'wc-block-components-product-rating-stars',
+		'wc-block-components-product-rating',
 		{
 			[ `${ parentClassName }__product-rating` ]: parentClassName,
 			[ `has-text-align-${ textAlign }` ]: textAlign,
