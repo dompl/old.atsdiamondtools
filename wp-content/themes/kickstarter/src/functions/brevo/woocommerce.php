@@ -6,7 +6,7 @@ function ats_add_checkout_newsletter_opt_in() {
     woocommerce_form_field( 'newsletter_subscribe', array(
         'type'  => 'checkbox',
         'class' => array( 'input-checkbox' ),
-        'label' => __( 'Subscribe to our newsletter', 'woocommerce' )
+        'label' => __( 'I do not wish to sign up for the ATS Diamond Tools newsletter', 'woocommerce' )
     ) );
 }
 
@@ -19,7 +19,7 @@ function ats_subscribe_customer_to_newsletter( $order_id ) {
     $last_name  = $order->get_billing_last_name();
     $subscribe  = get_post_meta( $order_id, '_newsletter_subscribe', true );
 
-    if ( $subscribe && !  empty( $user_email ) ) {
+    if (  !  $subscribe && !  empty( $user_email ) ) {
         // Now you have $user_email, $first_name, and $last_name
         // Prepare the contact import string with first name and last name
         $contactImportString = "EMAIL;FIRSTNAME;LASTNAME;SMS\n";
