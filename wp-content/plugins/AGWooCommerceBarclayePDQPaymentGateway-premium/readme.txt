@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.4
+Tested up to: 6.4.2
 Stable tag: 6.2
 
 == Description ==
@@ -31,8 +31,14 @@ Ok not a problem, lets see if you can fix it by following these steps.
 
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
-
 == Changelog ==
+
+= v.4.6.3 - 17/01/24 =
+* Dev             - Changed error code in order notes to display the error code meaning, rather than the code number.
+* Dev             - New logic added to add_order_check() to catch we are on an order.
+* Dev             - Check that token is set on successful_transaction().
+* Change          - Bump tested WooCommerce (8.5.1).
+* Update          - Freemius SDK updated.
 
 = v.4.6.2 - 11/12/23 =
 * Dev             - CSS fix for traffic light system, third party plugin changing style of TLS.

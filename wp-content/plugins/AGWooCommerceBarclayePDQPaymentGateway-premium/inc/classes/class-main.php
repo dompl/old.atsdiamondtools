@@ -577,7 +577,7 @@ function init_ag_epdq() {
 			}
 
 			// Save payment token to user
-			if( $this->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) {
+			if( isset( $this->token ) && $this->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) {
 				AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
 				// Drop BIN
 				unset( $args['BIN'] );
@@ -593,7 +593,7 @@ function init_ag_epdq() {
 				'Payment Method                      : ' => $args['PM'] ?? '',
 				'Acceptance Code Returned By Acquirer: ' => $args['ACCEPTANCE'] ?? '',
 				'Payment Reference In ePDQ System    : ' => $args['PAYID'] ?? '',
-				'Error Code                          : ' => $args['NCERROR'] ?? '',
+				'Error Code                          : ' => AG_errors::get_epdq_ncerror( $args['NCERROR'] ?? '' ),
 				'Card Brand                          : ' => $args['BRAND'] ?? '',
 				'Transaction Date                    : ' => $args['TRXDATE'] ?? '',
 				'Cardholder/Customer Name            : ' => $args['CN'] ?? '',

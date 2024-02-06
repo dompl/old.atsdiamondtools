@@ -117,11 +117,15 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public function add_order_check() {
 
+		if( ! isset( $_GET['page'] ) || ! isset( $_GET['id'] ) || $_GET['page'] != 'wc-orders' ) {
+			return;
+		}
+
 		if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
 			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
 		} else {
 			global $post;
-			$order = wc_get_order( $post->ID );
+			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $post->ID ) );
 		}
 
 		// Merchant has set to hide feature
@@ -169,7 +173,11 @@ class ag_ePDQ_fraud_checks {
 			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
 		} else {
 			global $post;
-			$order = wc_get_order( $post->ID );
+			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $post->ID ) );
+		}
+
+		if( ! $order ) {
+			return;
 		}
 
 		$ePDQ_settings = new epdq_checkout();
@@ -180,10 +188,6 @@ class ag_ePDQ_fraud_checks {
 		$search_CVC_check = array_search( 'CVCCheck', $keys, TRUE );
 		$search_3D_check = array_search( 'ECI', $keys, TRUE );
 		$search_aav_check = array_search( 'AAVCheck', $keys, TRUE );
-
-		if( ! $order ) {
-			return;
-		}
 
 		// Is EPDQ order check
 		if( $order->get_payment_method() !== 'epdq_checkout' ) {
