@@ -50,7 +50,14 @@ function ats_subscribe_to_newsletter() {
         }
 
         if ( $result ) {
-            wp_mail( 'info@redfrogstudio.co.uk', 'ATS Newsletter Signup', 'Hi Paul<br> We have a new newsletter subscriber on out website. The email address is ' . $email . '<br>Nice!' );
+            $email   = sanitize_email( $email ); // Make sure to sanitize the email address
+            $headers = array( 'Content-Type: text/html; charset=UTF-8' );
+            wp_mail(
+                'paul@atsdiamondtools.co.uk',
+                'ATS Newsletter Signup',
+                'Hi Paul<br> We have a new newsletter subscriber on our website. The email address is ' . $email . '<br>Nice!',
+                $headers
+            );
             wp_send_json_success( 'Thank you for your subscription!' );
         } else {
             wp_send_json_error( 'There was an error with your subscription.' );
