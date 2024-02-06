@@ -4,8 +4,8 @@
  */
 
 #footer {
-  margin-top: spacer();
-  padding: spacer() 0 0;
+  margin-top: 60px;
+  padding: 60px 0 0;
   @include em("font-size", 14px);
   background: color(gray-lightest);
 

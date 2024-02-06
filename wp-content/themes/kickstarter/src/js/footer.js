@@ -1,6 +1,36 @@
 // ==== FOOTER ==== //
 (function ($) {
 	$(function () {
+		// Newsletter signup
+		$("#ats-newsletter form").submit(function (e) {
+			e.preventDefault(); // Prevent the form from submitting the traditional way
+			$("#ats-newsletter").removeClass("error").addClass("active");
+			var formData = {
+				action: "subscribe_to_newsletter", // The action hook to run on the server-side
+				email: $('input[name="ats-nl-email"]').val(), // The email address from the form
+				nonce: AtsNewsletter.nonce, // Security nonce
+			};
+
+			$.ajax({
+				type: "POST",
+				url: AtsNewsletter.ajax_url, // URL to WordPress AJAX handling file
+				data: formData,
+				success: function (response) {
+					$("#ats-newsletter")
+						.removeClass("error")
+						.removeClass("active")
+						.addClass("success")
+						.html("<p>Thank you for your subscription!</p>"); // Display thank you message
+				},
+				error: function () {
+					$("#ats-newsletter")
+						.removeClass("active")
+						.addClass("error") // Error handling
+						.html("<p>There was an error. Please try again later.</p>");
+				},
+			});
+		});
+
 		function checkPasswordStrength(
 			$pass1,
 			$pass2,
