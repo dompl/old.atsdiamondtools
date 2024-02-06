@@ -288,6 +288,28 @@
     }
   }
 }
+#newsletter_subscribe_field {
+  background-color: color(brand);
+  padding: 5px;
+  color: white;
+  .woocommerce-input-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  label {
+    margin: 0 !important;
+    padding: 0 !important;
+    .optional {
+      display: none;
+    }
+  }
+  input {
+    float: left;
+    margin-top: 3px;
+    margin-right: 4px;
+  }
+}
 // #footer-signup {
 //   $height: 40px;
 //   position: relative;
