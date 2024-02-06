@@ -20,7 +20,9 @@
 						.removeClass("error")
 						.removeClass("active")
 						.addClass("success")
-						.html("<p>Thank you for your subscription!</p>"); // Display thank you message
+						.html(
+							"<h4>Welcome aboard! We're delighted to count you among our valued subscribers.</h4><p>Thank you for choosing ATS Diamond Tools.</p>"
+						); // Display thank you message
 				},
 				error: function () {
 					$("#ats-newsletter")

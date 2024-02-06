@@ -1,11 +1,16 @@
 <?php
 
-add_action( 'wp_head', function () {?>
+add_action( 'new_newsletter_signup', function () {$selectedOffer = getRandomOffer( $offers );?>
 <div id="ats-newsletter">
-    <form action="#" method="post">
-        <input type="email" name="ats-nl-email" placeholder="Your email address" required>
-        <input type="submit" value="Subscribe">
-    </form>
+    <h4><?php echo $selectedOffer['title']; ?></h4>
+    <p class="description"><?php echo $selectedOffer['description']; ?></p>
+    <div class="nl-form">
+        <form action="#" method="post">
+            <input type="email" name="ats-nl-email" placeholder="Your email address" required>
+            <input type="submit" value="Subscribe">
+        </form>
+    </div>
+    <div class="note">By signing up, I agree to ATS Diamond Tools' <a href="/privacy-statement/" target="_blank" title="ATS Diamond Tools' Privacy Policy">Privacy Policy</a> and consent to my data being collected and stored.</div>
 </div>
 <?php } );
 
@@ -16,6 +21,7 @@ function ats_subscribe_to_newsletter() {
     check_ajax_referer( 'ats-newsletter-nonce', 'nonce' );
 
     if ( isset( $_POST['email'] ) && filter_var( $_POST['email'], FILTER_VALIDATE_EMAIL ) ) {
+
         $email = sanitize_email( $_POST['email'] );
 
         // Configure API key authorization
@@ -44,6 +50,7 @@ function ats_subscribe_to_newsletter() {
         }
 
         if ( $result ) {
+            wp_mail( 'info@redfrogstudio.co.uk', 'ATS Newsletter Signup', 'Hi Paul<br> We have a new newsletter subscriber on out website. The email address is ' . $email . '<br>Nice!' );
             wp_send_json_success( 'Thank you for your subscription!' );
         } else {
             wp_send_json_error( 'There was an error with your subscription.' );
