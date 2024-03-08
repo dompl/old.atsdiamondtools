@@ -1,8 +1,10 @@
 // ==== FOOTER ==== //
 (function ($) {
 	$(function () {
-		var inst = $("[data-remodal-id=modal]").remodal();
-		inst.open();
+		if ($.fn.remodal && $("[data-remodal-id='modal']").length > 0) {
+			var inst = $("[data-remodal-id='modal']").remodal();
+			inst.open();
+		}
 		// Newsletter signup
 		$("#ats-newsletter form").submit(function (e) {
 			e.preventDefault(); // Prevent the form from submitting the traditional way

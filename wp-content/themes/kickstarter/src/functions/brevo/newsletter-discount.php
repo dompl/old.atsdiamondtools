@@ -28,7 +28,7 @@ function auto_apply_coupon_based_on_query() {
 function coupon_applied_popup_script() {
     echo '<div class="remodal" data-remodal-id="modal">
     <button data-remodal-action="close" class="remodal-close"></button>
-    <img src="http://atsdiamondtools.test/wp-content/themes/kickstarter/build/img/theme/logo-new.png" width="300" />
+    <img src="https://atsdiamondtools.co.uk/wp-content/themes/kickstarter/build/img/theme/logo-new.png" width="300" />
     <h1>Congratulations! Your 10% discount is now successfully activated.</h1>
     <p>
     Your exclusive 10% discount will be automatically applied at the checkout, ensuring you enjoy immediate savings on your purchase. There\'s no need for you to do anything further - simply proceed to checkout to see the discount applied.<br><br><strong>Enjoy your shopping with us!</strong>
