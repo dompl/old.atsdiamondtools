@@ -101,6 +101,7 @@ module.exports = {
 				src + "js/lib/navigation.js",
 				src + "js/lib/jquery-countdown.js",
 				src + "js/lib/countdown.js",
+				src + "js/lib/remodal.js",
 				src + "js/assets/navigation.js",
 				src + "js/lib/slick.js", // https://github.com/kenwheeler/slick
 				// src + "js/lib/clock.js", // Clock for delivery countdown
