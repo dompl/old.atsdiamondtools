@@ -14,6 +14,8 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 
 	protected $name = 'epdq_checkout';
 
+	private $AGversion;
+
 	public function initialize() {
 
 		//$this->gateway = new epdq_checkout;
@@ -26,8 +28,9 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 	}
 
 	public function get_payment_method_script_handles() {
-
-		$version      = AG_ePDQ_server::$AGversion;
+		/* @phpstan-ignore-next-line */
+		$this->AGversion = AG_ePDQ_server::$AGversion;
+		$version      = $this->AGversion;
 		$script_url   = AG_ePDQ_server::plugin_url() . '/inc/blocks/js/wc-payment-method-epdq.js';
 		$handle       = 'wc-payment-method-epdq';
 		$dependencies = array();
@@ -54,10 +57,9 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 		];
 	}
 
-
 	public function get_supported_features() {
 
-		$gateways = WC()->payment_gateways->get_available_payment_gateways();
+		$gateways = WC()->payment_gateways->get_available_payment_gateways(); // @phpstan-ignore-line
 		if ( isset( $gateways['epdq_checkout'] ) ) {
 			$gateway = $gateways['epdq_checkout'];
 
@@ -77,7 +79,7 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 
 			$icons_src = [
 				$epdq_settings->title => [
-					'src' => AG_ePDQ_server_path . 'inc/assets/img/new_cards.png',
+					'src' => AG_ePDQ_server_path . 'inc/assets/img/new_cards.png', // @phpstan-ignore-line
 					'alt' => $epdq_settings->title,
 				],
 			];
@@ -87,7 +89,7 @@ final class epdq_checkout_block extends AbstractPaymentMethodType {
 			foreach( $epdq_settings->cardtypes as $cardtype ) {
 
 				$icons_src[ strtolower( $cardtype ) ] = array(
-					'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $cardtype ) . '.png',
+					'src' => AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $cardtype ) . '.png', // @phpstan-ignore-line
 					'alt' => $cardtype,
 				);
 

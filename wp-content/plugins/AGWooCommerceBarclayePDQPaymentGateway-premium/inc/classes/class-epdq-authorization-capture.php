@@ -77,7 +77,7 @@ class ag_capture {
 		if( $order->has_status( array( 'processing', 'completed' ) ) ) {
 			return;
 		}
-		echo '<button style="background: #007cba; color: white;" type="button" id="ag-capture-epdq" class="button ag-capture" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '">ePDQ Capture Payment</button > ';
+		echo '<button style="background: #007cba; color: white;" type="button" id="ag-capture-epdq" class="button ag-capture" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_server_path . '">ePDQ Capture Payment</button > '; // @phpstan-ignore-line
 
 	}
 
@@ -98,7 +98,7 @@ class ag_capture {
 				return;
 			}
 
-			wp_enqueue_script( self::$args['plugin_name'] . '-ag-capture', AG_ePDQ_server_path . "inc/assets/js/ag-capture.js", array( 'jquery' ), NULL, TRUE );
+			wp_enqueue_script( self::$args['plugin_name'] . '-ag-capture', AG_ePDQ_server_path . "inc/assets/js/ag-capture.js", array( 'jquery' ), NULL, TRUE ); // @phpstan-ignore-line
 			wp_localize_script( self::$args['plugin_name'] . '-ag-capture', 'ag_epdq_capture_var', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'msg'     => __( 'Are you sure you wish to check the status of this order? ', 'ag_epdq_server' ),
@@ -143,7 +143,7 @@ class ag_capture {
 		$data_post['OPERATION'] = 'SAS';
 		$data_post['PAYID'] = $payid;
 
-		if( get_woocommerce_currency() != 'GBP' && defined( 'ePDQ_PSPID' ) ) {
+		if( get_woocommerce_currency() != 'GBP' && defined( 'ePDQ_PSPID' ) && defined( 'ePDQ_apiUser' ) && defined( 'ePDQ_apiPassword' ) ) {
 			$data_post['PSPID'] = ePDQ_PSPID;
 			$data_post['USERID'] = ePDQ_apiUser;
 			$data_post['PSWD'] = ePDQ_apiPassword;
@@ -153,6 +153,7 @@ class ag_capture {
 			$data_post['PSWD'] = $refund_settings['PSWD'];
 		}
 
+		$shasign_arg = [];
 		if( isset( $settings['shain'] ) ) {
 
 			ksort( $data_post );

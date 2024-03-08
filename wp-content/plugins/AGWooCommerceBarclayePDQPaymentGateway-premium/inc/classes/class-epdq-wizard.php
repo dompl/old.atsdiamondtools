@@ -13,9 +13,9 @@ if ( class_exists( 'AG_ePDQ_Wizard_steps' ) ) {
 class AG_ePDQ_Wizard_steps {
 	public static $single_instance = null;
 	public static $args = array();
-	public static $ag_svg = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png';
+	public static $ag_svg = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png'; // @phpstan-ignore-line
 	public static $settings_key = 'woocommerce_epdq_checkout_settings';
-	public $shaMethod = 1;
+	public static $shaMethod = 1;
 
 
 	/**
@@ -302,7 +302,7 @@ class AG_ePDQ_Wizard_steps {
 
 		check_admin_referer( self::$args['plugin_name'] . '-wizard' );
 
-		$sha_method = isset( $_POST['sha_method'] ) ? AG_ePDQ_Helpers::AG_escape( $_POST['sha_method'] ) : $shaMethod;
+		$sha_method = isset( $_POST['sha_method'] ) ? AG_ePDQ_Helpers::AG_escape( $_POST['sha_method'] ) : self::$shaMethod;
 		$settings   = array( 'sha_method' => $sha_method );
 
 		$saved_settings = array_filter( (array) get_option( self::$settings_key, array() ) );
@@ -645,7 +645,7 @@ class AG_ePDQ_Wizard_steps {
 	public static function wizard_epdq_step_finish() { ?>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-        <script src="<?php echo AG_ePDQ_server_path . 'inc/assets/js/confetti.js'; ?>"></script>
+        <script src="<?php echo AG_ePDQ_server_path . 'inc/assets/js/confetti.js';  // @phpstan-ignore-line ?>"></script> 
 
         <form method="post" class="step">
             <input type="hidden" name="save_step" value="step_finish"/>
@@ -679,7 +679,7 @@ class AG_ePDQ_Wizard_steps {
                        'facebook-share-dialog',
                        'width=626,height=436');
                        return false;">
-                <img class="fb-share" src="<?php echo AG_ePDQ_server_path . 'inc/assets/img/fb-share.png'; ?>"/>
+                <img class="fb-share" src="<?php echo AG_ePDQ_server_path . 'inc/assets/img/fb-share.png';  // @phpstan-ignore-line ?>"/>
             </a>
 
             <p class="setup-text">

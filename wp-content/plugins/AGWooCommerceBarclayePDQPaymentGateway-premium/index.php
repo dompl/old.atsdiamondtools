@@ -8,10 +8,10 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.6.3
+ * Version: 4.6.5
  * Update URI: https://api.freemius.com
  * WC requires at least: 7.1
- * WC tested up to: 8.5.1
+ * WC tested up to: 8.6.1
  * License: GPL3
  */
 
@@ -23,16 +23,15 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.6.3
+ * @version  4.6.5
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
-	public static $AGversion = "4.6.3";
+	public static $AGversion = "4.6.5";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
-	public static $short_title = 'AG ePDQ';
 
 
 	/**
@@ -265,10 +264,6 @@ class AG_ePDQ_server {
 			'plugin_name' => self::$AG_ePDQ_slug,
 			'short_title' => self::$pluginName,
 		) );
-
-		//if (class_exists('WC_Subscriptions_Order') && class_exists('WC_Payment_Gateway_CC')) {
-		//	require_once AG_ePDQ_class . 'class-wc-subscriptions.php';
-		//}
 
 	}
 

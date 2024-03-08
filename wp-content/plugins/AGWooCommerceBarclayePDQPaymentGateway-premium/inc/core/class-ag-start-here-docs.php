@@ -65,9 +65,10 @@ class AG_start_here_docs {
 
 
 			    foreach ($links as $link) {
+					$title = htmlspecialchars($link->nodeValue, ENT_QUOTES);
 				    $return[] = array(
 					    'href' => AG_ePDQ_Helpers::AG_escape($link->getAttribute('href')),
-					    'title' => AG_ePDQ_Helpers::AG_escape($link->nodeValue, ENT_QUOTES),
+					    'title' => AG_ePDQ_Helpers::AG_escape($title),
 				    );
 			    }
 

@@ -39,8 +39,8 @@ class epdq_order {
 		global $woocommerce;
 		$epdq_settings = new epdq_checkout();
 
-		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $args['STATUS'] ) . '</p>';
-		$errorNote = '<p>' . __( 'ePDQ NCERROR:', 'ag_epdq_server' ) . AG_errors::get_epdq_ncerror( $args['NCERROR'] ) . '</p>';
+		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $args['STATUS'] ?? '') . '</p>'; // @phpstan-ignore-line
+		$errorNote = '<p>' . __( 'ePDQ NCERROR:', 'ag_epdq_server' ) . AG_errors::get_epdq_ncerror( $args['NCERROR'] ?? '' ) . '</p>'; // @phpstan-ignore-line
 
 		$order_data = array(
 			'Status' => AG_errors::get_epdq_status_code( $args['STATUS'] ) ?? '',

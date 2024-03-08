@@ -161,7 +161,7 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public function AG_fraud_css() {
 
-		wp_enqueue_style( 'AG_fraud_css', AG_ePDQ_server_path . 'inc/assets/css/fraud-style.css' );
+		wp_enqueue_style( 'AG_fraud_css', AG_ePDQ_server_path . 'inc/assets/css/fraud-style.css' ); // @phpstan-ignore-line
 	}
 
 	/**
@@ -205,7 +205,7 @@ class ag_ePDQ_fraud_checks {
 		if( isset( $fraudCheck ) && $fraudCheck === 'no' ) {
 			$display = $this->loading_get_order_details();
 			$loading = 'is-loading';
-			$error = '';
+			$error = null;
 		} elseif( ( empty( $search_3D_check ) || empty( $search_CVC_check ) || empty( $search_postal_check ) || empty( $search_aav_check ) ) && isset( $fraudCheck ) && $fraudCheck === 'yes' ) {
 			$display = $this->loading_get_order_details();
 			$loading = 'is-loading';
@@ -213,7 +213,7 @@ class ag_ePDQ_fraud_checks {
 		} else {
 			$display = $this->get_order_details( $order );
 			$loading = '';
-			$error = '';
+			$error = null;
 
 		}
 
@@ -412,6 +412,7 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public static function display_tooltip( $type, $status ) {
 
+		$tooltip = '';
 		switch ( $type ) {
 			case 'A':
 				$tooltip = __( 'Address Check', 'ag_epdq_server' );

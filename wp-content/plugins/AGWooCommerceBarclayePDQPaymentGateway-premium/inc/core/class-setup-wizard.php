@@ -14,7 +14,7 @@ class AG_ePDQ_Wizard {
 
 	public static $single_instance = NULL;
 	public static $args = array();
-	public static $ag_png = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png';
+	public static $ag_png = AG_ePDQ_server_path . 'inc/assets/img/ag-logo.png'; // @phpstan-ignore-line
 	public static $ourSteps = array();
 	public $steps = array();
 	public $step = array();
@@ -52,7 +52,7 @@ class AG_ePDQ_Wizard {
 		$ourSteps = AG_ePDQ_Wizard_steps::steps();
 
 		if( ! current_user_can( 'install_plugins' ) ) {
-			unset( $default_steps['activate'] );
+			unset( $default_steps['activate'] ); // @phpstan-ignore-line
 		}
 
 		$this->steps = apply_filters( 'ag_wizard_steps', $ourSteps );
@@ -84,7 +84,7 @@ class AG_ePDQ_Wizard {
             <title>AG <?php echo self::$args['plugin_name']; ?> Setup Wizard</title>
 			<?php
 			wp_print_scripts( self::$args['plugin_name'] . '-wizard' );
-			wp_enqueue_style( self::$args['plugin_name'] . '-wizard', AG_ePDQ_server_path . 'inc/assets/css/wizard-style.css', array( 'dashicons', 'install' ), self::$args['plugin_version'] );
+			wp_enqueue_style( self::$args['plugin_name'] . '-wizard', AG_ePDQ_server_path . 'inc/assets/css/wizard-style.css', array( 'dashicons', 'install' ), self::$args['plugin_version'] ); // @phpstan-ignore-line
 			do_action( 'admin_enqueue_scripts' );
 			do_action( 'admin_print_styles' );
 			wp_enqueue_admin_bar_header_styles(); ?>

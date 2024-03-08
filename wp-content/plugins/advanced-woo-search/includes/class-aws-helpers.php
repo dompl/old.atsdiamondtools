@@ -224,7 +224,30 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 }
             }
 
+            // Add synonyms
+            $str_old_array = $str_new_array;
+
             $str_new_array = AWS_Helpers::get_synonyms( $str_new_array );
+
+            if ( count( $str_old_array ) !== count( $str_new_array ) ) {
+
+                $synonyms_phrases = array();
+
+                foreach ( $str_new_array as $str_new_arr_i => $str_new_arr_num ) {
+                    $str_new_arr_i = trim( $str_new_arr_i );
+                    if ( strpos( $str_new_arr_i, ' ' ) !== false ) {
+                        $synonyms_phrases_i_arr = explode( ' ', $str_new_arr_i );
+                        foreach ( $synonyms_phrases_i_arr as $synonyms_phrases_i_arr_name ) {
+                            $synonyms_phrases[$synonyms_phrases_i_arr_name] = 1;
+                        }
+                    }
+                }
+
+                if ( ! empty( $synonyms_phrases ) ) {
+                    $str_new_array = array_merge( $str_new_array, $synonyms_phrases );
+                }
+
+            }
 
             return $str_new_array;
 
@@ -1117,6 +1140,21 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $relevance_array = shortcode_atts( $relevance_array, $relevance_array_filtered, 'aws_relevance_scores' );
 
             return $relevance_array;
+
+        }
+
+        /*
+         * Check for incorrect filtering rules and return them
+         * @return string
+         */
+        static public function user_admin_capability() {
+
+            /**
+             * What capability current user must have to view settings page
+             * @since 2.99
+             * @param string $capability Minimal capability required to view plugin settings page
+             */
+            return apply_filters( 'aws_admin_capability', 'manage_options' );
 
         }
 

@@ -1,15 +1,15 @@
-# Copyright (C) 2023 We are AG
+# Copyright (C) 2024 We are AG
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.6.0\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.6.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-21T11:55:05+00:00\n"
+"POT-Creation-Date: 2024-02-08T16:49:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: ag_epdq_server\n"
@@ -198,823 +198,162 @@ msgid "Being processed - intermediate technical status"
 msgstr ""
 
 #: inc/classes/class-epdq-error-codes.php:72
-#: inc/classes/class-epdq-error-codes.php:613
+#: inc/classes/class-epdq-error-codes.php:574
 msgid "Unknown"
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:91
-#: inc/classes/class-epdq-error-codes.php:92
-#: inc/classes/class-epdq-error-codes.php:93
-#: inc/classes/class-epdq-error-codes.php:94
-#: inc/classes/class-epdq-error-codes.php:95
-#: inc/classes/class-epdq-error-codes.php:96
-#: inc/classes/class-epdq-error-codes.php:97
-#: inc/classes/class-epdq-error-codes.php:98
-#: inc/classes/class-epdq-error-codes.php:99
-#: inc/classes/class-epdq-error-codes.php:100
+#: inc/classes/class-epdq-error-codes.php:90
 msgid "Authorisation failed. Please retry."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:101
-msgid "Our payment system is currently under maintenance, please try later."
+#: inc/classes/class-epdq-error-codes.php:91
+msgid "Requested operation code not permitted. Please contact the helpdesk."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:102
-#: inc/classes/class-epdq-error-codes.php:332
-msgid "Expiry date error."
+#: inc/classes/class-epdq-error-codes.php:92
+msgid "Invalid time limit value. Please contact the helpdesk."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:103
-msgid "Requested operation code not permitted."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:104
-msgid "Invalid time limit value."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:105
+#: inc/classes/class-epdq-error-codes.php:93
 msgid "Invalid input date format."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:106
+#: inc/classes/class-epdq-error-codes.php:94
 msgid "Unable to parse socket input stream."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:107
+#: inc/classes/class-epdq-error-codes.php:95
 msgid "Error in parsing stream content."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:108
-msgid "Currency error."
+#: inc/classes/class-epdq-error-codes.php:96
+msgid "Currency error. Invalid currency code."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:109
+#: inc/classes/class-epdq-error-codes.php:97
 msgid "Transaction still posted at end of wait."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:110
+#: inc/classes/class-epdq-error-codes.php:98
 msgid "Sync value not compatible with delay value."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:111
+#: inc/classes/class-epdq-error-codes.php:99
 msgid "Duplicate of a pre-existing transaction."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:112
+#: inc/classes/class-epdq-error-codes.php:100
 msgid "Acceptance code required for transaction."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:113
+#: inc/classes/class-epdq-error-codes.php:101
 msgid "Maintenance acquirer differs from original transaction acquirer."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:114
+#: inc/classes/class-epdq-error-codes.php:102
 msgid "Maintenance merchant differs from original transaction merchant."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:115
+#: inc/classes/class-epdq-error-codes.php:103
 msgid "Maintenance operation not appropriate for original transaction."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:116
+#: inc/classes/class-epdq-error-codes.php:104
 msgid "Host application unknown for the transaction."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:117
+#: inc/classes/class-epdq-error-codes.php:105
 msgid "Unable to perform requested operation with requested currency."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:118
+#: inc/classes/class-epdq-error-codes.php:106
 msgid "Maintenance card number differs from original transaction card number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:119
+#: inc/classes/class-epdq-error-codes.php:107
 msgid "Operation code not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:120
+#: inc/classes/class-epdq-error-codes.php:108
 msgid "Exception occurred in socket input stream processing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:121
-#: inc/classes/class-epdq-error-codes.php:122
+#: inc/classes/class-epdq-error-codes.php:109
 msgid "Card length does not correspond to an acceptable value for the brand."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:123
-#: inc/classes/class-epdq-error-codes.php:125
-#: inc/classes/class-epdq-error-codes.php:146
-#: inc/classes/class-epdq-error-codes.php:149
-#: inc/classes/class-epdq-error-codes.php:158
-#: inc/classes/class-epdq-error-codes.php:159
-#: inc/classes/class-epdq-error-codes.php:163
-#: inc/classes/class-epdq-error-codes.php:164
-#: inc/classes/class-epdq-error-codes.php:243
-#: inc/classes/class-epdq-error-codes.php:253
-#: inc/classes/class-epdq-error-codes.php:282
-#: inc/classes/class-epdq-error-codes.php:283
-#: inc/classes/class-epdq-error-codes.php:301
-#: inc/classes/class-epdq-error-codes.php:314
-#: inc/classes/class-epdq-error-codes.php:316
-#: inc/classes/class-epdq-error-codes.php:317
-#: inc/classes/class-epdq-error-codes.php:321
-#: inc/classes/class-epdq-error-codes.php:362
-#: inc/classes/class-epdq-error-codes.php:370
-#: inc/classes/class-epdq-error-codes.php:374
-#: inc/classes/class-epdq-error-codes.php:375
-#: inc/classes/class-epdq-error-codes.php:376
-#: inc/classes/class-epdq-error-codes.php:377
-#: inc/classes/class-epdq-error-codes.php:378
-#: inc/classes/class-epdq-error-codes.php:379
-#: inc/classes/class-epdq-error-codes.php:380
-#: inc/classes/class-epdq-error-codes.php:382
-#: inc/classes/class-epdq-error-codes.php:383
-#: inc/classes/class-epdq-error-codes.php:384
-#: inc/classes/class-epdq-error-codes.php:385
-#: inc/classes/class-epdq-error-codes.php:386
-#: inc/classes/class-epdq-error-codes.php:387
-#: inc/classes/class-epdq-error-codes.php:388
-#: inc/classes/class-epdq-error-codes.php:389
-msgid "A technical problem has occurred. Please contact the helpdesk."
+#: inc/classes/class-epdq-error-codes.php:110
+msgid "Invalid card number or account number (PAN)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:124
+#: inc/classes/class-epdq-error-codes.php:111
 msgid "Invalid check for CardID and Brand."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:126
-msgid "Unknown origin IP."
+#: inc/classes/class-epdq-error-codes.php:112
+msgid "The ECI value is either not supported or conflicts with other transaction data."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:127
-msgid "No origin IP detected."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:128
-msgid "Merchant configuration problem. Please contact support."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:129
-#: inc/classes/class-epdq-error-codes.php:130
-#: inc/classes/class-epdq-error-codes.php:131
-#: inc/classes/class-epdq-error-codes.php:132
-#: inc/classes/class-epdq-error-codes.php:133
+#: inc/classes/class-epdq-error-codes.php:114
+#: inc/classes/class-epdq-error-codes.php:115
+#: inc/classes/class-epdq-error-codes.php:116
+#: inc/classes/class-epdq-error-codes.php:117
+#: inc/classes/class-epdq-error-codes.php:118
 msgid "Communication failure."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:134
+#: inc/classes/class-epdq-error-codes.php:119
 msgid "Waiting for acquirer feedback."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:135
+#: inc/classes/class-epdq-error-codes.php:120
 msgid "3XCB pending transaction awaiting for Final status."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:136
-#: inc/classes/class-epdq-error-codes.php:139
-#: inc/classes/class-epdq-error-codes.php:140
-#: inc/classes/class-epdq-error-codes.php:141
-#: inc/classes/class-epdq-error-codes.php:142
-#: inc/classes/class-epdq-error-codes.php:143
-#: inc/classes/class-epdq-error-codes.php:144
-#: inc/classes/class-epdq-error-codes.php:145
-#: inc/classes/class-epdq-error-codes.php:148
+#: inc/classes/class-epdq-error-codes.php:121
+#: inc/classes/class-epdq-error-codes.php:124
+#: inc/classes/class-epdq-error-codes.php:125
+#: inc/classes/class-epdq-error-codes.php:126
+#: inc/classes/class-epdq-error-codes.php:127
+#: inc/classes/class-epdq-error-codes.php:128
+#: inc/classes/class-epdq-error-codes.php:129
+#: inc/classes/class-epdq-error-codes.php:132
 msgid "We have received an unknown status for the transaction. We shall contact your acquirer and update the transaction status within one working day. Please check the status later."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:137
+#: inc/classes/class-epdq-error-codes.php:122
 msgid "We have received an unknown status for the transaction. We shall contact your acquirer and update the status of the transaction within one working day. Please check the status later."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:138
-#: inc/classes/class-epdq-error-codes.php:147
-#: inc/classes/class-epdq-error-codes.php:150
+#: inc/classes/class-epdq-error-codes.php:123
+#: inc/classes/class-epdq-error-codes.php:131
+#: inc/classes/class-epdq-error-codes.php:134
 msgid "We received an unknown status for the transaction. We will contact your acquirer and update the status of the transaction. Please check the status later."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:151
-msgid "Bank response origin cannot be checked."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:152
-msgid "Beneficiary account number has been modified during processing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:153
-msgid "Amount has been modified during processing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:154
-msgid "Currency has been modified during processing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:155
-msgid "No feedback detected from the bank server."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:156
-#: inc/classes/class-epdq-error-codes.php:217
-#: inc/classes/class-epdq-error-codes.php:218
-msgid "Payment refused by the financial institution."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:157
-#: inc/classes/class-epdq-error-codes.php:439
-msgid "Duplicate request."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:160
-msgid "Card blacklisted - Contact acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:161
-#: inc/classes/class-epdq-error-codes.php:166
-#: inc/classes/class-epdq-error-codes.php:167
-msgid "There has been a connection error to the receiving bank. Please try later or choose another payment method."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:162
-msgid "Transmission failure and/or Database error. The transaction could not be properly initialised in the send process (db access failures, etc.)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:165
-msgid "Your merchant's acquirer is temporarily unavailable, please try later or choose another payment method."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:168
-msgid "Acquirer has i`ndicated a failure during payment processing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:169
-msgid "RATEPAY Invalid Response Type (Failure)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:170
-msgid "RATEPAY Missing Mandatory status code field (failure)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:171
-msgid "RATEPAY Missing Mandatory Result code field (failure)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:172
-msgid "RATEPAY Response parsing Failed."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:173
-msgid "CVC check required by front end and returned invalid by acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:174
-msgid "Postcode check required by front end and returned invalid by acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:175
-msgid "Address check required by frontend and returned as invalid by acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:176
-msgid "Unauthorised customer country."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:177
-msgid "IP country differs from card country."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:178
-msgid "Number of different countries too high."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:179
-msgid "unauthorised card country."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:180
-msgid "unauthorised IP address country."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:181
-msgid "Anonymous proxy."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:182
-msgid "If the problem persists, please contact Support or go to paysafecard's card balance page (https://customer.cc.at.paysafecard.com/psccustomer/GetWelcomePanelServlet?language=en), to see when the amount reserved on your card will be available again."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:183
-msgid "IP address on merchant's blacklist."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:184
-msgid "BIN on merchant's blacklist."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:185
-msgid "Wrong BIN for 3xCB."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:186
-msgid "Card on merchant's blacklist."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:187
-msgid "E-mail blacklisted."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:188
-msgid "Passenger name blacklisted."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:189
-msgid "Cardholder name blacklisted."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:190
-msgid "Passenger name different from owner name."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:191
-msgid "Time to departure too short."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:192
-msgid "Card Configured in Card Supplier Limit for another relation (CSL)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:193
-msgid "Card not configured in the system for this customer (CSL)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:194
-msgid "REF1 not allowed for this relationship (Contract number)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:195
-msgid "Card/Supplier Amount limit reached (CSL)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:196
-msgid "Card not permitted for this supplier (Date out of contractual limits)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:197
-#: inc/classes/class-epdq-error-codes.php:198
-#: inc/classes/class-epdq-error-codes.php:199
-msgid "You have reached the permitted usage limit."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:200
-msgid "Unauthorised IP country for itinerary."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:201
-msgid "e-mail usage limit reached."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:202
-msgid "Unauthorised card country/IP country combination."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:203
-msgid "Postcode in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:204
-msgid "generic blacklist match."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:205
-msgid "Invoicing Address is a PO Box."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:206
-msgid "Airport in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:207
-msgid "Shipping Method in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:208
-msgid "Shipping Method Details in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:209
-msgid "Product Category in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:210
-msgid "Subbrand in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:211
-msgid "Issuer Number in high-risk group."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:212
-msgid "Time to delivery too short."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:213
-msgid "maximum scoring reached."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:214
-msgid "Authorisation cancelled by simulator."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:215
-#: inc/classes/class-epdq-error-codes.php:300
-#: inc/classes/class-epdq-error-codes.php:304
-#: inc/classes/class-epdq-error-codes.php:305
-#: inc/classes/class-epdq-error-codes.php:306
-#: inc/classes/class-epdq-error-codes.php:307
-#: inc/classes/class-epdq-error-codes.php:308
-#: inc/classes/class-epdq-error-codes.php:309
-#: inc/classes/class-epdq-error-codes.php:310
-#: inc/classes/class-epdq-error-codes.php:311
-#: inc/classes/class-epdq-error-codes.php:312
-#: inc/classes/class-epdq-error-codes.php:313
-#: inc/classes/class-epdq-error-codes.php:318
-msgid "A technical problem has occurred. Please try again."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:216
-#: inc/classes/class-epdq-error-codes.php:315
-msgid "There has been a connection error with the receiving bank. Please try later or choose another payment method."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:219
-msgid "Please call the acquirer support call number."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:220
-msgid "Payment must be approved by the acquirer prior to execution."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:221
-msgid "Invalid merchant number."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:222
-msgid "Retain card."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:223
-msgid "Authorisation declined."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:224
-msgid "Voor vragen over uw afwijzing kunt u contact opnemen met de @STARTURL@http://www.afterpay.nl/consument-contact@TXTURL@Klantenservice van AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:225
-msgid "It is possible that you may not have completed all the required information (correctly) during the order process."
-msgstr ""
-
+#: inc/classes/class-epdq-error-codes.php:130
+#: inc/classes/class-epdq-error-codes.php:133
+#: inc/classes/class-epdq-error-codes.php:142
+#: inc/classes/class-epdq-error-codes.php:143
+#: inc/classes/class-epdq-error-codes.php:147
+#: inc/classes/class-epdq-error-codes.php:148
 #: inc/classes/class-epdq-error-codes.php:226
-msgid "because your age is under 18. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=2@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:227
-msgid "because your address could not be validated. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=3@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:228
-msgid "because your emailadres is invalid. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=4@TXTURL@website van AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:229
-msgid "because the order amount extends the limit for first time AfterPay users. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=5@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:230
-msgid "because there are currently too many outstanding payments at AfterPay. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=6@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:231
-msgid "because your chamber of commerce number could not be validated. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=7@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:232
-msgid "because the order amount is too low. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=8@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:233
-msgid "For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=1@TXTURL@website of AfterPay@ENDURL@."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:234
-msgid "Retain card - special conditions."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:235
-msgid "Invalid transaction."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:236
-msgid "Invalid amount."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:237
-msgid "You have reached the permitted limit."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:238
-msgid "Invalid card number."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:239
-msgid "Unknown acquiring institution."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:240
-msgid "Payment method cancelled by the customer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:241
-msgid "The maximum time allowed has elapsed."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:242
-msgid "Please try again later."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:244
-msgid "Invalid format."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:245
-msgid "Unknown acquirer ID."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:246
-#: inc/classes/class-epdq-error-codes.php:259
-msgid "Card expired."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:247
-#: inc/classes/class-epdq-error-codes.php:248
 #: inc/classes/class-epdq-error-codes.php:264
-msgid "Suspicion of fraud."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:249
-msgid "Suspicion of fraud (3rdMan)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:250
-msgid "Suspicion of fraud (Perseuss)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:251
-msgid "Suspicion of fraud (ETHOCA)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:252
-msgid "Suspicion of fraud (Expert)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:254
-msgid "Invalid function."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:255
-msgid "Lost card."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:256
-msgid "Stolen card. Pick up."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:257
-msgid "Insufficient funds."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:258
-msgid "No Authorisation. Please contact your card issuer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:260
-msgid "Invalid PIN."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:261
-msgid "Card not in authoriser's database."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:262
-msgid "Transaction not permitted on card."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:263
-msgid "Transaction not permitted on this terminal."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:265
-msgid "The merchant should contact the acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:266
-msgid "Amount exceeds card limit."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:267
-msgid "Restricted card."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:268
-msgid "Security policy not respected."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:269
-msgid "Amount changed from ref. transaction."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:270
-msgid "The maximum allowed time has elapsed."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:271
-msgid "Incorrect PIN entered too many times."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:272
-msgid "Already disputed by cardholder."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:273
-msgid "PIN entry required."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:274
-msgid "Message flow error."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:275
-#: inc/classes/class-epdq-error-codes.php:276
-msgid "Authorisation centre unavailable."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:277
-msgid "Temporary system shutdown."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:278
-msgid "Acquirer unavailable."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:279
-msgid "Invalid card type for acquirer."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:280
-msgid "Duplicate transaction."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:281
-msgid "Processing temporarily not possible."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:284
-msgid "Unknown acceptance code."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:285
-#: inc/classes/class-epdq-error-codes.php:426
-msgid "Invalid currency."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:286
-msgid "Acceptance code missing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:287
-msgid "Inactive card."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:288
-msgid "Merchant not active."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:289
-msgid "Invalid expiry date."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:290
-msgid "Interrupted host communication."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:291
-msgid "Card refused."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:292
-msgid "Invalid password."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:293
-msgid "Plafond transaction (majoré du bonus) dépassé."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:294
-msgid "Plafond mensuel (majoré du bonus) dépassé."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:295
-msgid "Plafond centre de facturation dépassé."
-msgstr ""
-
+#: inc/classes/class-epdq-error-codes.php:283
 #: inc/classes/class-epdq-error-codes.php:296
-msgid "Plafond entreprise dépassé."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:297
-msgid "Code MCC du fournisseur non autorisé pour la carte."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:298
-msgid "Numéro SIRET du fournisseur non autorisé pour la carte."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:299
-msgid "This is not a valid online bank account."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:302
-msgid "Bezahlung mit RatePAY nicht möglich."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:303
-msgid "A technical problem has occurred. Please contact your acquirer's helpdesk."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:319
-msgid "Sorry, an error has occurred during processing. Please retry the transaction (using the Back button of the browser). If the problem persists, contact your merchant's helpdesk."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:320
-msgid " Sorry, an error occurred during processing. Please retry the operation (using the Back button of the browser). If the problem persists, please contact your merchant's helpdesk."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:322
-msgid "Authentication failed. Incorrect signature for your bank's access control server."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:323
-#: inc/classes/class-epdq-error-codes.php:440
-msgid "Authentication failed. Please retry or cancel."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:324
-#: inc/classes/class-epdq-error-codes.php:441
-msgid "Authentication temporarily unavailable. Please retry or cancel."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:325
-#: inc/classes/class-epdq-error-codes.php:442
-msgid "Technical problem with your browser. Please retry or cancel."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:326
-#: inc/classes/class-epdq-error-codes.php:443
-msgid "Your bank is temporarily unavailable. Please try again later or choose another payment method."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:327
-msgid "Temporary technical problem. Please retry later."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:328
-msgid "Unknown card type."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:329
-msgid "Card number format check failed for given card number."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:330
-msgid "Merchant data error."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:331
-msgid "Merchant identification missing."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:333
-msgid "Amount is not a number."
-msgstr ""
-
 #: inc/classes/class-epdq-error-codes.php:334
-#: inc/classes/class-epdq-error-codes.php:335
-#: inc/classes/class-epdq-error-codes.php:336
-#: inc/classes/class-epdq-error-codes.php:337
+#: inc/classes/class-epdq-error-codes.php:338
 #: inc/classes/class-epdq-error-codes.php:339
 #: inc/classes/class-epdq-error-codes.php:340
 #: inc/classes/class-epdq-error-codes.php:341
+#: inc/classes/class-epdq-error-codes.php:342
 #: inc/classes/class-epdq-error-codes.php:343
 #: inc/classes/class-epdq-error-codes.php:344
-#: inc/classes/class-epdq-error-codes.php:345
 #: inc/classes/class-epdq-error-codes.php:346
 #: inc/classes/class-epdq-error-codes.php:347
 #: inc/classes/class-epdq-error-codes.php:348
@@ -1023,907 +362,1507 @@ msgstr ""
 #: inc/classes/class-epdq-error-codes.php:351
 #: inc/classes/class-epdq-error-codes.php:352
 #: inc/classes/class-epdq-error-codes.php:353
-#: inc/classes/class-epdq-error-codes.php:354
-#: inc/classes/class-epdq-error-codes.php:355
-#: inc/classes/class-epdq-error-codes.php:356
-#: inc/classes/class-epdq-error-codes.php:357
-#: inc/classes/class-epdq-error-codes.php:358
-#: inc/classes/class-epdq-error-codes.php:359
-#: inc/classes/class-epdq-error-codes.php:360
-#: inc/classes/class-epdq-error-codes.php:361
+msgid "A technical problem has occurred. Please contact the helpdesk."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:135
+msgid "Bank response origin cannot be checked."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:136
+msgid "Beneficiary account number has been modified during processing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:137
+msgid "Amount has been modified during processing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:138
+msgid "Currency has been modified during processing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:139
+msgid "No feedback detected from the bank server."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:140
+#: inc/classes/class-epdq-error-codes.php:201
+msgid "Payment refused by the financial institution."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:141
+#: inc/classes/class-epdq-error-codes.php:400
+msgid "Duplicate request."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:144
+msgid "Card blacklisted - Contact acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:145
+#: inc/classes/class-epdq-error-codes.php:150
+#: inc/classes/class-epdq-error-codes.php:151
+msgid "There has been a connection error to the receiving bank. Please try later or choose another payment method."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:146
+msgid "Transmission failure and/or Database error. The transaction could not be properly initialised in the send process (db access failures, etc.)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:149
+msgid "Your merchant's acquirer is temporarily unavailable, please try later or choose another payment method."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:152
+msgid "Acquirer has i`ndicated a failure during payment processing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:153
+msgid "RATEPAY Invalid Response Type (Failure)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:154
+msgid "RATEPAY Missing Mandatory status code field (failure)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:155
+msgid "RATEPAY Missing Mandatory Result code field (failure)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:156
+msgid "RATEPAY Response parsing Failed."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:157
+msgid "CVC check required by front end and returned invalid by acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:158
+msgid "Postcode check required by front end and returned invalid by acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:159
+msgid "Address check required by frontend and returned as invalid by acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:160
+msgid "Unauthorised customer country."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:161
+msgid "IP country differs from card country."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:162
+msgid "Number of different countries too high."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:163
+msgid "unauthorised card country."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:164
+msgid "unauthorised IP address country."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:165
+msgid "Anonymous proxy."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:166
+msgid "If the problem persists, please contact Support or go to paysafecard's card balance page (https://customer.cc.at.paysafecard.com/psccustomer/GetWelcomePanelServlet?language=en), to see when the amount reserved on your card will be available again."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:167
+msgid "IP address on merchant's blacklist."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:168
+msgid "BIN on merchant's blacklist."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:169
+msgid "Wrong BIN for 3xCB."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:170
+msgid "Card on merchant's blacklist."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:171
+msgid "E-mail blacklisted."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:172
+msgid "Passenger name blacklisted."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:173
+msgid "Cardholder name blacklisted."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:174
+msgid "Passenger name different from owner name."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:175
+msgid "Time to departure too short."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:176
+msgid "Card Configured in Card Supplier Limit for another relation (CSL)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:177
+msgid "Card not configured in the system for this customer (CSL)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:178
+msgid "REF1 not allowed for this relationship (Contract number)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:179
+msgid "Card/Supplier Amount limit reached (CSL)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:180
+msgid "Card not permitted for this supplier (Date out of contractual limits)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:181
+#: inc/classes/class-epdq-error-codes.php:182
+#: inc/classes/class-epdq-error-codes.php:183
+msgid "You have reached the permitted usage limit."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:184
+msgid "Unauthorised IP country for itinerary."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:185
+msgid "e-mail usage limit reached."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:186
+msgid "Unauthorised card country/IP country combination."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:187
+msgid "Postcode in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:188
+msgid "generic blacklist match."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:189
+msgid "Invoicing Address is a PO Box."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:190
+msgid "Airport in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:191
+msgid "Shipping Method in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:192
+msgid "Shipping Method Details in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:193
+msgid "Product Category in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:194
+msgid "Subbrand in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:195
+msgid "Issuer Number in high-risk group."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:196
+msgid "Time to delivery too short."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:197
+msgid "maximum scoring reached."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:198
+msgid "Authorisation cancelled by simulator."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:199
+#: inc/classes/class-epdq-error-codes.php:282
+#: inc/classes/class-epdq-error-codes.php:286
+#: inc/classes/class-epdq-error-codes.php:287
+#: inc/classes/class-epdq-error-codes.php:288
+#: inc/classes/class-epdq-error-codes.php:289
+#: inc/classes/class-epdq-error-codes.php:290
+#: inc/classes/class-epdq-error-codes.php:291
+#: inc/classes/class-epdq-error-codes.php:292
+#: inc/classes/class-epdq-error-codes.php:293
+#: inc/classes/class-epdq-error-codes.php:294
+#: inc/classes/class-epdq-error-codes.php:295
+#: inc/classes/class-epdq-error-codes.php:300
+msgid "A technical problem has occurred. Please try again."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:200
+#: inc/classes/class-epdq-error-codes.php:297
+msgid "There has been a connection error with the receiving bank. Please try later or choose another payment method."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:202
+msgid "Please call the acquirer support call number."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:203
+msgid "Payment must be approved by the acquirer prior to execution."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:204
+msgid "Invalid merchant number."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:205
+msgid "Retain card."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:206
+msgid "Authorisation declined."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:207
+msgid "Voor vragen over uw afwijzing kunt u contact opnemen met de @STARTURL@http://www.afterpay.nl/consument-contact@TXTURL@Klantenservice van AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:208
+msgid "It is possible that you may not have completed all the required information (correctly) during the order process."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:209
+msgid "because your age is under 18. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=2@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:210
+msgid "because your address could not be validated. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=3@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:211
+msgid "because your emailadres is invalid. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=4@TXTURL@website van AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:212
+msgid "because the order amount extends the limit for first time AfterPay users. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=5@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:213
+msgid "because there are currently too many outstanding payments at AfterPay. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=6@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:214
+msgid "because your chamber of commerce number could not be validated. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=7@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:215
+msgid "because the order amount is too low. For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=8@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:216
+msgid "For more information please visit @STARTURL@http://www.afterpay.nl/rej.php?LAN=$LANGUAGE$&TEMPLATE=1@TXTURL@website of AfterPay@ENDURL@."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:217
+msgid "Retain card - special conditions."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:218
+msgid "Invalid transaction."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:219
+msgid "Invalid amount."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:220
+msgid "You have reached the permitted limit."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:221
+msgid "Invalid card number."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:222
+msgid "Unknown acquiring institution."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:223
+msgid "Payment method cancelled by the customer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:224
+msgid "The maximum time allowed has elapsed."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:225
+msgid "Please try again later."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:227
+msgid "Invalid format."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:228
+msgid "Unknown acquirer ID."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:229
+#: inc/classes/class-epdq-error-codes.php:241
+msgid "Card expired."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:230
+#: inc/classes/class-epdq-error-codes.php:246
+msgid "Suspicion of fraud."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:231
+msgid "Suspicion of fraud (3rdMan)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:232
+msgid "Suspicion of fraud (Perseuss)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:233
+msgid "Suspicion of fraud (ETHOCA)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:234
+msgid "Suspicion of fraud (Expert)."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:236
+msgid "Invalid function."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:237
+msgid "Lost card."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:238
+msgid "Stolen card. Pick up."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:239
+msgid "Insufficient funds."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:240
+msgid "No Authorisation. Please contact your card issuer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:242
+msgid "Invalid PIN."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:243
+msgid "Card not in authoriser's database."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:244
+msgid "Transaction not permitted on card."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:245
+msgid "Transaction not permitted on this terminal."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:247
+msgid "The merchant should contact the acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:248
+msgid "Amount exceeds card limit."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:249
+msgid "Restricted card."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:250
+msgid "Security policy not respected."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:251
+msgid "Amount changed from ref. transaction."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:252
+msgid "The maximum allowed time has elapsed."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:253
+msgid "Incorrect PIN entered too many times."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:254
+msgid "Already disputed by cardholder."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:255
+msgid "PIN entry required."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:256
+msgid "Message flow error."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:257
+#: inc/classes/class-epdq-error-codes.php:258
+msgid "Authorisation centre unavailable."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:259
+msgid "Temporary system shutdown."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:260
+msgid "Acquirer unavailable."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:261
+msgid "Invalid card type for acquirer."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:262
+msgid "Duplicate transaction."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:263
+msgid "Processing temporarily not possible."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:266
+msgid "Unknown acceptance code."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:267
+#: inc/classes/class-epdq-error-codes.php:387
+msgid "Invalid currency."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:268
+msgid "Acceptance code missing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:269
+msgid "Inactive card."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:270
+msgid "Merchant not active."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:271
+msgid "Invalid expiry date."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:272
+msgid "Interrupted host communication."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:273
+msgid "Card refused."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:274
+msgid "Invalid password."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:275
+msgid "Plafond transaction (majoré du bonus) dépassé."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:276
+msgid "Plafond mensuel (majoré du bonus) dépassé."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:277
+msgid "Plafond centre de facturation dépassé."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:278
+msgid "Plafond entreprise dépassé."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:279
+msgid "Code MCC du fournisseur non autorisé pour la carte."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:280
+msgid "Numéro SIRET du fournisseur non autorisé pour la carte."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:281
+msgid "This is not a valid online bank account."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:284
+msgid "Bezahlung mit RatePAY nicht möglich."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:285
+msgid "A technical problem has occurred. Please contact your acquirer's helpdesk."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:301
+msgid "Sorry, an error has occurred during processing. Please retry the transaction (using the Back button of the browser). If the problem persists, contact your merchant's helpdesk."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:302
+msgid " Sorry, an error occurred during processing. Please retry the operation (using the Back button of the browser). If the problem persists, please contact your merchant's helpdesk."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:304
+msgid "Authentication failed. Incorrect signature for your bank's access control server."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:305
+#: inc/classes/class-epdq-error-codes.php:401
+msgid "Authentication failed. Please retry or cancel."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:306
+#: inc/classes/class-epdq-error-codes.php:402
+msgid "Authentication temporarily unavailable. Please retry or cancel."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:307
+#: inc/classes/class-epdq-error-codes.php:403
+msgid "Technical problem with your browser. Please retry or cancel."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:308
+#: inc/classes/class-epdq-error-codes.php:404
+msgid "Your bank is temporarily unavailable. Please try again later or choose another payment method."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:309
+msgid "Temporary technical problem. Please retry later."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:310
+msgid "Unknown card type."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:311
+msgid "Card number format check failed for given card number."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:312
+msgid "Merchant data error."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:313
+msgid "Merchant identification missing."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:314
+msgid "Expiry date error."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:315
+msgid "Amount is not a number."
+msgstr ""
+
+#: inc/classes/class-epdq-error-codes.php:316
+#: inc/classes/class-epdq-error-codes.php:318
+#: inc/classes/class-epdq-error-codes.php:320
+#: inc/classes/class-epdq-error-codes.php:321
+#: inc/classes/class-epdq-error-codes.php:322
+#: inc/classes/class-epdq-error-codes.php:323
+#: inc/classes/class-epdq-error-codes.php:324
+#: inc/classes/class-epdq-error-codes.php:325
+#: inc/classes/class-epdq-error-codes.php:326
+#: inc/classes/class-epdq-error-codes.php:327
 msgid "A technical has problem occurred. Please contact the helpdesk."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:338
+#: inc/classes/class-epdq-error-codes.php:317
 msgid "Brand not supported for that merchant."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:342
-msgid "Invalid currency code."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:363
-msgid "Incorrect card length for the brand."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:364
+#: inc/classes/class-epdq-error-codes.php:328
 msgid "Purchasing card number for a standard merchant."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:365
+#: inc/classes/class-epdq-error-codes.php:329
 msgid "You should use a purchasing card for this transaction."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:366
+#: inc/classes/class-epdq-error-codes.php:330
 msgid "Details sent for a non-purchasing card merchant. Please contact the helpdesk."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:367
+#: inc/classes/class-epdq-error-codes.php:331
 msgid "Details not sent for a purchasing card transaction. Please contact the helpdesk."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:368
+#: inc/classes/class-epdq-error-codes.php:332
 msgid "Payment detail validation failed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:369
+#: inc/classes/class-epdq-error-codes.php:333
 msgid "Sum of given transaction amounts (tax, discount, delivery, net, etc.) does not match total."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:371
+#: inc/classes/class-epdq-error-codes.php:335
 msgid "No acquirer configured for this operation."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:372
+#: inc/classes/class-epdq-error-codes.php:336
 msgid "No UID configured for this operation."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:373
+#: inc/classes/class-epdq-error-codes.php:337
 msgid "Operation not permitted for the merchant."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:381
+#: inc/classes/class-epdq-error-codes.php:345
 msgid "Card number incorrect or incompatible."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:390
+#: inc/classes/class-epdq-error-codes.php:354
 msgid "Card Issue Number does not correspond to range or is not present."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:391
+#: inc/classes/class-epdq-error-codes.php:355
 msgid "Start Date invalid or not present."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:392
+#: inc/classes/class-epdq-error-codes.php:356
 msgid "Invalid CVC code format."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:393
+#: inc/classes/class-epdq-error-codes.php:357
 msgid "The merchant is not registered for 3D-Secure."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:394
-msgid "Invalid card number or account number (PAN)."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:395
-msgid "Invalid CardID and Brand match."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:396
-msgid "The ECI value is either not supported or conflicts with other transaction data."
-msgstr ""
-
-#: inc/classes/class-epdq-error-codes.php:397
+#: inc/classes/class-epdq-error-codes.php:358
 msgid "Incomplete TRN demat."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:398
+#: inc/classes/class-epdq-error-codes.php:359
 msgid "Incomplete PAY demat."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:399
+#: inc/classes/class-epdq-error-codes.php:360
 msgid "No demat APP."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:400
+#: inc/classes/class-epdq-error-codes.php:361
 msgid "Authorisation period expired."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:401
+#: inc/classes/class-epdq-error-codes.php:362
 msgid "VERRes was an error message."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:402
+#: inc/classes/class-epdq-error-codes.php:363
 msgid "DCP amount greater than authorisation amount."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:403
+#: inc/classes/class-epdq-error-codes.php:364
 msgid "Details negative amount."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:404
+#: inc/classes/class-epdq-error-codes.php:365
 msgid "Details negative quantity."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:405
+#: inc/classes/class-epdq-error-codes.php:366
 msgid "Could not decode/decompress received PARes (3D-Secure)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:406
+#: inc/classes/class-epdq-error-codes.php:367
 msgid "Received PARes was an error message from ACS (3D-Secure)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:407
+#: inc/classes/class-epdq-error-codes.php:368
 msgid "Received PARes format was invalid according to the 3DS specifications (3D-Secure)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:408
+#: inc/classes/class-epdq-error-codes.php:369
 msgid "PAReq/PARes reconciliation failure (3D-Secure)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:409
+#: inc/classes/class-epdq-error-codes.php:370
 msgid "Maximum amount reached."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:410
+#: inc/classes/class-epdq-error-codes.php:371
 msgid "This transaction requires authentication. Please check with your bank."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:411
+#: inc/classes/class-epdq-error-codes.php:372
 msgid "CVC missing at input, but CVC check requested."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:412
+#: inc/classes/class-epdq-error-codes.php:373
 msgid "Postcode missing at input, but postcode check requested."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:413
+#: inc/classes/class-epdq-error-codes.php:374
 msgid "Address missing at input, but Address check requested."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:414
+#: inc/classes/class-epdq-error-codes.php:375
 msgid "Partial capture not allowed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:415
+#: inc/classes/class-epdq-error-codes.php:376
 msgid "Invalid date of birth."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:416
+#: inc/classes/class-epdq-error-codes.php:377
 msgid "Invalid commodity code."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:417
+#: inc/classes/class-epdq-error-codes.php:378
 msgid "The requested currency and brand are incompatible."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:418
+#: inc/classes/class-epdq-error-codes.php:379
 msgid "Data validation error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:419
+#: inc/classes/class-epdq-error-codes.php:380
 msgid "This order has already been processed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:420
+#: inc/classes/class-epdq-error-codes.php:381
 msgid "Error in accessing the pre-payment check page."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:421
+#: inc/classes/class-epdq-error-codes.php:382
 msgid "Request not received in secure mode."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:422
+#: inc/classes/class-epdq-error-codes.php:383
 msgid "Unknown IP address origin."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:423
+#: inc/classes/class-epdq-error-codes.php:384
 msgid "No IP address origin."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:424
+#: inc/classes/class-epdq-error-codes.php:385
 msgid "PSPID not found or incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:425
+#: inc/classes/class-epdq-error-codes.php:386
 msgid "Password incorrect or disabled due to number of errors."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:427
+#: inc/classes/class-epdq-error-codes.php:388
 msgid "Invalid number of decimals for the currency."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:428
+#: inc/classes/class-epdq-error-codes.php:389
 msgid "Currency not accepted by the merchant."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:429
+#: inc/classes/class-epdq-error-codes.php:390
 msgid "Card type not active."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:430
+#: inc/classes/class-epdq-error-codes.php:391
 msgid "Number of lines doesn't match the number of payments."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:431
+#: inc/classes/class-epdq-error-codes.php:392
 msgid "Format validation error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:432
+#: inc/classes/class-epdq-error-codes.php:393
 msgid "Overflow in data capture requests for the original order."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:433
+#: inc/classes/class-epdq-error-codes.php:394
 msgid "Incorrect original order status."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:434
+#: inc/classes/class-epdq-error-codes.php:395
 msgid "missing authorisation code for unauthorised order."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:435
+#: inc/classes/class-epdq-error-codes.php:396
 msgid "Overflow in refunds requests."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:436
+#: inc/classes/class-epdq-error-codes.php:397
 msgid "Original order access error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:437
+#: inc/classes/class-epdq-error-codes.php:398
 msgid "Original history item access error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:438
+#: inc/classes/class-epdq-error-codes.php:399
 msgid "The selected Catalogue is empty."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:444
+#: inc/classes/class-epdq-error-codes.php:405
 msgid "Fraud Detection: technical error (invalid IP)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:445
+#: inc/classes/class-epdq-error-codes.php:406
 msgid "Fraud detection: technical error (IPCTY unknown or error)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:446
+#: inc/classes/class-epdq-error-codes.php:407
 msgid "Fraud detection: technical error (CCCTY unknown or error)."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:447
+#: inc/classes/class-epdq-error-codes.php:408
 msgid "Overflow in redo-authorisation requests."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:448
+#: inc/classes/class-epdq-error-codes.php:409
 msgid "Dynamic BIN check failed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:449
+#: inc/classes/class-epdq-error-codes.php:410
 msgid "Dynamic country check failed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:450
+#: inc/classes/class-epdq-error-codes.php:411
 msgid "Amadeus signature error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:451
+#: inc/classes/class-epdq-error-codes.php:412
 msgid "Cardholder Name is too long."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:452
+#: inc/classes/class-epdq-error-codes.php:413
 msgid "Name contains invalid characters."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:453
+#: inc/classes/class-epdq-error-codes.php:414
 msgid "Card number is too long."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:454
+#: inc/classes/class-epdq-error-codes.php:415
 msgid "Card number contains non-numeric info."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:455
+#: inc/classes/class-epdq-error-codes.php:416
 msgid "Card Number Empty."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:456
+#: inc/classes/class-epdq-error-codes.php:417
 msgid "CVC too long."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:457
+#: inc/classes/class-epdq-error-codes.php:418
 msgid "CVC contains non-numeric info."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:458
+#: inc/classes/class-epdq-error-codes.php:419
 msgid "Expiry date contains non-numeric info."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:459
+#: inc/classes/class-epdq-error-codes.php:420
 msgid "Invalid expiry month."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:460
+#: inc/classes/class-epdq-error-codes.php:421
 msgid "Expiry date must be in the future."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:461
+#: inc/classes/class-epdq-error-codes.php:422
 msgid "SHA Mismatch."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:462
-#: inc/classes/class-epdq-error-codes.php:463
+#: inc/classes/class-epdq-error-codes.php:423
+#: inc/classes/class-epdq-error-codes.php:424
 msgid "Operation not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:464
+#: inc/classes/class-epdq-error-codes.php:425
 msgid "Missing mandatory fields in invoicing address."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:465
+#: inc/classes/class-epdq-error-codes.php:426
 msgid "Missing mandatory date of birth field."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:466
+#: inc/classes/class-epdq-error-codes.php:427
 msgid "Missing required shopping basket details."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:467
+#: inc/classes/class-epdq-error-codes.php:428
 msgid "Missing social security number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:468
+#: inc/classes/class-epdq-error-codes.php:429
 msgid "Invalid country code."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:469
+#: inc/classes/class-epdq-error-codes.php:430
 msgid "Missing annual salary."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:470
+#: inc/classes/class-epdq-error-codes.php:431
 msgid "Missing gender."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:471
+#: inc/classes/class-epdq-error-codes.php:432
 msgid "Missing e-mail."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:472
+#: inc/classes/class-epdq-error-codes.php:433
 msgid "Missing IP address."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:473
+#: inc/classes/class-epdq-error-codes.php:434
 msgid "Missing part-payment campaign ID."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:474
+#: inc/classes/class-epdq-error-codes.php:435
 msgid "Missing invoice number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:475
+#: inc/classes/class-epdq-error-codes.php:436
 msgid "The alias must be different to the card number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:476
+#: inc/classes/class-epdq-error-codes.php:437
 msgid "Invalid details for shopping basket calculation."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:477
+#: inc/classes/class-epdq-error-codes.php:438
 msgid "No Refunds allowed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:478
+#: inc/classes/class-epdq-error-codes.php:439
 msgid "Invalid format of phone number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:479
+#: inc/classes/class-epdq-error-codes.php:440
 msgid "Invalid ZIP format."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:480
+#: inc/classes/class-epdq-error-codes.php:441
 msgid "Firstname or/and lastname missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:481
+#: inc/classes/class-epdq-error-codes.php:442
 msgid "Firstname and/or lastname format invalid."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:482
+#: inc/classes/class-epdq-error-codes.php:443
 msgid "The phone number is missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:483
+#: inc/classes/class-epdq-error-codes.php:444
 msgid "Invalid email format."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:484
+#: inc/classes/class-epdq-error-codes.php:445
 msgid "Wrong brand/payment method."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:485
+#: inc/classes/class-epdq-error-codes.php:446
 msgid "Wrong account number format."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:486
+#: inc/classes/class-epdq-error-codes.php:447
 msgid "RFP operation code is only permitted with scheduled payments."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:487
+#: inc/classes/class-epdq-error-codes.php:448
 msgid "RFP operation code not permitted for a Disputed payment."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:488
+#: inc/classes/class-epdq-error-codes.php:449
 msgid "RFP operation code not permitted - Unpaid amounts."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:489
+#: inc/classes/class-epdq-error-codes.php:450
 msgid "An error occurred."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:490
+#: inc/classes/class-epdq-error-codes.php:451
 msgid "account number unknown."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:491
+#: inc/classes/class-epdq-error-codes.php:452
 msgid "not credited dd-mm-yy."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:492
+#: inc/classes/class-epdq-error-codes.php:453
 msgid "name/number do not match."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:493
+#: inc/classes/class-epdq-error-codes.php:454
 msgid "account number blocked."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:494
+#: inc/classes/class-epdq-error-codes.php:455
 msgid "specific direct debit block."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:495
+#: inc/classes/class-epdq-error-codes.php:456
 msgid "account number WKA."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:496
+#: inc/classes/class-epdq-error-codes.php:457
 msgid "administrative reason."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:497
+#: inc/classes/class-epdq-error-codes.php:458
 msgid "account number expired."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:498
+#: inc/classes/class-epdq-error-codes.php:459
 msgid "no direct debit authorisation."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:499
+#: inc/classes/class-epdq-error-codes.php:460
 msgid "debit not approved."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:500
+#: inc/classes/class-epdq-error-codes.php:461
 msgid "double payment."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:501
+#: inc/classes/class-epdq-error-codes.php:462
 msgid "name/address/city not entered."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:502
+#: inc/classes/class-epdq-error-codes.php:463
 msgid "no original direct debit for revocation."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:503
+#: inc/classes/class-epdq-error-codes.php:464
 msgid "payer's account number format error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:504
+#: inc/classes/class-epdq-error-codes.php:465
 msgid "payer's account at different bank."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:505
+#: inc/classes/class-epdq-error-codes.php:466
 msgid "payee's account at different bank."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:506
+#: inc/classes/class-epdq-error-codes.php:467
 msgid "payee's account number format error."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:507
+#: inc/classes/class-epdq-error-codes.php:468
 msgid "payer's account number blocked."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:508
+#: inc/classes/class-epdq-error-codes.php:469
 msgid "payer's account number expired."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:509
+#: inc/classes/class-epdq-error-codes.php:470
 msgid "payee's account number expired."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:510
+#: inc/classes/class-epdq-error-codes.php:471
 msgid "direct debit not possible."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:511
+#: inc/classes/class-epdq-error-codes.php:472
 msgid "creditor payment not possible."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:512
+#: inc/classes/class-epdq-error-codes.php:473
 msgid "payer's account number unknown WKA-number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:513
+#: inc/classes/class-epdq-error-codes.php:474
 msgid "payee's account number unknown WKA-number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:514
+#: inc/classes/class-epdq-error-codes.php:475
 msgid "WKA transaction not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:515
+#: inc/classes/class-epdq-error-codes.php:476
 msgid "revocation period expired."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:516
+#: inc/classes/class-epdq-error-codes.php:477
 msgid "incorrect revocation reason."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:517
+#: inc/classes/class-epdq-error-codes.php:478
 msgid "original run number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:518
+#: inc/classes/class-epdq-error-codes.php:479
 msgid "payment ID incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:519
+#: inc/classes/class-epdq-error-codes.php:480
 msgid "amount not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:520
+#: inc/classes/class-epdq-error-codes.php:481
 msgid "zero amount not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:521
+#: inc/classes/class-epdq-error-codes.php:482
 msgid "negative amount not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:522
+#: inc/classes/class-epdq-error-codes.php:483
 msgid "payer and payee giro account number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:523
+#: inc/classes/class-epdq-error-codes.php:484
 msgid "processing code (verwerkingscode) incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:524
+#: inc/classes/class-epdq-error-codes.php:485
 msgid "revocation not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:525
+#: inc/classes/class-epdq-error-codes.php:486
 msgid "guaranteed direct debit on giro account number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:526
+#: inc/classes/class-epdq-error-codes.php:487
 msgid "NBC transaction type incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:527
+#: inc/classes/class-epdq-error-codes.php:488
 msgid "description too long."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:528
+#: inc/classes/class-epdq-error-codes.php:489
 msgid "book account number not issued."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:529
+#: inc/classes/class-epdq-error-codes.php:490
 msgid "book account number incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:530
+#: inc/classes/class-epdq-error-codes.php:491
 msgid "payer's account number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:531
+#: inc/classes/class-epdq-error-codes.php:492
 msgid "payer's account number not eleven-proof."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:532
+#: inc/classes/class-epdq-error-codes.php:493
 msgid "payer's account number not issued."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:533
+#: inc/classes/class-epdq-error-codes.php:494
 msgid "payer's account number of DNB/BGC/BLA."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:534
+#: inc/classes/class-epdq-error-codes.php:495
 msgid "payee's account number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:535
+#: inc/classes/class-epdq-error-codes.php:496
 msgid "payee's account number not eleven-proof."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:536
+#: inc/classes/class-epdq-error-codes.php:497
 msgid "payee's account number not issued."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:537
+#: inc/classes/class-epdq-error-codes.php:498
 msgid "payee's account number unknown."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:538
+#: inc/classes/class-epdq-error-codes.php:499
 msgid "payee's name missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:539
+#: inc/classes/class-epdq-error-codes.php:500
 msgid "indicate payee's bank account number instead of 3102."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:540
+#: inc/classes/class-epdq-error-codes.php:501
 msgid "no direct debit contract."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:541
+#: inc/classes/class-epdq-error-codes.php:502
 msgid "amount beyond limits."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:542
+#: inc/classes/class-epdq-error-codes.php:503
 msgid "selective direct debit block."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:543
+#: inc/classes/class-epdq-error-codes.php:504
 msgid "original run number unknown."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:544
+#: inc/classes/class-epdq-error-codes.php:505
 msgid "payer's name missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:545
+#: inc/classes/class-epdq-error-codes.php:506
 msgid "payee's account number missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:546
+#: inc/classes/class-epdq-error-codes.php:507
 msgid "restore not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:547
+#: inc/classes/class-epdq-error-codes.php:508
 msgid "bank's reference (navraaggegeven) missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:548
+#: inc/classes/class-epdq-error-codes.php:509
 msgid "BEC/GBK number incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:549
+#: inc/classes/class-epdq-error-codes.php:510
 msgid "BEC/GBK code incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:550
+#: inc/classes/class-epdq-error-codes.php:511
 msgid "book account number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:551
+#: inc/classes/class-epdq-error-codes.php:512
 msgid "cancelled on request."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:552
+#: inc/classes/class-epdq-error-codes.php:513
 msgid "cancellation order executed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:553
+#: inc/classes/class-epdq-error-codes.php:514
 msgid "cancelled instead of ended."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:554
+#: inc/classes/class-epdq-error-codes.php:515
 msgid "book account number is a shortened account number."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:555
+#: inc/classes/class-epdq-error-codes.php:516
 msgid "instructing party and payer account numbers do not match."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:556
+#: inc/classes/class-epdq-error-codes.php:517
 msgid "payee unknown GBK acceptor."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:557
+#: inc/classes/class-epdq-error-codes.php:518
 msgid "instructing party and payee account numbers do not match."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:558
+#: inc/classes/class-epdq-error-codes.php:519
 msgid "clearing not permitted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:559
+#: inc/classes/class-epdq-error-codes.php:520
 msgid "payer's account number has no spaces."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:560
+#: inc/classes/class-epdq-error-codes.php:521
 msgid "PAN length not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:561
+#: inc/classes/class-epdq-error-codes.php:522
 msgid "PAN length outside limits."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:562
+#: inc/classes/class-epdq-error-codes.php:523
 msgid "track number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:563
+#: inc/classes/class-epdq-error-codes.php:524
 msgid "track number not valid."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:564
+#: inc/classes/class-epdq-error-codes.php:525
 msgid "PAN sequence number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:565
+#: inc/classes/class-epdq-error-codes.php:526
 msgid "domestic PAN not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:566
+#: inc/classes/class-epdq-error-codes.php:527
 msgid "domestic PAN not eleven-proof."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:567
+#: inc/classes/class-epdq-error-codes.php:528
 msgid "domestic PAN not issued."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:568
+#: inc/classes/class-epdq-error-codes.php:529
 msgid "foreign PAN not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:569
+#: inc/classes/class-epdq-error-codes.php:530
 msgid "card validity date not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:570
+#: inc/classes/class-epdq-error-codes.php:531
 msgid "book period number (boekperiodenr) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:571
+#: inc/classes/class-epdq-error-codes.php:532
 msgid "transaction number not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:572
+#: inc/classes/class-epdq-error-codes.php:533
 msgid "transaction time not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:573
+#: inc/classes/class-epdq-error-codes.php:534
 msgid "invalid transaction time."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:574
+#: inc/classes/class-epdq-error-codes.php:535
 msgid "transaction date not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:575
+#: inc/classes/class-epdq-error-codes.php:536
 msgid "invalid transaction date."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:576
+#: inc/classes/class-epdq-error-codes.php:537
 msgid "STAN not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:577
+#: inc/classes/class-epdq-error-codes.php:538
 msgid "instructing party's name missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:578
+#: inc/classes/class-epdq-error-codes.php:539
 msgid "foreign amount (bedrag-vv) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:579
+#: inc/classes/class-epdq-error-codes.php:540
 msgid "rate (verrekenkoers) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:580
+#: inc/classes/class-epdq-error-codes.php:541
 msgid "number of decimals (aantaldecimalen) incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:581
+#: inc/classes/class-epdq-error-codes.php:542
 msgid "tariff (tarifering) not B/O/S."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:582
+#: inc/classes/class-epdq-error-codes.php:543
 msgid "domestic costs (kostenbinnenland) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:583
+#: inc/classes/class-epdq-error-codes.php:544
 msgid "domestic costs (kostenbinnenland) not higher than zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:584
+#: inc/classes/class-epdq-error-codes.php:545
 msgid "foreign costs (kostenbuitenland) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:585
+#: inc/classes/class-epdq-error-codes.php:546
 msgid "foreign costs (kostenbuitenland) not higher than zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:586
+#: inc/classes/class-epdq-error-codes.php:547
 msgid "domestic costs (kostenbinnenland) not zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:587
+#: inc/classes/class-epdq-error-codes.php:548
 msgid "foreign costs (kostenbuitenland) not zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:588
+#: inc/classes/class-epdq-error-codes.php:549
 msgid "Euro record not completed."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:589
+#: inc/classes/class-epdq-error-codes.php:550
 msgid "Customer currency incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:590
+#: inc/classes/class-epdq-error-codes.php:551
 msgid "NLG amount not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:591
+#: inc/classes/class-epdq-error-codes.php:552
 msgid "NLG amount not higher than zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:592
+#: inc/classes/class-epdq-error-codes.php:553
 msgid "NLG amount not equal to Amount."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:593
+#: inc/classes/class-epdq-error-codes.php:554
 msgid "NLG amount incorrectly converted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:594
+#: inc/classes/class-epdq-error-codes.php:555
 msgid "EUR amount not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:595
+#: inc/classes/class-epdq-error-codes.php:556
 msgid "EUR amount not greater than zero."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:596
+#: inc/classes/class-epdq-error-codes.php:557
 msgid "EUR amount not equal to Amount."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:597
+#: inc/classes/class-epdq-error-codes.php:558
 msgid "EUR amount incorrectly converted."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:598
+#: inc/classes/class-epdq-error-codes.php:559
 msgid "Customer currency not NLG."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:599
+#: inc/classes/class-epdq-error-codes.php:560
 msgid "rate euro-vv (Koerseuro-vv) not numeric."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:600
+#: inc/classes/class-epdq-error-codes.php:561
 msgid "comma rate euro-vv (Kommakoerseuro-vv) incorrect."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:601
+#: inc/classes/class-epdq-error-codes.php:562
 msgid "invalid acceptgiro distributor."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:602
+#: inc/classes/class-epdq-error-codes.php:563
 msgid "Original run number and/or BRN missing."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:603
+#: inc/classes/class-epdq-error-codes.php:564
 msgid "Amount/Account number/ BRN different."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:604
+#: inc/classes/class-epdq-error-codes.php:565
 msgid "Direct debit already revoked/restored."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:605
+#: inc/classes/class-epdq-error-codes.php:566
 msgid "Direct debit already reversed/revoked/restored."
 msgstr ""
 
-#: inc/classes/class-epdq-error-codes.php:606
+#: inc/classes/class-epdq-error-codes.php:567
 msgid "Payer's account number not know."
 msgstr ""
 
@@ -2241,91 +2180,214 @@ msgstr ""
 msgid "AG ePDQ Server Gateway"
 msgstr ""
 
-#: inc/classes/class-helpers.php:133
+#: inc/classes/class-helpers.php:136
 msgid "<strong>%s</strong> is enabled, but you don't have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
 msgstr ""
 
-#: inc/classes/class-main.php:153
+#: inc/classes/class-main.php:184
 msgid "<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target=\"_blank\" href=\"%s\">here</a> for more card numbers, steps on setting up and troubleshooting."
 msgstr ""
 
-#: inc/classes/class-main.php:164
+#: inc/classes/class-main.php:195
 msgid "<span class=\"AG-redirect-icon\"><img src=\"%s\" /></span>"
 msgstr ""
 
-#: inc/classes/class-main.php:165
+#: inc/classes/class-main.php:196
 msgid "<p class=\"AG-redirect-notice\">After clicking \"Place order\", you will be redirected to Barclays to complete your purchase securely.</p>"
 msgstr ""
 
-#: inc/classes/class-main.php:229
+#: inc/classes/class-main.php:260
 msgid "AG ePDQ Checkout Settings"
 msgstr ""
 
-#: inc/classes/class-main.php:229
+#: inc/classes/class-main.php:260
 msgid "This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website."
 msgstr ""
 
-#: inc/classes/class-main.php:230
+#: inc/classes/class-main.php:261
 msgid "Having issues setting up the plugin? Why not try the setup wizard <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:622
+#: inc/classes/class-main.php:652
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:665
+#: inc/classes/class-main.php:695
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:670
+#: inc/classes/class-main.php:700
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:676
+#: inc/classes/class-main.php:706
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:682
+#: inc/classes/class-main.php:712
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:726
+#: inc/classes/class-main.php:757
 msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:726
+#: inc/classes/class-main.php:757
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:726
+#: inc/classes/class-main.php:757
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:726
-#: inc/classes/class-main.php:731
+#: inc/classes/class-main.php:757
+#: inc/classes/class-main.php:762
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:731
+#: inc/classes/class-main.php:762
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:732
+#: inc/classes/class-main.php:763
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:732
+#: inc/classes/class-main.php:763
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:736
+#: inc/classes/class-main.php:767
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
-#: inc/classes/class-order.php:42
+#: inc/classes/class-order-status-check.php:114
 #: inc/classes/StatusCheck/class-order-status-check.php:122
-#: inc/classes/StatusCheck/class-order-status-check.php:367
+msgid "AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:116
+#: inc/classes/class-order-status-check.php:335
+#: inc/classes/class-order.php:42
+#: inc/classes/StatusCheck/class-order-status-check.php:123
+#: inc/classes/StatusCheck/class-order-status-check.php:369
 msgid "ePDQ Status:"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:121
+#: inc/classes/class-order-status-check.php:340
+#: inc/classes/StatusCheck/class-order-status-check.php:128
+#: inc/classes/StatusCheck/class-order-status-check.php:374
+msgid "Order ID:"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:122
+#: inc/classes/class-order-status-check.php:341
+#: inc/classes/StatusCheck/class-order-status-check.php:129
+#: inc/classes/StatusCheck/class-order-status-check.php:375
+msgid "Payment Reference In ePDQ System:"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:131
+#: inc/classes/class-order-status-check.php:346
+#: inc/classes/StatusCheck/class-order-status-check.php:138
+#: inc/classes/StatusCheck/class-order-status-check.php:380
+msgid " and Barclays ePDQ has confirmed the transaction."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:133
+#: inc/classes/class-order-status-check.php:348
+#: inc/classes/StatusCheck/class-order-status-check.php:140
+#: inc/classes/StatusCheck/class-order-status-check.php:382
+msgid "Barclays ePDQ transaction is confirmed"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:150
+#: inc/classes/class-order-status-check.php:364
+#: inc/classes/StatusCheck/class-order-status-check.php:156
+#: inc/classes/StatusCheck/class-order-status-check.php:398
+msgid " and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:158
+#: inc/classes/class-order-status-check.php:372
+#: inc/classes/StatusCheck/class-order-status-check.php:165
+#: inc/classes/StatusCheck/class-order-status-check.php:407
+msgid " and You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:167
+#: inc/classes/class-order-status-check.php:381
+#: inc/classes/StatusCheck/class-order-status-check.php:175
+#: inc/classes/StatusCheck/class-order-status-check.php:417
+msgid " and Barclays ePDQ has refused the transaction."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:176
+#: inc/classes/class-order-status-check.php:390
+#: inc/classes/StatusCheck/class-order-status-check.php:185
+#: inc/classes/StatusCheck/class-order-status-check.php:427
+msgid " and Barclays ePDQ has reported the payment is uncertain."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:187
+#: inc/classes/class-order-status-check.php:401
+#: inc/classes/StatusCheck/class-order-status-check.php:196
+#: inc/classes/StatusCheck/class-order-status-check.php:438
+msgid " and ePDQ has confirmed the customer has cancelled the transaction"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:198
+#: inc/classes/class-order-status-check.php:412
+#: inc/classes/class-order.php:70
+#: inc/classes/StatusCheck/class-order-status-check.php:207
+#: inc/classes/StatusCheck/class-order-status-check.php:449
+msgid "Barclays ePDQ transaction has been Authorised."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:201
+#: inc/classes/class-order-status-check.php:415
+#: inc/classes/class-order.php:71
+#: inc/classes/StatusCheck/class-order-status-check.php:210
+#: inc/classes/StatusCheck/class-order-status-check.php:452
+msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:213
+#: inc/classes/class-order-status-check.php:428
+#: inc/classes/StatusCheck/class-order-status-check.php:222
+#: inc/classes/StatusCheck/class-order-status-check.php:464
+msgid " and has come back as Incomplete or invalid"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:255
+#: inc/classes/Moto/class-moto.php:87
+#: inc/classes/StatusCheck/class-order-status-check.php:289
+msgid "Are you sure you wish to check the status of this order?"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:257
+#: inc/classes/StatusCheck/class-order-status-check.php:291
+msgid "Something went wrong, and the order status check could not be completed. Please try again."
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:334
+#: inc/classes/StatusCheck/class-order-status-check.php:368
+msgid "AG ePDQ order status check was manually checked"
+msgstr ""
+
+#. translators: 1: first name 2: last name
+#: inc/classes/class-order-status-check.php:489
+#: inc/classes/StatusCheck/class-order-status-check.php:554
+#: inc/classes/StatusCheck/class-order-status-check.php:607
+msgctxt "full name"
+msgid "%1$s %2$s"
+msgstr ""
+
+#: inc/classes/class-order-status-check.php:510
+#: inc/classes/StatusCheck/class-order-status-check.php:575
+#: inc/classes/StatusCheck/class-order-status-check.php:628
+msgid "Preview"
 msgstr ""
 
 #: inc/classes/class-order.php:43
@@ -2338,17 +2400,6 @@ msgstr ""
 
 #: inc/classes/class-order.php:60
 msgid "This was a MOTO payment."
-msgstr ""
-
-#: inc/classes/class-order.php:70
-#: inc/classes/StatusCheck/class-order-status-check.php:206
-msgid "Barclays ePDQ transaction has been Authorised."
-msgstr ""
-
-#: inc/classes/class-order.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:209
-#: inc/classes/StatusCheck/class-order-status-check.php:450
-msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
 msgstr ""
 
 #: inc/classes/class-order.php:77
@@ -2602,181 +2653,118 @@ msgstr ""
 msgid "Enable AG Fraud Check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:151
-#: inc/classes/Fraudchecks/fraud-checks.php:527
+#: inc/classes/Fraudchecks/fraud-checks.php:155
+#: inc/classes/Fraudchecks/fraud-checks.php:532
 msgid "AG Traffic Light System"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:351
+#: inc/classes/Fraudchecks/fraud-checks.php:355
 msgid "The Address is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:354
+#: inc/classes/Fraudchecks/fraud-checks.php:358
 msgid "The address has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:357
+#: inc/classes/Fraudchecks/fraud-checks.php:361
 msgid "Invalid or no Address has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:366
+#: inc/classes/Fraudchecks/fraud-checks.php:370
 msgid "The Postal Code is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:369
+#: inc/classes/Fraudchecks/fraud-checks.php:373
 msgid "The Postal Code has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:372
+#: inc/classes/Fraudchecks/fraud-checks.php:376
 msgid "Invalid or no Postal Code has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:375
+#: inc/classes/Fraudchecks/fraud-checks.php:379
 msgid "Parameters for Postal Code has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:381
+#: inc/classes/Fraudchecks/fraud-checks.php:385
 msgid "The CVC has been sent and the acquirer has given a positive response to the CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:384
+#: inc/classes/Fraudchecks/fraud-checks.php:388
 msgid "The CVC has been sent but the acquirer has given a negative response to the CVC check, i.e. the CVC is wrong."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:387
+#: inc/classes/Fraudchecks/fraud-checks.php:391
 msgid "Invalid or no CVC has been transmitted"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:390
+#: inc/classes/Fraudchecks/fraud-checks.php:394
 msgid "Parameters for CVC has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:413
+#: inc/classes/Fraudchecks/fraud-checks.php:418
 msgid "Address Check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:416
+#: inc/classes/Fraudchecks/fraud-checks.php:421
 msgid "Postcode check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:419
+#: inc/classes/Fraudchecks/fraud-checks.php:424
 msgid "CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:422
+#: inc/classes/Fraudchecks/fraud-checks.php:427
 msgid "3D Secure check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:467
+#: inc/classes/Fraudchecks/fraud-checks.php:472
 msgid "Manually keyed (MOTO) (card not present)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:471
+#: inc/classes/Fraudchecks/fraud-checks.php:476
 msgid "Recurring (from MOTO)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:475
+#: inc/classes/Fraudchecks/fraud-checks.php:480
 msgid "Installment payments"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:479
+#: inc/classes/Fraudchecks/fraud-checks.php:484
 msgid "Manually keyed, card present"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:483
+#: inc/classes/Fraudchecks/fraud-checks.php:488
 msgid "Cardholder identification successful"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:487
+#: inc/classes/Fraudchecks/fraud-checks.php:492
 msgid "Merchant supports identification but not cardholder,"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:491
+#: inc/classes/Fraudchecks/fraud-checks.php:496
 msgid "E-commerce with SSL encryption"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:495
+#: inc/classes/Fraudchecks/fraud-checks.php:500
 msgid "Recurring (from e-commerce)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:499
+#: inc/classes/Fraudchecks/fraud-checks.php:504
 msgid "Parameters for 3D has not been set."
 msgstr ""
 
 #: inc/classes/Moto/class-moto.php:89
-#: inc/classes/StatusCheck/class-order-status-check.php:288
-msgid "Are you sure you wish to check the status of this order?"
-msgstr ""
-
-#: inc/classes/Moto/class-moto.php:91
 msgid "Something went wrong, and the MOTO payment could not be completed. Please try again."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:121
-msgid "AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce"
+#: inc/classes/Moto/class-moto.php:124
+msgid "This order is a "
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:127
-#: inc/classes/StatusCheck/class-order-status-check.php:372
-msgid "Order ID:"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:128
-#: inc/classes/StatusCheck/class-order-status-check.php:373
-msgid "Payment Reference In ePDQ System:"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:137
-#: inc/classes/StatusCheck/class-order-status-check.php:378
-msgid " and Barclays ePDQ has confirmed the transaction."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:139
-#: inc/classes/StatusCheck/class-order-status-check.php:380
-msgid "Barclays ePDQ transaction is confirmed"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:155
-#: inc/classes/StatusCheck/class-order-status-check.php:396
-msgid " and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:164
-#: inc/classes/StatusCheck/class-order-status-check.php:405
-msgid " and You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:174
-#: inc/classes/StatusCheck/class-order-status-check.php:415
-msgid " and Barclays ePDQ has refused the transaction."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:184
-#: inc/classes/StatusCheck/class-order-status-check.php:425
-msgid " and Barclays ePDQ has reported the payment is uncertain."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:195
-#: inc/classes/StatusCheck/class-order-status-check.php:436
-msgid " and ePDQ has confirmed the customer has cancelled the transaction"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:221
-#: inc/classes/StatusCheck/class-order-status-check.php:462
-msgid " and has come back as Incomplete or invalid"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:234
-#: inc/classes/StatusCheck/class-order-status-check.php:475
+#: inc/classes/StatusCheck/class-order-status-check.php:235
+#: inc/classes/StatusCheck/class-order-status-check.php:477
 msgid " and has come back with an issue"
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:290
-msgid "Something went wrong, and the order status check could not be completed. Please try again."
-msgstr ""
-
-#: inc/classes/StatusCheck/class-order-status-check.php:366
-msgid "AG ePDQ order status check was manually checked"
 msgstr ""
 
 #: inc/classes/Tokenize/class-tokenization.php:124
@@ -2796,84 +2784,84 @@ msgstr ""
 msgid "Back to Welcome page"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:104
+#: inc/core/class-ag-welcome.php:100
 msgid "License &amp; Billing"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:106
+#: inc/core/class-ag-welcome.php:102
 msgid "Activate or sync your license, cancel your subscription, print invoices, and manage your account information."
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:110
+#: inc/core/class-ag-welcome.php:106
 msgid "Manage Licence & Billing"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:120
+#: inc/core/class-ag-welcome.php:114
 msgid "Your Account"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:122
+#: inc/core/class-ag-welcome.php:116
 msgid "Manage all of your AG plugins, subscriptions, renewals, and more."
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:126
+#: inc/core/class-ag-welcome.php:120
 msgid "Manage Your Account"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:136
+#: inc/core/class-ag-welcome.php:128
 msgid "Affiliate"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:138
+#: inc/core/class-ag-welcome.php:130
 msgid "Become an ambassador for AG and earn 20% commission for each sale!"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:142
+#: inc/core/class-ag-welcome.php:134
 msgid "Find Out More"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:157
+#: inc/core/class-ag-welcome.php:147
 msgid "Getting Support"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:159
+#: inc/core/class-ag-welcome.php:149
 msgid "Get premium support with a valid licence"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:163
+#: inc/core/class-ag-welcome.php:153
 msgid "Submit a ticket"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:173
-#: inc/core/class-ag-welcome.php:179
+#: inc/core/class-ag-welcome.php:161
+#: inc/core/class-ag-welcome.php:167
 msgid "Documentation"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:175
+#: inc/core/class-ag-welcome.php:163
 msgid "Have a read of the plugin documentation."
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:189
+#: inc/core/class-ag-welcome.php:175
 msgid "Feature Request"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:191
+#: inc/core/class-ag-welcome.php:177
 msgid "Have a feature you'd love to be part of the plugin?"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:195
+#: inc/core/class-ag-welcome.php:181
 msgid "Submit a feature request"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:205
+#: inc/core/class-ag-welcome.php:189
 msgid "Setup Wizard"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:207
+#: inc/core/class-ag-welcome.php:191
 msgid "Struggling to get setup?"
 msgstr ""
 
-#: inc/core/class-ag-welcome.php:211
+#: inc/core/class-ag-welcome.php:195
 msgid "Use the wizard"
 msgstr ""
 

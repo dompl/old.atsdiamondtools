@@ -46,7 +46,7 @@ class AG_ePDQ_Token {
 		// Used token before
 		$savedCard = $order->get_meta( 'use_saved_card' );
 		$customerToken = self::check( $login, $savedCard );
-		if( isset( $customerToken ) || ! empty( $customerToken ) ) {
+		if( isset( $customerToken )) {
 			$middle = strlen( $args['ED'] ) / 2;
 			$brand = $args['BRAND'];
 
@@ -151,7 +151,7 @@ class AG_ePDQ_Token {
 
 			if( $token->is_default() ) {
 
-				$getCards[] = '<li><input type="radio" id="cards-1" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' );
+				$getCards[] = '<li><input type="radio" id="cards-1" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' ); // @phpstan-ignore-line
 
 			}
 		}
@@ -160,7 +160,7 @@ class AG_ePDQ_Token {
 
 			if( ! $token->is_default() ) {
 
-				$getCards[] = '<li><input type="radio" id="cards" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' );
+				$getCards[] = '<li><input type="radio" id="cards" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' ); // @phpstan-ignore-line
 
 			}
 		}
@@ -175,6 +175,7 @@ class AG_ePDQ_Token {
 		$wc_customer = new \WC_Customer( $user_id );
 		$ePDQ_settings = new epdq_checkout();
 		$settings = ePDQ_crypt::key_settings();
+		$redirect_url = '';
 		if( get_woocommerce_currency() !== 'GBP' && defined( 'ePDQ_PSPID' ) ) {
 			$PSPID = ePDQ_PSPID;
 		} else {

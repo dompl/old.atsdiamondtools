@@ -38,18 +38,18 @@ class ePDQ_Sub {
 	public static function can_retry_renewal_order( $renewal_order ) {
 
 		// Check if the order is a renewal order and is failed.
-		if( ! wcs_order_contains_subscription( $renewal_order ) || 'failed' !== $renewal_order->get_status() ) {
+		if( ! wcs_order_contains_subscription( $renewal_order ) || 'failed' !== $renewal_order->get_status() ) { // @phpstan-ignore-line
 			return FALSE;
 		}
 
 		// Check if the retry limit has been reached.
-		$retry_limit = wcs_get_renewal_retry_limit();
+		$retry_limit = wcs_get_renewal_retry_limit(); // @phpstan-ignore-line
 		if( $retry_limit > 0 && $renewal_order->get_meta( '_wcs_renewal_retry_count', TRUE ) >= $retry_limit ) {
 			return FALSE;
 		}
 
 		// Check if the retry window has passed.
-		$retry_interval = wcs_get_renewal_retry_interval();
+		$retry_interval = wcs_get_renewal_retry_interval(); // @phpstan-ignore-line
 		if( $retry_interval > 0 ) {
 			$retry_date = $renewal_order->get_date_created()->add( new DateInterval( 'PT' . $retry_interval . 'S' ) );
 			if( $retry_date > current_time( 'timestamp' ) ) {
@@ -97,7 +97,7 @@ class ePDQ_Sub {
 
 		// Get customer token
 		$tokens = WC_Payment_Tokens::get_customer_tokens( $order->get_customer_id(), 'epdq_checkout' );
-		if( empty( $tokens ) || ! isset( $tokens ) ) {
+		if( empty( $tokens ) ) {
 			AG_ePDQ_Helpers::ag_log( 'There was an issue getting the customers default token for the subscription payment for order #' . $order->get_order_number(), 'debug', 'yes' );
 			$order->add_order_note( 'There was an issue getting the customers default token for the subscription payment for order #' . $order->get_order_number() );
 
@@ -110,7 +110,7 @@ class ePDQ_Sub {
 			if( $token->is_default() ) {
 				$getToken = array(
 					'token' => $token->get_token(),
-					'brand' => $token->get_card_type()
+					'brand' => $token->get_card_type() // @phpstan-ignore-line
 				);
 			}
 		}
@@ -139,6 +139,7 @@ class ePDQ_Sub {
 		$data_post['BRAND'] = $getToken['brand'] ?? '';
 
 		ksort( $data_post );
+		$shasign_arg = [];
 		foreach( $data_post as $key => $value ) {
 			if( $value == '' ) {
 				continue;

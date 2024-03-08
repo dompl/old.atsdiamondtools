@@ -52,7 +52,7 @@ class ag_epdq_webhook {
 			$hash_fields = array(
 				$settings['pspid'],
 				date( 'Y:m:d' ),
-				AG_ePDQ_Helpers::AG_get_request( 'idOrder' ),
+				$datacheck['PARAMVAR'],
 				$settings['shain'],
 				get_bloginfo( 'name' )
 			);
@@ -60,7 +60,7 @@ class ag_epdq_webhook {
 			$hash_fields = array(
 				$settings['pspid'],
 				date( 'Y:m:d' ),
-				AG_ePDQ_Helpers::AG_get_request( 'orderID' ),
+				$datacheck['PARAMVAR'],
 				$settings['shain'],
 				get_bloginfo( 'name' )
 			);
@@ -186,18 +186,18 @@ class ag_epdq_webhook {
 
 		global $woocommerce;
 
-		$order = new WC_Order( $args['orderID'] );
+		$order = new WC_Order( $args['PARAMVAR'] );
 		$epdq_settings = new epdq_checkout();
 
 		// Catch and stop if order is already paid for or is processing.
 		if( $order->has_status( array( 'processing', 'completed' ) ) ) {
-			AG_ePDQ_Helpers::ag_log( 'Aborting, Order #' . $args['orderID'] . ' is already paid for.', 'debug', 'yes' );
+			AG_ePDQ_Helpers::ag_log( 'Aborting, Order #' . $args['PARAMVAR'] . ' is already paid for.', 'debug', 'yes' );
 			wp_redirect( $order->get_checkout_order_received_url() );
 			exit;
 		}
 
 		// Save payment token to user
-		if( $epdq_settings->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) {
+		if( $epdq_settings->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) { // @phpstan-ignore-line
 			AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
 			// Drop BIN
 			unset( $args['BIN'] );
@@ -225,7 +225,7 @@ class ag_epdq_webhook {
 		AG_ePDQ_Helpers::update_order_notes( $order, $order_notes );
 
 		unset( $args['SHASIGN'], $args['COMPLUS'], $args['CARDNO'], $args['ALIAS'] );
-		AG_ePDQ_Helpers::update_order_meta_data( $args['orderID'], $args, $order );
+		AG_ePDQ_Helpers::update_order_meta_data( $args['PARAMVAR'], $args, $order );
 
 		// Process order data and update order status
 		epdq_order::process( $args, '[Webhook] ', $order );

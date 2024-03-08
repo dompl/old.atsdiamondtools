@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Stable tag: 6.2
 
 == Description ==
@@ -32,6 +32,18 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.6.5 - 29/02/24 =
+* Fix             - Resolved an issue in the complus_decrypt() function that led to failures caused by order ID discrepancies, ensuring reliable decryption processes.
+
+= v.4.6.4 - 28/02/24 =
+* Fix             - Addressed issues related to undefined variables and the overlooked usage of existing constants, enhancing the stability and reliability of our code.
+* Dev             - Optimized the codebase by eliminating instances where functions were called with excess parameters, streamlining function execution.
+* Dev             - Resolved warnings associated with the creation of dynamic properties, ensuring a more robust and error-free operation.
+* Dev             - Refined the get_epdq_ncerror() function by eliminating redundant keys, thereby improving data handling efficiency.
+* Dev             - Enhanced the payment request process by including "ECOM_SHIPTO_" parameters for shipping addresses, facilitating more comprehensive transaction data.
+* Dev             - Introduced a new PHP constant "ag_addmatch" to enable a match between billing and shipping addresses, streamlining address verification and enhancing security measures.
+* Change          - Bump tested WooCommerce (8.6.1).
 
 = v.4.6.3 - 17/01/24 =
 * Dev             - Changed error code in order notes to display the error code meaning, rather than the code number.
@@ -150,7 +162,6 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * Change           - Change deeper debugging to ag_support_debug.
 * Update           - Freemius SDK updated.
 
-
 = v.4.4.5 - 31/10/22 =
 * Improvement     - WooCommerce checkout blocks
 
@@ -162,7 +173,6 @@ Automatic updates should work like a charm; as always though, update on a stagin
 * Change          - Rename of Tokenize class.
 * Removal         - Removed old 3D secure score system, Fraud Checks replaces this.
 * Removal         - Removed upsell from welcome page.
-
 
 = v.4.4.3 - 20/09/22 =
 * Fix            - Fixed issue with setup wizard on newer versions of WooCommerce.

@@ -32,6 +32,8 @@ class AG_ePDQ_Helpers {
 			}
 		}
 		$order->save();
+
+		return FALSE;
 	}
 
 	/**
@@ -60,6 +62,8 @@ class AG_ePDQ_Helpers {
 		}
 		$data_back = implode( '', $order_notes );
 		$customer_order->add_order_note( $data_back );
+
+		return FALSE;
 	}
 
 	/**
@@ -136,7 +140,7 @@ class AG_ePDQ_Helpers {
 
 	public static function order_contains_subscription( $order_id ) {
 
-		return function_exists( 'wcs_order_contains_subscription' ) && ( wcs_order_contains_subscription( $order_id ) || wcs_order_contains_renewal( $order_id ) );
+		return function_exists( 'wcs_order_contains_subscription' ) && ( wcs_order_contains_subscription( $order_id ) || function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order_id ) );
 	}
 
 	/**
@@ -149,7 +153,7 @@ class AG_ePDQ_Helpers {
 	public static function get_enviroment_url( $endpoint ) {
 
 		$ePDQ_settings = new epdq_checkout();
-
+		$environment_url = '';
 		if( $ePDQ_settings->status === 'test' ) {
 			$environment_url = 'https://mdepayments.epdq.co.uk/ncol/test/' . $endpoint . '.asp';
 		}
@@ -286,8 +290,7 @@ class AG_ePDQ_Helpers {
 			return apply_filters( 'ePDQ_custom_order_id', $order );
 		}
 
-		// return $order->get_order_number();
-		return $order->get_id();
+		return $order->get_order_number();
 
 	}
 
@@ -301,7 +304,7 @@ class AG_ePDQ_Helpers {
 	// Function to delete old log files
 	public static function delete_old_log_files() {
 
-		$log_dir = WC_LOG_DIR;
+		$log_dir = WC_LOG_DIR; // @phpstan-ignore-line
 
 		$files = glob( $log_dir . '/AG-WooCommerce-Barclays-ePDQ-Payment-Gateway-*.log' );
 

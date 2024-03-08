@@ -64,6 +64,7 @@ class AG_ePDQ_order_status_check {
 		$key_settings = ePDQ_crypt::key_settings();
 		$environment_url = AG_ePDQ_Helpers::get_enviroment_url( 'querydirect' );
 		$accepted = array( 4, 5, 9 );
+		$error_note = '';
 
 		// Is auto check enabled?
 		if( $ePDQ_settings->statusCheck === 'yes' ) {
@@ -119,9 +120,9 @@ class AG_ePDQ_order_status_check {
 		$result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
 
 		$status_check = '<p><strong>' . __( 'AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce', 'ag_epdq_server' );
-		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . ' - ' . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '</p>';
+		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . ' - ' . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '</p>';  // @phpstan-ignore-line
 		if( isset( $result['NCERROR'] ) ) {
-			$errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $result['NCERROR'] ) . '</p>';
+			$errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $result['NCERROR'] ) . '</p>'; // @phpstan-ignore-line
 			$error_note = '<p>ePDQ NCERROR: - ' . $result['NCERRORPLUS'] . '</p>';
 		}
 		$note .= '<p>' . __( 'Order ID:', 'ag_epdq_server' ) . ' - ' . $order->get_id() . '</p>';
@@ -144,7 +145,7 @@ class AG_ePDQ_order_status_check {
 			$order->add_order_note( $status_check . $noteTitle );
 
 			$orderdata = array(
-				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ), // @phpstan-ignore-line
 				'PAYID'  => $result['PAYID'] ?? '',
 
 			);
@@ -210,7 +211,7 @@ class AG_ePDQ_order_status_check {
 			$order->update_status( 'on-hold' );
 			$order->add_order_note( $status_check . $noteTitle );
 			$orderdata = array(
-				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ), // @phpstan-ignore-line
 				'PAYID'  => $result['PAYID'] ?? '',
 
 			);
@@ -257,7 +258,7 @@ class AG_ePDQ_order_status_check {
 
 		if( 0 < $order->get_total() - $order->get_total_refunded() || 0 < absint( $order->get_item_count() - $order->get_item_count_refunded() ) ) {
 
-			echo '<button id="ag-check-status-epdq"  type="button" id="ag-status" class="button ag-status" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_url . '">AG ePDQ Order Status Check</button>';
+			echo '<button id="ag-check-status-epdq"  type="button" id="ag-status" class="button ag-status" data-order_url="' . esc_attr( get_edit_post_link( $order->get_id() ) ) . '" data-order_id="' . esc_attr( $order->get_id() ) . '" data-plugin="' . AG_ePDQ_url . '">AG ePDQ Order Status Check</button>';  // @phpstan-ignore-line
 
 			return;
 
@@ -282,7 +283,7 @@ class AG_ePDQ_order_status_check {
 			// 	return;
 			// }
 
-			wp_enqueue_script( self::$args['plugin_name'] . '-status-check', AG_ePDQ_server_path . "inc/assets/js/ag-status-check-script.js", array( 'jquery' ), NULL, TRUE );
+			wp_enqueue_script( self::$args['plugin_name'] . '-status-check', AG_ePDQ_server_path . "inc/assets/js/ag-status-check-script.js", array( 'jquery' ), NULL, TRUE );  // @phpstan-ignore-line
 			wp_localize_script( self::$args['plugin_name'] . '-status-check', 'ag_epdq_status_var', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'msg'     => __( 'Are you sure you wish to check the status of this order?', 'ag_epdq_server' ),
@@ -317,6 +318,7 @@ class AG_ePDQ_order_status_check {
 		$key_settings = ePDQ_crypt::key_settings();
 		$environment_url = AG_ePDQ_Helpers::get_enviroment_url( 'querydirect' );
 		$accepted = array( 4, 5, 9 );
+		$error_note = '';
 
 		if( empty( $settings['USERID'] ) ) {
 			AG_ePDQ_Helpers::ag_log( 'AG Status check failed: API username has not been set.', 'debug', $ePDQ_settings->debug );
@@ -364,9 +366,9 @@ class AG_ePDQ_order_status_check {
 		}
 
 		$status_check = '<p><strong>' . __( 'AG ePDQ order status check was manually checked', 'ag_epdq_server' );
-		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . ' - ' . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '</p>';
+		$note = '<p>' . __( 'ePDQ Status:', 'ag_epdq_server' ) . ' - ' . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '</p>'; // @phpstan-ignore-line
 		if( isset( $result['NCERROR'] ) ) {
-			$errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $result['NCERROR'] ) . '</p>';
+			$errornote = '<p>ePDQ NCERROR: - ' . AG_errors::get_epdq_ncerror( $result['NCERROR'] ) . '</p>'; // @phpstan-ignore-line
 			$error_note = '<p>ePDQ NCERROR: - ' . $result['NCERRORPLUS'] . '</p>';
 		}
 		$note .= '<p>' . __( 'Order ID:', 'ag_epdq_server' ) . ' - ' . $order->get_id() . '</p>';
@@ -385,7 +387,7 @@ class AG_ePDQ_order_status_check {
 			$order->add_order_note( $status_check . $noteTitle );
 
 			$orderdata = array(
-				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ), // @phpstan-ignore-line
 				'PAYID'  => $result['PAYID'] ?? '',
 
 			);
@@ -444,7 +446,7 @@ class AG_ePDQ_order_status_check {
 
 		} elseif( $result['STATUS'] === '5' ) {
 
-			$noteTitle = __( 'Barclays ePDQ transaction has been Authorised.', 'ag_epdq_direct', 'ag_epdq_server' );
+			$noteTitle = __( 'Barclays ePDQ transaction has been Authorised.', 'ag_epdq_server' );
 			AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ transaction has been Authorised. No issues to report.', 'debug', $ePDQ_settings->debug );
 			//$order->add_order_note( $note );
 			$order->add_order_note( '<strong>' . __( 'The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button.', 'ag_epdq_server' ) . '</strong>' );
@@ -549,7 +551,7 @@ class AG_ePDQ_order_status_check {
 
 			if( $order->get_billing_first_name() || $order->get_billing_last_name() ) {
 				/* translators: 1: first name 2: last name */
-				$buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'woocommerce', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
+				$buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
 			} elseif( $order->get_billing_company() ) {
 				$buyer = trim( $order->get_billing_company() );
 			} elseif( $order->get_customer_id() ) {
@@ -570,7 +572,7 @@ class AG_ePDQ_order_status_check {
 			if( $order->get_status() === 'trash' ) {
 				echo '<strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong>';
 			} else {
-				echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'woocommerce', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'woocommerce', 'ag_epdq_server' ) ) . '</a>';
+				echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'ag_epdq_server' ) ) . '</a>';
 				echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $order->get_id() ) ) . '&action=edit' ) . '" class="order-view"><strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong></a>';
 
 				// Check order is using our plugin
@@ -602,7 +604,7 @@ class AG_ePDQ_order_status_check {
 
 			if( $order->get_billing_first_name() || $order->get_billing_last_name() ) {
 				/* translators: 1: first name 2: last name */
-				$buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'ag_epdq_direct', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
+				$buyer = trim( sprintf( _x( '%1$s %2$s', 'full name', 'ag_epdq_server' ), $order->get_billing_first_name(), $order->get_billing_last_name() ) );
 			} elseif( $order->get_billing_company() ) {
 				$buyer = trim( $order->get_billing_company() );
 			} elseif( $order->get_customer_id() ) {
@@ -623,7 +625,7 @@ class AG_ePDQ_order_status_check {
 			if( $order->get_status() === 'trash' ) {
 				echo '<strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong>';
 			} else {
-				echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'ag_epdq_direct', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'ag_epdq_direct', 'ag_epdq_server' ) ) . '</a>';
+				echo '<a href="#" class="order-preview" data-order-id="' . absint( $order->get_id() ) . '" title="' . esc_attr( __( 'Preview', 'ag_epdq_server' ) ) . '">' . esc_html( __( 'Preview', 'ag_epdq_server' ) ) . '</a>';
 				echo '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $order->get_id() ) ) . '&action=edit' ) . '" class="order-view"><strong>#' . esc_attr( $order->get_order_number() ) . ' ' . esc_html( $buyer ) . '</strong></a>';
 
 
