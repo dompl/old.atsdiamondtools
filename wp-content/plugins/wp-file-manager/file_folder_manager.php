@@ -4,7 +4,7 @@
   Plugin URI: https://wordpress.org/plugins/wp-file-manager
   Description: Manage your WP files.
   Author: mndpsingh287
-  Version: 7.2.2
+  Version: 7.2.6
   Author URI: https://profiles.wordpress.org/mndpsingh287
   License: GPLv2
  **/
@@ -16,7 +16,7 @@ if (!class_exists('mk_file_folder_manager')):
     class mk_file_folder_manager
     {
         protected $SERVER = 'https://searchpro.ai/api/plugindata/api.php';
-        var $ver = '7.2.2';
+        var $ver = '7.2.6';
         /* Auto Load Hooks */
         public function __construct()
         {
@@ -839,13 +839,18 @@ if (!class_exists('mk_file_folder_manager')):
          /* Admin  Things */
          public function ffm_admin_things()
          {
+           
             $getPage = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
             $allowedPages = array(
                 'wp_file_manager',
             );
-             // Languages
-            $lang = isset($_GET['lang']) && !empty($_GET['lang']) ? sanitize_text_field(htmlentities($_GET['lang'])) : '';
-             if (!empty($getPage) && in_array($getPage, $allowedPages)):
+           
+           // Languages
+            $lang = isset($_GET['lang']) && !empty($_GET['lang']) && in_array(sanitize_text_field(htmlentities($_GET['lang'])), $this->fm_languages()) ? sanitize_text_field(htmlentities($_GET['lang'])) : '';
+            if (!empty($getPage) && in_array($getPage, $allowedPages)):
+                if( isset( $_GET['lang'] ) && !empty( $_GET['lang'] ) && !wp_verify_nonce( isset( $_GET['nonce'] ) ? $_GET['nonce'] : '', 'wp-file-manager-language' )) {
+                    //Access Denied
+                } else {
                 global $wp_version;
                 $fm_nonce = wp_create_nonce('wp-file-manager');
                 $wp_fm_lang = get_transient('wp_fm_lang');
@@ -997,7 +1002,7 @@ if (!class_exists('mk_file_folder_manager')):
                      'ajaxurl' => admin_url('admin-ajax.php'),
                      'nonce' => $fm_nonce,
                      'plugin_url' => plugins_url('lib/', __FILE__),
-                     'lang' => isset($_GET['lang']) ? sanitize_text_field(htmlentities($_GET['lang'])) : (($wp_fm_lang !== false) ? $wp_fm_lang : 'en'),
+                     'lang' => isset($_GET['lang']) && in_array(sanitize_text_field(htmlentities($_GET['lang'])), $this->fm_languages()) ? sanitize_text_field(htmlentities($_GET['lang'])) : (($wp_fm_lang !== false) ? $wp_fm_lang : 'en'),
                      'fm_enable_media_upload' => (isset($opt['fm_enable_media_upload']) && $opt['fm_enable_media_upload'] == '1') ? '1' : '0',
                      'is_multisite'=> is_multisite() ? '1' : '0',
                      'network_url'=> is_multisite() ? network_home_url() : '',
@@ -1017,8 +1022,9 @@ if (!class_exists('mk_file_folder_manager')):
                  if ($wp_fm_theme != 'default') {
                      wp_enqueue_style('theme-latest', plugins_url('lib/themes/'.$wp_fm_theme.'/css/theme.css', __FILE__), '', $this->ver);
                  }
-             } else {
-             }
+             } else {}
+             
+            }
              endif;
              
          }
@@ -1177,6 +1183,9 @@ if (!class_exists('mk_file_folder_manager')):
         public function load_custom_assets()
         {                 
             wp_enqueue_script('fm-custom-script', plugins_url('js/fm_script.js', __FILE__), array('jquery'), $this->ver);
+            wp_localize_script( 'fm-custom-script', 'fmscript', array(
+                'nonce' => wp_create_nonce('wp-file-manager-language')
+            )); 
             wp_enqueue_style('fm-custom-script-style', plugins_url('css/fm_script.css', __FILE__), '', $this->ver);
         }
 
@@ -1360,6 +1369,8 @@ if (!class_exists('mk_file_folder_manager')):
                     if($type == "db"){
                         $bkpName = $backup.'-db.sql.gz';
                     }else{
+                        $directory_separators = ['../', './','..\\', '.\\', '..'];
+                        $type = str_replace($directory_separators, '', $type);
                         $bkpName = $backup.'-'.$type.'.zip';
                     }
                     $file = $backup_dirname.$bkpName;

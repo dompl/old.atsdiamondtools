@@ -206,9 +206,10 @@ class WC_Stripe_Intent_Controller {
 
 			// 2. Load the customer ID (and create a customer eventually).
 			$customer = new WC_Stripe_Customer( wp_get_current_user()->ID );
+			$customer->maybe_create_customer();
 
-			// 3. Attach the source to the customer (Setup Intents require that).
-			$source_object = $customer->attach_source( $source_id );
+			// 3. Fetch the source object.
+			$source_object = WC_Stripe_API::get_payment_method( $source_id );
 
 			if ( ! empty( $source_object->error ) ) {
 				throw new Exception( $source_object->error->message );
@@ -702,7 +703,6 @@ class WC_Stripe_Intent_Controller {
 			'payment_method',
 			'save_payment_method_to_store',
 			'shipping',
-			'statement_descriptor',
 		];
 
 		$non_empty_params = [ 'payment_method' ];
@@ -728,9 +728,12 @@ class WC_Stripe_Intent_Controller {
 				'description'          => sprintf( __( '%1$s - Order %2$s', 'woocommerce-gateway-stripe' ), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $order->get_order_number() ),
 				'metadata'             => $payment_information['metadata'],
 				'payment_method_types' => $payment_method_types,
-				'statement_descriptor' => $payment_information['statement_descriptor'],
 			]
 		);
+
+		if ( isset( $payment_information['statement_descriptor_suffix'] ) ) {
+			$request['statement_descriptor_suffix'] = $payment_information['statement_descriptor_suffix'];
+		}
 
 		if ( $this->request_needs_redirection( $payment_method_types ) ) {
 			$request['return_url'] = $payment_information['return_url'];
