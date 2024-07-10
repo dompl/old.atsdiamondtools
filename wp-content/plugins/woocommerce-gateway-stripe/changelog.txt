@@ -1,5 +1,48 @@
 *** Changelog ***
 
+= 8.4.0 - 2024-06-13 =
+* Tweak - Resets the list of payment methods when any Stripe key is updated.
+* Fix - Removes the list of saved payment methods when the setting is disabled.
+* Tweak - Update WooCommerce.com docs links.
+* Fix - Correctly setting the preferred card brand when creating and updating a payment intent.
+* Tweak - Update WordPress.org screenshots and captions.
+* Fix - Added a feedback message + redirection back to cart when a Cash App payment fails.
+* Fix - Remove the duplicated customization notice in the settings screen.
+* Add - Include Cash App as a payment method for stores using the updated checkout experience.
+* Fix - Fixed fatal errors with subscription helper methods when subscriptions classes (from WooCommerce Subscriptions) are not available.
+* Add - Add a new dismissible banner to promote Stripe products to the settings page.
+* Fix - Hiding BNPL payment methods when the Stripe account country is not supported.
+* Fix - Resolved checkout error with UPE when using test mode customer in live mode or vice versa.
+* Fix - Handle checkbox type required fields correctly on the shortcode checkout when paying with Google Pay/Apple Pay.
+* Tweak - Remove unused confirmation modal a capability properties.
+* Fix - Resgister script on the checkout page only when the gateway is enabled.
+* Tweak - Allow to enable/disable payment methods irrespective of currency requirement.
+* Add - Include WeChat Pay as a payment method for stores using the updated checkout experience.
+* Add - Show currency requirement details in a popover.
+* Fix - Resolve invalid recurring shipping method errors when attempting to purchase multiple subscriptions with Apple Pay or Google Pay.
+* Fix - Deprecation errors on PHP 8.2 caused by using the deprecated constant FILTER_SANITIZE_STRING.
+* Update - Declare compatibility with the Cart and Checkout blocks.
+
+= 8.3.1 - 2024-05-30 =
+* Fix - Error on some environments due to the parameter in the WC_Stripe_UPE_Payment_Gateway constructor method.
+* Fix - Prevents orders purchased using a 3DS card being stuck as "pending payment" for stores with the Legacy Checkout Experience setting enabled.
+
+= 8.3.0 - 2024-05-23 =
+* Add - Add a new dismissible banner to promote Stripe products to the settings page.
+* Add - Include Afterpay (Clearpay in the UK) as a payment method for stores using the updated checkout experience.
+* Add - Include Affirm as a payment method for stores using the updated checkout experience.
+* Add - Include Klarna as a payment method for stores using the updated checkout experience.
+* Add - Additional information is displayed on the "Payment methods" page when listing co-branded credit cards.
+* Fix - Resolved an error that could prevent purchasing subscriptions that have a capital letter in the billing period. eg "Year" instead of "year".
+* Fix - The preferred card brand is used when paying with a co-branded credit card.
+* Fix - Prevent duplicate stripe meta data on orders caused by processing redirect payments and webhooks simultaneously.
+* Fix - Processing a refund of a non-card payments (i.e. iDeal, giropay) through the Stripe dashboard was not showing as refunded in WooCommerce for stores with UPE enabled.
+* Fix - Prevent orders that require manual review in Stripe being marked as processing in WooCommerce before approval.
+* Tweak - Credit card brand selection disabled when the "Legacy checkout experience" is enabled.
+* Tweak - Improve performance with handling redirect payments by not constructing every payment gateway on each page load.
+* Tweak - Adds the tracking of a selected card brand when paying using co-branded credit cards.
+* Tweak - Improve the order note message recorded when a subscription-renewal order payment fails.
+
 = 8.2.0 - 2024-04-11 =
 * Tweak - Improve the display of the Stripe account ID in the settings page.
 * Add - Enable custom styling of the Payment Elements for stores using the updated checkout experience.

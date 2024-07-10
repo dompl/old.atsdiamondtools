@@ -154,14 +154,6 @@ class AG_ePDQ_Settings {
 				'default' => 'no'
 			),
 
-			'statusCheck' => array(
-				'title'    => __( 'Disable auto Status Check', 'ag_epdq_server' ),
-				'type'     => 'checkbox',
-				'label'    => 'Turn off the auto status check.',
-				'default'  => 'no',
-				'desc_tip' => FALSE
-			),
-
 			'fraudCheck' => array(
 				'title'       => __( 'Enable AG Traffic Light System', 'ag_epdq_server' ),
 				'type'        => 'checkbox',
@@ -215,6 +207,101 @@ class AG_ePDQ_Settings {
 				'title'       => __( 'Tip', 'ag_epdq_server' ),
 				'type'        => 'hidden',
 				'description' => __( 'Want to store your API details in a more secure way, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/" target="_blank">here</a>', 'ag_epdq_server' ),
+			),
+
+		);
+	}
+
+
+	public static function status_check() {
+
+		// Get all order statuses, including custom ones
+		$order_statuses = wc_get_order_statuses();
+
+		// List of statuses to exclude
+		$exclude_statuses = array(
+			'wc-processing',
+			'wc-completed',
+			'wc-cancelled',
+			'wc-refunded',
+			'wc-failed',
+			'wc-checkout-draft'
+		);
+
+		// Filter out the excluded statuses
+		$filtered_order_statuses = array_diff_key( $order_statuses, array_flip( $exclude_statuses ) );
+
+		return array(
+
+			'statusCheck' => array(
+				'title'    => __( 'Disable auto Status Check', 'ag_epdq_server' ),
+				'type'     => 'checkbox',
+				'label'    => 'Disable the Automated Status Checks. This uses the <a target="_blank" href="https://weareag.co.uk/docs/general/tips/how-to-resolve-unpaid-order-cancelled-time-limit-reached/">WooCommerce hold stock</a> timer.<br />When WooCommerce automatically cancels an order due to the expiration of the hold period, this function will perform a one-time check to verify the order\'s final status.<br /><strong>Note: This is distinct from the Scheduled Status Check feature, which periodically checks the status of orders.</strong>',
+				'default'  => 'no',
+				'desc_tip' => FALSE
+			),
+
+			'autostatus'      => array(
+				'title'    => __( 'Enable Scheduled Status Check (Beta)', 'ag_epdq_server' ),
+				'type'     => 'checkbox',
+				'label'    => 'Enable this feature to automatically monitor unpaid orders at regular intervals until a response is received from the ePDQ.<br />It will continue to check the status of each order and update it accordingly—whether it\'s marked as cancelled, failed, or paid.<br />If the customer has not yet been redirected to the payment page, the order status will remain unchanged, and the feature will persistently poll ePDQ for updates.<br />Set the frequency of these checks bellow to ensure timely and accurate order status updates.<br /><strong>Learn more about this feature <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/status-check/scheduled-status-check-setup/" target="_blank">here</a>.</strong>',
+				'default'  => 'no',
+				'desc_tip' => FALSE
+			),
+			'order_status'    => array(
+				'title'       => __( 'Order Status', 'ag_epdq_server' ),
+				'type'        => 'multiselect',
+				'class'       => 'chosen_select',
+				'description' => __( 'Select the order statuses that should trigger the scheduled status checks. This setting allows you to tailor the monitoring process to specific order conditions.', 'ag_epdq_server' ),
+				'default'     => 'wc-pending',
+				'desc_tip'    => FALSE,
+				'options'     => $filtered_order_statuses,
+			),
+			'check_interval'  => array(
+				'title'       => __( 'Check Interval', 'ag_epdq_server' ),
+				'type'        => 'select',
+				'description' => __( 'Set the frequency at which the system checks the status of unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates.', 'ag_epdq_server' ),
+				'default'     => '86400',
+				'desc_tip'    => FALSE,
+				'options'     => array(
+					'86400' => __( 'Once a day', 'ag_epdq_server' ),
+					'43200' => __( 'Twice a day (every 12 hours)', 'ag_epdq_server' ),
+					'28800' => __( 'Three times a day (every 8 hours)', 'ag_epdq_server' ),
+					'21600' => __( 'Four times a day (every 6 hours)', 'ag_epdq_server' ),
+					'14400' => __( 'Every four hours', 'ag_epdq_server' ),
+					'10800' => __( 'Every three hours', 'ag_epdq_server' ),
+					'7200'  => __( 'Every two hours', 'ag_epdq_server' ),
+					'3600'  => __( 'Every hour', 'ag_epdq_server' ),
+					//'300'   => __( 'Every 5 minutes - DEV ONLY', 'ag_epdq_server' ),
+				),
+			),
+			'actionscheduler' => array(
+				'title'       => __( 'Monitor Scheduler Status', 'ag_epdq_server' ),
+				'type'        => 'hidden',
+				'description' => __( 'Click  <a href="' . site_url( '/wp-admin/admin.php?page=wc-status&status=pending&tab=action-scheduler&s=ag_check_unpaid_orders' ) . '" target="_blank">here</a> to view and manage the status of the Action Scheduler. This allows you to oversee scheduled tasks and ensure they are running as expected.', 'ag_epdq_server' ),
+			),
+
+			'cancelblock'     => array(
+				'title'    => __( 'Block WooCommerce Auto Cancel', 'ag_epdq_server' ),
+				'type'     => 'checkbox',
+				'label'    => 'Enable this feature to prevent WooCommerce from automatically canceling orders due to timeout.<br />When activated, this setting ensures that the Scheduled Status Check feature retains control over order statuses, allowing it to complete its checks without interruption.<br />This is particularly useful for maintaining the integrity of order monitoring, especially when awaiting updates from ePDQ.',
+				'default'  => 'no',
+				'desc_tip' => FALSE
+			),
+			'cancel_interval' => array(
+				'title'       => __( 'Cancel Interval (Beta)', 'ag_epdq_server' ),
+				'type'        => 'select',
+				'description' => __( 'Set the frequency at which the system auto cancels unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates.', 'ag_epdq_server' ),
+				'default'     => '1',
+				'desc_tip'    => FALSE,
+				'options'     => array(
+					'1'  => __( '1 day', 'ag_epdq_server' ),
+					'5'  => __( '5 days', 'ag_epdq_server' ),
+					'7'  => __( '7 days', 'ag_epdq_server' ),
+					'10' => __( '10 days', 'ag_epdq_server' ),
+					'15' => __( '15 days', 'ag_epdq_server' ),
+					'30' => __( '30 days', 'ag_epdq_server' )
+				),
 			),
 
 		);

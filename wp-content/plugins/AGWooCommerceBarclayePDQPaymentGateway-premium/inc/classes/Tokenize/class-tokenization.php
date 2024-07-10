@@ -46,7 +46,7 @@ class AG_ePDQ_Token {
 		// Used token before
 		$savedCard = $order->get_meta( 'use_saved_card' );
 		$customerToken = self::check( $login, $savedCard );
-		if( isset( $customerToken )) {
+		if( isset( $customerToken ) ) {
 			$middle = strlen( $args['ED'] ) / 2;
 			$brand = $args['BRAND'];
 
@@ -126,14 +126,7 @@ class AG_ePDQ_Token {
 					' . self::displayCards( $userID, $login, $tokens ) . '
 					<li><input type="radio" id="ag_cards" name="saved_cards" value="0"><label for="saved_cards"><p><strong>' . __( 'Use a new card', 'ag_epdq_server' ) . '</strong></p></label></li>
 				</ul>
-			</div>
-			<script>
-			  jQuery("#cards-1").prop( "checked", true ).parent().addClass("selected");
-			  jQuery(".ag-select-cards .card-list li input:radio").click(function () {
-				  jQuery(".ag-select-cards .card-list li input:radio").parent().removeClass("selected");
-				  jQuery(this).parent(this).addClass("selected");
-			  });
-			</script>';
+			</div>';
 
 		}
 
@@ -146,27 +139,24 @@ class AG_ePDQ_Token {
 		}
 
 		$getCards = array();
+		$defaultCardTemplate = '<li><input type="radio" id="cards-1" name="saved_cards" value="%1$s"><p>%2$s %3$s ending in %4$s %5$s</p></li>';
+		$nonDefaultCardTemplate = '<li><input type="radio" id="cards" name="saved_cards" value="%1$s"><p>%2$s %3$s ending in %4$s %5$s</p></li>';
 
 		foreach( $tokens as $token ) {
+			$cardType = strtolower( $token->get_card_type() );
+			$cardImage = '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . $cardType . '.png" alt="' . $cardType . '" />';
+			$cardName = '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>';
+			$cardEnding = esc_html( $token->get_last4() );
+			$cardExpiry = ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ')';
 
 			if( $token->is_default() ) {
-
-				$getCards[] = '<li><input type="radio" id="cards-1" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' ); // @phpstan-ignore-line
-
+				$getCards[] = sprintf( $defaultCardTemplate, $token->get_id(), $cardImage, $cardName, $cardEnding, $cardExpiry );
+			} else {
+				$getCards[] = sprintf( $nonDefaultCardTemplate, $token->get_id(), $cardImage, $cardName, $cardEnding, $cardExpiry );
 			}
 		}
 
-		foreach( $tokens as $token ) {
-
-			if( ! $token->is_default() ) {
-
-				$getCards[] = '<li><input type="radio" id="cards" name="saved_cards" value="' . $token->get_id() . '"><p>' . sprintf( esc_html__( '%1$s %2$s ending in %3$s %4$s', 'ag_epdq_server' ), '<img src="' . AG_ePDQ_server_path . 'inc/assets/img/new-card/' . strtolower( $token->get_card_type() ) . '.png" alt="' . strtolower( $token->get_card_type() ) . '" />', '<strong>' . esc_html( ucfirst( $token->get_card_type() ) ) . '</strong>', esc_html( $token->get_last4() ), ' (' . $token->get_expiry_month() . '/' . $token->get_expiry_year() . ') </p></li>' ); // @phpstan-ignore-line
-
-			}
-		}
-
-		return implode( $getCards );
-
+		return implode( '', $getCards );
 	}
 
 	public static function addNewCard() {

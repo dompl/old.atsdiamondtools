@@ -8,11 +8,11 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.7.0
+ * Version: 4.8.1
  * Update URI: https://api.freemius.com
  * Requires Plugins: woocommerce
  * WC requires at least: 7.1
- * WC tested up to: 8.8.3
+ * WC tested up to: 9.0.2
  * License: GPL3
  */
 
@@ -24,13 +24,13 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.7.0
+ * @version  4.8.1
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
-	public static $AGversion = "4.7.0";
+	public static $AGversion = "4.8.1";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -45,8 +45,6 @@ class AG_ePDQ_server {
 		$this->define_constants();
 
 		add_action( 'plugins_loaded', array( $this, 'woocommerce_ag_epdq_init' ), 0 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'ag_admin_css' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'ag_checkout_css' ) );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'ag_epdq_block_css' ) );
@@ -155,6 +153,7 @@ class AG_ePDQ_server {
 			'plugin_title'   => 'Barclays ePDQ payment gateway (Barclaycard) for WooCommerce',
 			'plugin_version' => self::$AGversion,
 			'plugin_name'    => self::$pluginName,
+
 		) );
 
 		AG_start_here_docs::run_instance( array(
@@ -199,15 +198,6 @@ class AG_ePDQ_server {
 		return $methods;
 	}
 
-	public function ag_admin_css() {
-
-		wp_enqueue_style( 'ag-admin', AG_ePDQ_server_path . 'inc/assets/css/admin-style.css', FALSE, self::$AGversion );
-	}
-
-	public function ag_checkout_css() {
-
-		wp_enqueue_style( 'ag-ePDQ', AG_ePDQ_server_path . 'inc/assets/css/style.css', FALSE, self::$AGversion );
-	}
 
 	public function ag_epdq_block_css() {
 

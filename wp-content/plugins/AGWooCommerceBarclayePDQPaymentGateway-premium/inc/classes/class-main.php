@@ -8,19 +8,13 @@
  * Modified By: Aaron Bowie - We are AG
  * -----
  * WC requires at least: 3.0.0
- * WC tested up to: 4.2
+ * WC tested up to: 8.9.1
  * License: GPL3
  */
 
 defined( 'ABSPATH' ) || die( "No script kiddies please!" );
 
 class epdq_checkout extends WC_Payment_Gateway {
-
-	/**
-	 * Plugin Doc link
-	 *
-	 * @var string
-	 */
 
 	// URL's
 	protected const TEST_URL = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
@@ -64,6 +58,14 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 	// webhook
 	public $token;
+
+	public $check_interval;
+	public $order_status;
+	public $autostatus;
+	public $actionscheduler;
+	public $cancelblock;
+	public $cancel_interval;
+
 
 	public function __construct() {
 
@@ -130,8 +132,34 @@ class epdq_checkout extends WC_Payment_Gateway {
 		), 20, 1 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_script' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'ag_checkout_css' ) );
 
 		add_action( 'woocommerce_before_account_payment_methods', array( $this, 'display_success_message' ) );
+
+		add_filter( 'woocommerce_gateway_description', array( $this, 'display_token_to_customer' ), 20, 2 );
+
+	}
+
+	public function display_token_to_customer( $description, $payment_id ) {
+
+		if( $payment_id == 'epdq_checkout' && isset( $this->token ) && $this->token === 'yes' ) {
+			return $description . AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
+		}
+
+		return $description;
+	}
+
+	public function ag_checkout_css() {
+
+		if( ! is_checkout() ) {
+			return;
+		}
+
+		wp_enqueue_style( 'ag-ePDQ', AG_ePDQ_server_path . 'inc/assets/css/style.css', FALSE, AG_ePDQ_server::$AGversion );
+
+		if( isset( $this->token ) && $this->token === 'yes' ) {
+			wp_enqueue_script( 'epdq_checkout_token_script', AG_ePDQ_server_path . 'inc/assets/js/checkout-token.js', TRUE );
+		}
 
 	}
 
@@ -163,7 +191,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 	 */
 	public function init_form_fields() {
 
-		$this->form_fields = array_merge( AG_ePDQ_Settings::form_fields(), AG_ePDQ_Settings::api_fields(), AG_ePDQ_Settings::form_advanced() );
+		$this->form_fields = array_merge( AG_ePDQ_Settings::form_fields(), AG_ePDQ_Settings::api_fields(), AG_ePDQ_Settings::form_advanced(), AG_ePDQ_Settings::status_check() );
 	}
 
 	public function admin_script() {
@@ -176,6 +204,8 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 		wp_enqueue_script( 'ePDQ_settings_script', AG_ePDQ_server_path . 'inc/assets/js/admin-script.js' );  // @phpstan-ignore-line
 		wp_enqueue_script( 'ePDQ_alert', 'https://unpkg.com/sweetalert/dist/sweetalert.min.js' );
+		wp_enqueue_style( 'ag_ePDQ_admin', AG_ePDQ_server_path . 'inc/assets/css/admin-style.css', FALSE, AG_ePDQ_server::$AGversion ); // @phpstan-ignore-line
+
 	}
 
 	/**
@@ -222,11 +252,6 @@ class epdq_checkout extends WC_Payment_Gateway {
 			$description .= $this->display_test_message();
 		}
 
-		// Display token section
-		if( isset( $this->token ) && $this->token === 'yes' ) {
-			$description .= AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
-		}
-
 		return $description;
 
 	}
@@ -264,7 +289,7 @@ class epdq_checkout extends WC_Payment_Gateway {
         <h3><?php echo __( 'AG ePDQ Checkout Settings', 'ag_epdq_server' ); ?></h3>
 
         <h2 id="ag-nav" class="nav-tab-wrapper">
-            <a href="#general" class="nav-tab nav-tab-active">General Settings</a> <a href="#rest" class="nav-tab">REST API</a> <a href="#advanced" class="nav-tab">Advanced</a>
+            <a href="#general" class="nav-tab nav-tab-active">General Settings</a> <a href="#rest" class="nav-tab">REST API</a> <a href="#statuccheck" class="nav-tab">Status Check</a> <a href="#advanced" class="nav-tab">Advanced</a>
         </h2>
         <div id="general" class="settings-tab-content" style="display: block;">
             <div class="wrapper-info">
@@ -293,6 +318,21 @@ class epdq_checkout extends WC_Payment_Gateway {
 				<?php echo $this->generate_settings_html( AG_ePDQ_Settings::api_fields() ); ?>
             </table>
         </div>
+        <div id="statuccheck" class="settings-tab-content" style="display: none;">
+            <div class="wrapper-info">
+                <div class="ag-notice">
+                    <div class="subject">
+                        <h3>Status Check Settings</h3>
+                        <p><?php echo __( 'Welcome to the Status Check Settings page. Here, you will find a range of features and options designed to help you manage and automate the ePDQ status checking for your orders.', 'ag_epdq_server' ) ?><br/>
+                            <strong><?php echo __( 'This feature relies on the proper configuration of the REST API. Please ensure that your REST API settings are correctly set up to utilise these status check functionalities effectively.', 'ag_epdq_server' ) ?></strong>.</p>
+
+                    </div>
+                </div>
+            </div>
+            <table class="form-table">
+				<?php echo $this->generate_settings_html( AG_ePDQ_Settings::status_check() ); ?>
+            </table>
+        </div>
         <div id="advanced" class="settings-tab-content" style="display: none;">
             <div class="wrapper-info">
                 <div class="ag-notice">
@@ -307,7 +347,7 @@ class epdq_checkout extends WC_Payment_Gateway {
             </table>
         </div>
 
-        <p><strong>Need some help setting up this plugin?</strong> <a href="<?php echo admin_url( 'admin.php?page=AGWooCommerceBarclayePDQPaymentGateway' ); ?>">Click here</a></p>
+        <p><strong>Need some help setting up this plugin?</strong> <a target="_blank" href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/">Click here</a></p>
 
 		<?php
 
@@ -387,7 +427,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 		// Use different PSPID (This is useful for stores that are franchisees)
 		$ePDQ_PSPID = NULL;
-		$multi_PSPID = apply_filters( 'ePDQ_PSPID', $ePDQ_PSPID );
+		$multi_PSPID = apply_filters( 'ePDQ_PSPID', $ePDQ_PSPID, $order_id );
 		if( ! empty( $multi_PSPID ) ) {
 			$PSPID = $multi_PSPID;
 		}

@@ -1143,99 +1143,6 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
-        /**
-         * Get array of similar words from the index
-         * @param array $data Search data
-         * @return array $new_terms Similar terms array
-         */
-        static public function get_similar_terms( $data ) {
-
-            global $wpdb;
-
-            $fuzzy_params = array(
-                'min_terms_length' => 3,
-                'term_like_prefix' => 2,
-                'max_similar_terms' => 50,
-                'min_distance' => 2,
-            );
-
-            /**
-             * Filter fuzzy search related parameters
-             * @since 3.05
-             * @param array $fuzzy_params Array of fuzzy search parameters
-             * @param array $data Array of search parameters
-             */
-            $fuzzy_params = apply_filters( 'aws_fuzzy_params', $fuzzy_params, $data );
-
-            $new_terms = array();
-
-            $search_terms = isset( $data['search_terms'] ) ? $data['search_terms'] : array();
-
-            $query_stock = isset( $data['query_params'] ) && isset( $data['query_params']['stock'] ) ? $data['query_params']['stock'] : '';
-            $query_visibility = isset( $data['query_params'] ) && isset( $data['query_params']['visibility'] ) ? $data['query_params']['visibility'] : '';
-            $query_exclude_products = isset( $data['query_params'] ) && isset( $data['query_params']['exclude_products'] ) ? $data['query_params']['exclude_products'] : '';
-            $query_lang = isset( $data['query_params'] ) && isset( $data['query_params']['lang'] ) ? $data['query_params']['lang'] : '';
-
-            foreach ( $search_terms as $search_term ) {
-
-                if ( strlen( $search_term ) > $fuzzy_params['min_terms_length'] ) {
-
-                    $keyword_like = $wpdb->esc_like( substr( $search_term, 0, $fuzzy_params['term_like_prefix'] ) ) . "%";
-
-                    $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
-
-                    $sql = "SELECT term, count
-                        FROM
-                            {$table_name}
-                        WHERE
-                            term LIKE '{$keyword_like}'
-                            {$query_stock}
-                            {$query_visibility}
-                            {$query_exclude_products}
-                            {$query_lang}
-                        GROUP BY term
-                        ORDER BY count DESC
-                        LIMIT 0, {$fuzzy_params['max_similar_terms']}
-                    ";
-
-                    $matches = $wpdb->get_results( $sql, ARRAY_A );
-
-                    $top_distance = 10;
-                    $temp_matches = array();
-
-                    if ( $matches ) {
-
-                        $distances = array();
-                        foreach ( $matches as $key => $match ) {
-
-                            $distance = levenshtein( $match['term'], $search_term );
-
-                            if ( $distance <= $fuzzy_params['min_distance'] ) {
-
-                                if ( $distance < $top_distance ) {
-                                    $top_distance = $distance;
-                                    $temp_matches = array();
-                                    $temp_matches[] = $match['term'];
-                                } elseif ( $distance === $top_distance ) {
-                                    $temp_matches[] = $match['term'];
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                    $new_terms = array_merge( $new_terms, $temp_matches );
-
-                }
-
-            }
-
-            return $new_terms;
-
-        }
-
         /*
          * Check for incorrect filtering rules and return them
          * @return string
@@ -1248,6 +1155,130 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
              * @param string $capability Minimal capability required to view plugin settings page
              */
             return apply_filters( 'aws_admin_capability', 'manage_options' );
+
+        }
+
+        /**
+         * Check if we should override default search query
+         * @param string $query
+         * @return bool
+         */
+        static public function aws_searchpage_enabled( $query ) {
+            $enabled = true;
+
+            $post_type_product = ( $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) ) ) ? true :
+                ( ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' ) ? true : false );
+
+            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
+                ! isset( $query->query_vars['s'] ) ||
+                ! $query->is_search() ||
+                ! $post_type_product
+            ) {
+                $enabled = false;
+            }
+
+            return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
+        }
+
+        /**
+         * Get array of custom data for search results output
+         * @param array $results Search results
+         * @param array $s_data Search related data
+         * @return array
+         */
+        static public function get_custom_results_data( $results, $s_data ) {
+
+            $results_data = array();
+            $notices = array();
+
+            $results_data['top_text'] = apply_filters( 'aws_search_top_text', '', $results, $s_data );
+
+            $results_data['notices'] = apply_filters( 'aws_search_notices', $notices, $results, $s_data );
+
+            $results_data = apply_filters( 'aws_search_custom_results_data', $results_data, $results, $s_data );
+
+            return (array) $results_data;
+
+        }
+
+        /**
+         * Generate all possible combinations or array items
+         * @param array $array_groups
+         * @return array
+         */
+        static public function generate_combinations( $array_groups ) {
+
+            $groups = array( array() );
+            foreach ( $array_groups as $array ) {
+                $tmp = array();
+                foreach ($groups as $resultItem) {
+                    foreach ($array as $item) {
+                        $tmp[] = array_merge( $resultItem, array( $item ) );
+                    }
+                }
+                $groups = $tmp;
+            }
+
+            return $groups;
+
+        }
+
+        /**
+         * Get variations of suggested fixed terms that was misspelled
+         * @param array $data Search related data
+         * @param int $max_terms_to_suggest Max number of suggested terms variations
+         * @return array
+         */
+        static public function get_fixed_terms_suggestions( $data, $max_terms_to_suggest = 3 ) {
+
+            /**
+             * Filter number of suggested fixed terms
+             * @since 3.10
+             * @param int $max_terms_to_suggest Max number of fixed terms suggestions
+             * @param array $data Array of search parameters
+             */
+            $max_terms_to_suggest = apply_filters( 'aws_search_fixed_terms_suggestions_num', $max_terms_to_suggest, $data );
+
+            $terms_suggestions = array();
+
+            if ( isset( $data['similar_terms'] ) && isset( $data['similar_terms']['pairs'] ) ) {
+
+                $terms_pairs = $data['similar_terms']['pairs'];
+                $s = $data['s'];
+
+                $similar_groupds = array();
+                foreach ( $terms_pairs as $pair ) {
+                    $tmp = array();
+                    if ( ! empty( $pair['new'] ) ) {
+                        foreach ( $pair['new'] as $new_term ) {
+                            $tmp[] = array(
+                                'old' => $pair['old'],
+                                'new' => $new_term,
+                            );
+                        }
+                    }
+                    $similar_groupds[] = $tmp;
+                }
+
+                $terms_groups = AWS_Helpers::generate_combinations( $similar_groupds );
+
+                if ( ! empty( $terms_groups ) ) {
+                    $count = 0;
+                    foreach ( $terms_groups as $terms_group ) {
+                        if ( ++$count > $max_terms_to_suggest ) {
+                            break;
+                        }
+                        $new_s = $s;
+                        foreach ( $terms_group as $terms ) {
+                            $new_s = str_replace( $terms['old'], $terms['new'], $new_s );
+                        }
+                        $terms_suggestions[] = $new_s;
+                    }
+                }
+
+            }
+
+            return $terms_suggestions;
 
         }
 

@@ -72,7 +72,8 @@ class AG_welcome_screen {
 
 	public function ePDQ_admin_css() {
 
-		wp_enqueue_style( 'ePDQ_admin', AG_ePDQ_path . 'assets/css/admin-style.css' ); // @phpstan-ignore-line
+		wp_enqueue_style( 'ag_ePDQ_admin', AG_ePDQ_server_path . 'inc/assets/css/admin-style.css', FALSE, self::$args['plugin_version'] ); // @phpstan-ignore-line
+
 	}
 
 	/**

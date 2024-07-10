@@ -83,30 +83,13 @@ class ag_capture {
 
 	public function capture_ajax_call( $hook ) {
 
-		global $post;
-
-		if( 'post.php' == $hook && 'shop_order' == $post->post_type && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
-
-			if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
-				$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
-			} else {
-				global $post;
-				$order = wc_get_order( $post->ID );
-			}
-
-			if( $order->get_payment_method() !== 'epdq_checkout' ) {
-				return;
-			}
-
-			wp_enqueue_script( self::$args['plugin_name'] . '-ag-capture', AG_ePDQ_server_path . "inc/assets/js/ag-capture.js", array( 'jquery' ), NULL, TRUE ); // @phpstan-ignore-line
-			wp_localize_script( self::$args['plugin_name'] . '-ag-capture', 'ag_epdq_capture_var', array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'msg'     => __( 'Are you sure you wish to check the status of this order? ', 'ag_epdq_server' ),
-				'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-ag-capture' ),
-				'error'   => __( 'Something went wrong, and the capture of payment could not be completed. Please try again. ', 'ag_epdq_server' ),
-			) );
-
-		}
+		wp_enqueue_script( self::$args['plugin_name'] . '-ag-capture', AG_ePDQ_server_path . "inc/assets/js/ag-capture.js", array( 'jquery' ), NULL, TRUE ); // @phpstan-ignore-line
+		wp_localize_script( self::$args['plugin_name'] . '-ag-capture', 'ag_epdq_capture_var', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'msg'     => __( 'Are you sure you wish to check the status of this order? ', 'ag_epdq_server' ),
+			'nonce'   => wp_create_nonce( self::$args['plugin_name'] . '-ag-capture' ),
+			'error'   => __( 'Something went wrong, and the capture of payment could not be completed. Please try again. ', 'ag_epdq_server' ),
+		) );
 
 	}
 

@@ -221,6 +221,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'open_shop_wp_head' ) );
                 }
 
+                if ( 'Zephyr' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'zephyr_wp_head' ) );
+                }
+
+                if ( 'Shoptimizer' === $this->current_theme ) {
+                    add_action( 'wp_enqueue_scripts', array( $this, 'shoptimizer_wp_enqueue_scripts' ) );
+                }
+
+                if ( 'Hitek' === $this->current_theme ) {
+                    add_action( 'xts_after_search_wrapper', array( $this, 'xts_after_search_wrapper' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -444,6 +456,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-generatepress.php' );
             }
 
+            // The7 theme
+            if ( 'The7' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-the7.php' );
+            }
+
             // Woodmart theme
             if ( 'Woodmart' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-woodmart.php' );
@@ -477,6 +494,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // WooCommerce Show Single Variations by Iconic
             if ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-single-variations.php' );
+            }
+
+            // YITH WooCommerce Ajax Product Filter
+            if ( defined( 'YITH_WCAN' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-yith-wcan.php' );
             }
 
         }
@@ -1661,6 +1683,78 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 }
             </style>
         <?php }
+
+        /*
+         * Zephyr theme search form styles
+         */
+        public function zephyr_wp_head() { ?>
+            <style>
+                .header_hor .aws-container {
+                    width: 100%;
+                }
+                .header_hor .aws-container .aws-search-field {
+                    color: rgb(53, 65, 91);
+                    font-size: 16px;
+                }
+                .header_hor .aws-container .aws-search-form .aws-form-btn {
+                    background: transparent;
+                    border: none;
+                }
+            </style>
+        <?php }
+
+        /*
+         * Shoptimizer fix search form inside dialog window
+         */
+        public function shoptimizer_wp_enqueue_scripts() {
+
+            $script = "
+                function aws_results_append_to( container, options  ) {
+                    if ( options.form.closest('.shoptimizer-modal').length > 0 ) {
+                        return '.shoptimizer-modal .site-search';
+                    }
+                    return container;
+                }
+                function aws_results_layout( styles, options  ) {
+                    if ( options.form.closest('.shoptimizer-modal').length > 0 ) {
+                        var offset = options.form.offset();
+                        var dialogOffset = options.form.closest('.site-search').offset();
+                        styles.left = offset.left - dialogOffset.left;
+                        styles.top = offset.top - dialogOffset.top + options.form.innerHeight();
+                    }
+                    return styles;
+                }
+                AwsHooks.add_filter( 'aws_results_append_to', aws_results_append_to );
+                AwsHooks.add_filter( 'aws_results_layout', aws_results_layout );
+            ";
+
+            wp_add_inline_script( 'aws-script', $script);
+            wp_add_inline_script( 'aws-pro-script', $script);
+
+        }
+
+        /*
+         * Add search form inside Hitek theme header
+         */
+        public function xts_after_search_wrapper() {
+
+            echo '<style>
+                .xts-header form.searchform, 
+                .xts-search-wrapper form.searchform {
+                    display: none;
+                }
+                .xts-search-wrapper.xts-search-full-screen .aws-container {
+                    margin: 0 35px;
+                    padding-top: 30px;
+                }
+                .xts-search-full-screen .xts-search-close {
+                    top: -110px;
+                }
+            </style>';
+
+            aws_get_search_form();
+
+        }
 
         /*
          * WP Bottom Menu

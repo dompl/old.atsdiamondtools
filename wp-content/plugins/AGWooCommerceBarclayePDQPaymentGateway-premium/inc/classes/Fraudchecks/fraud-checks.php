@@ -117,44 +117,7 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public function add_order_check() {
 
-		$screen = get_current_screen();
-
-		if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
-			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
-			if( $screen->id !== 'woocommerce_page_wc-orders' ) {
-				return;
-			}
-		} else {
-			global $post;
-			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $post->ID ) );
-			if( $screen->id !== 'shop_order' ) {
-				return;
-			}
-		}
-
-		// Merchant has set to hide feature
-		if( defined( 'disable_ag_checks' ) ) {
-			return;
-		}
-
-		if( ! $order ) {
-			return;
-		}
-
-		if( $order->get_status() === 'cancelled' || $order->get_status() === 'pending' ) {
-			return;
-		}
-
-		// Is FD order check
-		if( $order->get_payment_method() !== 'epdq_checkout' ) {
-			return;
-		}
-		// Is MOTO payment
-		if( $order->get_meta( 'is_moto' ) ) {
-			return;
-		}
-
-		$screen = wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled() ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
+		$screen = class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) && wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled() ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 
 		add_meta_box( 'ag_fraud_check', __( 'AG Traffic Light System', 'ag_epdq_server' ), array( $this, 'order_check_preview' ), $screen, 'side', 'core' );
 
@@ -165,20 +128,15 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public function AG_fraud_css() {
 
-		wp_enqueue_style( 'AG_fraud_css', AG_ePDQ_server_path . 'inc/assets/css/fraud-style.css' ); // @phpstan-ignore-line
+		wp_enqueue_style( 'AG_fraud_css', AG_ePDQ_server_path . 'inc/assets/css/fraud-style.css', FALSE, AG_ePDQ_server::$AGversion ); // @phpstan-ignore-line
 	}
 
 	/**
 	 * @return void
 	 */
-	public function order_check_preview() {
+	public function order_check_preview( $post_or_order_object ) {
 
-		if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
-			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
-		} else {
-			global $post;
-			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $post->ID ) );
-		}
+		$order = ( $post_or_order_object instanceof WP_Post ) ? wc_get_order( $post_or_order_object->ID ) : $post_or_order_object;
 
 		if( ! $order ) {
 			return;
@@ -203,6 +161,11 @@ class ag_ePDQ_fraud_checks {
 		}
 
 		if( $order->get_status() === 'cancelled' || $order->get_status() === 'pending' ) {
+			return;
+		}
+
+		// Merchant has set to hide feature
+		if( defined( 'disable_ag_checks' ) ) {
 			return;
 		}
 

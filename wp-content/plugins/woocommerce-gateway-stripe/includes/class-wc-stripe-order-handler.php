@@ -42,6 +42,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 
 	/**
 	 * Processes payments.
+	 *
 	 * Note at this time the original source has already been
 	 * saved to a customer card (if applicable) from process_payment.
 	 *
@@ -199,6 +200,21 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 	 * @version 4.0.0
 	 */
 	public function maybe_process_redirect_order() {
+		$gateway = WC_Stripe::get_instance()->get_main_stripe_gateway();
+
+		if ( is_a( $gateway, 'WC_Stripe_UPE_Payment_Gateway' ) ) {
+			$gateway->maybe_process_upe_redirect();
+		} else {
+			$this->maybe_process_legacy_redirect();
+		}
+	}
+
+	/**
+	 * Processes redirect payment for stores with legacy checkout experience enabled.
+	 *
+	 * @since 8.3.0
+	 */
+	private function maybe_process_legacy_redirect() {
 		if ( ! is_order_received_page() || empty( $_GET['client_secret'] ) || empty( $_GET['source'] ) ) {
 			return;
 		}
@@ -220,7 +236,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 		$result = new stdClass();
 		$order = wc_get_order( $order_id );
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( WC_Stripe_Helper::payment_method_allows_manual_capture( $order->get_payment_method() ) ) {
 			$charge             = $order->get_transaction_id();
 			$captured           = $order->get_meta( '_stripe_charge_captured', true );
 			$is_stripe_captured = false;
@@ -324,7 +340,7 @@ class WC_Stripe_Order_Handler extends WC_Stripe_Payment_Gateway {
 	public function cancel_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( WC_Stripe_Helper::payment_method_allows_manual_capture( $order->get_payment_method() ) ) {
 			$captured = $order->get_meta( '_stripe_charge_captured', true );
 			if ( 'no' === $captured ) {
 				$this->process_refund( $order_id );

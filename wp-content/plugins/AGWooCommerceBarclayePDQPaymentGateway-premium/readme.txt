@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.5.2
+Tested up to: 6.5.5
 Stable tag: 6.2
 
 == Description ==
@@ -17,7 +17,6 @@ Setting up this plugin should only take 30 minutes to complete, follow the steps
 = Does this plugin work with newest WP and WooCommerce versions? =
 Yes, this plugin works really fine with the latest versions!
 
-
 = I have a problem with the plugin, it's not working =
 Ok not a problem, lets see if you can fix it by following these steps.
 1. Enable the plugins debug mode in the settings page.
@@ -32,6 +31,26 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.8.1 - 02/07/24 =
+* Fix             - Resolved an issue with HPOS related to the fraud check features activating before an order has been created.
+* Fix             - Addressed compatibility issues with WooCommerce 9.0+ affecting the display of customer token cards on the checkout page.
+* Change          - Revised the handling of JavaScript for token payments to improve functionality.
+* Change          - Revised the number of orders Scheduled Status Check pools to check, from 50 to 25 to help with performance.
+* Change          - Bump tested WooCommerce (9.0.2).
+
+= v.4.8.0 - 13/06/24 =
+* New             - New Scheduled Status Check feature which uses WooCommerce Action Scheduler to check order status multiple times a day.
+* New             - New helper function to bypass the WooCommerce auto cancel order after X time, this is only in use when Scheduled Status Check is enabled.
+* Dev             - Added order ID to ePDQ_PSPID filter.
+* Dev             - Refactored codebase for Status Check feature.
+* Fix             - Fixed issue with capture button not working.
+* Change          - Reworded "old" auto status check to cancel status check - This feature uses WooCommerce auto cancel feature to trigger status check once only.
+* Change          - Bump tested WooCommerce (8.9.3).
+* Update          - Freemius SDK updated.
+
+= v.4.7.1 - 09/05/24 =
+* Fix             - Resolved a problem where certain scripts were not loading and returned a 404 error.
 
 = v.4.7.0 - 02/05/24 =
 * New             - The plugin settings page has been revamped and organized into new tabs for better usability.

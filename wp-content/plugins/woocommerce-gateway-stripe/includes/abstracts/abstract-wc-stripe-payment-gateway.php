@@ -249,7 +249,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 		return (
 			$error &&
 			1 < $this->retry_interval &&
-			! empty( $source_object ) &&
+			! empty( $source_object->status ) &&
 			'chargeable' === $source_object->status &&
 			self::is_same_idempotency_error( $error )
 		);
@@ -343,6 +343,8 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 				'ideal'      => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/ideal.svg" class="stripe-ideal-icon stripe-icon" alt="iDEAL" />',
 				'p24'        => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/p24.svg" class="stripe-p24-icon stripe-icon" alt="P24" />',
 				'giropay'    => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/giropay.svg" class="stripe-giropay-icon stripe-icon" alt="giropay" />',
+				'klarna'     => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/klarna.svg" class="stripe-klarna-icon stripe-icon" alt="klarna" />',
+				'affirm'     => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/affirm.svg" class="stripe-affirm-icon stripe-icon" alt="affirm" />',
 				'eps'        => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/eps.svg" class="stripe-eps-icon stripe-icon" alt="EPS" />',
 				'multibanco' => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/multibanco.svg" class="stripe-multibanco-icon stripe-icon" alt="Multibanco" />',
 				'sofort'     => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/sofort.svg" class="stripe-sofort-icon stripe-icon" alt="Sofort" />',
@@ -350,6 +352,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 				'boleto'     => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/boleto.svg" class="stripe-boleto-icon stripe-icon" alt="Boleto" />',
 				'oxxo'       => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/oxxo.svg" class="stripe-oxxo-icon stripe-icon" alt="OXXO" />',
 				'cards'      => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/cards.svg" class="stripe-cards-icon stripe-icon" alt="credit / debit card" />',
+				'cashapp'    => '<img src="' . WC_STRIPE_PLUGIN_URL . '/assets/images/cashapp.svg" class="stripe-cashapp-icon stripe-icon" alt="Cash App Pay" />',
 			]
 		);
 	}
@@ -456,7 +459,7 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			$post_data['receipt_email'] = $billing_email;
 		}
 
-		if ( 'stripe' === $order->get_payment_method() ) {
+		if ( WC_Stripe_Helper::payment_method_allows_manual_capture( $order->get_payment_method() ) ) {
 			$post_data['capture'] = $capture ? 'true' : 'false';
 			if ( $is_short_statement_descriptor_enabled ) {
 				$post_data['statement_descriptor_suffix'] = WC_Stripe_Helper::get_dynamic_statement_descriptor_suffix( $order );
@@ -546,6 +549,10 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			$order->update_meta_data( '_stripe_mandate_id', $response->payment_method_details->card->mandate );
 		}
 
+		if ( isset( $response->payment_method, $response->payment_method_details ) ) {
+			WC_Stripe_Payment_Tokens::update_token_from_method_details( $order->get_customer_id(), $response->payment_method, $response->payment_method_details );
+		}
+
 		if ( 'yes' === $captured ) {
 			/**
 			 * Charge can be captured but in a pending state. Payment methods
@@ -565,11 +572,27 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 			}
 
 			if ( 'succeeded' === $response->status ) {
-				$order->payment_complete( $response->id );
+				/**
+				 * If the response has a succeeded status but also has a risk/fraud outcome that requires manual review, don't mark the order as
+				 * processing/completed. This will be handled by the incoming review.open webhook.
+				 *
+				 * Depending on when Stripe sends their events and how quickly it is processed by the store, the review.open webhook (which marks orders as on-hold)
+				 * can be processed before or after the payment_intent.success webhook. This difference can lead to orders being incorrectly marked as processing/completed
+				 * in WooCommerce, but flagged for manual renewal in Stripe.
+				 *
+				 * If the review.open webhook was processed before the payment_intent.success, set the processing/completed status in `_stripe_status_before_hold`
+				 * to ensure the review.closed event handler will update the status to the proper status.
+				 */
+				if ( 'manual_review' === $this->get_risk_outcome( $response ) ) {
+					$this->set_stripe_order_status_before_hold( $order, 'default_payment_complete' );
+					$order->set_transaction_id( $response->id ); // Save the transaction ID to link the order to the Stripe charge ID. This is to fix reviews that result in refund.
+				} else {
+					$order->payment_complete( $response->id );
 
-				/* translators: transaction id */
-				$message = sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $response->id );
-				$order->add_order_note( $message );
+					/* translators: transaction id */
+					$message = sprintf( __( 'Stripe charge complete (Charge ID: %s)', 'woocommerce-gateway-stripe' ), $response->id );
+					$order->add_order_note( $message );
+				}
 			}
 
 			if ( 'failed' === $response->status ) {
@@ -1641,8 +1664,8 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 * @return boolean Whether or not it's a 'authentication_required' error
 	 */
 	public function is_authentication_required_for_payment( $response ) {
-		return ( ! empty( $response->error ) && 'authentication_required' === $response->error->code )
-			|| ( ! empty( $response->last_payment_error ) && 'authentication_required' === $response->last_payment_error->code );
+		return ( ! empty( $response->error->code ) && 'authentication_required' === $response->error->code )
+			|| ( ! empty( $response->last_payment_error->code ) && 'authentication_required' === $response->last_payment_error->code );
 	}
 
 	/**
@@ -2088,5 +2111,63 @@ abstract class WC_Stripe_Payment_Gateway extends WC_Payment_Gateway_CC {
 	 */
 	private function needs_ssl_setup() {
 		return ! $this->testmode && ! is_ssl();
+	}
+
+	/**
+	 * Helper method to retrieve the status of the order before it was put on hold.
+	 *
+	 * @since 8.3.0
+	 *
+	 * @param WC_Order $order The order.
+	 *
+	 * @return string The status of the order before it was put on hold.
+	 */
+	protected function get_stripe_order_status_before_hold( $order ) {
+		$before_hold_status = $order->get_meta( '_stripe_status_before_hold' );
+
+		if ( ! empty( $before_hold_status ) ) {
+			return $before_hold_status;
+		}
+
+		$default_before_hold_status = $order->needs_processing() ? 'processing' : 'completed';
+		return apply_filters( 'woocommerce_payment_complete_order_status', $default_before_hold_status, $order->get_id(), $order );
+	}
+
+	/**
+	 * Stores the status of the order before being put on hold in metadata.
+	 *
+	 * @since 8.3.0
+	 *
+	 * @param WC_Order  $order  The order.
+	 * @param string    $status The order status to store. Accepts 'default_payment_complete' which will fetch the default status for payment complete orders.
+	 *
+	 * @return void
+	 */
+	protected function set_stripe_order_status_before_hold( $order, $status ) {
+		if ( 'default_payment_complete' === $status ) {
+			$payment_complete_status = $order->needs_processing() ? 'processing' : 'completed';
+			$status                  = apply_filters( 'woocommerce_payment_complete_order_status', $payment_complete_status, $order->get_id(), $order );
+		}
+
+		$order->update_meta_data( '_stripe_status_before_hold', $status );
+	}
+
+	/**
+	 * Retrieves the risk/fraud outcome from the webhook payload.
+	 *
+	 * @param object $event_data The event data from the webhook.
+	 *
+	 * @return string The fraud type.
+	 */
+	protected function get_risk_outcome( $event_data ) {
+		$fraud_type = '';
+
+		if ( isset( $event_data->data->object->outcome->type ) ) { // Gets thCharge.succeeded event.
+			$fraud_type = $event_data->data->object->outcome->type;
+		} elseif ( isset( $event_data->outcome->type ) ) { // Payment_intent.succeeded event.
+			$fraud_type = $event_data->outcome->type;
+		}
+
+		return $fraud_type;
 	}
 }
