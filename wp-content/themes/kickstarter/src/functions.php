@@ -218,7 +218,7 @@ add_filter( 'woocommerce_available_shipping_methods', 'hide_table_rate_shipping_
  *
  * @param array $available_methods
  */
-add_filter( 'woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_when_free_is_available_in_zone', 10, 2 );
+// add_filter( 'woocommerce_available_shipping_methods', 'bbloomer_unset_shipping_when_free_is_available_in_zone', 10, 2 );
 
 function bbloomer_unset_shipping_when_free_is_available_in_zone( $rates, $package ) {
 
@@ -319,7 +319,8 @@ function remove_restriction_from_refund() {
     });
 })(jQuery);
 </script>
-<?php }
+<?php
+}
 add_action( 'admin_footer', 'remove_restriction_from_refund' );
 // add_action( 'init', 'ats_remove_variations_decimals' );
 /**
@@ -371,3 +372,46 @@ function ats_remove_variations_decimals() {
 }
 
 require_once get_template_directory() . '/functions/brevo/_init.php';
+
+add_action( 'init', 'fetch_2024_woocommerce_orders_via_wc_functions' );
+
+function fetch_2024_woocommerce_orders_via_wc_functions() {
+    if (  !  class_exists( 'WooCommerce' ) ) {
+        return; // Ensure WooCommerce is active
+    }
+
+    // Define arguments for the query
+    $args = [
+        'status'         => ['wc-completed', 'wc-processing', 'wc-on-hold'],
+        'date_created'   => '>=2024-01-01',
+        'payment_method' => 'epdq_checkout',
+        'limit'          => -1 // Be cautious with the -1 limit on large datasets
+    ];
+
+    // Fetch orders with WC_Order_Query
+    $query  = new WC_Order_Query( $args );
+    $orders = $query->get_orders();
+
+    // Initialize an array to store unique email addresses
+    $unique_emails = [];
+
+    // Loop through each order
+    foreach ( $orders as $order ) {
+        // Fetching customer email
+        $email = $order->get_billing_email();
+
+        // Check if the email is already in the array to ensure uniqueness
+        if (  !  in_array( $email, $unique_emails ) ) {
+            // If it's not, add it to the array
+            $unique_emails[] = $email;
+        }
+    }
+
+    // Display the count of unique emails
+    echo 'Unique emails: ' . count( $unique_emails ) . '<br>';
+
+    // Optionally, display the unique emails
+    foreach ( $unique_emails as $email ) {
+        echo $email . '<br>';
+    }
+}

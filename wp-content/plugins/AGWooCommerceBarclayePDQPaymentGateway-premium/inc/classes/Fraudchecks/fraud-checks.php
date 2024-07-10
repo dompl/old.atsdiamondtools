@@ -117,15 +117,19 @@ class ag_ePDQ_fraud_checks {
 	 */
 	public function add_order_check() {
 
-		if( ! isset( $_GET['page'] ) || ! isset( $_GET['id'] ) || $_GET['page'] != 'wc-orders' ) {
-			return;
-		}
+		$screen = get_current_screen();
 
 		if( OrderUtil::custom_orders_table_usage_is_enabled() ) {
 			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $_GET['id'] ) );
+			if( $screen->id !== 'woocommerce_page_wc-orders' ) {
+				return;
+			}
 		} else {
 			global $post;
 			$order = wc_get_order( AG_ePDQ_Helpers::AG_decode( $post->ID ) );
+			if( $screen->id !== 'shop_order' ) {
+				return;
+			}
 		}
 
 		// Merchant has set to hide feature
@@ -205,7 +209,7 @@ class ag_ePDQ_fraud_checks {
 		if( isset( $fraudCheck ) && $fraudCheck === 'no' ) {
 			$display = $this->loading_get_order_details();
 			$loading = 'is-loading';
-			$error = null;
+			$error = NULL;
 		} elseif( ( empty( $search_3D_check ) || empty( $search_CVC_check ) || empty( $search_postal_check ) || empty( $search_aav_check ) ) && isset( $fraudCheck ) && $fraudCheck === 'yes' ) {
 			$display = $this->loading_get_order_details();
 			$loading = 'is-loading';
@@ -213,9 +217,11 @@ class ag_ePDQ_fraud_checks {
 		} else {
 			$display = $this->get_order_details( $order );
 			$loading = '';
-			$error = null;
+			$error = NULL;
 
 		}
+
+		$status = $order->get_meta( 'Status' );
 
 		if( $display ) {
 			echo '<span class="' . $loading . '"><br>';
@@ -227,6 +233,9 @@ class ag_ePDQ_fraud_checks {
 			echo '<br><hr> <span class="fraud-message">' . $display['postal_code_display']['message'] . ' </span>';
 			echo '<br><hr> <span class="fraud-message">' . $display['cvc_code_display']['message'] . ' </span>';
 			echo '<br><hr> <span class="fraud-message">' . $display['Code_3DS_display']['message'] . ' </span>';
+			if( ! empty( $status ) ) {
+				echo '<br><hr> <span class="fraud-message"><strong>ePDQ Status: </strong> ' . $status . ' </span>';
+			}
 			if( isset( $error ) ) {
 				echo '<br> <hr><a class="fraud-link" href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/setting-up-ag-order-check/">' . $error . '</a></span>';
 			} else {

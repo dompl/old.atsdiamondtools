@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.4.3
+Tested up to: 6.5.2
 Stable tag: 6.2
 
 == Description ==
@@ -32,6 +32,22 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.7.0 - 02/05/24 =
+* New             - The plugin settings page has been revamped and organized into new tabs for better usability.
+* Fix             - Resolved an issue where TLS status was not displayed on the order viewing page.
+* Fix             - Corrected a CSS issue that affected the dismiss button's appearance.
+* Fix             - Addressed a problem with MOTO payments when the merchant is using HPOS.
+* Fix             - Updated the MOTO processing icon to a more appropriate loading image.
+* Dev             - Made enhancements to the codebase for compatibility with PHP 8.2.
+* Dev             - Integrated ePDQ order status into the Traffic Light system for clearer transaction visibility.
+* Change          - Introduced a new header for WooCommerce dependencies.
+* Change          - Bump tested WooCommerce (8.8.3).
+* Update          - Freemius SDK updated.
+
+= v.4.6.6 - 10/04/24 =
+* Change          - Bump tested WooCommerce (8.7.0).
+* Update          - Freemius SDK updated.
 
 = v.4.6.5 - 29/02/24 =
 * Fix             - Resolved an issue in the complus_decrypt() function that led to failures caused by order ID discrepancies, ensuring reliable decryption processes.

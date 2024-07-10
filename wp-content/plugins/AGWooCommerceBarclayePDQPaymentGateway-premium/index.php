@@ -8,10 +8,11 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.6.5
+ * Version: 4.7.0
  * Update URI: https://api.freemius.com
+ * Requires Plugins: woocommerce
  * WC requires at least: 7.1
- * WC tested up to: 8.6.1
+ * WC tested up to: 8.8.3
  * License: GPL3
  */
 
@@ -23,13 +24,13 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.6.5
+ * @version  4.7.0
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
-	public static $AGversion = "4.6.5";
+	public static $AGversion = "4.7.0";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -187,7 +188,6 @@ class AG_ePDQ_server {
 			} );
 		}
 	}
-
 
 	/**
 	 * Register gateway with Woo

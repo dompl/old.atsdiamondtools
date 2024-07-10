@@ -22,16 +22,14 @@ class epdq_checkout extends WC_Payment_Gateway {
 	 * @var string
 	 */
 
-	const TEST_URL = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
-	const LIVE_URL = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
-	const REFUND_TEST_URL = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
-	const REFUND_LIVE_URL = 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
+	// URL's
+	protected const TEST_URL = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
+	protected const LIVE_URL = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
+	protected const REFUND_TEST_URL = 'https://mdepayments.epdq.co.uk/ncol/test/maintenancedirect.asp';
+	protected const REFUND_LIVE_URL = 'https://payments.epdq.co.uk/ncol/prod/maintenancedirect.asp';
 
 	private static $AG_ePDQ_doc = "https://weareag.co.uk/docs/";
-	public $settings;
-	public $form_fields;
 
-	// URL's
 	private $test_url;
 	private $live_url;
 	private $refund_test;
@@ -42,20 +40,27 @@ class epdq_checkout extends WC_Payment_Gateway {
 	public $threeds;
 	public $fraudCheck;
 	public $statusCheck;
-	public $tooltip;
 	public $debug;
-	public $error_note;
+	public $access_key;
+	public $sha_in;
+	public $sha_out;
+	public $sha_method;
+	public $refund;
+	public $logo;
+	public $tip;
+	public $template;
+	public $pmlisttype;
+	public $webhook;
 
 	public $cardtypes;
 
-	//subscriptions
 	public $api_REFID;
 	public $api_password;
 	public $api_user;
 
 	//wizard
 	public $shaMethod;
-	public $payment_gateways;
+	//public $payment_gateways;
 
 	// webhook
 	public $token;
@@ -65,14 +70,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$this->id = 'epdq_checkout';
 		$this->method_title = 'AG ePDQ Checkout';
 		$this->icon = apply_filters( 'woocommerce_epdq_checkout_icon', '' );
-		$this->has_fields = FALSE;
-		$this->notice = 'no';
-		$this->status = 'test';
-
-		$this->test_url = self::TEST_URL;
-		$this->live_url = self::LIVE_URL;
-		$this->refund_test = self::REFUND_TEST_URL;
-		$this->refund_live = self::REFUND_LIVE_URL;
+		//$this->has_fields = FALSE;
 
 		if( ! AG_licence::valid_licence() ) {
 			return;
@@ -86,11 +84,16 @@ class epdq_checkout extends WC_Payment_Gateway {
 			$this->$setting_key = $value;
 		}
 
-		//$this->sha_method 	= ($this->sha_method != '') ? $this->sha_method : 2;
-		$this->notice = ( $this->notice !== '' ) ? $this->notice : 'no';
-		$this->threeds = $this->get_option( 'threeds' ) ? : 'no';
+		$this->status = $this->get_option( 'status' ) ?? 'test';
+
+		$this->test_url = self::TEST_URL;
+		$this->live_url = self::LIVE_URL;
+		$this->refund_test = self::REFUND_TEST_URL;
+		$this->refund_live = self::REFUND_LIVE_URL;
+		$this->notice = $this->notice ?? 'no';
+		$this->threeds = $this->get_option( 'threeds' ) ?? 'no';
 		$this->description = $this->display_checkout_description();
-		$this->fraudCheck = $this->get_option( 'fraudCheck' ) ? : 'no';
+		$this->fraudCheck = $this->get_option( 'fraudCheck' ) ?? 'no';
 
 		$this->supports = array(
 			'products',
@@ -160,7 +163,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 	 */
 	public function init_form_fields() {
 
-		$this->form_fields = AG_ePDQ_Settings::form_fields();
+		$this->form_fields = array_merge( AG_ePDQ_Settings::form_fields(), AG_ePDQ_Settings::api_fields(), AG_ePDQ_Settings::form_advanced() );
 	}
 
 	public function admin_script() {
@@ -258,12 +261,51 @@ class epdq_checkout extends WC_Payment_Gateway {
 	 */
 	public function admin_options() { ?>
 
-        <h3><?php echo __( 'AG ePDQ Checkout Settings', 'ag_epdq_server' ); ?></h3>            <p><?php echo __( 'This gateway will redirect the customers to the secured Barclays payment server and process the order there, Once payment is made Barclays will send them back to website.', 'ag_epdq_server' ) ?></p>            <p>
-            <i><?php echo __( 'Having issues setting up the plugin? Why not try the setup wizard <a href="' . admin_url( '?page=AG_ePDQ-wizard' ) . '">here</a>.', 'ag_epdq_server' ) ?></i>
-        </p>
-        <table class="form-table">
-			<?php $this->generate_settings_html(); ?>
-        </table><!--/.form-table-->
+        <h3><?php echo __( 'AG ePDQ Checkout Settings', 'ag_epdq_server' ); ?></h3>
+
+        <h2 id="ag-nav" class="nav-tab-wrapper">
+            <a href="#general" class="nav-tab nav-tab-active">General Settings</a> <a href="#rest" class="nav-tab">REST API</a> <a href="#advanced" class="nav-tab">Advanced</a>
+        </h2>
+        <div id="general" class="settings-tab-content" style="display: block;">
+            <div class="wrapper-info">
+                <div class="ag-notice">
+                    <div class="subject">
+                        <h3>General Settings</h3>
+                        <p><?php echo __( 'This gateway directs customers to the secure Barclays payment server to process transactions. After completing the payment, customers will be automatically redirected back to your website.', 'ag_epdq_server' ) ?></p>
+                        <i><?php echo __( 'Encounter setup difficulties? Our <a href="' . admin_url( '?page=AG_ePDQ-wizard' ) . '">Setup Wizard</a> can help streamline the process.', 'ag_epdq_server' ) ?></i>
+                    </div>
+                </div>
+            </div>
+            <table class="form-table">
+				<?php echo $this->generate_settings_html( AG_ePDQ_Settings::form_fields() ); ?>
+            </table>
+        </div>
+        <div id="rest" class="settings-tab-content" style="display: none;">
+            <div class="wrapper-info">
+                <div class="ag-notice">
+                    <div class="subject">
+                        <h3>REST API Settings</h3>
+                        <p><?php echo __( 'These settings are crucial for enabling several key features including processing refunds, performing status checks, and managing subscription renewal payments. Configure these to ensure smooth operation of these functionalities.', 'ag_epdq_server' ) ?></p>
+                    </div>
+                </div>
+            </div>
+            <table class="form-table">
+				<?php echo $this->generate_settings_html( AG_ePDQ_Settings::api_fields() ); ?>
+            </table>
+        </div>
+        <div id="advanced" class="settings-tab-content" style="display: none;">
+            <div class="wrapper-info">
+                <div class="ag-notice">
+                    <div class="subject">
+                        <h3>Advanced Settings</h3>
+                        <p><?php echo __( 'Below you will find additional features and settings for the ePDQ plugin. Configure these options to further customise and enhance your plugin\'s functionality.', 'ag_epdq_server' ) ?></p>
+                    </div>
+                </div>
+            </div>
+            <table class="form-table">
+				<?php echo $this->generate_settings_html( AG_ePDQ_Settings::form_advanced() ); ?>
+            </table>
+        </div>
 
         <p><strong>Need some help setting up this plugin?</strong> <a href="<?php echo admin_url( 'admin.php?page=AGWooCommerceBarclayePDQPaymentGateway' ); ?>">Click here</a></p>
 

@@ -217,9 +217,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_enqueue_scripts', array( $this, 'hestia_wp_enqueue_scripts' ) );
                 }
 
+                if ( 'Open Shop' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'open_shop_wp_head' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
+                }
+
+                // Advance Product Search by themehunk
+                if ( class_exists( 'TH_Advance_Product_Search' ) ) {
+                    add_filter( 'thaps_form_html', array( $this, 'aps_thaps_form_html' ) );
                 }
 
             }
@@ -288,6 +297,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             //  Deals for WooCommerce
             if ( function_exists( 'DFW' ) ) {
                 add_filter( 'aws_search_pre_filter_products', array( $this, 'dfm_search_pre_filter_products' ) );
+            }
+
+            // WooCommerce Product Search
+            if ( defined('WOO_PS_PLUGIN_VERSION') ) {
+                add_action( 'aws_search_page_filters', array( $this,  'wps_aws_search_page_filters' ), 1 );
             }
 
         }
@@ -1637,6 +1651,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Open Shop theme header styles
+         */
+        public function open_shop_wp_head() { ?>
+            <style>
+                .below-header-bar .aws-container {
+                    max-width: 550px;
+                    margin: 0 auto;
+                }
+            </style>
+        <?php }
+
+        /*
          * WP Bottom Menu
          */
         public function wp_bottom_menu_wp_head() { ?>
@@ -1654,6 +1680,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </script>
 
         <?php }
+
+        /*
+         * Advance Product Search by themehunk
+         */
+        public function aps_thaps_form_html( $html ) {
+            $output = aws_get_search_form( false );
+            return $output;
+        }
 
         /*
          * Exclude product categories
@@ -2236,6 +2270,25 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             return $products_array;
+
+        }
+
+        /*
+         * WooCommerce Product Search plugin - fix filters for s page
+         */
+        public function wps_aws_search_page_filters( $filters ) {
+
+            if ( isset( $_GET['ixwpst'] ) && $_GET['ixwpst'] && is_array( $_GET['ixwpst'] ) ) {
+                foreach( $_GET['ixwpst'] as $tax => $terms ) {
+                    $filters['tax'][$tax] = array(
+                        'terms' => $terms,
+                        'operator' => 'AND',
+                        'include_parent' => true,
+                    );
+                }
+            }
+
+            return $filters;
 
         }
 

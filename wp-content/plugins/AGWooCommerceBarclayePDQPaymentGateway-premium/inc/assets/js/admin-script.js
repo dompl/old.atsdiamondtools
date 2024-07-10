@@ -13,3 +13,14 @@ jQuery(document).ready(function () {
 
     });
 });
+
+jQuery(document).ready(function ($) {
+    $('#ag-nav a').click(function (e) {
+        e.preventDefault();
+        var clickedTab = $(this).attr('href');
+        $('.nav-tab').removeClass('nav-tab-active');
+        $(this).addClass('nav-tab-active');
+        $('.settings-tab-content').hide();
+        $(clickedTab).show();
+    });
+});
