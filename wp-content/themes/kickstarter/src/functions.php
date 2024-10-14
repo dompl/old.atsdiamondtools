@@ -373,13 +373,12 @@ function ats_remove_variations_decimals() {
 
 require_once get_template_directory() . '/functions/brevo/_init.php';
 
-add_action( 'init', 'fetch_2024_woocommerce_orders_via_wc_functions' );
+// add_action( 'init', 'fetch_2024_woocommerce_orders_via_wc_functions' );
 
 function fetch_2024_woocommerce_orders_via_wc_functions() {
     if (  !  class_exists( 'WooCommerce' ) ) {
         return; // Ensure WooCommerce is active
     }
-
     // Define arguments for the query
     $args = [
         'status'         => ['wc-completed', 'wc-processing', 'wc-on-hold'],
