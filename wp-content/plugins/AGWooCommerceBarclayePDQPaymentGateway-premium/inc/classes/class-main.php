@@ -8,7 +8,7 @@
  * Modified By: Aaron Bowie - We are AG
  * -----
  * WC requires at least: 3.0.0
- * WC tested up to: 8.9.1
+ * WC tested up to: 9.1.0
  * License: GPL3
  */
 
@@ -140,12 +140,19 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 	}
 
+	
 	public function display_token_to_customer( $description, $payment_id ) {
-
-		if( $payment_id == 'epdq_checkout' && isset( $this->token ) && $this->token === 'yes' ) {
-			return $description . AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
+		// Check if the payment ID is 'ag_fd_checkout' and the token is set to 'yes'
+		if ( $payment_id === 'epdq_checkout' && isset( $this->token ) && $this->token === 'yes' ) {
+			$saved_cards_html = AG_ePDQ_Token::selectSavedCards( get_current_user_id(), is_user_logged_in() );
+	
+			// Check if the saved cards HTML is already in the description to prevent duplication
+			if (strpos($description, $saved_cards_html) === false) {
+				return $description . $saved_cards_html;
+			}
 		}
-
+	
+		// Return the original description if conditions are not met or already appended
 		return $description;
 	}
 

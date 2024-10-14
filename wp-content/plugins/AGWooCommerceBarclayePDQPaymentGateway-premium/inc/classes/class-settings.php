@@ -272,7 +272,8 @@ class AG_ePDQ_Settings {
 					'10800' => __( 'Every three hours', 'ag_epdq_server' ),
 					'7200'  => __( 'Every two hours', 'ag_epdq_server' ),
 					'3600'  => __( 'Every hour', 'ag_epdq_server' ),
-					//'300'   => __( 'Every 5 minutes - DEV ONLY', 'ag_epdq_server' ),
+					'1800'  => __( 'Every 30 minutes (beta - may cause performance issues)', 'ag_epdq_server' ),
+					'900'   => __( 'Every 15 minutes (beta - may cause performance issues)', 'ag_epdq_server' ),
 				),
 			),
 			'actionscheduler' => array(

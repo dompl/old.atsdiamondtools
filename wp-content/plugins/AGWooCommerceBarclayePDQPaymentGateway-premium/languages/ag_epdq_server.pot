@@ -2,14 +2,14 @@
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.7.1\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.8.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-16T11:20:11+00:00\n"
+"POT-Creation-Date: 2024-08-08T16:17:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: ag_epdq_server\n"
@@ -34,15 +34,15 @@ msgstr ""
 msgid "We are AG"
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:104
+#: inc/classes/class-epdq-authorization-capture.php:89
 msgid "Are you sure you wish to check the status of this order? "
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:106
+#: inc/classes/class-epdq-authorization-capture.php:91
 msgid "Something went wrong, and the capture of payment could not be completed. Please try again. "
 msgstr ""
 
-#: inc/classes/class-epdq-authorization-capture.php:138
+#: inc/classes/class-epdq-authorization-capture.php:121
 msgid "PAYID is missing from this order, you will need to manually refund this order in the ePDQ back office."
 msgstr ""
 
@@ -2188,221 +2188,208 @@ msgstr ""
 msgid "<strong>%s</strong> is enabled, but you don't have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
 msgstr ""
 
-#: inc/classes/class-main.php:194
+#: inc/classes/class-main.php:225
 msgid "<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target=\"_blank\" href=\"%s\">here</a> for more card numbers, steps on setting up and troubleshooting."
 msgstr ""
 
-#: inc/classes/class-main.php:205
+#: inc/classes/class-main.php:236
 msgid "<span class=\"AG-redirect-icon\"><img src=\"%s\" /></span>"
 msgstr ""
 
-#: inc/classes/class-main.php:206
+#: inc/classes/class-main.php:237
 msgid "<p class=\"AG-redirect-notice\">After clicking \"Place order\", you will be redirected to Barclays to complete your purchase securely.</p>"
 msgstr ""
 
-#: inc/classes/class-main.php:270
+#: inc/classes/class-main.php:296
 msgid "AG ePDQ Checkout Settings"
 msgstr ""
 
-#: inc/classes/class-main.php:280
+#: inc/classes/class-main.php:306
 msgid "This gateway directs customers to the secure Barclays payment server to process transactions. After completing the payment, customers will be automatically redirected back to your website."
 msgstr ""
 
-#: inc/classes/class-main.php:281
+#: inc/classes/class-main.php:307
 msgid "Encounter setup difficulties? Our <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:294
+#: inc/classes/class-main.php:320
 msgid "These settings are crucial for enabling several key features including processing refunds, performing status checks, and managing subscription renewal payments. Configure these to ensure smooth operation of these functionalities."
 msgstr ""
 
-#: inc/classes/class-main.php:307
+#: inc/classes/class-main.php:333
+msgid "Welcome to the Status Check Settings page. Here, you will find a range of features and options designed to help you manage and automate the ePDQ status checking for your orders."
+msgstr ""
+
+#: inc/classes/class-main.php:334
+msgid "This feature relies on the proper configuration of the REST API. Please ensure that your REST API settings are correctly set up to utilise these status check functionalities effectively."
+msgstr ""
+
+#: inc/classes/class-main.php:348
 msgid "Below you will find additional features and settings for the ePDQ plugin. Configure these options to further customise and enhance your plugin's functionality."
 msgstr ""
 
-#: inc/classes/class-main.php:716
+#: inc/classes/class-main.php:757
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:759
+#: inc/classes/class-main.php:800
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:764
+#: inc/classes/class-main.php:805
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:770
+#: inc/classes/class-main.php:811
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:776
+#: inc/classes/class-main.php:817
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:821
+#: inc/classes/class-main.php:862
 msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:821
+#: inc/classes/class-main.php:862
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:821
+#: inc/classes/class-main.php:862
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:821
-#: inc/classes/class-main.php:826
+#: inc/classes/class-main.php:862
+#: inc/classes/class-main.php:867
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:826
+#: inc/classes/class-main.php:867
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:827
+#: inc/classes/class-main.php:868
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:827
+#: inc/classes/class-main.php:868
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:831
+#: inc/classes/class-main.php:872
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:114
-#: inc/classes/StatusCheck/class-order-status-check.php:122
 msgid "AG ePDQ order status check has checked the status of this order. This was due to time limit reached in WooCommerce"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:116
 #: inc/classes/class-order-status-check.php:335
 #: inc/classes/class-order.php:42
-#: inc/classes/StatusCheck/class-order-status-check.php:123
-#: inc/classes/StatusCheck/class-order-status-check.php:369
+#: inc/classes/StatusCheck/class-order-status-check.php:546
 msgid "ePDQ Status:"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:121
 #: inc/classes/class-order-status-check.php:340
-#: inc/classes/StatusCheck/class-order-status-check.php:128
-#: inc/classes/StatusCheck/class-order-status-check.php:374
+#: inc/classes/StatusCheck/class-order-status-check.php:553
 msgid "Order ID:"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:122
 #: inc/classes/class-order-status-check.php:341
-#: inc/classes/StatusCheck/class-order-status-check.php:129
-#: inc/classes/StatusCheck/class-order-status-check.php:375
+#: inc/classes/StatusCheck/class-order-status-check.php:554
 msgid "Payment Reference In ePDQ System:"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:131
 #: inc/classes/class-order-status-check.php:346
-#: inc/classes/StatusCheck/class-order-status-check.php:138
-#: inc/classes/StatusCheck/class-order-status-check.php:380
 msgid " and Barclays ePDQ has confirmed the transaction."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:133
 #: inc/classes/class-order-status-check.php:348
-#: inc/classes/StatusCheck/class-order-status-check.php:140
-#: inc/classes/StatusCheck/class-order-status-check.php:382
+#: inc/classes/StatusCheck/class-order-status-check.php:564
 msgid "Barclays ePDQ transaction is confirmed"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:150
 #: inc/classes/class-order-status-check.php:364
-#: inc/classes/StatusCheck/class-order-status-check.php:156
-#: inc/classes/StatusCheck/class-order-status-check.php:398
 msgid " and the authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:158
 #: inc/classes/class-order-status-check.php:372
-#: inc/classes/StatusCheck/class-order-status-check.php:165
-#: inc/classes/StatusCheck/class-order-status-check.php:407
 msgid " and You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:167
 #: inc/classes/class-order-status-check.php:381
-#: inc/classes/StatusCheck/class-order-status-check.php:175
-#: inc/classes/StatusCheck/class-order-status-check.php:417
 msgid " and Barclays ePDQ has refused the transaction."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:176
 #: inc/classes/class-order-status-check.php:390
-#: inc/classes/StatusCheck/class-order-status-check.php:185
-#: inc/classes/StatusCheck/class-order-status-check.php:427
 msgid " and Barclays ePDQ has reported the payment is uncertain."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:187
 #: inc/classes/class-order-status-check.php:401
-#: inc/classes/StatusCheck/class-order-status-check.php:196
-#: inc/classes/StatusCheck/class-order-status-check.php:438
 msgid " and ePDQ has confirmed the customer has cancelled the transaction"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:198
 #: inc/classes/class-order-status-check.php:412
 #: inc/classes/class-order.php:70
-#: inc/classes/StatusCheck/class-order-status-check.php:207
-#: inc/classes/StatusCheck/class-order-status-check.php:449
+#: inc/classes/StatusCheck/class-order-status-check.php:631
 msgid "Barclays ePDQ transaction has been Authorised."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:201
 #: inc/classes/class-order-status-check.php:415
 #: inc/classes/class-order.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:210
-#: inc/classes/StatusCheck/class-order-status-check.php:452
+#: inc/classes/StatusCheck/class-order-status-check.php:634
 msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:213
 #: inc/classes/class-order-status-check.php:428
-#: inc/classes/StatusCheck/class-order-status-check.php:222
-#: inc/classes/StatusCheck/class-order-status-check.php:464
 msgid " and has come back as Incomplete or invalid"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:255
 #: inc/classes/Moto/class-moto.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:289
+#: inc/classes/StatusCheck/class-order-status-check.php:270
 msgid "Are you sure you wish to check the status of this order?"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:257
-#: inc/classes/StatusCheck/class-order-status-check.php:291
+#: inc/classes/StatusCheck/class-order-status-check.php:272
 msgid "Something went wrong, and the order status check could not be completed. Please try again."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:334
-#: inc/classes/StatusCheck/class-order-status-check.php:368
 msgid "AG ePDQ order status check was manually checked"
 msgstr ""
 
 #. translators: 1: first name 2: last name
 #: inc/classes/class-order-status-check.php:489
-#: inc/classes/StatusCheck/class-order-status-check.php:554
-#: inc/classes/StatusCheck/class-order-status-check.php:607
+#: inc/classes/StatusCheck/class-order-status-check.php:390
+#: inc/classes/StatusCheck/class-order-status-check.php:443
 msgctxt "full name"
 msgid "%1$s %2$s"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:510
-#: inc/classes/StatusCheck/class-order-status-check.php:575
-#: inc/classes/StatusCheck/class-order-status-check.php:628
+#: inc/classes/StatusCheck/class-order-status-check.php:411
+#: inc/classes/StatusCheck/class-order-status-check.php:464
 msgid "Preview"
 msgstr ""
 
 #: inc/classes/class-order.php:43
+#: inc/classes/StatusCheck/class-order-status-check.php:549
 msgid "ePDQ NCERROR:"
 msgstr ""
 
@@ -2415,6 +2402,7 @@ msgid "This was a MOTO payment."
 msgstr ""
 
 #: inc/classes/class-order.php:77
+#: inc/classes/StatusCheck/class-order-status-check.php:580
 msgid "The authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
 msgstr ""
 
@@ -2460,7 +2448,7 @@ msgid "The customer has cancelled the transaction"
 msgstr ""
 
 #: inc/classes/class-settings.php:23
-#: inc/classes/class-settings.php:207
+#: inc/classes/class-settings.php:199
 msgid "Enable/Disable"
 msgstr ""
 
@@ -2601,18 +2589,14 @@ msgid "Show customers a notice at checkout that they will be redirected to Barcl
 msgstr ""
 
 #: inc/classes/class-settings.php:158
-msgid "Disable auto Status Check"
-msgstr ""
-
-#: inc/classes/class-settings.php:166
 msgid "Enable AG Traffic Light System"
 msgstr ""
 
-#: inc/classes/class-settings.php:174
+#: inc/classes/class-settings.php:166
 msgid "Dynamic template URL"
 msgstr ""
 
-#: inc/classes/class-settings.php:176
+#: inc/classes/class-settings.php:168
 msgid ""
 "The dynamic template page allows you to customise the design of the payment pages in a more advanced way than the static template does.\n"
 "\n"
@@ -2621,148 +2605,248 @@ msgid ""
 "                    Please bear in mind that using a dynamic template page involves an additional request from our system to look up your template page. This increases the time needed for the payment process."
 msgstr ""
 
-#: inc/classes/class-settings.php:184
+#: inc/classes/class-settings.php:176
 msgid "Layout of the payment methods"
 msgstr ""
 
-#: inc/classes/class-settings.php:188
+#: inc/classes/class-settings.php:180
 msgid "You can arrange the layout/list of the payment methods on Barclays payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:191
+#: inc/classes/class-settings.php:183
 msgid "Horizontally grouped logos with the group name on the left (default value)"
 msgstr ""
 
-#: inc/classes/class-settings.php:192
+#: inc/classes/class-settings.php:184
 msgid "Horizontally grouped logos with no group names"
 msgstr ""
 
-#: inc/classes/class-settings.php:193
+#: inc/classes/class-settings.php:185
 msgid "Vertical list of logos with specific payment method or brand name"
 msgstr ""
 
-#: inc/classes/class-settings.php:198
+#: inc/classes/class-settings.php:190
 msgid "Logo for payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:200
+#: inc/classes/class-settings.php:192
 msgid "Upload image for payment page"
 msgstr ""
 
-#: inc/classes/class-settings.php:209
+#: inc/classes/class-settings.php:201
 msgid "Enable Tokenization"
 msgstr ""
 
-#: inc/classes/class-settings.php:211
+#: inc/classes/class-settings.php:203
 msgid "Enable to allow customers to save their payment methods for future checkouts. Customers will be able to manage their saved payment methods on the WooCommerce My Account page. <br />When this is enabled, saved credit card information isn’t stored on your site’s server. It is tokenized and stored on ePDQ’s servers.<br /><strong><a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/utilizing-credit-card-tokenization/\" target=\"_blank\">Please follow our guide here on the full setup of this feature.</a></strong>"
 msgstr ""
 
-#: inc/classes/class-settings.php:215
+#: inc/classes/class-settings.php:207
 msgid "Tip"
 msgstr ""
 
-#: inc/classes/class-settings.php:217
+#: inc/classes/class-settings.php:209
 msgid "Want to store your API details in a more secure way, read through our doc <a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/\" target=\"_blank\">here</a>"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:159
-#: inc/classes/Fraudchecks/fraud-checks.php:541
+#: inc/classes/class-settings.php:237
+msgid "Disable auto Status Check"
+msgstr ""
+
+#: inc/classes/class-settings.php:245
+msgid "Enable Scheduled Status Check (Beta)"
+msgstr ""
+
+#: inc/classes/class-settings.php:252
+msgid "Order Status"
+msgstr ""
+
+#: inc/classes/class-settings.php:255
+msgid "Select the order statuses that should trigger the scheduled status checks. This setting allows you to tailor the monitoring process to specific order conditions."
+msgstr ""
+
+#: inc/classes/class-settings.php:261
+msgid "Check Interval"
+msgstr ""
+
+#: inc/classes/class-settings.php:263
+msgid "Set the frequency at which the system checks the status of unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates."
+msgstr ""
+
+#: inc/classes/class-settings.php:267
+msgid "Once a day"
+msgstr ""
+
+#: inc/classes/class-settings.php:268
+msgid "Twice a day (every 12 hours)"
+msgstr ""
+
+#: inc/classes/class-settings.php:269
+msgid "Three times a day (every 8 hours)"
+msgstr ""
+
+#: inc/classes/class-settings.php:270
+msgid "Four times a day (every 6 hours)"
+msgstr ""
+
+#: inc/classes/class-settings.php:271
+msgid "Every four hours"
+msgstr ""
+
+#: inc/classes/class-settings.php:272
+msgid "Every three hours"
+msgstr ""
+
+#: inc/classes/class-settings.php:273
+msgid "Every two hours"
+msgstr ""
+
+#: inc/classes/class-settings.php:274
+msgid "Every hour"
+msgstr ""
+
+#: inc/classes/class-settings.php:279
+msgid "Monitor Scheduler Status"
+msgstr ""
+
+#: inc/classes/class-settings.php:281
+msgid "Click  <a href=\""
+msgstr ""
+
+#: inc/classes/class-settings.php:285
+msgid "Block WooCommerce Auto Cancel"
+msgstr ""
+
+#: inc/classes/class-settings.php:292
+msgid "Cancel Interval (Beta)"
+msgstr ""
+
+#: inc/classes/class-settings.php:294
+msgid "Set the frequency at which the system auto cancels unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates."
+msgstr ""
+
+#: inc/classes/class-settings.php:298
+msgid "1 day"
+msgstr ""
+
+#: inc/classes/class-settings.php:299
+msgid "5 days"
+msgstr ""
+
+#: inc/classes/class-settings.php:300
+msgid "7 days"
+msgstr ""
+
+#: inc/classes/class-settings.php:301
+msgid "10 days"
+msgstr ""
+
+#: inc/classes/class-settings.php:302
+msgid "15 days"
+msgstr ""
+
+#: inc/classes/class-settings.php:303
+msgid "30 days"
+msgstr ""
+
+#: inc/classes/Fraudchecks/fraud-checks.php:122
+#: inc/classes/Fraudchecks/fraud-checks.php:504
 msgid "AG Traffic Light System"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:364
+#: inc/classes/Fraudchecks/fraud-checks.php:327
 msgid "The Address is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:367
+#: inc/classes/Fraudchecks/fraud-checks.php:330
 msgid "The address has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:370
+#: inc/classes/Fraudchecks/fraud-checks.php:333
 msgid "Invalid or no Address has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:379
+#: inc/classes/Fraudchecks/fraud-checks.php:342
 msgid "The Postal Code is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:382
+#: inc/classes/Fraudchecks/fraud-checks.php:345
 msgid "The Postal Code has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:385
+#: inc/classes/Fraudchecks/fraud-checks.php:348
 msgid "Invalid or no Postal Code has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:388
+#: inc/classes/Fraudchecks/fraud-checks.php:351
 msgid "Parameters for Postal Code has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:394
+#: inc/classes/Fraudchecks/fraud-checks.php:357
 msgid "The CVC has been sent and the acquirer has given a positive response to the CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:397
+#: inc/classes/Fraudchecks/fraud-checks.php:360
 msgid "The CVC has been sent but the acquirer has given a negative response to the CVC check, i.e. the CVC is wrong."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:400
+#: inc/classes/Fraudchecks/fraud-checks.php:363
 msgid "Invalid or no CVC has been transmitted"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:403
+#: inc/classes/Fraudchecks/fraud-checks.php:366
 msgid "Parameters for CVC has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:427
+#: inc/classes/Fraudchecks/fraud-checks.php:390
 msgid "Address Check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:430
+#: inc/classes/Fraudchecks/fraud-checks.php:393
 msgid "Postcode check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:433
+#: inc/classes/Fraudchecks/fraud-checks.php:396
 msgid "CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:436
+#: inc/classes/Fraudchecks/fraud-checks.php:399
 msgid "3D Secure check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:481
+#: inc/classes/Fraudchecks/fraud-checks.php:444
 msgid "Manually keyed (MOTO) (card not present)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:485
+#: inc/classes/Fraudchecks/fraud-checks.php:448
 msgid "Recurring (from MOTO)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:489
+#: inc/classes/Fraudchecks/fraud-checks.php:452
 msgid "Installment payments"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:493
+#: inc/classes/Fraudchecks/fraud-checks.php:456
 msgid "Manually keyed, card present"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:497
+#: inc/classes/Fraudchecks/fraud-checks.php:460
 msgid "Cardholder identification successful"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:501
+#: inc/classes/Fraudchecks/fraud-checks.php:464
 msgid "Merchant supports identification but not cardholder,"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:505
+#: inc/classes/Fraudchecks/fraud-checks.php:468
 msgid "E-commerce with SSL encryption"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:509
+#: inc/classes/Fraudchecks/fraud-checks.php:472
 msgid "Recurring (from e-commerce)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:513
+#: inc/classes/Fraudchecks/fraud-checks.php:476
 msgid "Parameters for 3D has not been set."
 msgstr ""
 
@@ -2774,9 +2858,36 @@ msgstr ""
 msgid "This order is a "
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:235
-#: inc/classes/StatusCheck/class-order-status-check.php:477
-msgid " and has come back with an issue"
+#: inc/classes/StatusCheck/class-order-status-check.php:550
+msgid "ePDQ NCERROR PLUS:"
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:562
+msgid "Barclays ePDQ has confirmed the transaction."
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:589
+msgid "You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:599
+msgid "Barclays ePDQ has refused the transaction."
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:609
+msgid "Barclays ePDQ has reported the payment is uncertain."
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:620
+msgid "ePDQ has confirmed the customer has cancelled the transaction"
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:646
+msgid "The order has come back as Incomplete or invalid"
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:659
+msgid "The order has come back with an issue"
 msgstr ""
 
 #: inc/classes/Tokenize/class-tokenization.php:124
@@ -2785,11 +2896,6 @@ msgstr ""
 
 #: inc/classes/Tokenize/class-tokenization.php:127
 msgid "Use a new card"
-msgstr ""
-
-#: inc/classes/Tokenize/class-tokenization.php:154
-#: inc/classes/Tokenize/class-tokenization.php:163
-msgid "%1$s %2$s ending in %3$s %4$s"
 msgstr ""
 
 #: inc/core/class-ag-licence.php:135

@@ -121,6 +121,10 @@ class AG_ePDQ_order_status_check {
 
 		$ePDQ_settings = new epdq_checkout();
 
+		if( empty( $ePDQ_settings->autostatus ) || $ePDQ_settings->autostatus === 'no' ) {
+			return;
+		}
+
 		$interval = $ePDQ_settings->cancel_interval; // Interval should be retrieved correctly from the settings
 
 		$args = array(
@@ -131,7 +135,9 @@ class AG_ePDQ_order_status_check {
 
 		$orders = wc_get_orders( $args );
 
-		AG_ePDQ_Helpers::ag_log( "[Scheduled Status Check] Auto cancel order function has been triggered.", 'debug', 'yes' );
+		if( defined( 'ag_support_debug' ) ) {
+			AG_ePDQ_Helpers::ag_log( "[Scheduled Status Check] Auto cancel order function has been triggered.", 'debug', 'yes' );
+		}
 
 		foreach( $orders as $order ) {
 			if( $order->get_payment_method() === 'epdq_checkout' && ! $order->is_paid() ) {
@@ -170,7 +176,9 @@ class AG_ePDQ_order_status_check {
 
 		// Log the number of orders that are being checked
 		$number_of_orders = count( $orders );
-		AG_ePDQ_Helpers::ag_log( "[Scheduled Status Check] Number of orders that are being checked: $number_of_orders", 'debug', 'yes' );
+		if( defined( 'ag_support_debug' ) ) {
+			AG_ePDQ_Helpers::ag_log( "[Scheduled Status Check] Number of orders that are being checked: $number_of_orders", 'debug', 'yes' );
+		}
 
 		foreach( $orders as $order_id ) {
 			$order = wc_get_order( $order_id );

@@ -128,6 +128,12 @@ class AG_ePDQ_Token {
 				</ul>
 			</div>';
 
+		} else {
+
+			return '<div class="ag-select-cards savecard">
+      				<label for="saveCard"><strong>Save your card details for future payments</strong></label>
+					<input type="checkbox" id="saveCard" name="saveCard">
+				</div>';
 		}
 
 	}

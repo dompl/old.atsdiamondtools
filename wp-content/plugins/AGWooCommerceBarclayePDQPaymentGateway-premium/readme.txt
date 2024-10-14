@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.5.5
+Tested up to: 6.6.1
 Stable tag: 6.2
 
 == Description ==
@@ -31,6 +31,13 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.8.2 - 26/08/24 =
+* Change          - Bump tested WooCommerce (9.2.3).
+* Change          - Implemented code to handle token payments even when no cards are previously saved, enhancing flexibility and user experience for first-time users.
+* Change          - Scheduled Status Check debug logs have now been added to deeper debugging, this is to save the debug log when deeper debugging is not enabled.
+* Change          - Added 30 and 15 minute Check Interval for Scheduled Status Check (beta feature as may cause performance issues with some hosts).
+* Update          - Freemius SDK updated.
 
 = v.4.8.1 - 02/07/24 =
 * Fix             - Resolved an issue with HPOS related to the fraud check features activating before an order has been created.

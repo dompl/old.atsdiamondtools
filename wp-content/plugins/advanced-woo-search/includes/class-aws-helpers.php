@@ -205,7 +205,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                             $str_new_array[$str_item_term] = $str_item_num;
                         }
 
-                        $new_array_key = AWS_Plurals::singularize( $str_item_term );
+                        $new_array_key = AWS_Helpers::singularize( $str_item_term );
 
                         if ( $new_array_key && strlen( $str_item_term ) > 3 && strlen( $new_array_key ) > 2 ) {
                             if ( ! isset( $str_new_array[$new_array_key] ) ) {
@@ -631,8 +631,10 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function singularize( $search_term ) {
 
+            $lang = apply_filters( 'aws_current_scrapping_lang', 'en' );
+
             $search_term_len = strlen( $search_term );
-            $search_term_norm = AWS_Plurals::singularize( $search_term );
+            $search_term_norm = AWS_Plurals::singularize( $search_term, $lang );
 
             if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
                 $search_term = $search_term_norm;
@@ -836,6 +838,31 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Get current page
+         *
+         * @return int Page ID
+         */
+        static public function get_current_page_id() {
+
+            global $wp_query;
+
+            if ( is_shop() ) {
+                $value = wc_get_page_id( 'shop' );
+            } elseif ( is_cart() ) {
+                $value = wc_get_page_id( 'cart' );
+            } elseif ( is_checkout() ) {
+                $value = wc_get_page_id( 'checkout' );
+            } elseif ( is_account_page() ) {
+                $value = wc_get_page_id( 'myaccount' );
+            } else {
+                $value = $wp_query->get_queried_object_id();
+            }
+
+            return $value;
+
+        }
+
+        /*
          * Get current active site language
          *
          * @return string Language code
@@ -1003,6 +1030,35 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function kses_textarea_allowed_tags() {
             return array( 'a', 'br', 'em', 'strong', 'b', 'code', 'blockquote', 'p', 'i' );
+        }
+
+        /**
+         * Check if terms really exists and get their term_id value
+         * @param array $terms Taxonomy terms array
+         * @param string $taxonomy Taxonomy name
+         * @return array $new_terms_arr
+         */
+        static public function check_terms( $terms, $taxonomy ) {
+
+            $new_terms_arr = array();
+            foreach ( $terms as $term_name ) {
+
+                $term_check = term_exists( $term_name, $taxonomy );
+                if ( $term_check && isset( $term_check['term_id'] ) ) {
+                    $new_terms_arr[] = $term_check['term_id'];
+                }
+
+                if ( ! $term_check && strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                    $term_check = term_exists( $term_name, 'pa_' . $taxonomy );
+                    if ( $term_check && isset( $term_check['term_id'] ) ) {
+                        $new_terms_arr[] = $term_check['term_id'];
+                    }
+                }
+
+            }
+
+            return $new_terms_arr;
+
         }
 
         /**

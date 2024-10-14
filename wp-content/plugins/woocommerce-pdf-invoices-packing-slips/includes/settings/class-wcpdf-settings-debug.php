@@ -244,6 +244,22 @@ class Settings_Debug {
 		}
 	}
 
+	private function clear_released_semaphore_locks( $data ) {
+		\WPO\WC\PDF_Invoices\Updraft_Semaphore_3_0::cleanup_released_locks();
+
+		$message = esc_html__( 'Released semaphore locks have been cleaned up!', 'woocommerce-pdf-invoices-packing-slips' );
+		wcpdf_log_error( $message, 'info' );
+		wp_send_json_success( compact( 'message' ) );
+	}
+
+	private function clear_released_legacy_semaphore_locks( $data ) {
+		\WPO\WC\PDF_Invoices\Updraft_Semaphore_3_0::cleanup_released_locks( true );
+
+		$message = esc_html__( 'Released legacy semaphore locks have been cleaned up!', 'woocommerce-pdf-invoices-packing-slips' );
+		wcpdf_log_error( $message, 'info' );
+		wp_send_json_success( compact( 'message' ) );
+	}
+
 	private function clear_extensions_license_cache( $data ) {
 		WPO_WCPDF()->settings->upgrade->clear_extensions_license_cache();
 
@@ -823,6 +839,18 @@ class Settings_Debug {
 			),
 			array(
 				'type'     => 'setting',
+				'id'       => 'embed_images',
+				'title'    => __( 'Embed Images', 'woocommerce-pdf-invoices-packing-slips' ),
+				'callback' => 'checkbox',
+				'section'  => 'debug_settings',
+				'args'     => array(
+					'option_name' => $option_name,
+					'id'          => 'embed_images',
+					'description' => __( 'Embed images only if you are experiencing issues with them loading in your PDF. Please note that this option can significantly increase the file size.', 'woocommerce-pdf-invoices-packing-slips' ),
+				)
+			),
+			array(
+				'type'     => 'setting',
 				'id'       => 'log_to_order_notes',
 				'title'    => __( 'Log to order notes', 'woocommerce-pdf-invoices-packing-slips' ),
 				'callback' => 'checkbox',
@@ -830,7 +858,7 @@ class Settings_Debug {
 				'args'     => array(
 					'option_name' => $option_name,
 					'id'          => 'log_to_order_notes',
-					'description' => __( 'Log PDF document creation and mark/unmark as printed to order notes.', 'woocommerce-pdf-invoices-packing-slips' ),
+					'description' => __( 'Log PDF document creation, deletion, and mark/unmark as printed to order notes.', 'woocommerce-pdf-invoices-packing-slips' ),
 				)
 			),
 			array(

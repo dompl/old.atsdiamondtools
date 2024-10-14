@@ -27,6 +27,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         private $child_theme = '';
 
         /**
+         * @var AWS_Integrations Active plugins arrray
+         */
+        public $active_plugins = array();
+
+        /**
          * @var AWS_Integrations The single instance of the class
          */
         protected static $_instance = null;
@@ -60,6 +65,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     $this->current_theme = $theme->parent()->get( 'Name' );
                 }
             }
+
+            $active_plugins = get_option( 'active_plugins', array() );
+
+            if ( is_multisite() ) {
+                $network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+                $active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+            }
+
+            $this->active_plugins = $active_plugins;
 
             $this->includes();
 
@@ -231,6 +245,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
                 if ( 'Hitek' === $this->current_theme ) {
                     add_action( 'xts_after_search_wrapper', array( $this, 'xts_after_search_wrapper' ) );
+                }
+
+                if ( 'Oxygen' === $this->current_theme ) {
+                    add_action( 'wp_before_load_template', array( $this, 'oxygen_wp_before_load_template' ) );
+                    add_action( 'wp_after_load_template', array( $this, 'oxygen_wp_after_load_template' ) );
                 }
 
                 // WP Bottom Menu
@@ -414,6 +433,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-barn2-protected-categories.php' );
             }
 
+            // WooCommerce Product Table plugin by Barn2
+            if ( class_exists( 'Barn2\Plugin\WC_Product_Table\Product_Table' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-barn2-product-table.php' );
+            }
+
             // WC Marketplace - https://wc-marketplace.com/
             if ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-multivendorx.php' );
@@ -499,6 +523,21 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // YITH WooCommerce Ajax Product Filter
             if ( defined( 'YITH_WCAN' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-yith-wcan.php' );
+            }
+
+            // Filter Everything
+            if ( class_exists( 'FlrtFilter' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-filter-everything.php' );
+            }
+
+            //  EAN for WooCommerce by WPFactory
+            if ( class_exists( 'Alg_WC_EAN' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-alg-wc-ean.php' );
+            }
+
+            // Breakdance builder
+            if ( defined( 'BREAKDANCE_PLUGIN_URL' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-breakdance.php' );
             }
 
         }
@@ -1757,6 +1796,24 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Oxygen theme header search form
+         */
+        public function oxygen_wp_before_load_template( $_template_file ) {
+            if ( strpos( $_template_file, 'oxygen/sidebar-menu-top.php' ) !== false ) {
+                ob_start();
+            }
+        }
+        public function oxygen_wp_after_load_template( $_template_file ) {
+            if ( strpos( $_template_file, 'oxygen/sidebar-menu-top.php' ) !== false ) {
+                $deal_html = ob_get_contents();
+                ob_end_clean();
+                $form = aws_get_search_form( false );
+                $form = str_replace( 'aws-container', 'aws-container search-form',$form );
+                echo preg_replace('/\<form[\s\S]*?search-form[\s\S]*?<\/form>/', $form, $deal_html);
+            }
+        }
+
+        /*
          * WP Bottom Menu
          */
         public function wp_bottom_menu_wp_head() { ?>
@@ -1946,6 +2003,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Sinatra' === $this->current_theme ) {
                 $selectors[] = '.si-header-widgets .si-search-form';
+            }
+
+            if ( 'Shopical' === $this->current_theme ) {
+                $selectors[] = '.search .search-form-wrapper';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace

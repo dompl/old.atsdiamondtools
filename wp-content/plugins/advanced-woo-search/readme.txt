@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.6
-Stable tag: 3.10
+Stable tag: 3.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,57 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.17 ( 2024-10-01 ) =
+* Add - Support for Shopical theme
+* Add - Support for WooCommerce Product Table by Barn2 plugin
+* Fix - Index duplicated products when using WPML plugin
+* Fix - Bug with quick edit feature when using WPML plugin
+* Dev - New check for currently active plugins
+
+= 3.16 ( 2024-09-16 ) =
+* Add - Greek to latin characters replace
+* Add - Plurals support for different languages
+* Add - Support for Breakdance plugin
+* Update - Tested with WC 9.3
+* Update - On page stock status and sale filters
+* Fix - Show clear button on first search when ajax is disabled
+
+= 3.15 ( 2024-09-02 ) =
+* Update - Tested with WC 9.2
+* Update - Add new parameters for orderby
+* Update - Settings page text
+* Fix - Filter by attributes for the search page. Fix filtering by slugs with integers inside
+* Dev - Add additional check for product IDs inside search page
+
+= 3.14 ( 2024-08-12 ) =
+* Update - Integration with Oxygen theme
+* Fix - Filtering for search results page when using slugs with numbers inside URL for terms
+* Fix - Add new parameters for orderby function
+* Fix - Automatically index products that were restored from the trash
+* Dev - Fix functions naming
+
+= 3.13 ( 2024-08-05 ) =
+* Add - Integration with EAN for WooCommerce by WPFactory plugin
+* Fix - Bug with search results filtering via third party plugins
+* Fix - Bug when filtering product variations on search results page
+* Dev - New function to get current page id
+
+= 3.12 ( 2024-07-19 ) =
+* Fix - Bug with search results page taxonomies filters
+
+= 3.11 ( 2024-07-15 ) =
+* Add - Support for Filter Everything plugin
+* Update - Tested with WC 9.1
+* Update - Integration with WooCommerce Product Filter by WooBeWoo plugin
+* Update - Integration with Product Filters for WooCommerce plugin
+* Update - Integration with YITH WooCommerce Ajax Product Filter plugin
+* Update - Integration with BeRocket WooCommerce AJAX Products Filter plugin
+* Update - Filter for search results page. Inherit tax_query parameters
+* Update - Integration with Avada theme. Move js scripts to footer
+* Update - Integration with The7 theme. Fix submit button for search forms
+* Update - Admin notice about reindex on first plugin activation
+* Fix - Bug with calling search function inside wp admin orders page
 
 = 3.10 ( 2024-07-01 ) =
 * Add - New option to show fixed terms list inside search results
@@ -341,56 +392,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 = 2.80 ( 2023-05-29 ) =
 * Add - Support for WP Bottom Menu plugin
-
-= 2.79 ( 2023-05-15 ) =
-* Add - Support for WooCommerce custom orders tables
-* Update - Tested with WC 7.7
-* Update - Taxonomies pages search. Fix terms normalization
-* Fix - FacetWP plugin integration issue with pagination
-* Fix - Relevance score calculation for one letter words
-
-= 2.78 ( 2023-04-28 ) =
-* Update - Support for WCFM plugin. Fix search inside vendor shop page
-* Update - Support for Elementor popups
-* Update - Support for Divi theme
-* Update - Support for Google Analytics
-* Fix - Escaping of html entities for admin options
-* Fix - Bug with WPML plugin that indexed child products
-
-= 2.77 ( 2023-04-17 ) =
-* Update - Tested with WC 7.6
-* Update - FacetWP plugin integration
-
-= 2.76 ( 2023-04-03 ) =
-* Add - New option to execute or not shortcodes inside the product content
-
-= 2.75 ( 2023-03-20 ) =
-* Add - Support for Product Filters for WooCommerce plugin
-* Update - Tested with WC 7.5
-* Fix - Bug with Divi theme integration
-
-= 2.74 ( 2023-03-06 ) =
-* Add - WP-CLI support
-* Dev - Add aws_force_reindex_product action
-
-= 2.73 ( 2023-02-20 ) =
-* Update - Tested with WC 7.4
-* Update - FacetWP plugin integration
-* Update - WPBakery plugin support
-
-= 2.72 ( 2023-02-06 ) =
-* Add - MultiVendorX – WooCommerce Multivendor Marketplace plugin support
-* Update - Change relevance score for products title
-* Fix - WPML plugin bug when saving settings values
-
-= 2.71 ( 2023-01-23 ) =
-* Update - Tested with WC 7.3
-* Fix - Integration issue with Advanced Woo Labels plugin
-* Fix - Elementor search form widget
-* Fix - Index scheduled products
-
-= 2.70 ( 2023-01-09 ) =
-* Update - Tested with WC 7.2
-
-= 2.69 ( 2022-12-12 ) =
-* Fix - OrderBy value for search results page query
