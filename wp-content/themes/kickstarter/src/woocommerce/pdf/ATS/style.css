@@ -55,9 +55,9 @@ p + p {
 	margin-top: 1.25em;
 }
 
-a { 
-	border-bottom: 1px solid; 
-	text-decoration: none; 
+a {
+	border-bottom: 1px solid;
+	text-decoration: none;
 }
 
 /* Basic Table Styling */
@@ -147,7 +147,7 @@ table.order-details {
 
 .order-details tr {
 	page-break-inside: always;
-	page-break-after: auto;	
+	page-break-after: auto;
 }
 
 .order-details td,
@@ -264,4 +264,17 @@ table.totals tr.payment_method {
 }
 .pagenum,.pagecount {
 	font-family: sans-serif;
+}.sku-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px; /* Adjust as necessary for proper positioning */
+  font-size: inherit; /* This will ensure it matches the font size of the surrounding text */
+}
+
+.sku-label {
+  margin-right: 5px; /* Space between "SKU:" label and the actual SKU value */
+}
+
+.sku-value {
+  font-size: inherit; /* Matches the font size of the "Select Option" text */
 }
