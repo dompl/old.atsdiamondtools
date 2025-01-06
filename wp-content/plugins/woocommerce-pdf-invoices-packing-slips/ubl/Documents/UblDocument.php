@@ -1,88 +1,92 @@
 <?php
 
-namespace WPO\WC\UBL\Documents;
+namespace WPO\IPS\UBL\Documents;
 
-use WPO\WC\UBL\Models\Order;
+use WPO\IPS\UBL\Models\Order;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
 class UblDocument extends Document {
+	
+	public function get_root_element() {
+		return apply_filters( 'wpo_wc_ubl_document_root_element', 'Invoice', $this );
+	}
 
 	public function get_format() {
 		$format = apply_filters( 'wpo_wc_ubl_document_format' , array(
 			'ublversion' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\UblVersionIdHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\UblVersionIdHandler::class,
 			),
 			'id' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\IdHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\IdHandler::class,
 			),
 			'issuedate' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\IssueDateHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\IssueDateHandler::class,
 			),
 			'invoicetype' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\InvoiceTypeCodeHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Invoice\InvoiceTypeCodeHandler::class,
 			),
 			'documentcurrencycode' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\DocumentCurrencyCodeHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\DocumentCurrencyCodeHandler::class,
 			),
 			'orderreference' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\OrderReferenceHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\OrderReferenceHandler::class,
 			),
 			'additionaldocumentreference' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\AdditionalDocumentReferenceHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\AdditionalDocumentReferenceHandler::class,
 			),
 			'accountsupplierparty' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\AddressHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\AddressHandler::class,
 				'options' => array(
 					'root' => 'AccountingSupplierParty',
 				),
 			),
 			'accountingcustomerparty' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\AddressHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\AddressHandler::class,
 				'options' => array(
 					'root' => 'AccountingCustomerParty',
 				),
 			),
 			'delivery' => array(
 				'enabled' => false,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\DeliveryHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\DeliveryHandler::class,
 			),
 			'paymentmeans' => array(
 				'enabled' => false,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\PaymentMeansHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\PaymentMeansHandler::class,
 			),
 			'paymentterms' => array(
 				'enabled' => false,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\PaymentTermsHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\PaymentTermsHandler::class,
 			),
 			'allowancecharge' => array(
 				'enabled' => false,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\AllowanceChargeHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\AllowanceChargeHandler::class,
 			),
 			'taxtotal' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\TaxTotalHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\TaxTotalHandler::class,
 			),
 			'legalmonetarytotal' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\LegalMonetaryTotalHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Common\LegalMonetaryTotalHandler::class,
 			),
 			'invoicelines' => array(
 				'enabled' => true,
-				'handler' => \WPO\WC\UBL\Handlers\Ubl\InvoiceLineHandler::class,
+				'handler' => \WPO\IPS\UBL\Handlers\Invoice\InvoiceLineHandler::class,
 			),
-		) );
+		), $this );
 
 		foreach ( $format as $key => $element ) {
 			if ( false === $element['enabled'] ) {
@@ -98,7 +102,7 @@ class UblDocument extends Document {
 			'cac' => 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2',
 			'cbc' => 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2',
 			''    => 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2',
-		) );
+		), $this );
 	}
 
 	public function get_data() {

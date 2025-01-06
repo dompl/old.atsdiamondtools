@@ -54,9 +54,9 @@ class IgniteWoo_Updater {
 
 		$this->products = array();
 
-		$this->load_plugin_textdomain();
+		// Deprecated, this causes the translations to be loaded too soon.
 
-		add_action( 'init', array( $this, 'load_localisation' ), 0 );
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ), 0 );
 
 		// Run this on activation.
 		register_activation_hook( $this->file, array( $this, 'activation' ) );
@@ -242,27 +242,21 @@ class IgniteWoo_Updater {
 	}
 	
 	/**
-	 * Load the plugin's localisation file.
-	 * @access public
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function load_localisation () {
-		load_plugin_textdomain( 'ignition-updater', false, dirname( plugin_basename( $this->file ) ) . '/lang/' );
-	} // End load_localisation()
-
-	/**
 	 * Load the plugin textdomain from the main WordPress "languages" folder.
 	 * @since  1.0.0
 	 * @return  void
 	 */
 	public function load_plugin_textdomain () {
-	    $domain = 'ignition-updater';
-	    // The "plugin_locale" filter is also used in load_plugin_textdomain()
-	    $locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+		$domain = 'ignition-updater';
+		// The "plugin_locale" filter is also used in load_plugin_textdomain()
+		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
-	    load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
-	    load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( $this->file ) ) . '/languages/' );
+		load_textdomain( $domain, WP_LANG_DIR . '/woocommerce/' . $domain . '-' . $locale . '.mo' );
+
+		$plugin_rel_path = apply_filters( 'ignitewoo_translation_file_rel_path', dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+		load_plugin_textdomain( $domain, false, $plugin_rel_path );
+		
 	} // End load_plugin_textdomain()
 
 	/**

@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 
-	const STRIPE_ID = 'link';
+	const STRIPE_ID = WC_Stripe_Payment_Methods::LINK;
 
 	/**
 	 * Constructor for Link payment method
@@ -24,6 +24,8 @@ class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 			for further payments.',
 			'woocommerce-gateway-stripe'
 		);
+
+		add_filter( 'woocommerce_gateway_title', [ $this, 'filter_gateway_title' ], 10, 2 );
 	}
 
 	/**
@@ -32,7 +34,6 @@ class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 	 * @return bool
 	 */
 	public static function is_link_enabled() {
-
 		// Assume Link is disabled if UPE is disabled.
 		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
 			return false;
@@ -109,5 +110,31 @@ class WC_Stripe_UPE_Payment_Method_Link extends WC_Stripe_UPE_Payment_Method {
 	 */
 	public function requires_automatic_capture() {
 		return false;
+	}
+
+	/**
+	 * Filters the gateway title to reflect Link as the payment method.
+	 */
+	public function filter_gateway_title( $title, $id ) {
+		global $theorder;
+
+		// If $theorder is empty (i.e. non-HPOS), fallback to using the global post object.
+		if ( empty( $theorder ) && ! empty( $GLOBALS['post']->ID ) ) {
+			$theorder = wc_get_order( $GLOBALS['post']->ID );
+		}
+
+		if ( ! is_object( $theorder ) ) {
+			return $title;
+		}
+
+		$method_title = $theorder->get_payment_method_title();
+
+		if ( 'stripe' === $id && ! empty( $method_title ) ) {
+			if ( 'Link' === $method_title ) {
+				return $method_title;
+			}
+		}
+
+		return $title;
 	}
 }

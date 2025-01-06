@@ -36,6 +36,7 @@ class Ignition_Updater_Admin {
 	public $product_id;
 	public $slug;
 	public $dir;
+	public $list_table;
 
 	/**
 	 * Constructor.
@@ -145,6 +146,9 @@ class Ignition_Updater_Admin {
 
 			if ( isset( $product['license_expiry'] ) /*&& !empty( $product['license_expiry'] )*/ ) {
 				try {
+					if ( 'Not activated' == $product['license_expiry'] ) {
+						continue;
+					}
 					$date = new DateTime( $product['license_expiry'] );
 				} catch ( Exception $e ) {
 					continue;

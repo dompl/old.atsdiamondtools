@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
 	use WC_Stripe_Subscriptions_Trait;
 
-	const STRIPE_ID = 'sepa_debit';
+	const STRIPE_ID = WC_Stripe_Payment_Methods::SEPA_DEBIT;
 
 	const LPM_GATEWAY_CLASS = WC_Gateway_Stripe_Sepa::class;
 
@@ -23,7 +23,7 @@ class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
 		$this->stripe_id            = self::STRIPE_ID;
 		$this->title                = __( 'SEPA Direct Debit', 'woocommerce-gateway-stripe' );
 		$this->is_reusable          = true;
-		$this->supported_currencies = [ 'EUR' ];
+		$this->supported_currencies = [ WC_Stripe_Currency_Code::EURO ];
 		$this->label                = __( 'SEPA Direct Debit', 'woocommerce-gateway-stripe' );
 		$this->description          = __(
 			'Reach 500 million customers and over 20 million businesses across the European Union.',
@@ -57,7 +57,7 @@ class WC_Stripe_UPE_Payment_Method_Sepa extends WC_Stripe_UPE_Payment_Method {
 			esc_html__( '%1$sTest mode:%2$s use the test account number AT611904300234573201. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed %3$shere%4$s.', 'woocommerce-gateway-stripe' ),
 			'<strong>',
 			'</strong>',
-			'<a href="https://stripe.com/docs/testing?payment-method=sepa-direct-debit" target="_blank">',
+			'<a href="https://docs.stripe.com/testing?payment-method=sepa-direct-debit#non-card-payments" target="_blank">',
 			'</a>'
 		);
 	}

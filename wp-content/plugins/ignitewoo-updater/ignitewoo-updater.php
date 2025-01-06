@@ -3,7 +3,7 @@
  * Plugin Name: IgniteWoo Updater
  * Plugin URI: https://ignitewoo.com/
  * Description: Helps you manage your IgniteWoo software licenses and receive important updates for your IgniteWoo products.
- * Version: 3.0.4
+ * Version: 3.0.7
  * Author: IgniteWoo.com
  * Author URI: https://ignitewoo.com/
  * Network: true

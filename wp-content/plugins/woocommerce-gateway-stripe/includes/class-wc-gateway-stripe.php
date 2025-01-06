@@ -142,7 +142,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function get_title() {
 		// Change the title on the payment methods settings page to include the number of enabled payment methods.
-		if ( isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] ) {
+		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() && isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] ) {
 			$enabled_payment_methods_count = count( WC_Stripe_Helper::get_legacy_enabled_payment_method_ids() );
 			$this->title                   = $enabled_payment_methods_count ?
 				/* translators: $1. Count of enabled payment methods. */
@@ -245,7 +245,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		if ( $this->testmode ) {
 			/* translators: link to Stripe testing page */
-			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe' ), 'https://stripe.com/docs/testing' );
+			$description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe' ), 'https://docs.stripe.com/testing' );
 		}
 
 		$description = trim( $description );

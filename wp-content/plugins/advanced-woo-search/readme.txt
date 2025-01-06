@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
-Tested up to: 6.6
-Stable tag: 3.17
+Tested up to: 6.7
+Stable tag: 3.24
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,40 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.24 ( 2024-12-30 ) =
+* Update - Tested with WC 9.5
+* Update - Settings page pro block description
+
+= 3.23 ( 2024-12-16 ) =
+* Add - New shortcodes for similar terms, search terms
+* Fix - Integration with Yoast Premium plugin. Allow additional parameters for permalinks
+* Dev - Update forceNewSearch method to use additional parameters
+
+= 3.22 ( 2024-11-29 ) =
+* Update - Settings page descriptions
+
+= 3.21 ( 2024-11-26 ) =
+* Update - Tested with WC 9.4
+* Update - Improve search speed and update index table structure
+* Update - Structure of cache table
+* Dev - Update conditions for table check
+
+= 3.20 ( 2024-11-11 ) =
+* Update - Integration with YITH WooCommerce Ajax Product Filter plugin
+* Update - Taxonomies search when using Begins search logic
+* Fix - Bug with diacritical characters replacement
+
+= 3.19 ( 2024-10-28 ) =
+* Update - Add different search rules for taxonomies search
+* Update - Styles for search form. Fix min height for input
+* Dev - Add aws_search_custom_top_results filter
+
+= 3.18 ( 2024-10-14 ) =
+* Add - Support for Jet Blocks plugin search widget
+* Update - Support for Italian language
+* Update - Admin page notices about integrations
+* Dev - Update the structure of plugin tables
 
 = 3.17 ( 2024-10-01 ) =
 * Add - Support for Shopical theme
@@ -358,37 +392,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Fix - Display On backorder product stock status when needed
 * Dev - Update aws_results_html js hook. Add new property - translate
 * Dev - Add aws_search_tax_result_item filter
-
-= 2.86 ( 2023-08-21 ) =
-* Update - Tested with WC 8.0
-* Update - Integration with WCFM plugin. Speed up SQL queries inside the vendor shop page
-* Fix - Attributes filters for search results
-* Fix - Search terms tracking for GA4. Update tracking code
-* Dev - Update aws_reindex_product action. Allow to use array of IDs as parameter
-
-= 2.85 ( 2023-08-07 ) =
-* Update - Special characters scrapping. Replace comma char with space
-* Fix - Bug with search form inside WCFM plugin vendor shop page
-
-= 2.84 ( 2023-07-24 ) =
-* Add - Support for ShopEngine plugin
-* Update - Support for GeneratePress theme
-* Update - Tested with WC 7.9
-* Dev - Add aws_pre_normalize_string filter
-
-
-= 2.83 ( 2023-07-10 ) =
-* Add - Support for WooCommerce Product Bundles plugin
-* Add - Support for Bricks Builder theme
-* Fix - Bug with block editor search module
-* Fix - Bug when searching for products with multiplication sign
-
-= 2.82 ( 2023-06-26 ) =
-* Add - Support for Blocksy theme
-* Update - Tested with WC 7.8
-
-= 2.81 ( 2023-06-12 ) =
-* Fix - FacetWP plugin issue with pagination
-
-= 2.80 ( 2023-05-29 ) =
-* Add - Support for WP Bottom Menu plugin

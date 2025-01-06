@@ -3,9 +3,9 @@ Contributors: pomegranate, alexmigf, yordansoares, kluver, dpeyou, dwpriv, moham
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, ubl, invoices, packing slips
 Requires at least: 4.4
-Tested up to: 6.6
-Requires PHP: 7.2
-Stable tag: 3.8.8
+Tested up to: 6.7
+Requires PHP: 7.4
+Stable tag: 3.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,52 @@ There's a setting on the Advanced tab of the settings page that allows you to to
 
 == Changelog ==
 
+= 3.9.4 (2024-12-23) =
+* New: add a note to inform users about the availability of additional documents
+* New: display a notice when the yearly reset action is not scheduled
+* Tweak: transition UBL support out of beta
+* Translations: update translation template (POT)
+
+* New: enable searching for multiple invoice numbers in the Orders list for HPOS setups
+* New: `calculate_due_date()` document function
+* Fix: correct the type of the abstract document `order_id` property
+* Fix: UBL shop country code
+* Translations: update translation template (POT)
+
+= 3.9.2 (2024-12-17) =
+- New: adds description to UBL format selector
+- Fix: issue with PHP extension load checks 
+- Translations: Updated translation template (POT).
+
+= 3.9.1 (2024-12-16) =
+- New: Adds support for multiple UBL formats.  
+- New: Adds a shop phone number field for e-Invoice support.  
+- New: Adds user info to order notes when generating documents.  
+- New: Added an admin notice to inform when server requirements are not met.  
+- New: Raised the minimum PHP version requirement to 7.4.  
+- New: Removes space between items table and totals.  
+- New: Added sections to settings for better organization.  
+- Tweak: Improve the description of the "Remove released semaphore locks" tool.  
+- Fix: Upgrade links not displaying correctly.  
+- Fix: Temp folder warning style issue.  
+- Fix: Remove unused legacy notice code: `check_auto_increment_increment()`.  
+- Fix: AJAX preview loading when disabled on settings pages.  
+- Fix: UBL issue with empty tax on line items.  
+- Fix: jQuery `tipTip` function not available.  
+- Fix: Template item meta styling.  
+- Fix: Semaphore class name on two classes that were still using the previous name.  
+- Translations: Updated translation template (POT).  
+- Tested: Tested up to WooCommerce 9.5.
+
+= 3.9.0 (2024-10-21) =
+* New: Updated `sabre/xml` library to version 4.
+* New: Added notice about dropping support for PHP versions below 7.4.
+* New: Implemented PSR-4 Autoloading Standard for improved code structure and maintainability.
+* New: Deprecated `wpo_wcpdf_due_date_display` hook.
+* Fix: WC item meta style issue when using `dd`.
+* Fix: Relocated `wpo_wcpdf_use_path` hook before `$src` empty check.
+* Translations: Updated translation template (POT).
+
 = 3.8.8 (2024-10-08) =
 * Fix: adds missing deprecated filters to document title methods
 
@@ -181,7 +227,7 @@ There's a setting on the Advanced tab of the settings page that allows you to to
 * Fix: replaces deprecated jQuery functions
 * Fix: bug with type hint in `wpo_wcpdf_parse_document_date_for_wp_query()` function
 * Fix: bug calling `is_allowed()` on `bool` under `wcpdf_get_document()` function
-* Fix: not removing documents meta on Woo subcription renewal
+* Fix: not removing documents meta on Woo subscription renewal
 * Fix: XSS vulnerability on Woo Checkout user input address data
 * Fix: Semaphore attachments issue on concurrent refunds
 * Translations: Updated translation template (POT)

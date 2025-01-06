@@ -83,7 +83,7 @@ class WC_Gateway_Stripe_Giropay extends WC_Stripe_Payment_Gateway {
 		$this->title                = $this->get_option( 'title' );
 		$this->description          = $this->get_option( 'description' );
 		$this->enabled              = $this->get_option( 'enabled' );
-		$this->testmode             = ( ! empty( $main_settings['testmode'] ) && 'yes' === $main_settings['testmode'] ) ? true : false;
+		$this->testmode             = WC_Stripe_Mode::is_test();
 		$this->saved_cards          = ( ! empty( $main_settings['saved_cards'] ) && 'yes' === $main_settings['saved_cards'] ) ? true : false;
 		$this->publishable_key      = ! empty( $main_settings['publishable_key'] ) ? $main_settings['publishable_key'] : '';
 		$this->secret_key           = ! empty( $main_settings['secret_key'] ) ? $main_settings['secret_key'] : '';
@@ -109,7 +109,7 @@ class WC_Gateway_Stripe_Giropay extends WC_Stripe_Payment_Gateway {
 		return apply_filters(
 			'wc_stripe_giropay_supported_currencies',
 			[
-				'EUR',
+				WC_Stripe_Currency_Code::EURO,
 			]
 		);
 	}
@@ -209,7 +209,7 @@ class WC_Gateway_Stripe_Giropay extends WC_Stripe_Payment_Gateway {
 		$post_data             = [];
 		$post_data['amount']   = WC_Stripe_Helper::get_stripe_amount( $order->get_total(), $currency );
 		$post_data['currency'] = strtolower( $currency );
-		$post_data['type']     = 'giropay';
+		$post_data['type']     = WC_Stripe_Payment_Methods::GIROPAY;
 		$post_data['owner']    = $this->get_owner_details( $order );
 		$post_data['redirect'] = [ 'return_url' => $return_url ];
 

@@ -261,7 +261,8 @@ class Ignition_Updater_Update_Checker {
 				}
 			}
 
-			update_option( $this->token . '-activated', $activated_products );
+			$res = update_option( $this->token . '-activated', $activated_products );
+
 		}
 
 		// Set Ignition Helper update info into transient

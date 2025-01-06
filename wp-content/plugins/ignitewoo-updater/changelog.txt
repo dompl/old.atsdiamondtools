@@ -1,3 +1,15 @@
+Version 3.0.7 - December 6, 2024
+
+	Fixed issue with undefined domain when loading language textdomain
+
+Version 3.0.6 - December 5, 2024
+
+	move load_textdomain call to init hook
+
+Version 3.0.5 - October 24, 2024
+
+	Fix fatal errors when using PHP 8.3.x
+	
 Version 3.0.4 - December 12, 2022
 
 	Fix fatal error when using PHP 8.1

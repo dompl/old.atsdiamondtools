@@ -43,11 +43,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function is_table_not_exist() {
 
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
-
-            return ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name );
+            return AWS()->option_vars->is_index_table_not_exists();
 
         }
 
@@ -62,7 +58,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $indexed_products = 0;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $sql = "SELECT COUNT(*) FROM {$table_name} GROUP BY ID;";
 
@@ -85,7 +81,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $return = false;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $columns = $wpdb->get_row("
                     SELECT * FROM {$table_name} LIMIT 0, 1
@@ -114,7 +110,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $return = false;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $columns = $wpdb->get_row("
                     SELECT * FROM {$table_name} LIMIT 0, 1
@@ -574,14 +570,14 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             // Line feeds, carriage returns, tabs
             $string = preg_replace( '/[\x00-\x1F\x80-\x9F]/u', '', $string );
 
-            // Diacritical marks
-            $string = strtr( $string, AWS_Helpers::get_diacritic_chars() );
-
             if ( function_exists( 'mb_strtolower' ) ) {
                 $string = mb_strtolower( $string );
             } else {
                 $string = strtolower( $string );
             }
+
+            // Diacritical marks
+            $string = strtr( $string, AWS_Helpers::get_diacritic_chars() );
 
             /**
              * Filters normalized string
@@ -927,6 +923,29 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Generate link for search results page term search
+         *
+         * @return string Search URL
+         */
+        static public function get_search_term_url( $s, $atts = array() ) {
+
+            $search_url = AWS_Helpers::get_search_url();
+            $current_lang = AWS_Helpers::get_lang();
+
+            $params = shortcode_atts( array(
+                's' => urlencode( sanitize_text_field( $s ) ),
+                'post_type' => 'product',
+                'type_aws' => 'true',
+                'lang' => $current_lang,
+            ), $atts );
+
+            $search_url = add_query_arg( $params, $search_url );
+
+            return $search_url;
+
+        }
+
+        /*
          * Get string with current product terms names
          *
          * @return string List of terms names
@@ -1246,10 +1265,13 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $results_data = array();
             $notices = array();
+            $custom_top_results = array();
 
             $results_data['top_text'] = apply_filters( 'aws_search_top_text', '', $results, $s_data );
 
             $results_data['notices'] = apply_filters( 'aws_search_notices', $notices, $results, $s_data );
+
+            $results_data['top_results'] = apply_filters( 'aws_search_custom_top_results', $custom_top_results, $results, $s_data );
 
             $results_data = apply_filters( 'aws_search_custom_results_data', $results_data, $results, $s_data );
 
