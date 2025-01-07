@@ -4,16 +4,25 @@ var fs = require("fs");
 var is_server = "./is_staging";
 var theme = "atsdiamondtools";
 var staging_domain = "onfrog.co.uk";
-if (fs.existsSync(is_server)) {
-	var server_proxy = "http://" + theme + "." + staging_domain;
-	var server = theme + "." + staging_domain;
-	var server_port = 8914;
+const hostname = require("os").hostname().toLowerCase();
+
+if (hostname.includes("laughing-curran")) {
+	var server_proxy = "http://" + theme + ".rfsdev.co.uk";
+	var server = theme + ".rfsdev.co.uk";
+	var server_port = 8917;
 	var is_https = false;
 } else {
-	var server_proxy = theme + ".test";
-	var server = theme + ".test"; // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
-	var server_port = 3000;
-	var is_https = false;
+	if (fs.existsSync(is_server)) {
+		var server_proxy = "http://" + theme + "." + staging_domain;
+		var server = theme + "." + staging_domain;
+		var server_port = 8914;
+		var is_https = false;
+	} else {
+		var server_proxy = theme + ".test";
+		var server = theme + ".test"; // We need to use a proxy instead of the built-in server because WordPress has to do some server-side rendering for the theme to work
+		var server_port = 3000;
+		var is_https = false;
+	}
 }
 // Project paths
 var src = "src/", // The raw material of your theme: custom scripts, SCSS source files, PHP files, images, etc.; do not delete this folder!
