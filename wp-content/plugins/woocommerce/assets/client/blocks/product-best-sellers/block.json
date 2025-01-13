@@ -6,8 +6,7 @@
 	"description": "Display a grid of your all-time best selling products.",
 	"supports": {
 		"align": [ "wide", "full" ],
-		"html": false,
-		"inserter": false
+		"html": false
 	},
 	"attributes": {
 		"columns": {
@@ -88,6 +87,6 @@
 		}
 	},
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

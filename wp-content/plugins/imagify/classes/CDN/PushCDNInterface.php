@@ -1,6 +1,8 @@
 <?php
 namespace Imagify\CDN;
 
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
+
 /**
  * Interface to use for Push CDNs.
  *
@@ -78,7 +80,7 @@ interface PushCDNInterface {
 	 * @param  string $file_name Name of the file. Leave empty for the full size file.
 	 * @return string            URL to the file.
 	 */
-	public function get_file_url( $file_name = '' );
+	public function get_file_url( $file_name = false );
 
 	/**
 	 * Get a file path.
@@ -90,5 +92,5 @@ interface PushCDNInterface {
 	 * @param  string $file_name Name of the file. Leave empty for the full size file. Use 'original' to get the path to the original file.
 	 * @return string            Path to the file.
 	 */
-	public function get_file_path( $file_name = '' );
+	public function get_file_path( $file_name = false );
 }

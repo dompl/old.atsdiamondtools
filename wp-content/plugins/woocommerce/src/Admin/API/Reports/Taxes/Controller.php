@@ -9,10 +9,9 @@ namespace Automattic\WooCommerce\Admin\API\Reports\Taxes;
 
 defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Admin\API\Reports\GenericController;
 use Automattic\WooCommerce\Admin\API\Reports\ExportableInterface;
 use Automattic\WooCommerce\Admin\API\Reports\ExportableTraits;
-use Automattic\WooCommerce\Admin\API\Reports\GenericController;
-use Automattic\WooCommerce\Admin\API\Reports\GenericQuery;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -36,19 +35,6 @@ class Controller extends GenericController implements ExportableInterface {
 	protected $rest_base = 'reports/taxes';
 
 	/**
-	 * Get data from `'taxes'` GenericQuery.
-	 *
-	 * @override GenericController::get_datastore_data()
-	 *
-	 * @param array $query_args Query arguments.
-	 * @return mixed Results from the data store.
-	 */
-	protected function get_datastore_data( $query_args = array() ) {
-		$query = new GenericQuery( $query_args, 'taxes' );
-		return $query->get_data();
-	}
-
-	/**
 	 * Maps query arguments from the REST request.
 	 *
 	 * @param array $request Request array.
@@ -69,17 +55,41 @@ class Controller extends GenericController implements ExportableInterface {
 	}
 
 	/**
-	 * Prepare a report data item for serialization.
+	 * Get all reports.
 	 *
-	 * @param mixed           $report  Report data item as returned from Data Store.
+	 * @param WP_REST_Request $request Request data.
+	 * @return array|WP_Error
+	 */
+	public function get_items( $request ) {
+		$query_args  = $this->prepare_reports_query( $request );
+		$taxes_query = new Query( $query_args );
+		$report_data = $taxes_query->get_data();
+
+		$data = array();
+
+		foreach ( $report_data->data as $tax_data ) {
+			$item   = $this->prepare_item_for_response( (object) $tax_data, $request );
+			$data[] = $this->prepare_response_for_collection( $item );
+		}
+
+		return $this->add_pagination_headers(
+			$request,
+			$data,
+			(int) $report_data->total,
+			(int) $report_data->page_no,
+			(int) $report_data->pages
+		);
+	}
+
+	/**
+	 * Prepare a report object for serialization.
+	 *
+	 * @param stdClass        $report  Report data.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response
 	 */
 	public function prepare_item_for_response( $report, $request ) {
 		$response = parent::prepare_item_for_response( $report, $request );
-
-		// Map to `object` for backwards compatibility.
-		$report = (object) $report;
 		$response->add_links( $this->prepare_links( $report ) );
 
 		/**
@@ -195,17 +205,15 @@ class Controller extends GenericController implements ExportableInterface {
 	public function get_collection_params() {
 		$params                       = parent::get_collection_params();
 		$params['orderby']['default'] = 'tax_rate_id';
-		$params['orderby']['enum']    = $this->apply_custom_orderby_filters(
-			array(
-				'name',
-				'tax_rate_id',
-				'tax_code',
-				'rate',
-				'order_tax',
-				'total_tax',
-				'shipping_tax',
-				'orders_count',
-			)
+		$params['orderby']['enum']    = array(
+			'name',
+			'tax_rate_id',
+			'tax_code',
+			'rate',
+			'order_tax',
+			'total_tax',
+			'shipping_tax',
+			'orders_count',
 		);
 		$params['taxes']              = array(
 			'description'       => __( 'Limit result set to items assigned one or more tax rates.', 'woocommerce' ),
@@ -244,15 +252,7 @@ class Controller extends GenericController implements ExportableInterface {
 	 */
 	public function prepare_item_for_export( $item ) {
 		return array(
-			'tax_code'     => \WC_Tax::get_rate_code(
-				(object) array(
-					'tax_rate_id'       => $item['tax_rate_id'],
-					'tax_rate_country'  => $item['country'],
-					'tax_rate_state'    => $item['state'],
-					'tax_rate_name'     => $item['name'],
-					'tax_rate_priority' => $item['priority'],
-				)
-			),
+			'tax_code'     => \WC_Tax::get_rate_code( $item['tax_rate_id'] ),
 			'rate'         => $item['tax_rate'],
 			'total_tax'    => self::csv_number_format( $item['total_tax'] ),
 			'order_tax'    => self::csv_number_format( $item['order_tax'] ),

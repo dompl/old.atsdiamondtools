@@ -33,10 +33,6 @@
 			"type": "string",
 			"default": "none"
 		},
-		"onCartClickBehaviour": {
-			"type": "string",
-			"default": "open_drawer"
-		},
 		"hasHiddenPrice": {
 			"type": "boolean",
 			"default": true
@@ -62,12 +58,8 @@
 		},
 		"productCountColorValue": {
 			"type": "string"
-		},
-		"productCountVisibility": {
-			"type": "string",
-			"default": "greater_than_zero"
 		}
 	},
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

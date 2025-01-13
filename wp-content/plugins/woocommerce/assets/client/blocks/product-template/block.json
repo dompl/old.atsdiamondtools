@@ -1,15 +1,14 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-template",
 	"title": "Product Template",
 	"category": "woocommerce",
 	"description": "Contains the block elements used to render a product.",
-	"keywords": [
-		"WooCommerce"
-	],
+	"keywords": [ "WooCommerce" ],
 	"textdomain": "woocommerce",
 	"usesContext": [
+		"id",
 		"queryId",
 		"query",
 		"queryContext",
@@ -17,18 +16,17 @@
 		"templateSlug",
 		"postId",
 		"queryContextIncludes",
-		"collection",
-		"__privateProductCollectionPreviewState"
+		"collection"
 	],
 	"supports": {
 		"inserter": false,
 		"reusable": false,
 		"html": false,
-		"align": [
-			"wide",
-			"full"
-		],
+		"align": [ "wide", "full" ],
 		"anchor": true,
+		"__experimentalLayout": {
+			"allowEditing": false
+		},
 		"color": {
 			"gradients": true,
 			"link": true,

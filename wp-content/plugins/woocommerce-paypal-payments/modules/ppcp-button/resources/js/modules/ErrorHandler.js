@@ -1,98 +1,108 @@
 class ErrorHandler {
-	/**
-	 * @param {string}  genericErrorText
-	 * @param {Element} wrapper
-	 */
-	constructor( genericErrorText, wrapper ) {
-		this.genericErrorText = genericErrorText;
-		this.wrapper = wrapper;
-	}
 
-	genericError() {
-		this.clear();
-		this.message( this.genericErrorText );
-	}
+    /**
+     * @param {String} genericErrorText
+     * @param {Element} wrapper
+     */
+    constructor(genericErrorText, wrapper)
+    {
+        this.genericErrorText = genericErrorText;
+        this.wrapper = wrapper;
+    }
 
-	appendPreparedErrorMessageElement( errorMessageElement ) {
-		this._getMessageContainer().replaceWith( errorMessageElement );
-	}
+    genericError() {
+        this.clear();
+        this.message(this.genericErrorText)
+    }
 
-	/**
-	 * @param {string} text
-	 */
-	message( text ) {
-		this._addMessage( text );
+    appendPreparedErrorMessageElement(errorMessageElement)
+    {
+        this._getMessageContainer().replaceWith(errorMessageElement);
+    }
 
-		this._scrollToMessages();
-	}
+    /**
+     * @param {String} text
+     */
+    message(text)
+    {
+        this._addMessage(text);
 
-	/**
-	 * @param {Array} texts
-	 */
-	messages( texts ) {
-		texts.forEach( ( t ) => this._addMessage( t ) );
+        this._scrollToMessages();
+    }
 
-		this._scrollToMessages();
-	}
+    /**
+     * @param {Array} texts
+     */
+    messages(texts)
+    {
+        texts.forEach(t => this._addMessage(t));
 
-	/**
-	 * @return {string}
-	 */
-	currentHtml() {
-		const messageContainer = this._getMessageContainer();
-		return messageContainer.outerHTML;
-	}
+        this._scrollToMessages();
+    }
 
-	/**
-	 * @private
-	 * @param {string} text
-	 */
-	_addMessage( text ) {
-		if ( ! typeof String || text.length === 0 ) {
-			throw new Error( 'A new message text must be a non-empty string.' );
-		}
+    /**
+     * @returns {String}
+     */
+    currentHtml()
+    {
+        const messageContainer = this._getMessageContainer();
+        return messageContainer.outerHTML;
+    }
 
-		const messageContainer = this._getMessageContainer();
+    /**
+     * @private
+     * @param {String} text
+     */
+    _addMessage(text)
+    {
+        if(! typeof String || text.length === 0) {
+            throw new Error('A new message text must be a non-empty string.');
+        }
 
-		const messageNode = this._prepareMessageElement( text );
-		messageContainer.appendChild( messageNode );
-	}
+        const messageContainer = this._getMessageContainer();
 
-	/**
-	 * @private
-	 */
-	_scrollToMessages() {
-		jQuery.scroll_to_notices( jQuery( '.woocommerce-error' ) );
-	}
+        let messageNode = this._prepareMessageElement(text);
+        messageContainer.appendChild(messageNode);
+    }
 
-	/**
-	 * @private
-	 */
-	_getMessageContainer() {
-		let messageContainer = document.querySelector( 'ul.woocommerce-error' );
-		if ( messageContainer === null ) {
-			messageContainer = document.createElement( 'ul' );
-			messageContainer.setAttribute( 'class', 'woocommerce-error' );
-			messageContainer.setAttribute( 'role', 'alert' );
-			jQuery( this.wrapper ).prepend( messageContainer );
-		}
-		return messageContainer;
-	}
+    /**
+     * @private
+     */
+    _scrollToMessages()
+    {
+        jQuery.scroll_to_notices(jQuery('.woocommerce-error'));
+    }
 
-	/**
-	 * @param message
-	 * @private
-	 */
-	_prepareMessageElement( message ) {
-		const li = document.createElement( 'li' );
-		li.innerHTML = message;
+    /**
+     * @private
+     */
+    _getMessageContainer()
+    {
+        let messageContainer = document.querySelector('ul.woocommerce-error');
+        if (messageContainer === null) {
+            messageContainer = document.createElement('ul');
+            messageContainer.setAttribute('class', 'woocommerce-error');
+            messageContainer.setAttribute('role', 'alert');
+            jQuery(this.wrapper).prepend(messageContainer);
+        }
+        return messageContainer;
+    }
 
-		return li;
-	}
+    /**
+     * @private
+     */
+    _prepareMessageElement(message)
+    {
+        const li = document.createElement('li');
+        li.innerHTML = message;
 
-	clear() {
-		jQuery( '.woocommerce-error, .woocommerce-message' ).remove();
-	}
+        return li;
+    }
+
+    clear()
+    {
+        jQuery( '.woocommerce-error, .woocommerce-message' ).remove();
+    }
 }
 
 export default ErrorHandler;

@@ -50,13 +50,6 @@ class WC_Payments_Task_Disputes extends Task {
 	private $disputes_due_within_1d;
 
 	/**
-	 * A memory cache of all disputes needing response.
-	 *
-	 * @var array|null
-	 */
-	private $disputes_needing_response = null;
-
-	/**
 	 * WC_Payments_Task_Disputes constructor.
 	 */
 	public function __construct() {
@@ -64,12 +57,13 @@ class WC_Payments_Task_Disputes extends Task {
 		$this->api_client     = \WC_Payments::get_payments_api_client();
 		$this->database_cache = \WC_Payments::get_database_cache();
 		parent::__construct();
+		$this->init();
 	}
 
 	/**
 	 * Initialize the task.
 	 */
-	private function fetch_relevant_disputes() {
+	private function init() {
 		$this->disputes_due_within_7d = $this->get_disputes_needing_response_within_days( 7 );
 		$this->disputes_due_within_1d = $this->get_disputes_needing_response_within_days( 1 );
 	}
@@ -89,9 +83,6 @@ class WC_Payments_Task_Disputes extends Task {
 	 * @return string
 	 */
 	public function get_title() {
-		if ( null === $this->disputes_needing_response ) {
-			$this->fetch_relevant_disputes();
-		}
 		if ( count( (array) $this->disputes_due_within_7d ) === 1 ) {
 			$dispute          = $this->disputes_due_within_7d[0];
 			$amount           = WC_Payments_Utils::interpret_stripe_amount( $dispute['amount'], $dispute['currency'] );
@@ -216,6 +207,7 @@ class WC_Payments_Task_Disputes extends Task {
 			),
 			count( (array) $this->disputes_due_within_7d )
 		);
+
 	}
 
 	/**
@@ -284,9 +276,6 @@ class WC_Payments_Task_Disputes extends Task {
 	 * @return bool
 	 */
 	public function can_view() {
-		if ( null === $this->disputes_needing_response ) {
-			$this->fetch_relevant_disputes();
-		}
 		return count( (array) $this->disputes_due_within_7d ) > 0;
 	}
 
@@ -334,31 +323,22 @@ class WC_Payments_Task_Disputes extends Task {
 	 * @return array|null Array of disputes awaiting a response. Null on failure.
 	 */
 	private function get_disputes_needing_response() {
-		if ( null !== $this->disputes_needing_response ) {
-			return $this->disputes_needing_response;
-		}
-
-		$this->disputes_needing_response = $this->database_cache->get_or_add(
+		return $this->database_cache->get_or_add(
 			Database_Cache::ACTIVE_DISPUTES_KEY,
-			function () {
-				try {
-					$response = $this->api_client->get_disputes(
-						[
-							'pagesize' => 50,
-							'search'   => [ 'warning_needs_response', 'needs_response' ],
-						]
-					);
-				} catch ( \Exception $e ) {
-					// Ensure an array is always returned, even if the API call fails.
-					return [];
-				}
+			function() {
+				$response = $this->api_client->get_disputes(
+					[
+						'pagesize' => 50,
+						'search'   => [ 'warning_needs_response', 'needs_response' ],
+					]
+				);
 
 				$active_disputes = $response['data'] ?? [];
 
 				// sort by due_by date ascending.
 				usort(
 					$active_disputes,
-					function ( $a, $b ) {
+					function( $a, $b ) {
 						$a_due_by = new \DateTime( $a['due_by'] );
 						$b_due_by = new \DateTime( $b['due_by'] );
 
@@ -368,9 +348,8 @@ class WC_Payments_Task_Disputes extends Task {
 
 				return $active_disputes;
 			},
+			// We'll consider all array values to be valid as the cache is only invalidated when it is deleted or it expires.
 			'is_array'
 		);
-
-		return $this->disputes_needing_response;
 	}
 }

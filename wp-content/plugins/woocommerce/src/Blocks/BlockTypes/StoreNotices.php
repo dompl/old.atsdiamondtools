@@ -45,15 +45,17 @@ class StoreNotices extends AbstractBlock {
 			return;
 		}
 
-		$classes_and_styles = StyleAttributesUtils::get_classes_and_styles_by_attributes( $attributes, array(), array( 'extra_classes' ) );
+		$classname          = isset( $attributes['className'] ) ? $attributes['className'] : '';
+		$classes_and_styles = StyleAttributesUtils::get_classes_and_styles_by_attributes( $attributes );
+
+		if ( isset( $attributes['align'] ) ) {
+			$classname .= " align{$attributes['align']}";
+		}
 
 		return sprintf(
-			'<div %1$s>%2$s</div>',
-			get_block_wrapper_attributes(
-				array(
-					'class' => 'wc-block-store-notices woocommerce ' . esc_attr( $classes_and_styles['classes'] ),
-				)
-			),
+			'<div class="woocommerce wc-block-store-notices %1$s %2$s">%3$s</div>',
+			esc_attr( $classes_and_styles['classes'] ),
+			esc_attr( $classname ),
 			wc_kses_notice( $notices )
 		);
 	}

@@ -291,12 +291,12 @@ function _imagify_new_upgrade( $network_version, $site_version ) {
 
 	// 1.8.2
 	if ( version_compare( $site_version, '1.8.2' ) < 0 ) {
-		$options->set( 'partner_links', 1 );
+		Imagify_Options::get_instance()->set( 'partner_links', 1 );
 	}
 
 	// 1.9.6
 	if ( version_compare( $site_version, '1.9.6' ) < 0 ) {
-		\Imagify\Stats\OptimizedMediaWithoutNextGen::get_instance()->clear_cache();
+		\Imagify\Stats\OptimizedMediaWithoutWebp::get_instance()->clear_cache();
 	}
 
 	// 1.9.11
@@ -305,20 +305,7 @@ function _imagify_new_upgrade( $network_version, $site_version ) {
 	}
 
 	if ( version_compare( $site_version, '2.0' ) < 0 ) {
-		$options->set( 'optimization_level', 2 );
-	}
-
-	if ( version_compare( $site_version, '2.2' ) < 0 ) {
-		$options->set( 'display_nextgen', $options->get( 'display_webp', 0 ) );
-		$options->set( 'display_nextgen_method', $options->get( 'display_webp_method' ) );
-	}
-
-	if ( version_compare( $site_version, '2.2.2', '<' ) ) {
-		if ( $options->get( 'convert_to_avif' ) ) {
-			$options->set( 'optimization_format', 'avif' );
-		} else {
-			$options->set( 'optimization_format', 'webp' );
-		}
+		Imagify_Options::get_instance()->set( 'optimization_level', 2 );
 	}
 }
 add_action( 'imagify_upgrade', '_imagify_new_upgrade', 10, 2 );

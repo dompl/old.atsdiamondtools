@@ -1,21 +1,17 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-collection",
 	"version": "1.0.0",
-	"title": "Product Collection",
+	"title": "Product Collection (Beta)",
 	"description": "Display a collection of products from your store.",
 	"category": "woocommerce",
-	"keywords": [
-		"WooCommerce",
-		"Products (Beta)",
-		"all products",
-		"by category",
-		"by tag",
-		"by attribute"
-	],
+	"keywords": [ "WooCommerce", "Products (Beta)" ],
 	"textdomain": "woocommerce",
 	"attributes": {
+		"id": {
+			"type": "string"
+		},
 		"queryId": {
 			"type": "number"
 		},
@@ -26,9 +22,6 @@
 			"type": "string"
 		},
 		"displayLayout": {
-			"type": "object"
-		},
-		"dimensions": {
 			"type": "object"
 		},
 		"convertedFromProducts": {
@@ -44,25 +37,16 @@
 		},
 		"queryContextIncludes": {
 			"type": "array"
-		},
-		"forcePageReload": {
-			"type": "boolean",
-			"default": false
-		},
-		"__privatePreviewState": {
-			"type": "object"
 		}
 	},
 	"providesContext": {
+		"id": "id",
 		"queryId": "queryId",
 		"query": "query",
 		"displayLayout": "displayLayout",
-		"dimensions": "dimensions",
 		"queryContextIncludes": "queryContextIncludes",
-		"collection": "collection",
-		"__privateProductCollectionPreviewState": "__privatePreviewState"
+		"collection": "collection"
 	},
-	"usesContext": [ "templateSlug", "postId" ],
 	"supports": {
 		"align": [ "wide", "full" ],
 		"anchor": true,

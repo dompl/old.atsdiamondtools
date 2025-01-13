@@ -3,7 +3,8 @@ namespace Imagify\Media;
 
 use Imagify\CDN\PushCDNInterface;
 use Imagify\Context\ContextInterface;
-use WP_Error;
+
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Interface to use for "media groups" (aka attachments).

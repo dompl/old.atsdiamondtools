@@ -194,7 +194,7 @@ class WC_Payments_Captured_Event_Note {
 		// Format and return the net string.
 		return sprintf(
 			/* translators: %s is a monetary amount */
-			__( 'Net payout: %s', 'woocommerce-payments' ),
+			__( 'Net deposit: %s', 'woocommerce-payments' ),
 			WC_Payments_Utils::format_explicit_currency( $net, $currency )
 		);
 	}
@@ -327,9 +327,9 @@ class WC_Payments_Captured_Event_Note {
 
 		$res['additional-fx'] = 0 !== $fixed_rate
 			/* translators: %1$s% is the fee percentage and %2$s is the fixed rate */
-			? __( 'Currency conversion fee: %1$s%% + %2$s', 'woocommerce-payments' )
+			? __( 'Foreign exchange fee: %1$s%% + %2$s', 'woocommerce-payments' )
 			/* translators: %1$s% is the fee percentage */
-			: __( 'Currency conversion fee: %1$s%%', 'woocommerce-payments' );
+			: __( 'Foreign exchange fee: %1$s%%', 'woocommerce-payments' );
 
 		$res['additional-wcpay-subscription'] = 0 !== $fixed_rate
 			/* translators: %1$s% is the fee percentage and %2$s is the fixed rate */
@@ -390,6 +390,7 @@ class WC_Payments_Captured_Event_Note {
 			self::format_exchange_rate( $exchange_rate, $to_currency ),
 			WC_Payments_Utils::format_explicit_currency( $to_display_amount, $to_currency, false )
 		);
+
 	}
 
 	/**
@@ -409,7 +410,7 @@ class WC_Payments_Captured_Event_Note {
 			[ 'decimals' => $num_decimals ]
 		);
 
-		$func_remove_ending_zeros = function ( $str ) {
+		$func_remove_ending_zeros = function( $str ) {
 			return rtrim( $str, '0' );
 		};
 

@@ -86,7 +86,10 @@ class RedirectionController {
 			}
 
 			if ( isset( $product_data_type ) ) {
-				return true;
+				if ( Features::is_enabled( 'product-virtual-downloadable' ) ) {
+					return true;
+				}
+				return ! $digital_product;
 			}
 		}
 
@@ -96,7 +99,7 @@ class RedirectionController {
 	/**
 	 * Check if a product is supported by the new experience.
 	 *
-	 * @param array $product_templates The registered product templates.
+	 * @param array $product_templates The registered product teamplates.
 	 */
 	public function set_product_templates( array $product_templates ): void {
 		$this->product_templates = $product_templates;
@@ -173,4 +176,5 @@ class RedirectionController {
 			exit();
 		}
 	}
+
 }

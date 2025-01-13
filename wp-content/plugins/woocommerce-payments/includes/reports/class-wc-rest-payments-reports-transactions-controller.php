@@ -81,6 +81,7 @@ class WC_REST_Payments_Reports_Transactions_Controller extends WC_Payments_REST_
 		}
 
 		return rest_ensure_response( $data );
+
 	}
 
 	/**
@@ -115,7 +116,7 @@ class WC_REST_Payments_Reports_Transactions_Controller extends WC_Payments_REST_
 	 * @param array|mixed     $item Item to prepare.
 	 * @param WP_REST_Request $request Request instance.
 	 *
-	 * @return WP_REST_Response|WP_Error
+	 * @return WP_REST_Response|WP_Error|WP_REST_Response
 	 */
 	public function prepare_item_for_response( $item, $request ) {
 
@@ -384,4 +385,5 @@ class WC_REST_Payments_Reports_Transactions_Controller extends WC_Payments_REST_
 
 		return $this->add_additional_fields_schema( $schema );
 	}
+
 }

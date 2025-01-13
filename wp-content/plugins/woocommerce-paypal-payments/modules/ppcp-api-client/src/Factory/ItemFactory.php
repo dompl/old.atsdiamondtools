@@ -13,29 +13,24 @@ use WC_Product;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\Item;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\Money;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\CurrencyGetter;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\ItemTrait;
 
 /**
  * Class ItemFactory
  */
 class ItemFactory {
-
-	use ItemTrait;
-
 	/**
-	 * The getter of the 3-letter currency code of the shop.
+	 * 3-letter currency code of the shop.
 	 *
-	 * @var CurrencyGetter
+	 * @var string
 	 */
-	private CurrencyGetter $currency;
+	private $currency;
 
 	/**
 	 * ItemFactory constructor.
 	 *
-	 * @param CurrencyGetter $currency The getter of the 3-letter currency code of the shop.
+	 * @param string $currency 3-letter currency code of the shop.
 	 */
-	public function __construct( CurrencyGetter $currency ) {
+	public function __construct( string $currency ) {
 		$this->currency = $currency;
 	}
 
@@ -58,19 +53,16 @@ class ItemFactory {
 				 * @var \WC_Product $product
 				 */
 				$quantity = (int) $item['quantity'];
-				$image    = wp_get_attachment_image_src( (int) $product->get_image_id(), 'full' );
 
 				$price = (float) $item['line_subtotal'] / (float) $item['quantity'];
 				return new Item(
-					$this->prepare_item_string( $product->get_name() ),
-					new Money( $price, $this->currency->get() ),
+					mb_substr( $product->get_name(), 0, 127 ),
+					new Money( $price, $this->currency ),
 					$quantity,
-					$this->prepare_item_string( $product->get_description() ),
+					$this->prepare_description( $product->get_description() ),
 					null,
-					$this->prepare_sku( $product->get_sku() ),
+					$product->get_sku(),
 					( $product->is_virtual() ) ? Item::DIGITAL_GOODS : Item::PHYSICAL_GOODS,
-					$product->get_permalink(),
-					$image[0] ?? '',
 					0,
 					$cart_item_key
 				);
@@ -85,7 +77,7 @@ class ItemFactory {
 				function ( \stdClass $fee ): Item {
 					return new Item(
 						$fee->name,
-						new Money( (float) $fee->amount, $this->currency->get() ),
+						new Money( (float) $fee->amount, $this->currency ),
 						1,
 						'',
 						null
@@ -136,18 +128,15 @@ class ItemFactory {
 		$quantity                  = (int) $item->get_quantity();
 		$price_without_tax         = (float) $order->get_item_subtotal( $item, false );
 		$price_without_tax_rounded = round( $price_without_tax, 2 );
-		$image                     = $product instanceof WC_Product ? wp_get_attachment_image_src( (int) $product->get_image_id(), 'full' ) : '';
 
 		return new Item(
-			$this->prepare_item_string( $item->get_name() ),
+			mb_substr( $item->get_name(), 0, 127 ),
 			new Money( $price_without_tax_rounded, $currency ),
 			$quantity,
-			$product instanceof WC_Product ? $this->prepare_item_string( $product->get_description() ) : '',
+			$product instanceof WC_Product ? $this->prepare_description( $product->get_description() ) : '',
 			null,
-			$product instanceof WC_Product ? $this->prepare_sku( $product->get_sku() ) : '',
-			( $product instanceof WC_Product && $product->is_virtual() ) ? Item::DIGITAL_GOODS : Item::PHYSICAL_GOODS,
-			$product instanceof WC_Product ? $product->get_permalink() : '',
-			$image[0] ?? ''
+			$product instanceof WC_Product ? $product->get_sku() : '',
+			( $product instanceof WC_Product && $product->is_virtual() ) ? Item::DIGITAL_GOODS : Item::PHYSICAL_GOODS
 		);
 	}
 
@@ -161,7 +150,7 @@ class ItemFactory {
 	 */
 	private function from_wc_order_fee( \WC_Order_Item_Fee $item, \WC_Order $order ): Item {
 		return new Item(
-			$this->prepare_item_string( $item->get_name() ),
+			$item->get_name(),
 			new Money( (float) $item->get_amount(), $order->get_currency() ),
 			$item->get_quantity(),
 			'',
@@ -201,8 +190,6 @@ class ItemFactory {
 			: null;
 		$sku         = ( isset( $data->sku ) ) ? $data->sku : '';
 		$category    = ( isset( $data->category ) ) ? $data->category : 'PHYSICAL_GOODS';
-		$url         = ( isset( $data->url ) ) ? $data->url : '';
-		$image_url   = ( isset( $data->image_url ) ) ? $data->image_url : '';
 
 		return new Item(
 			$data->name,
@@ -211,9 +198,18 @@ class ItemFactory {
 			$description,
 			$tax,
 			$sku,
-			$category,
-			$url,
-			$image_url
+			$category
 		);
+	}
+
+	/**
+	 * Cleanups the description and prepares it for sending to PayPal.
+	 *
+	 * @param string $description Item description.
+	 * @return string
+	 */
+	protected function prepare_description( string $description ): string {
+		$description = strip_shortcodes( wp_strip_all_tags( $description ) );
+		return substr( $description, 0, 127 ) ?: '';
 	}
 }

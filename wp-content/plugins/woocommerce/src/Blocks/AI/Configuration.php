@@ -8,8 +8,6 @@ use Automattic\Jetpack\Connection\Utils;
 
 /**
  * Class Configuration
- *
- * @internal
  */
 class Configuration {
 

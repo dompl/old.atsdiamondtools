@@ -8,7 +8,6 @@
  * @since   3.0.0
  */
 
-use Automattic\WooCommerce\Internal\CostOfGoodsSold\CogsAwareRestControllerTrait;
 use Automattic\WooCommerce\Utilities\I18nUtil;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,7 +21,6 @@ use Automattic\Jetpack\Constants;
  * @extends WC_REST_Product_Variations_V2_Controller
  */
 class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V2_Controller {
-	use CogsAwareRestControllerTrait;
 
 	/**
 	 * Endpoint namespace.
@@ -102,7 +100,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data    = array(
 			'id'                    => $object->get_id(),
-			'type'                  => $object->get_type(),
 			'date_created'          => wc_rest_prepare_date_response( $object->get_date_created(), false ),
 			'date_created_gmt'      => wc_rest_prepare_date_response( $object->get_date_created() ),
 			'date_modified'         => wc_rest_prepare_date_response( $object->get_date_modified(), false ),
@@ -110,7 +107,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 			'description'           => wc_format_content( $object->get_description() ),
 			'permalink'             => $object->get_permalink(),
 			'sku'                   => $object->get_sku(),
-			'global_unique_id'      => $object->get_global_unique_id(),
 			'price'                 => $object->get_price(),
 			'regular_price'         => $object->get_regular_price(),
 			'sale_price'            => $object->get_sale_price(),
@@ -151,13 +147,8 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 			'parent_id'             => $object->get_parent_id(),
 		);
 
-		$data = $this->add_additional_fields_to_object( $data, $request );
-		$data = $this->filter_response_by_context( $data, $context );
-
-		if ( $this->cogs_is_enabled() ) {
-			$this->add_cogs_info_to_returned_product_data( $data, $object );
-		}
-
+		$data     = $this->add_additional_fields_to_object( $data, $request );
+		$data     = $this->filter_response_by_context( $data, $context );
 		$response = rest_ensure_response( $data );
 		$response->add_links( $this->prepare_links( $object, $request ) );
 
@@ -199,11 +190,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 		// SKU.
 		if ( isset( $request['sku'] ) ) {
 			$variation->set_sku( wc_clean( $request['sku'] ) );
-		}
-
-		// Unique ID.
-		if ( isset( $request['global_unique_id'] ) ) {
-			$variation->set_global_unique_id( wc_clean( $request['global_unique_id'] ) );
 		}
 
 		// Thumbnail.
@@ -385,10 +371,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 			}
 		}
 
-		if ( $this->cogs_is_enabled() ) {
-			$this->set_cogs_info_in_product_object( $request, $variation );
-		}
-
 		/**
 		 * Filters an object before it is inserted via the REST API.
 		 *
@@ -457,7 +439,7 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 
 				if ( is_wp_error( $upload ) ) {
 					/**
-					 * Filter to check if it should suppress the image upload error, false by default.
+					 * Filter to check if it should supress the image upload error, false by default.
 					 *
 					 * @since 4.5.0
 					 * @param bool false   If it should suppress.
@@ -521,12 +503,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true,
 				),
-				'type'                  => array(
-					'description' => __( 'Product type.', 'woocommerce' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
 				'date_created'          => array(
 					'description' => __( "The date the variation was created, in the site's timezone.", 'woocommerce' ),
 					'type'        => 'date-time',
@@ -552,12 +528,7 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 					'readonly'    => true,
 				),
 				'sku'                   => array(
-					'description' => __( 'Stock Keeping Unit.', 'woocommerce' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'global_unique_id'      => array(
-					'description' => __( 'GTIN, UPC, EAN or ISBN.', 'woocommerce' ),
+					'description' => __( 'Unique identifier.', 'woocommerce' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
@@ -871,11 +842,6 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 				),
 			),
 		);
-
-		if ( $this->cogs_is_enabled() ) {
-			$schema = $this->add_cogs_related_product_schema( $schema, true );
-		}
-
 		return $this->add_additional_fields_schema( $schema );
 	}
 
@@ -1155,9 +1121,8 @@ class WC_REST_Product_Variations_Controller extends WC_REST_Product_Variations_V
 		$response          = array();
 		$product           = wc_get_product( $product_id );
 		$default_values    = isset( $request['default_values'] ) ? $request['default_values'] : array();
-		$meta_data         = isset( $request['meta_data'] ) ? $request['meta_data'] : array();
 		$data_store        = $product->get_data_store();
-		$response['count'] = $data_store->create_all_product_variations( $product, Constants::get_constant( 'WC_MAX_LINKED_VARIATIONS' ), $default_values, $meta_data );
+		$response['count'] = $data_store->create_all_product_variations( $product, Constants::get_constant( 'WC_MAX_LINKED_VARIATIONS' ), $default_values );
 
 		if ( isset( $request['delete'] ) && $request['delete'] ) {
 			$deleted_count             = $this->delete_unmatched_product_variations( $product );

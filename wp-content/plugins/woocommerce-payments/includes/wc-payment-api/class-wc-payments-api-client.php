@@ -9,7 +9,6 @@ defined( 'ABSPATH' ) || exit;
 
 use WCPay\Constants\Intent_Status;
 use WCPay\Exceptions\API_Exception;
-use WCPay\Exceptions\API_Merchant_Exception;
 use WCPay\Exceptions\Amount_Too_Small_Exception;
 use WCPay\Exceptions\Amount_Too_Large_Exception;
 use WCPay\Exceptions\Connection_Exception;
@@ -17,17 +16,14 @@ use WCPay\Fraud_Prevention\Fraud_Prevention_Service;
 use WCPay\Fraud_Prevention\Buyer_Fingerprinting_Service;
 use WCPay\Logger;
 use Automattic\WooCommerce\Admin\API\Reports\Customers\DataStore;
-use WCPay\Constants\Currency_Code;
 use WCPay\Database_Cache;
 use WCPay\Core\Server\Request;
 use WCPay\Core\Server\Request\List_Fraud_Outcome_Transactions;
-use WCPay\Exceptions\Cannot_Combine_Currencies_Exception;
-use WCPay\MultiCurrency\Interfaces\MultiCurrencyApiClientInterface;
 
 /**
  * Communicates with WooCommerce Payments API.
  */
-class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
+class WC_Payments_API_Client {
 
 	const ENDPOINT_BASE          = 'https://public-api.wordpress.com/wpcom/v2';
 	const ENDPOINT_SITE_FRAGMENT = 'sites/%s';
@@ -45,7 +41,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	const CAPABILITIES_API             = 'accounts/capabilities';
 	const WOOPAY_ACCOUNTS_API          = 'accounts/platform_checkout';
 	const WOOPAY_COMPATIBILITY_API     = 'woopay/compatibility';
-	const DOMAIN_REGISTRATION_API      = 'payment_method_domains';
+	const APPLE_PAY_API                = 'apple_pay';
 	const CHARGES_API                  = 'charges';
 	const CONN_TOKENS_API              = 'terminal/connection_tokens';
 	const TERMINAL_LOCATIONS_API       = 'terminal/locations';
@@ -81,8 +77,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	const FRAUD_OUTCOMES_API           = 'fraud_outcomes';
 	const FRAUD_RULESET_API            = 'fraud_ruleset';
 	const COMPATIBILITY_API            = 'compatibility';
-	const REPORTING_API                = 'reporting/payment_activity';
-	const RECOMMENDED_PAYMENT_METHODS  = 'payment_methods/recommended';
 
 	/**
 	 * Common keys in API requests/responses that we might want to redact.
@@ -194,7 +188,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @return bool
 	 */
-	public function is_server_connected(): bool {
+	public function is_server_connected() {
 		return $this->http_client->is_connected();
 	}
 
@@ -234,17 +228,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @param string $intent_id intent id.
 	 *
 	 * @return WC_Payments_API_Payment_Intention intention object.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function get_intent( $intent_id ) {
-		if ( ! preg_match( '/^\w+$/', $intent_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$intent = $this->request( [], self::INTENTIONS_API . '/' . $intent_id, self::GET );
 
 		return $this->deserialize_payment_intention_object_from_array( $intent );
@@ -456,80 +441,12 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	}
 
 	/**
-	 * Fetch account recommended payment methods data for a given country.
-	 *
-	 * @param string $country_code The account's business location country code. Provide a 2-letter ISO country code.
-	 * @param string $locale       Optional. The locale to instruct the platform to use for i18n.
-	 *
-	 * @return array The recommended payment methods data.
-	 * @throws API_Exception Exception thrown on request failure.
-	 */
-	public function get_recommended_payment_methods( string $country_code, string $locale = '' ): array {
-		// We can't use the request method here because this route doesn't require a connected store
-		// and we request this data pre-onboarding.
-		// By this point, we have an expired transient or the store context has changed.
-		// Query for incentives by calling the WooPayments API.
-		$url = add_query_arg(
-			[
-				'country_code' => $country_code,
-				'locale'       => $locale,
-			],
-			self::ENDPOINT_BASE . '/' . self::ENDPOINT_REST_BASE . '/' . self::RECOMMENDED_PAYMENT_METHODS,
-		);
-
-		$response = wp_remote_get(
-			$url,
-			[
-				'headers'    => apply_filters(
-					'wcpay_api_request_headers',
-					[
-						'Content-type' => 'application/json; charset=utf-8',
-					]
-				),
-				'user-agent' => $this->user_agent,
-				'timeout'    => self::API_TIMEOUT_SECONDS,
-				'sslverify'  => false,
-			]
-		);
-
-		if ( is_wp_error( $response ) ) {
-			Logger::error( 'HTTP_REQUEST_ERROR ' . var_export( $response, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
-			$message = sprintf(
-			// translators: %1: original error message.
-				__( 'Http request failed. Reason: %1$s', 'woocommerce-payments' ),
-				$response->get_error_message()
-			);
-			throw new API_Exception( $message, 'wcpay_http_request_failed', 500 );
-		}
-
-		$results = [];
-		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-			// Decode the results, falling back to an empty array.
-			$results = $this->extract_response_body( $response );
-			if ( ! is_array( $results ) ) {
-				$results = [];
-			}
-		}
-
-		return $results;
-	}
-
-	/**
 	 * Fetch a single transaction with provided id.
 	 *
 	 * @param string $transaction_id id of requested transaction.
 	 * @return array transaction object.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function get_transaction( $transaction_id ) {
-		if ( ! preg_match( '/^\w+$/', $transaction_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$transaction = $this->request( [], self::TRANSACTIONS_API . '/' . $transaction_id, self::GET );
 
 		if ( is_wp_error( $transaction ) ) {
@@ -578,7 +495,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @return array
 	 * @throws API_Exception - Exception thrown on request failure.
 	 */
-	public function get_disputes_summary( array $filters = [] ): array {
+	public function get_disputes_summary( array $filters = [] ):array {
 		return $this->request( [ $filters ], self::DISPUTES_API . '/summary', self::GET );
 	}
 
@@ -598,17 +515,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @param string $dispute_id id of requested dispute.
 	 * @return array dispute object.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function get_dispute( $dispute_id ) {
-		if ( ! preg_match( '/^\w+$/', $dispute_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$dispute = $this->request( [], self::DISPUTES_API . '/' . $dispute_id, self::GET );
 
 		if ( is_wp_error( $dispute ) ) {
@@ -628,17 +536,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @param array  $metadata   metadata associated with this dispute.
 	 *
 	 * @return array dispute object.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function update_dispute( $dispute_id, $evidence, $submit, $metadata ) {
-		if ( ! preg_match( '/^\w+$/', $dispute_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$request = [
 			'evidence' => $evidence,
 			'submit'   => $submit,
@@ -663,18 +562,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @param string $dispute_id id of dispute to close.
 	 * @return array dispute object.
-	 *
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function close_dispute( $dispute_id ) {
-		if ( ! preg_match( '/^\w+$/', $dispute_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$dispute = $this->request( [], self::DISPUTES_API . '/' . $dispute_id . '/close', self::POST );
 		// Invalidate the dispute caches.
 		\WC_Payments::get_database_cache()->delete( Database_Cache::DISPUTE_STATUS_COUNTS_KEY );
@@ -792,16 +681,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @return array
 	 * @throws API_Exception
 	 */
-	public function get_file_contents( string $file_id, bool $as_account = true ): array {
+	public function get_file_contents( string $file_id, bool $as_account = true ) : array {
 		try {
-			if ( ! preg_match( '/^\w+$/', $file_id ) ) {
-				throw new API_Exception(
-					__( 'Route param validation failed.', 'woocommerce-payments' ),
-					'wcpay_route_validation_failure',
-					400
-				);
-			}
-
 			return $this->request( [ 'as_account' => $as_account ], self::FILES_API . '/' . $file_id . '/contents', self::GET );
 		} catch ( API_Exception $e ) {
 			Logger::error( 'Error retrieving file contents for ' . $file_id . '. ' . $e->getMessage() );
@@ -818,14 +699,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @return array
 	 * @throws API_Exception
 	 */
-	public function get_file( string $file_id, bool $as_account = true ): array {
-		if ( ! preg_match( '/^\w+$/', $file_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
+	public function get_file( string $file_id, bool $as_account = true ) : array {
 		return $this->request( [ 'as_account' => $as_account ], self::FILES_API . '/' . $file_id, self::GET );
 	}
 
@@ -849,17 +723,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @return array
 	 *
 	 * @throws Exception - Exception thrown on request failure.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function get_timeline( $id ) {
-		if ( ! preg_match( '/^\w+$/', $id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$timeline = $this->request( [], self::TIMELINE_API . '/' . $id, self::GET );
 
 		$has_fraud_outcome_event = false;
@@ -895,7 +760,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 				// Sort by date desc, then by type desc as specified in events_order.
 				usort(
 					$timeline['data'],
-					function ( $a, $b ) {
+					function( $a, $b ) {
 						$result = $b['datetime'] <=> $a['datetime'];
 						if ( 0 !== $result ) {
 							return $result;
@@ -919,7 +784,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @throws API_Exception - Error contacting the API.
 	 */
-	public function get_currency_rates( string $currency_from, $currencies_to = null ): array {
+	public function get_currency_rates( string $currency_from, $currencies_to = null ) {
 		if ( empty( $currency_from ) ) {
 			throw new API_Exception(
 				__( 'Currency From parameter is required', 'woocommerce-payments' ),
@@ -951,7 +816,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	public function get_woopay_eligibility() {
 		return $this->request(
 			[
-				'test_mode' => WC_Payments::mode()->is_test_mode_onboarding(), // only send a test mode request if in test mode onboarding.
+				'test_mode' => WC_Payments::mode()->is_dev(), // only send a test mode request if in dev mode.
 			],
 			self::WOOPAY_ACCOUNTS_API,
 			self::GET
@@ -970,7 +835,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	public function update_woopay( $data ) {
 		return $this->request(
 			array_merge(
-				[ 'test_mode' => WC_Payments::mode()->is_test_mode_onboarding() ],
+				[ 'test_mode' => WC_Payments::mode()->is_dev() ],
 				$data
 			),
 			self::WOOPAY_ACCOUNTS_API,
@@ -1002,19 +867,18 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	/**
 	 * Get data needed to initialize the onboarding flow
 	 *
-	 * @param bool   $live_account                Whether to get the onboarding data for a live mode or test mode account.
-	 * @param string $return_url                  URL to redirect to at the end of the flow.
-	 * @param array  $site_data                   Data to track ToS agreement.
-	 * @param array  $user_data                   Data about the user doing the onboarding (location and device).
-	 * @param array  $account_data                Data to prefill the onboarding.
-	 * @param array  $actioned_notes              Actioned WCPay note names to be sent to the onboarding flow.
-	 * @param bool   $progressive                 Whether we need to enable progressive onboarding prefill.
-	 * @param bool   $collect_payout_requirements Whether we need to redirect user to Stripe KYC to complete their payouts data.
+	 * @param string $return_url                  - URL to redirect to at the end of the flow.
+	 * @param array  $site_data                   - Data to track ToS agreement.
+	 * @param array  $user_data                   - Data about the user doing the onboarding (location and device).
+	 * @param array  $account_data                - Data to prefill the onboarding.
+	 * @param array  $actioned_notes              - Actioned WCPay note names to be sent to the onboarding flow.
+	 * @param bool   $progressive                 - Whether we need to enable progressive onboarding prefill.
+	 * @param bool   $collect_payout_requirements - Whether we need to redirect user to Stripe KYC to complete their payouts data.
 	 *
-	 * @return array An array containing the url and state fields.
 	 * @throws API_Exception Exception thrown on request failure.
+	 * @return array An array containing the url and state fields.
 	 */
-	public function get_onboarding_data( bool $live_account, string $return_url, array $site_data = [], array $user_data = [], array $account_data = [], array $actioned_notes = [], bool $progressive = false, bool $collect_payout_requirements = false ): array {
+	public function get_onboarding_data( string $return_url, array $site_data = [], array $user_data = [], array $account_data = [], array $actioned_notes = [], bool $progressive = false, bool $collect_payout_requirements = false ): array {
 		$request_args = apply_filters(
 			'wc_payments_get_onboarding_data_args',
 			[
@@ -1023,69 +887,13 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 				'user_data'                   => $user_data,
 				'account_data'                => $account_data,
 				'actioned_notes'              => $actioned_notes,
-				'create_live_account'         => $live_account,
+				'create_live_account'         => ! WC_Payments::mode()->is_dev(),
 				'progressive'                 => $progressive,
 				'collect_payout_requirements' => $collect_payout_requirements,
 			]
 		);
 
 		return $this->request( $request_args, self::ONBOARDING_API . '/init', self::POST, true, true );
-	}
-
-	/**
-	 * Initialize the onboarding embedded KYC flow, returning a session object which is used by the frontend.
-	 *
-	 * @param bool  $live_account Whether to create live account.
-	 * @param array $site_data Site data.
-	 * @param array $user_data User data.
-	 * @param array $account_data Account data to be prefilled.
-	 * @param array $actioned_notes Actioned notes to be sent.
-	 * @param bool  $progressive Whether progressive onboarding should be enabled for this onboarding.
-	 *
-	 * @return array
-	 *
-	 * @throws API_Exception
-	 */
-	public function initialize_onboarding_embedded_kyc( bool $live_account, array $site_data = [], array $user_data = [], array $account_data = [], array $actioned_notes = [], bool $progressive = false ): array {
-		$request_args = apply_filters(
-			'wc_payments_get_onboarding_data_args',
-			[
-				'site_data'           => $site_data,
-				'user_data'           => $user_data,
-				'account_data'        => $account_data,
-				'actioned_notes'      => $actioned_notes,
-				'create_live_account' => $live_account,
-				'progressive'         => $progressive,
-			]
-		);
-
-		$session = $this->request( $request_args, self::ONBOARDING_API . '/embedded', self::POST, true, true );
-
-		if ( ! is_array( $session ) ) {
-			return [];
-		}
-
-		return $session;
-	}
-
-	/**
-	 * Finalize the onboarding embedded KYC flow.
-	 *
-	 * @param string $locale         The locale to use to i18n the data.
-	 * @param string $source         The source of the onboarding flow.
-	 * @param array  $actioned_notes The actioned notes on the account related to this onboarding.
-	 * @return array
-	 *
-	 * @throws API_Exception
-	 */
-	public function finalize_onboarding_embedded_kyc( string $locale, string $source, array $actioned_notes ): array {
-		$request_args = [
-			'locale'         => $locale,
-			'source'         => $source,
-			'actioned_notes' => $actioned_notes,
-		];
-
-		return $this->request( $request_args, self::ONBOARDING_API . '/embedded/finalize', self::POST, true, true );
 	}
 
 	/**
@@ -1141,6 +949,36 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 		}
 
 		return $business_types;
+	}
+
+	/**
+	 * Get the required verification information, needed for our KYC onboarding flow.
+	 *
+	 * @param string      $country_code The country code.
+	 * @param string      $type         The business type.
+	 * @param string|null $structure    The business structure (optional).
+	 *
+	 * @return array An array containing the required verification information.
+	 *
+	 * @throws API_Exception Exception thrown on request failure.
+	 */
+	public function get_onboarding_required_verification_information( string $country_code, string $type, $structure = null ) {
+		$params = [
+			'country' => $country_code,
+			'type'    => $type,
+		];
+
+		if ( ! is_null( $structure ) ) {
+			$params = array_merge( $params, [ 'structure' => $structure ] );
+		}
+
+		return $this->request(
+			$params,
+			self::ONBOARDING_API . '/required_verification_information',
+			self::GET,
+			true,
+			true
+		);
 	}
 
 	/**
@@ -1205,14 +1043,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 			);
 		}
 
-		if ( ! preg_match( '/^\w+$/', $customer_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$this->request(
 			$customer_data,
 			self::CUSTOMERS_API . '/' . $customer_id,
@@ -1247,19 +1077,11 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @throws API_Exception Error updating product.
 	 */
-	public function update_product( string $product_id, array $product_data = [] ): array {
+	public function update_product( string $product_id, array $product_data = [] ) : array {
 		if ( null === $product_id || '' === trim( $product_id ) ) {
 			throw new API_Exception(
 				__( 'Product ID is required', 'woocommerce-payments' ),
 				'wcpay_mandatory_product_id_missing',
-				400
-			);
-		}
-
-		if ( ! preg_match( '/^\w+$/', $product_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
 				400
 			);
 		}
@@ -1288,14 +1110,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 			);
 		}
 
-		if ( ! preg_match( '/^\w+$/', $price_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$this->request(
 			$price_data,
 			self::PRICES_API . '/' . $price_id,
@@ -1313,14 +1127,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If fetching the invoice fails.
 	 */
 	public function get_invoice( string $invoice_id ) {
-		if ( ! preg_match( '/^\w+$/', $invoice_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::INVOICES_API . '/' . $invoice_id,
@@ -1340,14 +1146,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception Error charging the invoice.
 	 */
 	public function charge_invoice( string $invoice_id, array $data = [] ) {
-		if ( ! preg_match( '/^\w+$/', $invoice_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::INVOICES_API . '/' . $invoice_id . '/pay',
@@ -1365,14 +1163,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception Error updating the invoice.
 	 */
 	public function update_invoice( string $invoice_id, array $data = [] ) {
-		if ( ! preg_match( '/^\w+$/', $invoice_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::INVOICES_API . '/' . $invoice_id,
@@ -1390,14 +1180,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception
 	 */
 	public function update_charge( string $charge_id, array $data = [] ) {
-		if ( ! preg_match( '/^\w+$/', $charge_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::CHARGES_API . '/' . $charge_id,
@@ -1414,14 +1196,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception
 	 */
 	public function get_charge( string $charge_id ) {
-		if ( ! preg_match( '/^\w+$/', $charge_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::CHARGES_API . '/' . $charge_id,
@@ -1439,14 +1213,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception
 	 */
 	public function update_transaction( string $transaction_id, array $data = [] ) {
-		if ( ! preg_match( '/^\w+$/', $transaction_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::TRANSACTIONS_API . '/' . $transaction_id,
@@ -1464,14 +1230,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If fetching the subscription fails.
 	 */
 	public function get_subscription( string $wcpay_subscription_id ) {
-		if ( ! preg_match( '/^\w+$/', $wcpay_subscription_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::SUBSCRIPTIONS_API . '/' . $wcpay_subscription_id,
@@ -1507,14 +1265,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If updating the WCPay subscription fails.
 	 */
 	public function update_subscription( $wcpay_subscription_id, $data ) {
-		if ( ! preg_match( '/^\w+$/', $wcpay_subscription_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::SUBSCRIPTIONS_API . '/' . $wcpay_subscription_id,
@@ -1532,14 +1282,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If canceling the subscription fails.
 	 */
 	public function cancel_subscription( string $wcpay_subscription_id ) {
-		if ( ! preg_match( '/^\w+$/', $wcpay_subscription_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::SUBSCRIPTIONS_API . '/' . $wcpay_subscription_id,
@@ -1558,14 +1300,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If updating the WCPay subscription item fails.
 	 */
 	public function update_subscription_item( $wcpay_subscription_item_id, $data ) {
-		if ( ! preg_match( '/^\w+$/', $wcpay_subscription_item_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$data,
 			self::SUBSCRIPTION_ITEMS_API . '/' . $wcpay_subscription_item_id,
@@ -1583,14 +1317,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If payment method does not exist.
 	 */
 	public function get_payment_method( $payment_method_id ) {
-		if ( ! preg_match( '/^\w+$/', $payment_method_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::PAYMENT_METHODS_API . '/' . $payment_method_id,
@@ -1609,14 +1335,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If payment method update fails.
 	 */
 	public function update_payment_method( $payment_method_id, $payment_method_data = [] ) {
-		if ( ! preg_match( '/^\w+$/', $payment_method_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			$payment_method_data,
 			self::PAYMENT_METHODS_API . '/' . $payment_method_id,
@@ -1636,14 +1354,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If an error occurs.
 	 */
 	public function get_payment_methods( $customer_id, $type, $limit = 100 ) {
-		if ( ! preg_match( '/^\w+$/', $customer_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[
 				'customer' => $customer_id,
@@ -1665,14 +1375,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If detachment fails.
 	 */
 	public function detach_payment_method( $payment_method_id ) {
-		if ( ! preg_match( '/^\w+$/', $payment_method_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request(
 			[],
 			self::PAYMENT_METHODS_API . '/' . $payment_method_id . '/detach',
@@ -1722,28 +1424,22 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 		);
 	}
 
-
 	/**
-	 * Registers a Payment Method Domain.
+	 * Registers a new domain with Apple Pay.
 	 *
-	 * @param string $domain_name Domain name which to register for the account.
+	 * @param string $domain_name Domain name which to register for Apple Pay.
 	 *
-	 * @return array An array containing an id and the bool property 'enabled' indicating
-	 * whether the domain is enabled for the account. Each Payment Method
-	 * (apple_pay, google_pay, link, paypal) in the array have a 'status'
-	 * property with the possible values 'active' and 'inactive'.
+	 * @return array An array containing an id in case it has succeeded, or an error message in case it has failed.
 	 *
 	 * @throws API_Exception If an error occurs.
 	 */
-	public function register_domain( $domain_name ) {
+	public function register_domain_with_apple( $domain_name ) {
 		return $this->request(
 			[
+				'test_mode'   => false, // Force live mode - Domain registration doesn't work in test mode.
 				'domain_name' => $domain_name,
-				// The value needs to be a string.
-				// If it's a boolean, it gets serialized as an integer (1), causing an invalid request error.
-				'enabled'     => 'true',
 			],
-			self::DOMAIN_REGISTRATION_API,
+			self::APPLE_PAY_API . '/domains',
 			self::POST
 		);
 	}
@@ -1763,7 +1459,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @throws API_Exception If an error occurs.
 	 */
-	public function register_terminal_reader( string $location, string $registration_code, ?string $label = null, ?array $metadata = null ) {
+	public function register_terminal_reader( string $location, string $registration_code, string $label = null, array $metadata = null ) {
 		$request = [
 			'location'          => $location,
 			'registration_code' => $registration_code,
@@ -1844,14 +1540,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If an error occurs.
 	 */
 	public function update_terminal_location( $location_id, $display_name, $address ) {
-		if ( ! preg_match( '/^\w+$/', $location_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		// Any parameters not provided will be left unchanged so pass only supplied values.
 		$update_request_body = array_merge(
 			( isset( $address ) ? [ 'address' => $address ] : [] ),
@@ -1876,14 +1564,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If the location id is invalid or downstream call fails.
 	 */
 	public function delete_terminal_location( $location_id ) {
-		if ( ! preg_match( '/^\w+$/', $location_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request( [], self::TERMINAL_LOCATIONS_API . '/' . $location_id, self::DELETE );
 	}
 
@@ -1920,14 +1600,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception - If not connected or request failed.
 	 */
 	public function get_document( $document_id ) {
-		if ( ! preg_match( '/^[\w-]+$/', $document_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request( [], self::DOCUMENTS_API . '/' . $document_id, self::GET, true, false, true );
 	}
 
@@ -2006,14 +1678,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @return array The response object.
 	 */
 	public function get_latest_fraud_outcome( $id ) {
-		if ( ! preg_match( '/^\w+$/', $id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		$response = $this->request(
 			[],
 			self::FRAUD_OUTCOMES_API . '/order_id/' . $id,
@@ -2194,9 +1858,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 			$response_code  = null;
 			$last_exception = null;
 
-			// The header intention is to give us insights into request latency between store and backend.
-			$headers['X-Request-Initiated'] = microtime( true );
-
 			try {
 				$response = $this->http_client->remote_request(
 					[
@@ -2247,7 +1908,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 
 			// Use exponential backoff to not overload backend.
 			usleep( self::API_RETRIES_BACKOFF_MSEC * ( 2 ** $retries ) );
-			++$retries;
+			$retries++;
 		}
 
 		// @todo We don't always return an array. `extract_response_body` can also return a string. We should standardize this!
@@ -2386,26 +2047,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 			} elseif ( isset( $response_body['code'] ) ) {
 				$this->maybe_act_on_fraud_prevention( $response_body['code'] );
 
-				if (
-					'invalid_request_error' === $response_body['code']
-					&& 0 === strpos( $response_body['message'], 'You cannot combine currencies on a single customer.' )
-				) {
-					// Get the currency, which is the last part of the error message,
-					// and remove the period from the end of the error message.
-					$message  = $response_body['message'];
-					$currency = substr( $message, -4 );
-					$currency = strtoupper( substr( $currency, 0, 3 ) );
-
-					// Only throw the error if we can find a valid currency.
-					if ( false !== Currency_Code::search( $currency ) ) {
-						throw new Cannot_Combine_Currencies_Exception(
-							$message,
-							$currency,
-							$response_code
-						);
-					}
-				}
-
 				$error_code    = $response_body['code'];
 				$error_message = $response_body['message'];
 			} else {
@@ -2420,13 +2061,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 			);
 
 			Logger::error( "$error_message ($error_code)" );
-
-			if ( 'card_declined' === $error_code && isset( $response_body['error']['payment_intent']['charges']['data'][0]['outcome']['seller_message'] ) ) {
-				$merchant_message = $response_body['error']['payment_intent']['charges']['data'][0]['outcome']['seller_message'];
-
-				throw new API_Merchant_Exception( $message, $error_code, $response_code, $merchant_message, $error_type, $decline_code );
-			}
-
 			throw new API_Exception( $message, $error_code, $response_code, $error_type, $decline_code );
 		}
 	}
@@ -2468,7 +2102,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @return array
 	 */
-	public function add_additional_info_to_charge( array $charge ): array {
+	public function add_additional_info_to_charge( array $charge ) : array {
 		$charge = $this->add_order_info_to_charge_object( $charge['id'], $charge );
 		$charge = $this->add_formatted_address_to_charge_object( $charge );
 
@@ -2482,7 +2116,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @return array
 	 */
-	public function add_formatted_address_to_charge_object( array $charge ): array {
+	public function add_formatted_address_to_charge_object( array $charge ) : array {
 		$has_billing_details = isset( $charge['billing_details'] );
 
 		if ( $has_billing_details ) {
@@ -2788,7 +2422,7 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @return array reader objects.
 	 */
-	public function get_readers_charge_summary( string $charge_date ): array {
+	public function get_readers_charge_summary( string $charge_date ) : array {
 		return $this->request( [ 'charge_date' => $charge_date ], self::READERS_CHARGE_SUMMARY, self::GET );
 	}
 
@@ -2802,14 +2436,6 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 * @throws API_Exception If an error occurs.
 	 */
 	public function get_currency_minimum_recurring_amount( $currency ) {
-		if ( ! preg_match( '/^\w+$/', $currency ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return (int) $this->request(
 			[],
 			self::MINIMUM_RECURRING_AMOUNT_API . '/' . $currency,
@@ -2848,17 +2474,8 @@ class WC_Payments_API_Client implements MultiCurrencyApiClientInterface {
 	 *
 	 * @param string $payment_intent_id id of requested transaction.
 	 * @return array authorization object.
-	 * @throws API_Exception - Exception thrown in case route validation fails.
 	 */
 	public function get_authorization( string $payment_intent_id ) {
-		if ( ! preg_match( '/^\w+$/', $payment_intent_id ) ) {
-			throw new API_Exception(
-				__( 'Route param validation failed.', 'woocommerce-payments' ),
-				'wcpay_route_validation_failure',
-				400
-			);
-		}
-
 		return $this->request( [], self::AUTHORIZATIONS_API . '/' . $payment_intent_id, self::GET );
 	}
 

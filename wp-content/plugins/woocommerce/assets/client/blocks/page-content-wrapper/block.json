@@ -4,9 +4,7 @@
 	"title": "WooCommerce Page",
 	"description": "Displays WooCommerce page content.",
 	"category": "woocommerce",
-	"keywords": [
-		"WooCommerce"
-	],
+	"keywords": [ "WooCommerce" ],
 	"textdomain": "woocommerce",
 	"supports": {
 		"html": false,
@@ -23,6 +21,6 @@
 		"postId": "postId",
 		"postType": "postType"
 	},
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

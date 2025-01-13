@@ -1051,6 +1051,7 @@ class WC_Countries {
 						),
 						'state'    => array(
 							'required' => false,
+							'hidden'   => true,
 						),
 					),
 					'DK' => array(

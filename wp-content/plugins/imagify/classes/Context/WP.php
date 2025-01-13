@@ -1,16 +1,14 @@
 <?php
 namespace Imagify\Context;
 
-use \Imagify\Traits\InstanceGetterTrait;
-
 /**
  * Context class used for the WP media library.
  *
  * @since  1.9
  * @author Grégory Viguier
  */
-final class WP extends AbstractContext {
-	use InstanceGetterTrait;
+class WP extends AbstractContext {
+	use \Imagify\Traits\InstanceGetterTrait;
 
 	/**
 	 * Context "short name".
@@ -28,7 +26,7 @@ final class WP extends AbstractContext {
 	 * @since  1.9.8
 	 * @author Grégory Viguier
 	 */
-	protected $resizing_threshold = 0;
+	protected $resizing_threshold;
 
 	/**
 	 * Get the thumbnail sizes for this context, except the full size.
@@ -47,6 +45,10 @@ final class WP extends AbstractContext {
 	 * }
 	 */
 	public function get_thumbnail_sizes() {
+		if ( isset( $this->thumbnail_sizes ) ) {
+			return $this->thumbnail_sizes;
+		}
+
 		$this->thumbnail_sizes = get_imagify_thumbnail_sizes();
 
 		return $this->thumbnail_sizes;
@@ -62,7 +64,13 @@ final class WP extends AbstractContext {
 	 * @return int
 	 */
 	public function get_resizing_threshold() {
-		if ( get_imagify_option( 'resize_larger' ) ) {
+		if ( isset( $this->resizing_threshold ) ) {
+			return $this->resizing_threshold;
+		}
+
+		if ( ! get_imagify_option( 'resize_larger' ) ) {
+			$this->resizing_threshold = 0;
+		} else {
 			$this->resizing_threshold = max( 0, get_imagify_option( 'resize_larger_w' ) );
 		}
 
@@ -78,6 +86,10 @@ final class WP extends AbstractContext {
 	 * @return bool
 	 */
 	public function can_backup() {
+		if ( isset( $this->can_backup ) ) {
+			return $this->can_backup;
+		}
+
 		$this->can_backup = get_imagify_option( 'backup' );
 
 		return $this->can_backup;

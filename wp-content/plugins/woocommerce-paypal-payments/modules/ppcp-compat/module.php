@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Compat;
 
-return static function (): CompatModule {
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+
+return static function (): ModuleInterface {
 	return new CompatModule();
 };

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Blocks;
 
-return static function (): BlocksModule {
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+
+return static function (): ModuleInterface {
 	return new BlocksModule();
 };

@@ -93,12 +93,7 @@ class WP extends AbstractData {
 			'original_size'  => 0,
 			'optimized_size' => 0,
 			'percent'        => 0,
-			'message'        => '',
 		], $old_data['stats'] );
-
-		if ( key_exists( 'message', $data ) ) {
-			$old_data['message'] = $data['message'];
-		}
 
 		if ( ! $data['success'] ) {
 			/**

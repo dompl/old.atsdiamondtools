@@ -9,11 +9,10 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\StatusReport;
 
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
-use WooCommerce\PayPalCommerce\WcSubscriptions\Helper\SubscriptionHelper;
+use WooCommerce\PayPalCommerce\Subscription\Helper\SubscriptionHelper;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Container\ServiceProvider;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+use WooCommerce\PayPalCommerce\Vendor\Interop\Container\ServiceProviderInterface;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\ApiClient\Authentication\Bearer;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\BillingAgreementsEndpoint;
@@ -27,21 +26,16 @@ use WooCommerce\PayPalCommerce\Webhooks\WebhookEventStorage;
 /**
  * Class StatusReportModule
  */
-class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableModule {
-	use ModuleClassNameIdTrait;
+class StatusReportModule implements ModuleInterface {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function services(): array {
-		return require __DIR__ . '/../services.php';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function extensions(): array {
-		return require __DIR__ . '/../extensions.php';
+	public function setup(): ServiceProviderInterface {
+		return new ServiceProvider(
+			require __DIR__ . '/../services.php',
+			require __DIR__ . '/../extensions.php'
+		);
 	}
 
 	/**
@@ -49,7 +43,7 @@ class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableMo
 	 *
 	 * @param ContainerInterface $c A services container instance.
 	 */
-	public function run( ContainerInterface $c ): bool {
+	public function run( ContainerInterface $c ): void {
 		add_action(
 			'woocommerce_system_status_report',
 			function () use ( $c ) {
@@ -71,7 +65,7 @@ class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableMo
 				$messages_apply = $c->get( 'button.helper.messages-apply' );
 
 				/* @var SubscriptionHelper $subscription_helper The subscription helper class. */
-				$subscription_helper = $c->get( 'wc-subscriptions.helper' );
+				$subscription_helper = $c->get( 'subscription.helper' );
 
 				$last_webhook_storage = $c->get( 'webhook.last-webhook-storage' );
 				assert( $last_webhook_storage instanceof WebhookEventStorage );
@@ -84,7 +78,7 @@ class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableMo
 
 				$had_ppec_plugin = PPECHelper::is_plugin_configured();
 
-				$subscription_mode_options = $c->get( 'wcgateway.settings.fields.subscriptions_mode_options' );
+				$is_tracking_available = $c->get( 'order-tracking.is-tracking-available' );
 
 				$items = array(
 					array(
@@ -172,48 +166,26 @@ class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableMo
 						),
 					),
 					array(
+						'label'          => esc_html__( 'Tracking enabled', 'woocommerce-paypal-payments' ),
+						'exported_label' => 'Tracking enabled',
+						'description'    => esc_html__( 'Whether tracking is enabled on PayPal account or not.', 'woocommerce-paypal-payments' ),
+						'value'          => $this->bool_to_html( $is_tracking_available ),
+					),
+				);
+
+				// For now only show this status if PPCP_FLAG_SUBSCRIPTIONS_API is true.
+				if ( defined( 'PPCP_FLAG_SUBSCRIPTIONS_API' ) && PPCP_FLAG_SUBSCRIPTIONS_API ) {
+					$items[] = array(
 						'label'          => esc_html__( 'Subscriptions Mode', 'woocommerce-paypal-payments' ),
 						'exported_label' => 'Subscriptions Mode',
 						'description'    => esc_html__( 'Whether subscriptions are active and their mode.', 'woocommerce-paypal-payments' ),
 						'value'          => $this->subscriptions_mode_text(
 							$subscription_helper->plugin_is_active(),
-							$settings->has( 'subscriptions_mode' ) ? (string) $subscription_mode_options[ $settings->get( 'subscriptions_mode' ) ] : '',
+							$settings->has( 'subscriptions_mode' ) ? (string) $settings->get( 'subscriptions_mode' ) : '',
 							$subscriptions_mode_settings
 						),
-					),
-					array(
-						'label'          => esc_html__( 'PayPal Shipping Callback', 'woocommerce-paypal-payments' ),
-						'exported_label' => 'PayPal Shipping Callback',
-						'description'    => esc_html__( 'Whether the "Require final confirmation on checkout" setting is disabled.', 'woocommerce-paypal-payments' ),
-						'value'          => $this->bool_to_html(
-							$settings->has( 'blocks_final_review_enabled' ) && ! $settings->get( 'blocks_final_review_enabled' )
-						),
-					),
-					array(
-						'label'          => esc_html__( 'Apple Pay', 'woocommerce-paypal-payments' ),
-						'exported_label' => 'Apple Pay',
-						'description'    => esc_html__( 'Whether Apple Pay is enabled.', 'woocommerce-paypal-payments' ),
-						'value'          => $this->bool_to_html(
-							$settings->has( 'applepay_button_enabled' ) && $settings->get( 'applepay_button_enabled' )
-						),
-					),
-					array(
-						'label'          => esc_html__( 'Google Pay', 'woocommerce-paypal-payments' ),
-						'exported_label' => 'Google Pay',
-						'description'    => esc_html__( 'Whether Google Pay is enabled.', 'woocommerce-paypal-payments' ),
-						'value'          => $this->bool_to_html(
-							$settings->has( 'googlepay_button_enabled' ) && $settings->get( 'googlepay_button_enabled' )
-						),
-					),
-					array(
-						'label'          => esc_html__( 'Fastlane', 'woocommerce-paypal-payments' ),
-						'exported_label' => 'Fastlane',
-						'description'    => esc_html__( 'Whether Fastlane is enabled.', 'woocommerce-paypal-payments' ),
-						'value'          => $this->bool_to_html(
-							$settings->has( 'axo_enabled' ) && $settings->get( 'axo_enabled' )
-						),
-					),
-				);
+					);
+				}
 
 				echo wp_kses_post(
 					$renderer->render(
@@ -223,9 +195,12 @@ class StatusReportModule implements ServiceModule, ExtendingModule, ExecutableMo
 				);
 			}
 		);
-
-		return true;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getKey() {  }
 
 	/**
 	 * It returns the current onboarding status.

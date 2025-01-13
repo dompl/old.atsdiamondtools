@@ -1,132 +1,106 @@
 import CartActionHandler from '../ActionHandler/CartActionHandler';
-import BootstrapHelper from '../Helper/BootstrapHelper';
+import BootstrapHelper from "../Helper/BootstrapHelper";
 
 class CartBootstrap {
-	constructor( gateway, renderer, errorHandler ) {
-		this.gateway = gateway;
-		this.renderer = renderer;
-		this.errorHandler = errorHandler;
+    constructor(gateway, renderer, messages, errorHandler) {
+        this.gateway = gateway;
+        this.renderer = renderer;
+        this.messages = messages;
+        this.errorHandler = errorHandler;
+        this.lastAmount = this.gateway.messages.amount;
 
-		this.renderer.onButtonsInit(
-			this.gateway.button.wrapper,
-			() => {
-				this.handleButtonStatus();
-			},
-			true
-		);
-	}
+        this.renderer.onButtonsInit(this.gateway.button.wrapper, () => {
+            this.handleButtonStatus();
+        }, true);
+    }
 
-	init() {
-		if ( this.shouldRender() ) {
-			this.render();
-			this.handleButtonStatus();
-		}
+    init() {
+        if (!this.shouldRender()) {
+            return;
+        }
 
-		jQuery( document.body ).on(
-			'updated_cart_totals updated_checkout',
-			() => {
-				if ( this.shouldRender() ) {
-					this.render();
-					this.handleButtonStatus();
-				}
+        this.render();
+        this.handleButtonStatus();
 
-				fetch( this.gateway.ajax.cart_script_params.endpoint, {
-					method: 'GET',
-					credentials: 'same-origin',
-				} )
-					.then( ( result ) => result.json() )
-					.then( ( result ) => {
-						if ( ! result.success ) {
-							return;
-						}
+        jQuery(document.body).on('updated_cart_totals updated_checkout', () => {
+            this.render();
+            this.handleButtonStatus();
 
-						// handle script reload
-						const newParams = result.data.url_params;
-						const reloadRequired =
-							JSON.stringify( this.gateway.url_params ) !==
-							JSON.stringify( newParams );
+            fetch(
+                this.gateway.ajax.cart_script_params.endpoint,
+                {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                }
+            )
+            .then(result => result.json())
+            .then(result => {
+                if (! result.success) {
+                    return;
+                }
 
-						if ( reloadRequired ) {
-							this.gateway.url_params = newParams;
-							jQuery( this.gateway.button.wrapper ).trigger(
-								'ppcp-reload-buttons'
-							);
-						}
+                // handle script reload
+                const newParams = result.data.url_params;
+                const reloadRequired = JSON.stringify(this.gateway.url_params) !== JSON.stringify(newParams);
 
-						// handle button status
-						const newData = {};
-						if ( result.data.button ) {
-							newData.button = result.data.button;
-						}
-						if ( result.data.messages ) {
-							newData.messages = result.data.messages;
-						}
-						if ( newData ) {
-							BootstrapHelper.updateScriptData( this, newData );
-							this.handleButtonStatus();
-						}
+                if (reloadRequired) {
+                    this.gateway.url_params = newParams;
+                    jQuery(this.gateway.button.wrapper).trigger('ppcp-reload-buttons');
+                }
 
-						jQuery( document.body ).trigger(
-							'ppcp_cart_total_updated',
-							[ result.data.amount ]
-						);
-					} );
-			}
-		);
-	}
+                // handle button status
+                if (result.data.button || result.data.messages) {
+                    this.gateway.button = result.data.button;
+                    this.gateway.messages = result.data.messages;
+                    this.handleButtonStatus();
+                }
 
-	handleButtonStatus() {
-		BootstrapHelper.handleButtonStatus( this );
-	}
+                if (this.lastAmount !== result.data.amount) {
+                    this.lastAmount = result.data.amount;
+                    this.messages.renderWithAmount(this.lastAmount);
+                }
+            });
+        });
+    }
 
-	shouldRender() {
-		return document.querySelector( this.gateway.button.wrapper ) !== null;
-	}
+    handleButtonStatus() {
+        BootstrapHelper.handleButtonStatus(this);
+    }
 
-	shouldEnable() {
-		return BootstrapHelper.shouldEnable( this );
-	}
+    shouldRender() {
+        return document.querySelector(this.gateway.button.wrapper) !== null;
+    }
 
-	render() {
-		if ( ! this.shouldRender() ) {
-			return;
-		}
+    shouldEnable() {
+        return BootstrapHelper.shouldEnable(this);
+    }
 
-		const actionHandler = new CartActionHandler(
-			PayPalCommerceGateway,
-			this.errorHandler
-		);
+    render() {
+        const actionHandler = new CartActionHandler(
+            PayPalCommerceGateway,
+            this.errorHandler,
+        );
 
-		if (
-			PayPalCommerceGateway.data_client_id.has_subscriptions &&
-			PayPalCommerceGateway.data_client_id.paypal_subscriptions_enabled
-		) {
-			let subscription_plan_id =
-				PayPalCommerceGateway.subscription_plan_id;
-			if (
-				PayPalCommerceGateway.variable_paypal_subscription_variation_from_cart !==
-				''
-			) {
-				subscription_plan_id =
-					PayPalCommerceGateway.variable_paypal_subscription_variation_from_cart;
-			}
+        if(
+            PayPalCommerceGateway.data_client_id.has_subscriptions
+            && PayPalCommerceGateway.data_client_id.paypal_subscriptions_enabled
+        ) {
+            this.renderer.render(actionHandler.subscriptionsConfiguration());
 
-			this.renderer.render(
-				actionHandler.subscriptionsConfiguration( subscription_plan_id )
-			);
+            if(!PayPalCommerceGateway.subscription_product_allowed) {
+                this.gateway.button.is_disabled = true;
+                this.handleButtonStatus();
+            }
 
-			if ( ! PayPalCommerceGateway.subscription_product_allowed ) {
-				this.gateway.button.is_disabled = true;
-				this.handleButtonStatus();
-			}
+            return;
+        }
 
-			return;
-		}
+        this.renderer.render(
+            actionHandler.configuration()
+        );
 
-		this.renderer.render( actionHandler.configuration() );
-
-		jQuery( document.body ).trigger( 'ppcp_cart_rendered' );
-	}
+        this.messages.renderWithAmount(this.lastAmount);
+    }
 }
 
 export default CartBootstrap;

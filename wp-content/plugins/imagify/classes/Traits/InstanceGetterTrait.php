@@ -1,6 +1,8 @@
 <?php
 namespace Imagify\Traits;
 
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
+
 /**
  * Trait that simulates a singleton pattern.
  * The idea is more to ease the instance retrieval than to prevent multiple instances.
@@ -15,12 +17,12 @@ trait InstanceGetterTrait {
 	/**
 	 * The "not-so-single" instance of the class.
 	 *
-	 * @var    ?object
+	 * @var    object
 	 * @since  1.9
 	 * @access protected
 	 * @author Grégory Viguier
 	 */
-	protected static $instance = null;
+	protected static $instance;
 
 	/**
 	 * Get the main Instance.

@@ -37,7 +37,6 @@ abstract class FeaturedItem extends AbstractDynamicBlock {
 		'font_size',
 		'padding',
 		'text_color',
-		'extra_classes',
 	);
 
 	/**
@@ -273,6 +272,10 @@ abstract class FeaturedItem extends AbstractDynamicBlock {
 			$classes[] = "has-{$attributes['contentAlign']}-content";
 		}
 
+		if ( isset( $attributes['className'] ) ) {
+			$classes[] = $attributes['className'];
+		}
+
 		$global_style_classes = StyleAttributesUtils::get_classes_by_attributes( $attributes, $this->global_style_wrapper );
 
 		$classes[] = $global_style_classes;
@@ -319,6 +322,6 @@ abstract class FeaturedItem extends AbstractDynamicBlock {
 	 */
 	protected function enqueue_data( array $attributes = [] ) {
 		parent::enqueue_data( $attributes );
-		$this->asset_data_registry->add( 'defaultHeight', wc_get_theme_support( 'featured_block::default_height', 500 ) );
+		$this->asset_data_registry->add( 'defaultHeight', wc_get_theme_support( 'featured_block::default_height', 500 ), true );
 	}
 }

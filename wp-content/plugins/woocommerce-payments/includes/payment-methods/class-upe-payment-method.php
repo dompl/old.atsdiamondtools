@@ -91,13 +91,6 @@ abstract class UPE_Payment_Method {
 	protected $dark_icon_url;
 
 	/**
-	 * Is the payment method a BNPL (Buy Now Pay Later) method?
-	 *
-	 * @var boolean
-	 */
-	protected $is_bnpl = false;
-
-	/**
 	 * Supported customer locations for which charges for a payment method can be processed
 	 * Empty if all customer locations are supported
 	 *
@@ -130,10 +123,8 @@ abstract class UPE_Payment_Method {
 	 * @param array|false $payment_details Optional payment details from charge object.
 	 *
 	 * @return string
-	 *
-	 * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	 */
-	public function get_title( ?string $account_country = null, $payment_details = false ) {
+	public function get_title( string $account_country = null, $payment_details = false ) {
 		return $this->title;
 	}
 
@@ -171,28 +162,11 @@ abstract class UPE_Payment_Method {
 
 		// This part ensures that when payment limits for the currency declared, those will be respected (e.g. BNPLs).
 		if ( [] !== $this->limits_per_currency ) {
-			$order = null;
-			if ( is_wc_endpoint_url( 'order-pay' ) ) {
-				$order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
-				$order = is_a( $order, 'WC_Order' ) ? $order : null;
-			}
-
 			$currency = get_woocommerce_currency();
-			if ( $order ) {
-				$currency = $order->get_currency();
-			}
-
 			// If the currency limits are not defined, we allow the PM for now (gateway has similar validation for limits).
-			$total = null;
-			if ( $order ) {
-				$total = $order->get_total();
-			} elseif ( isset( WC()->cart ) ) {
-				$total = WC()->cart->get_total( '' );
-			}
-
-			if ( isset( $this->limits_per_currency[ $currency ], WC()->cart ) && ! empty( $total ) ) {
-				$amount = WC_Payments_Utils::prepare_amount( $total, $currency );
-
+			// Additionally, we don't engage with limits verification in no-checkout context (cart is not available or empty).
+			if ( isset( $this->limits_per_currency[ $currency ], WC()->cart ) ) {
+				$amount = WC_Payments_Utils::prepare_amount( WC()->cart->get_total( '' ), $currency );
 				if ( $amount > 0 ) {
 					$range = null;
 					if ( isset( $this->limits_per_currency[ $currency ][ $account_country ] ) ) {
@@ -222,16 +196,6 @@ abstract class UPE_Payment_Method {
 	 */
 	public function is_reusable() {
 		return $this->is_reusable;
-	}
-
-	/**
-	 * Returns boolean dependent on whether payment method
-	 * will support BNPL (Buy Now Pay Later) payments
-	 *
-	 * @return bool
-	 */
-	public function is_bnpl() {
-		return $this->is_bnpl;
 	}
 
 	/**
@@ -270,20 +234,17 @@ abstract class UPE_Payment_Method {
 	/**
 	 * Returns testing credentials to be printed at checkout in test mode.
 	 *
-	 * @param string $account_country The country of the account.
 	 * @return string
 	 */
-	abstract public function get_testing_instructions( string $account_country );
+	abstract public function get_testing_instructions();
 
 	/**
 	 * Returns the payment method icon URL or an empty string.
 	 *
 	 * @param string|null $account_country Optional account country.
 	 * @return string
-	 *
-	 * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	 */
-	public function get_icon( ?string $account_country = null ) {
+	public function get_icon( string $account_country = null ) {
 		return isset( $this->icon_url ) ? $this->icon_url : '';
 	}
 
@@ -293,26 +254,8 @@ abstract class UPE_Payment_Method {
 	 * @param string|null $account_country Optional account country.
 	 * @return string
 	 */
-	public function get_dark_icon( ?string $account_country = null ) {
+	public function get_dark_icon( string $account_country = null ) {
 		return isset( $this->dark_icon_url ) ? $this->dark_icon_url : $this->get_icon( $account_country );
-	}
-
-	/**
-	 * Gets the theme appropriate icon for the payment method for a given location and context.
-	 *
-	 * @param string  $location The location to get the icon for.
-	 * @param boolean $is_blocks Whether the icon is for blocks.
-	 * @param string  $account_country Optional account country.
-	 * @return string
-	 */
-	public function get_payment_method_icon_for_location( string $location = 'checkout', bool $is_blocks = true, ?string $account_country = null ) {
-		$appearance_theme = WC_Payments_Utils::get_active_upe_theme_transient_for_location( $location, $is_blocks ? 'blocks' : 'classic' );
-
-		if ( 'night' === $appearance_theme ) {
-			return $this->get_dark_icon( $account_country );
-		}
-
-		return $this->get_icon( $account_country );
 	}
 
 	/**
@@ -321,10 +264,7 @@ abstract class UPE_Payment_Method {
 	 * @return array
 	 */
 	public function get_countries() {
-		$account         = \WC_Payments::get_account_service()->get_cached_account_data();
-		$account_country = isset( $account['country'] ) ? strtoupper( $account['country'] ) : '';
-
-		return $this->has_domestic_transactions_restrictions() ? [ $account_country ] : $this->countries;
+		return $this->countries;
 	}
 
 	/**

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Uninstall;
 
-return function (): UninstallModule {
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+
+return function (): ModuleInterface {
 	return new UninstallModule();
 };

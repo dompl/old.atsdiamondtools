@@ -1,13 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-list-field",
 	"title": "Product list",
 	"category": "widgets",
 	"description": "The product list.",
-	"keywords": [
-		"products"
-	],
+	"keywords": [ "products" ],
 	"textdomain": "default",
 	"attributes": {
 		"property": {
@@ -25,7 +23,5 @@
 		"__experimentalToolbar": false
 	},
 	"editorStyle": "file:./editor.css",
-	"usesContext": [
-		"postType"
-	]
+	"usesContext": [ "postType" ]
 }

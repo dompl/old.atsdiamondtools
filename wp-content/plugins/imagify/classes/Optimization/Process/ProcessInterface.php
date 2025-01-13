@@ -1,43 +1,25 @@
 <?php
-declare(strict_types=1);
-
 namespace Imagify\Optimization\Process;
 
-use Imagify\Media\MediaInterface;
-use Imagify\Optimization\Data\DataInterface;
-use Imagify\Optimization\File;
-use WP_Error;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Interface to use to optimize medias.
  *
- * @since 1.9
+ * @since  1.9
+ * @author Grégory Viguier
  */
 interface ProcessInterface {
-	/**
-	 * The suffix used in the thumbnail size name.
-	 *
-	 * @var string
-	 * @since 1.9
-	 */
-	const WEBP_SUFFIX = '@imagify-webp';
-
-	/**
-	 * The suffix used in the thumbnail size name.
-	 *
-	 * @var string
-	 * @since 2.2
-	 */
-	const AVIF_SUFFIX = '@imagify-avif';
 
 	/**
 	 * Tell if the given entry can be accepted in the constructor.
 	 * For example it can include `is_numeric( $id )` if the constructor accepts integers.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param mixed $id Whatever.
-	 *
+	 * @param  mixed $id Whatever.
 	 * @return bool
 	 */
 	public static function constructor_accepts( $id );
@@ -45,7 +27,9 @@ interface ProcessInterface {
 	/**
 	 * Get the data instance.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return DataInterface|false
 	 */
@@ -54,7 +38,9 @@ interface ProcessInterface {
 	/**
 	 * Get the media instance.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return MediaInterface|false
 	 */
@@ -63,7 +49,9 @@ interface ProcessInterface {
 	/**
 	 * Get the File instance of the original file.
 	 *
-	 * @since 1.9.8
+	 * @since  1.9.8
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return File|false
 	 */
@@ -72,7 +60,9 @@ interface ProcessInterface {
 	/**
 	 * Get the File instance of the full size file.
 	 *
-	 * @since 1.9.8
+	 * @since  1.9.8
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return File|false
 	 */
@@ -81,7 +71,9 @@ interface ProcessInterface {
 	/**
 	 * Tell if the current media is valid.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool
 	 */
@@ -90,75 +82,94 @@ interface ProcessInterface {
 	/**
 	 * Tell if the current user is allowed to operate Imagify in this context.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param string $describer Capacity describer. See \Imagify\Context\ContextInterface->get_capacity() for possible values. Can also be a "real" user capacity.
-	 *
+	 * @param  string $describer Capacity describer. See \Imagify\Context\ContextInterface->get_capacity() for possible values. Can also be a "real" user capacity.
 	 * @return bool
 	 */
 	public function current_user_can( $describer );
 
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** OPTIMIZATION ============================================================================ */
+	/** ----------------------------------------------------------------------------------------- */
+
 	/**
 	 * Optimize a media files by pushing tasks into the queue.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param int $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
-	 *
-	 * @return bool|WP_Error True if successfully launched. A \WP_Error instance on failure.
+	 * @param  int $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
+	 * @return bool|WP_Error           True if successfully launched. A \WP_Error instance on failure.
 	 */
 	public function optimize( $optimization_level = null );
 
 	/**
 	 * Re-optimize a media files with a different level.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param int $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
-	 *
-	 * @return bool|WP_Error True if successfully launched. A \WP_Error instance on failure.
+	 * @param  int $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
+	 * @return bool|WP_Error           True if successfully launched. A \WP_Error instance on failure.
 	 */
 	public function reoptimize( $optimization_level = null );
 
 	/**
 	 * Optimize several file sizes by pushing tasks into the queue.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param  array $sizes  An array of media sizes (strings). Use "full" for the size of the main file.
+	 * @param  array $sizes              An array of media sizes (strings). Use "full" for the size of the main file.
 	 * @param  int   $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
-	 *
-	 * @return bool|WP_Error True if successfully launched. A \WP_Error instance on failure.
+	 * @return bool|WP_Error             True if successfully launched. A \WP_Error instance on failure.
 	 */
 	public function optimize_sizes( $sizes, $optimization_level = null );
 
 	/**
 	 * Optimize one file with Imagify directly.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param string $size The media size.
-	 * @param int    $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
-	 *
-	 * @return array|WP_Error The optimization data. A \WP_Error instance on failure.
+	 * @param  string $size               The media size.
+	 * @param  int    $optimization_level The optimization level (0=normal, 1=aggressive, 2=ultra).
+	 * @return array|WP_Error             The optimization data. A \WP_Error instance on failure.
 	 */
 	public function optimize_size( $size, $optimization_level = null );
 
 	/**
 	 * Restore the media files from the backup file.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool|WP_Error True on success. A \WP_Error instance on failure.
 	 */
 	public function restore();
+
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** MISSING THUMBNAILS ====================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
 
 	/**
 	 * Get the sizes for this media that have not get through optimization.
 	 * No sizes are returned if the file is not optimized, has no backup, or is not an image.
 	 * The 'full' size os never returned.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return array|WP_Error {
 	 *     A WP_Error object on failure.
@@ -177,27 +188,42 @@ interface ProcessInterface {
 	/**
 	 * Optimize missing thumbnail sizes.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool|WP_Error True if successfully launched. A \WP_Error instance on failure.
 	 */
 	public function optimize_missing_thumbnails();
 
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** BACKUP FILE ============================================================================= */
+	/** ----------------------------------------------------------------------------------------- */
+
 	/**
 	 * Delete the backup file.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 */
 	public function delete_backup();
+
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** RESIZE FILE ============================================================================= */
+	/** ----------------------------------------------------------------------------------------- */
 
 	/**
 	 * Maybe resize an image.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access protected
+	 * @author Grégory Viguier
 	 *
-	 * @param string $size The size name.
-	 * @param File   $file A File instance.
-	 *
+	 * @param  string $size   The size name.
+	 * @param  File   $file   A File instance.
 	 * @return array|WP_Error A \WP_Error instance on failure, an array on success as follow: {
 	 *     @type bool $resized   True when the image has been resized.
 	 *     @type bool $backuped  True when the image has been backuped.
@@ -206,58 +232,70 @@ interface ProcessInterface {
 	 */
 	public function maybe_resize( $size, $file );
 
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** WEBP ==================================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
+
 	/**
-	 * Generate next-gen images if they are missing.
+	 * Generate WebP images if they are missing.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool|WP_Error True if successfully launched. A \WP_Error instance on failure.
 	 */
-	public function generate_nextgen_versions();
+	public function generate_webp_versions();
 
 	/**
-	 * Delete the next gen format images.
+	 * Delete the WebP images.
 	 * This doesn't delete the related optimization data.
 	 *
-	 * @since 2.2
+	 * @since  1.9
+	 * @since  1.9.6 Return WP_Error or true.
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param bool $keep_full Set to true to keep the full size.
-	 *
-	 * @return bool|WP_Error  True on success. A \WP_Error object on failure.
+	 * @param  bool $keep_full Set to true to keep the full size.
+	 * @return bool|\WP_Error  True on success. A \WP_Error object on failure.
 	 */
-	public function delete_nextgen_files( $keep_full = false );
+	public function delete_webp_files( $keep_full = false );
 
 	/**
-	 * Tell if a thumbnail size is an "Imagify Next-Gen" size.
+	 * Tell if a thumbnail size is an "Imagify WebP" size.
 	 *
-	 * @since 2.2
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param string $size_name The size name.
-	 *
-	 * @return string|bool The unsuffixed name of the size if next-gen. False if not next-gen.
+	 * @param  string $size_name The size name.
+	 * @return string|bool       The unsuffixed name of the size if WebP. False if not WebP.
 	 */
-	public function is_size_next_gen( $size_name );
+	public function is_size_webp( $size_name );
 
 	/**
-	 * Tell if the media has all next-gen versions.
+	 * Tell if the media has WebP versions.
+	 *
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool
 	 */
-	public function is_full_next_gen();
+	public function has_webp();
 
-	/**
-	 * Tell if the media has a next-gen format.
-	 *
-	 * @since 2.2
-	 *
-	 * @return bool
-	 */
-	public function has_next_gen();
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** PROCESS STATUS ========================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
 
 	/**
 	 * Tell if a process is running for this media.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return bool
 	 */
@@ -266,24 +304,34 @@ interface ProcessInterface {
 	/**
 	 * Set the running status to "running" for a period of time.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 */
 	public function lock();
 
 	/**
 	 * Delete the running status.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 */
 	public function unlock();
+
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** DATA ==================================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
 
 	/**
 	 * Tell if a size already has optimization data.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param string $size The size name.
-	 *
+	 * @param  string $size The size name.
 	 * @return bool
 	 */
 	public function size_has_optimization_data( $size );
@@ -291,12 +339,13 @@ interface ProcessInterface {
 	/**
 	 * Update the optimization data for a size.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
-	 * @param object $response The API response.
-	 * @param string $size     The size name.
-	 * @param int    $level    The optimization level (0=normal, 1=aggressive, 2=ultra).
-	 *
+	 * @param  object $response The API response.
+	 * @param  string $size     The size name.
+	 * @param  int    $level    The optimization level (0=normal, 1=aggressive, 2=ultra).
 	 * @return array            {
 	 *     The optimization data.
 	 *

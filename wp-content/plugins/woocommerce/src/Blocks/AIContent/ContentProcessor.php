@@ -10,8 +10,6 @@ use WP_Error;
  * ContentProcessor class.
  *
  * Process images for content
- *
- * @internal
  */
 class ContentProcessor {
 

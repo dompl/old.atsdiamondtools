@@ -9,7 +9,7 @@ use \Imagify\Traits\InstanceGetterTrait;
  * @since  1.9
  * @author Grégory Viguier
  */
-final class CustomFolders extends AbstractContext {
+class CustomFolders extends AbstractContext {
 	use InstanceGetterTrait;
 
 	/**
@@ -60,6 +60,10 @@ final class CustomFolders extends AbstractContext {
 	 * @return bool
 	 */
 	public function can_backup() {
+		if ( isset( $this->can_backup ) ) {
+			return $this->can_backup;
+		}
+
 		$this->can_backup = get_imagify_option( 'backup' );
 
 		return $this->can_backup;

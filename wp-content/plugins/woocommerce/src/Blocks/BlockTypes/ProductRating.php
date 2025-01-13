@@ -111,12 +111,10 @@ class ProductRating extends AbstractBlock {
 			return $content;
 		}
 
-		$post_id = isset( $block->context['postId'] ) ? $block->context['postId'] : '';
+		$post_id = $block->context['postId'];
 		$product = wc_get_product( $post_id );
 
-		if ( $product && $product->get_review_count() > 0
-			&& $product->get_reviews_allowed()
-			&& wc_reviews_enabled() ) {
+		if ( $product && $product->get_review_count() > 0 ) {
 			$product_reviews_count                    = $product->get_review_count();
 			$product_rating                           = $product->get_average_rating();
 			$parsed_attributes                        = $this->parse_attributes( $attributes );
@@ -202,29 +200,13 @@ class ProductRating extends AbstractBlock {
 				10
 			);
 
-			$classes = implode(
-				' ',
-				array_filter(
-					array(
-						'wc-block-components-product-rating wc-block-grid__product-rating',
-						esc_attr( $text_align_styles_and_classes['class'] ?? '' ),
-						esc_attr( $styles_and_classes['classes'] ),
-					)
-				)
-			);
-
-			$wrapper_attributes = get_block_wrapper_attributes(
-				array(
-					'class' => $classes,
-					'style' => esc_attr( $styles_and_classes['styles'] ?? '' ),
-				)
-			);
-
 			return sprintf(
-				'<div %1$s>
-					%2$s
+				'<div class="wc-block-components-product-rating wc-block-grid__product-rating %1$s %2$s" style="%3$s">
+					%4$s
 				</div>',
-				$wrapper_attributes,
+				esc_attr( $text_align_styles_and_classes['class'] ?? '' ),
+				esc_attr( $styles_and_classes['classes'] ),
+				esc_attr( $styles_and_classes['styles'] ?? '' ),
 				$rating_html
 			);
 		}

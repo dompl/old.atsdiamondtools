@@ -127,7 +127,7 @@ abstract class Request {
 		WC_Payments_API_Client::CAPABILITIES_API           => 'accounts/capabilities',
 		WC_Payments_API_Client::WOOPAY_ACCOUNTS_API        => 'accounts/platform_checkout',
 		WC_Payments_API_Client::WOOPAY_COMPATIBILITY_API   => 'woopay/compatibility',
-		WC_Payments_API_Client::DOMAIN_REGISTRATION_API    => 'payment_method_domains',
+		WC_Payments_API_Client::APPLE_PAY_API              => 'apple_pay',
 		WC_Payments_API_Client::CHARGES_API                => 'charges',
 		WC_Payments_API_Client::CONN_TOKENS_API            => 'terminal/connection_tokens',
 		WC_Payments_API_Client::TERMINAL_LOCATIONS_API     => 'terminal/locations',
@@ -162,7 +162,6 @@ abstract class Request {
 		WC_Payments_API_Client::FRAUD_OUTCOMES_API         => 'fraud_outcomes',
 		WC_Payments_API_Client::FRAUD_RULESET_API          => 'fraud_ruleset',
 		WC_Payments_API_Client::COMPATIBILITY_API          => 'compatibility',
-		WC_Payments_API_Client::REPORTING_API              => 'reporting',
 	];
 
 	/**
@@ -274,12 +273,10 @@ abstract class Request {
 
 		if ( ! empty( $missing_params ) ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html(
-					sprintf(
-						'Trying to access the parameters of a request which is not (fully) initialized yet. Missing parameter(s) for %s: %s',
-						get_class( $this ),
-						implode( ', ', $missing_params )
-					)
+				sprintf(
+					'Trying to access the parameters of a request which is not (fully) initialized yet. Missing parameter(s) for %s: %s',
+					get_class( $this ),
+					implode( ', ', $missing_params )
 				),
 				'wcpay_core_invalid_request_parameter_missing_parameters'
 			);
@@ -308,11 +305,9 @@ abstract class Request {
 			return $this->params[ $key ];
 		}
 		throw new Invalid_Request_Parameter_Exception(
-			esc_html(
-				sprintf(
-					'The passed key %s does not exist in Request class',
-					$key
-				)
+			sprintf(
+				'The passed key %s does not exist in Request class',
+				$key
 			),
 			'wcpay_core_invalid_request_parameter_uninitialized_param'
 		);
@@ -462,7 +457,7 @@ abstract class Request {
 
 		if ( ! $base_request->protected_mode ) {
 			throw new Extend_Request_Exception(
-				esc_html( get_class( $base_request ) . ' can only be extended within its ->apply_filters() method.' ),
+				get_class( $base_request ) . ' can only be extended within its ->apply_filters() method.',
 				'wcpay_core_extend_class_incorrectly'
 			);
 		}
@@ -543,12 +538,10 @@ abstract class Request {
 	 */
 	private function throw_immutable_exception( string $param ) {
 		throw new Immutable_Parameter_Exception(
-			esc_html(
-				sprintf(
-					'The value of %s::%s is immutable and cannot be changed.',
-					get_class( $this ),
-					$param
-				)
+			sprintf(
+				'The value of %s::%s is immutable and cannot be changed.',
+				get_class( $this ),
+				$param
 			),
 			'wcpay_core_immutable_parameter_changed'
 		);
@@ -615,7 +608,7 @@ abstract class Request {
 	 * @return array        The difference between the two arrays.
 	 */
 	private function array_diff( $array1, $array2 ) {
-		$arr_to_json = function ( $item ) {
+		$arr_to_json = function( $item ) {
 			return is_array( $item ) ? wp_json_encode( $item ) : $item;
 		};
 
@@ -636,7 +629,7 @@ abstract class Request {
 	protected function validate_stripe_id( $id, $prefixes = null ) {
 		if ( empty( $id ) ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html__( 'Empty parameter is not allowed', 'woocommerce-payments' ),
+				__( 'Empty parameter is not allowed', 'woocommerce-payments' ),
 				'wcpay_core_invalid_request_parameter_stripe_id'
 			);
 		}
@@ -664,12 +657,10 @@ abstract class Request {
 		}
 
 		throw new Invalid_Request_Parameter_Exception(
-			esc_html(
-				sprintf(
+			sprintf(
 				// Translators: %s is a Stripe ID.
-					__( '%s is not a valid Stripe identifier', 'woocommerce-payments' ),
-					$id
-				)
+				__( '%s is not a valid Stripe identifier', 'woocommerce-payments' ),
+				$id
 			),
 			'wcpay_core_invalid_request_parameter_stripe_id'
 		);
@@ -689,13 +680,11 @@ abstract class Request {
 		}
 
 		throw new Invalid_Request_Parameter_Exception(
-			esc_html(
-				sprintf(
+			sprintf(
 				/* translators: %1$s and %2$s are both numbers */
-					__( 'Invalid number passed. Number %1$s needs to be larger than %2$s', 'woocommerce-payments' ),
-					$value_to_validate,
-					$value_to_compare
-				)
+				__( 'Invalid number passed. Number %1$s needs to be larger than %2$s', 'woocommerce-payments' ),
+				$value_to_validate,
+				$value_to_compare
 			),
 			'wcpay_core_invalid_request_parameter_order'
 		);
@@ -713,12 +702,10 @@ abstract class Request {
 		$account_data = WC_Payments::get_account_service()->get_cached_account_data();
 		if ( isset( $account_data['customer_currencies']['supported'] ) && ! in_array( $currency_code, $account_data['customer_currencies']['supported'], true ) ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html(
-					sprintf(
-					// Translators: %s is a currency code.
-						__( '%s is not a supported currency for payments.', 'woocommerce-payments' ),
-						$currency_code
-					)
+				sprintf(
+				// Translators: %s is a currency code.
+					__( '%s is not a supported currency for payments.', 'woocommerce-payments' ),
+					$currency_code
 				),
 				'wcpay_core_invalid_request_parameter_currency_not_available'
 			);
@@ -738,16 +725,15 @@ abstract class Request {
 
 		if ( ! is_subclass_of( $child_class, $parent_class ) ) {
 			throw new Extend_Request_Exception(
-				esc_html(
-					sprintf(
-						'Failed to extend request. %s is not a subclass of %s',
-						is_string( $child_class ) ? $child_class : get_class( $child_class ),
-						$parent_class
-					)
+				sprintf(
+					'Failed to extend request. %s is not a subclass of %s',
+					is_string( $child_class ) ? $child_class : get_class( $child_class ),
+					$parent_class
 				),
 				'wcpay_core_extend_class_not_subclass'
 			);
 		}
+
 	}
 
 	/**
@@ -763,13 +749,11 @@ abstract class Request {
 		$d = DateTime::createFromFormat( $format, $date );
 		if ( ! ( $d && $d->format( $format ) === $date ) ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html(
-					sprintf(
+				sprintf(
 					// Translators: %1$s is a provided date string, %2$s is a date format.
-						__( '%1$s is not a valid date for format %2$s.', 'woocommerce-payments' ),
-						$date,
-						$format
-					)
+					__( '%1$s is not a valid date for format %2$s.', 'woocommerce-payments' ),
+					$date,
+					$format
 				),
 				'wcpay_core_invalid_request_parameter_invalid_date'
 			);
@@ -788,12 +772,10 @@ abstract class Request {
 		$check_fallback_url = wp_generate_password( 12, false );
 		if ( hash_equals( $check_fallback_url, wp_validate_redirect( $redirect_url, $check_fallback_url ) ) ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html(
-					sprintf(
-					// Translators: %s is a currency code.
-						__( '%1$s is not a valid redirect URL. Use a URL in the allowed_redirect_hosts filter.', 'woocommerce-payments' ),
-						$redirect_url
-					)
+				sprintf(
+				// Translators: %s is a currency code.
+					__( '%1$s is not a valid redirect URL. Use a URL in the allowed_redirect_hosts filter.', 'woocommerce-payments' ),
+					$redirect_url
 				),
 				'wcpay_core_invalid_request_parameter_invalid_redirect_url'
 			);
@@ -812,12 +794,10 @@ abstract class Request {
 		$user = get_user_by( 'login', $user_name );
 		if ( false === $user ) {
 			throw new Invalid_Request_Parameter_Exception(
-				esc_html(
-					sprintf(
+				sprintf(
 					// Translators: %s is a provided username.
-						__( '%s is not a valid username.', 'woocommerce-payments' ),
-						$user_name
-					)
+					__( '%s is not a valid username.', 'woocommerce-payments' ),
+					$user_name
 				),
 				'wcpay_core_invalid_request_parameter_invalid_username'
 			);
@@ -841,5 +821,6 @@ abstract class Request {
 			return;
 		}
 		throw new Invalid_Request_Parameter_Exception( 'Invalid request api route', 'wcpay_core_invalid_request_parameter_api_route_not_defined' );
+
 	}
 }

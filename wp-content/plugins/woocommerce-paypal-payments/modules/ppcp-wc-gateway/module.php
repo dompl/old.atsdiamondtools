@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\WcGateway;
 
-return static function (): WCGatewayModule {
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+
+return static function (): ModuleInterface {
 	return new WCGatewayModule();
 };

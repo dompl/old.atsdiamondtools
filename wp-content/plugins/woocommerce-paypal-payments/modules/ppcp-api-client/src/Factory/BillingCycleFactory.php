@@ -12,7 +12,6 @@ namespace WooCommerce\PayPalCommerce\ApiClient\Factory;
 use stdClass;
 use WC_Product;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\BillingCycle;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\CurrencyGetter;
 
 /**
  * Class BillingCycleFactory
@@ -22,16 +21,16 @@ class BillingCycleFactory {
 	/**
 	 * The currency.
 	 *
-	 * @var CurrencyGetter
+	 * @var string
 	 */
-	private CurrencyGetter $currency;
+	private $currency;
 
 	/**
 	 * BillingCycleFactory constructor.
 	 *
-	 * @param CurrencyGetter $currency The currency.
+	 * @param string $currency The currency.
 	 */
-	public function __construct( CurrencyGetter $currency ) {
+	public function __construct( string $currency ) {
 		$this->currency = $currency;
 	}
 
@@ -52,7 +51,7 @@ class BillingCycleFactory {
 			array(
 				'fixed_price' => array(
 					'value'         => $product->get_meta( '_subscription_price' ),
-					'currency_code' => $this->currency->get(),
+					'currency_code' => $this->currency,
 				),
 			),
 			(int) $product->get_meta( '_subscription_length' )

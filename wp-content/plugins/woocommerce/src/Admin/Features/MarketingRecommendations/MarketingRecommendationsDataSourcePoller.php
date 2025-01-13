@@ -2,8 +2,7 @@
 
 namespace Automattic\WooCommerce\Admin\Features\MarketingRecommendations;
 
-use Automattic\WooCommerce\Admin\RemoteSpecs\DataSourcePoller;
-use WC_Helper;
+use Automattic\WooCommerce\Admin\DataSourcePoller;
 
 /**
  * Specs data source poller class for marketing recommendations.
@@ -17,15 +16,15 @@ class MarketingRecommendationsDataSourcePoller extends DataSourcePoller {
 
 	/**
 	 * Default data sources array.
-	 *
-	 * @deprecated since 9.5.0. Use get_data_sources() instead.
 	 */
-	const DATA_SOURCES = array();
+	const DATA_SOURCES = array(
+		'https://woocommerce.com/wp-json/wccom/marketing-tab/1.3/recommendations.json',
+	);
 
 	/**
 	 * Class instance.
 	 *
-	 * @var MarketingRecommendationsDataSourcePoller instance
+	 * @var Analytics instance
 	 */
 	protected static $instance = null;
 
@@ -36,23 +35,12 @@ class MarketingRecommendationsDataSourcePoller extends DataSourcePoller {
 		if ( ! self::$instance ) {
 			self::$instance = new self(
 				self::ID,
-				self::get_data_sources(),
+				self::DATA_SOURCES,
 				array(
 					'spec_key' => 'product',
 				)
 			);
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Get data sources.
-	 *
-	 * @return array
-	 */
-	public static function get_data_sources() {
-		return array(
-			WC_Helper::get_woocommerce_com_base_url() . 'wp-json/wccom/marketing-tab/1.3/recommendations.json',
-		);
 	}
 }

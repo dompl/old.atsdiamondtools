@@ -405,8 +405,7 @@ class Imagify_Files_Stats {
 		}
 
 		$table_name = $files_db->get_table_name();
-		$sql        = $wpdb->get_var( "SELECT SUM( original_size ) FROM $table_name" ); // WPCS: unprepared SQL ok.
-		$size       = is_null( $sql ) ? 0 : round( $sql );
+		$size       = round( $wpdb->get_var( "SELECT SUM( original_size ) FROM $table_name" ) ); // WPCS: unprepared SQL ok.
 
 		return $size;
 	}
@@ -436,8 +435,7 @@ class Imagify_Files_Stats {
 		}
 
 		$table_name = $files_db->get_table_name();
-		$sql        = $wpdb->get_var( "SELECT AVG( size ) AS average_size_per_month FROM ( SELECT SUM( original_size ) AS size FROM $table_name GROUP BY YEAR( file_date ), MONTH( file_date ) ) AS size_per_month" ); // WPCS: unprepared SQL ok.
-		$average    = is_null( $sql ) ? 0 : round( $sql );
+		$average    = round( $wpdb->get_var( "SELECT AVG( size ) AS average_size_per_month FROM ( SELECT SUM( original_size ) AS size FROM $table_name GROUP BY YEAR( file_date ), MONTH( file_date ) ) AS size_per_month" ) ); // WPCS: unprepared SQL ok.
 
 		return $average;
 	}

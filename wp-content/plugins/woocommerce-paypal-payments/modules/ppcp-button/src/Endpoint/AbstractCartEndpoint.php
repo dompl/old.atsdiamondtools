@@ -10,7 +10,6 @@ namespace WooCommerce\PayPalCommerce\Button\Endpoint;
 use Exception;
 use Psr\Log\LoggerInterface;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\PayPalApiException;
-use WooCommerce\PayPalCommerce\Button\Helper\CartProductsHelper;
 
 /**
  * Abstract Class AbstractCartEndpoint
@@ -27,11 +26,11 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 	protected $cart;
 
 	/**
-	 * The cart products helper.
+	 * The product data store.
 	 *
-	 * @var CartProductsHelper
+	 * @var \WC_Data_Store
 	 */
-	protected $cart_products;
+	protected $product_data_store;
 
 	/**
 	 * The request data helper.
@@ -53,6 +52,13 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 	 * @var string
 	 */
 	protected $logger_tag = '';
+
+	/**
+	 * The added cart item IDs
+	 *
+	 * @var array
+	 */
+	private $cart_item_keys = array();
 
 	/**
 	 * The nonce.
@@ -104,22 +110,40 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 	protected function add_products( array $products ): bool {
 		$this->cart->empty_cart( false );
 
-		try {
-			$this->cart_products->add_products( $products );
-		} catch ( Exception $e ) {
+		$success = true;
+		foreach ( $products as $product ) {
+			if ( $product['product']->is_type( 'booking' ) ) {
+				$success = $success && $this->add_booking_product(
+					$product['product'],
+					$product['booking']
+				);
+			} elseif ( $product['product']->is_type( 'variable' ) ) {
+				$success = $success && $this->add_variable_product(
+					$product['product'],
+					$product['quantity'],
+					$product['variations']
+				);
+			} else {
+				$success = $success && $this->add_product(
+					$product['product'],
+					$product['quantity']
+				);
+			}
+		}
+
+		if ( ! $success ) {
 			$this->handle_error();
 		}
 
-		return true;
+		return $success;
 	}
 
 	/**
 	 * Handles errors.
 	 *
-	 * @param bool $send_response If this error handling should return the response.
 	 * @return void
 	 */
-	protected function handle_error( bool $send_response = true ): void {
+	private function handle_error(): void {
 
 		$message = __(
 			'Something went wrong. Action aborted',
@@ -137,16 +161,14 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 			wc_clear_notices();
 		}
 
-		if ( $send_response ) {
-			wp_send_json_error(
-				array(
-					'name'    => '',
-					'message' => $message,
-					'code'    => 0,
-					'details' => array(),
-				)
-			);
-		}
+		wp_send_json_error(
+			array(
+				'name'    => '',
+				'message' => $message,
+				'code'    => 0,
+				'details' => array(),
+			)
+		);
 	}
 
 	/**
@@ -156,7 +178,7 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 	 */
 	protected function products_from_request() {
 		$data     = $this->request_data->read_request( $this->nonce() );
-		$products = $this->cart_products->products_from_data( $data );
+		$products = $this->products_from_data( $data );
 		if ( ! $products ) {
 			wp_send_json_error(
 				array(
@@ -176,11 +198,130 @@ abstract class AbstractCartEndpoint implements EndpointInterface {
 	}
 
 	/**
+	 * Returns product information from a data array.
+	 *
+	 * @param array $data The data array.
+	 *
+	 * @return array|null
+	 */
+	protected function products_from_data( array $data ): ?array {
+
+		$products = array();
+
+		if (
+			! isset( $data['products'] )
+			|| ! is_array( $data['products'] )
+		) {
+			return null;
+		}
+		foreach ( $data['products'] as $product ) {
+			if ( ! isset( $product['quantity'] ) || ! isset( $product['id'] ) ) {
+				return null;
+			}
+
+			$wc_product = wc_get_product( (int) $product['id'] );
+
+			if ( ! $wc_product ) {
+				return null;
+			}
+			$products[] = array(
+				'product'    => $wc_product,
+				'quantity'   => (int) $product['quantity'],
+				'variations' => $product['variations'] ?? null,
+				'booking'    => $product['booking'] ?? null,
+			);
+		}
+		return $products;
+	}
+
+	/**
+	 * Adds a product to the cart.
+	 *
+	 * @param \WC_Product $product The Product.
+	 * @param int         $quantity The Quantity.
+	 *
+	 * @return bool
+	 * @throws Exception When product could not be added.
+	 */
+	private function add_product( \WC_Product $product, int $quantity ): bool {
+		$cart_item_key = $this->cart->add_to_cart( $product->get_id(), $quantity );
+
+		$this->cart_item_keys[] = $cart_item_key;
+		return false !== $cart_item_key;
+	}
+
+	/**
+	 * Adds variations to the cart.
+	 *
+	 * @param \WC_Product $product The Product.
+	 * @param int         $quantity The Quantity.
+	 * @param array       $post_variations The variations.
+	 *
+	 * @return bool
+	 * @throws Exception When product could not be added.
+	 */
+	private function add_variable_product(
+		\WC_Product $product,
+		int $quantity,
+		array $post_variations
+	): bool {
+
+		$variations = array();
+		foreach ( $post_variations as $key => $value ) {
+			$variations[ $value['name'] ] = $value['value'];
+		}
+
+		$variation_id = $this->product_data_store->find_matching_product_variation( $product, $variations );
+
+		// ToDo: Check stock status for variation.
+		$cart_item_key = $this->cart->add_to_cart(
+			$product->get_id(),
+			$quantity,
+			$variation_id,
+			$variations
+		);
+
+		$this->cart_item_keys[] = $cart_item_key;
+		return false !== $cart_item_key;
+	}
+
+	/**
+	 * Adds booking to the cart.
+	 *
+	 * @param \WC_Product $product The Product.
+	 * @param array       $data Data used by the booking plugin.
+	 *
+	 * @return bool
+	 * @throws Exception When product could not be added.
+	 */
+	private function add_booking_product(
+		\WC_Product $product,
+		array $data
+	): bool {
+
+		if ( ! is_callable( 'wc_bookings_get_posted_data' ) ) {
+			return false;
+		}
+
+		$cart_item_data = array(
+			'booking' => wc_bookings_get_posted_data( $data, $product ),
+		);
+
+		$cart_item_key = $this->cart->add_to_cart( $product->get_id(), 1, 0, array(), $cart_item_data );
+
+		$this->cart_item_keys[] = $cart_item_key;
+		return false !== $cart_item_key;
+	}
+
+	/**
 	 * Removes stored cart items from WooCommerce cart.
 	 *
 	 * @return void
 	 */
 	protected function remove_cart_items(): void {
-		$this->cart_products->remove_cart_items();
+		foreach ( $this->cart_item_keys as $cart_item_key ) {
+			$this->cart->remove_cart_item( $cart_item_key );
+		}
 	}
+
 }

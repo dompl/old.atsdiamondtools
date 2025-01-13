@@ -35,10 +35,8 @@
 			"label": "Outline"
 		}
 	],
-	"parent": [
-		"woocommerce/empty-mini-cart-contents-block"
-	],
+	"parent": [ "woocommerce/empty-mini-cart-contents-block" ],
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

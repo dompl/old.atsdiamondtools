@@ -246,6 +246,7 @@ if ( ! class_exists( 'WC_Payments_Email_IPP_Receipt' ) ) :
 		public function get_default_additional_content(): string {
 			return __( 'Thanks for using {site_url}!', 'woocommerce-payments' );
 		}
+
 	}
 
 endif;

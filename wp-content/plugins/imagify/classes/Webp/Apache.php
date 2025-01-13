@@ -1,29 +1,31 @@
 <?php
-declare(strict_types=1);
-
 namespace Imagify\Webp;
 
-use Imagify\WriteFile\AbstractApacheDirConfFile;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Add and remove contents to the .htaccess file to display WebP images on the site.
  *
- * @since 1.9
+ * @since  1.9
+ * @author Grégory Viguier
  */
-class Apache extends AbstractApacheDirConfFile {
+class Apache extends \Imagify\WriteFile\AbstractApacheDirConfFile {
 
 	/**
 	 * Name of the tag used as block delemiter.
 	 *
-	 * @var string
-	 * @since 1.9
+	 * @var    string
+	 * @since  1.9
+	 * @author Grégory Viguier
 	 */
 	const TAG_NAME = 'Imagify: webp file type';
 
 	/**
 	 * Get unfiltered new contents to write into the file.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access protected
+	 * @author Grégory Viguier
 	 *
 	 * @return string
 	 */

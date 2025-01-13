@@ -1,6 +1,5 @@
 <?php
 use Imagify\Notices\Notices;
-use Imagify\User\User;
 
 defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
@@ -103,11 +102,11 @@ function get_imagify_admin_url( $action = 'settings', $arg = [] ) {
 		case 'optimize-missing-sizes':
 			return wp_nonce_url( admin_url( 'admin-post.php?action=imagify_optimize_missing_sizes&attachment_id=' . $id . '&context=' . $context ), 'imagify-optimize-missing-sizes-' . $id . '-' . $context );
 
-		case 'generate-nextgen-versions':
-			return wp_nonce_url( admin_url( 'admin-post.php?action=imagify_generate_nextgen_versions&attachment_id=' . $id . '&context=' . $context ), 'imagify-generate-nextgen-versions-' . $id . '-' . $context );
+		case 'generate-webp-versions':
+			return wp_nonce_url( admin_url( 'admin-post.php?action=imagify_generate_webp_versions&attachment_id=' . $id . '&context=' . $context ), 'imagify-generate-webp-versions-' . $id . '-' . $context );
 
-		case 'delete-nextgen-versions':
-			return wp_nonce_url( admin_url( 'admin-post.php?action=imagify_delete_nextgen_versions&attachment_id=' . $id . '&context=' . $context ), 'imagify-delete-nextgen-versions-' . $id . '-' . $context );
+		case 'delete-webp-versions':
+			return wp_nonce_url( admin_url( 'admin-post.php?action=imagify_delete_webp_versions&attachment_id=' . $id . '&context=' . $context ), 'imagify-delete-webp-versions-' . $id . '-' . $context );
 
 		case 'optimize':
 		case 'manual-upload': // Deprecated.
@@ -401,7 +400,7 @@ function imagify_cache_user() {
 		return false;
 	}
 
-	$user    = new User();
+	$user    = new Imagify_User();
 	$data    = (object) get_object_vars( $user );
 	$methods = get_class_methods( $user );
 
@@ -411,7 +410,7 @@ function imagify_cache_user() {
 		}
 	}
 
-	$data->quota_formatted            = imagify_size_format( $user->get_quota() * pow( 1024, 2 ) );
+	$data->quota_formatted            = imagify_size_format( $user->quota * pow( 1024, 2 ) );
 	$data->next_date_update_formatted = date_i18n( get_option( 'date_format' ), strtotime( $user->next_date_update ) );
 
 	if ( imagify_is_active_for_network() ) {

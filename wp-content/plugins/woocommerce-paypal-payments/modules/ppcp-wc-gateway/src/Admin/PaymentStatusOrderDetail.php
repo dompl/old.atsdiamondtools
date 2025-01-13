@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\WcGateway\Admin;
 
-use WC_Order;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 
 /**
@@ -39,10 +38,7 @@ class PaymentStatusOrderDetail {
 	 * @param int $wc_order_id The WooCommerce order id.
 	 */
 	public function render( int $wc_order_id ) {
-		$wc_order = wc_get_order( $wc_order_id );
-		if ( ! $wc_order instanceof WC_Order ) {
-			return;
-		}
+		$wc_order = new \WC_Order( $wc_order_id );
 
 		if ( ! $this->column->should_render_for_order( $wc_order ) || $this->column->is_captured( $wc_order ) ) {
 			return;

@@ -5,8 +5,6 @@
  * Handles requests to /products/*
  */
 
-declare( strict_types = 1 );
-
 namespace Automattic\WooCommerce\Admin\API;
 
 defined( 'ABSPATH' ) || exit;

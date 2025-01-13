@@ -2,8 +2,7 @@
 
 namespace Automattic\WooCommerce\Admin\Features\ShippingPartnerSuggestions;
 
-use Automattic\WooCommerce\Admin\RemoteSpecs\DataSourcePoller;
-use WC_Helper;
+use Automattic\WooCommerce\Admin\DataSourcePoller;
 
 /**
  * Specs data source poller class for shipping partner suggestions.
@@ -17,10 +16,10 @@ class ShippingPartnerSuggestionsDataSourcePoller extends DataSourcePoller {
 
 	/**
 	 * Default data sources array.
-	 *
-	 * @deprecated since 9.5.0. Use get_data_sources() instead.
 	 */
-	const DATA_SOURCES = array();
+	const DATA_SOURCES = array(
+		'https://woocommerce.com/wp-json/wccom/shipping-partner-suggestions/1.0/suggestions.json',
+	);
 
 	/**
 	 * Class instance.
@@ -34,19 +33,8 @@ class ShippingPartnerSuggestionsDataSourcePoller extends DataSourcePoller {
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
-			self::$instance = new self( self::ID, self::get_data_sources() );
+			self::$instance = new self( self::ID, self::DATA_SOURCES );
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Get data sources.
-	 *
-	 * @return array
-	 */
-	public static function get_data_sources() {
-		return array(
-			WC_Helper::get_woocommerce_com_base_url() . 'wp-json/wccom/shipping-partner-suggestions/2.0/suggestions.json',
-		);
 	}
 }

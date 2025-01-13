@@ -42,8 +42,10 @@ abstract class Base_Constant implements \JsonSerializable {
 	private function __construct( string $value ) {
 		if ( $value instanceof static ) {
 			$value = $value->get_value();
-		} elseif ( ! defined( static::class . "::$value" ) ) {
+		} else {
+			if ( ! defined( static::class . "::$value" ) ) {
 				throw new \InvalidArgumentException( "Constant with name '$value' does not exist." );
+			}
 		}
 
 		$this->value = $value;
@@ -98,8 +100,6 @@ abstract class Base_Constant implements \JsonSerializable {
 	 */
 	public static function __callStatic( $name, $arguments ) {
 		if ( ! isset( static::$object_cache[ $name ] ) ) {
-			// Instantiating constants by class name using the 'new static($name)' approach is integral to this method's functionality.
-			// @phpstan-ignore-next-line.
 			static::$object_cache[ $name ] = new static( $name );
 		}
 		return static::$object_cache[ $name ];

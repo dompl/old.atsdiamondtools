@@ -13,18 +13,6 @@
 		"lock": false
 	},
 	"attributes": {
-		"showButtonStyles": {
-			"type": "boolean",
-			"default": false
-		},
-		"buttonHeight": {
-			"type": "string",
-			"default": "48"
-		},
-		"buttonBorderRadius": {
-			"type": "string",
-			"default": "4"
-		},
 		"lock": {
 			"type": "object",
 			"default": {
@@ -33,10 +21,8 @@
 			}
 		}
 	},
-	"parent": [
-		"woocommerce/cart-totals-block"
-	],
+	"parent": [ "woocommerce/cart-totals-block" ],
 	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3
+	"apiVersion": 2
 }

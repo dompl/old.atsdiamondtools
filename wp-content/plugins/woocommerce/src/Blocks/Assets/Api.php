@@ -42,13 +42,6 @@ class Api {
 	private $script_data = null;
 
 	/**
-	 * Tracks whether script_data was modified during the current request.
-	 *
-	 * @var boolean
-	 */
-	private $script_data_modified = false;
-
-	/**
 	 * Stores the hash for the script data, made up of the site url, plugin version and package path.
 	 *
 	 * @var string
@@ -178,9 +171,6 @@ class Api {
 		if ( is_null( $this->script_data ) || $this->disable_cache ) {
 			return;
 		}
-		if ( ! $this->script_data_modified ) {
-			return;
-		}
 		set_transient(
 			$this->script_data_transient_key,
 			wp_json_encode(
@@ -226,7 +216,6 @@ class Api {
 				'version'      => ! empty( $asset['version'] ) ? $asset['version'] : $this->get_file_version( $relative_src ),
 				'dependencies' => ! empty( $asset['dependencies'] ) ? $asset['dependencies'] : [],
 			);
-			$this->script_data_modified         = true;
 		}
 
 		// Return asset details as well as the requested dependencies array.

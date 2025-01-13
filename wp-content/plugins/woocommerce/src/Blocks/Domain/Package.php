@@ -56,12 +56,7 @@ class Package {
 	}
 
 	/**
-	 * Returns the version of WooCommerce Blocks.
-	 *
-	 * Note: since Blocks was merged into WooCommerce Core, the version of
-	 * WC Blocks doesn't update anymore. Use
-	 * `Constants::get_constant( 'WC_VERSION' )` when possible to get the
-	 * WooCommerce Core version.
+	 * Returns the version of the plugin.
 	 *
 	 * @return string
 	 */
@@ -70,7 +65,7 @@ class Package {
 	}
 
 	/**
-	 * Returns the version of WooCommerce Blocks stored in the database.
+	 * Returns the version of the plugin stored in the database.
 	 *
 	 * @return string
 	 */
@@ -79,11 +74,12 @@ class Package {
 	}
 
 	/**
-	 * Sets the version of WooCommerce Blocks in the database.
+	 * Set the version of the plugin stored in the database.
 	 * This is useful during the first installation or after the upgrade process.
 	 */
 	public function set_version_stored_on_db() {
 		update_option( Options::WC_BLOCK_VERSION, $this->get_version() );
+
 	}
 
 	/**
@@ -116,11 +112,29 @@ class Package {
 	}
 
 	/**
-	 * Returns an instance of the FeatureGating class.
+	 * Returns an instance of the the FeatureGating class.
 	 *
 	 * @return FeatureGating
 	 */
 	public function feature() {
 		return $this->feature_gating;
+	}
+
+	/**
+	 * Checks if we're executing the code in an experimental build mode.
+	 *
+	 * @return boolean
+	 */
+	public function is_experimental_build() {
+		return $this->feature()->is_experimental_build();
+	}
+
+	/**
+	 * Checks if we're executing the code in an feature plugin or experimental build mode.
+	 *
+	 * @return boolean
+	 */
+	public function is_feature_plugin_build() {
+		return $this->feature()->is_feature_plugin_build();
 	}
 }

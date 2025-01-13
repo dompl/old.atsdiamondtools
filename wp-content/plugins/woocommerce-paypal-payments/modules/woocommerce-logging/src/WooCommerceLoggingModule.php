@@ -9,36 +9,38 @@ declare(strict_types=1);
 
 namespace WooCommerce\WooCommerce\Logging;
 
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Container\ServiceProvider;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+use WooCommerce\PayPalCommerce\Vendor\Interop\Container\ServiceProviderInterface;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 
 /**
  * Class WooCommerceLoggingModule
  */
-class WooCommerceLoggingModule implements ServiceModule, ExtendingModule, ExecutableModule {
-	use ModuleClassNameIdTrait;
+class WooCommerceLoggingModule implements ModuleInterface {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function services(): array {
-		return require __DIR__ . '/../services.php';
+	public function setup(): ServiceProviderInterface {
+		return new ServiceProvider(
+			require __DIR__ . '/../services.php',
+			require __DIR__ . '/../extensions.php'
+		);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function extensions(): array {
-		return require __DIR__ . '/../extensions.php';
+	public function run( ContainerInterface $c ): void {
 	}
 
+
 	/**
-	 * {@inheritDoc}
+	 * Returns the key for the module.
+	 *
+	 * @return string|void
 	 */
-	public function run( ContainerInterface $c ): bool {
-		return true;
+	public function getKey() {
 	}
 }

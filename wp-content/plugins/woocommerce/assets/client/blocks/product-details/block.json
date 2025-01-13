@@ -4,16 +4,8 @@
 	"icon": "info",
 	"title": "Product Details",
 	"description": "Display a product's description, attributes, and reviews.",
-	"category": "woocommerce-product-elements",
-	"attributes": {
-		"hideTabTitle": {
-			"type": "boolean",
-			"default": false
-		}
-	},
-	"keywords": [
-		"WooCommerce"
-	],
+	"category": "woocommerce",
+	"keywords": [ "WooCommerce" ],
 	"supports": {
 		"align": true,
 		"spacing": {
@@ -21,6 +13,6 @@
 		}
 	},
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

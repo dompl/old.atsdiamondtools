@@ -25,10 +25,8 @@
 			}
 		}
 	},
-	"parent": [
-		"woocommerce/cart-cross-sells-block"
-	],
+	"parent": [ "woocommerce/cart-cross-sells-block" ],
 	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3
+	"apiVersion": 2
 }

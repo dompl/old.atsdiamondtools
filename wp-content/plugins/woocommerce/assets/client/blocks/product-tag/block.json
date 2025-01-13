@@ -2,17 +2,11 @@
 	"name": "woocommerce/product-tag",
 	"title": "Products by Tag",
 	"category": "woocommerce",
-	"keywords": [
-		"WooCommerce"
-	],
+	"keywords": [ "WooCommerce" ],
 	"description": "Display a grid of products with selected tags.",
 	"supports": {
-		"align": [
-			"wide",
-			"full"
-		],
-		"html": false,
-		"inserter": false
+		"align": [ "wide", "full" ],
+		"html": false
 	},
 	"attributes": {
 		"columns": {
@@ -80,6 +74,6 @@
 		}
 	},
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

@@ -3,14 +3,9 @@
   "title": "Product Categories List",
   "category": "woocommerce",
   "description": "Show all product categories as a list or dropdown.",
-  "keywords": [
-    "WooCommerce"
-  ],
+  "keywords": [ "WooCommerce" ],
   "supports": {
-    "align": [
-      "wide",
-      "full"
-    ],
+    "align": [ "wide", "full" ],
     "html": false,
     "color": {
       "background": false,
@@ -45,10 +40,10 @@
       "type": "boolean",
       "default": true
     },
-    "showChildrenOnly": {
-      "type": "boolean",
-      "default": false
-    }
+	"showChildrenOnly": {
+	  "type": "boolean",
+	  "default": false
+	}
   },
   "example": {
     "attributes": {
@@ -57,6 +52,6 @@
     }
   },
   "textdomain": "woocommerce",
-  "apiVersion": 3,
+  "apiVersion": 2,
   "$schema": "https://schemas.wp.org/trunk/block.json"
 }

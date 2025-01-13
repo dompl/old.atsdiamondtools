@@ -1,74 +1,66 @@
 import CartActionHandler from '../ActionHandler/CartActionHandler';
-import BootstrapHelper from '../Helper/BootstrapHelper';
+import BootstrapHelper from "../Helper/BootstrapHelper";
 
 class MiniCartBootstap {
-	constructor( gateway, renderer, errorHandler ) {
-		this.gateway = gateway;
-		this.renderer = renderer;
-		this.errorHandler = errorHandler;
-		this.actionHandler = null;
-	}
+    constructor(gateway, renderer, errorHandler) {
+        this.gateway = gateway;
+        this.renderer = renderer;
+        this.errorHandler = errorHandler;
+        this.actionHandler = null;
+    }
 
-	init() {
-		this.actionHandler = new CartActionHandler(
-			PayPalCommerceGateway,
-			this.errorHandler
-		);
-		this.render();
-		this.handleButtonStatus();
+    init() {
 
-		jQuery( document.body ).on(
-			'wc_fragments_loaded wc_fragments_refreshed',
-			() => {
-				this.render();
-				this.handleButtonStatus();
-			}
-		);
+        this.actionHandler = new CartActionHandler(
+            PayPalCommerceGateway,
+            this.errorHandler,
+        );
+        this.render();
+        this.handleButtonStatus();
 
-		this.renderer.onButtonsInit(
-			this.gateway.button.mini_cart_wrapper,
-			() => {
-				this.handleButtonStatus();
-			},
-			true
-		);
-	}
+        jQuery(document.body).on('wc_fragments_loaded wc_fragments_refreshed', () => {
+            this.render();
+            this.handleButtonStatus();
+        });
 
-	handleButtonStatus() {
-		BootstrapHelper.handleButtonStatus( this, {
-			wrapper: this.gateway.button.mini_cart_wrapper,
-			skipMessages: true,
-		} );
-	}
+        this.renderer.onButtonsInit(this.gateway.button.mini_cart_wrapper, () => {
+            this.handleButtonStatus();
+        }, true);
+    }
 
-	shouldRender() {
-		return (
-			document.querySelector( this.gateway.button.mini_cart_wrapper ) !==
-				null ||
-			document.querySelector(
-				this.gateway.hosted_fields.mini_cart_wrapper
-			) !== null
-		);
-	}
+    handleButtonStatus() {
+        BootstrapHelper.handleButtonStatus(this, {
+            wrapper: this.gateway.button.mini_cart_wrapper,
+            skipMessages: true
+        });
+    }
 
-	shouldEnable() {
-		return BootstrapHelper.shouldEnable( this, {
-			isDisabled: !! this.gateway.button.is_mini_cart_disabled,
-		} );
-	}
+    shouldRender() {
+        return document.querySelector(this.gateway.button.mini_cart_wrapper) !== null
+            || document.querySelector(this.gateway.hosted_fields.mini_cart_wrapper) !== null;
+    }
 
-	render() {
-		if ( ! this.shouldRender() ) {
-			return;
-		}
+    shouldEnable() {
+        return BootstrapHelper.shouldEnable(this, {
+            isDisabled: !!this.gateway.button.is_mini_cart_disabled
+        });
+    }
 
-		this.renderer.render( this.actionHandler.configuration(), {
-			button: {
-				wrapper: this.gateway.button.mini_cart_wrapper,
-				style: this.gateway.button.mini_cart_style,
-			},
-		} );
-	}
+    render() {
+        if (!this.shouldRender()) {
+            return;
+        }
+
+        this.renderer.render(
+            this.actionHandler.configuration(),
+            {
+                button: {
+                    wrapper: this.gateway.button.mini_cart_wrapper,
+                    style: this.gateway.button.mini_cart_style,
+                },
+            }
+        );
+    }
 }
 
 export default MiniCartBootstap;

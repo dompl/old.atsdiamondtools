@@ -22,10 +22,8 @@
 			"padding": true
 		}
 	},
-	"parent": [
-		"woocommerce/mini-cart-title-block"
-	],
+	"parent": [ "woocommerce/mini-cart-title-block" ],
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

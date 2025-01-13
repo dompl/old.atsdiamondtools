@@ -4,9 +4,7 @@
 	"title": "Catalog Sorting",
 	"description": "Enable customers to change the sorting order of the products.",
 	"category": "woocommerce",
-	"keywords": [
-		"WooCommerce"
-	],
+	"keywords": [ "WooCommerce" ],
 	"supports": {
 		"color": {
 			"text": true,
@@ -23,6 +21,6 @@
 		}
 	},
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

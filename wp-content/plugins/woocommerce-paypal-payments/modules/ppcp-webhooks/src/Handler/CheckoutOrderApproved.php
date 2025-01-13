@@ -15,7 +15,6 @@ use WC_Session_Handler;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\OrderEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\OrderStatus;
 use Psr\Log\LoggerInterface;
-use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
 use WooCommerce\PayPalCommerce\Session\MemoryWcSession;
 use WooCommerce\PayPalCommerce\Session\SessionHandler;
 use WooCommerce\PayPalCommerce\WcGateway\FundingSource\FundingSourceRenderer;
@@ -229,14 +228,12 @@ class CheckoutOrderApproved implements RequestHandler {
 				continue;
 			}
 
-			try {
-				$this->order_processor->process( $wc_order );
-			} catch ( RuntimeException $exception ) {
+			if ( ! $this->order_processor->process( $wc_order ) ) {
 				return $this->failure_response(
 					sprintf(
 						'Failed to process WC order %s: %s.',
 						(string) $wc_order->get_id(),
-						$exception->getMessage()
+						$this->order_processor->last_error()
 					)
 				);
 			}

@@ -1,15 +1,11 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
-    "apiVersion": 3,
+    "apiVersion": 2,
     "name": "woocommerce/product-section-description",
     "title": "Product section description",
     "category": "woocommerce",
     "description": "The product section description.",
-    "keywords": [
-        "products",
-        "section",
-        "description"
-    ],
+    "keywords": ["products", "section", "description"],
     "textdomain": "default",
     "attributes": {
         "content": {

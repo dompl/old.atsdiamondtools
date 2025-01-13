@@ -4,9 +4,9 @@
 	/**
 	 * Close an Imagify notice.
 	 */
-	$(document).on('click', '.imagify-notice-dismiss', function ( e ) {
+	$( '.imagify-notice-dismiss' ).on( 'click.imagify', function( e ) {
 		var $this   = $( this ),
-			$parent = $this.parents( '.imagify-welcome, .imagify-notice, .imagify-rkt-notice, .imagify-upsell, .imagify-upsell-admin-bar' ),
+			$parent = $this.parents( '.imagify-welcome, .imagify-notice, .imagify-rkt-notice' ),
 			href    = $this.attr( 'href' );
 
 		e.preventDefault();

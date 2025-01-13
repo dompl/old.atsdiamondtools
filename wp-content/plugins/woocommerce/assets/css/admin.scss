@@ -969,7 +969,7 @@ $font-sf-pro-text: helveticaneue-light, "Helvetica Neue Light",
 		filter: brightness(50%);
 	}
 	.woocommerce-add-variation-price-container {
-		width: auto;
+		width: 15%;
 		display: flex;
 		justify-content: flex-end;
 		> button {
@@ -994,7 +994,7 @@ $font-sf-pro-text: helveticaneue-light, "Helvetica Neue Light",
 			margin-top: 20px;
 			> button {
 				margin-left: 16px;
-				width: auto;
+				width: 88px;
 				display: unset;
 			}
 		}
@@ -2698,13 +2698,12 @@ ul.wc_coupon_list_block {
 			color: #ccc;
 			display: inline-block;
 			cursor: pointer;
-			padding: 0;
-			margin: 0 0 6px 12px;
+			padding: 0 0 0.5em;
+			margin: 0 0 0 12px;
 			vertical-align: middle;
 			text-decoration: none;
 			line-height: 16px;
 			width: 16px;
-			height: 16px;
 			overflow: hidden;
 
 			&::before {
@@ -2745,14 +2744,11 @@ ul.wc_coupon_list_block {
 	}
 
 	tbody tr .wc-order-edit-line-item-actions {
-		opacity: 0;
+		visibility: hidden;
 	}
 
-	tbody tr:focus-within,
-	tbody tr:hover {
-		.wc-order-edit-line-item-actions {
-			opacity: 1;
-		}
+	tbody tr:hover .wc-order-edit-line-item-actions {
+		visibility: visible;
 	}
 
 	.wc-order-totals .wc-order-edit-line-item-actions {
@@ -2787,17 +2783,6 @@ ul.wc_coupon_list_block {
 
 	h3 small {
 		color: #999;
-	}
-}
-
-#order_custom #postcustomstuff {
-	.add-custom-field {
-		padding: 12px 8px 8px;
-	}
-
-	.submit {
-		border: 0 none;
-		float: none;
 	}
 }
 
@@ -2970,9 +2955,9 @@ ul.wc_coupon_list_block {
 		display: none;
 	}
 
-	select#order-search-filter {
-		margin: 0 4px 0 0;
-		float: left;
+	select.search-filter {
+		margin-right: 4px;
+		margin-bottom: 3px;
 	}
 
 	.tablenav {
@@ -3073,10 +3058,6 @@ ul.wc_coupon_list_block {
 
 		.column-order_number {
 			width: 20ch;
-
-			.small-screen-only {
-				display: none;
-			}
 		}
 
 		.column-order_total {
@@ -3165,7 +3146,7 @@ ul.wc_coupon_list_block {
 .order-status {
 	display: inline-flex;
 	line-height: 2.5em;
-	color: #454545;
+	color: #777;
 	background: #e5e5e5;
 	border-radius: 4px;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -3176,27 +3157,27 @@ ul.wc_coupon_list_block {
 
 	&.status-completed {
 		background: #c8d7e1;
-		color: #003d66;
+		color: #2e4453;
 	}
 
 	&.status-on-hold {
 		background: #f8dda7;
-		color: #573B00;
+		color: #94660c;
 	}
 
 	&.status-failed {
 		background: #eba3a3;
-		color: #570000;
+		color: #761919;
 	}
 
 	&.status-processing {
 		background: #c6e1c6;
-		color: #2c4700;
+		color: #5b841b;
 	}
 
 	&.status-trash {
 		background: #eba3a3;
-		color: #550202;
+		color: #761919;
 	}
 
 	> span {
@@ -3374,10 +3355,6 @@ ul.wc_coupon_list_block {
 }
 
 @media screen and (max-width: 782px) {
-	.woocommerce_page_wc-orders #order-search-filter {
-		display: none;
-	}
-
 	.wc-order-preview footer {
 		.wc-action-button-group .wc-action-button-group__items {
 			display: flex;
@@ -3398,81 +3375,33 @@ ul.wc_coupon_list_block {
 		}
 	}
 
-	.woocommerce_page_wc-orders .wc-orders-list-table.wp-list-table,
 	.post-type-shop_order .wp-list-table {
-		.check-column {
+		td.check-column {
 			width: 1em;
-			vertical-align: top;
-		}
-
-		thead th.column-order_number {
-			width: 100%;
 		}
 
 		td.column-order_number {
-			.toggle-row {
-				height: 20px;
-			}
-
-			.order-preview {
-				margin-top: 13px;
-			}
+			padding-left: 0;
+			padding-bottom: 0.5em;
 		}
 
-		td.column-order_total,
-		td.column-wc_actions {
-			text-align: left;
-		}
+		td.column-order_status,
+		td.column-order_date {
+			display: inline-block !important;
+			padding: 0 1em 1em 1em !important;
 
-		td.column-wc_actions {
-			min-height: 2.0em !important;
-		}
-
-		tr:not(.is-expanded) {
-			td.column-order_number {
-				vertical-align: top;
-
-				a.order-view {
-					display: inline-block;
-					vertical-align: top;
-					width: calc( 50% - 40px - 4px );
-					margin-right: 4px;
-				}
-
-				.small-screen-only {
-					display: inline-block;
-					vertical-align: top;
-
-					&.order_date {
-						width: calc( 20% - 4px );
-						margin-right: 4px;
-					}
-
-					&.order_status {
-						width: 30%;
-						text-align: right;
-					}
-				}
-
-				@media screen and (max-width: 400px) {
-					a.order-view {
-						display: block;
-						width: calc( 100% - 40px );
-					}
-
-					.small-screen-only {
-						&.order_date {
-							width: calc( 40% - 4px );
-						}
-
-						&.order_status {
-							width: calc( 60% - 40px);
-						}
-					}
-				}
+			&::before {
+				display: none !important;
 			}
 		}
 
+		td.column-order_date {
+			padding-left: 0 !important;
+		}
+
+		td.column-order_status {
+			float: right;
+		}
 	}
 }
 
@@ -4224,6 +4153,7 @@ table.wc_shipping {
 .wc-backbone-modal-add-shipping-method,
 .wc-backbone-modal-shipping-method-settings,
 .wc-shipping-class-modal {
+	font-family: $font-sf-pro-text;
 	font-size: 13px;
 	font-weight: 400;
 	line-height: 16px;
@@ -4334,8 +4264,8 @@ table.wc_shipping {
 		}
 	}
 
-	.wc-shipping-legacy-local-pickup-help-text-container {
-		margin: 1.5em 0;
+	.wc-shipping-zone-method-input-help-text-container {
+		min-height: 40px;
 	}
 
 	.wc-shipping-zone-method-input-help-text {
@@ -4538,8 +4468,8 @@ table {
 	display: flex;
 	align-items: center;
 
-	.page-title-action, .page-title-action:active {
-		margin: 7px 0 0 10px;
+	.page-title-action {
+		margin: 0 12px;
 	}
 }
 
@@ -5047,13 +4977,6 @@ img.help_tip {
 		background: #dfdfdf !important;
 	}
 
-	.settings-panel {
-		ul.advice {
-			list-style: square;
-			list-style-position: inside;
-		}
-	}
-
 	table.form-table {
 		margin: 0;
 		position: relative;
@@ -5189,40 +5112,6 @@ img.help_tip {
 			float: none;
 		}
 
-		label:has(input:disabled) {
-			cursor: not-allowed;
-			> input:disabled {
-				opacity: 0.7;
-				cursor: not-allowed;
-				pointer-events: none;
-			}
-			&[disabled-tooltip] {
-				position: relative;
-			}
-			&[disabled-tooltip]::before {
-				pointer-events: none;
-				content: attr(disabled-tooltip);
-				position: absolute;
-				top: -6px;
-				left: 6px;
-				transform: translateX(-50%) translateY(-100%);
-				background: black;
-				text-align: center;
-				color: #fff;
-				padding: 6px;
-				font-size: 12px;
-				min-width: 80px;
-				max-width: 200px;
-				border-radius: 5px;
-				pointer-events: none;
-				opacity:0;
-			}
-			&[disabled-tooltip]:hover::before,
-			&[disabled-tooltip]:focus::before {
-				opacity:1
-			}
-		}
-
 		fieldset {
 			margin-top: 4px;
 
@@ -5233,10 +5122,6 @@ img.help_tip {
 
 			p.description {
 				margin-bottom: 8px;
-
-				&.is-error, span.is-error {
-					color: $red;
-				}
 			}
 
 			&:first-child {
@@ -5304,13 +5189,6 @@ img.help_tip {
 		.wc_payment_gateways_wrapper,
 		.wc_emails_wrapper {
 			padding: 0 15px 10px 0;
-		}
-
-		legend {
-			font-weight: 700;
-			line-height: 1.4;
-			padding: 5px 0 0;
-			margin: 0 0 8px !important;
 		}
 	}
 
@@ -5602,22 +5480,14 @@ img.help_tip {
 		}
 
 		label:first-child {
-			margin-right: 1.4em;
+			margin-right: 1em;
 			border-right: 1px solid #dfdfdf;
 		}
 
 		input,
 		select {
-			margin-top: -2px;
+			margin-top: -3px 0 0;
 			vertical-align: middle;
-		}
-
-		label.has-checkbox {
-			margin-right: 15px;
-		}
-
-		label.has-checkbox > input[type="checkbox"] {
-			margin-right: 3px;
 		}
 
 		select {
@@ -6580,8 +6450,8 @@ img.help_tip {
 
 	.upload_image_button {
 		display: block;
-		width: 128px;
-		height: 128px;
+		width: 64px;
+		height: 64px;
 		float: left;
 		margin-right: 20px;
 		position: relative;
@@ -6602,8 +6472,8 @@ img.help_tip {
 			right: 0;
 			bottom: 0;
 			text-align: center;
-			line-height: 128px;
-			font-size: 128px;
+			line-height: 64px;
+			font-size: 64px;
 			font-weight: 400;
 			-webkit-font-smoothing: antialiased;
 		}
@@ -6708,12 +6578,6 @@ img.help_tip {
 	&.form-row-full {
 		clear: both;
 	}
-}
-
-.form-flex-box {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 /**
@@ -7186,10 +7050,10 @@ img.ui-datepicker-trigger {
 
 				&:hover {
 					box-shadow: inset 0 -1px 0 0 #dfdfdf,
-						inset 300px 0 0 #f7edf7;
-					border-right: 5px solid var(--wc-primary) !important;
+						inset 300px 0 0 rgba(156, 93, 144, 0.1);
+					border-right: 5px solid #9c5d90 !important;
 					padding-left: 1.5em;
-					color: var(--wc-primary);
+					color: #9c5d90;
 				}
 			}
 		}
@@ -7655,6 +7519,10 @@ table.bar_chart {
 			.is-expanded td:not(.hidden) {
 				overflow: visible;
 			}
+
+			.toggle-row {
+				top: -15px;
+			}
 		}
 	}
 }
@@ -8115,7 +7983,7 @@ table.bar_chart {
 	#woocommerce-product-data {
 		.hndle {
 			display: block;
-			line-height: 28px;
+			line-height: 24px;
 
 			.type_box {
 				display: inline;
@@ -8789,13 +8657,4 @@ table.bar_chart {
 			}
 		}
 	}
-}
-
-html:has(#status-table-templates){
-	scroll-padding-top: 80px;
-}
-
-// Fix for Safari bug: https://bugs.webkit.org/show_bug.cgi?id=280063.
-.woocommerce-admin-page #postbox-container-2 {
-	clear: left;
 }

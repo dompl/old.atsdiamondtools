@@ -1,12 +1,10 @@
 <?php
-
 namespace Automattic\WooCommerce\Internal\Admin\WCPayPromotion;
 
-use Automattic\WooCommerce\Admin\RemoteSpecs\DataSourcePoller;
-use WC_Helper;
+use Automattic\WooCommerce\Admin\DataSourcePoller;
 
 /**
- * Specs data source poller class for WooPayments Promotion.
+ * Specs data source poller class for WooCommerce Payment Promotion.
  */
 class WCPayPromotionDataSourcePoller extends DataSourcePoller {
 
@@ -14,15 +12,15 @@ class WCPayPromotionDataSourcePoller extends DataSourcePoller {
 
 	/**
 	 * Default data sources array.
-	 *
-	 * @deprecated since 9.5.0. Use get_data_sources() instead.
 	 */
-	const DATA_SOURCES = array();
+	const DATA_SOURCES = array(
+		'https://woocommerce.com/wp-json/wccom/payment-gateway-suggestions/1.0/payment-method/promotions.json',
+	);
 
 	/**
 	 * Class instance.
 	 *
-	 * @var WCPayPromotionDataSourcePoller instance
+	 * @var Analytics instance
 	 */
 	protected static $instance = null;
 
@@ -31,33 +29,8 @@ class WCPayPromotionDataSourcePoller extends DataSourcePoller {
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
-			self::$instance = new self( self::ID, self::get_data_sources() );
+			self::$instance = new self( self::ID, self::DATA_SOURCES );
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Get data sources.
-	 *
-	 * @return array
-	 */
-	public static function get_data_sources() {
-		$data_sources = array(
-			WC_Helper::get_woocommerce_com_base_url() . 'wp-json/wccom/payment-gateway-suggestions/2.0/payment-method/promotions.json',
-		);
-
-		// Add country query param to data sources.
-		$base_location             = wc_get_base_location();
-		$data_sources_with_country = array_map(
-			function ( $url ) use ( $base_location ) {
-				return add_query_arg(
-					'country',
-					$base_location['country'],
-					$url
-				);
-			},
-			$data_sources
-		);
-		return $data_sources_with_country;
 	}
 }

@@ -7,12 +7,11 @@
 	"category": "woocommerce",
 	"supports": {
 		"align": true,
-		"reusable": false,
-		"inserter": false
+		"reusable": false
 	},
 	"keywords": [ "WooCommerce" ],
 	"usesContext": [ "postId", "postType", "queryId" ],
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

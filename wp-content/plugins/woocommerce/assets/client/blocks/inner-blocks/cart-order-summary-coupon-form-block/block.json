@@ -23,10 +23,8 @@
 			}
 		}
 	},
-	"parent": [
-		"woocommerce/cart-order-summary-block"
-	],
+	"parent": [ "woocommerce/cart-order-summary-block" ],
 	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3
+	"apiVersion": 2
 }

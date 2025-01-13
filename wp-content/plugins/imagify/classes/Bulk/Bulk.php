@@ -3,13 +3,11 @@ namespace Imagify\Bulk;
 
 use Exception;
 use Imagify\Traits\InstanceGetterTrait;
-use Imagify\Optimization\Process\ProcessInterface;
-use WP_Error;
 
 /**
  * Bulk optimization
  */
-final class Bulk {
+class Bulk {
 	use InstanceGetterTrait;
 
 	/**
@@ -19,15 +17,15 @@ final class Bulk {
 	 */
 	public function init() {
 		add_action( 'imagify_optimize_media', [ $this, 'optimize_media' ], 10, 3 );
-		add_action( 'imagify_convert_next_gen', [ $this, 'generate_nextgen_versions' ], 10, 2 ); // @phpstan-ignore-line
+		add_action( 'imagify_convert_webp', [ $this, 'generate_webp_versions' ], 10, 2 );
+		add_action( 'imagify_convert_webp_finished', [ $this, 'clear_webp_transients' ], 10, 2 );
 		add_action( 'wp_ajax_imagify_bulk_optimize', [ $this, 'bulk_optimize_callback' ] );
-		add_action( 'wp_ajax_imagify_missing_nextgen_generation', [ $this, 'missing_nextgen_callback' ] );
+		add_action( 'wp_ajax_imagify_missing_webp_generation', [ $this, 'missing_webp_callback' ] );
 		add_action( 'wp_ajax_imagify_get_folder_type_data', [ $this, 'get_folder_type_data_callback' ] );
 		add_action( 'wp_ajax_imagify_bulk_info_seen', [ $this, 'bulk_info_seen_callback' ] );
 		add_action( 'wp_ajax_imagify_bulk_get_stats', [ $this, 'bulk_get_stats_callback' ] );
 		add_action( 'imagify_after_optimize', [ $this, 'check_optimization_status' ], 10, 2 );
 		add_action( 'imagify_deactivation', [ $this, 'delete_transients_data' ] );
-		add_action( 'update_option_imagify_settings', [ $this, 'maybe_generate_missing_nextgen' ], 10, 2 );
 	}
 
 	/**
@@ -39,7 +37,7 @@ final class Bulk {
 		delete_transient( 'imagify_custom-folders_optimize_running' );
 		delete_transient( 'imagify_wp_optimize_running' );
 		delete_transient( 'imagify_bulk_optimization_complete' );
-		delete_transient( 'imagify_missing_next_gen_total' );
+		delete_transient( 'imagify_missing_webp_total' );
 	}
 
 	/**
@@ -63,11 +61,6 @@ final class Bulk {
 		}
 
 		$data     = $process->get_data();
-
-		if ( ! $data ) {
-			return;
-		}
-
 		$progress = get_transient( 'imagify_bulk_optimization_result' );
 
 		if ( $data->is_optimized() ) {
@@ -156,7 +149,7 @@ final class Bulk {
 	 * @param int    $optimization_level Optimization level.
 	 */
 	public function optimize_media( int $media_id, string $context, int $optimization_level ) {
-		if ( ! $media_id || ! $context ) {
+		if ( ! $media_id || ! $context || ! is_numeric( $optimization_level ) ) {
 			$this->decrease_counter( $context );
 
 			return;
@@ -220,14 +213,13 @@ final class Bulk {
 	}
 
 	/**
-	 * Runs the next-gen generation
+	 * Runs the WebP generation
 	 *
 	 * @param array $contexts An array of contexts (WP/Custom folders).
-	 * @param array $formats An array of format to generate.
 	 *
 	 * @return array
 	 */
-	public function run_generate_nextgen( array $contexts, array $formats ) {
+	public function run_generate_webp( array $contexts ) {
 		if ( ! $this->can_optimize() ) {
 			return [
 				'success' => false,
@@ -235,29 +227,28 @@ final class Bulk {
 			];
 		}
 
-		delete_transient( 'imagify_stat_without_next_gen' );
+		delete_transient( 'imagify_stat_without_webp' );
 
 		$medias = [];
 
 		foreach ( $contexts as $context ) {
-			foreach ( $formats as $format ) {
-				$media = $this->get_bulk_instance( $context )->get_optimized_media_ids_without_format( $format );
-				if ( ! $media['ids'] && $media['errors']['no_backup'] ) {
-					// No backup, no next-gen.
-					return [
-						'success' => false,
-						'message' => 'no-backup',
-					];
-				} elseif ( ! $media['ids'] && $media['errors']['no_file_path'] ) {
-					// Error.
-					return [
-						'success' => false,
-						'message' => __( 'The path to the selected files could not be retrieved.', 'imagify' ),
-					];
-				}
+			$media = $this->get_bulk_instance( $context )->get_optimized_media_ids_without_webp();
 
-				$medias[ $context ] = $media['ids'];
+			if ( ! $media['ids'] && $media['errors']['no_backup'] ) {
+				// No backup, no WebP.
+				return [
+					'success' => false,
+					'message' => 'no-backup',
+				];
+			} elseif ( ! $media['ids'] && $media['errors']['no_file_path'] ) {
+				// Error.
+				return [
+					'success' => false,
+					'message' => __( 'The path to the selected files could not be retrieved.', 'imagify' ),
+				];
 			}
+
+			$medias[ $context ] = $media['ids'];
 		}
 
 		if ( empty( $medias ) ) {
@@ -275,12 +266,12 @@ final class Bulk {
 			foreach ( $media_ids as $media_id ) {
 				try {
 					as_enqueue_async_action(
-						'imagify_convert_next_gen',
+						'imagify_convert_webp',
 						[
 							'id'      => $media_id,
 							'context' => $context,
 						],
-						"imagify-{$context}-convert-nextgen"
+						"imagify-{$context}-convert-webp"
 					);
 				} catch ( Exception $exception ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 					// nothing to do.
@@ -288,7 +279,7 @@ final class Bulk {
 			}
 		}
 
-		set_transient( 'imagify_missing_next_gen_total', $total, HOUR_IN_SECONDS );
+		set_transient( 'imagify_missing_webp_total', $total, HOUR_IN_SECONDS );
 
 		return [
 			'success' => true,
@@ -319,13 +310,13 @@ final class Bulk {
 		}
 
 		/**
-		 * Filter the name of the class to use for bulk process.
-		 *
-		 * @since 1.9
-		 *
-		 * @param string $class_name The class name.
-		 * @param string $context    The context name.
-		 */
+		* Filter the name of the class to use for bulk process.
+		*
+		* @since 1.9
+		*
+		* @param int    $class_name The class name.
+		* @param string $context    The context name.
+		*/
 		$class_name = apply_filters( 'imagify_bulk_class_name', $class_name, $context );
 
 		return '\\' . ltrim( $class_name, '\\' );
@@ -383,7 +374,7 @@ final class Bulk {
 	}
 
 	/**
-	 * Generate next-gen images if they are missing.
+	 * Generate WebP images if they are missing.
 	 *
 	 * @since 2.1
 	 *
@@ -392,12 +383,12 @@ final class Bulk {
 	 *
 	 * @return bool|WP_Error    True if successfully launched. A \WP_Error instance on failure.
 	 */
-	public function generate_nextgen_versions( int $media_id, string $context ) {
+	public function generate_webp_versions( int $media_id, string $context ) {
 		if ( ! $this->can_optimize() ) {
 			return false;
 		}
 
-		return imagify_get_optimization_process( $media_id, $context )->generate_nextgen_versions();
+		return imagify_get_optimization_process( $media_id, $context )->generate_webp_versions();
 	}
 
 	/**
@@ -422,14 +413,13 @@ final class Bulk {
 	 *
 	 * @since 1.9
 	 *
-	 * @param string $method The method used: 'GET' (default), or 'POST'.
-	 * @param string $parameter The name of the parameter to look for.
-	 *
+	 * @param  string $method The method used: 'GET' (default), or 'POST'.
+	 * @param  string $parameter The name of the parameter to look for.
 	 * @return string
 	 */
 	public function get_context( $method = 'GET', $parameter = 'context' ) {
-		$context = 'POST' === $method ? wp_unslash( $_POST[ $parameter ] ) : wp_unslash( $_GET[ $parameter ] ); //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
-		$context = htmlspecialchars( $context );
+		$method  = 'POST' === $method ? INPUT_POST : INPUT_GET;
+		$context = filter_input( $method, $parameter, FILTER_SANITIZE_STRING );
 
 		return imagify_sanitize_context( $context );
 	}
@@ -460,6 +450,10 @@ final class Bulk {
 		return (int) $level;
 	}
 
+	/** ----------------------------------------------------------------------------------------- */
+	/** BULK OPTIMIZATION CALLBACKS ============================================================= */
+	/** ----------------------------------------------------------------------------------------- */
+
 	/**
 	 * Launch the bulk optimization action
 	 *
@@ -485,14 +479,14 @@ final class Bulk {
 	}
 
 	/**
-	 * Launch the missing Next-gen versions generation
+	 * Launch the missing WebP versions generation
 	 *
 	 * @return void
 	 */
-	public function missing_nextgen_callback() {
+	public function missing_webp_callback() {
 		imagify_check_nonce( 'imagify-bulk-optimize' );
 
-		$contexts = $this->get_contexts();
+		$contexts = explode( '_', sanitize_key( wp_unslash( $_GET['context'] ) ) );
 
 		foreach ( $contexts as $context ) {
 			if ( ! imagify_get_context( $context )->current_user_can( 'bulk-optimize' ) ) {
@@ -500,9 +494,8 @@ final class Bulk {
 			}
 		}
 
-		$formats = imagify_nextgen_images_formats();
+		$data = $this->run_generate_webp( $contexts );
 
-		$data = $this->run_generate_nextgen( $contexts, $formats );
 		if ( false === $data['success'] ) {
 			wp_send_json_error( [ 'message' => $data['message'] ] );
 		}
@@ -564,8 +557,8 @@ final class Bulk {
 	public function bulk_get_stats_callback() {
 		imagify_check_nonce( 'imagify-bulk-optimize' );
 
-		$folder_types = filter_input( INPUT_GET, 'types', FILTER_REQUIRE_ARRAY );
-		$folder_types = is_array( $folder_types ) ? $folder_types : [];
+		$folder_types = filter_input( INPUT_GET, 'types', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY );
+		$folder_types = is_array( $folder_types ) ? array_filter( $folder_types, 'is_string' ) : [];
 
 		if ( ! $folder_types ) {
 			imagify_die( __( 'Invalid request', 'imagify' ) );
@@ -580,87 +573,5 @@ final class Bulk {
 		}
 
 		wp_send_json_success( imagify_get_bulk_stats( array_flip( $folder_types ) ) );
-	}
-
-	/**
-	 * Update Options callback to start bulk optimization.
-	 *
-	 * @since 2.2
-	 *
-	 * @param array $old_value The old option value.
-	 * @param array $value The new option value.
-	 *
-	 * @return void
-	 */
-	public function maybe_generate_missing_nextgen( $old_value, $value ) {
-		if ( ! isset( $old_value['optimization_format'], $value['optimization_format'] ) ) {
-			return;
-		}
-
-		if ( $old_value['optimization_format'] === $value['optimization_format'] ) {
-			// Old value = new value so do nothing.
-			return;
-		}
-
-		if ( 'off' === $value['optimization_format'] ) {
-			// No need to generate next-gen images.
-			return;
-		}
-
-		$contexts = $this->get_contexts();
-		$formats  = imagify_nextgen_images_formats();
-
-		$this->run_generate_nextgen( $contexts, $formats );
-	}
-
-	/**
-	 * Get the context for the bulk optimization page.
-	 *
-	 * @since 2.2
-	 *
-	 * @return array The array of unique contexts ('wp' or 'custom-folders').
-	 */
-	public function get_contexts() {
-		$contexts = [];
-		$types = [];
-
-		// Library: in each site.
-		if ( ! is_network_admin() ) {
-			$types['library|wp'] = 1;
-		}
-
-		// Custom folders: in network admin only if network activated, in each site otherwise.
-		if ( imagify_can_optimize_custom_folders() && ( imagify_is_active_for_network() && is_network_admin() || ! imagify_is_active_for_network() ) ) {
-			$types['custom-folders|custom-folders'] = 1;
-		}
-
-		/**
-		 * Filter the types to display in the bulk optimization page.
-		 *
-		 * @since  1.7.1
-		 *
-		 * @param array $types The folder types displayed on the page. If a folder type is "library", the context should be suffixed after a pipe character. They are passed as array keys.
-		 */
-		$types = apply_filters( 'imagify_bulk_page_types', $types );
-		$types = array_filter( (array) $types );
-
-		if ( isset( $types['library|wp'] ) ) {
-			$contexts[] = 'wp';
-		}
-
-		if ( isset( $types['custom-folders|custom-folders'] ) ) {
-			$folders_instance = \Imagify_Folders_DB::get_instance();
-
-			if ( ! $folders_instance->has_items() ) {
-				// New Feature!
-				if ( ! in_array( 'wp', $contexts, true ) ) {
-					$contexts[] = 'wp';
-				}
-			} elseif ( $folders_instance->has_active_folders() ) {
-				$contexts[] = 'custom-folders';
-			}
-		}
-
-		return $contexts;
 	}
 }

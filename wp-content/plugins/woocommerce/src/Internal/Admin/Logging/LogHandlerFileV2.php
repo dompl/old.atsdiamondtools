@@ -80,16 +80,14 @@ class LogHandlerFileV2 extends WC_Log_Handler {
 		$time_string  = static::format_time( $timestamp );
 		$level_string = strtoupper( $level );
 
-		if ( isset( $context['backtrace'] ) && true === filter_var( $context['backtrace'], FILTER_VALIDATE_BOOLEAN ) ) {
-			$context['backtrace'] = static::get_backtrace();
-		}
+		unset( $context['source'] );
+		if ( ! empty( $context ) ) {
+			if ( isset( $context['backtrace'] ) && true === filter_var( $context['backtrace'], FILTER_VALIDATE_BOOLEAN ) ) {
+				$context['backtrace'] = static::get_backtrace();
+			}
 
-		$context_for_entry = $context;
-		unset( $context_for_entry['source'] );
-
-		if ( ! empty( $context_for_entry ) ) {
-			$formatted_context = wp_json_encode( $context_for_entry, JSON_UNESCAPED_UNICODE );
-			$message          .= stripslashes( " CONTEXT: $formatted_context" );
+			$formatted_context = wp_json_encode( $context );
+			$message          .= " CONTEXT: $formatted_context";
 		}
 
 		$entry = "$time_string $level_string $message";

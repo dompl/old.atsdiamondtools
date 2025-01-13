@@ -12,7 +12,7 @@ use Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 use WC_Order;
 use WC_Order_Refund;
-use WCPay\MultiCurrency\Interfaces\MultiCurrencySettingsInterface;
+use WC_Payments;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,21 +43,12 @@ class Analytics {
 	private $multi_currency;
 
 	/**
-	 * Instance of MultiCurrencySettingsInterface.
-	 *
-	 * @var MultiCurrencySettingsInterface $settings_service
-	 */
-	private $settings_service;
-
-	/**
 	 * Constructor
 	 *
-	 * @param MultiCurrency                  $multi_currency   Instance of MultiCurrency.
-	 * @param MultiCurrencySettingsInterface $settings_service Instance of MultiCurrencySettingsInterface.
+	 * @param MultiCurrency $multi_currency Instance of MultiCurrency.
 	 */
-	public function __construct( MultiCurrency $multi_currency, MultiCurrencySettingsInterface $settings_service ) {
-		$this->multi_currency   = $multi_currency;
-		$this->settings_service = $settings_service;
+	public function __construct( MultiCurrency $multi_currency ) {
+		$this->multi_currency = $multi_currency;
 		$this->init();
 	}
 
@@ -72,7 +63,7 @@ class Analytics {
 			$this->register_customer_currencies();
 		}
 
-		if ( $this->settings_service->is_dev_mode() ) {
+		if ( WC_Payments::mode()->is_dev() ) {
 			add_filter( 'woocommerce_analytics_report_should_use_cache', [ $this, 'disable_report_caching' ] );
 		}
 
@@ -114,7 +105,7 @@ class Analytics {
 	 * @return void
 	 */
 	public function register_admin_scripts() {
-		$this->multi_currency->register_script_with_dependencies( self::SCRIPT_NAME, 'dist/multi-currency-analytics' );
+		WC_Payments::register_script_with_dependencies( self::SCRIPT_NAME, 'dist/multi-currency-analytics' );
 	}
 
 	/**
@@ -123,11 +114,6 @@ class Analytics {
 	 * @return void
 	 */
 	public function register_customer_currencies() {
-		$data_registry = Package::container()->get( AssetDataRegistry::class );
-		if ( $data_registry->exists( 'customerCurrencies' ) ) {
-			return;
-		}
-
 		$currencies           = $this->multi_currency->get_all_customer_currencies();
 		$available_currencies = $this->multi_currency->get_available_currencies();
 		$currency_options     = [];
@@ -151,7 +137,8 @@ class Analytics {
 			];
 		}
 
-		$data_registry->add( 'customerCurrencies', $currency_options );
+		$data_registry = Package::container()->get( AssetDataRegistry::class );
+		$data_registry->add( 'customerCurrencies', $currency_options, true );
 	}
 
 	/**

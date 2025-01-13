@@ -1,16 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-inventory-email-field",
 	"title": "Stock level threshold",
 	"category": "widgets",
 	"description": "Stock management minimum quantity.",
-	"keywords": [
-		"products",
-		"inventory",
-		"email",
-		"minimum"
-	],
+	"keywords": [ "products", "inventory", "email", "minimum" ],
 	"textdomain": "default",
 	"attributes": {
 		"name": {

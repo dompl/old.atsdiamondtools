@@ -2,7 +2,7 @@
 /**
  * REST API Payment Gateway Suggestions Controller
  *
- * Handles requests to install and activate dependent plugins.
+ * Handles requests to install and activate depedent plugins.
  */
 
 namespace Automattic\WooCommerce\Admin\API;

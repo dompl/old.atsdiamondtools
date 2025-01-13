@@ -1,7 +1,7 @@
 <?php
 namespace Imagify\Optimization\Data;
 
-use Imagify\Traits\MediaRowTrait;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Optimization data class for the custom folders.
@@ -16,7 +16,7 @@ use Imagify\Traits\MediaRowTrait;
  * @author Grégory Viguier
  */
 class CustomFolders extends AbstractData {
-	use MediaRowTrait;
+	use \Imagify\Traits\MediaRowTrait;
 
 	/**
 	 * The attachment SQL DB class.
@@ -44,17 +44,11 @@ class CustomFolders extends AbstractData {
 			return;
 		}
 
-		$media = $this->get_media();
-
-		if ( ! $media ) {
-			return;
-		}
-
 		// This is required by MediaRowTrait.
-		$this->id = $media->get_id();
+		$this->id = $this->get_media()->get_id();
 
 		// In this context, the media data and the optimization data are stored in the same DB table, so, no need to request twice the DB.
-		$this->row = $media->get_row(); // @phpstan-ignore-line
+		$this->row = $this->get_media()->get_row();
 	}
 
 	/**
@@ -163,10 +157,6 @@ class CustomFolders extends AbstractData {
 
 			if ( $file_path ) {
 				$old_data['hash'] = md5_file( $file_path );
-			}
-
-			if ( key_exists( 'message', $data ) ) {
-				$old_data['message'] = $data['message'];
 			}
 
 			if ( ! $data['success'] ) {

@@ -12,7 +12,6 @@ namespace WooCommerce\PayPalCommerce\ApiClient\Factory;
 use stdClass;
 use WC_Product;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\PaymentPreferences;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\CurrencyGetter;
 
 /**
  * Class PaymentPreferencesFactory
@@ -22,16 +21,16 @@ class PaymentPreferencesFactory {
 	/**
 	 * The currency.
 	 *
-	 * @var CurrencyGetter
+	 * @var string
 	 */
 	private $currency;
 
 	/**
 	 * PaymentPreferencesFactory constructor.
 	 *
-	 * @param CurrencyGetter $currency The currency.
+	 * @param string $currency The currency.
 	 */
-	public function __construct( CurrencyGetter $currency ) {
+	public function __construct( string $currency ) {
 		$this->currency = $currency;
 	}
 
@@ -45,7 +44,7 @@ class PaymentPreferencesFactory {
 		return new PaymentPreferences(
 			array(
 				'value'         => $product->get_meta( '_subscription_sign_up_fee' ) ?: '0',
-				'currency_code' => $this->currency->get(),
+				'currency_code' => $this->currency,
 			)
 		);
 	}

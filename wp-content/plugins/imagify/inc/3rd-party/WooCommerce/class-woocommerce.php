@@ -15,17 +15,17 @@ class WooCommerce {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'woocommerce_single_product_summary', [ $this, 'variable_products_nextgen_compat' ] );
+		add_action( 'woocommerce_single_product_summary', [ $this, 'variable_products_webp_compat' ] );
 	}
 
 	/**
-	 * Add Variable Products Next-gen images Compatibility.
+	 * Add Variable Products Webp Compatibility.
 	 *
 	 * @since 1.10.0
 	 *
 	 * @return void
 	 */
-	public function variable_products_nextgen_compat() {
+	public function variable_products_webp_compat() {
 		global $product;
 
 		if ( ! isset( $product ) || ! $product->is_type( 'variable' ) ) {

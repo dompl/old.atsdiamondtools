@@ -19,10 +19,9 @@ use WooCommerce\PayPalCommerce\WcGateway\Helper\SettingsStatus;
  * Creates the admin message about the gateway being enabled without the PayPal gateway.
  */
 class GatewayWithoutPayPalAdminNotice {
-	private const NOTICE_OK                   = '';
-	private const NOTICE_DISABLED_GATEWAY     = 'disabled_gateway';
-	private const NOTICE_DISABLED_LOCATION    = 'disabled_location';
-	private const NOTICE_DISABLED_CARD_BUTTON = 'disabled_card';
+	private const NOTICE_OK                = '';
+	private const NOTICE_DISABLED_GATEWAY  = 'disabled_gateway';
+	private const NOTICE_DISABLED_LOCATION = 'disabled_location';
 
 	/**
 	 * The gateway ID.
@@ -100,9 +99,6 @@ class GatewayWithoutPayPalAdminNotice {
 	public function message(): ?Message {
 		$notice_type = $this->check();
 
-		$url1 = '';
-		$url2 = '';
-
 		switch ( $notice_type ) {
 			case self::NOTICE_DISABLED_GATEWAY:
 				/* translators: %1$s the gateway name, %2$s URL. */
@@ -117,15 +113,6 @@ class GatewayWithoutPayPalAdminNotice {
 					'%1$s cannot be used without enabling the Checkout location for the PayPal gateway. <a href="%2$s">Enable the Checkout location</a>.',
 					'woocommerce-paypal-payments'
 				);
-				break;
-			case self::NOTICE_DISABLED_CARD_BUTTON:
-				/* translators: %1$s Standard Card Button section URL, %2$s Advanced Card Processing section URL. */
-				$text = __(
-					'The <a href="%1$s">Standard Card Button</a> cannot be used while <a href="%2$s">Advanced Card Processing</a> is enabled.',
-					'woocommerce-paypal-payments'
-				);
-				$url1 = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=ppcp-card-button-gateway' );
-				$url2 = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway&ppcp-tab=ppcp-credit-card-gateway' );
 				break;
 			default:
 				return null;
@@ -143,15 +130,6 @@ class GatewayWithoutPayPalAdminNotice {
 			$name,
 			admin_url( 'admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway' )
 		);
-
-		if ( $notice_type === self::NOTICE_DISABLED_CARD_BUTTON ) {
-			$message = sprintf(
-				$text,
-				$url1,
-				$url2
-			);
-		}
-
 		return new Message( $message, 'warning' );
 	}
 
@@ -180,13 +158,6 @@ class GatewayWithoutPayPalAdminNotice {
 
 		if ( $this->settings_status && ! $this->settings_status->is_smart_button_enabled_for_location( 'checkout' ) ) {
 			return self::NOTICE_DISABLED_LOCATION;
-		}
-
-		$is_dcc_enabled         = $this->settings->has( 'dcc_enabled' ) && $this->settings->get( 'dcc_enabled' ) ?? false;
-		$is_card_button_allowed = $this->settings->has( 'allow_card_button_gateway' ) && $this->settings->get( 'allow_card_button_gateway' );
-
-		if ( $is_dcc_enabled && $is_card_button_allowed ) {
-			return self::NOTICE_DISABLED_CARD_BUTTON;
 		}
 
 		return self::NOTICE_OK;

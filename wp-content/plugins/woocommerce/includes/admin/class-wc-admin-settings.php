@@ -47,23 +47,16 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 			if ( empty( self::$settings ) ) {
 				$settings = array();
 
-				include_once __DIR__ . '/settings/class-wc-settings-page.php';
+				include_once dirname( __FILE__ ) . '/settings/class-wc-settings-page.php';
 
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-general.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-products.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-tax.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-shipping.php';
-				if ( \Automattic\WooCommerce\Admin\Features\Features::is_enabled( 'reactify-classic-payments-settings' ) ) {
-					$settings[] = include __DIR__ . '/settings/class-wc-settings-payment-gateways-react.php';
-				} else {
-					$settings[] = include __DIR__ . '/settings/class-wc-settings-payment-gateways.php';
-				}
+				$settings[] = include __DIR__ . '/settings/class-wc-settings-payment-gateways.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-accounts.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-emails.php';
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-integrations.php';
-				if ( \Automattic\WooCommerce\Admin\Features\Features::is_enabled( 'launch-your-store' ) ) {
-					$settings[] = include __DIR__ . '/settings/class-wc-settings-site-visibility.php';
-				}
 				$settings[] = include __DIR__ . '/settings/class-wc-settings-advanced.php';
 
 				self::$settings = apply_filters( 'woocommerce_get_settings_pages', $settings );
@@ -157,7 +150,7 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 			// Get tabs for the settings page.
 			$tabs = apply_filters( 'woocommerce_settings_tabs_array', array() );
 
-			include __DIR__ . '/views/html-admin-settings.php';
+			include dirname( __FILE__ ) . '/views/html-admin-settings.php';
 		}
 
 		/**
@@ -518,19 +511,11 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 							$visibility_class[] = $value['row_class'];
 						}
 
-						$must_disable = $value['disabled'] ?? false;
-
-						if ( $must_disable ) {
-							$visibility_class[] = 'disabled';
-						}
-
 						$container_class = implode( ' ', $visibility_class );
-						$has_title       = isset( $value['title'] ) && '' !== $value['title'];
-						$has_legend      = isset( $value['legend'] ) && '' !== $value['legend'];
+						$must_disable    = $value['disabled'] ?? false;
 
 						if ( ! isset( $value['checkboxgroup'] ) || 'start' === $value['checkboxgroup'] ) {
-							$has_tooltip = isset( $value['tooltip'] ) && '' !== $value['tooltip'];
-
+							$has_tooltip             = isset( $value['tooltip'] ) && '' !== $value['tooltip'];
 							$tooltip_container_class = $has_tooltip ? 'with-tooltip' : '';
 							?>
 								<tr class="<?php echo esc_attr( $container_class ); ?>">
@@ -547,9 +532,9 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 							<?php
 						}
 
-						if ( $has_title || $has_legend ) {
+						if ( ! empty( $value['title'] ) ) {
 							?>
-								<legend class="<?php echo $has_legend ? '' : 'screen-reader-text'; ?>"><span><?php echo esc_html( $has_legend ? $value['legend'] : $value['title'] ); ?></span></legend>
+								<legend class="screen-reader-text"><span><?php echo esc_html( $value['title'] ); ?></span></legend>
 							<?php
 						}
 
@@ -562,6 +547,7 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 									type="checkbox"
 									class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
 									value="1"
+									<?php disabled( $value['disabled'] ?? false ); ?>
 									<?php checked( $option_value, 'yes' ); ?>
 									<?php echo implode( ' ', $custom_attributes ); // WPCS: XSS ok. ?>
 								/> <?php echo $description; // WPCS: XSS ok. ?>
@@ -778,15 +764,6 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					case 'slotfill_placeholder':
-						?>
-						<div
-							id="<?php echo esc_attr( $value['id'] ); ?>"
-							class="<?php echo esc_attr( $value['class'] ); ?>"
-						>
-						</div>
-						<?php
-						break;
 					// Default: run an action.
 					default:
 						do_action( 'woocommerce_admin_field_' . $value['type'], $value );
@@ -816,18 +793,19 @@ if ( ! class_exists( 'WC_Admin_Settings', false ) ) :
 				$description = $value['desc'];
 			}
 
-			$error_class = ( ! empty( $value['description_is_error'] ) ) ? 'is-error' : '';
+			$description_is_error    = $value['description_is_error'] ?? false;
+			$extra_description_style = $description_is_error ? " style='color:red'" : '';
 
 			if ( $description && in_array( $value['type'], array( 'textarea', 'radio' ), true ) ) {
 				$description = '<p style="margin-top:0">' . wp_kses_post( $description ) . '</p>';
 			} elseif ( $description && in_array( $value['type'], array( 'checkbox' ), true ) ) {
 				$description = wp_kses_post( $description );
 			} elseif ( $description ) {
-				$description = '<p class="description ' . $error_class . '">' . wp_kses_post( $description ) . '</p>';
+				$description = '<p class="description"' . $extra_description_style . '>' . wp_kses_post( $description ) . '</p>';
 			}
 
 			if ( $tooltip_html && in_array( $value['type'], array( 'checkbox' ), true ) ) {
-				$tooltip_html = '<p class="description ' . $error_class . '">' . $tooltip_html . '</p>';
+				$tooltip_html = '<p class="description"' . $extra_description_style . '>' . $tooltip_html . '</p>';
 			} elseif ( $tooltip_html ) {
 				$tooltip_html = wc_help_tip( $tooltip_html );
 			}

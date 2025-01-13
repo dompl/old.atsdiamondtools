@@ -136,8 +136,7 @@ class Error_Handler {
 
 		add_action( 'rest_api_init', array( $this, 'register_verify_error_endpoint' ) );
 
-		// Handle verified errors on admin pages.
-		add_action( 'admin_init', array( $this, 'handle_verified_errors' ) );
+		$this->handle_verified_errors();
 
 		// If the site gets reconnected, clear errors.
 		add_action( 'jetpack_site_registered', array( $this, 'delete_all_errors' ) );
@@ -703,15 +702,11 @@ class Error_Handler {
 			return;
 		}
 
-		wp_admin_notice(
-			esc_html( $message ),
-			array(
-				'type'               => 'error',
-				'dismissible'        => true,
-				'additional_classes' => array( 'jetpack-message', 'jp-connect' ),
-				'attributes'         => array( 'style' => 'display:block !important;' ),
-			)
-		);
+		?>
+		<div class="notice notice-error is-dismissible jetpack-message jp-connect" style="display:block !important;">
+			<p><?php echo esc_html( $message ); ?></p>
+		</div>
+		<?php
 	}
 
 	/**

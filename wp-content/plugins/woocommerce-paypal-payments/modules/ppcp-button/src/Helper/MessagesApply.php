@@ -18,9 +18,17 @@ class MessagesApply {
 	/**
 	 * In which countries credit messaging is available.
 	 *
-	 * @var string[]
+	 * @var array
 	 */
-	private $allowed_countries;
+	private $countries = array(
+		'US',
+		'DE',
+		'GB',
+		'FR',
+		'AU',
+		'IT',
+		'ES',
+	);
 
 	/**
 	 * 2-letter country code of the shop.
@@ -32,12 +40,10 @@ class MessagesApply {
 	/**
 	 * MessagesApply constructor.
 	 *
-	 * @param string[] $allowed_countries In which countries credit messaging is available.
-	 * @param string   $country 2-letter country code of the shop.
+	 * @param string $country 2-letter country code of the shop.
 	 */
-	public function __construct( array $allowed_countries, string $country ) {
-		$this->allowed_countries = $allowed_countries;
-		$this->country           = $country;
+	public function __construct( string $country ) {
+		$this->country = $country;
 	}
 
 	/**
@@ -46,6 +52,6 @@ class MessagesApply {
 	 * @return bool
 	 */
 	public function for_country(): bool {
-		return in_array( $this->country, $this->allowed_countries, true );
+		return in_array( $this->country, $this->countries, true );
 	}
 }

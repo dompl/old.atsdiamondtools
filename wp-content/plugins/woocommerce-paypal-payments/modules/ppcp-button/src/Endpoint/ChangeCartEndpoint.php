@@ -12,7 +12,6 @@ namespace WooCommerce\PayPalCommerce\Button\Endpoint;
 use Exception;
 use Psr\Log\LoggerInterface;
 use WooCommerce\PayPalCommerce\ApiClient\Factory\PurchaseUnitFactory;
-use WooCommerce\PayPalCommerce\Button\Helper\CartProductsHelper;
 
 /**
  * Class ChangeCartEndpoint
@@ -42,7 +41,7 @@ class ChangeCartEndpoint extends AbstractCartEndpoint {
 	 * @param \WC_Shipping        $shipping The current WC shipping object.
 	 * @param RequestData         $request_data The request data helper.
 	 * @param PurchaseUnitFactory $purchase_unit_factory The PurchaseUnit factory.
-	 * @param CartProductsHelper  $cart_products The cart products helper.
+	 * @param \WC_Data_Store      $product_data_store The data store for products.
 	 * @param LoggerInterface     $logger The logger.
 	 */
 	public function __construct(
@@ -50,7 +49,7 @@ class ChangeCartEndpoint extends AbstractCartEndpoint {
 		\WC_Shipping $shipping,
 		RequestData $request_data,
 		PurchaseUnitFactory $purchase_unit_factory,
-		CartProductsHelper $cart_products,
+		\WC_Data_Store $product_data_store,
 		LoggerInterface $logger
 	) {
 
@@ -58,7 +57,7 @@ class ChangeCartEndpoint extends AbstractCartEndpoint {
 		$this->shipping              = $shipping;
 		$this->request_data          = $request_data;
 		$this->purchase_unit_factory = $purchase_unit_factory;
-		$this->cart_products         = $cart_products;
+		$this->product_data_store    = $product_data_store;
 		$this->logger                = $logger;
 
 		$this->logger_tag = 'updating';
@@ -71,19 +70,13 @@ class ChangeCartEndpoint extends AbstractCartEndpoint {
 	 * @throws Exception On error.
 	 */
 	protected function handle_data(): bool {
-		$data = $this->request_data->read_request( $this->nonce() );
-
-		$this->cart_products->set_cart( $this->cart );
-
 		$products = $this->products_from_request();
 
 		if ( ! $products ) {
 			return false;
 		}
 
-		if ( ! ( $data['keepShipping'] ?? false ) ) {
-			$this->shipping->reset_shipping();
-		}
+		$this->shipping->reset_shipping();
 
 		if ( ! $this->add_products( $products ) ) {
 			return false;

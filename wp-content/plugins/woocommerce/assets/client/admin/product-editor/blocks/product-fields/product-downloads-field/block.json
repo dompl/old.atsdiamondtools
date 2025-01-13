@@ -1,14 +1,11 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-downloads-field",
 	"title": "Product downloads",
 	"category": "widgets",
 	"description": "The product downloads.",
-	"keywords": [
-		"products",
-		"downloads"
-	],
+	"keywords": [ "products", "downloads" ],
 	"textdomain": "default",
 	"attributes": {
 		"name": {
@@ -26,7 +23,5 @@
 		"__experimentalToolbar": false
 	},
 	"editorStyle": "file:./editor.css",
-	"usesContext": [
-		"postType"
-	]
+	"usesContext": [ "postType" ]
 }

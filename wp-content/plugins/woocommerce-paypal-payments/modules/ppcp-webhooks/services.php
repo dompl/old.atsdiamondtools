@@ -80,8 +80,6 @@ return array(
 		$order_endpoint = $container->get( 'api.endpoint.order' );
 		$authorized_payments_processor = $container->get( 'wcgateway.processor.authorized-payments' );
 		$payment_token_factory = $container->get( 'vaulting.payment-token-factory' );
-		$payment_token_helper = $container->get( 'vaulting.payment-token-helper' );
-		$refund_fees_updater = $container->get( 'wcgateway.helper.refund-fees-updater' );
 
 		return array(
 			new CheckoutOrderApproved(
@@ -93,14 +91,14 @@ return array(
 			),
 			new CheckoutOrderCompleted( $logger ),
 			new CheckoutPaymentApprovalReversed( $logger ),
-			new PaymentCaptureRefunded( $logger, $refund_fees_updater ),
+			new PaymentCaptureRefunded( $logger ),
 			new PaymentCaptureReversed( $logger ),
 			new PaymentCaptureCompleted( $logger, $order_endpoint ),
-			new VaultPaymentTokenCreated( $logger, $prefix, $authorized_payments_processor, $payment_token_factory, $payment_token_helper ),
+			new VaultPaymentTokenCreated( $logger, $prefix, $authorized_payments_processor, $payment_token_factory ),
 			new VaultPaymentTokenDeleted( $logger ),
 			new PaymentCapturePending( $logger ),
-			new PaymentSaleCompleted( $logger, $container->get( 'paypal-subscriptions.renewal-handler' ) ),
-			new PaymentSaleRefunded( $logger, $refund_fees_updater ),
+			new PaymentSaleCompleted( $logger ),
+			new PaymentSaleRefunded( $logger ),
 			new BillingSubscriptionCancelled( $logger ),
 			new BillingPlanPricingChangeActivated( $logger ),
 			new CatalogProductUpdated( $logger ),
@@ -129,6 +127,18 @@ return array(
 
 	'webhook.is-registered'                   => function( ContainerInterface $container ) : bool {
 		return $container->get( 'webhook.current' ) !== null;
+	},
+
+	'webhook.status.registered-webhooks'      => function( ContainerInterface $container ) : array {
+		$endpoint = $container->get( 'api.endpoint.webhook' );
+		assert( $endpoint instanceof WebhookEndpoint );
+
+		$state = $container->get( 'onboarding.state' );
+		if ( $state->current_state() >= State::STATE_ONBOARDED ) {
+			return $endpoint->list();
+		}
+
+		return array();
 	},
 
 	'webhook.status.registered-webhooks-data' => function( ContainerInterface $container ) : array {

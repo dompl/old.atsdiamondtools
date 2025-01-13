@@ -1,23 +1,16 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "woocommerce/product-sku-field",
 	"title": "Product text control",
 	"category": "woocommerce",
 	"description": "The product sku.",
-	"keywords": [
-		"products",
-		"sku"
-	],
+	"keywords": [ "products", "sku" ],
 	"textdomain": "default",
 	"attributes": {
 		"name": {
 			"type": "string",
 			"__experimentalRole": "content"
-		},
-		"disabled": {
-			"type": "boolean",
-			"default": false
 		}
 	},
 	"supports": {
@@ -30,7 +23,5 @@
 		"__experimentalToolbar": false
 	},
 	"editorStyle": "file:./editor.css",
-	"usesContext": [
-		"postType"
-	]
+	"usesContext": [ "postType" ]
 }

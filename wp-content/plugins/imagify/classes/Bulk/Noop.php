@@ -20,11 +20,10 @@ class Noop extends AbstractBulk {
 	}
 
 	/**
-	 *   * Get ids of all optimized media without Next gen versions.
+	 * Get ids of all optimized media without WebP versions.
 	 *
-	 * @since 2.2
-	 *
-	 * @param string $format Format we are looking for. (webp|avif).
+	 * @since 1.9
+	 * @since 1.9.5 The method doesn't return the IDs directly anymore.
 	 *
 	 * @return array {
 	 *     @type array $ids    A list of media IDs.
@@ -34,7 +33,7 @@ class Noop extends AbstractBulk {
 	 *     }
 	 * }
 	 */
-	public function get_optimized_media_ids_without_format( $format ) {
+	public function get_optimized_media_ids_without_webp() {
 		return [
 			'ids'    => [],
 			'errors' => [

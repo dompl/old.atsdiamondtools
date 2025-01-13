@@ -1,5 +1,5 @@
 /*!
- * paypal-js v5.1.6 (2023-03-27T20:51:02.623Z)
+ * paypal-js v5.1.1 (2022-08-03T17:21:59.218Z)
  * Copyright 2020-present, PayPal, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
  */
 
 /*!
- * paypal-js v6.0.1 (2023-07-19T21:00:13.568Z)
+ * paypal-js v6.0.0 (2023-06-02T19:54:59.307Z)
  * Copyright 2020-present, PayPal, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,5 +31,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */

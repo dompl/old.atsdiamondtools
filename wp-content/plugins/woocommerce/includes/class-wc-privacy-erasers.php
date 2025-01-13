@@ -357,7 +357,7 @@ class WC_Privacy_Erasers {
 		 * Allow extensions to remove their own personal data for this order.
 		 *
 		 * @since 3.4.0
-		 * @param WC_Order $order Order instance.
+		 * @param WC_Order $order A customer object.
 		 */
 		do_action( 'woocommerce_privacy_remove_order_personal_data', $order );
 	}

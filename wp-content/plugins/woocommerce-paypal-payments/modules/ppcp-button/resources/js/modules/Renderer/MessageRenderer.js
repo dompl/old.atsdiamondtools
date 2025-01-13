@@ -1,72 +1,59 @@
-import widgetBuilder from './WidgetBuilder';
+import widgetBuilder from "./WidgetBuilder";
 
 class MessageRenderer {
-	constructor( config ) {
-		this.config = config;
-		this.optionsFingerprint = null;
-		this.currentNumber = 0;
-	}
 
-	renderWithAmount( amount ) {
-		if ( ! this.shouldRender() ) {
-			return;
-		}
+    constructor(config) {
+        this.config = config;
+        this.optionsFingerprint = null;
+    }
 
-		const options = {
-			amount,
-		};
-		if ( this.config.placement ) {
-			options.placement = this.config.placement;
-		}
-		if ( this.config.style ) {
-			options.style = this.config.style;
-		}
+    renderWithAmount(amount) {
+        if (! this.shouldRender()) {
+            return;
+        }
 
-		// sometimes the element is destroyed while the options stay the same
-		if (
-			document
-				.querySelector( this.config.wrapper )
-				.getAttribute( 'data-render-number' ) !==
-			this.currentNumber.toString()
-		) {
-			this.optionsFingerprint = null;
-		}
+        const options = {
+            amount,
+            placement: this.config.placement,
+            style: this.config.style
+        };
 
-		if ( this.optionsEqual( options ) ) {
-			return;
-		}
+        if (this.optionsEqual(options)) {
+            return;
+        }
 
-		const wrapper = document.querySelector( this.config.wrapper );
-		this.currentNumber++;
-		wrapper.setAttribute( 'data-render-number', this.currentNumber );
+        const newWrapper = document.createElement('div');
+        newWrapper.setAttribute('id', this.config.wrapper.replace('#', ''));
 
-		widgetBuilder.registerMessages( this.config.wrapper, options );
-		widgetBuilder.renderMessages( this.config.wrapper );
-	}
+        const oldWrapper = document.querySelector(this.config.wrapper);
+        const sibling = oldWrapper.nextSibling;
+        oldWrapper.parentElement.removeChild(oldWrapper);
+        sibling.parentElement.insertBefore(newWrapper, sibling);
 
-	optionsEqual( options ) {
-		const fingerprint = JSON.stringify( options );
+        widgetBuilder.registerMessages(this.config.wrapper, options);
+        widgetBuilder.renderMessages(this.config.wrapper);
+    }
 
-		if ( this.optionsFingerprint === fingerprint ) {
-			return true;
-		}
+    optionsEqual(options) {
+        const fingerprint = JSON.stringify(options);
 
-		this.optionsFingerprint = fingerprint;
-		return false;
-	}
+        if (this.optionsFingerprint === fingerprint) {
+            return true;
+        }
 
-	shouldRender() {
-		if (
-			typeof paypal === 'undefined' ||
-			typeof paypal.Messages === 'undefined' ||
-			typeof this.config.wrapper === 'undefined'
-		) {
-			return false;
-		}
-		if ( ! document.querySelector( this.config.wrapper ) ) {
-			return false;
-		}
-		return true;
-	}
+        this.optionsFingerprint = fingerprint;
+        return false;
+    }
+
+    shouldRender() {
+
+        if (typeof paypal === 'undefined' || typeof paypal.Messages === 'undefined' || typeof this.config.wrapper === 'undefined' ) {
+            return false;
+        }
+        if (! document.querySelector(this.config.wrapper)) {
+            return false;
+        }
+        return true;
+    }
 }
 export default MessageRenderer;

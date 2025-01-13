@@ -10,11 +10,10 @@ declare(strict_types=1);
 namespace WooCommerce\PayPalCommerce\Webhooks;
 
 use WooCommerce\PayPalCommerce\Onboarding\State;
-use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 
 return array(
-	'wcgateway.settings.fields' => static function ( array $fields, ContainerInterface $container ): array {
+	'wcgateway.settings.fields' => static function ( $container, array $fields ): array {
 		$status_page_fields = array(
 			'webhook_status_heading' => array(
 				'heading'      => __( 'Webhook Status', 'woocommerce-paypal-payments' ),

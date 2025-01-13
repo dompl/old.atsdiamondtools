@@ -143,20 +143,6 @@ class PayUponInvoice {
 		}
 
 		add_filter(
-			'ppcp_partner_referrals_option',
-			function ( array $option ): array {
-				if ( $option['valid'] ) {
-					return $option;
-				}
-				if ( $option['field'] === 'ppcp-onboarding-pui' ) {
-					$option['valid'] = true;
-					$option['value'] = ( $option['value'] ? '1' : '' );
-				}
-				return $option;
-			}
-		);
-
-		add_filter(
 			'ppcp_partner_referrals_data',
 			function ( array $data ): array {
 				try {
@@ -195,7 +181,7 @@ class PayUponInvoice {
 		);
 
 		add_action(
-			'woocommerce_paypal_payments_payment_capture_completed_webhook_handler',
+			'ppcp_payment_capture_completed_webhook_handler',
 			function ( WC_Order $wc_order, string $order_id ) {
 				try {
 					if ( $wc_order->get_payment_method() !== PayUponInvoiceGateway::ID ) {

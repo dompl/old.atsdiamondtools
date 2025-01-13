@@ -1,9 +1,4 @@
 <?php
-/**
- * Interface for a transformer.
- *
- * @deprecated 9.4.0 Use \Automattic\WooCommerce\Admin\RemoteSpecs\Transformers\TransformerInterface instead.
- */
 
 namespace Automattic\WooCommerce\Admin\RemoteInboxNotifications;
 
@@ -15,8 +10,6 @@ use stdClass;
  * Interface TransformerInterface
  *
  * @package Automattic\WooCommerce\Admin\RemoteInboxNotifications
- *
- * @deprecated 9.4.0 Use \Automattic\WooCommerce\Admin\RemoteSpecs\Transformers\TransformerInterface instead.
  */
 interface TransformerInterface {
 	/**
@@ -24,11 +17,11 @@ interface TransformerInterface {
 	 *
 	 * @param mixed         $value a value to transform.
 	 * @param stdClass|null $arguments arguments.
-	 * @param string|null   $default_value default value.
+	 * @param string|null   $default default value.
 	 *
 	 * @return mixed|null
 	 */
-	public function transform( $value, stdClass $arguments = null, $default_value = null );
+	public function transform( $value, stdClass $arguments = null, $default = null);
 
 	/**
 	 * Validate Transformer arguments.

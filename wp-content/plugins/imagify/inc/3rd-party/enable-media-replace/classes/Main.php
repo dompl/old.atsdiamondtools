@@ -5,6 +5,8 @@ use Imagify\Traits\InstanceGetterTrait;
 use Imagify_Enable_Media_Replace_Deprecated;
 use Imagify_Filesystem;
 
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
+
 /**
  * Compat class for Enable Media Replace plugin.
  *
@@ -38,12 +40,12 @@ class Main extends Imagify_Enable_Media_Replace_Deprecated {
 	protected $old_backup_path;
 
 	/**
-	 * List of paths to the old next-gen files.
+	 * List of paths to the old WebP files.
 	 *
 	 * @var   array
 	 * @since 1.9.8
 	 */
-	protected $old_nextgen_paths = [];
+	protected $old_webp_paths = [];
 
 	/**
 	 * Launch the hooks before the files and data are replaced.
@@ -82,26 +84,29 @@ class Main extends Imagify_Enable_Media_Replace_Deprecated {
 		}
 
 		/**
-		 * Keep track of existing next-gen files.
+		 * Keep track of existing WebP files.
 		 *
-		 * Whether the user chooses to rename the files or not, we will need to delete the current next-gen files before creating new ones:
+		 * Whether the user chooses to rename the files or not, we will need to delete the current WebP files before creating new ones:
 		 * - Rename the files: the old ones must be removed, they are useless now.
 		 * - Do not rename the files: the thumbnails may still get new names because of the suffix containing the image dimensions, which may differ (for example when thumbnails are scaled, not cropped).
-		 * In this last case, the thumbnails with the old dimensions are removed from the drive and from the WP’s post meta, so there is no need of keeping orphan next-gen files that would stay on the drive for ever, even after the attachment is deleted from WP.
+		 * In this last case, the thumbnails with the old dimensions are removed from the drive and from the WP’s post meta, so there is no need of keeping orphan WebP files that would stay on the drive for ever, even after the attachment is deleted from WP.
 		 */
 		foreach ( $this->process->get_media()->get_media_files() as $media_file ) {
-			foreach ( [ 'avif', 'webp' ] as $format ) {
-				$this->old_nextgen_paths[] = imagify_path_to_nextgen( $media_file['path'], $format );
-			}
+			$this->old_webp_paths[] = imagify_path_to_webp( $media_file['path'] );
 		}
 
-		// Delete the old backup file and old next-gen files.
+		// Delete the old backup file and old WebP files.
 		add_action( 'imagify_before_auto_optimization',         [ $this, 'delete_backup' ] );
 		add_action( 'imagify_not_optimized_attachment_updated', [ $this, 'delete_backup' ] );
 	}
 
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** HOOKS =================================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
+
 	/**
-	 * Delete previous backup file and next-gen files.
+	 * Delete previous backup file and WebP files.
 	 * This is done after the images have been already replaced by Enable Media Replace.
 	 *
 	 * @since 1.8.4
@@ -121,13 +126,18 @@ class Main extends Imagify_Enable_Media_Replace_Deprecated {
 			$this->old_backup_path = false;
 		}
 
-		if ( ! empty( $this->old_nextgen_paths ) ) {
-			// Delete old next-gen files.
-			$this->old_nextgen_paths = array_filter( $this->old_nextgen_paths, [ $filesystem, 'exists' ] );
-			array_map( [ $filesystem, 'delete' ], $this->old_nextgen_paths );
-			$this->old_nextgen_paths = [];
+		if ( ! empty( $this->old_webp_paths ) ) {
+			// Delete old WebP files.
+			$this->old_webp_paths = array_filter( $this->old_webp_paths, [ $filesystem, 'exists' ] );
+			array_map( [ $filesystem, 'delete' ], $this->old_webp_paths );
+			$this->old_webp_paths = [];
 		}
 	}
+
+
+	/** ----------------------------------------------------------------------------------------- */
+	/** TOOLS =================================================================================== */
+	/** ----------------------------------------------------------------------------------------- */
 
 	/**
 	 * Get the optimization process corresponding to the current media.

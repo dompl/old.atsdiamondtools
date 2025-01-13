@@ -2,22 +2,26 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"name": "woocommerce/product-filter-price",
 	"version": "1.0.0",
-	"title": "Price (Experimental)",
-	"description": "Let shoppers filter products by choosing a price range.",
+	"title": "Product Filter: Price (Beta)",
+	"description": "Enable customers to filter the product collection by choosing a price range.",
 	"category": "woocommerce",
 	"keywords": [ "WooCommerce" ],
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
-	"ancestor": [ "woocommerce/product-filters" ],
+	"apiVersion": 2,
+	"ancestor": [ "woocommerce/product-filter" ],
 	"supports": {
 		"interactivity": true,
-		"html": false
+		"inserter": false
 	},
-	"usesContext": [ "query", "filterParams" ],
+	"usesContext": [ "query", "queryId" ],
 	"attributes": {
-		"clearButton": {
+		"showInputFields": {
 			"type": "boolean",
 			"default": true
+		},
+		"inlineInput": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

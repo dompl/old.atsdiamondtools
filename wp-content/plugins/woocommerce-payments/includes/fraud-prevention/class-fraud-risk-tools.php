@@ -7,12 +7,13 @@
 
 namespace WCPay\Fraud_Prevention;
 
-require_once __DIR__ . '/models/class-check.php';
-require_once __DIR__ . '/models/class-rule.php';
+require_once dirname( __FILE__ ) . '/models/class-check.php';
+require_once dirname( __FILE__ ) . '/models/class-rule.php';
 
 use WC_Payments;
 use WC_Payments_Account;
 use WC_Payments_Features;
+use WC_Payments_API_Client;
 use WCPay\Fraud_Prevention\Models\Check;
 use WCPay\Fraud_Prevention\Models\Rule;
 use WCPay\Constants\Currency_Code;
@@ -126,39 +127,6 @@ class Fraud_Risk_Tools {
 	}
 
 	/**
-	 * Validates the array to see if it's a valid ruleset.
-	 *
-	 * @param   array $array  The array to validate.
-	 *
-	 * @return  bool         Whether if the given array is a ruleset, or not.
-	 */
-	public static function is_valid_ruleset_array( array $array ) {
-		foreach ( $array as $rule ) {
-			if ( ! Rule::validate_array( $rule ) ) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Returns the international IP address rule.
-	 *
-	 * @return  Rule  International IP address rule object.
-	 */
-	public static function get_international_ip_address_rule() {
-		return new Rule(
-			self::RULE_INTERNATIONAL_IP_ADDRESS,
-			WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
-			Check::check(
-				'ip_country',
-				self::get_selling_locations_type_operator(),
-				self::get_selling_locations_string()
-			)
-		);
-	}
-
-	/**
 	 * Returns the standard protection rules.
 	 *
 	 * @return  array
@@ -166,11 +134,19 @@ class Fraud_Risk_Tools {
 	public static function get_standard_protection_settings() {
 		$rules = [
 			// REVIEW An order originates from an IP address outside your country.
-			self::get_international_ip_address_rule(),
+			new Rule(
+				self::RULE_INTERNATIONAL_IP_ADDRESS,
+				Rule::FRAUD_OUTCOME_REVIEW,
+				Check::check(
+					'ip_country',
+					self::get_selling_locations_type_operator(),
+					self::get_selling_locations_string()
+				)
+			),
 			// REVIEW An order exceeds $1,000.00 or 10 items.
 			new Rule(
 				self::RULE_ORDER_ITEMS_THRESHOLD,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::check(
 					'item_count',
 					Check::OPERATOR_GT,
@@ -180,7 +156,7 @@ class Fraud_Risk_Tools {
 			// REVIEW An order exceeds $1,000.00 or 10 items.
 			new Rule(
 				self::RULE_PURCHASE_PRICE_THRESHOLD,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::check(
 					'order_total',
 					Check::OPERATOR_GT,
@@ -190,7 +166,7 @@ class Fraud_Risk_Tools {
 			// REVIEW An order is originated from a different country than the shipping country.
 			new Rule(
 				self::RULE_IP_ADDRESS_MISMATCH,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::check(
 					'ip_billing_country_same',
 					Check::OPERATOR_EQUALS,
@@ -232,7 +208,7 @@ class Fraud_Risk_Tools {
 			// REVIEW An order has less than 2 items or more than 10 items.
 			new Rule(
 				self::RULE_ORDER_ITEMS_THRESHOLD,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::list(
 					Check::LIST_OPERATOR_OR,
 					[
@@ -244,7 +220,7 @@ class Fraud_Risk_Tools {
 			// REVIEW The shipping and billing address don't match.
 			new Rule(
 				self::RULE_ADDRESS_MISMATCH,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::check(
 					'billing_shipping_address_same',
 					Check::OPERATOR_EQUALS,
@@ -254,7 +230,7 @@ class Fraud_Risk_Tools {
 			// REVIEW An order is originated from a different country than the shipping country.
 			new Rule(
 				self::RULE_IP_ADDRESS_MISMATCH,
-				WC_Payments_Features::is_frt_review_feature_active() ? Rule::FRAUD_OUTCOME_REVIEW : Rule::FRAUD_OUTCOME_BLOCK,
+				Rule::FRAUD_OUTCOME_REVIEW,
 				Check::check(
 					'ip_billing_country_same',
 					Check::OPERATOR_EQUALS,
@@ -334,9 +310,9 @@ class Fraud_Risk_Tools {
 		$selling_locations_type = get_option( 'woocommerce_allowed_countries', 'all' );
 		switch ( $selling_locations_type ) {
 			case 'specific':
-				return strtolower( implode( '|', get_option( 'woocommerce_specific_allowed_countries', [] ) ) );
+				return implode( '|', get_option( 'woocommerce_specific_allowed_countries', [] ) );
 			case 'all_except':
-				return strtolower( implode( '|', get_option( 'woocommerce_all_except_countries', [] ) ) );
+				return implode( '|', get_option( 'woocommerce_all_except_countries', [] ) );
 			case 'all':
 				return '';
 			default:

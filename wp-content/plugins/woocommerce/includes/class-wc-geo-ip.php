@@ -633,7 +633,7 @@ class WC_Geo_IP {
 	);
 
 	/**
-	 * Country names.
+	 * Contry names.
 	 *
 	 * @var array
 	 */

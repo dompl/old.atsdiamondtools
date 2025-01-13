@@ -1,35 +1,44 @@
 <?php
 namespace Imagify\Traits;
 
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
+
 /**
  * Trait to use to connect medias and database.
  * It also cache the results.
  * Classes using that trait must define a protected property $db_class_name (string) containing the media SQL DB class name.
  *
  * @since  1.9
+ * @author Grégory Viguier
  */
 trait MediaRowTrait {
 
 	/**
 	 * The media SQL data row.
 	 *
-	 * @var ?array
-	 * @since 1.9
+	 * @var    array
+	 * @since  1.9
+	 * @access protected
+	 * @author Grégory Viguier
 	 */
 	protected $row;
 
 	/**
 	 * The media ID.
 	 *
-	 * @var int
-	 * @since 1.9
+	 * @var    int
+	 * @since  1.9
+	 * @access protected
+	 * @author Grégory Viguier
 	 */
 	protected $id;
 
 	/**
 	 * Get the row.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return array
 	 */
@@ -54,7 +63,9 @@ trait MediaRowTrait {
 	/**
 	 * Update the row.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @param array $data The data to update.
 	 */
@@ -71,7 +82,9 @@ trait MediaRowTrait {
 	/**
 	 * Delete the row.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 */
 	public function delete_row() {
 		if ( ! $this->db_class_name || $this->id <= 0 ) {
@@ -86,7 +99,9 @@ trait MediaRowTrait {
 	/**
 	 * Shorthand to get the DB table instance.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return \Imagify\DB\DBInterface The DB table instance.
 	 */
@@ -97,7 +112,9 @@ trait MediaRowTrait {
 	/**
 	 * Invalidate the row, by setting it to an empty array.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return array The row.
 	 */
@@ -109,7 +126,9 @@ trait MediaRowTrait {
 	/**
 	 * Reset the row cache.
 	 *
-	 * @since 1.9
+	 * @since  1.9
+	 * @access public
+	 * @author Grégory Viguier
 	 *
 	 * @return null The row.
 	 */

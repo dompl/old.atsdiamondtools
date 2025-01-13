@@ -9,14 +9,11 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Webhooks;
 
-use WC_Order;
 use WooCommerce\PayPalCommerce\Onboarding\State;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Container\ServiceProvider;
+use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
 use Exception;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\FactoryModule;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
-use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
+use WooCommerce\PayPalCommerce\Vendor\Interop\Container\ServiceProviderInterface;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
@@ -28,34 +25,24 @@ use WooCommerce\PayPalCommerce\Webhooks\Status\Assets\WebhooksStatusPageAssets;
 /**
  * Class WebhookModule
  */
-class WebhookModule implements ServiceModule, FactoryModule, ExtendingModule, ExecutableModule {
-	use ModuleClassNameIdTrait;
+class WebhookModule implements ModuleInterface {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function services(): array {
-		return require __DIR__ . '/../services.php';
+	public function setup(): ServiceProviderInterface {
+		return new ServiceProvider(
+			require __DIR__ . '/../services.php',
+			require __DIR__ . '/../extensions.php'
+		);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function factories(): array {
-		return require __DIR__ . '/../factories.php';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function extensions(): array {
-		return require __DIR__ . '/../extensions.php';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function run( ContainerInterface $container ): bool {
+	public function run( ContainerInterface $container ): void {
+		$logger = $container->get( 'woocommerce.logger.woocommerce' );
+		assert( $logger instanceof LoggerInterface );
 
 		add_action(
 			'rest_api_init',
@@ -125,35 +112,38 @@ class WebhookModule implements ServiceModule, FactoryModule, ExtendingModule, Ex
 			}
 		);
 
-		add_action(
-			'init',
-			function () use ( $container ) {
-				$page_id = $container->get( 'wcgateway.current-ppcp-settings-page-id' );
-				if ( Settings::CONNECTION_TAB_ID !== $page_id ) {
-					return;
-				}
+		$page_id = $container->get( 'wcgateway.current-ppcp-settings-page-id' );
+		if ( Settings::CONNECTION_TAB_ID === $page_id ) {
+			$asset_loader = $container->get( 'webhook.status.assets' );
+			assert( $asset_loader instanceof WebhooksStatusPageAssets );
+			add_action(
+				'init',
+				array( $asset_loader, 'register' )
+			);
+			add_action(
+				'admin_enqueue_scripts',
+				array( $asset_loader, 'enqueue' )
+			);
 
-				$asset_loader = $container->get( 'webhook.status.assets' );
-				assert( $asset_loader instanceof WebhooksStatusPageAssets );
-				$asset_loader->register();
-				add_action(
-					'admin_enqueue_scripts',
-					array( $asset_loader, 'enqueue' )
-				);
+			try {
+				$webhooks = $container->get( 'webhook.status.registered-webhooks' );
+				$state    = $container->get( 'onboarding.state' );
+				if ( empty( $webhooks ) && $state->current_state() >= State::STATE_ONBOARDED ) {
+					$registrar = $container->get( 'webhook.registrar' );
+					assert( $registrar instanceof WebhookRegistrar );
 
-				try {
-					$webhooks = $container->get( 'webhook.status.registered-webhooks' );
-					$state    = $container->get( 'onboarding.state' );
-					if ( empty( $webhooks ) && $state->current_state() >= State::STATE_ONBOARDED ) {
-						$registrar = $container->get( 'webhook.registrar' );
-						assert( $registrar instanceof WebhookRegistrar );
-						$registrar->register();
-					}
-				} catch ( Exception $exception ) {
-					$container->get( 'woocommerce.logger.woocommerce' )->error( 'Failed to load webhooks list: ' . $exception->getMessage() );
+					// Looks like we cannot call rest_url too early.
+					add_action(
+						'init',
+						function () use ( $registrar ) {
+							$registrar->register();
+						}
+					);
 				}
+			} catch ( Exception $exception ) {
+				$logger->error( 'Failed to load webhooks list: ' . $exception->getMessage() );
 			}
-		);
+		}
 
 		add_action(
 			'woocommerce_paypal_payments_gateway_migrate',
@@ -168,7 +158,13 @@ class WebhookModule implements ServiceModule, FactoryModule, ExtendingModule, Ex
 				);
 			}
 		);
+	}
 
-		return true;
+	/**
+	 * Returns the key for the module.
+	 *
+	 * @return string|void
+	 */
+	public function getKey() {
 	}
 }

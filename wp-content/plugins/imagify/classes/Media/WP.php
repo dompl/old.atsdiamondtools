@@ -1,7 +1,7 @@
 <?php
 namespace Imagify\Media;
 
-use WP_Error;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Media class for the medias in the WP library.
@@ -20,7 +20,7 @@ class WP extends AbstractMedia {
 	 * @access protected
 	 * @author Grégory Viguier
 	 */
-	protected $is_wp53 = false;
+	protected $is_wp53;
 
 	/**
 	 * The constructor.
@@ -211,7 +211,7 @@ class WP extends AbstractMedia {
 		}
 
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/image.php'; // @phpstan-ignore-line
+			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 
 		// Store the path to the current full size file before generating the thumbnails.
@@ -419,6 +419,10 @@ class WP extends AbstractMedia {
 	 * @return bool
 	 */
 	protected function is_wp_53() {
+		if ( isset( $this->is_wp53 ) ) {
+			return $this->is_wp53;
+		}
+
 		$this->is_wp53 = function_exists( 'wp_get_original_image_path' );
 
 		return $this->is_wp53;

@@ -4,9 +4,7 @@
 	"title": "Order Totals Section",
 	"description": "Display the order details section.",
 	"category": "woocommerce",
-	"keywords": [
-		"WooCommerce"
-	],
+	"keywords": [ "WooCommerce" ],
 	"attributes": {
 		"heading": {
 			"type": "string"
@@ -14,10 +12,7 @@
 	},
 	"supports": {
 		"multiple": false,
-		"align": [
-			"wide",
-			"full"
-		],
+		"align": [ "wide", "full" ],
 		"html": false,
 		"spacing": {
 			"padding": true,
@@ -29,6 +24,6 @@
 		}
 	},
 	"textdomain": "woocommerce",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

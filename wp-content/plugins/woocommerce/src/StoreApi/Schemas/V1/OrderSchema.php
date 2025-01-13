@@ -379,7 +379,7 @@ class OrderSchema extends AbstractSchema {
 			'tax_lines'          => array_map(
 				function( $item ) {
 					return [
-						'name'  => $item->get_label(),
+						'name'  => $item->get_name(),
 						'price' => $this->prepare_money_response( $item->get_tax_total() ),
 						'rate'  => strval( $item->get_rate_percent() ),
 					];

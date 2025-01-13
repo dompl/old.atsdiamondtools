@@ -31,11 +31,9 @@ jQuery( function( $ ) {
 			var $tabs_wrapper = $tab.closest( '.wc-tabs-wrapper, .woocommerce-tabs' );
 			var $tabs         = $tabs_wrapper.find( '.wc-tabs, ul.tabs' );
 
-			$tabs.find( 'li' ).attr( 'aria-selected', 'false' );
 			$tabs.find( 'li' ).removeClass( 'active' );
 			$tabs_wrapper.find( '.wc-tab, .panel:not(.panel .panel)' ).hide();
 
-			$tab.closest( 'li' ).attr( 'aria-selected', 'true' );
 			$tab.closest( 'li' ).addClass( 'active' );
 			$tabs_wrapper.find( '#' + $tab.attr( 'href' ).split( '#' )[1] ).show();
 		} )
@@ -127,8 +125,6 @@ jQuery( function( $ ) {
 		this.onResetSlidePosition = this.onResetSlidePosition.bind( this );
 		this.getGalleryItems      = this.getGalleryItems.bind( this );
 		this.openPhotoswipe       = this.openPhotoswipe.bind( this );
-		this.trapFocusPhotoswipe  = this.trapFocusPhotoswipe.bind( this );
-		this.handlePswpTrapFocus  = this.handlePswpTrapFocus.bind( this );
 
 		if ( this.flexslider_enabled ) {
 			this.initFlexslider( args.flexslider );
@@ -217,16 +213,7 @@ jQuery( function( $ ) {
 		// But only zoom if the img is larger than its container.
 		if ( zoomEnabled ) {
 			var zoom_options = $.extend( {
-				touch: false,
-				callback: function() {
-					var zoomImg = this;
-					
-					setTimeout( function() {
-						zoomImg.removeAttribute( 'role' );
-						zoomImg.setAttribute( 'alt', '' );
-						zoomImg.setAttribute( 'aria-hidden', 'true' );
-					}, 100 );
-				}
+				touch: false
 			}, wc_single_product_params.zoom_options );
 
 			if ( 'ontouchstart' in document.documentElement ) {
@@ -249,12 +236,7 @@ jQuery( function( $ ) {
 	 */
 	ProductGallery.prototype.initPhotoswipe = function() {
 		if ( this.zoom_enabled && this.$images.length > 0 ) {
-			this.$target.prepend(
-				'<a href="#" role="button" class="woocommerce-product-gallery__trigger" aria-haspopup="dialog" aria-label="'+
-				wc_single_product_params.i18n_product_gallery_trigger_text + '">' +
-					'<span aria-hidden="true">🔍</span>' +
-				'</a>'
-			);
+			this.$target.prepend( '<a href="#" class="woocommerce-product-gallery__trigger">🔍</a>' );
 			this.$target.on( 'click', '.woocommerce-product-gallery__trigger', this.openPhotoswipe );
 			this.$target.on( 'click', '.woocommerce-product-gallery__image a', function( e ) {
 				e.preventDefault();
@@ -314,10 +296,8 @@ jQuery( function( $ ) {
 		e.preventDefault();
 
 		var pswpElement = $( '.pswp' )[0],
-			items         = this.getGalleryItems(),
-			eventTarget   = $( e.target ),
-			currentTarget = e.currentTarget,
-			self          = this,
+			items       = this.getGalleryItems(),
+			eventTarget = $( e.target ),
 			clicked;
 
 		if ( 0 < eventTarget.closest( '.woocommerce-product-gallery__trigger' ).length ) {
@@ -335,71 +315,12 @@ jQuery( function( $ ) {
 				}
 				captionEl.children[0].textContent = item.title;
 				return true;
-			},
-			timeToIdle: 0, // Ensure the gallery controls are always visible to avoid keyboard navigation issues.
+			}
 		}, wc_single_product_params.photoswipe_options );
 
 		// Initializes and opens PhotoSwipe.
 		var photoswipe = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options );
-
-		photoswipe.listen( 'afterInit', function() {
-			self.trapFocusPhotoswipe( true );
-		});
-
-		photoswipe.listen( 'close', function() {
-			self.trapFocusPhotoswipe( false );
-			currentTarget.focus();
-		});
-
 		photoswipe.init();
-	};
-
-	/**
-	 * Control focus in photoswipe modal.
-	 * 
-	 * @param {boolean} trapFocus - Whether to trap focus or not.
-	 */
-	ProductGallery.prototype.trapFocusPhotoswipe = function( trapFocus ) {
-		var pswp = document.querySelector( '.pswp' );
-
-		if ( ! pswp ) {
-			return;
-		}
-
-		if ( trapFocus ) {
-			pswp.addEventListener( 'keydown', this.handlePswpTrapFocus );
-		} else {
-			pswp.removeEventListener( 'keydown', this.handlePswpTrapFocus );
-		}
-	};
-	
-	/**
-	 * Handle keydown event in photoswipe modal.
-	 */
-	ProductGallery.prototype.handlePswpTrapFocus = function( e ) {
-		var allFocusablesEls      = e.currentTarget.querySelectorAll( 'button:not([disabled])' );
-		var filteredFocusablesEls = Array.from( allFocusablesEls ).filter( function( btn ) {
-			return btn.style.display !== 'none' && window.getComputedStyle( btn ).display !== 'none';
-		} );
-
-		if ( 1 >= filteredFocusablesEls.length ) {
-			return;
-		}
-
-		var firstTabStop = filteredFocusablesEls[0];
-		var lastTabStop  = filteredFocusablesEls[filteredFocusablesEls.length - 1];
-
-		if ( e.key === 'Tab' ) {
-			if ( e.shiftKey ) {
-				if ( document.activeElement === firstTabStop ) {
-					e.preventDefault();
-					lastTabStop.focus();
-				}
-			} else if ( document.activeElement === lastTabStop ) {
-				e.preventDefault();
-				firstTabStop.focus();
-			}
-		}
 	};
 
 	/**

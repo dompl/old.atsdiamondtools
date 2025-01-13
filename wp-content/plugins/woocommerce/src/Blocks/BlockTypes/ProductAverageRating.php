@@ -1,6 +1,4 @@
 <?php
-declare( strict_types = 1 );
-
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
 use Automattic\WooCommerce\Blocks\Utils\StyleAttributesUtils;
@@ -90,29 +88,16 @@ class ProductAverageRating extends AbstractBlock {
 			return '';
 		}
 
-		$styles_and_classes            = StyleAttributesUtils::get_classes_and_styles_by_attributes( $attributes, array(), array( 'extra_classes' ) );
+		$styles_and_classes            = StyleAttributesUtils::get_classes_and_styles_by_attributes( $attributes );
 		$text_align_styles_and_classes = StyleAttributesUtils::get_text_align_class_and_style( $attributes );
 
-		$wrapper_attributes = get_block_wrapper_attributes(
-			array(
-				'class' => implode(
-					' ',
-					array_filter(
-						[
-							'wc-block-components-product-average-rating-counter',
-							esc_attr( $text_align_styles_and_classes['class'] ?? '' ),
-							esc_attr( $styles_and_classes['classes'] ),
-						]
-					)
-				),
-				'style' => esc_attr( $styles_and_classes['styles'] ?? '' ),
-			)
-		);
-
 		return sprintf(
-			'<div %1$s>%2$s</div>',
-			$wrapper_attributes,
+			'<div class="wc-block-components-product-average-rating-counter %1$s %2$s" style="%3$s">%4$s</div>',
+			esc_attr( $text_align_styles_and_classes['class'] ?? '' ),
+			esc_attr( $styles_and_classes['classes'] ),
+			esc_attr( $styles_and_classes['styles'] ?? '' ),
 			$product->get_average_rating()
 		);
 	}
 }
+

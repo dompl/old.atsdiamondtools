@@ -131,12 +131,9 @@ class Imagify_Settings {
 	 * @return bool
 	 */
 	public function is_form_submit() {
-		if ( ! isset( $_POST['option_page'], $_POST['action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			return false;
-		}
-
-		return htmlspecialchars( wp_unslash( $_POST['option_page'] ) ) === $this->settings_group && htmlspecialchars( wp_unslash( $_POST['action'] ) ) === 'update'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return filter_input( INPUT_POST, 'option_page', FILTER_SANITIZE_STRING ) === $this->settings_group && filter_input( INPUT_POST, 'action', FILTER_SANITIZE_STRING ) === 'update';
 	}
+
 
 	/** ----------------------------------------------------------------------------------------- */
 	/** ON FORM SUBMIT ========================================================================== */
@@ -358,8 +355,6 @@ class Imagify_Settings {
 		if ( $old_key === $new_key ) {
 			return;
 		}
-
-		delete_transient( 'imagify_user_cache' );
 
 		// Handle API key validation cache and notices.
 		if ( Imagify_Requirements::is_api_key_valid( true ) ) {
@@ -747,74 +742,6 @@ class Imagify_Settings {
 			echo $args['info'];
 			?>
 		</span>
-		<?php
-	}
-
-	/**
-	 * Display styled radio list group.
-	 *
-	 * @param array $args Arguments:
-	 *                {option_name}   string The option name. E.g. 'disallowed-sizes'. Mandatory.
-	 *                {values}        array  List of values to display, in the form of 'value' => 'Label'. Mandatory.
-	 *                {attributes}    array  A list of HTML attributes, as 'attribute' => 'value'.
-	 *                {current_value} int|bool USE ONLY WHEN DEALING WITH DATA THAT IS NOT SAVED IN THE PLUGIN OPTIONS. If not provided, the field will automatically get the value from the options.
-	 *
-	 * @return void
-	 */
-	public function field_inline_radio_list( $args ) {
-		$args = array_merge(
-			[
-				'option_name'   => '',
-				'values'        => [],
-				'info'          => '',
-				'attributes'    => [],
-				'current_value' => false,
-			],
-			$args
-		);
-
-		if ( ! $args['option_name'] || ! $args['values'] ) {
-			return;
-		}
-
-		if ( is_numeric( $args['current_value'] ) || is_string( $args['current_value'] ) ) {
-			$current_value = $args['current_value'];
-		} else {
-			$current_value = $this->options->get( $args['option_name'] );
-		}
-
-		$option_name_class = sanitize_html_class( $args['option_name'] );
-		$attributes        = array_merge( [
-			'name'  => $this->option_name . '[' . $args['option_name'] . ']',
-			'id'    => 'imagify_' . $option_name_class . '_%s',
-			'class' => 'imagify-row-radio',
-		], $args['attributes'] );
-
-		$id_attribute = $attributes['id'];
-		unset( $attributes['id'] );
-		$args['attributes'] = self::build_attributes( $attributes );
-		?>
-		<div class="imagify-setting-optim-level">
-			<p class="imagify-inline-options imagify-inline-options-<?php echo esc_attr( $args['info_class'] ); ?>">
-			<?php
-			foreach ( $args['values'] as $value => $label ) {
-				$input_id = sprintf( $id_attribute, sanitize_html_class( $value ) );
-				?>
-			<input type="radio" value="<?php echo esc_attr( $value ); ?>" id="<?php echo $input_id; ?>"<?php echo $args['attributes']; ?> <?php checked( $current_value, $value ); ?> />
-			<label for="<?php echo $input_id; ?>" onclick=""><?php echo $label; ?></label>
-				<?php
-			}
-			?>
-			</p>
-			<span id="<?php
-			echo $attributes['aria-describedby'];
-			?>" class="imagify-<?php echo esc_attr( $args['info_class'] ); ?>">
-				<span class="dashicons dashicons-info"></span>
-				<?php
-				echo $args['info'];
-				?>
-			</span>
-		</div>
 		<?php
 	}
 

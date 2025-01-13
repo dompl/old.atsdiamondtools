@@ -8,7 +8,6 @@ namespace Automattic\WooCommerce\Internal\DataStores\Orders;
 use Automattic\Jetpack\Constants;
 use Automattic\WooCommerce\Caches\OrderCache;
 use Automattic\WooCommerce\Internal\Admin\Orders\EditLock;
-use Automattic\WooCommerce\Internal\CostOfGoodsSold\CogsAwareTrait;
 use Automattic\WooCommerce\Internal\Utilities\DatabaseUtil;
 use Automattic\WooCommerce\Proxies\LegacyProxy;
 use Automattic\WooCommerce\Utilities\ArrayUtil;
@@ -23,8 +22,6 @@ defined( 'ABSPATH' ) || exit;
  * This class is the standard data store to be used when the custom orders table is in use.
  */
 class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements \WC_Object_Data_Store_Interface, \WC_Order_Data_Store_Interface {
-
-	use CogsAwareTrait;
 
 	/**
 	 * Order IDs for which we are checking sync on read in the current request. In WooCommerce, using wc_get_order is a very common pattern, to avoid performance issues, we only sync on read once per request per order. This works because we consider out of sync orders to be an anomaly, so we don't recommend running HPOS with incompatible plugins.
@@ -101,7 +98,7 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	);
 
 	/**
-	 * Meta keys that are considered ephemeral and do not trigger a full save (updating modified date) when changed.
+	 * Meta keys that are considered ephemereal and do not trigger a full save (updating modified date) when changed.
 	 *
 	 * @var string[]
 	 */
@@ -534,7 +531,7 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	 *
 	 * @return string Alias.
 	 */
-	private function get_order_table_alias(): string {
+	private function get_order_table_alias() : string {
 		return 'o';
 	}
 
@@ -543,7 +540,7 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	 *
 	 * @return string Alias.
 	 */
-	private function get_op_table_alias(): string {
+	private function get_op_table_alias() : string {
 		return 'p';
 	}
 
@@ -554,7 +551,7 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	 *
 	 * @return string Alias.
 	 */
-	private function get_address_table_alias( string $type ): string {
+	private function get_address_table_alias( string $type ) : string {
 		return 'billing' === $type ? 'b' : 's';
 	}
 
@@ -592,24 +589,11 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 		}
 
 		self::$backfilling_order_ids[] = $order->get_id();
-
-		// Attempt to create the backup post if missing.
-		if ( $order->get_id() && is_null( get_post( $order->get_id() ) ) ) {
-			if ( ! $this->maybe_create_backup_post( $order, 'backfill' ) ) {
-				// translators: %d is an order ID.
-				$this->error_logger->warning( sprintf( __( 'Unable to create backup post for order %d.', 'woocommerce' ), $order->get_id() ) );
-				return;
-			}
-		}
-
 		$this->update_order_meta_from_object( $order );
 		$order_class = get_class( $order );
 		$post_order  = new $order_class();
 		$post_order->set_id( $order->get_id() );
-
-		if ( $cpt_data_store->order_exists( $order->get_id() ) ) {
-			$cpt_data_store->read( $post_order );
-		}
+		$cpt_data_store->read( $post_order );
 
 		// This compares the order data to the post data and set changes array for props that are changed.
 		$post_order->set_props( $order->get_data() );
@@ -643,69 +627,6 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 		 * @param \WC_Order $order The order object.
 		 */
 		do_action( 'woocommerce_hpos_post_record_backfilled', $order );
-	}
-
-	/**
-	 * Updates an order (in this datastore) from another order object.
-	 *
-	 * @param \WC_Abstract_Order $order Source order.
-	 * @return bool Whether the order was updated.
-	 */
-	public function update_order_from_object( $order ) {
-		$hpos_order = new \WC_Order();
-		$hpos_order->set_id( $order->get_id() );
-		$this->read( $hpos_order );
-		$hpos_order->set_props( $order->get_data() );
-
-		// Meta keys.
-		foreach ( $hpos_order->get_meta_data() as &$meta ) {
-			$hpos_order->delete_meta_data( $meta->key );
-		}
-
-		foreach ( $order->get_meta_data() as &$meta ) {
-			$hpos_order->add_meta_data( $meta->key, $meta->value );
-		}
-
-		add_filter( 'woocommerce_orders_table_datastore_should_save_after_meta_change', '__return_false' );
-		$hpos_order->save_meta_data();
-		remove_filter( 'woocommerce_orders_table_datastore_should_save_after_meta_change', '__return_false' );
-
-		$db_rows = $this->get_db_rows_for_order( $hpos_order, 'update', true );
-		foreach ( $db_rows as $db_update ) {
-			ksort( $db_update['data'] );
-			ksort( $db_update['format'] );
-			$this->persist_db_row( $db_update );
-		}
-
-		return true;
-	}
-
-	/**
-	 * Helper method to persist a DB row to database. Uses insert_or_update when possible.
-	 *
-	 * @param array $update Data containing atleast `table`, `data` and `format` keys, but also preferably `where` and `where_format` to use `insert_or_update`.
-	 *
-	 * @return bool|int Number of rows affected, boolean false on error.
-	 */
-	private function persist_db_row( $update ) {
-		if ( isset( $update['where'] ) ) {
-			$row_updated = $this->database_util->insert_or_update(
-				$update['table'],
-				$update['data'],
-				$update['where'],
-				$update['format'],
-				$update['where_format']
-			);
-			// row_updated can be 0 when there are no changes. So we check for type as well as row count.
-			$result = false !== $row_updated;
-		} else {
-			$result = $this->database_util->insert_on_duplicate_key_update(
-				$update['table'],
-				$update['data'],
-				array_values( $update['format'] ),
-			);
-		}
-		return $result;
 	}
 
 	/**
@@ -1184,7 +1105,7 @@ WHERE
 	 * @param int $order_id The order id to check.
 	 * @return bool True if an order exists with the given name.
 	 */
-	public function order_exists( $order_id ): bool {
+	public function order_exists( $order_id ) : bool {
 		global $wpdb;
 
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -1223,7 +1144,7 @@ WHERE
 		$data      = $this->get_order_data_for_ids( $order_ids );
 
 		if ( count( $data ) !== count( $order_ids ) ) {
-			throw new \Exception( esc_html__( 'Invalid order IDs in call to read_multiple()', 'woocommerce' ) );
+			throw new \Exception( __( 'Invalid order IDs in call to read_multiple()', 'woocommerce' ) );
 		}
 
 		$data_synchronizer = wc_get_container()->get( DataSynchronizer::class );
@@ -1247,17 +1168,11 @@ WHERE
 		$load_posts_for = array_diff( $order_ids, array_merge( self::$reading_order_ids, self::$backfilling_order_ids ) );
 		$post_orders    = $data_sync_enabled ? $this->get_post_orders_for_ids( array_intersect_key( $orders, array_flip( $load_posts_for ) ) ) : array();
 
-		$cogs_is_enabled = $this->cogs_is_enabled();
-
 		foreach ( $data as $order_data ) {
 			$order_id = absint( $order_data->id );
 			$order    = $orders[ $order_id ];
 
 			$this->init_order_record( $order, $order_id, $order_data );
-
-			if ( $order->has_cogs() && $cogs_is_enabled ) {
-				$this->read_cogs_data( $order );
-			}
 
 			if ( $data_sync_enabled && $this->should_sync_order( $order ) && isset( $post_orders[ $order_id ] ) ) {
 				self::$reading_order_ids[] = $order_id;
@@ -1267,36 +1182,13 @@ WHERE
 	}
 
 	/**
-	 * Read the Cost of Goods Sold value for a given order from the database, if available, and apply it to the order.
-	 *
-	 * @param \WC_Abstract_Order $order The order to get the COGS value for.
-	 */
-	private function read_cogs_data( WC_Abstract_Order $order ) {
-		$meta_entry = $this->data_store_meta->get_metadata_by_key( $order, '_cogs_total_value' );
-		$cogs_value = false === $meta_entry ? 0 : (float) current( $meta_entry )->meta_value;
-
-		/**
-		 * Filter to customize the Cost of Goods Sold value that gets loaded for a given order.
-		 *
-		 * @since 9.5.0
-		 *
-		 * @param float $cogs_value The value as read from the database.
-		 * @param WC_Abstract_Order $product The order for which the value is being loaded.
-		 */
-		$cogs_value = apply_filters( 'woocommerce_load_order_cogs_value', $cogs_value, $order );
-
-		$order->set_cogs_total_value( (float) $cogs_value );
-		$order->apply_changes();
-	}
-
-	/**
 	 * Helper method to check whether to sync the order.
 	 *
 	 * @param \WC_Abstract_Order $order Order object.
 	 *
 	 * @return bool Whether the order should be synced.
 	 */
-	private function should_sync_order( \WC_Abstract_Order $order ): bool {
+	private function should_sync_order( \WC_Abstract_Order $order ) : bool {
 		$draft_order    = in_array( $order->get_status(), array( 'draft', 'auto-draft' ), true );
 		$already_synced = in_array( $order->get_id(), self::$reading_order_ids, true );
 		return ! $draft_order && ! $already_synced;
@@ -1333,7 +1225,7 @@ WHERE
 	 *
 	 * @return array Filtered meta data.
 	 */
-	public function filter_raw_meta_data( &$object, $raw_meta_data ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound
+	public function filter_raw_meta_data( &$object, $raw_meta_data ) {
 		$filtered_meta_data = parent::filter_raw_meta_data( $object, $raw_meta_data );
 		$allowed_keys       = array(
 			'_billing_address_index',
@@ -1341,7 +1233,7 @@ WHERE
 		);
 		$allowed_meta       = array_filter(
 			$raw_meta_data,
-			function ( $meta ) use ( $allowed_keys ) {
+			function( $meta ) use ( $allowed_keys ) {
 				return in_array( $meta->meta_key, $allowed_keys, true );
 			}
 		);
@@ -1691,7 +1583,15 @@ WHERE
 		);
 		// phpcs:enable
 
-		$order_data = array();
+		$meta_data_query = $this->get_order_meta_select_statement();
+		$order_data      = array();
+		$meta_data       = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $meta_data_query and $order_meta_table is autogenerated and should already be prepared. $id_placeholder is already prepared.
+				"$meta_data_query WHERE $order_meta_table.order_id in ( $id_placeholder )",
+				$ids
+			)
+		);
 
 		foreach ( $table_data as $table_datum ) {
 			$id                = $table_datum->{"{$order_table_alias}_id"};
@@ -1715,27 +1615,14 @@ WHERE
 			$order_data[ $id ]->meta_data = array();
 		}
 
-		if ( count( $order_data ) > 0 ) {
-			$meta_order_ids            = array_keys( $order_data );
-			$meta_order_id_placeholder = implode( ', ', array_fill( 0, count( $meta_order_ids ), '%d' ) );
-			$meta_data_query           = $this->get_order_meta_select_statement();
-			$meta_data                 = $wpdb->get_results(
-				$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $meta_data_query and $order_meta_table is autogenerated and should already be prepared. $id_placeholder is already prepared.
-					"$meta_data_query WHERE $order_meta_table.order_id in ( $meta_order_id_placeholder )",
-					$ids
-				)
+		foreach ( $meta_data as $meta_datum ) {
+			// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Not a meta query.
+			$order_data[ $meta_datum->order_id ]->meta_data[] = (object) array(
+				'meta_id'    => $meta_datum->id,
+				'meta_key'   => $meta_datum->meta_key,
+				'meta_value' => $meta_datum->meta_value,
 			);
-
-			foreach ( $meta_data as $meta_datum ) {
-				// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Not a meta query.
-				$order_data[ $meta_datum->order_id ]->meta_data[] = (object) array(
-					'meta_id'    => $meta_datum->id,
-					'meta_key'   => $meta_datum->meta_key,
-					'meta_value' => $meta_datum->meta_value,
-				);
-				// phpcs:enable
-			}
+			// phpcs:enable
 		}
 		return $order_data;
 	}
@@ -1900,12 +1787,22 @@ FROM $order_meta_table
 	 * @since 6.8.0
 	 */
 	protected function persist_order_to_db( &$order, bool $force_all_fields = false ) {
-		$context = ( 0 === absint( $order->get_id() ) ) ? 'create' : 'update';
+		$context   = ( 0 === absint( $order->get_id() ) ) ? 'create' : 'update';
+		$data_sync = wc_get_container()->get( DataSynchronizer::class );
 
 		if ( 'create' === $context ) {
-			$post_id = $this->maybe_create_backup_post( $order, 'create' );
+			$post_id = wp_insert_post(
+				array(
+					'post_type'     => $data_sync->data_sync_is_enabled() ? $order->get_type() : $data_sync::PLACEHOLDER_ORDER_POST_TYPE,
+					'post_status'   => 'draft',
+					'post_parent'   => $order->get_changes()['parent_id'] ?? $order->get_data()['parent_id'] ?? 0,
+					'post_date'     => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getOffsetTimestamp() ),
+					'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getTimestamp() ),
+				)
+			);
+
 			if ( ! $post_id ) {
-				throw new \Exception( esc_html__( 'Could not create order in posts table.', 'woocommerce' ) );
+				throw new \Exception( __( 'Could not create order in posts table.', 'woocommerce' ) );
 			}
 
 			$order->set_id( $post_id );
@@ -1921,10 +1818,15 @@ FROM $order_meta_table
 			ksort( $update['data'] );
 			ksort( $update['format'] );
 
-			$result = $this->persist_db_row( $update );
+			$result = $this->database_util->insert_on_duplicate_key_update(
+				$update['table'],
+				$update['data'],
+				array_values( $update['format'] )
+			);
+
 			if ( false === $result ) {
 				// translators: %s is a table name.
-				throw new \Exception( esc_html( sprintf( __( 'Could not persist order to database table "%s".', 'woocommerce' ), $update['table'] ) ) );
+				throw new \Exception( sprintf( __( 'Could not persist order to database table "%s".', 'woocommerce' ), $update['table'] ) );
 			}
 		}
 
@@ -1932,81 +1834,6 @@ FROM $order_meta_table
 		$this->update_address_index_meta( $order, $changes );
 		$default_taxonomies = $this->init_default_taxonomies( $order, array() );
 		$this->set_custom_taxonomies( $order, $default_taxonomies );
-
-		if ( $order->has_cogs() && $this->cogs_is_enabled() ) {
-			$this->save_cogs_data( $order );
-		}
-	}
-
-	/**
-	 * Save the Cost of Goods Sold value of a given order to the database.
-	 *
-	 * @param WC_Abstract_Order $order The order to save the COGS value for.
-	 */
-	private function save_cogs_data( WC_Abstract_Order $order ) {
-		$cogs_value = $order->get_cogs_total_value();
-
-		/**
-		 * Filter to customize the Cost of Goods Sold value that gets saved for a given order,
-		 * or to suppress the saving of the value (so that custom storage can be used).
-		 *
-		 * @since 9.5.0
-		 *
-		 * @param float|null $cogs_value The value to be written to the database. If returned as null, nothing will be written.
-		 * @param WC_Abstract_Order $item The order for which the value is being saved.
-		 */
-		$cogs_value = apply_filters( 'woocommerce_save_order_cogs_value', $cogs_value, $order );
-		if ( is_null( $cogs_value ) ) {
-			return;
-		}
-
-		$existing_meta = $this->data_store_meta->get_metadata_by_key( $order, '_cogs_total_value' );
-
-		if ( 0.0 === $cogs_value && $existing_meta ) {
-			$existing_meta = current( $existing_meta );
-			$this->data_store_meta->delete_meta( $order, $existing_meta );
-		} elseif ( $existing_meta ) {
-				$existing_meta        = current( $existing_meta );
-				$existing_meta->key   = '_cogs_total_value';
-				$existing_meta->value = $cogs_value;
-				$this->data_store_meta->update_meta( $order, $existing_meta );
-		} else {
-			$meta        = new \WC_Meta_Data();
-			$meta->key   = '_cogs_total_value';
-			$meta->value = $cogs_value;
-			$this->data_store_meta->add_meta( $order, $meta );
-		}
-	}
-
-	/**
-	 * Takes care of creating the backup post in the posts table (placeholder or actual order post, depending on sync settings).
-	 *
-	 * @since 8.8.0
-	 *
-	 * @param \WC_Abstract_Order $order   The order.
-	 * @param string             $context The context: either 'create' or 'backfill'.
-	 * @return int The new post ID.
-	 */
-	protected function maybe_create_backup_post( &$order, string $context ): int {
-		$data_sync = wc_get_container()->get( DataSynchronizer::class );
-
-		$data = array(
-			'post_type'     => $data_sync->data_sync_is_enabled() ? $order->get_type() : $data_sync::PLACEHOLDER_ORDER_POST_TYPE,
-			'post_status'   => 'draft',
-			'post_parent'   => $order->get_changes()['parent_id'] ?? $order->get_data()['parent_id'] ?? 0,
-			'post_date'     => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getOffsetTimestamp() ),
-			'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getTimestamp() ),
-		);
-
-		if ( 'backfill' === $context ) {
-			if ( ! $order->get_id() ) {
-				return 0;
-			}
-
-			$data['import_id'] = $order->get_id();
-		}
-
-		return wp_insert_post( $data );
 	}
 
 	/**
@@ -2141,26 +1968,21 @@ FROM $order_meta_table
 
 			if ( $row ) {
 				$result[] = array(
-					'table'        => self::get_addresses_table_name(),
-					'data'         => array_merge(
+					'table'  => self::get_addresses_table_name(),
+					'data'   => array_merge(
 						$row['data'],
 						array(
 							'order_id'     => $order->get_id(),
 							'address_type' => $address_type,
 						)
 					),
-					'format'       => array_merge(
+					'format' => array_merge(
 						$row['format'],
 						array(
 							'order_id'     => '%d',
 							'address_type' => '%s',
 						)
 					),
-					'where'        => array(
-						'order_id'     => $order->get_id(),
-						'address_type' => $address_type,
-					),
-					'where_format' => array( '%d', '%s' ),
 				);
 			}
 		}
@@ -2177,24 +1999,7 @@ FROM $order_meta_table
 		 */
 		$ext_rows = apply_filters( 'woocommerce_orders_table_datastore_extra_db_rows_for_order', array(), $order, $context );
 
-		/**
-		 * Filters the rows that are going to be inserted or updated during an order save.
-		 *
-		 * @since 8.8.0
-		 * @internal Use 'woocommerce_orders_table_datastore_extra_db_rows_for_order' for adding rows to the database save.
-		 *
-		 * @param array     $rows    Array of rows to be inserted/updated. See 'woocommerce_orders_table_datastore_extra_db_rows_for_order' for exact format.
-		 * @param \WC_Order $order   The order object.
-		 * @param string    $context The context of the operation: 'create' or 'update'.
-		 */
-		$result = apply_filters(
-			'woocommerce_orders_table_datastore_db_rows_for_order',
-			array_merge( $result, $ext_rows ),
-			$order,
-			$context
-		);
-
-		return $result;
+		return array_merge( $result, $ext_rows );
 	}
 
 	/**
@@ -2307,7 +2112,7 @@ FROM $order_meta_table
 				/**
 				 * Fires immediately after an order is deleted.
 				 *
-				 * @since 2.7.0
+				 * @since
 				 *
 				 * @param int $order_id ID of the order that has been deleted.
 				 */
@@ -2332,7 +2137,7 @@ FROM $order_meta_table
 				/**
 				 * Fires immediately after an order is trashed.
 				 *
-				 * @since 2.7.0
+				 * @since
 				 *
 				 * @param int $order_id ID of the order that has been trashed.
 				 */
@@ -2393,7 +2198,7 @@ FROM $order_meta_table
 	 *
 	 * @return void
 	 */
-	private function upshift_or_delete_child_orders( $order ): void {
+	private function upshift_or_delete_child_orders( $order ) : void {
 		global $wpdb;
 
 		$order_table     = self::get_orders_table_name();
@@ -2600,7 +2405,7 @@ FROM $order_meta_table
 		$this->persist_save( $order );
 
 		// Do not fire 'woocommerce_new_order' for draft statuses for backwards compatibility.
-		if ( in_array( $order->get_status( 'edit' ), array( 'auto-draft', 'draft', 'checkout-draft' ), true ) ) {
+		if ( 'auto-draft' === $order->get_status( 'edit' ) ) {
 			return;
 		}
 
@@ -2662,7 +2467,8 @@ FROM $order_meta_table
 	 * @param \WC_Order $order Order object.
 	 */
 	public function update( &$order ) {
-		$previous_status = ArrayUtil::get_value_or_default( $order->get_data(), 'status', 'new' );
+		$previous_status = ArrayUtil::get_value_or_default( $order->get_data(), 'status' );
+		$changes         = $order->get_changes();
 
 		// Before updating, ensure date paid is set if missing.
 		if (
@@ -2697,15 +2503,8 @@ FROM $order_meta_table
 		$order->apply_changes();
 		$this->clear_caches( $order );
 
-		$draft_statuses = array( 'new', 'auto-draft', 'draft', 'checkout-draft' );
-
-		// For backwards compatibility, this hook should be fired only if the new status is not one of the draft statuses and the previous status was one of the draft statuses.
-		if (
-			! empty( $changes['status'] )
-			&& $changes['status'] !== $previous_status
-			&& ! in_array( $changes['status'], $draft_statuses, true )
-			&& in_array( $previous_status, $draft_statuses, true )
-		) {
+		// For backwards compatibility, moving an auto-draft order to a valid status triggers the 'woocommerce_new_order' hook.
+		if ( ! empty( $changes['status'] ) && 'auto-draft' === $previous_status ) {
 			do_action( 'woocommerce_new_order', $order->get_id(), $order ); // phpcs:ignore WooCommerce.Commenting.CommentHooks.MissingHookComment
 			return;
 		}
@@ -2720,7 +2519,7 @@ FROM $order_meta_table
 	}
 
 	/**
-	 * Proxy to updating order meta. Here for backward compatibility reasons.
+	 * Proxy to udpating order meta. Here for backward compatibility reasons.
 	 *
 	 * @param \WC_Order $order Order object.
 	 *
@@ -2904,6 +2703,7 @@ FROM $order_meta_table
 		if ( $save ) {
 			$order->save_meta_data();
 		}
+
 	}
 
 	/**
@@ -3071,7 +2871,7 @@ CREATE TABLE $meta_table (
 	 * @param  WC_Data $object WC_Data object.
 	 * @return array
 	 */
-	public function read_meta( &$object ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound
+	public function read_meta( &$object ) {
 		$raw_meta_data = $this->data_store_meta->read_meta( $object );
 		return $this->filter_raw_meta_data( $object, $raw_meta_data );
 	}
@@ -3084,7 +2884,7 @@ CREATE TABLE $meta_table (
 	 *
 	 * @return bool
 	 */
-	public function delete_meta( &$object, $meta ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound
+	public function delete_meta( &$object, $meta ) {
 		global $wpdb;
 
 		if ( $this->should_backfill_post_record() && isset( $meta->id ) ) {
@@ -3132,7 +2932,7 @@ CREATE TABLE $meta_table (
 	 *
 	 * @return int|bool  meta ID or false on failure
 	 */
-	public function add_meta( &$object, $meta ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound
+	public function add_meta( &$object, $meta ) {
 		$add_meta        = $this->data_store_meta->add_meta( $object, $meta );
 		$meta->id        = $add_meta;
 		$changes_applied = $this->after_meta_change( $object, $meta );
@@ -3154,7 +2954,7 @@ CREATE TABLE $meta_table (
 	 *
 	 * @return bool The number of rows updated, or false on error.
 	 */
-	public function update_meta( &$object, $meta ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound
+	public function update_meta( &$object, $meta ) {
 		$update_meta     = $this->data_store_meta->update_meta( $object, $meta );
 		$changes_applied = $this->after_meta_change( $object, $meta );
 
@@ -3207,17 +3007,6 @@ CREATE TABLE $meta_table (
 		$current_time      = $this->legacy_proxy->call_function( 'current_time', 'mysql', 1 );
 		$current_date_time = new \WC_DateTime( $current_time, new \DateTimeZone( 'GMT' ) );
 
-		$should_save =
-			$order->get_date_modified() < $current_date_time && empty( $order->get_changes() )
-			&& ( ! is_object( $meta ) || ! in_array( $meta->key, $this->ephemeral_meta_keys, true ) );
-
-		/**
-		 * Allows code to skip a full order save() when metadata is changed.
-		 *
-		 * @since 8.8.0
-		 *
-		 * @param bool $should_save Whether to trigger a full save after metadata is changed.
-		 */
-		return apply_filters( 'woocommerce_orders_table_datastore_should_save_after_meta_change', $should_save );
+		return $order->get_date_modified() < $current_date_time && empty( $order->get_changes() ) && ( ! is_object( $meta ) || ! in_array( $meta->key, $this->ephemeral_meta_keys, true ) );
 	}
 }

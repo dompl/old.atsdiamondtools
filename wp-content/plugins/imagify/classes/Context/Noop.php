@@ -9,7 +9,7 @@ use \Imagify\Traits\InstanceGetterTrait;
  * @since  1.9
  * @author Grégory Viguier
  */
-final class Noop implements ContextInterface {
+class Noop implements ContextInterface {
 	use InstanceGetterTrait;
 
 	/**

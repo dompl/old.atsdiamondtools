@@ -22,6 +22,7 @@ class Onboarding {
 		OnboardingProfile::init();
 		OnboardingSetupWizard::instance()->init();
 		OnboardingSync::instance()->init();
+		OnboardingThemes::init();
 		OnboardingFonts::init();
 	}
 }

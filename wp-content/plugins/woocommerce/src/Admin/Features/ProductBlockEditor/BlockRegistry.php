@@ -41,8 +41,6 @@ class BlockRegistry {
 		'woocommerce/product-text-area-field',
 		'woocommerce/product-number-field',
 		'woocommerce/product-linked-list-field',
-		'woocommerce/product-select-field',
-		'woocommerce/product-notice-field',
 	);
 
 	/**
@@ -50,8 +48,6 @@ class BlockRegistry {
 	 */
 	const PRODUCT_FIELDS_BLOCKS = array(
 		'woocommerce/product-catalog-visibility-field',
-		'woocommerce/product-custom-fields',
-		'woocommerce/product-custom-fields-toggle-field',
 		'woocommerce/product-description-field',
 		'woocommerce/product-downloads-field',
 		'woocommerce/product-images-field',

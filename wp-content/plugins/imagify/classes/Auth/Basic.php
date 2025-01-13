@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
  * @since  1.9.5
  * @author Grégory Viguier
  */
-final class Basic {
+class Basic {
 	use \Imagify\Traits\InstanceGetterTrait;
 
 	/**
@@ -48,9 +48,6 @@ final class Basic {
 			return $url;
 		}
 
-		$user = '';
-		$pass = '';
-
 		if ( defined( 'IMAGIFY_AUTH_USER' ) && defined( 'IMAGIFY_AUTH_PASSWORD' ) && IMAGIFY_AUTH_USER && IMAGIFY_AUTH_PASSWORD ) {
 			$user = IMAGIFY_AUTH_USER;
 			$pass = IMAGIFY_AUTH_PASSWORD;
@@ -63,7 +60,7 @@ final class Basic {
 			}
 		}
 
-		if ( empty( $user ) ) {
+		if ( empty( $user ) || empty( $pass ) ) {
 			// No credentials.
 			return $url;
 		}

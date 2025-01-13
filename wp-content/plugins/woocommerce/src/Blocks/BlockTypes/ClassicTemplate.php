@@ -2,9 +2,6 @@
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
 use Automattic\WooCommerce\Blocks\Templates\ProductAttributeTemplate;
-use Automattic\WooCommerce\Blocks\Templates\ProductCatalogTemplate;
-use Automattic\WooCommerce\Blocks\Templates\ProductCategoryTemplate;
-use Automattic\WooCommerce\Blocks\Templates\ProductTagTemplate;
 use Automattic\WooCommerce\Blocks\Templates\ProductSearchResultsTemplate;
 use Automattic\WooCommerce\Blocks\Templates\OrderConfirmationTemplate;
 use Automattic\WooCommerce\Blocks\Utils\StyleAttributesUtils;
@@ -52,7 +49,7 @@ class ClassicTemplate extends AbstractDynamicBlock {
 
 		// Indicate to interactivity powered components that this block is on the page,
 		// and needs refresh to update data.
-		$this->asset_data_registry->add( 'needsRefreshForInteractivityAPI', true );
+		$this->asset_data_registry->add( 'needsRefreshForInteractivityAPI', true, true );
 	}
 
 	/**
@@ -102,7 +99,7 @@ class ClassicTemplate extends AbstractDynamicBlock {
 			$frontend_scripts::load_scripts();
 		}
 
-		if ( OrderConfirmationTemplate::SLUG === $attributes['template'] ) {
+		if ( OrderConfirmationTemplate::get_slug() === $attributes['template'] ) {
 			return $this->render_order_received();
 		}
 
@@ -112,9 +109,9 @@ class ClassicTemplate extends AbstractDynamicBlock {
 
 		$valid             = false;
 		$archive_templates = array(
-			ProductCatalogTemplate::SLUG,
-			ProductCategoryTemplate::SLUG,
-			ProductTagTemplate::SLUG,
+			'archive-product',
+			'taxonomy-product_cat',
+			'taxonomy-product_tag',
 			ProductAttributeTemplate::SLUG,
 			ProductSearchResultsTemplate::SLUG,
 		);
@@ -133,14 +130,15 @@ class ClassicTemplate extends AbstractDynamicBlock {
 
 		if ( $valid ) {
 			// Set this so that our product filters can detect if it's a PHP template.
-			$this->asset_data_registry->add( 'isRenderingPhpTemplate', true );
+			$this->asset_data_registry->add( 'isRenderingPhpTemplate', true, true );
 
 			// Set this so filter blocks being used as widgets know when to render.
-			$this->asset_data_registry->add( 'hasFilterableProducts', true );
+			$this->asset_data_registry->add( 'hasFilterableProducts', true, true );
 
 			$this->asset_data_registry->add(
 				'pageUrl',
-				html_entity_decode( get_pagenum_link() )
+				html_entity_decode( get_pagenum_link() ),
+				''
 			);
 
 			return $this->render_archive_product();

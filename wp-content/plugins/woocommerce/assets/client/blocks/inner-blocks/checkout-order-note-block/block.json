@@ -23,10 +23,8 @@
 			}
 		}
 	},
-	"parent": [
-		"woocommerce/checkout-fields-block"
-	],
+	"parent": [ "woocommerce/checkout-fields-block" ],
 	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3
+	"apiVersion": 2
 }

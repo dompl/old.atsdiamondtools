@@ -104,40 +104,27 @@ $wrapper_class = isset( $notices[ $notice ] ) || isset( $plugins['wp-rocket/wp-r
 				<div class="imagify-settings-main-content imagify-pb0<?php echo $hidden_class; ?>">
 					<div class="imagify-settings-section imagify-clear">
 						<div>
-							<h2 class="imagify-options-title"><?php _e( 'Our Plugins', 'imagify' ); ?></h2>
-							<p class="imagify-options-subtitle"><?php _e( 'Build better, faster, safer', 'imagify' ); ?></p>
-							<p class="">
+							<h2 class="imagify-options-title"><?php _e( 'Display Options', 'imagify' ); ?></h2>
+
+							<p class="imagify-options-subtitle"><?php _e( 'Show Toolbar Menu', 'imagify' ); ?></p>
+
+							<div class="imagify-col">
+								<p>
 								<?php
-								_e( 'Beyond Imagify, there\'s a whole family of plugins designed to help you build better, faster, and safer websites. Each one is crafted with our unique blend of expertise, simplicity, and
-outstanding support. Combine our plugins below to build incredible WordPress websites!', 'imagify');
+								$settings->field_checkbox( array(
+									'option_name' => 'admin_bar_menu',
+									'label'       => __( 'I want this awesome quick access menu on my Toolbar.', 'imagify' ),
+								) );
 								?>
-							</p>
-							<?php foreach ( $data['plugin_family'] as $plugin => $plugin_data ) : ?>
-								<div class="imagify-plugin-family-col">
-									<div class="imagify-card">
-										<div class="imagify-card-header">
-											<div class="imagify-card-logo">
-												<img src="<?php echo esc_url( IMAGIFY_ASSETS_IMG_URL . $plugin_data['logo']['file'] ); ?>" loading="lazy" style="width: <?php echo esc_attr( $plugin_data['logo']['width'] ); ?>">
-											</div>
-											<h4><?php echo esc_html( $plugin_data['title'] ); ?></h4>
-										</div>
-										<div class="imagify-card-body">
-											<p>
-												<?php echo esc_html( $plugin_data['desc'] ); ?>
-											</p>
-										</div>
-										<div class="imagify-card-footer">
-											<?php if ( '#' === $plugin_data['cta']['url'] ) : ?>
-												<span><?php echo esc_html( $plugin_data['cta']['text'] ); ?></span><span class="dashicons dashicons-yes"></span>
-											<?php else : ?>
-												<a href="<?php echo esc_url( $plugin_data['cta']['url'] ); ?>" class="imagify-card-btn imagify-btn-cta" <?php echo 'Get it Now' === $plugin_data['cta']['text'] ? 'target="_blank"' : ''; ?> rel="noopener"><?php echo esc_html( $plugin_data['cta']['text'] ); ?></a>
-												<a href="<?php echo esc_url( $plugin_data['link'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( 'Learn more' ); ?></a>
-											<?php endif; ?>
-										</div>
-									</div>
-								</div>
-								<?php
-							endforeach;
+								</p>
+							</div>
+							<div class="imagify-col">
+								<p>
+									<img class="imagify-menu-bar-img" src="<?php echo esc_url( IMAGIFY_ASSETS_IMG_URL . 'imagify-menu-bar-' . $lang . '.jpg' ); ?>" width="273" height="239" alt="">
+								</p>
+							</div>
+
+							<?php
 							/**
 							 * List of partners affected by this option.
 							 * For internal use only.
@@ -152,8 +139,9 @@ outstanding support. Combine our plugins below to build incredible WordPress web
 
 							if ( $partners ) {
 								?>
-								<h2 class="imagify-options-title"><?php esc_html_e( 'Partners', 'imagify' ); ?></h2>
 								<p class="imagify-options-subtitle" id="imagify-partners-label">
+									<?php esc_html_e( 'Partners', 'imagify' ); ?>
+
 									<span class="imagify-info">
 										<span class="dashicons dashicons-info"></span>
 										<a href="#imagify-partners-info" class="imagify-modal-trigger"><?php _e( 'More info?', 'imagify' ); ?></a>
@@ -189,6 +177,7 @@ outstanding support. Combine our plugins below to build incredible WordPress web
 	$this->print_template( 'modal-settings-infos' );
 	$this->print_template( 'modal-settings-partners-infos' );
 	$this->print_template( 'modal-settings-visual-comparison' );
+	$this->print_template( 'modal-payment' );
 	?>
 
 </div>

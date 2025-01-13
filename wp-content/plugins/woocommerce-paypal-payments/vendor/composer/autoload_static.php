@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
+class ComposerStaticInita7c14807788ff38a21dc774bab6b2298
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -18,32 +18,18 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
             'WpOop\\WordPress\\' => 16,
             'WooCommerce\\WooCommerce\\Logging\\' => 32,
             'WooCommerce\\PayPalCommerce\\Webhooks\\' => 36,
-            'WooCommerce\\PayPalCommerce\\WcSubscriptions\\' => 43,
             'WooCommerce\\PayPalCommerce\\WcGateway\\' => 37,
             'WooCommerce\\PayPalCommerce\\Vendor\\' => 34,
             'WooCommerce\\PayPalCommerce\\Vaulting\\' => 36,
             'WooCommerce\\PayPalCommerce\\Uninstall\\' => 37,
+            'WooCommerce\\PayPalCommerce\\Subscription\\' => 40,
             'WooCommerce\\PayPalCommerce\\StatusReport\\' => 40,
-            'WooCommerce\\PayPalCommerce\\Settings\\' => 36,
             'WooCommerce\\PayPalCommerce\\Session\\' => 35,
-            'WooCommerce\\PayPalCommerce\\SavedPaymentChecker\\' => 47,
-            'WooCommerce\\PayPalCommerce\\SavePaymentMethods\\' => 46,
-            'WooCommerce\\PayPalCommerce\\PayPalSubscriptions\\' => 47,
-            'WooCommerce\\PayPalCommerce\\PayLaterWCBlocks\\' => 44,
-            'WooCommerce\\PayPalCommerce\\PayLaterConfigurator\\' => 48,
-            'WooCommerce\\PayPalCommerce\\PayLaterBlock\\' => 41,
             'WooCommerce\\PayPalCommerce\\OrderTracking\\' => 41,
             'WooCommerce\\PayPalCommerce\\Onboarding\\' => 38,
-            'WooCommerce\\PayPalCommerce\\LocalAlternativePaymentMethods\\' => 58,
-            'WooCommerce\\PayPalCommerce\\Googlepay\\' => 37,
             'WooCommerce\\PayPalCommerce\\Compat\\' => 34,
-            'WooCommerce\\PayPalCommerce\\Common\\' => 34,
-            'WooCommerce\\PayPalCommerce\\CardFields\\' => 38,
             'WooCommerce\\PayPalCommerce\\Button\\' => 34,
             'WooCommerce\\PayPalCommerce\\Blocks\\' => 34,
-            'WooCommerce\\PayPalCommerce\\Axo\\' => 31,
-            'WooCommerce\\PayPalCommerce\\AxoBlock\\' => 36,
-            'WooCommerce\\PayPalCommerce\\Applepay\\' => 36,
             'WooCommerce\\PayPalCommerce\\ApiClient\\' => 37,
             'WooCommerce\\PayPalCommerce\\AdminNotices\\' => 40,
             'WooCommerce\\PayPalCommerce\\' => 27,
@@ -85,10 +71,6 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-webhooks/src',
         ),
-        'WooCommerce\\PayPalCommerce\\WcSubscriptions\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-wc-subscriptions/src',
-        ),
         'WooCommerce\\PayPalCommerce\\WcGateway\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-wc-gateway/src',
@@ -105,41 +87,17 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-uninstall/src',
         ),
+        'WooCommerce\\PayPalCommerce\\Subscription\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/ppcp-subscription/src',
+        ),
         'WooCommerce\\PayPalCommerce\\StatusReport\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-status-report/src',
         ),
-        'WooCommerce\\PayPalCommerce\\Settings\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-settings/src',
-        ),
         'WooCommerce\\PayPalCommerce\\Session\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-session/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\SavedPaymentChecker\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-saved-payment-checker/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\SavePaymentMethods\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-save-payment-methods/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\PayPalSubscriptions\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-paypal-subscriptions/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\PayLaterWCBlocks\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-paylater-wc-blocks/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\PayLaterConfigurator\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-paylater-configurator/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\PayLaterBlock\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-paylater-block/src',
         ),
         'WooCommerce\\PayPalCommerce\\OrderTracking\\' => 
         array (
@@ -149,25 +107,9 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-onboarding/src',
         ),
-        'WooCommerce\\PayPalCommerce\\LocalAlternativePaymentMethods\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-local-alternative-payment-methods/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\Googlepay\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-googlepay/src',
-        ),
         'WooCommerce\\PayPalCommerce\\Compat\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-compat/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\Common\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/lib/common',
-        ),
-        'WooCommerce\\PayPalCommerce\\CardFields\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-card-fields/src',
         ),
         'WooCommerce\\PayPalCommerce\\Button\\' => 
         array (
@@ -176,18 +118,6 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
         'WooCommerce\\PayPalCommerce\\Blocks\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/ppcp-blocks/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\Axo\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-axo/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\AxoBlock\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-axo-block/src',
-        ),
-        'WooCommerce\\PayPalCommerce\\Applepay\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/ppcp-applepay/src',
         ),
         'WooCommerce\\PayPalCommerce\\ApiClient\\' => 
         array (
@@ -255,9 +185,9 @@ class ComposerStaticInit2fa610ed883c0868838d3008b7127cbf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2fa610ed883c0868838d3008b7127cbf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2fa610ed883c0868838d3008b7127cbf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2fa610ed883c0868838d3008b7127cbf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita7c14807788ff38a21dc774bab6b2298::$classMap;
 
         }, null, ClassLoader::class);
     }

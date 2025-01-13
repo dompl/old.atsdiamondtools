@@ -5,9 +5,7 @@
 	"description": "Contains blocks that are displayed when the cart is empty.",
 	"category": "woocommerce",
 	"supports": {
-		"align": [
-			"wide"
-		],
+		"align": [ "wide" ],
 		"html": false,
 		"multiple": false,
 		"reusable": false,
@@ -23,10 +21,8 @@
 			}
 		}
 	},
-	"parent": [
-		"woocommerce/cart"
-	],
+	"parent": [ "woocommerce/cart" ],
 	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3
+	"apiVersion": 2
 }

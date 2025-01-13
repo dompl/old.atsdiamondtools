@@ -1,7 +1,7 @@
 <?php
 namespace Imagify\Imagifybeat;
 
-use \Imagify\Traits\InstanceGetterTrait;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Imagifybeat core.
@@ -9,8 +9,8 @@ use \Imagify\Traits\InstanceGetterTrait;
  * @since  1.9.3
  * @author Grégory Viguier
  */
-final class Core {
-	use InstanceGetterTrait;
+class Core {
+	use \Imagify\Traits\InstanceGetterTrait;
 
 	/**
 	 * Class init: launch hooks.

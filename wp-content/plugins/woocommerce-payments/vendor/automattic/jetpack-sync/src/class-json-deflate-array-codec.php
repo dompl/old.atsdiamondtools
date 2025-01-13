@@ -52,7 +52,7 @@ class JSON_Deflate_Array_Codec implements Codec_Interface {
 	 *
 	 * @see https://gist.github.com/muhqu/820694
 	 *
-	 * @param mixed $any Value to serialize and wrap.
+	 * @param string $any Value to serialize and wrap.
 	 *
 	 * @return false|string
 	 */

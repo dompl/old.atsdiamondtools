@@ -49,7 +49,7 @@ class WC_Payments_Http implements WC_Payments_Http_Interface {
 	 * @param array  $args             - The arguments to passed to Jetpack.
 	 * @param string $body             - The body passed on to the HTTP request.
 	 * @param bool   $is_site_specific - If true, the site ID will be included in the request url. Defaults to true.
-	 * @param bool   $use_user_token   - If true, the request will be signed with the Jetpack connection owner user token rather than blog token. Defaults to false.
+	 * @param bool   $use_user_token   - If true, the request will be signed with the user token rather than blog token. Defaults to false.
 	 *
 	 * @return array HTTP response on success.
 	 * @throws API_Exception - If not connected or request failed.
@@ -135,7 +135,7 @@ class WC_Payments_Http implements WC_Payments_Http_Interface {
 	 * @return bool true if Jetpack connection has access token.
 	 */
 	public function is_connected() {
-		return $this->connection_manager->is_connected() && $this->connection_manager->has_connected_owner();
+		return $this->connection_manager->is_plugin_enabled() && $this->connection_manager->is_active();
 	}
 
 
@@ -184,6 +184,9 @@ class WC_Payments_Http implements WC_Payments_Http_Interface {
 	 * @throws API_Exception - Exception thrown on failure.
 	 */
 	public function start_connection( $redirect ) {
+		// Mark the plugin as enabled in case it had been soft-disconnected.
+		$this->connection_manager->enable_plugin();
+
 		// Register the site to wp.com.
 		if ( ! $this->connection_manager->is_connected() ) {
 			$result = $this->connection_manager->try_registration();
@@ -199,8 +202,7 @@ class WC_Payments_Http implements WC_Payments_Http_Interface {
 		wp_safe_redirect(
 			add_query_arg(
 				[
-					'from'        => 'woocommerce-core-profiler',
-					'plugin_name' => 'woocommerce-payments',
+					'from'        => 'woocommerce-payments',
 					'calypso_env' => $calypso_env,
 				],
 				$this->connection_manager->get_authorization_url( null, $redirect )

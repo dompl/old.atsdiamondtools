@@ -46,10 +46,7 @@ var data = {
       campaign:       'cmp',
       content:        'cnt',
       term:           'trm',
-      id:             'id',
-      platform:       'plt',
-      format:         'fmt',
-      tactic:         'tct'
+      id:             'id'
     },
 
     extra: {
@@ -83,10 +80,7 @@ var data = {
         data.aliases.main.campaign  + '=' + sbjs.campaign + data.delimiter +
         data.aliases.main.content   + '=' + sbjs.content  + data.delimiter +
         data.aliases.main.term      + '=' + sbjs.term     + data.delimiter +
-        data.aliases.main.id        + '=' + sbjs.id       + data.delimiter +
-        data.aliases.main.platform  + '=' + sbjs.platform + data.delimiter +
-        data.aliases.main.format    + '=' + sbjs.format   + data.delimiter +
-        data.aliases.main.tactic    + '=' + sbjs.tactic
+        data.aliases.main.id        + '=' + sbjs.id
       );
     },
 
@@ -131,12 +125,6 @@ var delimiter = _dereq_('../data').delimiter;
 
 module.exports = {
 
-  useBase64: false, // Base64 flag set to false by default
-
-  setBase64Flag: function(value) {
-    this.useBase64 = value;
-  },
-
   encodeData: function(s) {
     return encodeURIComponent(s).replace(/\!/g, '%21')
                                 .replace(/\~/g, '%7E')
@@ -175,12 +163,7 @@ module.exports = {
     } else {
       basehost = '';
     }
-    var cookie_content = this.encodeData(value);
-    if (this.useBase64) {
-        // Base64 encoding and removing equal sign padding
-        cookie_content = btoa(cookie_content).replace(/=+$/, '');
-    }
-    document.cookie = this.encodeData(name) + '=' + cookie_content + expires + basehost + '; path=/';
+    document.cookie = this.encodeData(name) + '=' + this.encodeData(value) + expires + basehost + '; path=/';
   },
 
   get: function(name) {
@@ -191,18 +174,7 @@ module.exports = {
       var c = ca[i];
       while (c.charAt(0) === ' ') { c = c.substring(1, c.length); }
       if (c.indexOf(nameEQ) === 0) {
-        var cookie_content = c.substring(nameEQ.length, c.length);
-        // Decode the content if it only contains Base64-valid characters
-        // Non-alphanumeric characters indicate that the cookie data is not encoded
-        if (/^[A-Za-z0-9+/]+$/.test(cookie_content)) {
-          try {
-            // Attempt to decode the Base64 string (after padding with = to make it a multiple of 4)
-            cookie_content = atob( cookie_content.padEnd(Math.ceil(cookie_content.length / 4) * 4, "=") );
-          } catch (error) {
-            // If the Base64 string is invalid, just keep the cookie content as is
-          }
-        }
-        return this.decodeData(cookie_content);
+        return this.decodeData(c.substring(nameEQ.length, c.length));
       }
     }
     return null;
@@ -368,8 +340,6 @@ module.exports = function(prefs) {
       isolate   = p.domain.isolate,
       lifetime  = p.lifetime;
 
-  cookies.setBase64Flag( p.base64 );
-
   migrations.go(lifetime, domain, isolate);
 
   var __sbjs_type,
@@ -378,28 +348,22 @@ module.exports = function(prefs) {
       __sbjs_campaign,
       __sbjs_content,
       __sbjs_term,
-      __sbjs_id,
-      __sbjs_platform,
-      __sbjs_format,
-      __sbjs_tactic;
+      __sbjs_id;
 
   function mainData() {
     var sbjs_data;
     if (
-        typeof get_param.utm_source           !== 'undefined' ||
-        typeof get_param.utm_medium           !== 'undefined' ||
-        typeof get_param.utm_campaign         !== 'undefined' ||
-        typeof get_param.utm_content          !== 'undefined' ||
-        typeof get_param.utm_term             !== 'undefined' ||
-        typeof get_param.utm_id               !== 'undefined' ||
-        typeof get_param.utm_source_platform  !== 'undefined' ||
-        typeof get_param.utm_creative_format  !== 'undefined' ||
-        typeof get_param.utm_marketing_tactic !== 'undefined' ||
-        typeof get_param.gclid                !== 'undefined' ||
-        typeof get_param.yclid                !== 'undefined' ||
-        typeof get_param[p.campaign_param]    !== 'undefined' ||
-        typeof get_param[p.term_param]        !== 'undefined' ||
-        typeof get_param[p.content_param]     !== 'undefined'
+        typeof get_param.utm_source        !== 'undefined' ||
+        typeof get_param.utm_medium        !== 'undefined' ||
+        typeof get_param.utm_campaign      !== 'undefined' ||
+        typeof get_param.utm_content       !== 'undefined' ||
+        typeof get_param.utm_term          !== 'undefined' ||
+        typeof get_param.utm_id            !== 'undefined' ||
+        typeof get_param.gclid             !== 'undefined' ||
+        typeof get_param.yclid             !== 'undefined' ||
+        typeof get_param[p.campaign_param] !== 'undefined' ||
+        typeof get_param[p.term_param]     !== 'undefined' ||
+        typeof get_param[p.content_param]  !== 'undefined'
     ) {
       setFirstAndCurrentExtraData();
       sbjs_data = getData(terms.traffic.utm);
@@ -467,10 +431,7 @@ module.exports = function(prefs) {
           __sbjs_content = terms.none;
         }
 
-        __sbjs_id       = get_param.utm_id || terms.none;
-        __sbjs_platform = get_param.utm_source_platform || terms.none;
-        __sbjs_format   = get_param.utm_creative_format || terms.none;
-        __sbjs_tactic   = get_param.utm_marketing_tactic || terms.none;
+        __sbjs_id = get_param.utm_id || terms.none;
 
         if (typeof get_param.utm_term !== 'undefined') {
           __sbjs_term = get_param.utm_term;
@@ -490,9 +451,6 @@ module.exports = function(prefs) {
         __sbjs_content  = terms.none;
         __sbjs_term     = terms.none;
         __sbjs_id       = terms.none;
-        __sbjs_platform = terms.none;
-        __sbjs_format   = terms.none;
-        __sbjs_tactic   = terms.none;
         break;
 
       case terms.traffic.referral:
@@ -503,9 +461,6 @@ module.exports = function(prefs) {
         __sbjs_content  = uri.parse(document.referrer).path;
         __sbjs_term     = terms.none;
         __sbjs_id       = terms.none;
-        __sbjs_platform = terms.none;
-        __sbjs_format   = terms.none;
-        __sbjs_tactic   = terms.none;
         break;
 
       case terms.traffic.typein:
@@ -516,9 +471,6 @@ module.exports = function(prefs) {
         __sbjs_content  = terms.none;
         __sbjs_term     = terms.none;
         __sbjs_id       = terms.none;
-        __sbjs_platform = terms.none;
-        __sbjs_format   = terms.none;
-        __sbjs_tactic   = terms.none;
         break;
 
       default:
@@ -529,9 +481,6 @@ module.exports = function(prefs) {
         __sbjs_content  = terms.oops;
         __sbjs_term     = terms.oops;
         __sbjs_id       = terms.oops;
-        __sbjs_platform = terms.oops;
-        __sbjs_format   = terms.oops;
-        __sbjs_tactic   = terms.oops;
     }
     var sbjs_data = {
       type:             __sbjs_type,
@@ -540,10 +489,7 @@ module.exports = function(prefs) {
       campaign:         __sbjs_campaign,
       content:          __sbjs_content,
       term:             __sbjs_term,
-      id:               __sbjs_id,
-      platform:         __sbjs_platform,
-      format:           __sbjs_format,
-      tactic:           __sbjs_tactic
+      id:               __sbjs_id
     };
 
     return data.pack.main(sbjs_data);
@@ -807,9 +753,6 @@ module.exports = {
     // Set `timezone offset` in hours
     params.timezone_offset = this.validate.checkInt(user.timezone_offset);
 
-    // Enable `base64 encoding`
-    params.base64 = user.base64 || false;
-
     // Set `campaign param` for AdWords links
     params.campaign_param = user.campaign_param || false;
 
@@ -908,7 +851,6 @@ module.exports = {
   }
 
 };
-
 },{"./helpers/uri":4,"./terms":9}],9:[function(_dereq_,module,exports){
 "use strict";
 

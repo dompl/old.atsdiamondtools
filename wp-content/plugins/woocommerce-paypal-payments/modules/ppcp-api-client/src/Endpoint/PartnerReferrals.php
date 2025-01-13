@@ -85,7 +85,8 @@ class PartnerReferrals {
 			$error = new RuntimeException(
 				__( 'Could not create referral.', 'woocommerce-paypal-payments' )
 			);
-			$this->logger->warning(
+			$this->logger->log(
+				'warning',
 				$error->getMessage(),
 				array(
 					'args'     => $args,
@@ -94,7 +95,6 @@ class PartnerReferrals {
 			);
 			throw $error;
 		}
-
 		$json        = json_decode( $response['body'] );
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 201 !== $status_code ) {
@@ -102,7 +102,8 @@ class PartnerReferrals {
 				$json,
 				$status_code
 			);
-			$this->logger->warning(
+			$this->logger->log(
+				'warning',
 				$error->getMessage(),
 				array(
 					'args'     => $args,
@@ -121,7 +122,8 @@ class PartnerReferrals {
 		$error = new RuntimeException(
 			__( 'Action URL not found.', 'woocommerce-paypal-payments' )
 		);
-		$this->logger->warning(
+		$this->logger->log(
+			'warning',
 			$error->getMessage(),
 			array(
 				'args'     => $args,

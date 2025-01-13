@@ -11,7 +11,7 @@ namespace WooCommerce\PayPalCommerce\WcGateway\Checkout;
 
 use WooCommerce\PayPalCommerce\Button\Helper\ContextTrait;
 use WooCommerce\PayPalCommerce\Session\SessionHandler;
-use WooCommerce\PayPalCommerce\WcSubscriptions\Helper\SubscriptionHelper;
+use WooCommerce\PayPalCommerce\Subscription\Helper\SubscriptionHelper;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\CardButtonGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\CreditCardGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
@@ -97,19 +97,13 @@ class DisableGateways {
 
 		if ( ! $this->settings_status->is_smart_button_enabled_for_location( 'checkout' ) ) {
 			unset( $methods[ CardButtonGateway::ID ] );
-			if ( $this->subscription_helper->cart_contains_subscription() ) {
+			if ( ! $this->session_handler->order() && is_checkout() ) {
 				unset( $methods[ PayPalGateway::ID ] );
 			}
 		}
 
 		if ( ! $this->needs_to_disable_gateways() ) {
 			return $methods;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$payment_method = wc_clean( wp_unslash( $_POST['payment_method'] ?? '' ) );
-		if ( $payment_method && is_string( $payment_method ) ) {
-			return array( $payment_method => $methods[ $payment_method ] );
 		}
 
 		return array( PayPalGateway::ID => $methods[ PayPalGateway::ID ] );

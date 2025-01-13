@@ -22,36 +22,18 @@ class SellerStatus {
 	private $products;
 
 	/**
-	 * The capabilities.
-	 *
-	 * @var SellerStatusCapability[]
-	 */
-	private $capabilities;
-
-	/**
 	 * SellerStatus constructor.
 	 *
-	 * @param SellerStatusProduct[]    $products The products.
-	 * @param SellerStatusCapability[] $capabilities The capabilities.
-	 *
-	 * @psalm-suppress RedundantConditionGivenDocblockType
+	 * @param SellerStatusProduct[] $products The products.
 	 */
-	public function __construct( array $products, array $capabilities ) {
+	public function __construct( array $products ) {
 		foreach ( $products as $key => $product ) {
 			if ( is_a( $product, SellerStatusProduct::class ) ) {
 				continue;
 			}
 			unset( $products[ $key ] );
 		}
-		foreach ( $capabilities as $key => $capability ) {
-			if ( is_a( $capability, SellerStatusCapability::class ) ) {
-				continue;
-			}
-			unset( $capabilities[ $key ] );
-		}
-
-		$this->products     = $products;
-		$this->capabilities = $capabilities;
+		$this->products = $products;
 	}
 
 	/**
@@ -61,15 +43,6 @@ class SellerStatus {
 	 */
 	public function products() : array {
 		return $this->products;
-	}
-
-	/**
-	 * Returns the capabilities.
-	 *
-	 * @return SellerStatusCapability[]
-	 */
-	public function capabilities() : array {
-		return $this->capabilities;
 	}
 
 	/**
@@ -85,16 +58,8 @@ class SellerStatus {
 			$this->products()
 		);
 
-		$capabilities = array_map(
-			function( SellerStatusCapability $capability ) : array {
-				return $capability->to_array();
-			},
-			$this->capabilities()
-		);
-
 		return array(
-			'products'     => $products,
-			'capabilities' => $capabilities,
+			'products' => $products,
 		);
 	}
 }

@@ -1,9 +1,7 @@
 <?php
 namespace Imagify\Media;
 
-use Imagify\Traits\MediaRowTrait;
-use Imagify\Deprecated\Traits\Media\CustomFoldersDeprecatedTrait;
-use WP_Error;
+defined( 'ABSPATH' ) || die( 'Cheatin’ uh?' );
 
 /**
  * Media class for the custom folders.
@@ -12,8 +10,8 @@ use WP_Error;
  * @author Grégory Viguier
  */
 class CustomFolders extends AbstractMedia {
-	use MediaRowTrait;
-	use CustomFoldersDeprecatedTrait;
+	use \Imagify\Traits\MediaRowTrait;
+	use \Imagify\Deprecated\Traits\Media\CustomFoldersDeprecatedTrait;
 
 	/**
 	 * Context (where the media "comes from").
@@ -230,11 +228,11 @@ class CustomFolders extends AbstractMedia {
 	 * @access public
 	 * @author Grégory Viguier
 	 *
-	 * @return bool|WP_Error True on success. A WP_Error instance on failure.
+	 * @return bool|WP_Error True on success. A \WP_Error instance on failure.
 	 */
 	public function generate_thumbnails() {
 		if ( ! $this->is_valid() ) {
-			return new WP_Error( 'invalid_media', __( 'This media is not valid.', 'imagify' ) );
+			return new \WP_Error( 'invalid_media', __( 'This media is not valid.', 'imagify' ) );
 		}
 
 		return true;

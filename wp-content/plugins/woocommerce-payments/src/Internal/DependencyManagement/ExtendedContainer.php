@@ -41,11 +41,9 @@ class ExtendedContainer extends Container {
 		 */
 		if ( ! $this->has( $id ) ) {
 			throw new ContainerException(
-				esc_html(
-					sprintf(
-						'The ID you provided (%s) for replacement is not associated with anything inside the container or its delegates. Maybe try adding it instead?',
-						$id
-					)
+				sprintf(
+					'The ID you provided (%s) for replacement is not associated with anything inside the container or its delegates. Maybe try adding it instead?',
+					$id
 				)
 			);
 		}
