@@ -18,13 +18,13 @@ function get_imagify_attachment_optimization_text( $process ) {
 
 	$is_media_page            = Imagify_Views::get_instance()->is_media_page();
 	$is_library_page          = Imagify_Views::get_instance()->is_wp_library_page();
-	$output                   = $is_media_page ? '' : '<ul class="imagify-datas-list">';
+	$output                   = $is_media_page ? '' : '<ul class="imagify-datas-list" id="imagify_data_sum">';
 	$output_before            = $is_media_page ? '' : '<li class="imagify-data-item">';
 	$output_after             = $is_media_page ? '<br/>' : '</li>';
 	$reoptimize_link          = get_imagify_attachment_reoptimize_link( $process );
 	$reoptimize_link         .= get_imagify_attachment_optimize_missing_thumbnails_link( $process );
-	$reoptimize_link         .= get_imagify_attachment_generate_webp_versions_link( $process );
-	$reoptimize_link         .= get_imagify_attachment_delete_webp_versions_link( $process );
+	$reoptimize_link         .= get_imagify_attachment_generate_nextgen_versions_link( $process );
+	$reoptimize_link         .= get_imagify_attachment_delete_nextgen_versions_link( $process );
 	$reoptimize_output        = $reoptimize_link ? $reoptimize_link : '';
 	$reoptimize_output_before = '<div class="imagify-datas-actions-links">';
 	$reoptimize_output_after  = '</div><!-- .imagify-datas-actions-links -->';
@@ -42,11 +42,16 @@ function get_imagify_attachment_optimization_text( $process ) {
 	}
 
 	$data               = $process->get_data();
+	$optimized_data     = $data->get_optimization_data();
 	$attachment_id      = $media->get_id();
 	$optimization_level = imagify_get_optimization_level_label( $data->get_optimization_level() );
 
 	if ( ! $is_media_page ) {
 		$output .= $output_before . '<span class="data">' . __( 'New Filesize:', 'imagify' ) . '</span> <strong class="big">' . $data->get_optimized_size() . '</strong>' . $output_after;
+	}
+
+	if ( key_exists( 'message', $optimized_data ) && $optimized_data['message'] ) {
+		$output .= $output_before . '<span class="data">' . __( 'Convert:', 'imagify' ) . '</span> <strong class="big">' . $optimized_data['message'] . '</strong>' . $output_after;
 	}
 
 	$chart = '';
@@ -89,8 +94,12 @@ function get_imagify_attachment_optimization_text( $process ) {
 	$output .= $output_before . '<span class="data">' . __( 'Level:', 'imagify' ) . '</span> <strong>' . $optimization_level . '</strong>' . $output_after;
 
 	if ( $media->is_image() ) {
-		$has_webp = $process->has_webp() ? __( 'Yes', 'imagify' ) : __( 'No', 'imagify' );
-		$output  .= $output_before . '<span class="data">' . __( 'WebP generated:', 'imagify' ) . '</span> <strong class="big">' . esc_html( $has_webp ) . '</strong>' . $output_after;
+		$has_nextgen = $process->has_next_gen() ? __( 'Yes', 'imagify' ) : __( 'No', 'imagify' );
+
+		if ( $process->has_next_gen() ) {
+			$has_nextgen = $process->is_full_next_gen() ? __( 'Yes', 'imagify' ) : __( 'Partially', 'imagify' );
+		}
+		$output  .= $output_before . '<span class="data">' . __( 'Next-Gen generated:', 'imagify' ) . '</span> <strong class="big">' . esc_html( $has_nextgen ) . '</strong>' . $output_after;
 
 		$total_optimized_thumbnails = $data->get_optimized_sizes_count();
 
@@ -308,20 +317,22 @@ function get_imagify_attachment_optimize_missing_thumbnails_link( $process ) {
 }
 
 /**
- * Get the link to generate WebP versions if they are missing.
+ * Get the link to generate next-gen versions if they are missing.
  *
- * @since  1.9
- * @author Grégory Viguier
+ * @since 1.9
  *
- * @param  ProcessInterface $process The optimization process object.
- * @return string                    The output to print.
+ * @param ProcessInterface $process The optimization process object.
+ *
+ * @return string The output to print.
  */
-function get_imagify_attachment_generate_webp_versions_link( $process ) {
+function get_imagify_attachment_generate_nextgen_versions_link( $process ) {
 	if ( ! $process->is_valid() ) {
 		return '';
 	}
 
-	if ( ! get_imagify_option( 'convert_to_webp' ) ) {
+	$formats = imagify_nextgen_images_formats();
+
+	if ( empty( $formats ) ) {
 		return '';
 	}
 
@@ -331,7 +342,15 @@ function get_imagify_attachment_generate_webp_versions_link( $process ) {
 		return '';
 	}
 
-	if ( 'image/webp' === $media->get_mime_type() ) {
+	$format = get_imagify_option( 'optimization_format' );
+
+	if (
+		'avif' === $format
+		&&
+		'image/avif' === $media->get_mime_type()
+	) {
+		return '';
+	} elseif ( 'image/webp' === $media->get_mime_type() ) {
 		return '';
 	}
 
@@ -341,14 +360,16 @@ function get_imagify_attachment_generate_webp_versions_link( $process ) {
 		return '';
 	}
 
-	if ( $process->has_webp() ) {
+	if ( $process->has_next_gen() ) {
 		return '';
 	}
 
 	$context = $media->get_context();
 
+	$display = apply_filters_deprecated( 'imagify_display_generate_webp_versions_link', array( true, $process, $context ), '2.2', 'imagify_display_generate_next_gen_versions_link' );
+
 	/**
-	 * Allow to not display the "Generate WebP versions" link.
+	 * Allow to not display the "Generate next-gen versions" link.
 	 *
 	 * @since  1.9
 	 * @author Grégory Viguier
@@ -357,14 +378,14 @@ function get_imagify_attachment_generate_webp_versions_link( $process ) {
 	 * @param ProcessInterface $process The optimization process object.
 	 * @param string           $context The context.
 	 */
-	$display = apply_filters( 'imagify_display_generate_webp_versions_link', true, $process, $context );
+	$display = apply_filters( 'imagify_display_generate_next_gen_versions_link', $display, $process, $context );
 
 	// Stop the process if the filter is false.
 	if ( ! $display ) {
 		return '';
 	}
 
-	$url = get_imagify_admin_url( 'generate-webp-versions', [
+	$url = get_imagify_admin_url( 'generate-nextgen-versions', [
 		'attachment_id' => $media->get_id(),
 		'context'       => $context,
 	] );
@@ -377,7 +398,7 @@ function get_imagify_attachment_generate_webp_versions_link( $process ) {
 }
 
 /**
- * Get the link to delete WebP versions when the status is "already_optimized".
+ * Get the link to delete next-gen versions when the status is "already_optimized".
  *
  * @since  1.9.6
  * @author Grégory Viguier
@@ -385,7 +406,7 @@ function get_imagify_attachment_generate_webp_versions_link( $process ) {
  * @param  ProcessInterface $process The optimization process object.
  * @return string                    The output to print.
  */
-function get_imagify_attachment_delete_webp_versions_link( $process ) {
+function get_imagify_attachment_delete_nextgen_versions_link( $process ) {
 	if ( ! $process->is_valid() ) {
 		return '';
 	}
@@ -400,12 +421,12 @@ function get_imagify_attachment_delete_webp_versions_link( $process ) {
 
 	$data = $process->get_data();
 
-	if ( ! $data->is_already_optimized() || ! $process->has_webp() ) {
+	if ( ! $data->is_already_optimized() || ! $process->has_next_gen() ) {
 		return '';
 	}
 
 	$class = '';
-	$url   = get_imagify_admin_url( 'delete-webp-versions', [
+	$url   = get_imagify_admin_url( 'delete-nextgen-versions', [
 		'attachment_id' => $media_id,
 		'context'       => $context,
 	] );
@@ -429,9 +450,10 @@ function get_imagify_attachment_delete_webp_versions_link( $process ) {
  * @since  1.9 Function signature changed.
  * @author Jonathan Buttigieg
  *
- * @param  ProcessInterface $process        The optimization process object.
- * @param  bool             $with_container Set to false to not return the HTML container.
- * @return string                           The output to print.
+ * @param \Imagify\Optimization\Process\ProcessInterface $process The optimization process object.
+ * @param bool                                           $with_container Set to false to not return the HTML container.
+ *
+ * @return string The output to print.
  */
 function get_imagify_media_column_content( $process, $with_container = true ) {
 	if ( ! $process->is_valid() ) {

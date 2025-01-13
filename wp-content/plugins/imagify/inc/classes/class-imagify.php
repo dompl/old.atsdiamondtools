@@ -86,6 +86,10 @@ class Imagify {
 	 * @return object
 	 */
 	public function get_user() {
+		if ( empty( $this->api_key ) ) {
+			return new WP_Error( 'api_key_missing', __( 'API key required.', 'imagify' ) );
+		}
+
 		global $wp_current_filter;
 
 		if ( isset( static::$user ) ) {
@@ -434,6 +438,19 @@ class Imagify {
 		// Check if curl is available.
 		if ( ! Imagify_Requirements::supports_curl() ) {
 			return new WP_Error( 'curl', 'cURL isn\'t installed on the server.' );
+		}
+
+		/**
+		 * Allows to mock Imagify calls to the API.
+		 *
+		 * @param stdClass|null $response Response from the call.
+		 * @param string $url URL from the call.
+		 * @param array $args Arguments from the call.
+		 */
+		$response = apply_filters( 'pre_imagify_request', null, $url, $args );
+
+		if ( $response ) {
+			return $response;
 		}
 
 		try {

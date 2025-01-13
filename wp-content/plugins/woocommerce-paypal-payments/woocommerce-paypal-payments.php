@@ -3,13 +3,14 @@
  * Plugin Name: WooCommerce PayPal Payments
  * Plugin URI:  https://woocommerce.com/products/woocommerce-paypal-payments/
  * Description: PayPal's latest complete payments processing solution. Accept PayPal, Pay Later, credit/debit cards, alternative digital wallets local payment types and bank accounts. Turn on only PayPal options or process a full suite of payment methods. Enable global transaction with extensive currency and country coverage.
- * Version:     2.2.2
+ * Version:     2.9.5
  * Author:      WooCommerce
  * Author URI:  https://woocommerce.com/
  * License:     GPL-2.0
- * Requires PHP: 7.2
- * WC requires at least: 3.9
- * WC tested up to: 8.0
+ * Requires PHP: 7.4
+ * Requires Plugins: woocommerce
+ * WC requires at least: 6.9
+ * WC tested up to: 9.4
  * Text Domain: woocommerce-paypal-payments
  *
  * @package WooCommerce\PayPalCommerce
@@ -21,16 +22,19 @@ namespace WooCommerce\PayPalCommerce;
 
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 
-define( 'PAYPAL_API_URL', 'https://api.paypal.com' );
-define( 'PAYPAL_SANDBOX_API_URL', 'https://api.sandbox.paypal.com' );
-define( 'PAYPAL_INTEGRATION_DATE', '2023-08-11' );
+define( 'PAYPAL_API_URL', 'https://api-m.paypal.com' );
+define( 'PAYPAL_URL', 'https://www.paypal.com' );
+define( 'PAYPAL_SANDBOX_API_URL', 'https://api-m.sandbox.paypal.com' );
+define( 'PAYPAL_SANDBOX_URL', 'https://www.sandbox.paypal.com' );
+define( 'PAYPAL_INTEGRATION_DATE', '2024-12-02' );
+define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
 
 ! defined( 'CONNECT_WOO_CLIENT_ID' ) && define( 'CONNECT_WOO_CLIENT_ID', 'AcCAsWta_JTL__OfpjspNyH7c1GGHH332fLwonA5CwX4Y10mhybRZmHLA0GdRbwKwjQIhpDQy0pluX_P' );
 ! defined( 'CONNECT_WOO_SANDBOX_CLIENT_ID' ) && define( 'CONNECT_WOO_SANDBOX_CLIENT_ID', 'AYmOHbt1VHg-OZ_oihPdzKEVbU3qg0qXonBcAztuzniQRaKE0w1Hr762cSFwd4n8wxOl-TCWohEa0XM_' );
 ! defined( 'CONNECT_WOO_MERCHANT_ID' ) && define( 'CONNECT_WOO_MERCHANT_ID', 'K8SKZ36LQBWXJ' );
 ! defined( 'CONNECT_WOO_SANDBOX_MERCHANT_ID' ) && define( 'CONNECT_WOO_SANDBOX_MERCHANT_ID', 'MPMFHQTVMBZ6G' );
-! defined( 'CONNECT_WOO_URL' ) && define( 'CONNECT_WOO_URL', 'https://connect.woocommerce.com/ppc' );
-! defined( 'CONNECT_WOO_SANDBOX_URL' ) && define( 'CONNECT_WOO_SANDBOX_URL', 'https://connect.woocommerce.com/ppcsandbox' );
+! defined( 'CONNECT_WOO_URL' ) && define( 'CONNECT_WOO_URL', 'https://api.woocommerce.com/integrations/ppc' );
+! defined( 'CONNECT_WOO_SANDBOX_URL' ) && define( 'CONNECT_WOO_SANDBOX_URL', 'https://api.woocommerce.com/integrations/ppcsandbox' );
 
 ( function () {
 	$autoload_filepath = __DIR__ . '/vendor/autoload.php';
@@ -42,8 +46,6 @@ define( 'PAYPAL_INTEGRATION_DATE', '2023-08-11' );
 	 * Initialize the plugin and its modules.
 	 */
 	function init(): void {
-		define( 'PPCP_FLAG_SUBSCRIPTIONS_API', apply_filters( 'ppcp_flag_subscriptions_api', getenv( 'PPCP_FLAG_SUBSCRIPTIONS_API' ) === '1' ) );
-
 		$root_dir = __DIR__;
 
 		if ( ! is_woocommerce_activated() ) {
@@ -57,11 +59,11 @@ define( 'PAYPAL_INTEGRATION_DATE', '2023-08-11' );
 
 			return;
 		}
-		if ( version_compare( PHP_VERSION, '7.2', '<' ) ) {
+		if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 			add_action(
 				'admin_notices',
 				function() {
-					echo '<div class="error"><p>' . esc_html__( 'WooCommerce PayPal Payments requires PHP 7.1 or above.', 'woocommerce-paypal-payments' ), '</p></div>';
+					echo '<div class="error"><p>' . esc_html__( 'WooCommerce PayPal Payments requires PHP 7.4 or above.', 'woocommerce-paypal-payments' ), '</p></div>';
 				}
 			);
 
@@ -88,32 +90,28 @@ define( 'PAYPAL_INTEGRATION_DATE', '2023-08-11' );
 		'plugins_loaded',
 		function () {
 			init();
+			add_action(
+				'init',
+				function () {
+					$current_plugin_version   = (string) PPCP::container()->get( 'ppcp.plugin' )->getVersion();
+					$installed_plugin_version = get_option( 'woocommerce-ppcp-version' );
+					if ( $installed_plugin_version !== $current_plugin_version ) {
+						/**
+						 * The hook fired when the plugin is installed or updated.
+						 */
+						do_action( 'woocommerce_paypal_payments_gateway_migrate', $installed_plugin_version );
 
-			if ( ! function_exists( 'get_plugin_data' ) ) {
-				/**
-				 * Skip check for WP files.
-				 *
-				 * @psalm-suppress MissingFile
-				 */
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			$plugin_data              = get_plugin_data( __DIR__ . '/woocommerce-paypal-payments.php' );
-			$plugin_version           = $plugin_data['Version'] ?? null;
-			$installed_plugin_version = get_option( 'woocommerce-ppcp-version' );
-			if ( $installed_plugin_version !== $plugin_version ) {
-				/**
-				 * The hook fired when the plugin is installed or updated.
-				 */
-				do_action( 'woocommerce_paypal_payments_gateway_migrate' );
-
-				if ( $installed_plugin_version ) {
-					/**
-					 * The hook fired when the plugin is updated.
-					 */
-					do_action( 'woocommerce_paypal_payments_gateway_migrate_on_update' );
-				}
-				update_option( 'woocommerce-ppcp-version', $plugin_version );
-			}
+						if ( $installed_plugin_version ) {
+							/**
+							 * The hook fired when the plugin is updated.
+							 */
+							do_action( 'woocommerce_paypal_payments_gateway_migrate_on_update' );
+						}
+						update_option( 'woocommerce-ppcp-version', $current_plugin_version );
+					}
+				},
+				-1
+			);
 		}
 	);
 	register_activation_hook(

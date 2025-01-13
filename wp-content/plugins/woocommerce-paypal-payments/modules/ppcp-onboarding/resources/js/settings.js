@@ -1,410 +1,549 @@
-document.addEventListener(
-    'DOMContentLoaded',
-    () => {
-        const payLaterMessagingSelectableLocations = ['product', 'cart', 'checkout'];
-        const payLaterMessagingAllLocations = payLaterMessagingSelectableLocations.concat('general');
-        const payLaterMessagingLocationsSelector = '#field-pay_later_messaging_locations';
-        const payLaterMessagingLocationsSelect = payLaterMessagingLocationsSelector + ' select';
-        const payLaterMessagingEnabledSelector = '#ppcp-pay_later_messaging_enabled';
+import {
+	setVisible,
+	setVisibleByClass,
+} from '../../../ppcp-button/resources/js/modules/Helper/Hiding';
 
-        const smartButtonLocationsSelector = '#field-smart_button_locations';
-        const smartButtonLocationsSelect = smartButtonLocationsSelector + ' select';
-        const smartButtonSelectableLocations = payLaterMessagingSelectableLocations.concat('mini-cart');
+document.addEventListener( 'DOMContentLoaded', () => {
+	const payLaterMessagingSelectableLocations = [
+		'product',
+		'cart',
+		'checkout',
+		'shop',
+		'home',
+	];
+	const payLaterMessagingAllLocations =
+		payLaterMessagingSelectableLocations.concat( 'general' );
+	const payLaterMessagingLocationsSelector =
+		'#field-pay_later_messaging_locations';
+	const payLaterMessagingLocationsSelect =
+		payLaterMessagingLocationsSelector + ' select';
+	const payLaterMessagingEnabledSelector =
+		'#ppcp-pay_later_messaging_enabled';
 
-        const groupToggle = (selector, group) => {
-            const toggleElement = document.querySelector(selector);
-            if (! toggleElement) {
-                return;
-            }
+	const smartButtonLocationsSelector = '#field-smart_button_locations';
+	const smartButtonLocationsSelect = smartButtonLocationsSelector + ' select';
+	const smartButtonSelectableLocations = [
+		'product',
+		'cart',
+		'checkout',
+		'mini-cart',
+		'cart-block',
+		'checkout-block-express',
+	];
 
-            if (! toggleElement.checked) {
-                group.forEach( (elementToHide) => {
-                    document.querySelector(elementToHide).style.display = 'none';
-                })
-            }
-            toggleElement.addEventListener(
-                'change',
-                (event) => {
-                    if (! event.target.checked) {
-                        group.forEach( (elementToHide) => {
-                            document.querySelector(elementToHide).style.display = 'none';
-                        });
+	const groupToggle = ( selector, group ) => {
+		const toggleElement = document.querySelector( selector );
+		if ( ! toggleElement ) {
+			return;
+		}
 
-                        return;
-                    }
+		if ( ! toggleElement.checked ) {
+			group.forEach( ( elementToHide ) => {
+				const element = document.querySelector( elementToHide );
+				if ( element ) {
+					element.style.display = 'none';
+				}
+			} );
+		}
+		toggleElement.addEventListener( 'change', ( event ) => {
+			if ( ! event.target.checked ) {
+				group.forEach( ( elementToHide ) => {
+					const element = document.querySelector( elementToHide );
+					if ( element ) {
+						element.style.display = 'none';
+					}
+				} );
 
-                    group.forEach( (elementToShow) => {
-                        document.querySelector(elementToShow).style.display = '';
-                    })
+				return;
+			}
 
-                    togglePayLaterMessageFields();
-                }
-            );
-        };
+			group.forEach( ( elementToShow ) => {
+				document.querySelector( elementToShow ).style.display = '';
+			} );
 
-        const groupToggleSelect = (selector, group) => {
-            const toggleElement = document.querySelector(selector);
-            if (! toggleElement) {
-                return;
-            }
-            const value = toggleElement.value;
-            group.forEach( (elementToToggle) => {
-                const domElement = document.querySelector(elementToToggle.selector);
-                if (! domElement) {
-                    return;
-                }
-                if (value === elementToToggle.value && domElement.style.display !== 'none') {
-                    domElement.style.display = '';
-                    return;
-                }
-                domElement.style.display = 'none';
-            });
+			togglePayLaterMessageFields();
+		} );
+	};
 
-            // We need to use jQuery here as the select might be a select2 element, which doesn't use native events.
-            jQuery(toggleElement).on(
-                'change',
-                (event) => {
-                    const value = event.target.value;
-                    group.forEach( (elementToToggle) => {
-                        if (value === elementToToggle.value) {
-                            document.querySelector(elementToToggle.selector).style.display = '';
-                            return;
-                        }
-                        document.querySelector(elementToToggle.selector).style.display = 'none';
-                    })
-                }
-            );
-        };
+	const groupToggleSelect = ( selector, group ) => {
+		const toggleElement = document.querySelector( selector );
+		if ( ! toggleElement ) {
+			return;
+		}
+		const value = toggleElement.value;
+		group.forEach( ( elementToToggle ) => {
+			const domElement = document.querySelector(
+				elementToToggle.selector
+			);
+			if ( ! domElement ) {
+				return;
+			}
+			if (
+				value === elementToToggle.value &&
+				domElement.style.display !== 'none'
+			) {
+				domElement.style.display = '';
+				return;
+			}
+			domElement.style.display = 'none';
+		} );
 
-        const togglePayLaterMessageFields = () => {
-            payLaterMessagingAllLocations.forEach( (location) => {
-                groupToggleSelect(
-                    '#ppcp-pay_later_' + location + '_message_layout',
-                    [
-                        {
-                            value:'text',
-                            selector:'#field-pay_later_' + location + '_message_logo'
-                        },
-                        {
-                            value:'text',
-                            selector:'#field-pay_later_' + location + '_message_position'
-                        },
-                        {
-                            value:'text',
-                            selector:'#field-pay_later_' + location + '_message_color'
-                        },
-                        {
-                            value:'flex',
-                            selector:'#field-pay_later_' + location + '_message_flex_ratio'
-                        },
-                        {
-                            value:'flex',
-                            selector:'#field-pay_later_' + location + '_message_flex_color'
-                        }
-                    ]
-                );
-            })
-        }
+		// We need to use jQuery here as the select might be a select2 element, which doesn't use native events.
+		jQuery( toggleElement ).on( 'change', ( event ) => {
+			const value = event.target.value;
+			group.forEach( ( elementToToggle ) => {
+				if ( value === elementToToggle.value ) {
+					document.querySelector(
+						elementToToggle.selector
+					).style.display = '';
+					return;
+				}
+				document.querySelector(
+					elementToToggle.selector
+				).style.display = 'none';
+			} );
+		} );
+	};
 
-        const removeDisabledCardIcons = (disabledCardsSelectSelector, iconsSelectSelector) => {
-            const iconsSelect = document.querySelector(iconsSelectSelector);
-            if (! iconsSelect) {
-                return;
-            }
-            const allOptions = Array.from(document.querySelectorAll(disabledCardsSelectSelector + ' option'));
-            const iconVersions = {
-                'visa': {
-                    'light': {'label': 'Visa (light)'},
-                    'dark' : {'label': 'Visa (dark)', 'value': 'visa-dark'}
-                },
-                'mastercard': {
-                    'light': {'label': 'Mastercard (light)'},
-                    'dark' : {'label': 'Mastercard (dark)', 'value': 'mastercard-dark'}
-                }
-            }
-            const replace = () => {
-                const validOptions = allOptions.filter(option => ! option.selected);
-                const selectedValidOptions = validOptions.map(
-                    (option) => {
-                        option = option.cloneNode(true);
-                        let value = option.value;
-                        option.selected = iconsSelect.querySelector('option[value="' + value + '"]') && iconsSelect.querySelector('option[value="' + value + '"]').selected;
-                        if(value === 'visa' || value === 'mastercard') {
-                            let darkOption = option.cloneNode(true);
-                            let currentVersion = iconVersions[value];
-                            let darkValue = iconVersions[value].dark.value;
+	const togglePayLaterMessageFields = () => {
+		payLaterMessagingAllLocations.forEach( ( location ) => {
+			groupToggleSelect(
+				'#ppcp-pay_later_' + location + '_message_layout',
+				[
+					{
+						value: 'text',
+						selector:
+							'#field-pay_later_' + location + '_message_logo',
+					},
+					{
+						value: 'text',
+						selector:
+							'#field-pay_later_' +
+							location +
+							'_message_position',
+					},
+					{
+						value: 'text',
+						selector:
+							'#field-pay_later_' + location + '_message_color',
+					},
+					{
+						value: 'flex',
+						selector:
+							'#field-pay_later_' +
+							location +
+							'_message_flex_ratio',
+					},
+					{
+						value: 'flex',
+						selector:
+							'#field-pay_later_' +
+							location +
+							'_message_flex_color',
+					},
+				]
+			);
+		} );
+	};
 
-                            option.text = currentVersion.light.label;
-                            darkOption.text = currentVersion.dark.label;
-                            darkOption.value = darkValue;
-                            darkOption.selected = iconsSelect.querySelector('option[value="' + darkValue + '"]') && iconsSelect.querySelector('option[value="' + darkValue + '"]').selected;
+	const removeDisabledCardIcons = (
+		disabledCardsSelectSelector,
+		iconsSelectSelector
+	) => {
+		const iconsSelect = document.querySelector( iconsSelectSelector );
+		if ( ! iconsSelect ) {
+			return;
+		}
+		const allOptions = Array.from(
+			document.querySelectorAll( disabledCardsSelectSelector + ' option' )
+		);
+		const iconVersions = {
+			visa: {
+				light: { label: 'Visa (light)' },
+				dark: { label: 'Visa (dark)', value: 'visa-dark' },
+			},
+			mastercard: {
+				light: { label: 'Mastercard (light)' },
+				dark: { label: 'Mastercard (dark)', value: 'mastercard-dark' },
+			},
+		};
+		const replace = () => {
+			const validOptions = allOptions.filter(
+				( option ) => ! option.selected
+			);
+			const selectedValidOptions = validOptions
+				.map( ( option ) => {
+					option = option.cloneNode( true );
+					const value = option.value;
+					option.selected =
+						iconsSelect.querySelector(
+							'option[value="' + value + '"]'
+						) &&
+						iconsSelect.querySelector(
+							'option[value="' + value + '"]'
+						).selected;
+					if ( value === 'visa' || value === 'mastercard' ) {
+						const darkOption = option.cloneNode( true );
+						const currentVersion = iconVersions[ value ];
+						const darkValue = iconVersions[ value ].dark.value;
 
-                            return [option, darkOption];
-                        }
-                        return option;
-                    }
-                ).flat();
+						option.text = currentVersion.light.label;
+						darkOption.text = currentVersion.dark.label;
+						darkOption.value = darkValue;
+						darkOption.selected =
+							iconsSelect.querySelector(
+								'option[value="' + darkValue + '"]'
+							) &&
+							iconsSelect.querySelector(
+								'option[value="' + darkValue + '"]'
+							).selected;
 
-                iconsSelect.innerHTML = '';
-                selectedValidOptions.forEach(
-                    (option) => {
-                        if(Array.isArray(option)){
-                            option.forEach(
-                                (option) => {
-                                    iconsSelect.appendChild(option);
-                                }
-                            )
-                        }
+						return [ option, darkOption ];
+					}
+					return option;
+				} )
+				.flat();
 
-                        iconsSelect.appendChild(option);
-                    }
-                );
-            };
+			iconsSelect.innerHTML = '';
+			selectedValidOptions.forEach( ( option ) => {
+				if ( Array.isArray( option ) ) {
+					option.forEach( ( option ) => {
+						iconsSelect.appendChild( option );
+					} );
+				}
 
-            const disabledCardsSelect = jQuery(disabledCardsSelectSelector);
-            disabledCardsSelect.on('change', replace);
-            replace();
-        };
+				iconsSelect.appendChild( option );
+			} );
+		};
 
-        const toggleInputsBySelectedLocations = (
-            stylingPerSelector,
-            locationsSelector,
-            groupToShowOnChecked,
-            groupToHideOnChecked,
-            inputType
-        ) => {
+		const disabledCardsSelect = jQuery( disabledCardsSelectSelector );
+		disabledCardsSelect.on( 'change', replace );
+		replace();
+	};
 
-            const payLaterMessagingEnabled = document.querySelector(payLaterMessagingEnabledSelector);
-            const stylingPerElement = document.querySelector(stylingPerSelector);
-            const locationsElement = document.querySelector(locationsSelector);
-            const stylingPerElementWrapper = stylingPerElement?.closest('tr');
-            const stylingPerElementWrapperSelector = '#'+ stylingPerElementWrapper?.getAttribute('id');
+	const hideElements = ( selectorGroup ) => {
+		selectorGroup.forEach( ( selector ) =>
+			setVisibleByClass( selector, false, 'hide' )
+		);
+	};
 
-            if (! stylingPerElement) {
-                return;
-            }
+	const showElements = ( selectorGroup ) => {
+		selectorGroup.forEach( ( selector ) =>
+			setVisibleByClass( selector, true, 'hide' )
+		);
+	};
 
-            const toggleElementsBySelectedLocations = () => {
-                stylingPerElementWrapper.style.display = '';
-                let selectedLocations = getSelectedLocations(locationsSelector);
-                let emptySmartButtonLocationMessage = jQuery('.ppcp-empty-smart-button-location');
+	const toggleInputsBySelectedLocations = (
+		stylingPerSelector,
+		locationsSelector,
+		groupToShowOnChecked,
+		groupToHideOnChecked,
+		inputType
+	) => {
+		const payLaterMessagingEnabled = document.querySelector(
+			payLaterMessagingEnabledSelector
+		);
 
-                if(selectedLocations.length === 0) {
-                    hideElements(groupToHideOnChecked.concat(stylingPerElementWrapperSelector));
-                    if (emptySmartButtonLocationMessage.length === 0) {
-                        jQuery(PayPalCommerceSettings.empty_smart_button_location_message).insertAfter(jQuery(smartButtonLocationsSelector).find('.description'));
-                    }
-                }
+		const stylingPerElement = document.querySelector( stylingPerSelector );
+		if ( ! stylingPerElement ) {
+			return;
+		}
 
-                if (! stylingPerElement.checked) {
-                    return;
-                }
+		const stylingPerElementWrapper = stylingPerElement.closest( 'tr' );
 
-                if (inputType === 'messages' && ! payLaterMessagingEnabled.checked) {
-                    return;
-                }
+		const toggleElementsBySelectedLocations = () => {
+			const selectedLocations = getSelectedLocations( locationsSelector );
 
-                const inputSelectors = inputSelectorsByLocations(selectedLocations, inputType);
+			setVisibleByClass(
+				stylingPerElementWrapper,
+				selectedLocations.length > 0,
+				'hide'
+			);
 
-                groupToShowOnChecked.forEach( (element) => {
-                    if ( inputSelectors.includes(element) ) {
-                        document.querySelector(element).style.display = '';
-                        return;
-                    }
-                    document.querySelector(element).style.display = 'none';
-                })
+			if ( selectedLocations.length === 0 ) {
+				hideElements( groupToHideOnChecked );
 
-                if (inputType === 'messages') {
-                    togglePayLaterMessageFields();
-                }
-            }
+				const emptySmartButtonLocationMessage = document.querySelector(
+					'.ppcp-empty-smart-button-location'
+				);
+				if ( ! emptySmartButtonLocationMessage ) {
+					jQuery(
+						PayPalCommerceSettings.empty_smart_button_location_message
+					).insertAfter(
+						jQuery( smartButtonLocationsSelector ).find(
+							'.description'
+						)
+					);
+				}
+			}
 
-            const hideElements = (selectroGroup) => {
-                selectroGroup.forEach( (elementToHide) => {
-                    document.querySelector(elementToHide).style.display = 'none';
-                })
-            }
+			if ( ! stylingPerElement.checked ) {
+				return;
+			}
 
-            const showElements = (selectroGroup) => {
-                selectroGroup.forEach( (elementToShow) => {
-                    document.querySelector(elementToShow).style.display = '';
-                })
-            }
+			if (
+				inputType === 'messages' &&
+				! payLaterMessagingEnabled.checked
+			) {
+				return;
+			}
 
-            groupToggle(stylingPerSelector, groupToShowOnChecked);
-            toggleElementsBySelectedLocations();
+			const inputSelectors = inputSelectorsByLocations(
+				selectedLocations,
+				inputType
+			);
 
-            if (stylingPerElement.checked) {
-                hideElements(groupToHideOnChecked);
-            }
+			groupToShowOnChecked.forEach( ( element ) => {
+				setVisibleByClass(
+					element,
+					inputSelectors.includes( element ),
+					'hide'
+				);
+			} );
 
-            stylingPerElement.addEventListener(
-                'change',
-                (event) => {
-                    toggleElementsBySelectedLocations();
+			if ( inputType === 'messages' ) {
+				togglePayLaterMessageFields();
+			}
+		};
 
-                    if (event.target.checked) {
-                        hideElements(groupToHideOnChecked);
-                        return;
-                    }
+		groupToggle( stylingPerSelector, groupToShowOnChecked );
+		toggleElementsBySelectedLocations();
 
-                    let selectedLocations = getSelectedLocations(locationsSelector);
-                    if(selectedLocations.length > 0) {
-                        showElements(groupToHideOnChecked);
-                    }
+		if ( stylingPerElement.checked ) {
+			hideElements( groupToHideOnChecked );
+		}
 
-                    if (inputType === 'messages') {
-                        togglePayLaterMessageFields();
-                    }
-                }
-            );
+		stylingPerElement.addEventListener( 'change', ( event ) => {
+			toggleElementsBySelectedLocations();
 
-            // We need to use jQuery here as the select might be a select2 element, which doesn't use native events.
-            jQuery(locationsElement).on('change', function (){
-                let emptySmartButtonLocationMessage = jQuery('.ppcp-empty-smart-button-location');
-                emptySmartButtonLocationMessage?.remove();
-                toggleElementsBySelectedLocations()
-                stylingPerElement.dispatchEvent(new Event('change'))
-            });
-        }
+			if ( event.target.checked ) {
+				hideElements( groupToHideOnChecked );
+				return;
+			}
 
-        const getSelectedLocations = (selector) => {
-            let checkedLocations = document.querySelectorAll(selector + ' :checked');
-            return [...checkedLocations].map(option => option.value);
-        }
+			const selectedLocations = getSelectedLocations( locationsSelector );
+			if ( selectedLocations.length > 0 ) {
+				showElements( groupToHideOnChecked );
+			}
 
-        const inputSelectorsByLocations = (locations, inputType = 'messages') => {
-            let inputSelectros = [];
+			if ( inputType === 'messages' ) {
+				togglePayLaterMessageFields();
+			}
+		} );
 
-            locations.forEach( (location) => {
-                inputSelectros = inputType === 'messages'
-                    ? inputSelectros.concat(payLaterMessagingInputSelectorByLocation(location))
-                    : inputSelectros.concat(butttonInputSelectorByLocation(location));
-            })
+		// We need to use jQuery here as the select might be a select2 element, which doesn't use native events.
+		jQuery( locationsSelector ).on( 'change', function () {
+			const emptySmartButtonLocationMessage = jQuery(
+				'.ppcp-empty-smart-button-location'
+			);
+			emptySmartButtonLocationMessage?.remove();
+			toggleElementsBySelectedLocations();
+			stylingPerElement.dispatchEvent( new Event( 'change' ) );
+		} );
+	};
 
-            return inputSelectros
-        }
+	const getSelectedLocations = ( selector ) => {
+		const checkedLocations = document.querySelectorAll(
+			selector + ' :checked'
+		);
+		return [ ...checkedLocations ].map( ( option ) => option.value );
+	};
 
-        const payLaterMessagingInputSelectorByLocation = (location) => {
-            const inputSelectors = [
-                '#field-pay_later_' + location + '_message_layout',
-                '#field-pay_later_' + location + '_message_logo',
-                '#field-pay_later_' + location + '_message_position',
-                '#field-pay_later_' + location + '_message_color',
-                '#field-pay_later_' + location + '_message_flex_color',
-                '#field-pay_later_' + location + '_message_flex_ratio',
-                '#field-pay_later_' + location + '_message_preview',
-            ]
+	const inputSelectorsByLocations = ( locations, inputType = 'messages' ) => {
+		let inputSelectros = [];
 
-            if (location !== 'general') {
-                inputSelectors.push('#field-pay_later_' + location + '_messaging_heading');
-            }
+		locations.forEach( ( location ) => {
+			inputSelectros =
+				inputType === 'messages'
+					? inputSelectros.concat(
+							payLaterMessagingInputSelectorByLocation( location )
+					  )
+					: inputSelectros.concat(
+							butttonInputSelectorByLocation( location )
+					  );
+		} );
 
-            return inputSelectors
-        }
+		return inputSelectros;
+	};
 
-        const butttonInputSelectorByLocation = (location) => {
-            const locationPrefix = location === 'checkout' ? '' : '_' + location;
-            const inputSelectors = [
-                '#field-button' + locationPrefix + '_layout',
-                '#field-button' + locationPrefix + '_tagline',
-                '#field-button' + locationPrefix + '_label',
-                '#field-button' + locationPrefix + '_color',
-                '#field-button' + locationPrefix + '_shape',
-                '#field-button' + locationPrefix + '_preview',
-            ]
+	const payLaterMessagingInputSelectorByLocation = ( location ) => {
+		const inputSelectors = [
+			'#field-pay_later_' + location + '_message_layout',
+			'#field-pay_later_' + location + '_message_logo',
+			'#field-pay_later_' + location + '_message_position',
+			'#field-pay_later_' + location + '_message_color',
+			'#field-pay_later_' + location + '_message_flex_color',
+			'#field-pay_later_' + location + '_message_flex_ratio',
+			'#field-pay_later_' + location + '_message_preview',
+		];
 
-            if (location !== 'general') {
-                inputSelectors.push('#field-button_' + location + '_heading');
-            }
+		if ( location !== 'general' ) {
+			inputSelectors.push(
+				'#field-pay_later_' + location + '_messaging_heading'
+			);
+		}
 
-            if (location === 'mini-cart') {
-                inputSelectors.push('#field-button' + locationPrefix + '_height');
-            }
+		return inputSelectors;
+	};
 
-            return inputSelectors
-        }
+	const butttonInputSelectorByLocation = ( location ) => {
+		const locationPrefix = location === 'checkout' ? '' : '_' + location;
+		const inputSelectors = [
+			'#field-button' + locationPrefix + '_layout',
+			'#field-button' + locationPrefix + '_tagline',
+			'#field-button' + locationPrefix + '_label',
+			'#field-button' + locationPrefix + '_color',
+			'#field-button' + locationPrefix + '_shape',
+			'#field-button' + locationPrefix + '_height',
+			'#field-button' + locationPrefix + '_preview',
+		];
 
-        const allPayLaterMessaginginputSelectors = () => {
-            let stylingInputSelectors = inputSelectorsByLocations(payLaterMessagingAllLocations);
+		if ( location !== 'general' ) {
+			inputSelectors.push( '#field-button_' + location + '_heading' );
+		}
 
-            return stylingInputSelectors.concat(payLaterMessagingLocationsSelector, '#field-pay_later_enable_styling_per_messaging_location');
-        }
+		return inputSelectors.filter( ( selector ) =>
+			document.querySelector( selector )
+		);
+	};
 
-        const toggleMessagingEnabled = () => {
-            const payLaterMessagingEnabled = document.querySelector(payLaterMessagingEnabledSelector);
-            const stylingPerMessagingElement = document.querySelector('#ppcp-pay_later_enable_styling_per_messaging_location');
+	const allPayLaterMessaginginputSelectors = () => {
+		const stylingInputSelectors = inputSelectorsByLocations(
+			payLaterMessagingAllLocations
+		);
 
-            groupToggle(
-                payLaterMessagingEnabledSelector,
-                allPayLaterMessaginginputSelectors()
-            );
+		return stylingInputSelectors.concat(
+			payLaterMessagingLocationsSelector,
+			'#field-pay_later_enable_styling_per_messaging_location'
+		);
+	};
 
-            if (! payLaterMessagingEnabled) {
-                return;
+	const toggleMessagingEnabled = () => {
+		const payLaterMessagingEnabled = document.querySelector(
+			payLaterMessagingEnabledSelector
+		);
+		const stylingPerMessagingElement = document.querySelector(
+			'#ppcp-pay_later_enable_styling_per_messaging_location'
+		);
 
-            }
+		groupToggle(
+			payLaterMessagingEnabledSelector,
+			allPayLaterMessaginginputSelectors()
+		);
 
-            payLaterMessagingEnabled.addEventListener(
-                'change',
-                (event) => {
-                    if (! event.target.checked) {
-                        return;
-                    }
-                    stylingPerMessagingElement.dispatchEvent(new Event('change'))
-                }
-            );
-        }
+		if ( ! payLaterMessagingEnabled ) {
+			return;
+		}
 
-        (() => {
-            removeDisabledCardIcons('select[name="ppcp[disable_cards][]"]', 'select[name="ppcp[card_icons][]"]');
+		payLaterMessagingEnabled.addEventListener( 'change', ( event ) => {
+			if ( ! event.target.checked ) {
+				return;
+			}
+			stylingPerMessagingElement.dispatchEvent( new Event( 'change' ) );
+		} );
+	};
 
-            groupToggle(
-                '#ppcp-pay_later_button_enabled',
-                ['#field-pay_later_button_locations']
-            );
+	const referenceTransactionsCheck = () => {
+		if (
+			typeof PayPalCommerceGatewaySettings !== 'undefined' &&
+			PayPalCommerceGatewaySettings.reference_transaction_enabled !== '1'
+		) {
+			document
+				.getElementById( 'ppcp-vault_enabled' )
+				?.setAttribute( 'disabled', 'disabled' );
 
-            toggleInputsBySelectedLocations(
-                '#ppcp-pay_later_enable_styling_per_messaging_location',
-                payLaterMessagingLocationsSelect,
-                inputSelectorsByLocations(payLaterMessagingSelectableLocations),
-                inputSelectorsByLocations(['general']),
-                'messages'
-            );
+			const description = document
+				.getElementById( 'field-vault_enabled' )
+				?.getElementsByClassName( 'description' )[ 0 ];
+			if ( description ) {
+				description.innerHTML =
+					PayPalCommerceGatewaySettings.vaulting_must_enable_advanced_wallet_message;
+			}
+		}
+	};
 
-            toggleInputsBySelectedLocations(
-                '#ppcp-smart_button_enable_styling_per_location',
-                smartButtonLocationsSelect,
-                inputSelectorsByLocations(smartButtonSelectableLocations, 'buttons'),
-                inputSelectorsByLocations(['general'], 'buttons'),
-                'buttons'
-            );
+    /**
+     * Hide the subscription settings when smart buttons are disabled for checkout,
+     * since the basic redirect gateway is disabled for subscriptions.
+     */
+	const initSettingsHidingForPlaceOrderGateway = () => {
+		const selectors = [
+			'#field-paypal_saved_payments',
+			'#field-subscriptions_mode',
+			'#field-vault_enabled',
+		];
 
-            toggleMessagingEnabled();
+		const updateSettingsVisibility = () => {
+			const selectedLocations = getSelectedLocations(
+				smartButtonLocationsSelect
+			);
+			const hasCheckoutSmartButtons =
+				selectedLocations.includes( 'checkout' ) ||
+				selectedLocations.includes( 'checkout-block-express' );
 
+			selectors.forEach( ( selector ) => {
+				setVisibleByClass( selector, hasCheckoutSmartButtons, 'hide' );
+			} );
+		};
 
-            groupToggle(
-                '#ppcp-vault_enabled',
-                [
-                    '#field-subscription_behavior_when_vault_fails',
-                ]
-            );
+		updateSettingsVisibility();
 
-            groupToggleSelect(
-                '#ppcp-intent',
-                [
-                    {
-                        value:'authorize',
-                        selector:'#field-capture_for_virtual_only'
-                    },
-                    {
-                        value:'authorize',
-                        selector:'#field-capture_on_status_change'
-                    }
-                ]
-            );
+		jQuery( smartButtonLocationsSelect ).on(
+			'change',
+			updateSettingsVisibility
+		);
+	};
 
-            togglePayLaterMessageFields();
-        })();
-    }
-)
+	( () => {
+		removeDisabledCardIcons(
+			'select[name="ppcp[disable_cards][]"]',
+			'select[name="ppcp[card_icons][]"]'
+		);
+
+		groupToggle( '#ppcp-pay_later_button_enabled', [
+			'#field-pay_later_button_locations',
+		] );
+
+		toggleInputsBySelectedLocations(
+			'#ppcp-pay_later_enable_styling_per_messaging_location',
+			payLaterMessagingLocationsSelect,
+			inputSelectorsByLocations( payLaterMessagingSelectableLocations ),
+			inputSelectorsByLocations( [ 'general' ] ),
+			'messages'
+		);
+
+		toggleInputsBySelectedLocations(
+			'#ppcp-smart_button_enable_styling_per_location',
+			smartButtonLocationsSelect,
+			inputSelectorsByLocations(
+				smartButtonSelectableLocations,
+				'buttons'
+			),
+			inputSelectorsByLocations( [ 'general' ], 'buttons' ),
+			'buttons'
+		);
+
+		toggleMessagingEnabled();
+
+        initSettingsHidingForPlaceOrderGateway();
+
+		groupToggle( '#ppcp-vault_enabled', [
+			'#field-subscription_behavior_when_vault_fails',
+		] );
+
+		groupToggleSelect( '#ppcp-intent', [
+			{
+				value: 'authorize',
+				selector: '#field-capture_for_virtual_only',
+			},
+			{
+				value: 'authorize',
+				selector: '#field-capture_on_status_change',
+			},
+		] );
+
+		togglePayLaterMessageFields();
+
+		referenceTransactionsCheck();
+	} )();
+} );

@@ -54,22 +54,28 @@ class OnboardingOptionsRenderer {
 	 * Renders the onboarding options.
 	 *
 	 * @param bool $is_shop_supports_dcc Whether the shop can use DCC (country, currency).
+	 * @param bool $make_dcc_default Whether DCC should be selected by default.
 	 */
-	public function render( bool $is_shop_supports_dcc ): string {
-		$checked = $is_shop_supports_dcc ? '' : 'checked';
-		return '
-<ul class="ppcp-onboarding-options">
-	<li>
-		<label><input type="checkbox" disabled checked> ' .
-			__( 'Enable PayPal Payments — includes PayPal, Venmo, Pay Later — with fraud protection', 'woocommerce-paypal-payments' ) . '
-		</label>
-	</li>
-	<li>
-		<label><input type="checkbox" id="ppcp-onboarding-accept-cards" ' . $checked . '> ' . __( 'Securely accept all major credit & debit cards on the strength of the PayPal network', 'woocommerce-paypal-payments' ) . '</label>
-	</li>
-	<li>' . $this->render_dcc( $is_shop_supports_dcc ) . '</li>' .
-			$this->render_pui_option()
-		. '</ul>';
+	public function render( bool $is_shop_supports_dcc, bool $make_dcc_default ): string {
+		$checked_cards = ( $is_shop_supports_dcc && ! $make_dcc_default ) ? '' : 'checked';
+
+		$on_boarding_options = '
+			<li>
+				<label><input type="checkbox" disabled checked> ' .
+					__( 'Enable PayPal Payments — includes PayPal, Venmo, Pay Later — with fraud protection', 'woocommerce-paypal-payments' ) . '
+				</label>
+			</li>
+			<li>
+				<label><input type="checkbox" id="ppcp-onboarding-accept-cards" ' . $checked_cards . '> ' . __( 'Securely accept all major credit & debit cards on the strength of the PayPal network', 'woocommerce-paypal-payments' ) . '</label>
+			</li>
+			<li>' .
+				$this->render_dcc( $is_shop_supports_dcc, $make_dcc_default ) .
+			'</li>' .
+			$this->render_pui_option();
+
+		return ' <ul class="ppcp-onboarding-options">' .
+			apply_filters( 'ppcp_onboarding_options', $on_boarding_options ) .
+		'</ul>';
 	}
 
 	/**
@@ -90,7 +96,7 @@ class OnboardingOptionsRenderer {
 				$checked = '';
 			}
 
-			return '<li><label><input type="checkbox" id="ppcp-onboarding-pui" ' . $checked . '> ' .
+			return '<li><label><input type="checkbox" id="ppcp-onboarding-pui" ' . $checked . ' data-onboarding-option="ppcp-onboarding-pui"> ' .
 				__( 'Onboard with Pay upon Invoice', 'woocommerce-paypal-payments' ) . '
 		</label></li>';
 		}
@@ -102,8 +108,9 @@ class OnboardingOptionsRenderer {
 	 * Renders the onboarding DCC options.
 	 *
 	 * @param bool $is_shop_supports_dcc Whether the shop can use DCC (country, currency).
+	 * @param bool $make_dcc_default Whether DCC should be selected by default.
 	 */
-	private function render_dcc( bool $is_shop_supports_dcc ): string {
+	private function render_dcc( bool $is_shop_supports_dcc, bool $make_dcc_default ): string {
 		$items = array();
 
 		$is_us_shop = 'US' === $this->country;
@@ -131,7 +138,10 @@ class OnboardingOptionsRenderer {
 				__( 'For Standard payments, Casual sellers may connect their Personal PayPal account in eligible countries to sell on WooCommerce. For Advanced payments, a Business PayPal account is required.', 'woocommerce-paypal-payments' )
 			),
 		);
-		$items[]          = '
+
+		$basic_table_rows = apply_filters( 'ppcp_onboarding_basic_table_rows', $basic_table_rows );
+
+		$items[] = '
 <li>
 	<label>
 		<input type="radio" id="ppcp-onboarding-dcc-basic" name="ppcp_onboarding_dcc" value="basic" checked ' .
@@ -186,11 +196,15 @@ class OnboardingOptionsRenderer {
 					__( 'For Standard payments, Casual sellers may connect their Personal PayPal account in eligible countries to sell on WooCommerce. For Advanced payments, a Business PayPal account is required.', 'woocommerce-paypal-payments' )
 				),
 			);
-			$items[]        = '
+
+			$dcc_table_rows = apply_filters( 'ppcp_onboarding_dcc_table_rows', $dcc_table_rows, $this );
+
+			$items[] = '
 <li>
 	<label>
 		<input type="radio" id="ppcp-onboarding-dcc-acdc" name="ppcp_onboarding_dcc" value="acdc" ' .
-				'data-screen-url="' . $this->get_screen_url( 'acdc' ) . '"> ' .
+				( $make_dcc_default ? 'checked' : '' ) .
+				' data-screen-url="' . $this->get_screen_url( 'acdc' ) . '"> ' .
 				__( 'Advanced Card Processing', 'woocommerce-paypal-payments' ) . '
 	</label>
 	' . $this->render_tooltip( __( 'PayPal acts as the payment processor for card transactions. You can add optional features like Chargeback Protection for more security.', 'woocommerce-paypal-payments' ) ) . '
@@ -219,7 +233,7 @@ class OnboardingOptionsRenderer {
 	 * @param string $note The additional description text, such as about conditions.
 	 * @return string
 	 */
-	private function render_table_row( string $header, string $value, string $tooltip = '', string $note = '' ): string {
+	public function render_table_row( string $header, string $value, string $tooltip = '', string $note = '' ): string {
 		$value_html = $value;
 		if ( $note ) {
 			$value_html .= '<br/><span class="ppcp-muted-text">' . $note . '</span>';

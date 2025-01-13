@@ -1,0 +1,100 @@
+#default_f {
+	display: none;
+}
+.selected_by_field {
+	display: none;
+}
+#match_rules_wrap {
+	display: none;
+}
+#wc_order_rules_form table.conditions_table_edit th,
+table.conditions_table_edit td {
+	padding: .7em !important;
+}
+#wc_order_rules_form #match_rules_wrap {
+	margin-bottom: .5em;
+}
+#wc_order_rules_form td.order_rule .chosen-container,
+#wc_order_rules_form td.order_var .chosen-container,
+#wc_order_rules_form td.order_var .select2-container,
+#wc_order_rules_form td.order_rule .select2-container,
+#wc_order_rules_form td.order_value .select2-container {
+	width: 100% !important;
+}
+#wc_order_rules_form table.conditions_table_edit th.variable-column,
+#wc_order_rules_form table.conditions_table_edit th.rule-column,
+#wc_order_rules_form table.conditions_table_edit th.value-column {
+	width: 31% !important;
+}
+#wc_order_rules_form td.order_value input[type=number] {
+	float: left;
+	margin-right: 10px;
+	width: 45% !important;
+}
+#wc_order_rules_form td.order_value .order_date_inp_second + .select2-container {
+	width: 45% !important;
+}
+#wc_order_rules_form table.conditions_table td {
+	overflow: visible;
+}
+#rule_row_colour{
+	width: 80px;
+	text-align: center;
+}
+.row_colour_assigned{
+	 white-space: normal;
+    width: 92%;
+     border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 22px;
+    min-width: 80px;
+    text-align: center;
+     word-wrap: break-word;
+}
+.no_row_colour_assigned{
+	display: block;
+    font-family: "woocommerce" !important;
+    font-size: 19px;
+    line-height: 19px;
+    border-radius: 100%;
+    color: #a00;
+    display: block;
+    float: none;
+    height: 19px;
+    margin: auto;
+    width: 19px;
+}
+.no_row_colour_assigned:after{
+	content: '\e013';
+}
+table.orderrules th.column-name {
+	width: 40%;
+}
+.select2-container.order_date_inp_second{
+    float: left;
+}
+.woocommerce_page_wc_order_rules #wc_order_rules_form table.orderrules tbody td {
+	cursor: move;
+}
+/* WooCommerce Orders Page Filter Tidier Tweak */
+.select2-container .select2-selection--single .select2-selection__rendered {
+	line-height: 26px !important;
+}
+.select2-container .select2-selection--single {
+	height: 28px !important;
+}
+.post-type-shop_order .tablenav .select2-container {
+	margin: 1px !important;
+	margin-right: 6px !important;
+	font-size: 12px !important;
+}
+.post-type-shop_order .tablenav input, .post-type-shop_order .tablenav select {
+	line-height: 28px !important;
+	height: 28px !important;
+}
+.post-type-shop_order .tablenav .button {
+	line-height: 26px !important;
+}

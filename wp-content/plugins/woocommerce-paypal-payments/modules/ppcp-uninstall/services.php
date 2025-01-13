@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WooCommerce\PayPalCommerce\Uninstall;
 
 use WooCommerce\PayPalCommerce\ApiClient\Repository\PayPalRequestIdRepository;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Uninstall\Assets\ClearDatabaseAssets;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\CardButtonGateway;
@@ -34,6 +35,7 @@ return array(
 			WebhookSimulation::OPTION_ID,
 			WebhookRegistrar::KEY,
 			'ppcp_payment_tokens_migration_initialized',
+			SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI,
 		);
 	},
 
@@ -42,6 +44,12 @@ return array(
 			'woocommerce_paypal_payments_check_pui_payment_captured',
 			'woocommerce_paypal_payments_check_saved_payment',
 			'woocommerce_paypal_payments_payment_tokens_migration',
+		);
+	},
+
+	'uninstall.ppcp-all-action-names'           => function( ContainerInterface $container ) : array {
+		return array(
+			'woocommerce_paypal_payments_uninstall',
 		);
 	},
 

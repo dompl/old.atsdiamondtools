@@ -70,8 +70,8 @@ class Container implements ContainerInterface {
 	 * @param WooContainer    $woo_container    Delegate container for WooCommerce (Optional).
 	 */
 	public function __construct(
-		LegacyContainer $legacy_container = null,
-		WooContainer $woo_container = null
+		?LegacyContainer $legacy_container = null,
+		?WooContainer $woo_container = null
 	) {
 		$this->container = new ExtendedContainer();
 
@@ -107,7 +107,7 @@ class Container implements ContainerInterface {
 		try {
 			return $this->container->get( $id );
 		} catch ( \Throwable $e ) {
-			throw new ContainerException( $e->getMessage(), $e->getCode(), $e );
+			throw new ContainerException( $e->getMessage(), $e->getCode(), $e ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 	}
 

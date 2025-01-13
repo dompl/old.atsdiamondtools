@@ -56,7 +56,7 @@ function imagify_sanitize_context( $context ) {
  * @author Grégory Viguier
  *
  * @param  string $context  The context name. Default values are 'wp' and 'custom-folders'.
- * @return ContextInterface The context instance.
+ * @return \Imagify\Context\ContextInterface The context instance.
  */
 function imagify_get_context( $context ) {
 	$class_name = imagify_get_context_class_name( $context );
@@ -110,7 +110,7 @@ function imagify_get_context_class_name( $context ) {
  *
  * @param  int    $media_id The media ID.
  * @param  string $context  The context name. Default values are 'wp' and 'custom-folders'.
- * @return ProcessInterface The optimization process instance.
+ * @return \Imagify\Optimization\Process\ProcessInterface The optimization process instance.
  */
 function imagify_get_optimization_process( $media_id, $context ) {
 	$class_name = imagify_get_optimization_process_class_name( $context );
@@ -183,6 +183,32 @@ function imagify_get_filesystem() {
  */
 function imagify_path_to_webp( $path ) {
 	return $path . '.webp';
+}
+
+/**
+ * Convert a path (or URL) to its next-gen version.
+ * To keep the function simple:
+ * - Not tested if it's an image.
+ * - File existance is not tested.
+ * - If an URL is given, make sure it doesn't contain query args.
+ *
+ * @since  2.2
+ *
+ * @param  string $path A file path or URL.
+ * @param  string $format format we are targeting.
+ * @return string
+ */
+function imagify_path_to_nextgen( $path, string $format ) {
+	switch ( $format ) {
+		case 'webp':
+			$path = $path . '.webp';
+			break;
+		case 'avif':
+			$path = $path . '.avif';
+			break;
+	}
+
+	return $path;
 }
 
 /**

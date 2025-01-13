@@ -39,7 +39,7 @@ class PaymentRequest {
 	 * @param  LegacyProxy $legacy_proxy Legacy proxy.
 	 * @param  array|null  $request      Request data, this can be $_POST, or WP_REST_Request::get_params().
 	 */
-	public function __construct( LegacyProxy $legacy_proxy, array $request = null ) {
+	public function __construct( LegacyProxy $legacy_proxy, ?array $request = null ) {
 		$this->legacy_proxy = $legacy_proxy;
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$this->request = $request ?? $_POST;
@@ -117,7 +117,7 @@ class PaymentRequest {
 
 		$is_woopayment_selected = isset( $request['payment_method'] ) && WC_Payment_Gateway_WCPay::GATEWAY_ID === $request['payment_method'];
 		if ( ! $is_woopayment_selected ) {
-			throw new PaymentRequestException( __( 'WooPayments is not used during checkout.', 'woocommerce-payments' ) );
+			throw new PaymentRequestException( esc_html__( 'WooPayments is not used during checkout.', 'woocommerce-payments' ) );
 		}
 
 		$token_request_key = 'wc-' . WC_Payment_Gateway_WCPay::GATEWAY_ID . '-payment-token';
@@ -132,7 +132,7 @@ class PaymentRequest {
 			$token = $this->legacy_proxy->call_static( WC_Payment_Tokens::class, 'get', $token_id );
 
 			if ( is_null( $token ) ) {
-				throw new PaymentRequestException( __( 'Invalid saved payment method (token) ID.', 'woocommerce-payments' ) );
+				throw new PaymentRequestException( esc_html__( 'Invalid saved payment method (token) ID.', 'woocommerce-payments' ) );
 			}
 			return new SavedPaymentMethod( $token->get_token(), $token->get_id() );
 		}
@@ -142,7 +142,7 @@ class PaymentRequest {
 			return new NewPaymentMethod( $payment_method );
 		}
 
-		throw new PaymentRequestException( __( 'No valid payment method was selected.', 'woocommerce-payments' ) );
+		throw new PaymentRequestException( esc_html__( 'No valid payment method was selected.', 'woocommerce-payments' ) );
 	}
 
 	/**

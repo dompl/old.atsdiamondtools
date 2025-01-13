@@ -39,6 +39,7 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 			add_action( 'woocommerce_sections_' . $this->id, array( $this, 'output_sections' ) );
 			add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
 			add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_action( 'woocommerce_admin_field_add_settings_slot', array( $this, 'add_settings_slot' ) );
 		}
 
 		/**
@@ -62,6 +63,15 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		}
 
 		/**
+		 * Creates the React mount point for settings slot.
+		 */
+		public function add_settings_slot() {
+			?>
+			<div id="wc_settings_slotfill"> </div>
+			<?php
+		}
+
+		/**
 		 * Add this page to settings.
 		 *
 		 * @param array $pages The settings array where we'll add ourselves.
@@ -70,6 +80,42 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		 */
 		public function add_settings_page( $pages ) {
 			$pages[ $this->id ] = $this->label;
+
+			return $pages;
+		}
+
+		/**
+		 * Get page settings data to populate the settings editor.
+		 *
+		 * @param array $pages The settings array where we'll add data.
+		 *
+		 * @return array
+		 */
+		public function add_settings_page_data( $pages ) {
+			$sections      = $this->get_sections();
+			$sections_data = array();
+
+			// Loop through each section and get the settings for that section.
+			foreach ( $sections as $section_id => $section_label ) {
+				$section_settings = count( $sections ) > 1
+					? $this->get_settings_for_section( $section_id )
+					: $this->get_settings();
+
+				// Loop through each setting in the section and add the value to the settings data.
+				foreach ( $section_settings as $section_setting ) {
+					if ( isset( $section_setting['id'] ) ) {
+						$section_setting['value'] = isset( $section_setting['default'] )
+							// Fallback to the default value if it exists.
+							? get_option( $section_setting['id'], $section_setting['default'] )
+							// Otherwise, fallback to false.
+							: get_option( $section_setting['id'] );
+					}
+
+					$sections_data[] = $section_setting;
+				}
+			}
+
+			$pages[ $this->id ] = $sections_data;
 
 			return $pages;
 		}
@@ -153,7 +199,13 @@ if ( ! class_exists( 'WC_Settings_Page', false ) ) :
 		 */
 		public function get_sections() {
 			$sections = $this->get_own_sections();
-			return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
+			/**
+			 * Filters the sections for this settings page.
+			 *
+			 * @since 2.2.0
+			 * @param array $sections The sections for this settings page.
+			 */
+			return (array) apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 		}
 
 		/**

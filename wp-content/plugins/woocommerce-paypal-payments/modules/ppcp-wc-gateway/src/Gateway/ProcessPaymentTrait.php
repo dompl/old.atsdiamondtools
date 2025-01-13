@@ -13,52 +13,12 @@ use Exception;
 use Throwable;
 use WC_Order;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\GatewayGenericException;
+use WooCommerce\PayPalCommerce\ApiClient\Exception\PayPalApiException;
 
 /**
  * Trait ProcessPaymentTrait
  */
 trait ProcessPaymentTrait {
-	/**
-	 * Checks if PayPal or Credit Card gateways are enabled.
-	 *
-	 * @return bool Whether any of the gateways is enabled.
-	 */
-	protected function gateways_enabled(): bool {
-		if ( $this->config->has( 'enabled' ) && $this->config->get( 'enabled' ) ) {
-			return true;
-		}
-		if ( $this->config->has( 'dcc_enabled' ) && $this->config->get( 'dcc_enabled' ) ) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Scheduled the vaulted payment check.
-	 *
-	 * @param int $wc_order_id The WC order ID.
-	 * @param int $customer_id The customer ID.
-	 */
-	protected function schedule_saved_payment_check( int $wc_order_id, int $customer_id ): void {
-		$timestamp = 3 * MINUTE_IN_SECONDS;
-		if (
-			$this->config->has( 'subscription_behavior_when_vault_fails' )
-			&& $this->config->get( 'subscription_behavior_when_vault_fails' ) === 'capture_auth'
-		) {
-			$timestamp = 0;
-		}
-
-		as_schedule_single_action(
-			time() + $timestamp,
-			'woocommerce_paypal_payments_check_saved_payment',
-			array(
-				'order_id'    => $wc_order_id,
-				'customer_id' => $customer_id,
-				'intent'      => $this->config->has( 'intent' ) ? $this->config->get( 'intent' ) : '',
-			)
-		);
-	}
-
 	/**
 	 * Handles the payment failure.
 	 *
@@ -77,6 +37,7 @@ trait ProcessPaymentTrait {
 		}
 
 		$this->session_handler->destroy_session_data();
+		WC()->session->set( 'ppcp_subscription_id', '' );
 
 		wc_add_notice( $error->getMessage(), 'error' );
 
@@ -100,6 +61,7 @@ trait ProcessPaymentTrait {
 		}
 
 		$this->session_handler->destroy_session_data();
+		WC()->session->set( 'ppcp_subscription_id', '' );
 
 		return array(
 			'result'   => 'success',
@@ -113,8 +75,13 @@ trait ProcessPaymentTrait {
 	 * @param Throwable $exception The exception to format.
 	 * @return string
 	 */
-	protected function format_exception( Throwable $exception ): string {
-		$output = $exception->getMessage() . ' ' . basename( $exception->getFile() ) . ':' . $exception->getLine();
+	protected function format_exception( Throwable $exception ) : string {
+		$message = $exception->getMessage();
+		if ( is_a( $exception, PayPalApiException::class ) ) {
+			$message = $exception->get_details( $message );
+		}
+
+		$output = $message . ' ' . basename( $exception->getFile() ) . ':' . $exception->getLine();
 		$prev   = $exception->getPrevious();
 		if ( ! $prev ) {
 			return $output;

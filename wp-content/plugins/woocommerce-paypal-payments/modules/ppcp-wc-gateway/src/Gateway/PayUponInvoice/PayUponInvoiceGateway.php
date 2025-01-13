@@ -104,6 +104,13 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway {
 	protected $refund_processor;
 
 	/**
+	 * The module URL
+	 *
+	 * @var string
+	 */
+	private $module_url;
+
+	/**
 	 * PayUponInvoiceGateway constructor.
 	 *
 	 * @param PayUponInvoiceOrderEndpoint $order_endpoint The order endpoint.
@@ -116,6 +123,7 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway {
 	 * @param CheckoutHelper              $checkout_helper The checkout helper.
 	 * @param State                       $state The onboarding state.
 	 * @param RefundProcessor             $refund_processor The refund processor.
+	 * @param string                      $module_url The module URL.
 	 */
 	public function __construct(
 		PayUponInvoiceOrderEndpoint $order_endpoint,
@@ -127,7 +135,8 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway {
 		PayUponInvoiceHelper $pui_helper,
 		CheckoutHelper $checkout_helper,
 		State $state,
-		RefundProcessor $refund_processor
+		RefundProcessor $refund_processor,
+		string $module_url
 	) {
 		$this->id = self::ID;
 
@@ -157,6 +166,8 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway {
 		$this->transaction_url_provider = $transaction_url_provider;
 		$this->pui_helper               = $pui_helper;
 		$this->checkout_helper          = $checkout_helper;
+		$this->module_url               = $module_url;
+		$this->icon                     = apply_filters( 'woocommerce_paypal_payments_pay_upon_invoice_gateway_icon', esc_url( $this->module_url ) . 'assets/images/ratepay.svg' );
 
 		$this->state = $state;
 		if ( $state->current_state() === State::STATE_ONBOARDED ) {
@@ -198,25 +209,41 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway {
 				'description' => __( "Specify brand name, logo and customer service instructions to be presented on Ratepay's payment instructions.", 'woocommerce-paypal-payments' ),
 			),
 			'brand_name'                    => array(
-				'title'       => __( 'Brand name', 'woocommerce-paypal-payments' ),
-				'type'        => 'text',
-				'default'     => get_bloginfo( 'name' ) ?? '',
-				'desc_tip'    => true,
-				'description' => __( 'Merchant name displayed in Ratepay\'s payment instructions.', 'woocommerce-paypal-payments' ),
+				'title'             => __( 'Brand name', 'woocommerce-paypal-payments' ),
+				'type'              => 'text',
+				'default'           => get_bloginfo( 'name' ) ?? '',
+				'desc_tip'          => true,
+				'description'       => __( 'Merchant name displayed in Ratepay\'s payment instructions. Should not exceed 127 characters.', 'woocommerce-paypal-payments' ),
+				'maxlength'         => 127,
+				'custom_attributes' => array(
+					'pattern'      => '.{1,127}',
+					'autocomplete' => 'off',
+					'required'     => '',
+				),
 			),
 			'logo_url'                      => array(
-				'title'       => __( 'Logo URL', 'woocommerce-paypal-payments' ),
-				'type'        => 'url',
-				'default'     => '',
-				'desc_tip'    => true,
-				'description' => __( 'Logo to be presented on Ratepay\'s payment instructions.', 'woocommerce-paypal-payments' ),
+				'title'             => __( 'Logo URL', 'woocommerce-paypal-payments' ),
+				'type'              => 'url',
+				'default'           => '',
+				'desc_tip'          => true,
+				'description'       => __( 'Logo to be presented on Ratepay\'s payment instructions.', 'woocommerce-paypal-payments' ),
+				'custom_attributes' => array(
+					'pattern'      => '.+',
+					'autocomplete' => 'off',
+					'required'     => '',
+				),
 			),
 			'customer_service_instructions' => array(
-				'title'       => __( 'Customer service instructions', 'woocommerce-paypal-payments' ),
-				'type'        => 'text',
-				'default'     => '',
-				'desc_tip'    => true,
-				'description' => __( 'Customer service instructions to be presented on Ratepay\'s payment instructions.', 'woocommerce-paypal-payments' ),
+				'title'             => __( 'Customer service instructions', 'woocommerce-paypal-payments' ),
+				'type'              => 'text',
+				'default'           => '',
+				'desc_tip'          => true,
+				'description'       => __( 'Customer service instructions to be presented on Ratepay\'s payment instructions.', 'woocommerce-paypal-payments' ),
+				'custom_attributes' => array(
+					'pattern'      => '.+',
+					'autocomplete' => 'off',
+					'required'     => '',
+				),
 			),
 		);
 	}

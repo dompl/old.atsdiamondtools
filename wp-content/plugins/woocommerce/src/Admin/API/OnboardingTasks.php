@@ -37,7 +37,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 	protected $rest_base = 'onboarding/tasks';
 
 	/**
-	 * Duration to milisecond mapping.
+	 * Duration to millisecond mapping.
 	 *
 	 * @var array
 	 */
@@ -739,14 +739,6 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 		TaskLists::maybe_add_extended_tasks( $extended_tasks );
 
 		$lists = is_array( $task_list_ids ) && count( $task_list_ids ) > 0 ? TaskLists::get_lists_by_ids( $task_list_ids ) : TaskLists::get_lists();
-
-		// We have no use for hidden lists, it's expensive to compute individual tasks completion.
-		$lists = array_filter(
-			$lists,
-			function( $list ) {
-				return ! $list->is_hidden();
-			}
-		);
 
 		$json = array_map(
 			function( $list ) {

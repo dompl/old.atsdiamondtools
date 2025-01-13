@@ -7,6 +7,8 @@
  * @version  2.6.0
  */
 
+use Automattic\WooCommerce\Internal\Admin\EmailPreview;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -39,9 +41,6 @@ class WC_Admin {
 		if ( isset( $_GET['page'] ) && 'wc-addons' === $_GET['page'] ) {
 			add_filter( 'admin_body_class', array( 'WC_Admin_Addons', 'filter_admin_body_classes' ) );
 		}
-
-		// Fetch list of promotions from Woo.com for WooCommerce admin UI. We need to fire earlier than admin_init so we can filter menu items.
-		add_action( 'woocommerce_init', array( 'WC_Admin_Marketplace_Promotions', 'init_marketplace_promotions' ) );
 	}
 
 	/**
@@ -80,9 +79,6 @@ class WC_Admin {
 		// Marketplace suggestions & related REST API.
 		include_once __DIR__ . '/marketplace-suggestions/class-wc-marketplace-suggestions.php';
 		include_once __DIR__ . '/marketplace-suggestions/class-wc-marketplace-updater.php';
-
-		// Marketplace promotions.
-		include_once __DIR__ . '/class-wc-admin-marketplace-promotions.php';
 	}
 
 	/**
@@ -200,22 +196,8 @@ class WC_Admin {
 				die( 'Security check' );
 			}
 
-			// load the mailer class.
-			$mailer = WC()->mailer();
-
-			// get the preview email subject.
-			$email_heading = __( 'HTML email template', 'woocommerce' );
-
-			// get the preview email content.
-			ob_start();
-			include __DIR__ . '/views/html-email-template-preview.php';
-			$message = ob_get_clean();
-
-			// create a new email.
-			$email = new WC_Email();
-
-			// wrap the content with the email template and then add styles.
-			$message = apply_filters( 'woocommerce_mail_content', $email->style_inline( $mailer->wrap_message( $email_heading, $message ) ) );
+			$email_preview = wc_get_container()->get( EmailPreview::class );
+			$message       = $email_preview->render();
 
 			// print the preview email.
 			// phpcs:ignore WordPress.Security.EscapeOutput

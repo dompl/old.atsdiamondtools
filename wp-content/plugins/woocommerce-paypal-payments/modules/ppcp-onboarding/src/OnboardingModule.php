@@ -9,53 +9,67 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Onboarding;
 
-use WooCommerce\PayPalCommerce\Vendor\Dhii\Container\ServiceProvider;
-use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
+use WooCommerce\PayPalCommerce\Onboarding\Endpoint\UpdateSignupLinksEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Assets\OnboardingAssets;
 use WooCommerce\PayPalCommerce\Onboarding\Endpoint\LoginSellerEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Render\OnboardingRenderer;
-use WooCommerce\PayPalCommerce\Vendor\Interop\Container\ServiceProviderInterface;
+use WooCommerce\PayPalCommerce\Settings\SettingsModule;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 
 /**
  * Class OnboardingModule
  */
-class OnboardingModule implements ModuleInterface {
+class OnboardingModule implements ServiceModule, ExtendingModule, ExecutableModule {
+	use ModuleClassNameIdTrait;
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setup(): ServiceProviderInterface {
-		return new ServiceProvider(
-			require __DIR__ . '/../services.php',
-			require __DIR__ . '/../extensions.php'
-		);
+	public function services(): array {
+		return require __DIR__ . '/../services.php';
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function run( ContainerInterface $c ): void {
+	public function extensions(): array {
+		return require __DIR__ . '/../extensions.php';
+	}
 
-		$asset_loader = $c->get( 'onboarding.assets' );
-		/**
-		 * The OnboardingAssets.
-		 *
-		 * @var OnboardingAssets $asset_loader
-		 */
+	/**
+	 * {@inheritDoc}
+	 */
+	public function run( ContainerInterface $c ): bool {
+
 		add_action(
 			'admin_enqueue_scripts',
-			array(
-				$asset_loader,
-				'register',
-			)
-		);
-		add_action(
-			'woocommerce_settings_checkout',
-			array(
-				$asset_loader,
-				'enqueue',
-			)
+			function() use ( $c ) {
+				if (
+					apply_filters(
+					// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+						'woocommerce.feature-flags.woocommerce_paypal_payments.settings_enabled',
+						getenv( 'PCP_SETTINGS_ENABLED' ) === '1'
+					) && ! SettingsModule::should_use_the_old_ui()
+				) {
+					return;
+				}
+
+				$asset_loader = $c->get( 'onboarding.assets' );
+				assert( $asset_loader instanceof OnboardingAssets );
+
+				$asset_loader->register();
+				add_action(
+					'woocommerce_settings_checkout',
+					array(
+						$asset_loader,
+						'enqueue',
+					)
+				);
+			}
 		);
 
 		add_filter(
@@ -96,7 +110,7 @@ class OnboardingModule implements ModuleInterface {
 		);
 
 		add_action(
-			'wc_ajax_ppc-pui',
+			'wc_ajax_' . UpdateSignupLinksEndpoint::ENDPOINT,
 			static function () use ( $c ) {
 				$endpoint = $c->get( 'onboarding.endpoint.pui' );
 				$endpoint->handle_request();
@@ -106,13 +120,7 @@ class OnboardingModule implements ModuleInterface {
 		// Initialize REST routes at the appropriate time.
 		$rest_controller = $c->get( 'onboarding.rest' );
 		add_action( 'rest_api_init', array( $rest_controller, 'register_routes' ) );
-	}
 
-	/**
-	 * Returns the key for the module.
-	 *
-	 * @return string|void
-	 */
-	public function getKey() {
+		return true;
 	}
 }

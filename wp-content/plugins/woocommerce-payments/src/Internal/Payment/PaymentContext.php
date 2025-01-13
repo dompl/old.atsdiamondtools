@@ -151,7 +151,7 @@ class PaymentContext {
 	 *
 	 * @param string $cvc_confirmation The confirmation.
 	 */
-	public function set_cvc_confirmation( string $cvc_confirmation = null ) {
+	public function set_cvc_confirmation( ?string $cvc_confirmation = null ) {
 		$this->set( 'cvc_confirmation', $cvc_confirmation );
 	}
 
@@ -353,7 +353,7 @@ class PaymentContext {
 	 * @param string $key   Property name.
 	 * @param mixed  $value Value to store.
 	 */
-	private function set( string $key, $value ) : void {
+	private function set( string $key, $value ): void {
 		$this->log_change( $key, $value );
 		$this->data[ $key ] = $value;
 	}
@@ -364,7 +364,7 @@ class PaymentContext {
 	 * @param string $key   Property name.
 	 * @param mixed  $value Value to store.
 	 */
-	private function log_change( string $key, $value ) : void {
+	private function log_change( string $key, $value ): void {
 		$last_transition = end( $this->transitions );
 		$last_transition->add_change( new Change( $key, $this->get( $key ), $value ) );
 	}

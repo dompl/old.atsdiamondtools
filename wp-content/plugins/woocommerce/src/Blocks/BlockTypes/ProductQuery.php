@@ -132,7 +132,7 @@ class ProductQuery extends AbstractBlock {
 
 		// The `loop_shop_per_page` filter can be found in WC_Query::product_query().
 		// phpcs:ignore WooCommerce.Commenting.CommentHooks.MissingHookComment
-		$this->asset_data_registry->add( 'loopShopPerPage', apply_filters( 'loop_shop_per_page', wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() ), true );
+		$this->asset_data_registry->add( 'loopShopPerPage', apply_filters( 'loop_shop_per_page', wc_get_default_products_per_row() * wc_get_default_product_rows_per_page() ) );
 	}
 
 	/**
@@ -180,17 +180,16 @@ class ProductQuery extends AbstractBlock {
 			// and needs refresh to update data.
 			$this->asset_data_registry->add(
 				'needsRefreshForInteractivityAPI',
-				true,
 				true
 			);
 			// Set this so that our product filters can detect if it's a PHP template.
-			$this->asset_data_registry->add( 'hasFilterableProducts', true, true );
-			$this->asset_data_registry->add( 'isRenderingPhpTemplate', true, true );
+			$this->asset_data_registry->add( 'hasFilterableProducts', true );
+			$this->asset_data_registry->add( 'isRenderingPhpTemplate', true );
 			add_filter(
 				'query_loop_block_query_vars',
 				array( $this, 'build_query' ),
 				10,
-				1
+				2
 			);
 		}
 
@@ -240,11 +239,13 @@ class ProductQuery extends AbstractBlock {
 	 * Return a custom query based on attributes, filters and global WP_Query.
 	 *
 	 * @param WP_Query $query The WordPress Query.
+	 * @param WP_Block $block The block being rendered.
 	 * @return array
 	 */
-	public function build_query( $query ) {
-		$parsed_block = $this->parsed_block;
-		if ( ! $this->is_woocommerce_variation( $parsed_block ) ) {
+	public function build_query( $query, $block = null ) {
+		$parsed_block                = $this->parsed_block;
+		$is_product_collection_block = $block->context['query']['isProductCollectionBlock'] ?? false;
+		if ( ! $this->is_woocommerce_variation( $parsed_block ) || $is_product_collection_block ) {
 			return $query;
 		}
 
@@ -515,7 +516,6 @@ class ProductQuery extends AbstractBlock {
 			'attributes_filter_query_args' => $attributes_filter_query_args,
 			'rating_filter_query_args'     => array( RatingFilter::RATING_QUERY_VAR ),
 		);
-
 	}
 
 	/**
@@ -620,7 +620,7 @@ class ProductQuery extends AbstractBlock {
 		$max_price_query = empty( $max_price ) ? array() : [
 			'key'     => '_price',
 			'value'   => $max_price,
-			'compare' => '<',
+			'compare' => '<=',
 			'type'    => 'numeric',
 		];
 
@@ -779,7 +779,7 @@ class ProductQuery extends AbstractBlock {
 	 * - For array items with numeric keys, we merge them as normal.
 	 * - For array items with string keys:
 	 *
-	 *   - If the value isn't array, we'll use the value comming from the merge array.
+	 *   - If the value isn't array, we'll use the value coming from the merge array.
 	 *     $base = ['orderby' => 'date']
 	 *     $new  = ['orderby' => 'meta_value_num']
 	 *     Result: ['orderby' => 'meta_value_num']

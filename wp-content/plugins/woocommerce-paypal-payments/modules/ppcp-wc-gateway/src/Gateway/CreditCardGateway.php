@@ -11,28 +11,38 @@ namespace WooCommerce\PayPalCommerce\WcGateway\Gateway;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use WC_Customer;
 use WC_Order;
+use WC_Payment_Tokens;
+use WooCommerce\PayPalCommerce\ApiClient\Endpoint\OrderEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PaymentsEndpoint;
+use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PaymentTokensEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\PayPalApiException;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
+use WooCommerce\PayPalCommerce\Onboarding\Environment;
 use WooCommerce\PayPalCommerce\Onboarding\State;
 use WooCommerce\PayPalCommerce\Session\SessionHandler;
-use WooCommerce\PayPalCommerce\Subscription\Helper\SubscriptionHelper;
 use WooCommerce\PayPalCommerce\Vaulting\PaymentTokenRepository;
 use WooCommerce\PayPalCommerce\Vaulting\VaultedCreditCardHandler;
-use WooCommerce\PayPalCommerce\WcGateway\Exception\GatewayGenericException;
-use WooCommerce\PayPalCommerce\WcGateway\Processor\OrderProcessor;
-use WooCommerce\PayPalCommerce\WcGateway\Processor\RefundProcessor;
-use WooCommerce\PayPalCommerce\WcGateway\Settings\SettingsRenderer;
+use WooCommerce\PayPalCommerce\Vaulting\WooCommercePaymentTokens;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\WcGateway\Endpoint\CaptureCardPayment;
+use WooCommerce\PayPalCommerce\WcGateway\Exception\GatewayGenericException;
+use WooCommerce\PayPalCommerce\WcGateway\Processor\AuthorizedPaymentsProcessor;
+use WooCommerce\PayPalCommerce\WcGateway\Processor\OrderProcessor;
+use WooCommerce\PayPalCommerce\WcGateway\Processor\PaymentsStatusHandlingTrait;
+use WooCommerce\PayPalCommerce\WcGateway\Processor\RefundProcessor;
+use WooCommerce\PayPalCommerce\WcGateway\Processor\TransactionIdHandlingTrait;
+use WooCommerce\PayPalCommerce\WcGateway\Settings\SettingsRenderer;
+use WooCommerce\PayPalCommerce\WcSubscriptions\FreeTrialHandlerTrait;
+use WooCommerce\PayPalCommerce\WcSubscriptions\Helper\SubscriptionHelper;
+use WooCommerce\PayPalCommerce\WcGateway\Helper\DCCGatewayConfiguration;
 
 /**
  * Class CreditCardGateway
  */
 class CreditCardGateway extends \WC_Payment_Gateway_CC {
 
-	use ProcessPaymentTrait, GatewaySettingsRendererTrait;
+	use ProcessPaymentTrait, GatewaySettingsRendererTrait, TransactionIdHandlingTrait, PaymentsStatusHandlingTrait, FreeTrialHandlerTrait;
 
 	const ID = 'ppcp-credit-card-gateway';
 
@@ -51,11 +61,25 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	protected $order_processor;
 
 	/**
+	 * The card icons.
+	 *
+	 * @var array
+	 */
+	protected $card_icons;
+
+	/**
 	 * The settings.
 	 *
 	 * @var ContainerInterface
 	 */
 	protected $config;
+
+	/**
+	 * The DCC Gateway Configuration.
+	 *
+	 * @var DCCGatewayConfiguration
+	 */
+	protected DCCGatewayConfiguration $dcc_configuration;
 
 	/**
 	 * The vaulted credit card handler.
@@ -114,13 +138,6 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	protected $subscription_helper;
 
 	/**
-	 * The logger.
-	 *
-	 * @var LoggerInterface
-	 */
-	protected $logger;
-
-	/**
 	 * The payments endpoint
 	 *
 	 * @var PaymentsEndpoint
@@ -128,77 +145,130 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	protected $payments_endpoint;
 
 	/**
+	 * The environment.
+	 *
+	 * @var Environment
+	 */
+	private $environment;
+
+	/**
+	 * The order endpoint.
+	 *
+	 * @var OrderEndpoint
+	 */
+	private $order_endpoint;
+
+	/**
+	 * Capture card payment.
+	 *
+	 * @var CaptureCardPayment
+	 */
+	private $capture_card_payment;
+
+	/**
+	 * The prefix.
+	 *
+	 * @var string
+	 */
+	private $prefix;
+
+	/**
+	 * Payment tokens endpoint.
+	 *
+	 * @var PaymentTokensEndpoint
+	 */
+	private $payment_tokens_endpoint;
+
+	/**
+	 * WooCommerce payment tokens factory.
+	 *
+	 * @var WooCommercePaymentTokens
+	 */
+	private $wc_payment_tokens;
+
+	/**
+	 * The logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
+	/**
 	 * CreditCardGateway constructor.
 	 *
 	 * @param SettingsRenderer         $settings_renderer The Settings Renderer.
 	 * @param OrderProcessor           $order_processor The Order processor.
 	 * @param ContainerInterface       $config The settings.
+	 * @param DCCGatewayConfiguration  $dcc_configuration The DCC Gateway Configuration.
+	 * @param array                    $card_icons The card icons.
 	 * @param string                   $module_url The URL to the module.
 	 * @param SessionHandler           $session_handler The Session Handler.
 	 * @param RefundProcessor          $refund_processor The refund processor.
 	 * @param State                    $state The state.
 	 * @param TransactionUrlProvider   $transaction_url_provider Service able to provide view transaction url base.
 	 * @param SubscriptionHelper       $subscription_helper The subscription helper.
-	 * @param LoggerInterface          $logger The logger.
 	 * @param PaymentsEndpoint         $payments_endpoint The payments endpoint.
 	 * @param VaultedCreditCardHandler $vaulted_credit_card_handler The vaulted credit card handler.
+	 * @param Environment              $environment The environment.
+	 * @param OrderEndpoint            $order_endpoint The order endpoint.
+	 * @param CaptureCardPayment       $capture_card_payment Capture card payment.
+	 * @param string                   $prefix The prefix.
+	 * @param PaymentTokensEndpoint    $payment_tokens_endpoint Payment tokens endpoint.
+	 * @param WooCommercePaymentTokens $wc_payment_tokens WooCommerce payment tokens factory.
+	 * @param LoggerInterface          $logger The logger.
 	 */
 	public function __construct(
 		SettingsRenderer $settings_renderer,
 		OrderProcessor $order_processor,
 		ContainerInterface $config,
+		DCCGatewayConfiguration $dcc_configuration,
+		array $card_icons,
 		string $module_url,
 		SessionHandler $session_handler,
 		RefundProcessor $refund_processor,
 		State $state,
 		TransactionUrlProvider $transaction_url_provider,
 		SubscriptionHelper $subscription_helper,
-		LoggerInterface $logger,
 		PaymentsEndpoint $payments_endpoint,
-		VaultedCreditCardHandler $vaulted_credit_card_handler
+		VaultedCreditCardHandler $vaulted_credit_card_handler,
+		Environment $environment,
+		OrderEndpoint $order_endpoint,
+		CaptureCardPayment $capture_card_payment,
+		string $prefix,
+		PaymentTokensEndpoint $payment_tokens_endpoint,
+		WooCommercePaymentTokens $wc_payment_tokens,
+		LoggerInterface $logger
 	) {
 		$this->id                          = self::ID;
 		$this->settings_renderer           = $settings_renderer;
 		$this->order_processor             = $order_processor;
 		$this->config                      = $config;
+		$this->dcc_configuration           = $dcc_configuration;
 		$this->module_url                  = $module_url;
 		$this->session_handler             = $session_handler;
 		$this->refund_processor            = $refund_processor;
 		$this->state                       = $state;
 		$this->transaction_url_provider    = $transaction_url_provider;
 		$this->subscription_helper         = $subscription_helper;
-		$this->logger                      = $logger;
 		$this->payments_endpoint           = $payments_endpoint;
 		$this->vaulted_credit_card_handler = $vaulted_credit_card_handler;
+		$this->environment                 = $environment;
+		$this->order_endpoint              = $order_endpoint;
+		$this->capture_card_payment        = $capture_card_payment;
+		$this->prefix                      = $prefix;
+		$this->payment_tokens_endpoint     = $payment_tokens_endpoint;
+		$this->wc_payment_tokens           = $wc_payment_tokens;
+		$this->logger                      = $logger;
 
-		if ( $state->current_state() === State::STATE_ONBOARDED ) {
-			$this->supports = array( 'refunds' );
-		}
-		if ( $this->config->has( 'dcc_enabled' ) && $this->config->get( 'dcc_enabled' ) ) {
-			$this->supports = array(
-				'refunds',
-				'products',
-			);
+		$default_support = array(
+			'products',
+			'refunds',
+		);
 
-			if (
-				( $this->config->has( 'vault_enabled_dcc' ) && $this->config->get( 'vault_enabled_dcc' ) )
-				|| ( $this->config->has( 'subscriptions_mode' ) && $this->config->get( 'subscriptions_mode' ) === 'subscriptions_api' )
-			) {
-				array_push(
-					$this->supports,
-					'subscriptions',
-					'subscription_cancellation',
-					'subscription_suspension',
-					'subscription_reactivation',
-					'subscription_amount_changes',
-					'subscription_date_changes',
-					'subscription_payment_method_change',
-					'subscription_payment_method_change_customer',
-					'subscription_payment_method_change_admin',
-					'multiple_subscriptions'
-				);
-			}
-		}
+		$this->supports = array_merge(
+			$default_support,
+			apply_filters( 'woocommerce_paypal_payments_credit_card_gateway_supports', array() )
+		);
 
 		$this->method_title       = __(
 			'Advanced Card Processing',
@@ -208,10 +278,9 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 			'Accept debit and credit cards, and local payment methods with PayPal’s latest solution.',
 			'woocommerce-paypal-payments'
 		);
-		$this->title              = $this->config->has( 'dcc_gateway_title' ) ?
-			$this->config->get( 'dcc_gateway_title' ) : $this->method_title;
-		$this->description        = $this->config->has( 'dcc_gateway_description' ) ?
-			$this->config->get( 'dcc_gateway_description' ) : $this->method_description;
+		$this->title              = $this->dcc_configuration->gateway_title();
+		$this->description        = $this->dcc_configuration->gateway_description();
+		$this->card_icons         = $card_icons;
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -241,8 +310,10 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	 */
 	public function form() {
 		add_action( 'gettext', array( $this, 'replace_credit_card_cvv_label' ), 10, 3 );
+		add_action( 'gettext', array( $this, 'replace_credit_card_cvv_placeholder' ), 10, 3 );
 		parent::form();
 		remove_action( 'gettext', 'replace_credit_card_cvv_label' );
+		remove_action( 'gettext', 'replace_credit_card_cvv_placeholder' );
 	}
 
 	/**
@@ -263,77 +334,46 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	}
 
 	/**
+	 * Replace WooCommerce credit card CVV field placeholder.
+	 *
+	 * @param string $translation Translated text.
+	 * @param string $text Original text to translate.
+	 * @param string $domain Text domain.
+	 *
+	 * @return string Translated field.
+	 */
+	public function replace_credit_card_cvv_placeholder( string $translation, string $text, string $domain ): string {
+		if ( 'woocommerce' !== $domain || 'CVC' !== $text || ! apply_filters( 'woocommerce_paypal_payments_card_fields_translate_card_cvv', true ) ) {
+			return $translation;
+		}
+
+		return __( 'CVV', 'woocommerce-paypal-payments' );
+	}
+
+	/**
 	 * Returns the icons of the gateway.
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		$icon = parent::get_icon();
+		$icon  = parent::get_icon();
+		$icons = $this->card_icons;
 
-		$icons = $this->config->has( 'card_icons' ) ? (array) $this->config->get( 'card_icons' ) : array();
-		if ( empty( $icons ) ) {
+		if ( ! $icons ) {
 			return $icon;
 		}
 
-		$title_options = $this->card_labels();
-		$images        = array_map(
-			function ( string $type ) use ( $title_options ): string {
-				$striped_dark = str_replace( '-dark', '', $type );
-				return '<img
-                 title="' . esc_attr( $title_options[ $striped_dark ] ) . '"
-                 src="' . esc_url( $this->module_url ) . 'assets/images/' . esc_attr( $type ) . '.svg"
-                 class="ppcp-card-icon"
-                > ';
-			},
-			$icons
-		);
+		$images = array();
+
+		foreach ( $icons as $card ) {
+			$images[] = '<img
+				class="ppcp-card-icon"
+				title="' . esc_attr( $card['title'] ) . '"
+				src="' . esc_url( $card['url'] ) . '"
+			> ';
+		}
 
 		return implode( '', $images );
-	}
-
-	/**
-	 * Returns an array of credit card names.
-	 *
-	 * @return array
-	 */
-	private function card_labels(): array {
-		return array(
-			'visa'       => _x(
-				'Visa',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'mastercard' => _x(
-				'Mastercard',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'amex'       => _x(
-				'American Express',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'discover'   => _x(
-				'Discover',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'jcb'        => _x(
-				'JCB',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'elo'        => _x(
-				'Elo',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-			'hiper'      => _x(
-				'Hiper',
-				'Name of credit card',
-				'woocommerce-paypal-payments'
-			),
-		);
 	}
 
 	/**
@@ -355,18 +395,112 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	public function process_payment( $order_id ) {
 		$wc_order = wc_get_order( $order_id );
 		if ( ! is_a( $wc_order, WC_Order::class ) ) {
+			WC()->session->set( 'ppcp_card_payment_token_for_free_trial', null );
+
 			return $this->handle_payment_failure(
 				null,
 				new GatewayGenericException( new Exception( 'WC order was not found.' ) )
 			);
 		}
 
+		$guest_card_payment_for_free_trial = WC()->session->get( 'ppcp_guest_payment_for_free_trial' ) ?? null;
+		WC()->session->get( 'ppcp_guest_payment_for_free_trial', null );
+		if ( $guest_card_payment_for_free_trial ) {
+			$customer_id = $guest_card_payment_for_free_trial->customer->id ?? '';
+			if ( $customer_id ) {
+				update_user_meta( $wc_order->get_customer_id(), '_ppcp_target_customer_id', $customer_id );
+			}
+
+			if ( isset( $guest_card_payment_for_free_trial->payment_source->card ) ) {
+				$this->wc_payment_tokens->create_payment_token_card( $wc_order->get_customer_id(), $guest_card_payment_for_free_trial );
+
+				$wc_order->payment_complete();
+				return $this->handle_payment_success( $wc_order );
+			}
+		}
+
+		$card_payment_token_for_free_trial = WC()->session->get( 'ppcp_card_payment_token_for_free_trial' ) ?? null;
+		WC()->session->set( 'ppcp_card_payment_token_for_free_trial', null );
+		if ( $card_payment_token_for_free_trial ) {
+			$tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id() );
+			foreach ( $tokens as $token ) {
+				if ( $token->get_id() === (int) $card_payment_token_for_free_trial ) {
+					$wc_order->payment_complete();
+					return $this->handle_payment_success( $wc_order );
+				}
+			}
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$card_payment_token_id = wc_clean( wp_unslash( $_POST['wc-ppcp-credit-card-gateway-payment-token'] ?? '' ) );
+
+		if ( $this->is_free_trial_order( $wc_order ) && $card_payment_token_id ) {
+			$customer_tokens = $this->wc_payment_tokens->customer_tokens( get_current_user_id() );
+			foreach ( $customer_tokens as $token ) {
+				if ( $token['payment_source']->name() === 'card' ) {
+					$wc_order->payment_complete();
+					return $this->handle_payment_success( $wc_order );
+				}
+			}
+		}
+
+		if ( $card_payment_token_id ) {
+			$customer_tokens = $this->wc_payment_tokens->customer_tokens( get_current_user_id() );
+
+			$wc_tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id(), self::ID );
+
+			if ( $customer_tokens && empty( $wc_tokens ) ) {
+				$this->wc_payment_tokens->create_wc_tokens( $customer_tokens, get_current_user_id() );
+			}
+
+			$customer_token_ids = array();
+			foreach ( $customer_tokens as $customer_token ) {
+				$customer_token_ids[] = $customer_token['id'];
+			}
+
+			$tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id() );
+			foreach ( $tokens as $token ) {
+				if ( $token->get_id() === (int) $card_payment_token_id ) {
+					if ( ! in_array( $token->get_token(), $customer_token_ids, true ) ) {
+						$token->delete();
+						continue;
+					}
+
+					$custom_id    = $wc_order->get_order_number();
+					$invoice_id   = $this->prefix . $wc_order->get_order_number();
+					$create_order = $this->capture_card_payment->create_order( $token->get_token(), $custom_id, $invoice_id, $wc_order );
+
+					$order = $this->order_endpoint->order( $create_order->id );
+					$wc_order->update_meta_data( PayPalGateway::INTENT_META_KEY, $order->intent() );
+
+					if ( $order->intent() === 'AUTHORIZE' ) {
+						$order = $this->order_endpoint->authorize( $order );
+
+						$wc_order->update_meta_data( AuthorizedPaymentsProcessor::CAPTURED_META_KEY, 'false' );
+
+						if ( $this->subscription_helper->has_subscription( $wc_order->get_id() ) ) {
+							$wc_order->update_meta_data( '_ppcp_captured_vault_webhook', 'false' );
+						}
+					}
+
+					$transaction_id = $this->get_paypal_order_transaction_id( $order );
+					if ( $transaction_id ) {
+						$this->update_transaction_id( $transaction_id, $wc_order );
+					}
+
+					$this->handle_new_order_status( $order, $wc_order );
+
+					return $this->handle_payment_success( $wc_order );
+				}
+			}
+		}
+
 		/**
-		 * If customer has chosen a saved credit card payment.
+		 * If customer has chosen a saved credit card payment from checkout page.
 		 */
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$saved_credit_card = wc_clean( wp_unslash( $_POST['saved_credit_card'] ?? '' ) );
-		if ( $saved_credit_card ) {
+		if ( $saved_credit_card && is_checkout() ) {
 			try {
 				$wc_order = $this->vaulted_credit_card_handler->handle_payment(
 					$saved_credit_card,
@@ -381,6 +515,40 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 		}
 
 		/**
+		 * If customer is changing subscription payment.
+		 */
+		if (
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
+			isset( $_POST['woocommerce_change_payment'] )
+			&& $this->subscription_helper->has_subscription( $wc_order->get_id() )
+			&& $this->subscription_helper->is_subscription_change_payment()
+		) {
+			$saved_credit_card = wc_clean( wp_unslash( $_POST['wc-ppcp-credit-card-gateway-payment-token'] ?? '' ) );
+			if ( ! $saved_credit_card ) {
+				$saved_credit_card = wc_clean( wp_unslash( $_POST['saved_credit_card'] ?? '' ) );
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
+			}
+
+			if ( $saved_credit_card ) {
+				$payment_token = WC_Payment_Tokens::get( $saved_credit_card );
+				if ( $payment_token ) {
+					$wc_order->add_payment_token( $payment_token );
+					$wc_order->save();
+
+					return $this->handle_payment_success( $wc_order );
+				}
+			}
+
+			wc_add_notice( __( 'Could not change payment.', 'woocommerce-paypal-payments' ), 'error' );
+
+			return array(
+				'result'       => 'failure',
+				'redirect'     => wc_get_checkout_url(),
+				'errorMessage' => __( 'Could not change payment.', 'woocommerce-paypal-payments' ),
+			);
+		}
+
+		/**
 		 * If the WC_Order is paid through the approved webhook.
 		 */
 		//phpcs:disable WordPress.Security.NonceVerification.Recommended
@@ -390,18 +558,9 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 		//phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		try {
-			if ( ! $this->order_processor->process( $wc_order ) ) {
-				return $this->handle_payment_failure(
-					$wc_order,
-					new Exception(
-						$this->order_processor->last_error()
-					)
-				);
-			}
+			$this->order_processor->process( $wc_order );
 
-			if ( $this->subscription_helper->has_subscription( $order_id ) ) {
-				$this->schedule_saved_payment_check( $order_id, $wc_order->get_customer_id() );
-			}
+			do_action( 'woocommerce_paypal_payments_before_handle_payment_success', $wc_order );
 
 			return $this->handle_payment_success( $wc_order );
 		} catch ( PayPalApiException $error ) {
@@ -413,7 +572,7 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 					$error
 				)
 			);
-		} catch ( RuntimeException $error ) {
+		} catch ( Exception $error ) {
 			return $this->handle_payment_failure( $wc_order, $error );
 		}
 	}
@@ -492,6 +651,8 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 			$this->config->set( 'dcc_enabled', 'yes' === $value );
 			$this->config->persist();
 
+			$this->dcc_configuration->refresh();
+
 			return true;
 		}
 
@@ -504,7 +665,7 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 	 * @return bool
 	 */
 	private function is_enabled(): bool {
-		return $this->config->has( 'dcc_enabled' ) && $this->config->get( 'dcc_enabled' );
+		return $this->dcc_configuration->is_enabled();
 	}
 
 	/**
