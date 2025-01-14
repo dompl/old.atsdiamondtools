@@ -40,7 +40,30 @@ function update_imagify_user( $data ) {
  * @return object
  */
 function get_imagify_user() {
-	return imagify()->get_user();
+	$user = get_transient( 'imagify_user_cache' );
+	if ( false !== $user ) {
+		return $user;
+	}
+
+	$user = imagify()->get_user();
+
+	// Fill user object with missed details before saving the transient.
+	if ( is_wp_error( $user ) ) {
+		$user->id = 0;
+		$user->email = '';
+		$user->plan_id = 0;
+		$user->plan_label = '';
+		$user->quota = 0;
+		$user->extra_quota = 0;
+		$user->extra_quota_consumed = 0;
+		$user->consumed_current_month_quota = 0;
+		$user->next_date_update = null;
+		$user->is_active = false;
+		$user->is_monthly = false;
+	}
+
+	set_transient( 'imagify_user_cache', $user, 5 * MINUTE_IN_SECONDS );
+	return $user;
 }
 
 /**
@@ -164,7 +187,7 @@ function get_imagify_max_image_size() {
  */
 function imagify_translate_api_message( $message ) {
 	if ( ! $message ) {
-		return imagify_translate_api_message( 'Unknown error occurred' );
+		$message = 'Unknown error occurred';
 	}
 
 	if ( is_wp_error( $message ) ) {
@@ -199,6 +222,7 @@ function imagify_translate_api_message( $message ) {
 			'</a>'
 		),
 		'Your image is too big to be uploaded on our server'                                       => __( 'Your file is too big to be uploaded on our server.', 'imagify' ),
+		'Webp is less performant than original'                                                    => __( 'WebP file is larger than the original image', 'imagify' ),
 		'Our server returned an invalid response'                                                  => __( 'Our server returned an invalid response.', 'imagify' ),
 		'cURL isn\'t installed on the server'                                                      => __( 'cURL is not available on the server.', 'imagify' ),
 		// API messages.
@@ -276,14 +300,14 @@ function imagify_bulk_optimize( $contexts, $optimization_level ) {
 }
 
 /**
- * Runs the WebP generation
+ * Runs the next-gen generation
  *
  * @param array $contexts An array of contexts (WP/Custom folders).
  *
  * @return void
  */
-function imagify_generate_webp( $contexts ) {
-	Imagify\Bulk\Bulk::get_instance()->run_generate_webp( $contexts );
+function imagify_generate_nextgen( $contexts ) {
+	Imagify\Bulk\Bulk::get_instance()->run_generate_nextgen( $contexts );
 }
 
 /**
