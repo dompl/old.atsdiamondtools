@@ -1,5 +1,10 @@
 {
-    "require": {
-        "getbrevo/brevo-php": "1.x.x"
-    }
+  "name": "atsdiamondtools/kickstarter",
+  "description": "Kickstarter theme for ATS Diamond Tools",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "getbrevo/brevo-php": "1.x.x"
+  }
 }

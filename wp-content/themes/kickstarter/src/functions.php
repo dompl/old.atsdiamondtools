@@ -16,8 +16,15 @@ function load_files( $folder ) {
     if (  !  $folder ) {
         return;
     }
+
     $directory = get_stylesheet_directory() . '/' . $folder . '/*.php';
+
     foreach ( glob( $directory ) as $element ) {
+        // Skip Composer autoload files or any sensitive files
+        if ( strpos( $element, 'autoload.php' ) !== false || strpos( $element, 'vendor' ) !== false ) {
+            continue;
+        }
+
         require_once $element;
     }
 }

@@ -1,5 +1,7 @@
 <?php
-require get_stylesheet_directory() . '/vendor/autoload.php';
+// if (  !  class_exists( '\Brevo\Client\Configuration' ) ) {
+//     require_once get_template_directory() . ' /vendor/autoload.php'; // Adjust path if needed
+// }
 
 require_once 'import-subscribers.php';
 require_once 'newsletter-subscription.php';
