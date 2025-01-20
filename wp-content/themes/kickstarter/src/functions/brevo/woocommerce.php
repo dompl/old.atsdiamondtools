@@ -31,16 +31,22 @@ function ats_subscribe_customer_to_newsletter( $order_id ) {
 }
 
 function ats_handle_newsletter_subscription( $contactImportString ) {
-    // Your existing Brevo API subscription code here
-    // Configure API key authorization
-    $config = Brevo\Client\Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
 
-    $apiInstance          = new Brevo\Client\Api\ContactsApi( new GuzzleHttp\Client(), $config );
-    $requestContactImport = new \Brevo\Client\Model\RequestContactImport();
+    require_once __DIR__ . '/vendor/autoload.php'; // Adjust path as needed
+
+    // Configure API key authorization
+    $config = Brevo\Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
+
+    $apiInstance = new Brevo\Api\ContactsApi(
+        new GuzzleHttp\Client(),
+        $config
+    );
+
+    $requestContactImport = new Brevo\Model\RequestContactImport();
 
     // Set the contact import details
     $requestContactImport['fileBody']                = $contactImportString;
-    $requestContactImport['listIds']                 = [3]; // Adjust the list ID accordingly
+    $requestContactImport['listIds']                 = [3]; // Adjust list ID
     $requestContactImport['emailBlacklist']          = false;
     $requestContactImport['smsBlacklist']            = false;
     $requestContactImport['updateExistingContacts']  = true;
@@ -48,8 +54,8 @@ function ats_handle_newsletter_subscription( $contactImportString ) {
 
     try {
         $result = $apiInstance->importContacts( $requestContactImport );
-        // Optionally, handle success, such as logging or sending a confirmation
+        error_log( 'Brevo import successful: ' . json_encode( $result ) );
     } catch ( Exception $e ) {
-        // Handle errors, such as logging them or sending error notifications
+        error_log( 'Brevo API Error: ' . $e->getMessage() );
     }
 }
