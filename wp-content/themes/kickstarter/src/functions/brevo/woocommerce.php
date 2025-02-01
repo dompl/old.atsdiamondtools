@@ -32,21 +32,24 @@ function ats_subscribe_customer_to_newsletter( $order_id ) {
 
 function ats_handle_newsletter_subscription( $contactImportString ) {
 
-    require_once __DIR__ . '/vendor/autoload.php'; // Adjust path as needed
+    // Adjust the path if your vendor directory is elsewhere
+    require_once __DIR__ . '/vendor/autoload.php';
 
-    // Configure API key authorization
-    $config = Brevo\Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
+    // Configure API key authorisation using the fully qualified class name
+    $config = \Brevo\Client\Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
 
-    $apiInstance = new Brevo\Api\ContactsApi(
+    // Create a new instance of the ContactsApi
+    $apiInstance = new \Brevo\Client\Api\ContactsApi(
         new GuzzleHttp\Client(),
         $config
     );
 
-    $requestContactImport = new Brevo\Model\RequestContactImport();
+    // Create and configure the request model
+    $requestContactImport = new \Brevo\Client\Model\RequestContactImport();
 
-    // Set the contact import details
+    // Set the contact import details (adjust setters as per your library's version if needed)
     $requestContactImport['fileBody']                = $contactImportString;
-    $requestContactImport['listIds']                 = [3]; // Adjust list ID
+    $requestContactImport['listIds']                 = [3]; // Adjust list ID as required
     $requestContactImport['emailBlacklist']          = false;
     $requestContactImport['smsBlacklist']            = false;
     $requestContactImport['updateExistingContacts']  = true;
