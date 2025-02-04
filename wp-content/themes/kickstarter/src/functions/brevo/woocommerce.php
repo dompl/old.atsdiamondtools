@@ -1,13 +1,21 @@
 <?php
+/**
+ * Functions related to Brevo subscription on WooCommerce order completion
+ */
+
+use Brevo\Client\Api\ContactsApi;
+use Brevo\Client\Configuration;
+use Brevo\Client\Model\RequestContactImport;
+use GuzzleHttp\Client;
 
 add_action( 'woocommerce_before_order_notes', 'ats_add_checkout_newsletter_opt_in', 9 );
 
 function ats_add_checkout_newsletter_opt_in() {
-    woocommerce_form_field( 'newsletter_subscribe', array(
+    woocommerce_form_field( 'newsletter_subscribe', [
         'type'  => 'checkbox',
-        'class' => array( 'input-checkbox' ),
+        'class' => ['input-checkbox'],
         'label' => __( 'I do not wish to sign up for the ATS Diamond Tools newsletter', 'woocommerce' )
-    ) );
+    ] );
 }
 
 add_action( 'woocommerce_order_status_completed', 'ats_subscribe_customer_to_newsletter' );
@@ -20,36 +28,28 @@ function ats_subscribe_customer_to_newsletter( $order_id ) {
     $subscribe  = get_post_meta( $order_id, '_newsletter_subscribe', true );
 
     if (  !  $subscribe && !  empty( $user_email ) ) {
-        // Now you have $user_email, $first_name, and $last_name
-        // Prepare the contact import string with first name and last name
+        // Build the contact import string
         $contactImportString = "EMAIL;FIRSTNAME;LASTNAME;SMS\n";
         $contactImportString .= sprintf( "%s;%s;%s;\n", $user_email, $first_name, $last_name );
 
-        // Assuming you have a function to handle the Brevo subscription
         ats_handle_newsletter_subscription( $contactImportString );
     }
 }
 
 function ats_handle_newsletter_subscription( $contactImportString ) {
-
-    // Adjust the path if your vendor directory is elsewhere
+    // Adjust the path to vendor/autoload.php if needed
     require_once __DIR__ . '/vendor/autoload.php';
 
-    // Configure API key authorisation using the fully qualified class name
-    $config = \Brevo\Client\Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
+    // Configure API key (ensure BREVO_API is defined somewhere, e.g. in wp-config.php)
+    $config = Configuration::getDefaultConfiguration()->setApiKey( 'api-key', BREVO_API );
 
     // Create a new instance of the ContactsApi
-    $apiInstance = new \Brevo\Client\Api\ContactsApi(
-        new GuzzleHttp\Client(),
-        $config
-    );
+    $apiInstance = new ContactsApi( new Client(), $config );
 
     // Create and configure the request model
-    $requestContactImport = new \Brevo\Client\Model\RequestContactImport();
-
-    // Set the contact import details (adjust setters as per your library's version if needed)
+    $requestContactImport                            = new RequestContactImport();
     $requestContactImport['fileBody']                = $contactImportString;
-    $requestContactImport['listIds']                 = [3]; // Adjust list ID as required
+    $requestContactImport['listIds']                 = [3]; // Replace 3 with the actual Brevo list ID
     $requestContactImport['emailBlacklist']          = false;
     $requestContactImport['smsBlacklist']            = false;
     $requestContactImport['updateExistingContacts']  = true;
@@ -61,4 +61,22 @@ function ats_handle_newsletter_subscription( $contactImportString ) {
     } catch ( Exception $e ) {
         error_log( 'Brevo API Error: ' . $e->getMessage() );
     }
+}
+
+/**
+ * Redirect WordPress fatal error recovery emails to a different address.
+ */
+
+add_filter( 'recovery_mode_email', 'custom_recovery_mode_email', 10, 2 );
+function custom_recovery_mode_email( $email, $url ) {
+    // Change the recipient
+    $email['to'] = 'info@redfrogstudio.co.uk';
+
+    // Optionally customise the subject
+    $email['subject'] = 'Site Fatal Error Notification';
+
+    // Optionally customise the message body
+    $email['message'] .= "\n\nPlease note this email was redirected to info@redfrogstudio.co.uk.";
+
+    return $email;
 }
