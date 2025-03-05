@@ -533,7 +533,11 @@ class AG_ePDQ_order_status_check {
 		// Post
 		$result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
 
-		if( ! isset( $result['STATUS'] ) ) {
+		if( empty( $result['STATUS'] ) ) {
+			AG_ePDQ_Helpers::ag_log( $label . ' - data returned: ' . print_r( $result, TRUE ), 'debug', 'yes' );
+			$note = __( 'The order status sent back from ePDQ was missing for this order. Unable to process due to missing data. Here is what was returned from ePDQ for this order check: <strong>' . print_r( $result['NCERRORPLUS'], TRUE ) . '</strong>', 'ag_epdq_server' );
+			$order->add_order_note( $note );
+
 			return;
 		}
 

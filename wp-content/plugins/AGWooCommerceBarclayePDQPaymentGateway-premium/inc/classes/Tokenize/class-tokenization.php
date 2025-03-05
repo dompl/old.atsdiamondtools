@@ -33,8 +33,8 @@ class AG_ePDQ_Token {
 		if( empty( $args['ALIAS'] ) ) {
 			return;
 		}
-		$order = new WC_Order( $args['orderID'] );
-		//$customer_id = $order->get_user_id();
+		$order = new WC_Order( $args['idOrder'] );
+		$userID = $order->get_user_id();
 
 		// Catch and stop if order is already paid for or is processing.
 		if( $order->has_status( array( 'processing', 'completed', 'on-hold', 'failed' ) ) ) {
@@ -82,6 +82,7 @@ class AG_ePDQ_Token {
 		$token->set_user_id( $userID );
 		// Save the new token to the database
 		$token->save();
+
 		AG_ePDQ_Helpers::ag_log( 'Token saved.', 'debug', 'yes' );
 		// Set this token as the users new default token
 		WC_Payment_Tokens::set_users_default( $userID, $token->get_id() );

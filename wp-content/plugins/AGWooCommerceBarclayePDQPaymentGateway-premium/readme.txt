@@ -1,8 +1,9 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.6.1
+Tested up to: 6.7.2
 Stable tag: 6.2
+
 
 == Description ==
 
@@ -31,6 +32,22 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.8.4 - 28/02/25 =
+* New             - Implemented full support for WooCommerce’s upcoming new payment settings pages, scheduled for full rollout in WooCommerce 9.9.
+* Fix             - Resolved an issue where token saving failed when an order prefix was used on the merchant's website.
+* Dev             - Removed legacy functions ag_billing_address_limit(), schedule_delete_old_log_files(), delete_old_log_files(), luhn_algorithm_check(), and do_ssl_check() to streamline the codebase and improve performance.
+* Change          - Enhanced update_order_meta_data(), update_order_notes(), ag_log() and ag_get_order_id() for improved security and performance.
+* Change          - Bump tested WooCommerce (9.7.0).
+
+= v.4.8.3.1 - 28/01/25 =
+* New             - Added PHP minimum lock 8.1.
+* Change          - Added new debug message and order note if Status Check is returned with no status, this is to show the merchant what the issue is with order.
+* Change          - Bump tested WooCommerce (9.6.0).
+* Update          - Freemius SDK updated.
+
+= v.4.8.2 - 26/08/24 =
+* Fix             - Fixed issue with token saving for some customers.
 
 = v.4.8.2 - 26/08/24 =
 * Change          - Bump tested WooCommerce (9.2.3).

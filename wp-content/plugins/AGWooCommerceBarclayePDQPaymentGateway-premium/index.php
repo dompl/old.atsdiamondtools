@@ -8,11 +8,12 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.8.2
+ * Version: 4.8.4
  * Update URI: https://api.freemius.com
  * Requires Plugins: woocommerce
  * WC requires at least: 7.1
- * WC tested up to: 9.2.3
+ * WC tested up to: 9.7.0
+ * Requires PHP: 8.1
  * License: GPL3
  */
 
@@ -24,13 +25,13 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.8.2
+ * @version  4.8.4
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
-	public static $AGversion = "4.8.2";
+	public static $AGversion = "4.8.4";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -51,11 +52,10 @@ class AG_ePDQ_server {
 
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'woocommerce_add_epdq_gateway' ) );
 
-		add_action( 'admin_init', array( 'AG_ePDQ_Helpers', 'schedule_delete_old_log_files' ) );
-		add_action( 'delete_old_log_files_event', array( 'AG_ePDQ_Helpers', 'delete_old_log_files' ) );
-
 		// If the site supports Gutenberg Blocks, support the Checkout block
 		add_action( 'woocommerce_blocks_loaded', array( $this, 'ag_blocks_support' ) );
+
+		add_action( 'admin_footer', array( 'AG_ePDQ_Helpers', 'reorder_gateways_and_add_card_icons' ) );
 
 		// Support for HPOS
 		add_action( 'before_woocommerce_init', function() {

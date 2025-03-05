@@ -2270,6 +2270,190 @@ class GFAPI {
 		return new WP_Error( 'missing_table', sprintf( __( 'The %s table does not exist.', 'gravityforms' ), $table ) );
 	}
 
+	/**
+	 * Triggers processing of non-payment add-on feeds for the given entry.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param array  $entry      The entry to be processed.
+	 * @param array  $form       The form the entry belongs to.
+	 * @param string $addon_slug A specific add-on slug, or an empty string for all non-payment add-on feeds to be processed.
+	 * @param bool   $reset_meta Indicates if the processed feeds meta for the entry should be reset.
+	 *
+	 * @return false|array
+	 */
+	public static function maybe_process_feeds( $entry, $form, $addon_slug = '', $reset_meta = false ) {
+		if ( ! class_exists( 'GFFeedAddOn' ) || empty( $entry['id'] ) ) {
+			return false;
+		}
+
+		$addons = GFFeedAddOn::get_registered_feed_addons();
+
+		if ( ! empty( $addon_slug ) ) {
+			$addon = rgar( $addons, $addon_slug );
+			if ( empty( $addon ) || $addon instanceof GFPaymentAddOn ) {
+				return false;
+			}
+
+			if ( $reset_meta ) {
+				self::update_processed_feeds_meta( $entry['id'], $addon_slug, null );
+			}
+
+			$entry = $addon->maybe_process_feed( $entry, $form );
+		} else {
+			foreach ( $addons as $slug => $addon ) {
+				if ( $addon instanceof GFPaymentAddOn ) {
+					continue;
+				}
+
+				if ( $reset_meta ) {
+					self::update_processed_feeds_meta( $entry['id'], $slug, null );
+				}
+
+				$entry = $addon->maybe_process_feed( $entry, $form );
+			}
+		}
+
+		gf_feed_processor()->save()->dispatch();
+
+		return $entry;
+	}
+
+	/**
+	 * Returns the processed feeds meta for the specified entry.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param int    $entry_id   The ID of the entry the meta is to be retrieved for.
+	 * @param string $addon_slug An add-on slug to return the IDs for a specific add-on or an empty string to return the meta for all add-ons.
+	 *
+	 * @return array
+	 */
+	public static function get_processed_feeds_meta( $entry_id, $addon_slug = '' ) {
+		$meta = gform_get_meta( $entry_id, 'processed_feeds' );
+
+		if ( empty( $addon_slug ) ) {
+			return is_array( $meta ) ? $meta : array();
+		}
+
+		return rgar( $meta, $addon_slug, array() );
+	}
+
+	/**
+	 * Updates or deletes the processed feeds meta for the specified entry.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param int            $entry_id   The ID of the entry the meta is to be updated for.
+	 * @param string         $addon_slug An add-on slug when updating the meta for a specific add-on or an empty string to update the meta for all add-ons.
+	 * @param int|array|null $value      The ID of a processed feed for a specific add-on, an array of processed feed IDs for a specific add-on, an array using add-on slugs as the keys to arrays of processed feed IDs, or null to clear the meta.
+	 * @param null|int       $form_id    The form ID of the entry (optional, saves extra query if passed when creating the metadata).
+	 *
+	 * @return void
+	 */
+	public static function update_processed_feeds_meta( $entry_id, $addon_slug, $value, $form_id = null ) {
+		if ( empty( $addon_slug ) ) {
+			if ( empty( $value ) ) {
+				gform_delete_meta( $entry_id, 'processed_feeds' );
+			} elseif ( ! isset( $value[0] ) ) {
+				gform_update_meta( $entry_id, 'processed_feeds', $value, $form_id );
+			}
+
+			return;
+		}
+
+		$meta = self::get_processed_feeds_meta( $entry_id );
+
+		if ( empty( $value ) ) {
+			if ( empty( $meta ) ) {
+				gform_delete_meta( $entry_id, 'processed_feeds' );
+
+				return;
+			}
+			unset( $meta[ $addon_slug ] );
+		} elseif ( is_array( $value ) ) {
+			$meta[ $addon_slug ] = $value;
+		} else {
+			$meta[ $addon_slug ][] = $value;
+		}
+
+		gform_update_meta( $entry_id, 'processed_feeds', $meta, $form_id );
+	}
+
+	/**
+	 * Returns the key used when saving/retrieving the feed status entry meta.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int $feed_id The feed ID.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_feed_status_key( $feed_id ) {
+		return sprintf( 'feed_%d_status', $feed_id );
+	}
+
+	/**
+	 * Retrieves the feed processing status for the specified entry from the "feed_{$feed_id}_status" meta.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int  $entry_id              The entry ID.
+	 * @param int  $feed_id               The feed ID.
+	 * @param bool $return_latest         Indicates if only the latest attempt should be returned. Default is to return all attempts.
+	 * @param bool $return_latest_details Indicates if the details array of the latest attempt should be returned instead of just the status string.
+	 *
+	 * @return array|string
+	 */
+	public static function get_entry_feed_status( $entry_id, $feed_id, $return_latest = false, $return_latest_details = false ) {
+		$meta = gform_get_meta( $entry_id, self::get_entry_feed_status_key( $feed_id ) );
+		if ( empty( $meta ) ) {
+			return $return_latest && ! $return_latest_details ? '' : array();
+		}
+
+		if ( $return_latest ) {
+			$latest = end( $meta );
+
+			return $return_latest_details ? $latest : rgar( $latest, 'status', '' );
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * Updates or deletes the "feed_{$feed_id}_status" meta for the specified entry.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int        $entry_id The entry ID.
+	 * @param int        $feed_id  The feed ID.
+	 * @param array|null $status   {
+	 *     The status array to be appended to the metadata or null to delete the metadata.
+	 *
+	 *     @type int        $timestamp The timestamp for the feed processing attempt.
+	 *     @type string     $status    The status: success or failed.
+	 *     @type int|string $code      The error code.
+	 *     @type string     $message   The error message.
+	 *     @type mixed      $data      Additional data relating to the error.
+	 * }
+	 * @param null|int   $form_id  The form ID of the entry (optional, saves extra query if passed when creating the metadata).
+	 *
+	 * @return void
+	 */
+	public static function update_entry_feed_status( $entry_id, $feed_id, $status, $form_id = null ) {
+		$key = self::get_entry_feed_status_key( $feed_id );
+		if ( is_null( $status ) ) {
+			gform_delete_meta( $entry_id, $key );
+
+			return;
+		}
+
+		$meta   = self::get_entry_feed_status( $entry_id, $feed_id );
+		$meta[] = $status;
+
+		gform_update_meta( $entry_id, $key, $meta, $form_id );
+	}
+
 	// NOTIFICATIONS ----------------------------------------------
 
 	/**

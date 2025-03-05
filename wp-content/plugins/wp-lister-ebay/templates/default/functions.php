@@ -1,7 +1,7 @@
 <?php
 
 // process template html        
-function my_tpl_register_custom_fields849975() {
+function my_tpl_register_custom_fields890403() {
 
 	// register custom template options
     // parameters are: $type, $id, $default, $label, $config
@@ -37,7 +37,7 @@ function my_tpl_register_custom_fields849975() {
 	// wplister_register_custom_fields( 'text', 'test_field', '', 'Test' );
 
 }
-add_action( 'wplister_template_init', 'my_tpl_register_custom_fields849975' );
+add_action( 'wplister_template_init', 'my_tpl_register_custom_fields890403' );
 
 
 // implement custom listing shortcode by filtering the processed template html

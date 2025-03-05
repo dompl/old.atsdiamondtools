@@ -8,7 +8,7 @@
  * Modified By: Aaron Bowie - We are AG
  * -----
  * WC requires at least: 3.0.0
- * WC tested up to: 9.1.0
+ * WC tested up to: 9.1.4
  * License: GPL3
  */
 

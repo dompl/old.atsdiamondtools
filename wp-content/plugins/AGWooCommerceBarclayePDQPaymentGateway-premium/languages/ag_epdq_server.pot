@@ -1,17 +1,17 @@
-# Copyright (C) 2024 We are AG
+# Copyright (C) 2025 We are AG
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.8.1\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.8.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-08-08T16:17:33+00:00\n"
+"POT-Creation-Date: 2025-02-18T10:27:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: ag_epdq_server\n"
 
 #. Plugin Name of the plugin
@@ -2288,19 +2288,19 @@ msgstr ""
 #: inc/classes/class-order-status-check.php:116
 #: inc/classes/class-order-status-check.php:335
 #: inc/classes/class-order.php:42
-#: inc/classes/StatusCheck/class-order-status-check.php:546
+#: inc/classes/StatusCheck/class-order-status-check.php:558
 msgid "ePDQ Status:"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:121
 #: inc/classes/class-order-status-check.php:340
-#: inc/classes/StatusCheck/class-order-status-check.php:553
+#: inc/classes/StatusCheck/class-order-status-check.php:565
 msgid "Order ID:"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:122
 #: inc/classes/class-order-status-check.php:341
-#: inc/classes/StatusCheck/class-order-status-check.php:554
+#: inc/classes/StatusCheck/class-order-status-check.php:566
 msgid "Payment Reference In ePDQ System:"
 msgstr ""
 
@@ -2311,7 +2311,7 @@ msgstr ""
 
 #: inc/classes/class-order-status-check.php:133
 #: inc/classes/class-order-status-check.php:348
-#: inc/classes/StatusCheck/class-order-status-check.php:564
+#: inc/classes/StatusCheck/class-order-status-check.php:576
 msgid "Barclays ePDQ transaction is confirmed"
 msgstr ""
 
@@ -2343,14 +2343,14 @@ msgstr ""
 #: inc/classes/class-order-status-check.php:198
 #: inc/classes/class-order-status-check.php:412
 #: inc/classes/class-order.php:70
-#: inc/classes/StatusCheck/class-order-status-check.php:631
+#: inc/classes/StatusCheck/class-order-status-check.php:643
 msgid "Barclays ePDQ transaction has been Authorised."
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:201
 #: inc/classes/class-order-status-check.php:415
 #: inc/classes/class-order.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:634
+#: inc/classes/StatusCheck/class-order-status-check.php:646
 msgid "The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button."
 msgstr ""
 
@@ -2361,12 +2361,12 @@ msgstr ""
 
 #: inc/classes/class-order-status-check.php:255
 #: inc/classes/Moto/class-moto.php:71
-#: inc/classes/StatusCheck/class-order-status-check.php:270
+#: inc/classes/StatusCheck/class-order-status-check.php:278
 msgid "Are you sure you wish to check the status of this order?"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:257
-#: inc/classes/StatusCheck/class-order-status-check.php:272
+#: inc/classes/StatusCheck/class-order-status-check.php:280
 msgid "Something went wrong, and the order status check could not be completed. Please try again."
 msgstr ""
 
@@ -2376,20 +2376,20 @@ msgstr ""
 
 #. translators: 1: first name 2: last name
 #: inc/classes/class-order-status-check.php:489
-#: inc/classes/StatusCheck/class-order-status-check.php:390
-#: inc/classes/StatusCheck/class-order-status-check.php:443
+#: inc/classes/StatusCheck/class-order-status-check.php:398
+#: inc/classes/StatusCheck/class-order-status-check.php:451
 msgctxt "full name"
 msgid "%1$s %2$s"
 msgstr ""
 
 #: inc/classes/class-order-status-check.php:510
-#: inc/classes/StatusCheck/class-order-status-check.php:411
-#: inc/classes/StatusCheck/class-order-status-check.php:464
+#: inc/classes/StatusCheck/class-order-status-check.php:419
+#: inc/classes/StatusCheck/class-order-status-check.php:472
 msgid "Preview"
 msgstr ""
 
 #: inc/classes/class-order.php:43
-#: inc/classes/StatusCheck/class-order-status-check.php:549
+#: inc/classes/StatusCheck/class-order-status-check.php:561
 msgid "ePDQ NCERROR:"
 msgstr ""
 
@@ -2402,7 +2402,7 @@ msgid "This was a MOTO payment."
 msgstr ""
 
 #: inc/classes/class-order.php:77
-#: inc/classes/StatusCheck/class-order-status-check.php:580
+#: inc/classes/StatusCheck/class-order-status-check.php:592
 msgid "The authorisation will be processed offline. Please confirm the payment in the ePDQ back office."
 msgstr ""
 
@@ -2705,47 +2705,55 @@ msgstr ""
 msgid "Every hour"
 msgstr ""
 
-#: inc/classes/class-settings.php:279
+#: inc/classes/class-settings.php:275
+msgid "Every 30 minutes (beta - may cause performance issues)"
+msgstr ""
+
+#: inc/classes/class-settings.php:276
+msgid "Every 15 minutes (beta - may cause performance issues)"
+msgstr ""
+
+#: inc/classes/class-settings.php:280
 msgid "Monitor Scheduler Status"
 msgstr ""
 
-#: inc/classes/class-settings.php:281
+#: inc/classes/class-settings.php:282
 msgid "Click  <a href=\""
 msgstr ""
 
-#: inc/classes/class-settings.php:285
+#: inc/classes/class-settings.php:286
 msgid "Block WooCommerce Auto Cancel"
 msgstr ""
 
-#: inc/classes/class-settings.php:292
+#: inc/classes/class-settings.php:293
 msgid "Cancel Interval (Beta)"
 msgstr ""
 
-#: inc/classes/class-settings.php:294
+#: inc/classes/class-settings.php:295
 msgid "Set the frequency at which the system auto cancels unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates."
 msgstr ""
 
-#: inc/classes/class-settings.php:298
+#: inc/classes/class-settings.php:299
 msgid "1 day"
 msgstr ""
 
-#: inc/classes/class-settings.php:299
+#: inc/classes/class-settings.php:300
 msgid "5 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:300
+#: inc/classes/class-settings.php:301
 msgid "7 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:301
+#: inc/classes/class-settings.php:302
 msgid "10 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:302
+#: inc/classes/class-settings.php:303
 msgid "15 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:303
+#: inc/classes/class-settings.php:304
 msgid "30 days"
 msgstr ""
 
@@ -2858,35 +2866,39 @@ msgstr ""
 msgid "This order is a "
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:550
-msgid "ePDQ NCERROR PLUS:"
+#: inc/classes/StatusCheck/class-order-status-check.php:538
+msgid "The order status sent back from ePDQ was missing for this order. Unable to process due to missing data. Here is what was returned from ePDQ for this order check: <strong>"
 msgstr ""
 
 #: inc/classes/StatusCheck/class-order-status-check.php:562
+msgid "ePDQ NCERROR PLUS:"
+msgstr ""
+
+#: inc/classes/StatusCheck/class-order-status-check.php:574
 msgid "Barclays ePDQ has confirmed the transaction."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:589
+#: inc/classes/StatusCheck/class-order-status-check.php:601
 msgid "You requested to confirm an authorisation request, we are waiting for a response from your acquirer, this transaction is in a pending status. Please check again soon."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:599
+#: inc/classes/StatusCheck/class-order-status-check.php:611
 msgid "Barclays ePDQ has refused the transaction."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:609
+#: inc/classes/StatusCheck/class-order-status-check.php:621
 msgid "Barclays ePDQ has reported the payment is uncertain."
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:620
+#: inc/classes/StatusCheck/class-order-status-check.php:632
 msgid "ePDQ has confirmed the customer has cancelled the transaction"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:646
+#: inc/classes/StatusCheck/class-order-status-check.php:658
 msgid "The order has come back as Incomplete or invalid"
 msgstr ""
 
-#: inc/classes/StatusCheck/class-order-status-check.php:659
+#: inc/classes/StatusCheck/class-order-status-check.php:671
 msgid "The order has come back with an issue"
 msgstr ""
 
