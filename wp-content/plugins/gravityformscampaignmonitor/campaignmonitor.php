@@ -1,15 +1,10 @@
 <?php
 
-// don't load directly
-if ( ! defined( 'ABSPATH' ) ) {
-	die();
-}
-
 /*
 Plugin Name: Gravity Forms Campaign Monitor Add-On
 Plugin URI: https://gravityforms.com
 Description: Integrates Gravity Forms with Campaign Monitor, allowing form submissions to be automatically sent to your Campaign Monitor account.
-Version: 4.0.0
+Version: 4.1.0
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -17,7 +12,7 @@ Text Domain: gravityformscampaignmonitor
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2009-2023 Rocketgenius, Inc.
+Copyright 2009-2025 Rocketgenius, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +29,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-define( 'GF_CAMPAIGN_MONITOR_VERSION', '4.0.0' );
+// don't load directly
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
+}
+
+define( 'GF_CAMPAIGN_MONITOR_VERSION', '4.1.0' );
 
 // If Gravity Forms is loaded, bootstrap the Campaign Monitor Add-On.
 add_action( 'gform_loaded', array( 'GF_CampaignMonitor_Bootstrap', 'load' ), 5 );

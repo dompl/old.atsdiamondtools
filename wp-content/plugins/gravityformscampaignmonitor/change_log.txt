@@ -1,3 +1,8 @@
+### 4.1.0 | 2025-03-10
+- Updated the API wrapper to return WP_Errors instead of throwing Exceptions.
+- Fixed code placement to be consistent with the WordPress coding standards.
+- AF: Updated process_feed() return value for compatibility with Gravity Forms 2.9.4, so the framework can save the feed status to the entry meta.
+
 ### 4.0.0 | 2023-12-20
 - Fixed the PHP 8.2 creation of dynamic property deprecation notice that occurs on the settings page.
 - Added support for async (background) feed processing to improve form submission performance.

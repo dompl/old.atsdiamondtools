@@ -67,7 +67,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function auth_test() {
 
@@ -91,7 +91,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function get_client( $client_id = '' ) {
 
@@ -107,7 +107,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function get_clients() {
 
@@ -129,7 +129,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function get_custom_fields( $list_id = '' ) {
 		
@@ -147,7 +147,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function get_list( $list_id = '' ) {
 
@@ -165,7 +165,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function get_lists() {
 
@@ -190,7 +190,7 @@ class GF_CampaignMonitor_API {
 	 *
 	 * @uses GF_CampaignMonitor_API::make_request()
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	public function add_subscriber( $subscriber = array(), $list_id = '' ) {
 		
@@ -248,7 +248,7 @@ class GF_CampaignMonitor_API {
 	 * @param array  $options Request option.
 	 * @param string $method  Request method. Defaults to GET.
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 */
 	private function make_request( $path, $options = array(), $method = 'GET' ) {
 
@@ -274,7 +274,7 @@ class GF_CampaignMonitor_API {
 
 		// If request attempt threw a WordPress error, throw exception.
 		if ( is_wp_error( $response ) ) {
-			throw new \Exception( $response->get_error_message() );
+			return $response;
 		}
 
 		// Decode response.
@@ -282,7 +282,7 @@ class GF_CampaignMonitor_API {
 
 		// If error response was received, throw exception.
 		if ( isset( $response['Code'] ) ) {
-			throw new \Exception( $response['Message'] );
+			return new WP_Error( $response['Code'], rgar( $response, 'Message' ) );
 		}
 
 		return $response;

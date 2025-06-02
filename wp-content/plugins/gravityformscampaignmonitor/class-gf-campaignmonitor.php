@@ -78,7 +78,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 	 * @access protected
 	 * @var    string The URL of the Add-On.
 	 */
-	protected $_url = 'http://www.gravityforms.com';
+	protected $_url = 'https://gravityforms.com';
 
 	/**
 	 * Defines the title of this Add-On.
@@ -416,18 +416,12 @@ class GFCampaignMonitor extends GFFeedAddOn {
 		// Get the list ID.
 		$list_id = $this->get_setting( 'contactList' );
 
-		try {
+		$custom_fields = $this->api->get_custom_fields( $list_id );
 
-			// Get custom fields.
-			$custom_fields = $this->api->get_custom_fields( $list_id );
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not retrieve custom fields.
-			$this->log_error( __METHOD__ . '(): Unable to retrieve custom fields; ' . $e->getMessage() );
+		if ( is_wp_error( $custom_fields ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to retrieve custom fields; ' . $custom_fields->get_error_message() );
 
 			return $field_map;
-
 		}
 
 		// Loop through custom fields.
@@ -595,25 +589,18 @@ class GFCampaignMonitor extends GFFeedAddOn {
 
 		}
 
-		try {
+		$client = $this->api->get_client( $client_id );
 
-			// Get client.
-			$client = $this->api->get_client( $client_id );
-
-			return esc_html( $client['BasicDetails']['CompanyName'] );
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not get the client.
-			$this->log_error( __METHOD__ . '(): Unable to get client; ' . $e->getMessage() );
+		if ( is_wp_error( $client ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to get client; ' . $client->get_error_message() );
 
 			return sprintf(
 				'<strong>%s</strong>',
 				esc_html__( 'Client could not be found.', 'gravityformscampaignmonitor' )
 			);
-
 		}
 
+		return esc_html( rgars( $client, 'BasicDetails/CompanyName' ) );
 	}
 
 	/**
@@ -637,25 +624,18 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			return rgars( $feed, 'meta/contactList' );
 		}
 
-		try {
+		$list = $this->api->get_list( $feed['meta']['contactList'] );
 
-			// Get list.
-			$list = $this->api->get_list( $feed['meta']['contactList'] );
-
-			return esc_html( $list['Title'] );
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not get the list.
-			$this->log_error( __METHOD__ . '(): Unable to get list; ' . $e->getMessage() );
+		if ( is_wp_error( $list ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to get list; ' . $list->get_error_message() );
 
 			return sprintf(
 				'<strong>%s</strong>',
 				esc_html__( 'List could not be found.', 'gravityformscampaignmonitor' )
 			);
-
 		}
 
+		return esc_html( rgar( $list, 'Title' ) );
 	}
 
 
@@ -668,19 +648,15 @@ class GFCampaignMonitor extends GFFeedAddOn {
 	 * Initiate processing the feed.
 	 *
 	 * @since  Unknown
+	 * @since  1.7 Updated return value for consistency with other add-ons, so the framework can save the feed status to the entry meta.
+	 *
 	 * @access public
 	 *
-	 * @param  array $feed  The feed object to be processed.
-	 * @param  array $entry The entry object currently being processed.
-	 * @param  array $form  The form object currently being processed.
+	 * @param array $feed  The feed object to be processed.
+	 * @param array $entry The entry object currently being processed.
+	 * @param array $form  The form object currently being processed.
 	 *
-	 * @uses GFAddOn::get_field_map_fields()
-	 * @uses GFAddOn::get_field_value()
-	 * @uses GFAddOn::log_debug()
-	 * @uses GFCampaignMonitor::initialize_api()
-	 * @uses GF_CampaignMonitor_API::add_subscriber()
-	 * @uses GFCommon::is_invalid_or_empty_email()
-	 * @uses GFFeedAddOn::add_feed_error()
+	 * @return array|WP_Error
 	 */
 	public function process_feed( $feed, $entry, $form ) {
 
@@ -690,7 +666,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			// Log that API could not be initialized.
 			$this->add_feed_error( esc_html__( 'User could not be subscribed because API could not be initialized.', 'gravityformscampaignmonitor' ), $feed, $entry, $form );
 
-			return;
+			return new WP_Error( 'api_not_initialized', 'API was not initialized.' );
 
 		}
 
@@ -708,7 +684,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			// Log that subscriber could not be added.
 			$this->add_feed_error( esc_html__( 'User could not be subscribed because provided email address was empty or invalid.', 'gravityformscampaignmonitor' ), $feed, $entry, $form );
 
-			return;
+			return new WP_Error( 'invalid_email', 'Invalid email address.' );
 
 		}
 
@@ -776,25 +752,18 @@ class GFCampaignMonitor extends GFFeedAddOn {
 
 		$this->log_debug( __METHOD__ . '(): Subscriber to be added => ' . print_r( $subscriber, true ) );
 
-		try {
+		$result = $this->api->add_subscriber( $subscriber, rgars( $feed, 'meta/contactList' ) );
 
-			// Subscribe user.
-			$this->api->add_subscriber( $subscriber, rgars( $feed, 'meta/contactList' ) );
+		if ( is_wp_error( $result ) ) {
+			$this->add_feed_error( sprintf( esc_html__( 'User could not be subscribed: %s', 'gravityformscampaignmonitor' ), $result->get_error_message() ), $feed, $entry, $form );
 
-			// Log that user was subscribed.
-			$this->log_debug( __METHOD__ . '(): User was subscribed to list.' );
-
-			return;
-
-		} catch ( \Exception $e ) {
-
-			// Log that user could not be subscribed.
-			$this->add_feed_error( sprintf( esc_html__( 'User could not be subscribed: %s', 'gravityformscampaignmonitor' ), $e->getMessage() ), $feed, $entry, $form );
-
-			return;
-
+			return $result;
 		}
 
+		$this->log_debug( __METHOD__ . '(): User was subscribed to list.' );
+		$this->add_note( rgar( $entry, 'id' ), esc_html__( 'Subscriber added.', 'gravityformscampaignmonitor' ), 'success' );
+
+		return $entry;
 	}
 
 	/**
@@ -936,7 +905,7 @@ class GFCampaignMonitor extends GFFeedAddOn {
 
 		// If API is alredy initialized and license key is not provided, return true.
 		if ( ! is_null( $this->api ) ) {
-			return true;
+			return is_object( $this->api );
 		}
 
 		// Load the API library.
@@ -955,31 +924,23 @@ class GFCampaignMonitor extends GFFeedAddOn {
 		// Log validation step.
 		$this->log_debug( __METHOD__ . '(): Validating API Info.' );
 
-		// Setup a new Fillable PDFs API object with the API credentials.
 		$api = new GF_CampaignMonitor_API( $settings['apiKey'] );
 
-		try {
+		$result = $api->auth_test();
 
-			// Get system date.
-			$api->auth_test();
-
-			// Assign API library to instance.
-			$this->api = $api;
-
-			// Log that authentication test passed.
-			$this->log_debug( __METHOD__ . '(): API credentials are valid.' );
-
-			return true;
-
-		} catch ( \Exception $e ) {
-
-			// Log that authentication test failed.
-			$this->log_error( __METHOD__ . '(): API credentials are invalid; '. $e->getMessage() );
+		if ( is_wp_error( $result ) ) {
+			$this->log_error( __METHOD__ . '(): API credentials are invalid; ' . $result->get_error_message() );
+			$this->api = false;
 
 			return false;
-
 		}
 
+		$this->api = $api;
+
+		// Log that authentication test passed.
+		$this->log_debug( __METHOD__ . '(): API credentials are valid.' );
+
+		return true;
 	}
 
 	/**
@@ -1001,25 +962,17 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			return false;
 		}
 
-		try {
+		$clients = $this->api->get_clients();
 
-			// Get clients.
-			$clients = $this->api->get_clients();
-
-			// Get default client.
-			$client = array_shift( $clients );
-
-			return $return_id ? $client['ClientID'] : $client;
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not retrieve the clients.
-			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $e->getMessage() );
+		if ( is_wp_error( $clients ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $clients->get_error_message() );
 
 			return false;
-
 		}
 
+		$client = array_shift( $clients );
+
+		return $return_id ? rgar( $client, 'ClientID' ) : $client;
 	}
 
 	/**
@@ -1049,18 +1002,12 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			)
 		);
 
-		try {
+		$clients = $this->api->get_clients();
 
-			// Get clients.
-			$clients = $this->api->get_clients();
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not retrieve the clients.
-			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $e->getMessage() );
+		if ( is_wp_error( $clients ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $clients->get_error_message() );
 
 			return array();
-
 		}
 
 		// If no clients were found, return.
@@ -1132,21 +1079,15 @@ class GFCampaignMonitor extends GFFeedAddOn {
 
 		}
 
-		try {
+		$this->api->set_client_id( $client_id );
 
-			// Set client ID.
-			$this->api->set_client_id( $client_id );
+		// Get lists.
+		$lists = $this->api->get_lists();
 
-			// Get lists.
-			$lists = $this->api->get_lists();
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not retrieve the lists.
-			$this->log_error( __METHOD__ . '(): Unable to retrieve lists; ' . $e->getMessage() );
+		if ( is_wp_error( $lists ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to retrieve lists; ' . $lists->get_error_message() );
 
 			return array();
-
 		}
 
 		// If no lists were found, return.
@@ -1188,22 +1129,15 @@ class GFCampaignMonitor extends GFFeedAddOn {
 			return false;
 		}
 
-		try {
+		$clients = $this->api->get_clients();
 
-			// Get clients.
-			$clients = $this->api->get_clients();
-
-			return count( $clients ) > 1;
-
-		} catch ( \Exception $e ) {
-
-			// Log that we could not retrieve clients.
-			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $e->getMessage() );
+		if ( is_wp_error( $clients ) ) {
+			$this->log_error( __METHOD__ . '(): Unable to retrieve clients; ' . $clients->get_error_message() );
 
 			return false;
-
 		}
 
+		return count( $clients ) > 1;
 	}
 
 	/**
