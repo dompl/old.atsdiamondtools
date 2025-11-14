@@ -31,8 +31,9 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                             $html .='<div class="list">';
                                 $html .='1. ' . sprintf(esc_html__( "Enable a %s option ( may not work with some themes )", 'advanced-woo-search' ), '<a href="#main">' . __( 'Seamless integration', 'advanced-woo-search' ) . '</a>' ) . '<br>';
                                 $html .='2. ' . sprintf( esc_html__( 'Using shortcode %s', 'advanced-woo-search' ), '<code>[aws_search_form]</code>' ) . '<br>';
-                                $html .='3. ' . sprintf( esc_html__( "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas", 'advanced-woo-search' ), '<a href="' . admin_url( 'widgets.php' ) . '" target="_blank">' . __( 'Widgets Screen', 'advanced-woo-search' ) . '</a>' ) . '<br>';
-                                $html .='4. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php aws_get_search_form( true ); ?&gt;</code>" ) . '<br>';
+                                $html .='3. ' . esc_html__( 'Using a page builder - locate the built-in search form widget and add it to the desired location on the page.', 'advanced-woo-search' ). '<br>';
+                                $html .='4. ' . sprintf( esc_html__( "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas", 'advanced-woo-search' ), '<a href="' . admin_url( 'widgets.php' ) . '" target="_blank">' . __( 'Widgets Screen', 'advanced-woo-search' ) . '</a>' ) . '<br>';
+                                $html .='5. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php aws_get_search_form( true ); ?&gt;</code>" ) . '<br>';
                             $html .='</div>';
                         $html .='</div>';
                     $html .='</td>';
@@ -40,16 +41,19 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                 $html .= '</tr>';
         
                 $html .= '<tr>';
-        
-                    $html .= '<th>' . esc_html__( 'Reindex table', 'advanced-woo-search' ) . '</th>';
+
+                    $html .='<th>';
+                        $html .= esc_html__( 'Reindex table', 'advanced-woo-search' ) ;
+                        $html .=' <span class="aws-help-tip aws-tip" data-tip="'. esc_attr( sprintf( esc_html__( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'advanced-woo-search' ), '<strong>', '</strong>' ) ) .'"></span>';
+                    $html .='</th>';
+
                     $html .= '<td>';
-                        $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span><span class="reindex-notice">' . __( 'Please do not close the page.', 'advanced-woo-search' ) . '</span></div><br><br>';
-                        $html .= '<span class="description">' .
-                            sprintf( esc_html__( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'advanced-woo-search' ), '<strong>', '</strong>' ) . '<br>' .
+                        $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span><span class="reindex-notice">' . __( 'Please do not close the page.', 'advanced-woo-search' ) . '</span></div>';
+                        $html .= '<p class="description">' .
                             __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br>' .
-                            '<strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . sprintf( __( 'Index table options can be found inside %s section.', 'advanced-woo-search' ), '<a href="'.esc_url( admin_url('admin.php?page=aws-options&tab=performance') ).'">' . __( 'Performance', 'advanced-woo-search' ) . '</a>' ) . '<br><br>' .
+                            '<strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . sprintf( __( 'Index table options can be found inside %s section.', 'advanced-woo-search' ), '<a href="'.esc_url( admin_url('admin.php?page=aws-performance') ).'">' . __( 'Index Config', 'advanced-woo-search' ) . '</a>' ) . '<br><br>' .
                             esc_html__( 'Products in index:', 'advanced-woo-search' ) . '<span id="aws-reindex-count"> <strong>' . AWS_Helpers::get_indexed_products_count() . '</strong></span>';
-                        $html .= '</span>';
+                        $html .= '</p>';
                     $html .= '</td>';
         
                 $html .= '</tr>';
@@ -129,6 +133,67 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
             $html .= '</div>';
 
             return $html;
+
+        }
+
+         /*
+         * Get content for settings page header
+         * @return string
+         */
+        static public function get_header() {
+
+            $current_page = isset( $_GET['page']  ) ? sanitize_text_field( $_GET['page'] ) : 'aws-options';
+
+            $submenu = __( 'Settings', 'advanced-woo-search' );
+
+            switch ( $current_page ) {
+                case 'aws-performance':
+                    $submenu = __( 'Index Config', 'advanced-woo-search' );
+                    break;
+                case 'aws-premium':
+                    $submenu = __( 'Premium', 'advanced-woo-search' );
+                    break;
+            }
+
+            echo '<div id="aws-admin-header">';
+                echo '<div class="inner">';
+                    echo '<div class="logo">';
+                        echo '<img src="' . AWS_URL . '/assets/img/logo.png' . '" alt="' . esc_html( 'logo', 'advanced-woo-search' ) . '">';
+                        echo '<span class="title">';
+                            echo '<span class="separator">/</span>';
+                            echo esc_html( $submenu );
+                        echo '</span>';
+                    echo '</div>';
+                    echo '<div class="btns">';
+                        echo '<a class="button button-pro" href="' . admin_url( 'admin.php?page=aws-premium' ) . '">' . esc_html( 'Get Premium', 'advanced-woo-search' ) . '</a>';
+                        echo '<a class="button button-docs" href="https://advanced-woo-search.com/guide/?utm_source=wp-plugin&utm_medium=header&utm_campaign=guide" target="_blank">' . esc_html( 'Documentation', 'advanced-woo-search' ) . '</a>';
+                        echo '<a class="button button-support" href="https://advanced-woo-search.com/contact/?utm_source=wp-plugin&utm_medium=header&utm_campaign=support" target="_blank">' . esc_html( 'Support', 'advanced-woo-search' ) . '</a>';
+                    echo '</div>';
+                echo '</div>';
+
+                if ( $current_page === 'aws-options' ) {
+
+                    $tabs = AWS_Admin_Options::get_instance_tabs_names();
+                    $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
+
+                    echo '<div id="aws-admin-subheader">';
+                        echo '<div class="inner">';
+
+                            echo '<nav class="aws-tabs">';
+
+                                foreach ( $tabs as $name => $label ) {
+                                    echo '<a data-tab-name="' . esc_attr( $name ) . '" href="' . admin_url( 'admin.php?page=aws-options&tab=' . $name ) . '" class="aws-nav-tab ' . ( $current_tab == $name ? 'aws-nav-tab-active' : '' ) . '">' . $label . '</a>';
+                                }
+
+                            echo '</nav>';
+
+                        echo '</div>';
+                    echo '</div>';
+
+
+                }
+
+            echo '</div>';
 
         }
 

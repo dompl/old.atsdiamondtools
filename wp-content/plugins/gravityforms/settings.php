@@ -296,7 +296,7 @@ class GFSettings {
 							 *
 							 * @param string $uninstall_button The HTML of the uninstall button.
 							 */
-							echo apply_filters( 'gform_uninstall_button', $uninstall_button );
+							echo apply_filters( 'gform_uninstall_button', $uninstall_button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 						}
 					?>
@@ -349,7 +349,7 @@ class GFSettings {
 	private static function uninstall_addon_message() {
 		if ( isset( self::$uninstalled_addon ) ) {
 			?>
-			<div class="alert success"><?php echo sprintf( esc_html__( '%s uninstalled. It can be re-activated from the %splugins page%s.', 'gravityforms' ), self::$uninstalled_addon ,"<a href='plugins.php'>", '</a>' ) ?></div>
+			<div class="alert success"><?php echo sprintf( esc_html__( '%s uninstalled. It can be re-activated from the %splugins page%s.', 'gravityforms' ), esc_html__( self::$uninstalled_addon ), "<a href='plugins.php'>", '</a>' ) ?></div>
 			<?php
 		}
 	}
@@ -495,7 +495,7 @@ class GFSettings {
 						'save_callback'       => function( $field, $value ) {
 							// Remove non-alphanumeric characters.
 							$value = preg_replace( '/[^a-zA-Z0-9]/', '', $value );
-							if ( isset( $_POST['_gform_setting_license_key'] ) ) {
+							if ( isset( $_POST['_gform_setting_license_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 								GFFormsModel::save_key( $value );
 							}
 
@@ -580,7 +580,13 @@ class GFSettings {
 							'default' => self::is_orbital_default(),
 						),
 					),
-					'description'   => esc_html__( 'This theme will be used by default everywhere forms are embedded on your site.', 'gravityforms' ) . '&nbsp;<a href="https://docs.gravityforms.com/block-themes-and-style-settings/" target="_blank" aria-label="' . esc_html__( 'Learn more about form theme and style settings', 'gravityforms' ) . '">' . esc_html__( 'Learn more about form theme and style settings.', 'gravityforms' ) . '</a>',
+					'description'   => sprintf(
+						'%s&nbsp;<a href="%s" target="_blank">%s<span class="screen-reader-text">%s</span>&nbsp;<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span></a>',
+						esc_html__( 'This theme will be used by default everywhere forms are embedded on your site', 'gravityforms' ),
+						'https://docs.gravityforms.com/block-themes-and-style-settings/',
+						esc_html__( 'Learn more about form theme and style settings.', 'gravityforms' ),
+						esc_html__( '(opens in a new tab)', 'gravityforms' )
+					),
 					'save_callback' => function( $field, $value ) {
 						update_option( 'rg_gforms_default_theme', $value );
 
@@ -692,7 +698,11 @@ class GFSettings {
         $fields['telemetry'] = array(
 				'id'            => 'section_enable_telemetry_collection',
 				'title'         => esc_html__( 'Data Collection', 'gravityforms' ),
-				'description'   => sprintf( __( 'We love improving the form building experience for everyone in our community. By enabling data collection, you can help us learn more about how our customers use Gravity Forms. %1$sLearn more...%2$s', 'gravityforms' ), '<a target="_blank" href="https://docs.gravityforms.com/about-additional-data-collection/">', '</a>' ),
+				'description' => sprintf(
+					esc_html__( 'We love improving the form building experience for everyone in our community. By enabling data collection, you can help us learn more about how our customers use Gravity Forms. %1$sLearn more...%2$s','gravityforms'),
+					'<a target="_blank" href="https://docs.gravityforms.com/about-additional-data-collection/">',
+					'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span></a>'
+				),
 				'class'         => 'gform-settings-panel--half',
 				'fields'        => array(
 					array(
@@ -725,7 +735,7 @@ class GFSettings {
 				'description' => sprintf(
 						esc_html__( 'Enable this option to output the default form CSS. Disable it if you plan to create your own CSS in a child theme. Note: after Gravity Forms 2.8, this setting will no longer appear on the settings page. If you previously had it enabled, you will need to use the %sgform_disable_css%s filter to disable it.', 'gravityforms' ),
 						'<a href="https://docs.gravityforms.com/gform_disable_css/" target="_blank">',
-						'</a>'
+						'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span></a>'
 						),
 
 				'class'       => 'gform-settings-panel--half',
@@ -857,8 +867,10 @@ class GFSettings {
 									target="_blank"
 									rel="noopener"
 								>
-									<i class="gform-button__icon gform-icon gform-icon--<?php echo esc_attr( $cta['class'] ); ?>"></i>
+									<i class="gform-button__icon gform-icon gform-icon--<?php echo esc_attr( $cta['class'] ); ?>" aria-hidden="true"></i>
 									<?php echo esc_html( $cta['label'] ); ?>
+									<span class="screen-reader-text"><?php echo esc_html__( '(opens in a new tab)', 'gravityforms' ); ?></span>&nbsp;
+									<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span>
 								</a>
 							<?php elseif ( $cta['type'] === 'text' ) : ?>
 								<?php echo esc_html( $cta['content'] ); ?>
@@ -1057,11 +1069,12 @@ class GFSettings {
 						'id'          => 'recpatcha',
 						'title'       => esc_html__( 'reCAPTCHA Settings', 'gravityforms' ),
 						'description' => sprintf(
-							'%s <strong>%s</strong> %s <a href="https://www.google.com/recaptcha/admin/create" target="_blank">%s</a>',
+							'%s <strong>%s</strong> %s <a href="https://www.google.com/recaptcha/admin/create" target="_blank">%s<span class="screen-reader-text">%s</span>&nbsp;<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span></a>',
 							esc_html__( 'Gravity Forms integrates with reCAPTCHA, a free CAPTCHA service that uses an advanced risk analysis engine and adaptive challenges to keep automated software from engaging in abusive activities on your site. ', 'gravityforms' ),
 							esc_html__( 'Please note, only v2 keys are supported and checkbox keys are not compatible with invisible reCAPTCHA.', 'gravityforms' ),
 							esc_html__( 'These settings are required only if you decide to use the reCAPTCHA field.', 'gravityforms' ),
-							esc_html__( 'Get your reCAPTCHA Keys.', 'gravityforms' )
+							esc_html__( 'Get your reCAPTCHA Keys.', 'gravityforms' ),
+							esc_html__( '(opens in a new tab)', 'gravityforms' )
 						),
 						'class'       => 'gform-settings-panel--full',
 						'fields'      => array(
@@ -1181,7 +1194,7 @@ class GFSettings {
 				},
 				'after_fields'      => function() {
 					echo '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
-					printf( '<script type="text/javascript" src="%s"></script>', GFCommon::get_base_url() . '/js/plugin_settings.js' );
+					printf( '<script type="text/javascript" src="%s"></script>', esc_url( GFCommon::get_base_url() . '/js/plugin_settings.js' ) );
 				},
 			)
 		);
@@ -1297,7 +1310,7 @@ class GFSettings {
 			$message = '';
 		}
 
-		echo $message;
+		echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		exit;
 	}
@@ -1336,20 +1349,25 @@ class GFSettings {
 		if ( rgpost( 'uninstall_addon' ) ) {
 			check_admin_referer( 'uninstall', 'gf_addon_uninstall' );
 			foreach ( self::$addon_pages as $key => $addon ) {
-				if ( $_POST['addon'] == $addon['tab_label'] ) {
+				if ( rgpost( 'addon' ) == $addon['tab_label'] ) {
 					unset( self::$addon_pages[ $key ] );
 					break;
 				}
 			}
 
 			// Set the uninstalled addon variable to display a success message.
-			self::$uninstalled_addon = $_POST['addon'];
+			self::$uninstalled_addon = rgpost( 'addon' );
 		}
 
 		if ( ! empty( self::$addon_pages ) ) {
 
 			$sorted_addons = self::$addon_pages;
-			asort( $sorted_addons );
+			usort(
+				$sorted_addons,
+				function ( $a, $b ) {
+					return strnatcasecmp( $a['tab_label'], $b['tab_label'] );
+				}
+			);
 
 			// Add add-ons to menu
 			foreach ( $sorted_addons as $sorted_addon ) {
@@ -1396,12 +1414,12 @@ class GFSettings {
 
 			<?php
 			self::page_header_bar();
-			echo GFCommon::get_remote_message();
+			echo GFCommon::get_remote_message(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			GFCommon::notices_section();
 			?>
 
 			<?php if ( $message ) { ?>
-				<div id="message" class="updated"><p><?php echo $message; ?></p></div>
+				<div id="message" class="updated"><p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p></div>
 			<?php } ?>
 
 			<div class="gform-settings__wrapper">
@@ -1422,7 +1440,7 @@ class GFSettings {
 							'<a href="%s" %s><span class="icon">%s</span> <span class="label">%s</span></a>',
 							esc_url( $url ),
 							$current_tab === $tab['name'] ? ' class="active"' : '',
-							$icon_markup,
+							$icon_markup, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							esc_html( $tab['label'] )
 						);
 					}

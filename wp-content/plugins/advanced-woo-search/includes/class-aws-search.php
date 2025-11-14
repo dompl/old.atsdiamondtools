@@ -113,6 +113,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $s = $keyword ? esc_attr( $keyword ) : ( isset( $_POST['keyword'] ) ? esc_attr( $_POST['keyword'] ) : '' );
             $s = htmlspecialchars_decode( $s );
+            $s = preg_replace('/\s+/', ' ', trim( $s ) );
+            
+            /**
+             * Filters search string before normalization
+             * @since 3.37
+             * @param string $string
+             */
+            $s = apply_filters( 'aws_pre_normalized_search_string', $s );
 
             $this->data['s_nonormalize'] = $s;
 
@@ -141,8 +149,9 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             }
 
             $search_archives   = AWS()->get_settings( 'search_archives' );
-            $show_cats         = ( isset( $search_archives['archive_category'] ) && $search_archives['archive_category'] ) ? 'true' : 'false';
-            $show_tags         = ( isset( $search_archives['archive_tag'] ) && $search_archives['archive_tag'] ) ? 'true' : 'false';
+            $show_cats         = ( isset( $search_archives['archive_category'] ) && is_array( $search_archives['archive_category'] ) && isset( $search_archives['archive_category']['value'] ) && $search_archives['archive_category']['value'] === '1' ) ? 'true' : 'false';
+            $show_tags         = ( isset( $search_archives['archive_tag'] ) && is_array( $search_archives['archive_tag'] ) && isset( $search_archives['archive_tag']['value'] ) && $search_archives['archive_tag']['value'] === '1' ) ? 'true' : 'false';
+
             $results_num       = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
             $pages_results_num = AWS()->get_settings( 'pages_results_num' );
             $search_in         = AWS()->get_settings( 'search_in' );
@@ -150,16 +159,17 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $search_rule       = AWS()->get_settings( 'search_rule' );
             $search_words_num  = AWS()->get_settings( 'search_words_num' );
             $fuzzy             = AWS()->get_settings( 'fuzzy' );
+            $search_page_highlight = AWS()->get_settings( 'search_page_highlight' );
 
             $search_in_arr = array();
-
-            if ( is_array( $search_in ) && ! empty( $search_in ) ) {
-                foreach( $search_in as $search_in_source => $search_in_active ) {
-                    if ( $search_in_active ) {
-                        $search_in_arr[] = $search_in_source;
+            if ( $search_in && is_array( $search_in ) ) {
+                foreach ( $search_in as $search_in_name => $search_in_params ) {
+                    if ( is_array( $search_in_params ) && isset( $search_in_params['value'] ) && $search_in_params['value'] === '1' ) {
+                        $search_in_arr[] = $search_in_name;
                     }
                 }
-            } elseif ( is_string( $search_in ) && $search_in ) {
+            } else {
+                // depricated
                 $search_in_arr = explode( ',',  $search_in );
             }
 
@@ -176,8 +186,31 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['search_rule']   = $search_rule;
             $this->data['search_words_num'] = $search_words_num;
             $this->data['fuzzy'] = $fuzzy;
+            $this->data['search_page_highlight'] = $search_page_highlight;
             $this->data['is_search_page'] = !! $keyword;
             $this->data['current_lang'] = $current_lang;
+
+
+            if ( $show_cats === 'true' ) {
+                $tax_to_display[] = 'product_cat';
+            }
+
+            if ( $show_tags === 'true' ) {
+                $tax_to_display[] = 'product_tag';
+            }
+
+            /**
+             * Filters array of custom taxonomies that must be displayed in search results
+             *
+             * @since 1.68
+             *
+             * @param array $taxonomies_archives Array of custom taxonomies
+             * @param string $s Search query
+             */
+            $taxonomies_archives = apply_filters( 'aws_search_results_tax_archives', $tax_to_display, $s );
+
+            $this->data['taxonomies_archives'] = $taxonomies_archives;
+
 
             $search_array = array_unique( explode( ' ', $s ) );
 
@@ -237,24 +270,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 }
 
                 if ( $output === 'all' ) {
-
-                    if ( $show_cats === 'true' ) {
-                        $tax_to_display[] = 'product_cat';
-                    }
-
-                    if ( $show_tags === 'true' ) {
-                        $tax_to_display[] = 'product_tag';
-                    }
-
-                    /**
-                     * Filters array of custom taxonomies that must be displayed in search results
-                     *
-                     * @since 1.68
-                     *
-                     * @param array $taxonomies_archives Array of custom taxonomies
-                     * @param string $s Search query
-                     */
-                    $taxonomies_archives = apply_filters( 'aws_search_results_tax_archives', $tax_to_display, $s );
 
                     if ( $taxonomies_archives && is_array( $taxonomies_archives ) && ! empty( $taxonomies_archives ) ) {
 
@@ -435,7 +450,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 if ( $is_normal_term ) {
                     $search_array[] = $wpdb->prepare( '( term LIKE %s )', $like );
                 } else {
-                    $search_array[] = $wpdb->prepare( '( term = "%s" )', $search_term );
+                    $search_array[] = $wpdb->prepare( "( term = '%s' )", $search_term );
                 }
 
                 foreach ( $search_in_arr as $search_in_term ) {
@@ -904,32 +919,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                  return $text;
             }
 
-            $pattern = array();
-
-            $search_terms = array();
-
-            if ( ! empty( $this->data['search_terms'] ) ) {
-                $search_terms = array_fill_keys( $this->data['search_terms'], 1);
-                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
-                $search_terms = array_keys( $search_terms );
-            }
-
-            foreach( $search_terms as $search_in ) {
-
-                $search_in = preg_quote( $search_in, '/' );
-
-                if ( strlen( $search_in ) > 1 ) {
-                    $pattern[] = '(' . $search_in . ')+';
-                } else {
-                    $pattern[] = '\b[' . $search_in . ']{1}\b';
-                }
-
-            }
-
-            usort( $pattern, array( $this, 'sort_by_length' ) );
-            $pattern = implode( '|', $pattern );
-            $pattern = sprintf( '/%s/i', $pattern );
-
             /**
              * Tag to use for highlighting search words inside content
              * @since 1.88
@@ -937,9 +926,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              */
             $highlight_tag = apply_filters( 'aws_highlight_tag', 'strong' );
 
-            $highlight_tag_pattern = '<' . $highlight_tag . '>${0}</' . $highlight_tag . '>';
-
-            $text = preg_replace($pattern, $highlight_tag_pattern, $text );
+            $text = AWS_Helpers::highlight_words( $text, $this->data, $highlight_tag );
 
             return $text;
 

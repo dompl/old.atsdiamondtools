@@ -21,13 +21,19 @@ class WC_Stripe_Payment_Tokens {
 	 * The values are the related gateway ID we use for them in the extension.
 	 */
 	const UPE_REUSABLE_GATEWAYS_BY_PAYMENT_METHOD = [
-		WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID           => WC_Stripe_UPE_Payment_Gateway::ID,
-		WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID         => WC_Stripe_UPE_Payment_Gateway::ID,
-		WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID   => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID,
-		WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID        => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID,
-		WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID         => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID,
-		WC_Stripe_UPE_Payment_Method_Sofort::STRIPE_ID       => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Sofort::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID         => WC_Stripe_UPE_Payment_Gateway::ID,
+		WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID       => WC_Stripe_UPE_Payment_Gateway::ID,
+		WC_Stripe_UPE_Payment_Method_Amazon_Pay::STRIPE_ID => WC_Stripe_UPE_Payment_Gateway::ID,
+		WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID        => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID      => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID       => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Sofort::STRIPE_ID     => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Sofort::STRIPE_ID,
 		WC_Stripe_UPE_Payment_Method_Cash_App_Pay::STRIPE_ID => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Cash_App_Pay::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Bacs_Debit::STRIPE_ID => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Bacs_Debit::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_ACSS::STRIPE_ID       => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_ACSS::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID,
+		WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID     => WC_Stripe_UPE_Payment_Gateway::ID . '_' . WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID,
 	];
 
 	/**
@@ -41,7 +47,7 @@ class WC_Stripe_Payment_Tokens {
 
 		add_filter( 'woocommerce_get_customer_payment_tokens', [ $this, 'woocommerce_get_customer_payment_tokens' ], 10, 3 );
 		add_filter( 'woocommerce_payment_methods_list_item', [ $this, 'get_account_saved_payment_methods_list_item' ], 10, 2 );
-		add_filter( 'woocommerce_get_credit_card_type_label', [ $this, 'normalize_sepa_label' ] );
+		add_filter( 'woocommerce_get_credit_card_type_label', [ $this, 'normalize_payment_method_label' ] );
 		add_filter( 'woocommerce_payment_token_class', [ $this, 'woocommerce_payment_token_class' ], 10, 2 );
 		add_action( 'woocommerce_payment_token_deleted', [ $this, 'woocommerce_payment_token_deleted' ], 10, 2 );
 		add_action( 'woocommerce_payment_token_set_default', [ $this, 'woocommerce_payment_token_set_default' ] );
@@ -58,19 +64,22 @@ class WC_Stripe_Payment_Tokens {
 	}
 
 	/**
-	 * Normalizes the SEPA IBAN label on My Account page.
+	 * Normalizes the payment method labels on My Account page.
 	 *
-	 * @since 4.0.0
-	 * @version 4.0.0
+	 * @since 9.4.0
+	 * @version 9.4.0
 	 * @param string $label
 	 * @return string $label
 	 */
-	public function normalize_sepa_label( $label ) {
-		if ( 'sepa iban' === strtolower( $label ) ) {
-			return 'SEPA IBAN';
+	public function normalize_payment_method_label( $label ) {
+		switch ( strtolower( $label ) ) {
+			case 'becs direct debit':
+				return 'BECS Direct Debit';
+			case 'sepa iban':
+				return 'SEPA IBAN';
+			default:
+				return $label;
 		}
-
-		return $label;
 	}
 
 	/**
@@ -292,28 +301,29 @@ class WC_Stripe_Payment_Tokens {
 			$customer = new WC_Stripe_Customer( $user_id );
 
 			// Retrieve the payment methods for the enabled reusable gateways.
-			$payment_methods = [];
-			foreach ( self::UPE_REUSABLE_GATEWAYS_BY_PAYMENT_METHOD as $payment_method_type => $reausable_gateway_id ) {
+			$reusable_payment_method_types = array_keys( self::UPE_REUSABLE_GATEWAYS_BY_PAYMENT_METHOD );
 
-				// The payment method type doesn't match the ones we use. Nothing to do here.
-				if ( ! isset( $gateway->payment_methods[ $payment_method_type ] ) ) {
-					continue;
-				}
-
-				$payment_method_instance = $gateway->payment_methods[ $payment_method_type ];
-				if ( $payment_method_instance->is_enabled() ) {
-					$payment_methods[] = $customer->get_payment_methods( $payment_method_type );
-				}
-			}
+			$enabled_payment_methods = $gateway->get_upe_enabled_payment_method_ids();
+			$active_reusable_payment_method_types = array_intersect( $enabled_payment_methods, $reusable_payment_method_types );
 
 			// Add SEPA if it is disabled and iDEAL or Bancontact are enabled. iDEAL and Bancontact tokens are saved as SEPA tokens.
-			if ( $gateway->is_sepa_tokens_for_other_methods_enabled() && ! $gateway->payment_methods[ WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID ]->is_enabled()
-				&& ( $gateway->payment_methods[ WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID ]->is_enabled()
-					|| $gateway->payment_methods[ WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID ]->is_enabled() ) ) {
-					$payment_methods[] = $customer->get_payment_methods( WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID );
-			}
+			if ( ! in_array( WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID, $active_reusable_payment_method_types, true ) ) {
+				$ideal_tokens_enabled      = $gateway->is_sepa_tokens_for_ideal_enabled();
+				$bancontact_tokens_enabled = $gateway->is_sepa_tokens_for_bancontact_enabled();
 
-			$payment_methods = array_merge( ...$payment_methods );
+				if ( ( $ideal_tokens_enabled && in_array( WC_Stripe_UPE_Payment_Method_Ideal::STRIPE_ID, $active_reusable_payment_method_types, true ) )
+					|| ( $bancontact_tokens_enabled && in_array( WC_Stripe_UPE_Payment_Method_Bancontact::STRIPE_ID, $active_reusable_payment_method_types, true ) ) ) {
+					$active_reusable_payment_method_types[] = WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID;
+				}
+			}
+			$payment_methods = $customer->get_all_payment_methods( $active_reusable_payment_method_types );
+
+			$payment_method_ids = array_map(
+				function ( $payment_method ) {
+					return $payment_method->id;
+				},
+				$payment_methods
+			);
 
 			// Prevent unnecessary recursion, WC_Payment_Token::save() ends up calling 'woocommerce_get_customer_payment_tokens' in some cases.
 			remove_action( 'woocommerce_get_customer_payment_tokens', [ $this, 'woocommerce_get_customer_payment_tokens' ], 10, 3 );
@@ -327,7 +337,7 @@ class WC_Stripe_Payment_Tokens {
 				$payment_method_type = $this->get_original_payment_method_type( $payment_method );
 
 				// The corresponding method for the payment method type is not enabled, skipping.
-				if ( ! $gateway->payment_methods[ $payment_method_type ]->is_enabled() ) {
+				if ( ! $gateway->is_oc_enabled() && ! $gateway->payment_methods[ $payment_method_type ]->is_enabled() ) {
 					continue;
 				}
 
@@ -340,12 +350,13 @@ class WC_Stripe_Payment_Tokens {
 					$this->is_valid_payment_method_id( $payment_method->id, $payment_method_type ) &&
 					( empty( $gateway_id ) || $this->is_valid_payment_method_type_for_gateway( $payment_method_type, $gateway_id ) )
 				) {
-					$token                      = $this->add_token_to_user( $payment_method, $customer );
+					$token                      = $this->add_token_to_user( $payment_method, $customer, $payment_method_ids );
 					$tokens[ $token->get_id() ] = $token;
 				} else {
 					unset( $stored_tokens[ $payment_method->id ] );
 				}
 			}
+
 			add_action( 'woocommerce_get_customer_payment_tokens', [ $this, 'woocommerce_get_customer_payment_tokens' ], 10, 3 );
 
 			remove_action( 'woocommerce_payment_token_deleted', [ $this, 'woocommerce_payment_token_deleted' ], 10, 2 );
@@ -391,7 +402,7 @@ class WC_Stripe_Payment_Tokens {
 	}
 
 	/**
-	 * Controls the output for SEPA and Cash App on the my account page.
+	 * Controls the output for some payment methods on the my account page.
 	 *
 	 * @since 4.8.0
 	 * @param array            $item          Individual list item from woocommerce_saved_payment_methods_list.
@@ -400,13 +411,34 @@ class WC_Stripe_Payment_Tokens {
 	 * @return array $item Modified list item.
 	 */
 	public function get_account_saved_payment_methods_list_item( $item, $payment_token ) {
+		// If this isn't a Stripe payment token, take no action.
+		if ( ! $payment_token instanceof WC_Stripe_Payment_Method_Comparison_Interface ) {
+			return $item;
+		}
+
 		switch ( strtolower( $payment_token->get_type() ) ) {
 			case WC_Stripe_Payment_Methods::SEPA:
 				$item['method']['last4'] = $payment_token->get_last4();
 				$item['method']['brand'] = esc_html__( 'SEPA IBAN', 'woocommerce-gateway-stripe' );
 				break;
+			case WC_Stripe_Payment_Methods::BACS_DEBIT:
+				$item['method']['last4'] = $payment_token->get_last4();
+				$item['method']['brand'] = esc_html__( 'Bacs Direct Debit', 'woocommerce-gateway-stripe' );
+				break;
 			case WC_Stripe_Payment_Methods::CASHAPP_PAY:
 				$item['method']['brand'] = esc_html__( 'Cash App Pay', 'woocommerce-gateway-stripe' );
+				break;
+			case WC_Stripe_Payment_Methods::ACH:
+				$item['method']['brand'] = $payment_token->get_bank_name();
+				$item['method']['last4'] = $payment_token->get_last4();
+				break;
+			case WC_Stripe_Payment_Methods::ACSS_DEBIT:
+				$item['method']['brand'] = $payment_token->get_bank_name();
+				$item['method']['last4'] = $payment_token->get_last4();
+				break;
+			case WC_Stripe_Payment_Methods::BECS_DEBIT:
+				$item['method']['brand'] = esc_html__( 'BECS Direct Debit', 'woocommerce-gateway-stripe' );
+				$item['method']['last4'] = $payment_token->get_last4();
 				break;
 			case WC_Stripe_Payment_Methods::LINK:
 				$item['method']['brand'] = sprintf(
@@ -414,6 +446,16 @@ class WC_Stripe_Payment_Tokens {
 					esc_html__( 'Stripe Link (%s)', 'woocommerce-gateway-stripe' ),
 					esc_html( $payment_token->get_email() )
 				);
+				break;
+			case WC_Stripe_Payment_Methods::AMAZON_PAY:
+				$item['method']['brand'] = sprintf(
+					/* translators: customer email */
+					esc_html__( 'Amazon Pay (%s)', 'woocommerce-gateway-stripe' ),
+					esc_html( $payment_token->get_email() )
+				);
+				break;
+			case WC_Stripe_Payment_Methods::KLARNA:
+				$item['method']['brand'] = esc_html__( 'Klarna', 'woocommerce-gateway-stripe' );
 				break;
 		}
 
@@ -473,11 +515,10 @@ class WC_Stripe_Payment_Tokens {
 		$stripe_customer = new WC_Stripe_Customer( get_current_user_id() );
 
 		try {
-			if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
-				if ( WC_Stripe_UPE_Payment_Gateway::ID === $token->get_gateway_id() ) {
-					$stripe_customer->set_default_payment_method( $token->get_token() );
-				}
-			} elseif ( WC_Gateway_Stripe::ID === $token->get_gateway_id() || WC_Gateway_Stripe_Sepa::ID === $token->get_gateway_id() ) {
+			// If the token is a payment method, set it as the default payment method. If the token is a source, set it as the default source.
+			if ( strpos( $token->get_token(), 'pm_' ) === 0 ) {
+				$stripe_customer->set_default_payment_method( $token->get_token() );
+			} elseif ( strpos( $token->get_token(), 'src_' ) === 0 ) {
 				$stripe_customer->set_default_source( $token->get_token() );
 			}
 		} catch ( WC_Stripe_Exception $e ) {
@@ -500,24 +541,29 @@ class WC_Stripe_Payment_Tokens {
 	/**
 	 * Creates and add a token to an user, based on the PaymentMethod object.
 	 *
-	 * @param   object             $payment_method Payment method to be added.
-	 * @param   WC_Stripe_Customer $customer       WC_Stripe_Customer we're processing the tokens for.
+	 * @param   object             $payment_method      Payment method to be added.
+	 * @param   WC_Stripe_Customer $customer            WC_Stripe_Customer we're processing the tokens for.
+	 * @param   array              $payment_method_ids  List of payment methods retrieved from Stripe.
 	 * @return  WC_Payment_Token   The WC object for the payment token.
 	 */
-	private function add_token_to_user( $payment_method, WC_Stripe_Customer $customer ) {
-		// Clear cached payment methods.
-		$customer->clear_cache();
-
+	private function add_token_to_user( $payment_method, WC_Stripe_Customer $customer, $payment_method_ids = [] ) {
 		$payment_method_type = $this->get_original_payment_method_type( $payment_method );
 		$gateway_id          = self::UPE_REUSABLE_GATEWAYS_BY_PAYMENT_METHOD[ $payment_method_type ];
 
 		$found_token = $this->get_duplicate_token( $payment_method, $customer->get_user_id(), $gateway_id );
 		if ( $found_token ) {
-			// Update the token with the new payment method ID.
-			$found_token->set_token( $payment_method->id );
-			$found_token->save();
+			// Update the token with the new payment method ID if the current payment method ID is not in the list of payment method IDs retrieved from Stripe.
+			if ( ! in_array( $found_token->get_token(), $payment_method_ids, true ) ) {
+				// Clear cached payment methods.
+				$customer->clear_cache();
+				$found_token->set_token( $payment_method->id );
+				$found_token->save();
+			}
 			return $found_token;
 		}
+
+		// Clear cached payment methods.
+		$customer->clear_cache();
 
 		switch ( $payment_method_type ) {
 			case WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID:
@@ -528,17 +574,75 @@ class WC_Stripe_Payment_Tokens {
 				$token->set_last4( $payment_method->card->last4 );
 				$token->set_fingerprint( $payment_method->card->fingerprint );
 				break;
-
+			case WC_Stripe_UPE_Payment_Method_Bacs_Debit::STRIPE_ID:
+				$token = new WC_Payment_Token_Bacs_Debit();
+				$token->set_last4( $payment_method->bacs_debit->last4 );
+				$token->set_fingerprint( $payment_method->bacs_debit->fingerprint );
+				$token->set_payment_method_type( $payment_method_type );
+				break;
 			case WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID:
 				$token = new WC_Payment_Token_Link();
 				$token->set_email( $payment_method->link->email );
 				$token->set_payment_method_type( $payment_method_type );
+				break;
+			case WC_Stripe_UPE_Payment_Method_Amazon_Pay::STRIPE_ID:
+				$token = new WC_Payment_Token_Amazon_Pay();
+				$token->set_email( $payment_method->billing_details->email ?? '' );
+				break;
+			case WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID:
+				$token = new WC_Payment_Token_ACH();
+				if ( isset( $payment_method->us_bank_account->last4 ) ) {
+					$token->set_last4( $payment_method->us_bank_account->last4 );
+				}
+				if ( isset( $payment_method->us_bank_account->fingerprint ) ) {
+					$token->set_fingerprint( $payment_method->us_bank_account->fingerprint );
+				}
+				if ( isset( $payment_method->us_bank_account->account_type ) ) {
+					$token->set_account_type( $payment_method->us_bank_account->account_type );
+				}
+				if ( isset( $payment_method->us_bank_account->bank_name ) ) {
+					$token->set_bank_name( $payment_method->us_bank_account->bank_name );
+				}
+				break;
+			case WC_Stripe_UPE_Payment_Method_ACSS::STRIPE_ID:
+				$token = new WC_Payment_Token_ACSS();
+				if ( isset( $payment_method->acss_debit->last4 ) ) {
+					$token->set_last4( $payment_method->acss_debit->last4 );
+				}
+				if ( isset( $payment_method->acss_debit->fingerprint ) ) {
+					$token->set_fingerprint( $payment_method->acss_debit->fingerprint );
+				}
+				if ( isset( $payment_method->acss_debit->bank_name ) ) {
+					$token->set_bank_name( $payment_method->acss_debit->bank_name );
+				}
 				break;
 			case WC_Stripe_UPE_Payment_Method_Cash_App_Pay::STRIPE_ID:
 				$token = new WC_Payment_Token_CashApp();
 
 				if ( isset( $payment_method->cashapp->cashtag ) ) {
 					$token->set_cashtag( $payment_method->cashapp->cashtag );
+				}
+				break;
+			case WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID:
+				$token = new WC_Payment_Token_Becs_Debit();
+				if ( isset( $payment_method->{WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID} ) ) {
+					$au_becs_debit_fields = $payment_method->{WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID};
+
+					if ( isset( $au_becs_debit_fields->last4 ) ) {
+						$token->set_last4( $au_becs_debit_fields->last4 );
+					}
+					if ( isset( $au_becs_debit_fields->fingerprint ) ) {
+						$token->set_fingerprint( $au_becs_debit_fields->fingerprint );
+					}
+				}
+				break;
+			case WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID:
+				$token = new WC_Stripe_Klarna_Payment_Token();
+				if ( isset( $payment_method->{WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID} ) ) {
+					$klarna_fields = $payment_method->{WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID};
+					if ( isset( $klarna_fields->dob ) ) {
+						$token->set_dob_from_object( $klarna_fields->dob );
+					}
 				}
 				break;
 			default:
@@ -590,8 +694,13 @@ class WC_Stripe_Payment_Tokens {
 	public static function get_token_label_overrides_for_checkout() {
 		$label_overrides      = [];
 		$payment_method_types = [
+			WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID,
+			WC_Stripe_UPE_Payment_Method_ACSS::STRIPE_ID,
 			WC_Stripe_UPE_Payment_Method_Cash_App_Pay::STRIPE_ID,
 			WC_Stripe_UPE_Payment_Method_Link::STRIPE_ID,
+			WC_Stripe_UPE_Payment_Method_Bacs_Debit::STRIPE_ID,
+			WC_Stripe_UPE_Payment_Method_Amazon_Pay::STRIPE_ID,
+			WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID,
 		];
 
 		foreach ( $payment_method_types as $stripe_id ) {
@@ -686,7 +795,7 @@ class WC_Stripe_Payment_Tokens {
 			/**
 			 * Token object.
 			 *
-			 * @var WC_Payment_Token_CashApp|WC_Stripe_Payment_Token_CC|WC_Payment_Token_Link|WC_Payment_Token_SEPA $token
+			 * @var WC_Payment_Token_CashApp|WC_Stripe_Payment_Token_CC|WC_Payment_Token_Link|WC_Payment_Token_SEPA|WC_Payment_Token_ACH|WC_Payment_Token_ACSS|WC_Payment_Token_Becs_Debit $token
 			 */
 			if ( $token->is_equal_payment_method( $payment_method ) ) {
 				return $token;
@@ -696,7 +805,8 @@ class WC_Stripe_Payment_Tokens {
 	}
 
 	/**
-	 * Filters the payment token class to override the credit card class with the extension's version.
+	 * Filters the payment token class to handle token classes that don't match the default
+	 * WooCommerce payment token class name.
 	 *
 	 * @param string $class Payment token class.
 	 * @param string $type Token type.
@@ -706,6 +816,20 @@ class WC_Stripe_Payment_Tokens {
 		if ( WC_Payment_Token_CC::class === $class ) {
 			return WC_Stripe_Payment_Token_CC::class;
 		}
+		if ( WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID === $type ) {
+			return WC_Payment_Token_ACH::class;
+		}
+		if ( WC_Stripe_UPE_Payment_Method_ACSS::STRIPE_ID === $type ) {
+			return WC_Payment_Token_ACSS::class;
+		}
+		if ( WC_Stripe_UPE_Payment_Method_Becs_Debit::STRIPE_ID === $type ) {
+			return WC_Payment_Token_Becs_Debit::class;
+		}
+		// Check for Klarna and make sure we don't override other plugins that may use `klarna` as the token ID.
+		if ( WC_Stripe_UPE_Payment_Method_Klarna::STRIPE_ID === $type && 'WC_Payment_Token_klarna' === $class ) {
+			return WC_Stripe_Klarna_Payment_Token::class;
+		}
+
 		return $class;
 	}
 

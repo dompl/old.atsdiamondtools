@@ -1,4 +1,7 @@
 <?php
+
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -142,7 +145,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function get_title() {
 		// Change the title on the payment methods settings page to include the number of enabled payment methods.
-		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() && isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] ) {
+		if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() && isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] && isset( $_GET['tab'] ) && 'checkout' === $_GET['tab'] ) {
 			$enabled_payment_methods_count = count( WC_Stripe_Helper::get_legacy_enabled_payment_method_ids() );
 			$this->title                   = $enabled_payment_methods_count ?
 				/* translators: $1. Count of enabled payment methods. */
@@ -202,7 +205,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 * Initialise Gateway Settings Form Fields
 	 */
 	public function init_form_fields() {
-		$this->form_fields = require dirname( __FILE__ ) . '/admin/stripe-settings.php';
+		$this->form_fields = require __DIR__ . '/admin/stripe-settings.php';
 	}
 
 	/**
@@ -222,11 +225,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		if ( parent::is_valid_pay_for_order_endpoint() ) {
 			$order      = wc_get_order( wc_clean( $wp->query_vars['order-pay'] ) );
 			$user_email = $order->get_billing_email();
-		} else {
-			if ( $user->ID ) {
+		} elseif ( $user->ID ) {
 				$user_email = get_user_meta( $user->ID, 'billing_email', true );
 				$user_email = $user_email ? $user_email : $user->user_email;
-			}
 		}
 
 		if ( is_add_payment_method_page() ) {
@@ -441,8 +442,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 				return $this->complete_free_order( $order, $prepared_source, $force_save_source );
 			}
 
+			$order_helper = WC_Stripe_Order_Helper::get_instance();
+
 			// This will throw exception if not valid.
-			$this->validate_minimum_order_amount( $order );
+			$order_helper->validate_minimum_order_amount( $order );
 
 			WC_Stripe_Logger::log( "Info: Begin processing payment for order $order_id for the amount of {$order->get_total()}" );
 
@@ -454,7 +457,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 			// Confirm the intent after locking the order to make sure webhooks will not interfere.
 			if ( empty( $intent->error ) ) {
-				$this->lock_order_payment( $order, $intent );
+				$order_helper->lock_order_payment( $order );
 				$intent = $this->confirm_intent( $intent, $order, $prepared_source );
 			}
 
@@ -468,7 +471,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 					return $this->retry_after_error( $intent, $order, $retry, $force_save_source, $previous_error, $use_order_source );
 				}
 
-				$this->unlock_order_payment( $order );
+				$order_helper->unlock_order_payment( $order );
 				$this->throw_localized_message( $intent, $order );
 			}
 
@@ -482,10 +485,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 				// If the intent requires a 3DS flow, redirect to it.
 				if ( WC_Stripe_Intent_Status::REQUIRES_ACTION === $intent->status ) {
-					$this->unlock_order_payment( $order );
+					$order_helper->unlock_order_payment( $order );
 
 					// If the order requires some action from the customer, add meta to the order to prevent it from being cancelled by WooCommerce's hold stock settings.
-					WC_Stripe_Helper::set_payment_awaiting_action( $order );
+					$order_helper->set_payment_awaiting_action( $order );
 
 					if ( is_wc_endpoint_url( 'order-pay' ) ) {
 						$redirect_url = add_query_arg( 'wc-stripe-confirmation', 1, $order->get_checkout_payment_url( false ) );
@@ -504,6 +507,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 						return [
 							'result'                => 'success',
 							'redirect'              => $this->get_return_url( $order ),
+							'payment_intent_id'     => $intent->id,
 							'payment_intent_secret' => $intent->client_secret,
 							'save_payment_method'   => $this->save_payment_method_requested(),
 						];
@@ -520,7 +524,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			}
 
 			// Unlock the order.
-			$this->unlock_order_payment( $order );
+			$order_helper->unlock_order_payment( $order );
 
 			// Return thank you page redirect.
 			return [
@@ -535,7 +539,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			do_action( 'wc_gateway_stripe_process_payment_error', $e, $order );
 
 			/* translators: error message */
-			$order->update_status( 'failed' );
+			$order->update_status( OrderStatus::FAILED );
 
 			return [
 				'result'   => 'fail',
@@ -558,8 +562,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		$order = wc_get_order( $order_id );
 
-		$fee      = WC_Stripe_Helper::get_stripe_fee( $order );
-		$currency = WC_Stripe_Helper::get_stripe_currency( $order );
+		$order_helper = WC_Stripe_Order_Helper::get_instance();
+		$fee          = $order_helper->get_stripe_fee( $order );
+		$currency     = $order_helper->get_stripe_currency( $order );
 
 		if ( ! $fee || ! $currency ) {
 			return;
@@ -595,8 +600,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		$order = wc_get_order( $order_id );
 
-		$net      = WC_Stripe_Helper::get_stripe_net( $order );
-		$currency = WC_Stripe_Helper::get_stripe_currency( $order );
+		$order_helper = WC_Stripe_Order_Helper::get_instance();
+		$net      = $order_helper->get_stripe_net( $order );
+		$currency = $order_helper->get_stripe_currency( $order );
 
 		if ( ! $net || ! $currency ) {
 			return;
@@ -644,7 +650,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		}
 
 		sleep( $this->retry_interval );
-		$this->retry_interval++;
+		++$this->retry_interval;
 
 		return $this->process_payment( $order->get_id(), true, $force_save_source, $response->error, $previous_error, $use_order_source );
 	}
@@ -825,7 +831,10 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 
 		$force_save_source_value = apply_filters( 'wc_stripe_force_save_source', false );
 
-		if ( $this->save_payment_method_requested() || $force_save_source_value ) {
+		// We want to save the payment method if requested or forced, AND if we are not
+		// already using a saved payment method.
+		if ( ( $this->save_payment_method_requested() || $force_save_source_value ) &&
+			! $this->is_using_saved_payment_method() ) {
 			$query_params['save_payment_method'] = true;
 		}
 
@@ -885,7 +894,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		if ( ! $order->has_status(
 			apply_filters(
 				'wc_stripe_allowed_payment_processing_statuses',
-				[ 'pending', 'failed' ],
+				[ OrderStatus::PENDING, OrderStatus::FAILED ],
 				$order
 			)
 		) ) {
@@ -893,7 +902,9 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			return;
 		}
 
-		if ( $this->lock_order_payment( $order, $intent ) ) {
+		$order_helper = WC_Stripe_Order_Helper::get_instance();
+
+		if ( $order_helper->lock_order_payment( $order ) ) {
 			return;
 		}
 
@@ -912,13 +923,13 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			$this->handle_intent_verification_failure( $order, $intent );
 		}
 
-		$this->unlock_order_payment( $order );
+		$order_helper->unlock_order_payment( $order );
 
 		/**
 		 * This meta is to prevent stores with short hold stock settings from cancelling orders while waiting for payment to be finalised by Stripe or the customer (i.e. completing 3DS or payment redirects).
 		 * Now that payment is confirmed, we can remove this meta.
 		 */
-		WC_Stripe_Helper::remove_payment_awaiting_action( $order );
+		$order_helper->remove_payment_awaiting_action( $order );
 	}
 
 	/**
@@ -954,7 +965,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 	 */
 	public function failed_sca_auth( $order, $intent ) {
 		// If the order has already failed, do not repeat the same message.
-		if ( $order->has_status( 'failed' ) ) {
+		if ( $order->has_status( OrderStatus::FAILED ) ) {
 			return;
 		}
 
@@ -963,7 +974,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 			/* translators: 1) The error message that was received from Stripe. */
 			? sprintf( __( 'Stripe SCA authentication failed. Reason: %s', 'woocommerce-gateway-stripe' ), $intent->last_payment_error->message )
 			: __( 'Stripe SCA authentication failed.', 'woocommerce-gateway-stripe' );
-		$order->update_status( 'failed', $status_message );
+		$order->update_status( OrderStatus::FAILED, $status_message );
 	}
 
 	/**
@@ -1001,7 +1012,7 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		$new_test_secret_key      = $this->get_option( 'test_secret_key' );
 
 		// Checks whether a value has transitioned from a non-empty value to a new one.
-		$has_changed = function( $old_value, $new_value ) {
+		$has_changed = function ( $old_value, $new_value ) {
 			return ! empty( $old_value ) && ( $old_value !== $new_value );
 		};
 
@@ -1213,5 +1224,30 @@ class WC_Gateway_Stripe extends WC_Stripe_Payment_Gateway {
 		}
 
 		return $this->validate_text_field( $field_key, $field_value );
+	}
+
+	/**
+	 * Returns whether Google Pay and Apple Pay (PRBs) are enabled,
+	 * for the legacy checkout.
+	 *
+	 * WC_Stripe_UPE_Payment_Gateway overrides this method.
+	 *
+	 * @return bool
+	 */
+	public function is_payment_request_enabled() {
+		return 'yes' === $this->get_option( 'payment_request' );
+	}
+
+	/**
+	 * Checks if the Optimized Checkout setting is enabled.
+	 *
+	 * OC is not supported in the legacy gateway, so we return false here,
+	 * this method is then overridden by UPE payment gateway which extends from this class.
+	 *
+	 * @return bool Always false.
+	 */
+	public function is_oc_enabled() {
+		// Always return false here, as OC is not supported in the legacy gateway.
+		return false;
 	}
 }

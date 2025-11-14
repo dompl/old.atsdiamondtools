@@ -33,6 +33,7 @@ class IgniteWoo_Updater {
 	 * @return  void
 	 */
 	public function __construct ( $file, $version ) {
+
 		global $ignition_updater_token;
 
 		$this->token = $ignition_updater_token;
@@ -54,9 +55,8 @@ class IgniteWoo_Updater {
 
 		$this->products = array();
 
-		// Deprecated, this causes the translations to be loaded too soon.
-
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ), 0 );
+		// Now called directly in the main plugin file.
+		//add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ), 11 );
 
 		// Run this on activation.
 		register_activation_hook( $this->file, array( $this, 'activation' ) );
@@ -247,6 +247,7 @@ class IgniteWoo_Updater {
 	 * @return  void
 	 */
 	public function load_plugin_textdomain () {
+
 		$domain = 'ignition-updater';
 		// The "plugin_locale" filter is also used in load_plugin_textdomain()
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
@@ -256,7 +257,7 @@ class IgniteWoo_Updater {
 		$plugin_rel_path = apply_filters( 'ignitewoo_translation_file_rel_path', dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 		load_plugin_textdomain( $domain, false, $plugin_rel_path );
-		
+
 	} // End load_plugin_textdomain()
 
 	/**

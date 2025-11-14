@@ -340,15 +340,28 @@ jQuery( function( $ ) {
 	// Check for settings change
 	$( document ).on( 'keyup paste', '#wpo-wcpdf-settings input, #wpo-wcpdf-settings textarea', settingsChanged );
 	$( document ).on( 'change', '#wpo-wcpdf-settings input[type="checkbox"], #wpo-wcpdf-settings input[type="radio"], #wpo-wcpdf-settings select', function( event ) {
-		if ( ! event.isTrigger ) { // exclude programmatic triggers that aren't actually changing anything
+		if ( 'shop_address_country' === event.target.id || ! event.isTrigger ) { // exclude programmatic triggers that aren't actually changing anything
 			settingsChanged( event );
 		}
-	});
+	} );
 	$( document ).on( 'select2:select select2:unselect', '#wpo-wcpdf-settings select.wc-enhanced-select', settingsChanged );
 	$( document.body ).on( 'wpo-wcpdf-media-upload-setting-updated', settingsChanged );
 	$( document ).on( 'click', '.wpo_remove_image_button, #wpo-wcpdf-settings .remove-requirement', settingsChanged );
 
+	// On Multilingual
+	if ( $( '#wpo_wcpdf_settings_general-shop_address_country-translations' ).length > 0 ) {
+		$( '#wpo-wcpdf-settings select[name^="wpo_wcpdf_settings_general[shop_address_country]"]' ).each( function() {
+			const $select = $( this );
+			if ( $select.val() ) {
+				shopCountryChanged( $select );
+			}
+		} );
+	}
+
 	function settingsChanged( event, previewDelay ) {
+		if ( 'shop_address_country' === event.target.id ) {
+			shopCountryChanged( $( event.target ) );
+		}
 
 		// Show secondary save button
 		showSaveBtn();
@@ -362,7 +375,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-			if ( jQuery.inArray( event.type, ['keyup', 'paste'] ) !== -1 ) {
+			if ( $.inArray( event.type, ['keyup', 'paste'] ) !== -1 ) {
 				if ( $element.is( 'input[type="checkbox"], select' ) ) {
 					return;
 				} else {
@@ -374,8 +387,88 @@ jQuery( function( $ ) {
 		}
 	}
 
+	function shopCountryChanged( $countryField ) {
+		const selectedCountry = $countryField.val();
+		const $form           = $countryField.closest( 'form' );
+
+		// Get the language key
+		const nameMatch = $countryField.attr( 'name' )
+			.match( /\[shop_address_country]\[(.*?)\]/ ); // 'pt-pt', 'default', etc.
+		const lang      = nameMatch ? nameMatch[1] : 'default';
+
+		// Find the matching state field for that language
+		const $state = $form.find( `select[name="wpo_wcpdf_settings_general[shop_address_state][${lang}]"]` );
+
+		// Keep the original button lookup, but relative to $state
+		const $state_sync_button = $state
+			.closest( '.wpo-wcpdf-input-wrapper' )
+			.find( '#shop_address_state_action' );
+
+		// Clear previous states
+		$state.empty().prop( 'disabled', true );
+		$state_sync_button.prop( 'disabled', true );
+
+		// Temporary loading option
+		$state.append(
+			$( '<option>', {
+				value: '',
+				text: wpo_wcpdf_admin.shop_country_changed_messages.loading
+			} )
+		);
+
+		return $.ajax( {
+			url: wpo_wcpdf_admin.ajaxurl,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'wcpdf_get_country_states',
+				country: selectedCountry,
+				security: wpo_wcpdf_admin.nonce,
+			},
+			success: function( response ) {
+				$state.empty();
+
+				const states   = response.data?.states;
+				const selected = response.data?.selected;
+
+				if ( response.success && states && Object.keys( states ).length > 0 ) {
+					$.each( states, function( code, name ) {
+						$state.append(
+							$( '<option>', {
+								value: code,
+								text: name,
+								selected: code === selected
+							} )
+						);
+					} );
+					$state.prop( 'disabled', false );
+					$state_sync_button.prop( 'disabled', false );
+				} else {
+					$state.append(
+						$( '<option>', {
+							value: '',
+							text: wpo_wcpdf_admin.shop_country_changed_messages.empty
+						} )
+					);
+				}
+
+				triggerPreview();
+			},
+			error: function() {
+				$state.empty().append(
+					$( '<option>', {
+						value: '',
+						text: wpo_wcpdf_admin.shop_country_changed_messages.error
+					} )
+				);
+
+				triggerPreview();
+			}
+		} );
+	}
+
 	function showSaveBtn( event ) {
-		$('.preview-data-wrapper .save-settings p').css('margin-right', '0');
+		$( '.preview-data-wrapper .save-settings p' ).css( 'margin-right', '0' );
 	}
 
 	// Submit settings form when clicking on secondary save button
@@ -386,12 +479,12 @@ jQuery( function( $ ) {
 	// Trigger the Preview
 	function triggerPreview( timeoutDuration = 0 ) {
 		$previewStates = $( '#wpo-wcpdf-preview-wrapper' ).data( 'preview-states' );
-		
+
 		// Check if preview is disabled and return
 		if ( 'undefined' === $previewStates || 1 === $previewStates ) {
 			return;
 		}
-		
+
 		timeoutDuration = typeof timeoutDuration == 'number' ? timeoutDuration : 0;
 
 		loadPreviewData();
@@ -614,31 +707,190 @@ jQuery( function( $ ) {
 	}
 
 	//----------> /Preview <----------//
+	//----------> Settings Accordion <----------//
 
 	function settingsAccordion() {
-		// Default to expanded for '#general', collapsed for others.
-		$( '.settings_category' ).not( '#general' ).find( '.form-table' ).hide();
-		$( '#general > h2' ).addClass( 'active' );
+		// Get current tab.
+		const params      = new URLSearchParams( window.location.search );
+		const allowedTabs = [ 'general', 'documents', 'debug' ];
+		const tab         = params.get( 'tab' ) || 'general';
 
-		// Retrieve the state from localStorage
-		$( '.settings_category h2' ).each( function( index ) {
-			const state = localStorage.getItem( 'wcpdf_accordion_state_' + index );
-			if ( 'true' === state ) {
-				$( this ).addClass( 'active' ).next( '.form-table' ).show();
+		if ( ! allowedTabs.includes( tab ) ) {
+			return;
+		}
+
+		const tabsMainCategory = {
+			general   : 'display',
+			documents : 'general',
+			debug     : 'filesystem_access' // Default open section for Advanced/Debug tab
+		};
+
+		const sections = $( '.settings_category h2' );
+		
+		if ( sections.length === 0 ) {
+			return; // No sections found
+		}
+
+		// Accessibility attributes for accordion headers and panels
+		sections.each( function ( index ) {
+			const $header   = $( this );
+			const $panel    = $header.next( '.form-table' );
+			const $category = $header.parent( '.settings_category' );
+			const idBase    = $category.attr( 'id' ) || $header.attr( 'id' ) || `wcpdf_${tab}_section_${index}`;
+			
+			// Ensure header has an id and compute explicit ids
+			if ( ! $header.attr( 'id' ) ) {
+				$header.attr( 'id', `${idBase}_header` );
+			}
+			const headerElementId = $header.attr( 'id' );
+			const panelId         = `${idBase}_panel`;
+
+			$header.attr( {
+				'role': 'button',
+				'tabindex': 0,
+				'aria-controls': panelId
+			} );
+
+			$panel.attr( {
+				'id': panelId,
+				'role': 'region',
+				'aria-labelledby': headerElementId
+			} );
+		} );
+
+		// Initialize accordion state
+		sections.each( function ( index ) {
+			const $header    = $( this );
+			const $category  = $header.parent( '.settings_category' );
+			const categoryId = $category.attr( 'id' ) || `wcpdf_${tab}_section_${index}`;
+			const $panel     = $header.next( '.form-table' );
+			
+			// Check localStorage for saved state
+			const stored = localStorage.getItem( `wcpdf_${tab}_settings_accordion_state_${categoryId}` );
+			let shouldOpen = false;
+
+			if ( stored !== null ) {
+				// User has previously interacted with this section - use saved state
+				shouldOpen = stored === 'true';
+			} else if ( tabsMainCategory[ tab ] && categoryId === tabsMainCategory[ tab ] ) {
+				// First visit - open the default main category for this tab
+				shouldOpen = true;
+			}
+			// else: keep collapsed (shouldOpen = false)
+
+			// Set initial state
+			if ( shouldOpen ) {
+				$header.addClass( 'active' ).attr( 'aria-expanded', true );
+				$panel.show().attr( 'aria-hidden', 'false' );
+			} else {
+				$header.removeClass( 'active' ).attr( 'aria-expanded', false );
+				$panel.hide().attr( 'aria-hidden', 'true' );
 			}
 		} );
 
-		$('.settings_category h2' ).on( 'click', function() {
-			const index = $( '.settings_category h2' ).index( this );
+		// Toggle section on click
+		function toggleSection( header ) {
+			const $header    = $( header );
+			const categoryId = $header.parent( '.settings_category' ).attr( 'id' );
+			const $panel     = $header.next( '.form-table' );
+			const willOpen   = ! $panel.is( ':visible' );
 
-			$( this ).toggleClass( 'active' ).next( '.form-table' ).slideToggle( 'fast', function() {
-				// Save the state in localStorage
-				const isVisible = $( this ).is( ':visible' );
-				localStorage.setItem( 'wcpdf_accordion_state_' + index, isVisible );
+			$header.toggleClass( 'active', willOpen ).attr( 'aria-expanded', willOpen );
+
+			$panel.stop( true, false ).slideToggle( {
+				duration: 300,
+				easing: 'swing',
+				complete: function () {
+					const isVisible = $( this ).is( ':visible' );
+					$( this ).attr( 'aria-hidden', isVisible ? 'false' : 'true' );
+					if ( categoryId ) {
+						localStorage.setItem( `wcpdf_${tab}_settings_accordion_state_${categoryId}`, isVisible );
+					}
+				}
 			} );
+		}
+
+		// Bind click events
+		sections.off( 'click' ).on( 'click', function () {
+			toggleSection( this );
+		} );
+
+		// Keyboard accessibility
+		sections.off( 'keydown' ).on( 'keydown', function ( e ) {
+			if ( e.key === 'Enter' || e.key === ' ' ) {
+				e.preventDefault();
+				toggleSection( this );
+			}
 		} );
 	}
 
+	// Initialize accordion
 	settingsAccordion();
+
+	//----------> /Settings Accordion <----------//
+	//----------> Sync Address <----------//
+
+	$( '#wpo-wcpdf-settings .sync-address' ).on( 'click', function( event ) {
+		event.preventDefault();
+
+		const $button  = $( this );
+		const $form    = $( this ).closest('form');
+		const $icon    = $button.find( 'span.dashicons' );
+		const $tooltip = $button.closest( '.wpo-wcpdf-input-wrapper' ).find( '.sync-tooltip' );
+		let $field     = $button.closest( '.wpo-wcpdf-input-wrapper' ).find( 'input' );
+
+		if ( $field.length === 0 ) {
+			$field = $button.closest( '.wpo-wcpdf-input-wrapper' ).find( 'select' );
+		}
+
+		// Rotate the icon to indicate processing.
+		$icon.toggleClass( 'rotate' );
+
+		$.ajax( {
+			type: 'POST',
+			url:  wpo_wcpdf_admin.ajaxurl,
+			data: {
+				action:        'wpo_wcpdf_sync_address',
+				security:      wpo_wcpdf_admin.nonce,
+				address_field: $field.attr( 'id' ),
+			},
+			success: function( response ) {
+				if ( response.success && response.data.value && '' !== response.data.value.trim() ) {
+					if ( 'shop_address_country' === $field.attr( 'id' ) ) {
+						const country_state = response.data.value.split( ':' );
+						$field.val( country_state[0] );
+
+						// Update states if the country changed.
+						shopCountryChanged( $field ).done( function() {
+							const matches     = $field.attr( 'name' ).match( /\[([^\]]+)\]/g ); // matches all bracket parts
+							const lang        = matches ? matches[ matches.length - 1 ].replace( /[\[\]]/g, '' ) : 'default';
+							const $stateField = $form.find( `select[name="wpo_wcpdf_settings_general[shop_address_state][${lang}]"]` );
+
+							// Update the selected state.
+							if ( $stateField.length !== 0 ) {
+								$stateField.val( country_state[1] );
+							}
+						} );
+					} else {
+						$field.val( response.data.value );
+					}
+
+					triggerPreview();
+				} else if ( ! response.success && response.data.message && '' !== response.data.message.trim() ) {
+					$tooltip.text( response.data.message ).addClass( 'visible' );
+					setTimeout( function() {
+						$tooltip.removeClass( 'visible' );
+					}, 3000 );
+				}
+			},
+			complete: function() {
+				// Reset the icon rotation.
+				$icon.toggleClass( 'rotate' );
+			}
+		} );
+
+	} );
+
+	//----------> /Sync Address <----------//
 
 } );

@@ -10,6 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Stripe_Admin_Notices {
 	/**
+	 * Stripe customer page base URL.
+	 *
+	 * @var string
+	 */
+	private const STRIPE_CUSTOMER_PAGE_BASE_URL = 'https://dashboard.stripe.com/customers/';
+
+	/**
 	 * Notices (array)
 	 *
 	 * @var array
@@ -25,6 +32,7 @@ class WC_Stripe_Admin_Notices {
 		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
 		add_action( 'wp_loaded', [ $this, 'hide_notices' ] );
 		add_action( 'woocommerce_stripe_updated', [ $this, 'stripe_updated' ] );
+		add_action( 'after_plugin_row_woocommerce-gateway-stripe/woocommerce-gateway-stripe.php', [ $this, 'display_legacy_deprecation_notice' ], 10, 1 );
 	}
 
 	/**
@@ -33,11 +41,12 @@ class WC_Stripe_Admin_Notices {
 	 * @since 1.0.0
 	 * @version 4.0.0
 	 */
-	public function add_admin_notice( $slug, $class, $message, $dismissible = false ) {
+	public function add_admin_notice( $slug, $class, $message, $dismissible = false, $actions = [] ) {
 		$this->notices[ $slug ] = [
 			'class'       => $class,
 			'message'     => $message,
 			'dismissible' => $dismissible,
+			'actions'     => $actions,
 		];
 	}
 
@@ -58,8 +67,22 @@ class WC_Stripe_Admin_Notices {
 		// All other payment methods.
 		$this->payment_methods_check_environment();
 
+		// Check for subscriptions detached from the customer.
+		if ( WC_Stripe_Subscriptions_Helper::is_subscriptions_enabled() ) {
+			$this->subscription_check_detachment();
+			$this->subscription_check_detachment_bulk_action();
+		}
+
 		foreach ( (array) $this->notices as $notice_key => $notice ) {
-			echo '<div class="' . esc_attr( $notice['class'] ) . '" style="position:relative;">';
+			$actions     = $notice['actions'] ?? [];
+			$div_style   = 'position:relative;';
+			$has_actions = count( $actions ) > 0;
+			if ( $has_actions ) {
+				// If there are actions, we need to make sure the div can contain them.
+				$div_style .= 'overflow: auto;';
+			}
+
+			echo '<div class="' . esc_attr( $notice['class'] ) . '" style="' . esc_attr( $div_style ) . '">';
 
 			if ( $notice['dismissible'] ) {
 				?>
@@ -79,8 +102,83 @@ class WC_Stripe_Admin_Notices {
 					'br'     => [],
 				]
 			);
-			echo '</p></div>';
+			echo '</p>';
+
+			if ( $has_actions ) {
+				foreach ( $actions as $action ) {
+					echo wp_kses(
+						$action,
+						[
+							'a' => [
+								'href'  => [],
+								'style' => [],
+							],
+						]
+					);
+				}
+			}
+
+			echo '</div>';
 		}
+	}
+
+	/**
+	 * Displays the legacy deprecation notice.
+	 *
+	 * @param string $plugin_file Plugin file.
+	 */
+	public static function display_legacy_deprecation_notice( $plugin_file ) {
+		global $wp_list_table;
+		$stripe_settings = WC_Stripe_Helper::get_stripe_settings();
+
+		// If Stripe is not enabled, don't show the legacy deprecation notice.
+		if ( ! isset( $stripe_settings['enabled'] ) || 'no' === $stripe_settings['enabled'] ) {
+			return;
+		}
+
+		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+			return;
+		}
+
+		if ( is_null( $wp_list_table ) ) {
+			return;
+		}
+
+		$columns_count   = $wp_list_table->get_column_count();
+		$is_active       = is_plugin_active( $plugin_file );
+		$is_active_class = $is_active ? 'active' : 'inactive';
+
+		$setting_link = esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=stripe&panel=settings' ) );
+		$message      = sprintf(
+			/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
+			__( 'WooCommerce Stripe Gateway legacy checkout experience has been deprecated since version 9.6.0. Please %1$smigrate to the new checkout experience%2$s to access more payment methods and avoid disruptions. %3$sLearn more%4$s', 'woocommerce-gateway-stripe' ),
+			'<a href="' . $setting_link . '">',
+			'</a>',
+			'<a href="https://woocommerce.com/document/stripe/admin-experience/legacy-checkout-experience/" target="_blank">',
+			'</a>'
+		);
+
+		?>
+		<tr class='plugin-update-tr <?php echo esc_html( $is_active_class ); ?>' data-id="woocommerce-gateway-stripe-update" data-slug="woocommerce-gateway-stripe" data-plugin='<?php echo esc_html( $plugin_file ); ?>'>
+			<td colspan='<?php echo esc_html( $columns_count ); ?>' class='plugin-update colspanchange'>
+				<div class='notice inline notice-warning notice-alt'>
+					<p>
+						<span style="display: inline-block; vertical-align: text-top;">
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z" stroke="#dba617" stroke-width="1.5"/>
+								<path d="M13 7H11V13H13V7Z" fill="#dba617"/>
+								<path d="M13 15H11V17H13V15Z" fill="#dba617"/>
+							</svg>
+						</span>
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo $message;
+						?>
+					</p>
+				</div>
+			</td>
+		</tr>
+		<?php
 	}
 
 	/**
@@ -113,22 +211,24 @@ class WC_Stripe_Admin_Notices {
 	 * @version 4.0.0
 	 */
 	public function stripe_check_environment() {
-		$show_style_notice   = get_option( 'wc_stripe_show_style_notice' );
-		$show_ssl_notice     = get_option( 'wc_stripe_show_ssl_notice' );
-		$show_keys_notice    = get_option( 'wc_stripe_show_keys_notice' );
-		$show_3ds_notice     = get_option( 'wc_stripe_show_3ds_notice' );
-		$show_phpver_notice  = get_option( 'wc_stripe_show_phpver_notice' );
-		$show_wcver_notice   = get_option( 'wc_stripe_show_wcver_notice' );
-		$show_curl_notice    = get_option( 'wc_stripe_show_curl_notice' );
-		$show_sca_notice     = get_option( 'wc_stripe_show_sca_notice' );
-		$changed_keys_notice = get_option( 'wc_stripe_show_changed_keys_notice' );
-		$options             = WC_Stripe_Helper::get_stripe_settings();
-		$testmode            = WC_Stripe_Mode::is_test();
-		$test_pub_key        = isset( $options['test_publishable_key'] ) ? $options['test_publishable_key'] : '';
-		$test_secret_key     = isset( $options['test_secret_key'] ) ? $options['test_secret_key'] : '';
-		$live_pub_key        = isset( $options['publishable_key'] ) ? $options['publishable_key'] : '';
-		$live_secret_key     = isset( $options['secret_key'] ) ? $options['secret_key'] : '';
-		$three_d_secure      = isset( $options['three_d_secure'] ) && 'yes' === $options['three_d_secure'];
+		$show_style_notice         = get_option( 'wc_stripe_show_style_notice' );
+		$show_ssl_notice           = get_option( 'wc_stripe_show_ssl_notice' );
+		$show_keys_notice          = get_option( 'wc_stripe_show_keys_notice' );
+		$show_3ds_notice           = get_option( 'wc_stripe_show_3ds_notice' );
+		$show_phpver_notice        = get_option( 'wc_stripe_show_phpver_notice' );
+		$show_wcver_notice         = get_option( 'wc_stripe_show_wcver_notice' );
+		$show_curl_notice          = get_option( 'wc_stripe_show_curl_notice' );
+		$show_sca_notice           = get_option( 'wc_stripe_show_sca_notice' );
+		$changed_keys_notice       = get_option( 'wc_stripe_show_changed_keys_notice' );
+		$legacy_deprecation_notice = get_option( 'wc_stripe_show_legacy_deprecation_notice' );
+		$oauth_required_notice     = get_option( 'wc_stripe_oauth_required' );
+		$options                   = WC_Stripe_Helper::get_stripe_settings();
+		$testmode                  = WC_Stripe_Mode::is_test();
+		$test_pub_key              = isset( $options['test_publishable_key'] ) ? $options['test_publishable_key'] : '';
+		$test_secret_key           = isset( $options['test_secret_key'] ) ? $options['test_secret_key'] : '';
+		$live_pub_key              = isset( $options['publishable_key'] ) ? $options['publishable_key'] : '';
+		$live_secret_key           = isset( $options['secret_key'] ) ? $options['secret_key'] : '';
+		$three_d_secure            = isset( $options['three_d_secure'] ) && 'yes' === $options['three_d_secure'];
 
 		if ( isset( $options['enabled'] ) && 'yes' === $options['enabled'] ) {
 			// Check if Stripe is in test mode.
@@ -302,6 +402,23 @@ class WC_Stripe_Admin_Notices {
 
 				$this->add_admin_notice( 'changed_keys', 'notice notice-warning', $message, true );
 			}
+
+			if ( empty( $legacy_deprecation_notice ) ) {
+				// Show legacy deprecation notice in version 9.3.0 if legacy checkout experience is enabled.
+				if ( ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+					$setting_link = $this->get_setting_link();
+					$message      = sprintf(
+						/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
+						__( 'WooCommerce Stripe Gateway legacy checkout experience has been deprecated since version 9.6.0. Please %1$smigrate to the new checkout experience%2$s to access more payment methods and avoid disruptions. %3$sLearn more%4$s', 'woocommerce-gateway-stripe' ),
+						'<a href="' . $setting_link . '">',
+						'</a>',
+						'<a href="https://woocommerce.com/document/stripe/admin-experience/legacy-checkout-experience/" target="_blank">',
+						'</a>'
+					);
+
+					$this->add_admin_notice( 'legacy_deprecation', 'notice notice-warning', $message, true );
+				}
+			}
 		}
 	}
 
@@ -317,65 +434,169 @@ class WC_Stripe_Admin_Notices {
 		$is_stripe_settings_page = isset( $_GET['page'], $_GET['section'] ) && 'wc-settings' === $_GET['page'] && 0 === strpos( $_GET['section'], 'stripe' );
 		$currency_messages       = '';
 
-		foreach ( $payment_methods as $method => $class ) {
-			$gateway = new $class();
+		if ( WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+			foreach ( WC_Stripe_UPE_Payment_Gateway::UPE_AVAILABLE_METHODS as $method_class ) {
+				if ( WC_Stripe_UPE_Payment_Method_CC::class === $method_class || WC_Stripe_UPE_Payment_Method_Link::class === $method_class ) {
+					continue;
+				}
+				$method     = $method_class::STRIPE_ID;
+				$upe_method = new $method_class();
+				if ( ! $upe_method->is_enabled() ) {
+					continue;
+				}
 
-			if ( 'yes' !== $gateway->enabled ) {
-				continue;
+				if ( ! $is_stripe_settings_page && ! in_array( get_woocommerce_currency(), $upe_method->get_supported_currencies(), true ) ) {
+					/* translators: %1$s Payment method, %2$s List of supported currencies */
+					$currency_messages .= sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s<br>', 'woocommerce-gateway-stripe' ), $upe_method->get_label(), implode( ', ', $upe_method->get_supported_currencies() ) );
+				}
 			}
 
-			if ( 'stripe_sofort' === $gateway->id ) {
-				$message = sprintf(
-				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'Sofort is being deprecated as a standalone payment method by Stripe and will continue processing Sofort payments throughout 2023 only. %1$sLearn more%2$s.', 'woocommerce-gateway-stripe' ),
-					'<a href="https://support.stripe.com/questions/sofort-is-being-deprecated-as-a-standalone-payment-method" target="_blank">',
-					'</a>'
-				);
+			$show_notice = get_option( 'wc_stripe_show_upe_payment_methods_notice' );
+			if ( ! empty( $currency_messages ) && 'no' !== $show_notice ) {
+				$this->add_admin_notice( 'upe_payment_methods', 'notice notice-error', $currency_messages, true );
+			}
+		} else {
+			foreach ( $payment_methods as $method => $class ) {
+				$gateway = new $class();
 
-				$this->add_admin_notice( WC_Stripe_Payment_Methods::SOFORT, 'notice notice-warning', $message, false );
-			} elseif ( ! $is_stripe_settings_page && ! in_array( get_woocommerce_currency(), $gateway->get_supported_currency(), true ) ) {
-				/* translators: 1) Payment method, 2) List of supported currencies */
-				$currency_messages .= sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s<br>', 'woocommerce-gateway-stripe' ), $gateway->get_method_title(), implode( ', ', $gateway->get_supported_currency() ) );
+				if ( 'yes' !== $gateway->enabled ) {
+					continue;
+				}
+
+				if ( ! $is_stripe_settings_page && ! in_array( get_woocommerce_currency(), $gateway->get_supported_currency(), true ) ) {
+					/* translators: 1) Payment method, 2) List of supported currencies */
+					$currency_messages .= sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s<br>', 'woocommerce-gateway-stripe' ), $gateway->get_method_title(), implode( ', ', $gateway->get_supported_currency() ) );
+				}
+			}
+
+			$show_notice = get_option( 'wc_stripe_show_payment_methods_notice' );
+			if ( ! empty( $currency_messages && 'no' !== $show_notice ) ) {
+				$this->add_admin_notice( 'payment_methods', 'notice notice-error', $currency_messages, true );
 			}
 		}
+	}
 
-		$show_notice = get_option( 'wc_stripe_show_payment_methods_notice' );
-		if ( ! empty( $currency_messages && 'no' !== $show_notice ) ) {
-			$this->add_admin_notice( 'payment_methods', 'notice notice-error', $currency_messages, true );
-		}
-
-		if ( ! WC_Stripe_Feature_Flags::is_upe_preview_enabled() || ! WC_Stripe_Feature_Flags::is_upe_checkout_enabled() ) {
+	/**
+	 * Adds a notice to the subscription details page if we are looking at an active subscription and the payment method has been detached.
+	 *
+	 * @return void
+	 */
+	public function subscription_check_detachment() {
+		if ( ! self::is_subscription_edit_page() ) {
 			return;
 		}
 
-		foreach ( WC_Stripe_UPE_Payment_Gateway::UPE_AVAILABLE_METHODS as $method_class ) {
-			if ( WC_Stripe_UPE_Payment_Method_CC::class === $method_class || WC_Stripe_UPE_Payment_Method_Link::class === $method_class ) {
-				continue;
-			}
-			$method     = $method_class::STRIPE_ID;
-			$upe_method = new $method_class();
-			if ( ! $upe_method->is_enabled() ) {
-				continue;
-			}
+		global $theorder;
 
-			if ( WC_Stripe_Payment_Methods::SOFORT === $upe_method->get_id() ) {
-				$message = sprintf(
-				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag */
-					__( 'Sofort is being deprecated as a standalone payment method by Stripe and will continue processing Sofort payments throughout 2023 only. %1$sLearn more%2$s.', 'woocommerce-gateway-stripe' ),
-					'<a href="https://support.stripe.com/questions/sofort-is-being-deprecated-as-a-standalone-payment-method" target="_blank">',
-					'</a>'
-				);
+		$subscription = null;
 
-				$this->add_admin_notice( WC_Stripe_Payment_Methods::SOFORT, 'notice notice-warning', $message, false );
-			} elseif ( ! $is_stripe_settings_page && ! in_array( get_woocommerce_currency(), $upe_method->get_supported_currencies(), true ) ) {
-				/* translators: %1$s Payment method, %2$s List of supported currencies */
-				$currency_messages .= sprintf( __( '%1$s is enabled - it requires store currency to be set to %2$s<br>', 'woocommerce-gateway-stripe' ), $upe_method->get_label(), implode( ', ', $upe_method->get_supported_currencies() ) );
-			}
+		if ( isset( $theorder ) ) {
+			$subscription = $theorder;
+		} elseif ( ! empty( $GLOBALS['post']->ID ) ) { // If $theorder is empty (i.e. non-HPOS), fallback to using the global post object.
+			$subscription = wcs_get_subscription( $GLOBALS['post']->ID );
 		}
 
-		$show_notice = get_option( 'wc_stripe_show_upe_payment_methods_notice' );
-		if ( ! empty( $currency_messages ) && 'no' !== $show_notice ) {
-			$this->add_admin_notice( 'upe_payment_methods', 'notice notice-error', $currency_messages, true );
+		if ( ! isset( $subscription ) || ! $subscription instanceof WC_Subscription ) {
+			return;
+		}
+
+		if ( ! $subscription->has_status( [ 'active' ] ) ) {
+			// Only show the notice for active subscriptions.
+			return;
+		}
+
+		if ( WC_Stripe_Subscriptions_Helper::is_subscription_payment_method_detached( $subscription ) ) {
+			$customer_payment_method_link = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $subscription->get_change_payment_method_url() ),
+				esc_html(
+					/* translators: this is a text for a link pointing to the customer's payment method page */
+					__( 'Payment method page &rarr;', 'woocommerce-gateway-stripe' )
+				)
+			);
+			$customer_stripe_page = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( WC_Stripe_Subscriptions_Helper::STRIPE_CUSTOMER_PAGE_BASE_URL . $subscription->get_meta( '_stripe_customer_id' ) ),
+				esc_html(
+					/* translators: this is a text for a link pointing to the customer's page on Stripe */
+					__( 'Stripe customer page &rarr;', 'woocommerce-gateway-stripe' )
+				)
+			);
+
+			$detached_message  = __( 'The payment method for this subscription has been detached, <strong>preventing renewals</strong>. ', 'woocommerce-gateway-stripe' );
+			$detached_message .= __( 'To fix this, either: <br />', 'woocommerce-gateway-stripe' );
+			$detached_message .= __( '1) Share the payment method page link with the customer to update it: ', 'woocommerce-gateway-stripe' ) . $customer_payment_method_link . '<br />';
+			$detached_message .= __( ' or <br />', 'woocommerce-gateway-stripe' );
+			$detached_message .= __( "2) Manually update the payment method in the subscription's billing details using a valid payment method from the customer's Stripe account: ", 'woocommerce-gateway-stripe' ) . $customer_stripe_page . '<br />';
+			$detached_message .= '<br />' . sprintf(
+				/* translators: 1) HTML anchor open tag 2) HTML anchor closing tag 3) The already-translated title of the tool*/
+				__( 'To list all your current subscriptions with payment methods detached, go to WooCommerce -> Status -> %1$sTools%2$s -> <strong>%3$s</strong>.', 'woocommerce-gateway-stripe' ),
+				'<a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=tools' ) ) . '">',
+				'</a>',
+				__( 'List Stripe subscriptions with detached payment method', 'woocommerce-gateway-stripe' ),
+			);
+			$this->add_admin_notice( 'subscription_detached', 'notice notice-error', $detached_message );
+		}
+	}
+
+	/**
+	 * Add a notice to the admin area if there are subscriptions with payment method detached.
+	 *
+	 * @return void
+	 */
+	public function subscription_check_detachment_bulk_action() {
+		if ( isset( $_REQUEST['detached-subscriptions'] ) && 'no' !== get_option( 'wc_stripe_show_subscription_detached_bulk_action_notice' ) ) {
+			$notice_content = '<p>' . esc_html__( 'No detached subscriptions found.', 'woocommerce-gateway-stripe' ) . '</p>';
+			$notice_class   = 'info';
+			if ( ! empty( $_REQUEST['detached-subscriptions'] ) ) {
+				$detached_subs_ids = explode( ',', sanitize_text_field( wp_unslash( $_REQUEST['detached-subscriptions'] ) ) );
+				$subscriptions     = [];
+				foreach ( $detached_subs_ids as $detached_sub_id ) {
+					$detached_sub_id = absint( $detached_sub_id );
+					$subscription    = wcs_get_subscription( $detached_sub_id );
+					if ( ! $subscription instanceof WC_Subscription ) {
+						continue;
+					}
+					$subscriptions[] = WC_Stripe_Subscriptions_Helper::get_detached_payment_data_from_subscription( $subscription );
+				}
+				$detached_messages = WC_Stripe_Subscriptions_Helper::build_subscriptions_detached_messages( $subscriptions );
+				if ( ! empty( $detached_messages ) ) {
+					$notice_content = '<p>';
+					$notice_content .= wp_kses(
+						$detached_messages,
+						[
+							'a'      => [
+								'href'   => [],
+								'target' => [],
+							],
+							'strong' => [],
+							'br'     => [],
+						]
+					);
+					$notice_content .= '</p>';
+					$notice_class    = 'error';
+				}
+			}
+			$this->add_admin_notice( 'subscription_detached_bulk_action', 'notice notice-' . $notice_class, $notice_content, true );
+		}
+	}
+
+	/**
+	 * Environment check for subscriptions.
+	 *
+	 * @return void
+	 *
+	 * @deprecated 9.6.0 This method is no longer used and will be removed in a future version.
+	 */
+	public function subscriptions_check_environment() {
+		_deprecated_function( __METHOD__, '9.6.0' );
+		$options = WC_Stripe_Helper::get_stripe_settings();
+		if ( 'yes' === ( $options['enabled'] ?? null ) && 'no' !== get_option( 'wc_stripe_show_subscriptions_notice' ) ) {
+			$subscriptions     = WC_Stripe_Subscriptions_Helper::get_some_detached_subscriptions();
+			$detached_messages = WC_Stripe_Subscriptions_Helper::build_subscriptions_detached_messages( $subscriptions );
+			if ( ! empty( $detached_messages ) ) {
+				$this->add_admin_notice( 'subscriptions', 'notice notice-error', $detached_messages, true );
+			}
 		}
 	}
 
@@ -421,8 +642,6 @@ class WC_Stripe_Admin_Notices {
 					break;
 				case 'sofort':
 					update_option( 'wc_stripe_show_sofort_notice', 'no' );
-					break;
-				case 'sofort':
 					update_option( 'wc_stripe_show_sofort_upe_notice', 'no' );
 					break;
 				case 'sca':
@@ -431,11 +650,28 @@ class WC_Stripe_Admin_Notices {
 				case 'changed_keys':
 					update_option( 'wc_stripe_show_changed_keys_notice', 'no' );
 					break;
+				case 'legacy_deprecation':
+					update_option( 'wc_stripe_show_legacy_deprecation_notice', 'no' );
+					break;
 				case 'payment_methods':
 					update_option( 'wc_stripe_show_payment_methods_notice', 'no' );
 					break;
 				case 'upe_payment_methods':
 					update_option( 'wc_stripe_show_upe_payment_methods_notice', 'no' );
+					break;
+				case 'oauth_required':
+					update_option( 'wc_stripe_show_oauth_required_notice', 'no' );
+					break;
+				case 'subscriptions':
+					update_option( 'wc_stripe_show_subscriptions_notice', 'no' );
+					break;
+				case 'subscription_detached_bulk_action':
+					update_option( 'wc_stripe_show_subscription_detached_bulk_action_notice', 'no' );
+
+					// Redirect back to the current page without the query param to hide the notice to avoid issues.
+					if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+						wp_safe_redirect( remove_query_arg( [ 'wc-stripe-hide-notice', '_wc_stripe_notice_nonce' ], esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
+					}
 					break;
 			}
 		}
@@ -469,6 +705,24 @@ class WC_Stripe_Admin_Notices {
 		if ( empty( $previous_version ) || version_compare( $previous_version, '4.3.0', 'ge' ) ) {
 			update_option( 'wc_stripe_show_sca_notice', 'no' );
 		}
+	}
+
+	/**
+	 * Checks if the current page is a subscription edit page in wp-admin.
+	 *
+	 * This should be removed once WooCommerce provides a way to check for subscription edit pages.
+	 *
+	 * @return bool
+	 */
+	private static function is_subscription_edit_page() {
+		$query_params = wp_unslash( $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( WC_Stripe_Woo_Compat_Utils::is_custom_orders_table_enabled() ) { // If custom order tables are enabled, we need to check the page query param.
+			return isset( $query_params['page'] ) && 'wc-orders--shop_subscription' === $query_params['page'] && isset( $query_params['id'] );
+		}
+
+		// If custom order tables are not enabled, we need to check the post type and action query params.
+		$is_shop_subscription_post_type = isset( $query_params['post'] ) && 'shop_subscription' === get_post_type( $query_params['post'] );
+		return isset( $query_params['action'] ) && 'edit' === $query_params['action'] && $is_shop_subscription_post_type;
 	}
 }
 

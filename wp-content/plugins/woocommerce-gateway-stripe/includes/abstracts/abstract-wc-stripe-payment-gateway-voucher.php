@@ -1,4 +1,7 @@
 <?php
+
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -223,7 +226,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 		$stripe_params = parent::javascript_params();
 
 		if ( $this->is_valid_pay_for_order_endpoint() ) {
-			$order_id = absint( get_query_var( 'order-pay' ) );
+			$order_id                          = absint( get_query_var( 'order-pay' ) );
 			$stripe_params['stripe_order_key'] = ! empty( $order_id ) ? wc_get_order( $order_id )->get_order_key() : null;
 		}
 
@@ -262,10 +265,10 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			$intent = $this->create_or_update_payment_intent( $order );
 
 			$order->update_meta_data( '_stripe_upe_payment_type', $this->stripe_id );
-			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( OrderStatus::PENDING, __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
 			$order->save();
 
-			WC_Stripe_Helper::add_payment_intent_to_order( $intent->id, $order );
+			WC_Stripe_Order_Helper::get_instance()->add_payment_intent_to_order( $intent->id, $order );
 
 			return [
 				'result'               => 'success',
@@ -283,7 +286,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 
 			$statuses = apply_filters(
 				'wc_stripe_allowed_payment_processing_statuses',
-				[ 'pending', 'failed' ],
+				[ OrderStatus::PENDING, OrderStatus::FAILED ],
 				$order
 			);
 
@@ -382,7 +385,7 @@ abstract class WC_Stripe_Payment_Gateway_Voucher extends WC_Stripe_Payment_Gatew
 			$order->set_payment_method( $this );
 			$intent = $this->create_or_update_payment_intent( $order );
 
-			$order->update_status( 'pending', __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
+			$order->update_status( OrderStatus::PENDING, __( 'Awaiting payment.', 'woocommerce-gateway-stripe' ) );
 			$order->update_meta_data( '_stripe_upe_payment_type', $this->stripe_id );
 			$order->save();
 

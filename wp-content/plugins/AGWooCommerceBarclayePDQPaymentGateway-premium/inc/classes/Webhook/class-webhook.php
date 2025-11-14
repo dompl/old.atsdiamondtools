@@ -45,7 +45,8 @@ class ag_epdq_webhook {
 			$datacheck[ AG_ePDQ_Helpers::AG_decode( $key ) ] = AG_ePDQ_Helpers::AG_decode( $value );
 		}
 
-		$nonce = AG_ePDQ_Helpers::AG_escape( $datacheck['COMPLUS'] );
+		$data_parts = explode( '+', $datacheck['COMPLUS'] );
+		$nonce = AG_ePDQ_Helpers::AG_escape( $data_parts[0] );
 
 		// Hash
 		if( defined( 'ePDQ_custom_order_id' ) ) {
@@ -108,7 +109,7 @@ class ag_epdq_webhook {
 		$result = self::decrypt_webhook( $datacheck );
 
 		if( $result['STATUS'] === '5' ) {
-			AG_ePDQ_Token::save( $result, get_current_user_id(), is_user_logged_in() );
+			AG_ePDQ_Token::save( $result, $datacheck['ORDERID'], is_user_logged_in() );
 			$url = wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=1';
 		} else {
 			$url = wc_get_account_endpoint_url( 'payment-methods' ) . '?token_success=0';
@@ -198,7 +199,7 @@ class ag_epdq_webhook {
 
 		// Save payment token to user
 		if( $epdq_settings->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) { // @phpstan-ignore-line
-			AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
+			AG_ePDQ_Token::save( $args, $order, is_user_logged_in() );
 			// Drop BIN
 			unset( $args['BIN'] );
 			$order->update_meta_data( 'use_saved_card', '' );

@@ -57,8 +57,9 @@ class Ignition_Updater_Admin {
 		require_once( 'class-ignition-updater-api.php' );
 		$this->api = new Ignition_Updater_API();
 
-		$this->name = __( 'IgniteWoo Licenses', 'ignition-updater' );
-		$this->menu_label = __( 'IgniteWoo Licenses', 'ignition-updater' );
+		// Translating this particular text causes WP to display a warning about loading textdomain too early.
+		$this->name = 'IgniteWoo Licenses'; // __( 'IgniteWoo Licenses', 'ignition-updater' );
+		$this->menu_label = 'IgniteWoo Licenses'; // __( 'IgniteWoo Licenses', 'ignition-updater' );
 		$this->page_slug = 'ignition-helper';
 		$this->plugin_path = trailingslashit( plugin_dir_path( $file ) );
 		$this->plugin_url = trailingslashit( plugin_dir_url( $file ) );

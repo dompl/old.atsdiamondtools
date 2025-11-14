@@ -1,7 +1,7 @@
 === AG Barclaycard ePDQ - WooCommerce Gateway ===
 Contributors: We are AG, freemius
 Requires at least: 6.0
-Tested up to: 6.7.2
+Tested up to: 6.8.3
 Stable tag: 6.2
 
 
@@ -32,6 +32,29 @@ Ok not a problem, lets see if you can fix it by following these steps.
 Automatic updates should work like a charm; as always though, update on a staging site before pushing to a live site, failing that ensure you back up your site just in case.
 
 == Changelog ==
+
+= v.4.9.1 - 07/10/25 =
+* Change          - Change to how Woo handles refunds, no longer marking as refunded, as we must wait for ePDQ to confirm refund has been processed.
+
+= v.4.9.0 - 07/10/25 =
+* New             - New TLS (Traffic light system) 2.0 update, more information, easier to understand what is going on with orders.
+* Dev             - Rebuild of refund process for new ePDQ change of how refunds work.
+* Dev             - New admin notice of ePDQ EOL with link to our post.
+* Change          - Bump tested WooCommerce (10.2.2).
+* Update          - Freemius SDK updated.
+
+= v.4.8.6 - 23/07/25 =
+* Dev             - Added is_test_mode() function to display if plugin is in test mode when viewing all gateways.
+* Change          - Added some logic to help Cartflows plugin to not process redirect multiple times.
+* Change          - Changed token save() to include order object to help with saving token issues.
+* Change          - Bump tested WooCommerce (10.0.4).
+
+= v.4.8.5 - 06/05/25 =
+* New             - Added support for webhook router addon plugin, useful if merchants run multiple websites using ePDQ to redirect the webhook to the correct website.
+* Fix             - Resolved a PHP issue with $encryption.
+* Fix             - Added validation to detect and handle cases where customers enter a comma with a space in front of it in address fields, preventing errors that previously caused issues.
+* Change          - Some improvements to the new WooCommerce payment settings page coming in 9.9 to all users. Changed card brand icons and added some quick links.
+* Change          - Bump tested WooCommerce (9.8.3).
 
 = v.4.8.4 - 28/02/25 =
 * New             - Implemented full support for WooCommerce’s upcoming new payment settings pages, scheduled for full rollout in WooCommerce 9.9.

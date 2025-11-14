@@ -8,11 +8,11 @@
  * File: index.php
  * Project: AG-woocommerce-epdq-payment-gateway
  * -----
- * Version: 4.8.4
+ * Version: 4.9.1
  * Update URI: https://api.freemius.com
  * Requires Plugins: woocommerce
  * WC requires at least: 7.1
- * WC tested up to: 9.7.0
+ * WC tested up to: 10.2.2
  * Requires PHP: 8.1
  * License: GPL3
  */
@@ -25,13 +25,13 @@ defined( 'ABSPATH' ) || die( "No script kiddies please!" );
  * AG ePDQ server
  *
  * @class    AG_ePDQ_server
- * @version  4.8.4
+ * @version  4.9.1
  * @category Class
  * @author   We are AG
  */
 class AG_ePDQ_server {
 
-	public static $AGversion = "4.8.4";
+	public static $AGversion = "4.9.1";
 	public static $AG_ePDQ_slug = "AGWooCommerceBarclayePDQPaymentGateway";
 	public static $pluginName = 'AG_ePDQ';
 
@@ -55,7 +55,13 @@ class AG_ePDQ_server {
 		// If the site supports Gutenberg Blocks, support the Checkout block
 		add_action( 'woocommerce_blocks_loaded', array( $this, 'ag_blocks_support' ) );
 
-		add_action( 'admin_footer', array( 'AG_ePDQ_Helpers', 'reorder_gateways_and_add_card_icons' ) );
+		add_action( 'admin_footer', array( 'AG_ePDQ_Helpers', 'reorder_gateways_and_add_card_icons') );
+
+		add_filter( 'gettext', array( $this, 'ag_replace_wc_refunded_notice_text'), 10, 3 );
+		add_action( 'admin_notices', array( $this, 'ag_epdq_support_ending_notice') );
+		add_action( 'wp_ajax_ag_epdq_dismiss_notice', array( $this, 'ag_epdq_dismiss_notice') );
+
+		add_filter( 'woocommerce_order_fully_refunded_status', array( $this, 'ag_epdq_prevent_auto_refunded_status'), 10, 2 );
 
 		// Support for HPOS
 		add_action( 'before_woocommerce_init', function() {
@@ -72,6 +78,88 @@ class AG_ePDQ_server {
 		}
 
 	}
+
+	public static function ag_epdq_prevent_auto_refunded_status( $new_status, $order_or_id ) {
+
+		$order = $order_or_id instanceof WC_Order ? $order_or_id : wc_get_order( (int) $order_or_id );
+		if ( ! $order ) {
+			return $new_status;
+		}
+
+		if ( $order->get_meta( '_ag_epdq_refund_pending' ) ) {
+			return $order->get_status();
+		}
+
+		return $new_status;
+	}
+
+	public static function ag_replace_wc_refunded_notice_text( $translated, $text, $domain ) {
+		if ( is_admin() && 'woocommerce' === $domain ) {
+			$target = 'Order status set to refunded. To return funds to the customer you will need to issue a refund through your payment gateway.';
+			if ( $text === $target ) {
+				return __( 'Order marked Refunded. Payment refund was handled by the status check / webhook', 'ag_epdq_server' );
+			}
+		}
+		return $translated;
+	}
+
+	public static function ag_epdq_support_ending_notice() {
+
+		// Only show to admins / store managers.
+		if ( ! current_user_can( 'manage_woocommerce' ) && ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$user_id     = get_current_user_id();
+		$dismiss_key = '_ag_epdq_support_ending_notice_dismissed';
+
+		// Check if the user dismissed the notice.
+		if ( get_user_meta( $user_id, $dismiss_key, true ) ) {
+			return;
+		}
+
+		// Restrict to common WooCommerce admin pages.
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
+		if ( $screen && ! in_array( $screen->id, [ 'dashboard', 'plugins', 'woocommerce_page_wc-settings' ], true ) ) {
+			return;
+		}
+
+		$nonce = wp_create_nonce( 'ag_epdq_dismiss_notice' );
+		?>
+		<div class="notice notice-warning is-dismissible ag-epdq-support-ending" data-nonce="<?php echo esc_attr( $nonce ); ?>">
+			<p>
+				<strong>Barclaycard ePDQ support is ending soon.</strong><br>
+				Barclays have confirmed they will end support for the ePDQ payment gateway by <strong>March 2026</strong>.
+				If your store uses ePDQ, please review your options and plan a move to another provider.
+				<br><br>
+				Read our announcement and guidance here:
+				<a href="https://weareag.co.uk/important-announcement-barclaycard-epdq-support-ending-heres-what-it-means-for-you/" target="_blank" rel="noopener noreferrer">Barclaycard ePDQ Support Ending – What It Means for You</a>.
+				<br><br>
+				<em>Note:</em> If your store uses saved cards or subscriptions, moving providers and keeping tokens is not straightforward — plan your next steps early.
+			</p>
+		</div>
+		<script>
+            (function($){
+                $(document).on('click', '.ag-epdq-support-ending .notice-dismiss', function(){
+                    var nonce = $('.ag-epdq-support-ending').data('nonce');
+                    $.post(ajaxurl, { action: 'ag_epdq_dismiss_notice', nonce: nonce });
+                });
+            })(jQuery);
+		</script>
+		<?php
+	}
+
+	public static function ag_epdq_dismiss_notice() {
+		check_ajax_referer( 'ag_epdq_dismiss_notice', 'nonce' );
+
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( [ 'message' => 'Not logged in' ] );
+		}
+
+		update_user_meta( get_current_user_id(), '_ag_epdq_support_ending_notice_dismissed', time() );
+		wp_send_json_success();
+	}
+
 
 	private function define_constants() {
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract UPE Payment Method class
+ * UPE Payment Method class
  *
  * Handles general functionality for UPE payment methods
  *
@@ -10,20 +10,27 @@
 namespace WCPay\Payment_Methods;
 
 use WC_Payments_Utils;
-use WCPay\MultiCurrency\MultiCurrency;
 use WP_User;
 use WC_Payments_Token_Service;
 use WC_Payment_Token_CC;
 use WC_Payment_Token_WCPay_SEPA;
 use WC_Payments_Subscriptions_Utilities;
-use WCPay\Logger;
 
 /**
- * Extendable abstract class for payment methods.
+ * Extendable class for payment methods.
+ *
+ * @template T of \WCPay\PaymentMethods\Configs\Interfaces\PaymentMethodDefinitionInterface
  */
-abstract class UPE_Payment_Method {
+class UPE_Payment_Method {
 
 	use WC_Payments_Subscriptions_Utilities;
+
+	/**
+	 * Payment method definition.
+	 *
+	 * @var class-string<T>|null
+	 */
+	protected $definition;
 
 	/**
 	 * Stripe key name
@@ -91,6 +98,13 @@ abstract class UPE_Payment_Method {
 	protected $dark_icon_url;
 
 	/**
+	 * Is the payment method a BNPL (Buy Now Pay Later) method?
+	 *
+	 * @var boolean
+	 */
+	protected $is_bnpl = false;
+
+	/**
 	 * Supported customer locations for which charges for a payment method can be processed
 	 * Empty if all customer locations are supported
 	 *
@@ -102,9 +116,22 @@ abstract class UPE_Payment_Method {
 	 * Create instance of payment method
 	 *
 	 * @param WC_Payments_Token_Service $token_service Instance of WC_Payments_Token_Service.
+	 * @param class-string<T>|null      $definition    Optional payment method definition class name.
 	 */
-	public function __construct( $token_service ) {
+	public function __construct( $token_service, ?string $definition = null ) {
 		$this->token_service = $token_service;
+		$this->definition    = $definition;
+
+		if ( null !== $this->definition ) {
+			// Cache values that don't require context.
+			$this->stripe_id                    = $this->definition::get_id();
+			$this->is_reusable                  = $this->definition::is_reusable();
+			$this->currencies                   = $this->definition::get_supported_currencies();
+			$this->accept_only_domestic_payment = $this->definition::accepts_only_domestic_payments();
+			$this->limits_per_currency          = $this->definition::get_limits_per_currency();
+			$this->is_bnpl                      = $this->definition::is_bnpl();
+			$this->countries                    = $this->definition::get_supported_countries();
+		}
 	}
 
 	/**
@@ -113,6 +140,9 @@ abstract class UPE_Payment_Method {
 	 * @return string
 	 */
 	public function get_id() {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_id();
+		}
 		return $this->stripe_id;
 	}
 
@@ -123,8 +153,13 @@ abstract class UPE_Payment_Method {
 	 * @param array|false $payment_details Optional payment details from charge object.
 	 *
 	 * @return string
+	 *
+	 * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	 */
-	public function get_title( string $account_country = null, $payment_details = false ) {
+	public function get_title( ?string $account_country = null, $payment_details = false ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_title( $account_country );
+		}
 		return $this->title;
 	}
 
@@ -152,21 +187,39 @@ abstract class UPE_Payment_Method {
 	 * can be used at checkout
 	 *
 	 * @param string $account_country Country of merchants account.
+	 * @param bool   $skip_limits_per_currency_check Whether to skip limits per currency check.
 	 *
 	 * @return bool
 	 */
-	public function is_enabled_at_checkout( string $account_country ) {
+	public function is_enabled_at_checkout( string $account_country, bool $skip_limits_per_currency_check = false ) {
 		if ( $this->is_subscription_item_in_cart() || $this->is_changing_payment_method_for_subscription() ) {
 			return $this->is_reusable();
 		}
 
 		// This part ensures that when payment limits for the currency declared, those will be respected (e.g. BNPLs).
-		if ( [] !== $this->limits_per_currency ) {
+		if ( [] !== $this->limits_per_currency && ! $skip_limits_per_currency_check ) {
+			$order = null;
+			if ( is_wc_endpoint_url( 'order-pay' ) ) {
+				$order = wc_get_order( absint( get_query_var( 'order-pay' ) ) );
+				$order = is_a( $order, 'WC_Order' ) ? $order : null;
+			}
+
 			$currency = get_woocommerce_currency();
+			if ( $order ) {
+				$currency = $order->get_currency();
+			}
+
 			// If the currency limits are not defined, we allow the PM for now (gateway has similar validation for limits).
-			// Additionally, we don't engage with limits verification in no-checkout context (cart is not available or empty).
-			if ( isset( $this->limits_per_currency[ $currency ], WC()->cart ) ) {
-				$amount = WC_Payments_Utils::prepare_amount( WC()->cart->get_total( '' ), $currency );
+			$total = null;
+			if ( $order ) {
+				$total = $order->get_total();
+			} elseif ( isset( WC()->cart ) ) {
+				$total = WC()->cart->get_total( '' );
+			}
+
+			if ( isset( $this->limits_per_currency[ $currency ], WC()->cart ) && ! empty( $total ) ) {
+				$amount = WC_Payments_Utils::prepare_amount( $total, $currency );
+
 				if ( $amount > 0 ) {
 					$range = null;
 					if ( isset( $this->limits_per_currency[ $currency ][ $account_country ] ) ) {
@@ -199,6 +252,16 @@ abstract class UPE_Payment_Method {
 	}
 
 	/**
+	 * Returns boolean dependent on whether payment method
+	 * will support BNPL (Buy Now Pay Later) payments
+	 *
+	 * @return bool
+	 */
+	public function is_bnpl() {
+		return $this->is_bnpl;
+	}
+
+	/**
 	 * Returns boolean dependent on whether payment method will accept charges
 	 * with chosen currency
 	 *
@@ -216,7 +279,9 @@ abstract class UPE_Payment_Method {
 			}
 		}
 
-		return empty( $this->currencies ) || in_array( $current_store_currency, $this->currencies, true );
+		$supported_currencies = $this->get_currencies();
+
+		return empty( $supported_currencies ) || in_array( $current_store_currency, $supported_currencies, true );
 	}
 
 	/**
@@ -234,17 +299,28 @@ abstract class UPE_Payment_Method {
 	/**
 	 * Returns testing credentials to be printed at checkout in test mode.
 	 *
+	 * @param string $account_country The country of the account.
 	 * @return string
 	 */
-	abstract public function get_testing_instructions();
+	public function get_testing_instructions( string $account_country ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_testing_instructions( $account_country );
+		}
+		return '';
+	}
 
 	/**
 	 * Returns the payment method icon URL or an empty string.
 	 *
 	 * @param string|null $account_country Optional account country.
 	 * @return string
+	 *
+	 * @phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	 */
-	public function get_icon( string $account_country = null ) {
+	public function get_icon( ?string $account_country = null ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_icon_url( $account_country );
+		}
 		return isset( $this->icon_url ) ? $this->icon_url : '';
 	}
 
@@ -254,8 +330,29 @@ abstract class UPE_Payment_Method {
 	 * @param string|null $account_country Optional account country.
 	 * @return string
 	 */
-	public function get_dark_icon( string $account_country = null ) {
+	public function get_dark_icon( ?string $account_country = null ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_dark_icon_url( $account_country );
+		}
 		return isset( $this->dark_icon_url ) ? $this->dark_icon_url : $this->get_icon( $account_country );
+	}
+
+	/**
+	 * Gets the theme appropriate icon for the payment method for a given location and context.
+	 *
+	 * @param string  $location The location to get the icon for.
+	 * @param boolean $is_blocks Whether the icon is for blocks.
+	 * @param string  $account_country Optional account country.
+	 * @return string
+	 */
+	public function get_payment_method_icon_for_location( string $location = 'checkout', bool $is_blocks = true, ?string $account_country = null ) {
+		$appearance_theme = WC_Payments_Utils::get_active_upe_theme_transient_for_location( $location, $is_blocks ? 'blocks' : 'classic' );
+
+		if ( 'night' === $appearance_theme ) {
+			return $this->get_dark_icon( $account_country );
+		}
+
+		return $this->get_icon( $account_country );
 	}
 
 	/**
@@ -264,7 +361,95 @@ abstract class UPE_Payment_Method {
 	 * @return array
 	 */
 	public function get_countries() {
-		return $this->countries;
+		$account         = \WC_Payments::get_account_service()->get_cached_account_data();
+		$account_country = isset( $account['country'] ) ? strtoupper( $account['country'] ) : '';
+
+		return $this->has_domestic_transactions_restrictions() ? [ $account_country ] : $this->countries;
+	}
+
+	/**
+	 * Returns payment method description for the settings page.
+	 *
+	 * @param string|null $account_country Country of merchants account.
+	 *
+	 * @return string
+	 */
+	public function get_description( ?string $account_country = null ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_description( $account_country );
+		}
+		return '';
+	}
+
+	/**
+	 * Returns payment method settings label.
+	 *
+	 * @param string $account_country Country of merchants account.
+	 * @return string
+	 */
+	public function get_settings_label( string $account_country ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_settings_label( $account_country );
+		}
+		return $this->get_title( $account_country );
+	}
+
+	/**
+	 * Returns payment method settings icon.
+	 *
+	 * @param string|null $account_country Country of merchants account.
+	 * @return string
+	 */
+	public function get_settings_icon_url( ?string $account_country = null ) {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_settings_icon_url( $account_country );
+		}
+		return $this->get_icon( $account_country );
+	}
+
+	/**
+	 * Returns boolean dependent on whether payment method allows manual capture.
+	 *
+	 * @return bool
+	 */
+	public function allows_manual_capture() {
+		if ( null !== $this->definition ) {
+			return $this->definition::allows_manual_capture();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the Stripe key for the payment method.
+	 *
+	 * @return string
+	 */
+	public function get_stripe_key() {
+		if ( null !== $this->definition ) {
+			return $this->definition::get_stripe_id();
+		}
+		return \WC_Payments::get_gateway()->get_payment_method_capability_key_map()[ $this->stripe_id ];
+	}
+
+	/**
+	 * Returns payment method settings definition.
+	 *
+	 * @param string $account_country Country of merchants account.
+	 * @return array
+	 */
+	public function get_payment_method_information_object( string $account_country ) {
+		return [
+			'id'                            => $this->get_id(),
+			'label'                         => $this->get_settings_label( $account_country ),
+			'description'                   => $this->get_description( $account_country ),
+			'settings_icon_url'             => $this->get_settings_icon_url( $account_country ),
+			'currencies'                    => $this->get_currencies(),
+			'stripe_key'                    => $this->get_stripe_key(),
+			'allows_manual_capture'         => $this->allows_manual_capture(),
+			'allows_pay_later'              => $this->is_bnpl(),
+			'accepts_only_domestic_payment' => $this->has_domestic_transactions_restrictions(),
+		];
 	}
 
 	/**

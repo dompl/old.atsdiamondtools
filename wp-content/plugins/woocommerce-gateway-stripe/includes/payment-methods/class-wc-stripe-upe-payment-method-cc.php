@@ -41,11 +41,13 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 	 * @return string
 	 */
 	public function get_title( $payment_details = false ) {
-		$wallet_type = WC_Stripe_Payment_Methods::AMAZON_PAY === ( $payment_details->type ?? null ) ? WC_Stripe_Payment_Methods::AMAZON_PAY : ( $payment_details->card->wallet->type ?? null );
-		if ( $payment_details && $wallet_type ) {
+		// Wallet type
+		$wallet_type = $payment_details->card->wallet->type ?? null;
+		if ( $wallet_type ) {
 			return $this->get_card_wallet_type_title( $wallet_type );
 		}
 
+		// Default
 		return parent::get_title();
 	}
 
@@ -77,7 +79,9 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 		$token->set_gateway_id( WC_Stripe_UPE_Payment_Gateway::ID );
 		$token->set_token( $payment_method->id );
 		$token->set_user_id( $user_id );
-		$token->set_fingerprint( $payment_method->card->fingerprint );
+		if ( isset( $payment_method->card->fingerprint ) ) {
+			$token->set_fingerprint( $payment_method->card->fingerprint );
+		}
 		$token->save();
 		return $token;
 	}
@@ -106,7 +110,14 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 	 *
 	 * @return string
 	 */
-	public function get_testing_instructions() {
+	public function get_testing_instructions( $show_optimized_checkout_instruction = false ) {
+		if ( false !== $show_optimized_checkout_instruction ) {
+			_deprecated_argument(
+				__FUNCTION__,
+				'9.9.0'
+			);
+		}
+
 		return sprintf(
 			/* translators: 1) HTML strong open tag 2) HTML strong closing tag 3) HTML anchor open tag 2) HTML anchor closing tag */
 			esc_html__( '%1$sTest mode:%2$s use the test VISA card 4242424242424242 with any expiry date and CVC. Other payment methods may redirect to a Stripe test page to authorize payment. More test card numbers are listed %3$shere%4$s.', 'woocommerce-gateway-stripe' ),
@@ -115,35 +126,5 @@ class WC_Stripe_UPE_Payment_Method_CC extends WC_Stripe_UPE_Payment_Method {
 			'<a href="https://docs.stripe.com/testing" target="_blank">',
 			'</a>'
 		);
-	}
-
-	/**
-	 * Returns the title for the card wallet type.
-	 * This is used to display the title for Apple Pay and Google Pay.
-	 *
-	 * @param $express_payment_type string The type of express payment method.
-	 *
-	 * @return string The title for the card wallet type.
-	 */
-	private function get_card_wallet_type_title( $express_payment_type ) {
-		$express_payment_titles = [
-			'apple_pay'                           => 'Apple Pay',
-			'google_pay'                          => 'Google Pay',
-			WC_Stripe_Payment_Methods::AMAZON_PAY => 'Amazon Pay',
-		];
-
-		$payment_method_title = $express_payment_titles[ $express_payment_type ] ?? false;
-
-		if ( ! $payment_method_title ) {
-			return parent::get_title();
-		}
-
-		$suffix = apply_filters( 'wc_stripe_payment_request_payment_method_title_suffix', 'Stripe' );
-
-		if ( ! empty( $suffix ) ) {
-			$suffix = " ($suffix)";
-		}
-
-		return $payment_method_title . $suffix;
 	}
 }

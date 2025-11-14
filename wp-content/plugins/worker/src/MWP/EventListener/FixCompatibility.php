@@ -31,6 +31,7 @@ class MWP_EventListener_FixCompatibility implements Symfony_EventDispatcher_Even
                 array('fixSpamShield', -10000),
                 array('fixWpSpamShieldBan', -10000),
                 array('fixGlobals', -10000),
+                array('fixOneClickSsl', -10000),
             ),
         );
     }
@@ -176,6 +177,16 @@ class MWP_EventListener_FixCompatibility implements Symfony_EventDispatcher_Even
     {
         if (!isset($GLOBALS['hook_suffix'])) {
             $GLOBALS['hook_suffix'] = null;
+        }
+    }
+
+    /**
+     * Disable One Click SSL during ManageWP requests.
+     */
+    public function fixOneClickSsl()
+    {
+        if (isset($_SERVER['HTTP_MWP_ACTION'])) {
+            $this->context->addFilter('pre_option_ocssl', '__return_empty_string');
         }
     }
 }

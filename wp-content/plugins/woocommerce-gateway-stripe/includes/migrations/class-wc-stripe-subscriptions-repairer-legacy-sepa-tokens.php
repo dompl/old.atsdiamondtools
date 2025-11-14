@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * This class extends the WCS_Background_Repairer for scheduling and running the individual migration actions.
  */
-class WC_Stripe_Subscriptions_Repairer_Legacy_SEPA_Tokens extends WCS_Background_Repairer {
+class WC_Stripe_Subscriptions_Repairer_Legacy_SEPA_Tokens extends \WCS_Background_Repairer {
 
 	const LEGACY_SEPA_SUBSCRIPTIONS_COUNT = 'woocommerce_stripe_subscriptions_with_legacy_sepa';
 
@@ -27,6 +27,20 @@ class WC_Stripe_Subscriptions_Repairer_Legacy_SEPA_Tokens extends WCS_Background
 	 * @var string
 	 */
 	private $display_notice_transient = 'wc_stripe_legacy_sepa_tokens_repair_notice';
+
+	/**
+	 * The scheduled hook.
+	 *
+	 * @var string
+	 */
+	protected $scheduled_hook;
+
+	/**
+	 * The repair hook.
+	 *
+	 * @var string
+	 */
+	protected $repair_hook;
 
 	/**
 	 * Constructor
@@ -287,7 +301,7 @@ class WC_Stripe_Subscriptions_Repairer_Legacy_SEPA_Tokens extends WCS_Background
 			}
 
 			$action_counts = [
-				'pending' => (int) $store->query_actions(
+				'pending'  => (int) $store->query_actions(
 					[
 						'hook'   => $this->repair_hook,
 						'status' => ActionScheduler_Store::STATUS_PENDING,
@@ -349,7 +363,7 @@ class WC_Stripe_Subscriptions_Repairer_Legacy_SEPA_Tokens extends WCS_Background
 			return $cached_legacy_sepa_subscriptions_count > 0;
 		}
 
-		$subscriptions = wc_get_orders(
+		$subscriptions       = wc_get_orders(
 			[
 				'return'         => 'ids',
 				'type'           => 'shop_subscription',

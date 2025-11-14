@@ -8,7 +8,7 @@
 namespace WCPay\MultiCurrency;
 
 use WC_Order;
-use WC_Payments_Localization_Service;
+use WCPay\MultiCurrency\Interfaces\MultiCurrencyLocalizationInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,9 +24,9 @@ class FrontendCurrencies {
 	protected $multi_currency;
 
 	/**
-	 * WC_Payments_Localization_Service instance.
+	 * MultiCurrencyLocalizationInterface instance.
 	 *
-	 * @var WC_Payments_Localization_Service
+	 * @var MultiCurrencyLocalizationInterface
 	 */
 	protected $localization_service;
 
@@ -89,12 +89,12 @@ class FrontendCurrencies {
 	/**
 	 * Constructor.
 	 *
-	 * @param MultiCurrency                    $multi_currency       The MultiCurrency instance.
-	 * @param WC_Payments_Localization_Service $localization_service The Localization Service instance.
-	 * @param Utils                            $utils                Utils instance.
-	 * @param Compatibility                    $compatibility        Compatibility instance.
+	 * @param MultiCurrency                      $multi_currency       The MultiCurrency instance.
+	 * @param MultiCurrencyLocalizationInterface $localization_service The Localization Service instance.
+	 * @param Utils                              $utils                Utils instance.
+	 * @param Compatibility                      $compatibility        Compatibility instance.
 	 */
-	public function __construct( MultiCurrency $multi_currency, WC_Payments_Localization_Service $localization_service, Utils $utils, Compatibility $compatibility ) {
+	public function __construct( MultiCurrency $multi_currency, MultiCurrencyLocalizationInterface $localization_service, Utils $utils, Compatibility $compatibility ) {
 		$this->multi_currency       = $multi_currency;
 		$this->localization_service = $localization_service;
 		$this->utils                = $utils;
@@ -111,18 +111,12 @@ class FrontendCurrencies {
 			// Currency hooks.
 			add_filter( 'woocommerce_currency', [ $this, 'get_woocommerce_currency' ], 900 );
 			add_filter( 'wc_get_price_decimals', [ $this, 'get_price_decimals' ], 900 );
+			add_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 900 );
 			add_filter( 'wc_get_price_thousand_separator', [ $this, 'get_price_thousand_separator' ], 900 );
 			add_filter( 'woocommerce_price_format', [ $this, 'get_woocommerce_price_format' ], 900 );
 			add_action( 'before_woocommerce_pay', [ $this, 'init_order_currency_from_query_vars' ] );
 			add_action( 'woocommerce_order_get_total', [ $this, 'maybe_init_order_currency_from_order_total_prop' ], 900, 2 );
 			add_action( 'woocommerce_get_formatted_order_total', [ $this, 'maybe_clear_order_currency_after_formatted_order_total' ], 900, 4 );
-
-			// Note: it's important that 'init_order_currency_from_query_vars' is called before
-			// 'get_price_decimal_separator' because the order currency is often required to
-			// determine the decimal separator. That's why the priority on 'init_order_currency_from_query_vars'
-			// is explicity lower than the priority of 'get_price_decimal_separator'.
-			add_filter( 'wc_get_price_decimal_separator', [ $this, 'init_order_currency_from_query_vars' ], 900 );
-			add_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 901 );
 		}
 
 		add_filter( 'woocommerce_thankyou_order_id', [ $this, 'init_order_currency' ] );
@@ -141,6 +135,22 @@ class FrontendCurrencies {
 		$this->price_decimal_separators = [];
 		$this->woocommerce_currency     = null;
 		$this->store_currency           = null;
+	}
+
+	/**
+	 * Removes 'min_price' and 'max_price' from the URL query parameters.
+	 *
+	 * Clears existing price filters when the currency is changed to prevent inconsistencies.
+	 *
+	 * @return void
+	 */
+	public function clear_url_price_params() {
+		if ( isset( $_GET['min_price'] ) || isset( $_GET['max_price'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$url = remove_query_arg( [ 'min_price', 'max_price' ] );
+
+			wp_safe_redirect( $url );
+			exit;
+		}
 	}
 
 	/**
@@ -276,16 +286,17 @@ class FrontendCurrencies {
 			return $arg;
 		}
 
-		// We remove the filters here becuase 'wc_get_order' triggers the 'wc_get_price_decimal_separator' filter.
-		remove_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 901 );
-		remove_filter( 'wc_get_price_decimal_separator', [ $this, 'init_order_currency_from_query_vars' ], 900 );
+		// We remove these filters here because 'wc_get_order'
+		// can trigger them, leading to an infinitely recursive call.
+		remove_filter( 'woocommerce_price_format', [ $this, 'get_woocommerce_price_format' ], 900 );
+		remove_filter( 'wc_get_price_thousand_separator', [ $this, 'get_price_thousand_separator' ], 900 );
+		remove_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 900 );
+		remove_filter( 'wc_get_price_decimals', [ $this, 'get_price_decimals' ], 900 );
 		$order = ! $arg instanceof WC_Order ? wc_get_order( $arg ) : $arg;
-		// Note: it's important that 'init_order_currency_from_query_vars' is called before
-		// 'get_price_decimal_separator' because the order currency is often required to
-		// determine the decimal separator. That's why the priority on 'init_order_currency_from_query_vars'
-		// is explicity lower than the priority of 'get_price_decimal_separator'.
-		add_filter( 'wc_get_price_decimal_separator', [ $this, 'init_order_currency_from_query_vars' ], 900 );
-		add_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 901 );
+		add_filter( 'wc_get_price_decimals', [ $this, 'get_price_decimals' ], 900 );
+		add_filter( 'wc_get_price_decimal_separator', [ $this, 'get_price_decimal_separator' ], 900 );
+		add_filter( 'wc_get_price_thousand_separator', [ $this, 'get_price_thousand_separator' ], 900 );
+		add_filter( 'woocommerce_price_format', [ $this, 'get_woocommerce_price_format' ], 900 );
 
 		if ( $order ) {
 			$this->order_currency = $order->get_currency();
@@ -382,6 +393,8 @@ class FrontendCurrencies {
 	 */
 	private function get_currency_code() {
 		if ( $this->should_use_order_currency() ) {
+			$this->init_order_currency_from_query_vars();
+
 			return $this->order_currency;
 		}
 
@@ -409,7 +422,7 @@ class FrontendCurrencies {
 	 */
 	private function should_use_order_currency(): bool {
 		$pages = [ 'my-account', 'checkout' ];
-		$vars  = [ 'order-received', 'order-pay', 'order-received', 'orders', 'view-order' ];
+		$vars  = [ 'order-received', 'order-pay', 'orders', 'view-order' ];
 
 		if ( $this->utils->is_page_with_vars( $pages, $vars ) ) {
 			return $this->utils->is_call_in_backtrace(

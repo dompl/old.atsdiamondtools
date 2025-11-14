@@ -3,7 +3,7 @@
 Plugin Name: ManageWP - Worker
 Plugin URI: https://managewp.com
 Description: We help you efficiently manage all your WordPress websites. <strong>Updates, backups, 1-click login, migrations, security</strong> and more, on one dashboard. This service comes in two versions: standalone <a href="https://managewp.com">ManageWP</a> service that focuses on website management, and <a href="https://godaddy.com/pro">GoDaddy Pro</a> that includes additional tools for hosting, client management, lead generation, and more.
-Version: 4.9.23
+Version: 4.9.25
 Author: GoDaddy
 Author URI: https://godaddy.com
 License: GPL2
@@ -268,7 +268,7 @@ if (!class_exists('MwpRecoveryKit', false)):
 
             ignore_user_abort(true);
             $dirName           = realpath(dirname(__FILE__));
-            $filesAndChecksums = $this->requestJson(sprintf('http://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/raw/%s/checksum.json', $version));
+            $filesAndChecksums = $this->requestJson(sprintf('https://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/raw/%s/checksum.json', $version));
 
             try {
                 $files = $this->recoverFiles($dirName, $filesAndChecksums, $version);
@@ -294,7 +294,7 @@ if (!class_exists('MwpRecoveryKit', false)):
             }
 
             try {
-                $response = self::requestJson('http://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/latest.json');
+                $response = self::requestJson('https://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/latest.json');
                 $response += array('version' => '0.0.0', 'schedule' => 86400, 'autoUpdate' => false, 'checksum' => array());
                 wp_clear_scheduled_hook('mwp_auto_update');
                 wp_schedule_single_event(current_time('timestamp') + $response['schedule'], 'mwp_auto_update');
@@ -410,7 +410,7 @@ if (!class_exists('MwpRecoveryKit', false)):
                     next($filesAndChecksums);
                     continue;
                 }
-                $fileUrl  = sprintf('http://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/raw/%s/%s', $version, $relativePath);
+                $fileUrl  = sprintf('https://s3-us-west-2.amazonaws.com/mwp-orion-public/worker/raw/%s/%s', $version, $relativePath);
                 $response = wp_remote_get($fileUrl, array('timeout' => 60));
                 if ($response instanceof WP_Error) {
                     $lastError = 'Unable to download file '.$fileUrl.': '.$response->get_error_message();
@@ -575,8 +575,8 @@ if (!function_exists('mwp_init')):
         // reason (eg. the site can't ping itself). Handle that case early.
         register_activation_hook(__FILE__, 'mwp_activation_hook');
 
-        $GLOBALS['MMB_WORKER_VERSION']  = '4.9.23';
-        $GLOBALS['MMB_WORKER_REVISION'] = '2025-04-25 00:00:00';
+        $GLOBALS['MMB_WORKER_VERSION']  = '4.9.25';
+        $GLOBALS['MMB_WORKER_REVISION'] = '2025-10-16 00:00:00';
 
         // Ensure PHP version compatibility.
         if (version_compare(PHP_VERSION, '5.2', '<')) {

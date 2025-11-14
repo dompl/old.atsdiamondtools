@@ -1,15 +1,15 @@
 === WooCommerce Stripe Payment Gateway ===
 Contributors: woocommerce, automattic, royho, akeda, mattyza, bor0, woothemes
-Tags: credit card, stripe, apple pay, payment request, google pay, sepa, bancontact, alipay, giropay, ideal, p24, woocommerce, automattic
-Requires at least: 6.5
-Tested up to: 6.7
+Tags: credit card, stripe, payments, woocommerce, woo
+Requires at least: 6.6
+Tested up to: 6.8.3
 Requires PHP: 7.4
-Stable tag: 9.2.0
+Stable tag: 10.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Attributions: thorsten-stripe
 
-Take credit card payments on your store using Stripe.
+Accept debit and credit cards in 135+ currencies, many local methods like Alipay, ACH, and SEPA, and express checkout with Apple Pay and Google Pay.
 
 == Description ==
 
@@ -21,7 +21,7 @@ The enhanced checkout experience from Stripe can help customers:
 
 - **Boost conversion:** Provide an optimal experience across mobile, tablet, and desktop with a responsive checkout, and offer 23 payment methods, including [Link](https://stripe.com/payments/link), [Apple Pay](https://woocommerce.com/apple-pay/), and [Google Pay](https://www.google.com/payments/solutions/), out of the box.
 - **Expand your customer base:** Convert customers who might otherwise abandon their cart with buy now, pay later methods like Klarna, Affirm, and Afterpay/Clearpay, wallets like Apple Pay, Google Pay, Alipay, and WeChat Pay, and local payment methods such as Bancontact in Europe and Alipay in Asia Pacific. Deliver a localized payment experience with out-of-the-box support for localized error messages, right-to-left languages, and automatic adjustment of input fields based on payment method and country.
-- **Meet existing customer demand and localize the experience:** Offer [local payment methods](https://stripe.com/guides/payment-methods-guide), such as Bancontact, Boleto, Cash App Pay, EPS, giropay, iDEAL, Multibanco, OXXO, Przelewy 24, and SEPA Direct Debit.
+- **Meet existing customer demand and localize the experience:** Offer [local payment methods](https://stripe.com/guides/payment-methods-guide), such as ACH Direct Debit, Bacs Direct Debit, Bancontact, BECS Direct Debit, BLIK, Boleto, Cash App Pay, EPS, iDEAL, Multibanco, OXXO, Pre-authorized debit payments, Przelewy 24, and SEPA Direct Debit.
 - **Fight fraud:** Detect and prevent fraud with [Stripe Radar](https://stripe.com/radar), which offers seamlessly integrated, powerful fraud-detection tools that use machine learning to detect and flag potentially fraudulent transactions.
 - **Accept in-person payments for products and services:** Use the Stripe Terminal M2 card reader or get started with no additional hardware using Tap to Pay on iPhone, or Tap to Pay on Android.
 - **Support subscriptions:** Support recurring payments with various payment methods via [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/).
@@ -110,58 +110,53 @@ If you get stuck, you can ask for help in the [Plugin Forum](https://wordpress.o
 
 == Changelog ==
 
-= 9.2.0 - 2025-02-13 =
-* Fix - Fix missing product_id parameter for the express checkout add-to-cart operation.
-* Fix - Fix the quantity parameter for the express checkout add-to-cart API call.
-* Dev - Replaces part of the StoreAPI call code for the cart endpoints to use the newly introduced filter.
-* Fix - Clear cart first when using express checkout inside the product page.
-* Fix - Avoid Stripe timeouts for the express checkout click event.
-* Fix - Switch booking products back to using non-StoreAPI add-to-cart methods.
-* Dev - Add new E2E tests for Link express checkout.
-* Add - Add Amazon Pay to block cart and block checkout.
-* Fix - Remove intentional delay when displaying tax-related notice for express checkout, causing click event to time out.
-* Fix - Fixes an issue when saving Bancontact and iDEAL methods with SEPA Direct Debit disabled.
-* Dev - Introduces new payment method constants for the express methods: Google Pay, Apple Pay, Link, and Amazon Pay.
-* Fix - Prevent an express checkout element's load errors from affecting other express checkout elements.
-* Tweak - Process ECE cart requests using the Blocks (Store) API.
-* Add - Adds a new setting to toggle saving of Bancontact and iDEAL methods as SEPA Debit.
-* Add - Wrap Amazon Pay in feature flag.
-* Fix - Allow the saving of Bancontact tokens when SEPA is disabled.
-* Tweak - Use WC Core's rate limiter on "Add payment method" page.
-* Add - New Amazon Pay payment method in the Stripe Express Checkout Element for the classic, shortcode (classic) checkout, product, and cart pages.
-* Dev - Introduces new payment intent status constants for the frontend.
-* Fix - Fix Stripe customer creation when using the Blocks API for express checkout.
-* Add - Add new payment processing flow using confirmation tokens.
-* Dev - Adds new logs to identify why express payment methods are not being displayed.
-* Fix - Fixes a fatal error when editing the shortcode checkout page with an empty cart on PHP 8.4.
-* Fix - Fixes processing of orders through the Pay for Order page when using ECE with Blocks (Store) API.
-* Add - Enables the use of Blocks API for Express Checkout Element orders by default.
-* Add - Adds a new filter to allow changing the user attributed to an order when paying for it through the Order Pay page.
-* Fix - Fixes an error with the fingerprint property setting when using the legacy checkout.
-* Fix - Fixes order attribution data for the Express Checkout Element when using the Blocks API to process.
-* Tweak - Process ECE orders using the Blocks API.
-* Fix - Fixes incorrect error message for card failures due insufficient funds on the shortcode checkout page (legacy).
-* Fix - Fixes deprecation warnings related to nullable method parameters when using PHP 8.4, and increases the minimum PHP version Code Sniffer considers to 7.4.
-* Fix - Adds support for the Reunion country when checking out using the new checkout experience.
-* Add - Support zero-amount refunds.
-* Fix - A potential fix to prevent duplicate charges.
-* Fix - Prevent empty settings screen when cancelling changes to the payment methods display order.
-* Fix - Improve product page caching when Express Payment buttons are not enabled.
-* Fix - Allow editing uncaptured orders but show a warning about the possible failure scenario.
-* Fix - Fetch the payment intent status on order edit page only for unpaid orders if manual capture is enabled.
-* Fix - Error when changing subscription payment method to a 3D Secure card while using a custom checkout endpoint.
-* Fix - Fixes the webhook order retrieval by intent charges by adding an array check.
-* Add - Add total tax amount to metadata.
-* Update - Update the translation for payment requests settings section notice.
-* Add - Add Amazon Pay to settings express checkout section.
-* Add - Add Amazon Pay customize express checkout page.
-* Fix - Improve the appearance of Stripe elements in checkout pages to match the store theme.
-* Fix - Hide ECE button for synced subscription variations.
-* Fix - Use the original shipping address for Amazon Pay pay for orders.
-* Tweak - Improve slow query for legacy SEPA subscriptions on WC status tools page by caching the data.
-* Tweak - Improve settings page load by delaying oauth URL generation.
-* Tweak - Update the Woo logo in the Configure connection modal
-* Add - Add currency restriction pill on Amazon Pay.
-* Fix - Express checkout methods dependency.
+= 10.0.1 - 2025-10-15 =
+* Fix - Remove persistent reconnection notices
 
-[See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-stripe/trunk/changelog.txt).
+= 10.0.0 - 2025-10-14 =
+
+**New Features**
+
+* Add - Allow the purchase of free trials using the Express Payment methods when the product does not require shipping
+* Update - Splits the "Enable SEPA for other methods" setting into two separate settings for Bancontact and iDEAL
+
+**Important Fixes and Updates**
+
+* Update - Removing the `wc_stripe_is_upe_checkout_enabled` filter, as Legacy Checkout is no longer supported
+* Update - Disable Payment Request Buttons and ensure Express Checkout is used when express checkout buttons are enabled
+* Add - Introduce wc_stripe_preselect_payment_method_configuration filter for manual payment method configuration selection
+* Update - Removes frontend code related to Payment Request Buttons in the checkout page
+* Fix - Ensure Klarna payment tokens can be deleted and handled correctly
+* Fix - Prevent fatal error when third-party plugins check for non-existent methods in payment method classes
+* Add - Implement cache prefetch for payment method configuration
+* Update - Shows the Stripe account connection modal in settings when the merchant did not connect via OAuth along with a new notice
+* Update - The usage of SEPA Direct Debit as a saved payment method for iDEAL and Bancontact is now disabled by default
+* Update - Reduce settings Javascript file size by using smaller image
+
+**Other Fixes**
+
+* Fix - Minor fixes and code improvements for the saved payment methods comparison logic
+* Update - Changes the documentation page URL for the Optimized Checkout feature to https://woocommerce.com/document/stripe/admin-experience/optimized-checkout-suite/
+* Update - Changes the background color and spacing for the Woo logo shown in the account modal
+
+**Internal Changes and Upcoming Features**
+
+* Tweak - Update PMC cache expiration time from 10 minutes to 20 minutes
+* Dev - Expands the Stripe Order Helper class to handle source ID, refund ID, intent ID, and setup intent ID metas
+* Dev - Upgrades `jest` to version 29.7.0, `@wordpress/scripts` to 26.19.0, and adds `axios`(version 1.12.2) to the JavaScript development dependencies
+* Dev - Introduces a new helper class to handle Stripe orders
+* Dev - Fixes a warning thrown when running Klarna payment token PHP Unit tests
+* Dev - Fixes some possible warnings shown in the browser console when the Optimized Checkout payment element is instantiated with invalid parameters
+* Dev - Renaming the Klarna payment token class to WC_Stripe_Klarna_Payment_Token
+* Dev - Upgrades Node to v20
+* Dev - Fix live reload issue with Webpack 5
+* Dev - Upgrades the Webpack-related packages
+* Dev - Upgrade the cross-env and rimraf NPM packages; remove chromedriver NPM dependency
+* Dev - Removes three unused NPM script commands: `test`, `test:grep`, and `test:single`
+* Dev - Upgrades the Babel-related packages
+* Dev - Consolidate component used for unavailable payment methods
+* Dev - Update webhook unit tests to be compatible with WooCommerce 10.2
+* Dev - Update the @woocommerce/navigation dependency
+* Dev - Update @wordpress/scripts to 30.24.0 and @wordpress/base-styles to 6.7.0
+
+[See changelog for full details across versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-stripe/trunk/changelog.txt).

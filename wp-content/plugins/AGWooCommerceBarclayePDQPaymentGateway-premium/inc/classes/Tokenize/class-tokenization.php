@@ -28,12 +28,11 @@ class AG_ePDQ_Token {
 	private static $test_url = 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard.asp';
 	private static $live_url = 'https://payments.epdq.co.uk/ncol/prod/orderstandard.asp';
 
-	public static function save( $args, $userID, $login ) {
+	public static function save( $args, $order, $login ) {
 
 		if( empty( $args['ALIAS'] ) ) {
 			return;
 		}
-		$order = new WC_Order( $args['idOrder'] );
 		$userID = $order->get_user_id();
 
 		// Catch and stop if order is already paid for or is processing.

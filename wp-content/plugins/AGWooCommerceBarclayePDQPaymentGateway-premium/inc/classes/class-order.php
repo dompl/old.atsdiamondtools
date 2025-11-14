@@ -120,6 +120,13 @@ class epdq_order {
 				$order->add_order_note( $note );
 				AG_ePDQ_Helpers::ag_log( $type . 'Barclays ePDQ refund has been processed.', 'debug', $epdq_settings->debug );
 				$order->add_order_note( $type . __( 'Barclays ePDQ refund has been processed.', 'ag_epdq_server' ) );
+				$order->update_status( 'refunded' );
+				break;
+
+			case '81':
+				$order->add_order_note( $note );
+				AG_ePDQ_Helpers::ag_log( $type . 'Barclays ePDQ refund has been requested.', 'debug', $epdq_settings->debug );
+				$order->add_order_note( $type . __( 'Barclays ePDQ refund has been requested.', 'ag_epdq_server' ) );
 				break;
 
 			case '82':

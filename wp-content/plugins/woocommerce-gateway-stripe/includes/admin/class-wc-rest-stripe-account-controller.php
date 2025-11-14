@@ -116,7 +116,7 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 		// Use statement descriptor from settings, falling back to Stripe account statement descriptor if needed.
 		$statement_descriptor = WC_Stripe_Helper::clean_statement_descriptor( $this->gateway->get_option( 'statement_descriptor' ) );
 		if ( empty( $statement_descriptor ) ) {
-			$statement_descriptor = $account['settings']['payments']['statement_descriptor'];
+			$statement_descriptor = $account['settings']['payments']['statement_descriptor'] ?? null;
 		}
 		if ( empty( $statement_descriptor ) ) {
 			$statement_descriptor = null;
@@ -134,7 +134,7 @@ class WC_REST_Stripe_Account_Controller extends WC_Stripe_REST_Base_Controller {
 					'supported' => $this->account->get_supported_store_currencies(),
 				],
 				'country'                  => $account['country'] ?? WC()->countries->get_base_country(),
-				'is_live'                  => WC_Stripe_Mode::is_live() && $account['charges_enabled'] ?? false,
+				'is_live'                  => WC_Stripe_Mode::is_live() && ( $account['charges_enabled'] ?? false ),
 				'test_mode'                => WC_Stripe_Mode::is_test(),
 			]
 		);

@@ -193,12 +193,52 @@ class AG_ePDQ_order_status_check {
 			AG_ePDQ_Helpers::ag_log( 'The customer has cancelled the transaction', 'debug', $ePDQ_settings->debug );
 			$order->add_order_note( $status_check . $noteTitle );
 
-		} elseif ( $result['STATUS'] === 5 ) {
+		} elseif ( $result['STATUS'] === '5' ) {
 
 			$noteTitle = __( 'Barclays ePDQ transaction has been Authorised.', 'ag_epdq_server' );
 			AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ transaction has been Authorised. No issues to report.', 'debug', $ePDQ_settings->debug );
 			//$order->add_order_note( $note );
 			$order->add_order_note( '<strong>' . __( 'The order must be captured before funds will be sent to you. You can capture from within your ePDQ account or here in this order by clicking the capture payment button.', 'ag_epdq_server' ) . '</strong>' );
+			$order->update_status( 'on-hold' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
+
+		}  elseif ( $result['STATUS'] === '8' ) {
+
+			$noteTitle = __( 'Barclays ePDQ has confirmed the refund.', 'ag_epdq_server' );
+			AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ refund has been Authorised. No issues to report.', 'debug', $ePDQ_settings->debug );
+			//$order->add_order_note( $note );
+			$order->update_status( 'refunded' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+			'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+			'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
+
+		} elseif ( $result['STATUS'] === '81' ) {
+
+			$noteTitle = __( 'Barclays ePDQ refund requested.', 'ag_epdq_server' );
+			//$order->add_order_note( $note );
+			$order->update_status( 'on-hold' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
+
+		} elseif ( $result['STATUS'] === '83' ) {
+
+			$noteTitle = __( 'Barclays ePDQ refund rejected.', 'ag_epdq_server' );
+			//$order->add_order_note( $note );
 			$order->update_status( 'on-hold' );
 			$order->add_order_note( $status_check . $noteTitle );
 			$orderdata = array(
@@ -422,6 +462,43 @@ class AG_ePDQ_order_status_check {
 			);
 			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order);
 
+
+		}  elseif ( $result['STATUS'] === '8' ) {
+
+			$noteTitle = __( 'Barclays ePDQ has confirmed the refund.', 'ag_epdq_server' );
+			AG_ePDQ_Helpers::ag_log( 'Barclays ePDQ refund has been Authorised. No issues to report.', 'debug', $ePDQ_settings->debug );
+			$order->update_status( 'refunded' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+			'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+			'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
+
+			} elseif ( $result['STATUS'] === '81' ) {
+
+			         $noteTitle = __( 'Barclays ePDQ refund requested.', 'ag_epdq_server' );
+			$order->update_status( 'on-hold' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
+
+			} elseif ( $result['STATUS'] === '83' ) {
+
+			         $noteTitle = __( 'Barclays ePDQ refund rejected.', 'ag_epdq_server' );
+			$order->update_status( 'on-hold' );
+			$order->add_order_note( $status_check . $noteTitle );
+			$orderdata = array(
+				'Status' => AG_errors::get_epdq_status_code( $result['STATUS'] ),
+				'PAYID'  => $result['PAYID'] ?? '',
+
+			);
+			AG_ePDQ_Helpers::update_order_meta_data( $order->get_id(), $orderdata , $order );
 
 		} elseif ( $result['STATUS'] === '0' || $result['STATUS'] === null ) {
 

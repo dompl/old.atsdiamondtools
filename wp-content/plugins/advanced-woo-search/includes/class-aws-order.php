@@ -41,7 +41,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             $new_products = array();
             $filters = array();
             $attr_filter = array();
-
+            
             if ( isset( $query->query_vars['meta_query'] ) ) {
                 $meta_query = $query->query_vars['meta_query'];
 
@@ -61,6 +61,9 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             if ( ! isset( $filters['in_status'] ) && isset( $_GET['in_stock'] ) ) {
                 $filters['in_status'] = in_array( strval(sanitize_text_field( $_GET['in_stock'] )), array( '1', 'true', 'yes', 'instock', 'in_stock' ) );
+            }
+            if ( ! isset( $filters['in_status'] ) && isset( $_GET['stock'] ) ) {
+                $filters['in_status'] = in_array( strval(sanitize_text_field( $_GET['stock'] )), array( '1', 'true', 'yes', 'instock', 'in_stock' ) );
             }
 
             if ( ! isset( $filters['price_min'] ) && isset( $_GET['min_price'] ) ) {
@@ -314,7 +317,13 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                             if ( $parent_id !== $product_id && class_exists( 'WC_Product_Variation' ) ) {
                                 $terms = array();
-                                $variation_product = new WC_Product_Variation( $product_id );
+
+                                try {
+                                    $variation_product = new WC_Product_Variation( $product_id );
+                                } catch ( Exception $e ) {
+                                    $variation_product = false;
+                                }
+
                                 if ( $variation_product && method_exists( $variation_product, 'get_attributes' ) ) {
                                     $variation_attr = $variation_product->get_attributes();
                                     if ( $variation_attr && is_array( $variation_attr ) ) {

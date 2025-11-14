@@ -5,31 +5,58 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WC_Stripe_Feature_Flags {
 	const UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME = 'upe_checkout_experience_enabled';
-	const ECE_FEATURE_FLAG_NAME               = '_wcstripe_feature_ece';
 	const AMAZON_PAY_FEATURE_FLAG_NAME        = '_wcstripe_feature_amazon_pay';
 
-	const LPM_ACH_FEATURE_FLAG_NAME  = '_wcstripe_feature_lpm_ach';
-	const LPM_ACSS_FEATURE_FLAG_NAME = '_wcstripe_feature_lpm_acss';
-	const LPM_BACS_FEATURE_FLAG_NAME = '_wcstripe_feature_lpm_bacs';
+	/**
+	 * Feature flag for Stripe ECE (Express Checkout Element).
+	 * This feature flag controls whether the new Express Checkout Element (ECE) or the legacy Payment Request Button (PRB) is used to render express checkout buttons.
+	 *
+	 * @var string
+	 *
+	 * @deprecated This feature flag will be removed in version 10.1.0. ECE will be permanently enabled.
+	 */
+	const ECE_FEATURE_FLAG_NAME = '_wcstripe_feature_ece';
 
 	/**
-	 * Checks whether ACH LPM (Local Payment Method) feature flag is enabled.
-	 * ACH LPM is a feature that allows merchants to enable/disable the ACH payment method.
+	 * Feature flag for Optimized Checkout (OC).
 	 *
-	 * @return bool
+	 * @var string
+	 *
+	 * @deprecated This feature flag will be removed in version 9.9.0.
 	 */
-	public static function is_ach_lpm_enabled() {
-		return 'yes' === get_option( self::LPM_ACH_FEATURE_FLAG_NAME, 'no' );
+	const OC_FEATURE_FLAG_NAME = '_wcstripe_feature_oc';
+
+	/**
+	 * Map of feature flag option names => their default "yes"/"no" value.
+	 * This single source of truth makes it easier to maintain our dev tools.
+	 *
+	 * @var array
+	 */
+	protected static $feature_flags = [
+		'_wcstripe_feature_upe'                => 'yes',
+		self::AMAZON_PAY_FEATURE_FLAG_NAME     => 'no',
+		self::OC_FEATURE_FLAG_NAME             => 'no',
+	];
+
+	/**
+	 * Retrieve all defined feature flags with their default values.
+	 * Note: This method is intended for use in the dev tools.
+	 *
+	 * @return array
+	 */
+	public static function get_all_feature_flags_with_defaults() {
+		return self::$feature_flags;
 	}
 
 	/**
-	 * Checks whether ACSS LPM (Local Payment Method) feature flag is enabled.
-	 * ACSS LPM is a feature that allows merchants to enable/disable the ACSS payment method.
+	 * Retrieve the default value for a specific feature flag.
 	 *
-	 * @return bool
+	 * @param string $flag
+	 * @return string
 	 */
-	public static function is_acss_lpm_enabled() {
-		return 'yes' === get_option( self::LPM_ACSS_FEATURE_FLAG_NAME, 'no' );
+	public static function get_option_with_default( $flag ) {
+		$default = isset( self::$feature_flags[ $flag ] ) ? self::$feature_flags[ $flag ] : 'no';
+		return get_option( $flag, $default );
 	}
 
 	/**
@@ -38,17 +65,7 @@ class WC_Stripe_Feature_Flags {
 	 * @return bool
 	 */
 	public static function is_amazon_pay_available() {
-		return 'yes' === get_option( self::AMAZON_PAY_FEATURE_FLAG_NAME, 'no' );
-	}
-
-	/**
-	 * Checks whether Bacs LPM (Local Payment Method) feature flag is enabled.
-	 * Alows the merchant to enable/disable Bacs payment method.
-	 *
-	 * @return bool
-	 */
-	public static function is_bacs_lpm_enabled(): bool {
-		return 'yes' === get_option( self::LPM_BACS_FEATURE_FLAG_NAME, 'no' );
+		return 'yes' === self::get_option_with_default( self::AMAZON_PAY_FEATURE_FLAG_NAME );
 	}
 
 	/**
@@ -56,9 +73,11 @@ class WC_Stripe_Feature_Flags {
 	 * Express checkout buttons are rendered with either ECE or PRB depending on this feature flag.
 	 *
 	 * @return bool
+	 *
+	 * @deprecated 10.0.0 ECE is always enabled. This method will be removed in a future release.
 	 */
 	public static function is_stripe_ece_enabled() {
-		return 'yes' === get_option( self::ECE_FEATURE_FLAG_NAME, 'yes' );
+		return true;
 	}
 
 	/**
@@ -68,18 +87,18 @@ class WC_Stripe_Feature_Flags {
 	 * @return bool
 	 */
 	public static function is_upe_preview_enabled() {
-		return 'yes' === get_option( '_wcstripe_feature_upe', 'yes' );
+		return 'yes' === self::get_option_with_default( '_wcstripe_feature_upe' );
 	}
 
 	/**
 	 * Checks whether UPE is enabled.
 	 *
 	 * @return bool
+	 *
+	 * @deprecated 10.0.0 UPE is always enabled. This method will be removed in a future release.
 	 */
 	public static function is_upe_checkout_enabled() {
-		$stripe_settings = WC_Stripe_Helper::get_stripe_settings();
-		return ! empty( $stripe_settings[ self::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ] )
-			&& 'yes' === $stripe_settings[ self::UPE_CHECKOUT_FEATURE_ATTRIBUTE_NAME ];
+		return true;
 	}
 
 	/**
@@ -100,5 +119,33 @@ class WC_Stripe_Feature_Flags {
 	 */
 	public static function are_apms_deprecated() {
 		return ( new \DateTime() )->format( 'Y-m-d' ) > '2024-10-28' && ! self::is_upe_checkout_enabled();
+	}
+
+	/**
+	 * Whether the Optimized Checkout (OC) feature flag is enabled.
+	 *
+	 * @return bool
+	 */
+	public static function is_oc_available() {
+		$stripe_settings = WC_Stripe_Helper::get_stripe_settings();
+		$pmc_enabled     = $stripe_settings['pmc_enabled'] ?? 'no';
+		if ( 'yes' !== $pmc_enabled ) {
+			return false;
+		}
+
+		/**
+		 * Filter to control the availability of the Optimized Checkout feature.
+		 *
+		 * @since 9.6.0
+		 * @deprecated This filter will be removed in version 9.9.0. No replacement will be provided as the Optimized Checkout feature will be permanently enabled.
+		 * @param string $default_value The default value for the feature flag.
+		 * @param string $pmc_enabled The value of the 'pmc_enabled' setting.
+		 */
+		return apply_filters(
+			'wc_stripe_is_optimized_checkout_available',
+			true,
+			'yes',
+			$pmc_enabled
+		);
 	}
 }

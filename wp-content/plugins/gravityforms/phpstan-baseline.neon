@@ -6,11 +6,6 @@ parameters:
 			path: common.php
 
 		-
-			message: "#^@param string \\$headers does not accept actual type of parameter\\: array\\{From\\: non\\-falsy\\-string, Reply\\-To\\?\\: non\\-falsy\\-string, Bcc\\?\\: non\\-falsy\\-string, Cc\\?\\: non\\-falsy\\-string, Content\\-type\\: non\\-falsy\\-string\\}\\.$#"
-			count: 1
-			path: common.php
-
-		-
 			message: "#^Expected 4 @param tags, found 3\\.$#"
 			count: 1
 			path: common.php
@@ -126,11 +121,6 @@ parameters:
 			path: entry_list.php
 
 		-
-			message: "#^Expected 3 @param tags, found 1\\.$#"
-			count: 1
-			path: entry_list.php
-
-		-
 			message: "#^Expected 4 @param tags, found 3\\.$#"
 			count: 1
 			path: entry_list.php
@@ -147,11 +137,6 @@ parameters:
 
 		-
 			message: "#^Expected 0 @param tags, found 1\\.$#"
-			count: 1
-			path: export.php
-
-		-
-			message: "#^Function esc_html invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: export.php
 
@@ -186,11 +171,6 @@ parameters:
 			path: form_detail.php
 
 		-
-			message: "#^Variable \\$fixed_menu_items might not be defined\\.$#"
-			count: 1
-			path: form_detail.php
-
-		-
 			message: "#^Variable \\$my_parent might not be defined\\.$#"
 			count: 1
 			path: form_detail.php
@@ -212,7 +192,7 @@ parameters:
 
 		-
 			message: "#^One or more @param tags has an invalid name or invalid syntax\\.$#"
-			count: 4
+			count: 3
 			path: form_display.php
 
 		-
@@ -402,11 +382,6 @@ parameters:
 
 		-
 			message: "#^Static method GFFormSettings\\:\\:form_settings_page\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: gravityforms.php
-
-		-
-			message: "#^Variable \\$fixed_menu_items might not be defined\\.$#"
 			count: 1
 			path: gravityforms.php
 
@@ -691,21 +666,12 @@ parameters:
 			path: includes/fields/class-gf-field-fileupload.php
 
 		-
-			message: "#^One or more @param tags has an invalid name or invalid syntax\\.$#"
-			count: 1
-			path: includes/fields/class-gf-field-fileupload.php
-
-		-
 			message: "#^Variable \\$rules_messages in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: includes/fields/class-gf-field-fileupload.php
 
 		-
-			message: "#^Variable \\$value in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: includes/fields/class-gf-field-fileupload.php
 
-		-
 			message: "#^Callback expects 1 parameter, \\$accepted_args is set to 2\\.$#"
 			count: 2
 			path: includes/fields/class-gf-field-image-choice.php
@@ -787,11 +753,6 @@ parameters:
 
 		-
 			message: "#^Method GF_Field\\:\\:get_conditional_logic_event\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: includes/fields/class-gf-field.php
-
-		-
-			message: "#^Method GF_Field\\:\\:get_input_value_submission\\(\\) should return array\\|string but return statement is missing\\.$#"
 			count: 1
 			path: includes/fields/class-gf-field.php
 
@@ -909,16 +870,6 @@ parameters:
 			message: "#^Variable \\$status might not be defined\\.$#"
 			count: 3
 			path: includes/legacy/forms_model_legacy.php
-
-		-
-			message: "#^Method Gravity_Forms\\\\Gravity_Forms\\\\Libraries\\\\Dom_Parser\\:\\:is_amp_regex\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: includes/libraries/class-dom-parser.php
-
-		-
-			message: "#^Undefined variable\\: \\$content$#"
-			count: 2
-			path: includes/libraries/class-dom-parser.php
 
 		-
 			message: "#^is_wp_error\\(Gravity_Forms\\\\Gravity_Forms\\\\External_API\\\\GF_API_Response\\) will always evaluate to false\\.$#"
@@ -1106,11 +1057,6 @@ parameters:
 			path: includes/save-form/class-gf-save-form-service-provider.php
 
 		-
-			message: "#^Call to static method get_support_url\\(\\) on an unknown class Gravity_Forms\\\\Gravity_Forms\\\\Save_Form\\\\Endpoints\\\\GFCommon\\.$#"
-			count: 1
-			path: includes/save-form/endpoints/class-gf-save-form-endpoint-admin.php
-
-		-
 			message: "#^@param tag must not be named \\$this\\. Choose a descriptive alias, for example \\$instance\\.$#"
 			count: 1
 			path: includes/settings/class-settings.php
@@ -1196,11 +1142,6 @@ parameters:
 			path: includes/updates/class-gf-updates-service-provider.php
 
 		-
-			message: "#^One or more @param tags has an invalid name or invalid syntax\\.$#"
-			count: 1
-			path: includes/upload.php
-
-		-
 			message: "#^Variable \\$contentType might not be defined\\.$#"
 			count: 1
 			path: includes/upload.php
@@ -1246,7 +1187,7 @@ parameters:
 			path: includes/webapi/v2/includes/controllers/class-controller-entry-notes.php
 
 		-
-			message: "#^is_wp_error\\(bool\\) will always evaluate to false\\.$#"
+			message: "#^is_wp_error\\(int\\|false\\) will always evaluate to false\\.$#"
 			count: 2
 			path: includes/webapi/v2/includes/controllers/class-controller-entry-properties.php
 
@@ -1291,7 +1232,7 @@ parameters:
 			path: includes/webapi/webapi.php
 
 		-
-			message: "#^is_wp_error\\(bool\\) will always evaluate to false\\.$#"
+			message: "#^is_wp_error\\(int\\|false\\) will always evaluate to false\\.$#"
 			count: 2
 			path: includes/webapi/webapi.php
 

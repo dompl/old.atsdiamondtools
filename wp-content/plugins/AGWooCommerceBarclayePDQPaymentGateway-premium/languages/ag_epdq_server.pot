@@ -2,16 +2,16 @@
 # This file is distributed under the GPL3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.8.3.1\n"
+"Project-Id-Version: AG WooCommerce Barclay ePDQ Payment Gateway 4.8.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ag_epdq_server\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-18T10:27:11+00:00\n"
+"POT-Creation-Date: 2025-09-23T12:33:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ag_epdq_server\n"
 
 #. Plugin Name of the plugin
@@ -2184,100 +2184,98 @@ msgstr ""
 msgid "AG ePDQ Server Gateway"
 msgstr ""
 
-#: inc/classes/class-helpers.php:137
-msgid "<strong>%s</strong> is enabled, but you don't have an SSL certificate on your website. Please ensure that you have a valid SSL certificate.<br /><strong>ePDQ Direct Link will only work in test mode while there is no SSL</strong>"
-msgstr ""
-
-#: inc/classes/class-main.php:225
+#: inc/classes/class-main.php:233
+#, php-format
 msgid "<br /><strong>TEST MODE ACTIVE.</strong><br />In test mode, you can use Visa card number 4444 3333 2222 1111 with any CVC and a valid expiration date or check the documentation <a target=\"_blank\" href=\"%s\">here</a> for more card numbers, steps on setting up and troubleshooting."
 msgstr ""
 
-#: inc/classes/class-main.php:236
+#: inc/classes/class-main.php:244
+#, php-format
 msgid "<span class=\"AG-redirect-icon\"><img src=\"%s\" /></span>"
 msgstr ""
 
-#: inc/classes/class-main.php:237
+#: inc/classes/class-main.php:245
 msgid "<p class=\"AG-redirect-notice\">After clicking \"Place order\", you will be redirected to Barclays to complete your purchase securely.</p>"
 msgstr ""
 
-#: inc/classes/class-main.php:296
+#: inc/classes/class-main.php:304
 msgid "AG ePDQ Checkout Settings"
 msgstr ""
 
-#: inc/classes/class-main.php:306
+#: inc/classes/class-main.php:314
 msgid "This gateway directs customers to the secure Barclays payment server to process transactions. After completing the payment, customers will be automatically redirected back to your website."
 msgstr ""
 
-#: inc/classes/class-main.php:307
+#: inc/classes/class-main.php:315
 msgid "Encounter setup difficulties? Our <a href=\""
 msgstr ""
 
-#: inc/classes/class-main.php:320
+#: inc/classes/class-main.php:328
 msgid "These settings are crucial for enabling several key features including processing refunds, performing status checks, and managing subscription renewal payments. Configure these to ensure smooth operation of these functionalities."
 msgstr ""
 
-#: inc/classes/class-main.php:333
+#: inc/classes/class-main.php:341
 msgid "Welcome to the Status Check Settings page. Here, you will find a range of features and options designed to help you manage and automate the ePDQ status checking for your orders."
 msgstr ""
 
-#: inc/classes/class-main.php:334
+#: inc/classes/class-main.php:342
 msgid "This feature relies on the proper configuration of the REST API. Please ensure that your REST API settings are correctly set up to utilise these status check functionalities effectively."
 msgstr ""
 
-#: inc/classes/class-main.php:348
+#: inc/classes/class-main.php:356
 msgid "Below you will find additional features and settings for the ePDQ plugin. Configure these options to further customise and enhance your plugin's functionality."
 msgstr ""
 
-#: inc/classes/class-main.php:757
+#: inc/classes/class-main.php:778
 msgid "Customer took "
 msgstr ""
 
-#: inc/classes/class-main.php:800
+#: inc/classes/class-main.php:821
 msgid "Refund failed: Transaction ID not found."
 msgstr ""
 
-#: inc/classes/class-main.php:805
+#: inc/classes/class-main.php:826
 msgid "Refund failed: Amount invalid."
 msgstr ""
 
-#: inc/classes/class-main.php:811
+#: inc/classes/class-main.php:832
 msgid "Refund failed: API username has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:817
+#: inc/classes/class-main.php:838
 msgid "Refund failed: API password has not been set."
 msgstr ""
 
-#: inc/classes/class-main.php:862
+#: inc/classes/class-main.php:883
 msgid "Refund request successful"
 msgstr ""
 
-#: inc/classes/class-main.php:862
+#: inc/classes/class-main.php:883
 msgid "Refund Amount: "
 msgstr ""
 
-#: inc/classes/class-main.php:862
+#: inc/classes/class-main.php:883
 msgid "Refund Reason: "
 msgstr ""
 
-#: inc/classes/class-main.php:862
-#: inc/classes/class-main.php:867
+#: inc/classes/class-main.php:883
+#: inc/classes/class-main.php:888
 msgid "ePDQ Status: "
 msgstr ""
 
-#: inc/classes/class-main.php:867
+#: inc/classes/class-main.php:888
 msgid "Refund failed"
 msgstr ""
 
-#: inc/classes/class-main.php:868
+#: inc/classes/class-main.php:889
 msgid "Refund Note"
 msgstr ""
 
-#: inc/classes/class-main.php:868
+#: inc/classes/class-main.php:889
 msgid "Error: "
 msgstr ""
 
-#: inc/classes/class-main.php:872
+#: inc/classes/class-main.php:893
 msgid "Refund failed: Please refresh this page and check the order notes, or the debug log."
 msgstr ""
 
@@ -2378,6 +2376,7 @@ msgstr ""
 #: inc/classes/class-order-status-check.php:489
 #: inc/classes/StatusCheck/class-order-status-check.php:398
 #: inc/classes/StatusCheck/class-order-status-check.php:451
+#, php-format
 msgctxt "full name"
 msgid "%1$s %2$s"
 msgstr ""
@@ -2649,213 +2648,220 @@ msgstr ""
 msgid "Want to store your API details in a more secure way, read through our doc <a href=\"https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/\" target=\"_blank\">here</a>"
 msgstr ""
 
-#: inc/classes/class-settings.php:237
+#: inc/classes/class-settings.php:215
+msgid "This is used if you are using our Router plugin to send webhook data to multiple website via your main router website."
+msgstr ""
+
+#: inc/classes/class-settings.php:243
 msgid "Disable auto Status Check"
 msgstr ""
 
-#: inc/classes/class-settings.php:245
+#: inc/classes/class-settings.php:251
 msgid "Enable Scheduled Status Check (Beta)"
 msgstr ""
 
-#: inc/classes/class-settings.php:252
+#: inc/classes/class-settings.php:258
 msgid "Order Status"
 msgstr ""
 
-#: inc/classes/class-settings.php:255
+#: inc/classes/class-settings.php:261
 msgid "Select the order statuses that should trigger the scheduled status checks. This setting allows you to tailor the monitoring process to specific order conditions."
 msgstr ""
 
-#: inc/classes/class-settings.php:261
+#: inc/classes/class-settings.php:267
 msgid "Check Interval"
 msgstr ""
 
-#: inc/classes/class-settings.php:263
+#: inc/classes/class-settings.php:269
 msgid "Set the frequency at which the system checks the status of unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates."
 msgstr ""
 
-#: inc/classes/class-settings.php:267
+#: inc/classes/class-settings.php:273
 msgid "Once a day"
 msgstr ""
 
-#: inc/classes/class-settings.php:268
+#: inc/classes/class-settings.php:274
 msgid "Twice a day (every 12 hours)"
 msgstr ""
 
-#: inc/classes/class-settings.php:269
+#: inc/classes/class-settings.php:275
 msgid "Three times a day (every 8 hours)"
 msgstr ""
 
-#: inc/classes/class-settings.php:270
+#: inc/classes/class-settings.php:276
 msgid "Four times a day (every 6 hours)"
 msgstr ""
 
-#: inc/classes/class-settings.php:271
+#: inc/classes/class-settings.php:277
 msgid "Every four hours"
 msgstr ""
 
-#: inc/classes/class-settings.php:272
+#: inc/classes/class-settings.php:278
 msgid "Every three hours"
 msgstr ""
 
-#: inc/classes/class-settings.php:273
+#: inc/classes/class-settings.php:279
 msgid "Every two hours"
 msgstr ""
 
-#: inc/classes/class-settings.php:274
+#: inc/classes/class-settings.php:280
 msgid "Every hour"
 msgstr ""
 
-#: inc/classes/class-settings.php:275
+#: inc/classes/class-settings.php:281
 msgid "Every 30 minutes (beta - may cause performance issues)"
 msgstr ""
 
-#: inc/classes/class-settings.php:276
+#: inc/classes/class-settings.php:282
 msgid "Every 15 minutes (beta - may cause performance issues)"
 msgstr ""
 
-#: inc/classes/class-settings.php:280
+#: inc/classes/class-settings.php:286
 msgid "Monitor Scheduler Status"
 msgstr ""
 
-#: inc/classes/class-settings.php:282
+#: inc/classes/class-settings.php:288
 msgid "Click  <a href=\""
 msgstr ""
 
-#: inc/classes/class-settings.php:286
+#: inc/classes/class-settings.php:292
 msgid "Block WooCommerce Auto Cancel"
 msgstr ""
 
-#: inc/classes/class-settings.php:293
+#: inc/classes/class-settings.php:299
 msgid "Cancel Interval (Beta)"
 msgstr ""
 
-#: inc/classes/class-settings.php:295
+#: inc/classes/class-settings.php:301
 msgid "Set the frequency at which the system auto cancels unpaid orders. Choose an interval that best suits your operational needs and ensures timely updates."
 msgstr ""
 
-#: inc/classes/class-settings.php:299
+#: inc/classes/class-settings.php:305
 msgid "1 day"
 msgstr ""
 
-#: inc/classes/class-settings.php:300
+#: inc/classes/class-settings.php:306
 msgid "5 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:301
+#: inc/classes/class-settings.php:307
 msgid "7 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:302
+#: inc/classes/class-settings.php:308
 msgid "10 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:303
+#: inc/classes/class-settings.php:309
 msgid "15 days"
 msgstr ""
 
-#: inc/classes/class-settings.php:304
+#: inc/classes/class-settings.php:310
 msgid "30 days"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:122
-#: inc/classes/Fraudchecks/fraud-checks.php:504
+#: inc/classes/Fraudchecks/fraud-checks.php:184
 msgid "AG Traffic Light System"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:327
+#: inc/classes/Fraudchecks/fraud-checks.php:780
 msgid "The Address is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:330
+#: inc/classes/Fraudchecks/fraud-checks.php:783
 msgid "The address has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:333
+#: inc/classes/Fraudchecks/fraud-checks.php:786
 msgid "Invalid or no Address has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:342
+#: inc/classes/Fraudchecks/fraud-checks.php:795
 msgid "The Postal Code is Correct"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:345
+#: inc/classes/Fraudchecks/fraud-checks.php:798
 msgid "The Postal Code has been sent but the acquirer has given a negative response for the address check."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:348
+#: inc/classes/Fraudchecks/fraud-checks.php:801
 msgid "Invalid or no Postal Code has been transmitted."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:351
+#: inc/classes/Fraudchecks/fraud-checks.php:804
 msgid "Parameters for Postal Code has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:357
+#: inc/classes/Fraudchecks/fraud-checks.php:810
 msgid "The CVC has been sent and the acquirer has given a positive response to the CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:360
+#: inc/classes/Fraudchecks/fraud-checks.php:813
 msgid "The CVC has been sent but the acquirer has given a negative response to the CVC check, i.e. the CVC is wrong."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:363
+#: inc/classes/Fraudchecks/fraud-checks.php:816
 msgid "Invalid or no CVC has been transmitted"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:366
+#: inc/classes/Fraudchecks/fraud-checks.php:819
 msgid "Parameters for CVC has not been set."
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:390
+#: inc/classes/Fraudchecks/fraud-checks.php:845
 msgid "Address Check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:393
+#: inc/classes/Fraudchecks/fraud-checks.php:848
 msgid "Postcode check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:396
+#: inc/classes/Fraudchecks/fraud-checks.php:851
 msgid "CVC check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:399
+#: inc/classes/Fraudchecks/fraud-checks.php:854
 msgid "3D Secure check"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:444
+#: inc/classes/Fraudchecks/fraud-checks.php:899
 msgid "Manually keyed (MOTO) (card not present)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:448
+#: inc/classes/Fraudchecks/fraud-checks.php:903
 msgid "Recurring (from MOTO)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:452
+#: inc/classes/Fraudchecks/fraud-checks.php:907
 msgid "Installment payments"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:456
+#: inc/classes/Fraudchecks/fraud-checks.php:911
 msgid "Manually keyed, card present"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:460
+#: inc/classes/Fraudchecks/fraud-checks.php:915
 msgid "Cardholder identification successful"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:464
+#: inc/classes/Fraudchecks/fraud-checks.php:919
 msgid "Merchant supports identification but not cardholder,"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:468
+#: inc/classes/Fraudchecks/fraud-checks.php:923
 msgid "E-commerce with SSL encryption"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:472
+#: inc/classes/Fraudchecks/fraud-checks.php:927
 msgid "Recurring (from e-commerce)"
 msgstr ""
 
-#: inc/classes/Fraudchecks/fraud-checks.php:476
+#: inc/classes/Fraudchecks/fraud-checks.php:931
 msgid "Parameters for 3D has not been set."
+msgstr ""
+
+#: inc/classes/Fraudchecks/fraud-checks.php:1840
+msgid "AG Order Checks"
 msgstr ""
 
 #: inc/classes/Moto/class-moto.php:73

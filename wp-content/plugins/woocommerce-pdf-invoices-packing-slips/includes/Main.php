@@ -1,8 +1,6 @@
 <?php
 namespace WPO\IPS;
 
-use WPO\IPS\UBL\Builders\SabreBuilder;
-use WPO\IPS\UBL\Documents\UblDocument;
 use WPO\IPS\UBL\Exceptions\FileWriteException;
 use WPO\IPS\Vendor\Dompdf\Exception as DompdfException;
 
@@ -88,7 +86,7 @@ class Main {
 		add_action( 'wpo_wcpdf_delete_document', array( $this, 'log_document_deletion_to_order_notes' ) );
 
 		// Add document link to emails
-		add_action( 'init', array( $this, 'handle_document_link_in_emails' ) );
+		add_action( 'init', array( $this, 'handle_document_link_in_emails' ), 20 );
 	}
 
 	/**
@@ -138,7 +136,7 @@ class Main {
 		add_filter( 'wcpdf_disable_deprecation_notices', '__return_true' );
 
 		// reload translations because WC may have switched to site locale (by setting the plugin_locale filter to site locale in wc_switch_to_site_locale())
-		if ( apply_filters( 'wpo_wcpdf_allow_reload_attachment_translations', true ) ) {
+		if ( apply_filters( 'wpo_wcpdf_allow_reload_attachment_translations', isset( WPO_WCPDF()->settings->debug_settings['reload_attachment_translations'] ) ) ) {
 			WPO_WCPDF()->translations();
 			do_action( 'wpo_wcpdf_reload_attachment_translations' );
 		}
@@ -215,7 +213,6 @@ class Main {
 	}
 
 	public function get_document_pdf_attachment( $document, $tmp_path ) {
-		$wp_filesystem    = wpo_wcpdf_get_wp_filesystem();
 		$filename         = $document->get_filename();
 		$pdf_path         = $tmp_path . $filename;
 		$document_type    = $document->get_type();
@@ -227,8 +224,8 @@ class Main {
 
 		try {
 			// Check if the file can be reused
-			if ( $wp_filesystem->exists( $pdf_path ) && $reuse_attachment && $max_reuse_age > 0 ) {
-				$filemtime = filemtime( $pdf_path );
+			if ( WPO_WCPDF()->file_system->exists( $pdf_path ) && $reuse_attachment && $max_reuse_age > 0 ) {
+				$filemtime = WPO_WCPDF()->file_system->mtime( $pdf_path );
 				if ( $filemtime && ( time() - $filemtime < $max_reuse_age ) ) {
 					return $pdf_path;
 				}
@@ -247,7 +244,7 @@ class Main {
 
 			// Write the file
 			if ( $write_file ) {
-				$file_written = $wp_filesystem->put_contents( $pdf_path, $pdf_data, FS_CHMOD_FILE );
+				$file_written = WPO_WCPDF()->file_system->put_contents( $pdf_path, $pdf_data, FS_CHMOD_FILE );
 				$semaphore->log( "PDF attachment written to {$pdf_path}", 'info' );
 			} else {
 				$semaphore->log( "PDF attachment not written to {$pdf_path} because the lock was not acquired", 'info' );
@@ -280,18 +277,7 @@ class Main {
 	}
 
 	public function get_document_ubl_attachment( $document, $tmp_path ) {
-		$ubl_maker = wcpdf_get_ubl_maker();
-		$ubl_maker->set_file_path( $tmp_path );
-
-		$ubl_document = new UblDocument();
-		$ubl_document->set_order_document( $document );
-
-		$builder       = new SabreBuilder();
-		$contents      = $builder->build( $ubl_document );
-		$filename      = $document->get_filename( 'download', [ 'output' => 'ubl' ] );
-		$full_filename = $ubl_maker->write( $filename, $contents );
-
-		return $full_filename;
+		return wpo_ips_write_ubl_file( $document, true );
 	}
 
 	public function get_documents_for_email( $email_id, $order ) {
@@ -299,10 +285,10 @@ class Main {
 		$attach_documents = array();
 
 		foreach ( $documents as $document ) {
-			// Pro not activated, only attach Invoice
-			if ( ! function_exists( 'WPO_WCPDF_Pro' ) && 'invoice' !== $document->get_type() ) {
+			// Only invoice is allowed in the free version.
+			if ( ! function_exists( 'WPO_WCPDF_Pro' ) && 'packing-slip' === $document->get_type() ) {
 				continue;
-			};
+			}
 
 			foreach ( $document->output_formats as $output_format ) {
 				if ( $document->is_enabled( $output_format ) ) {
@@ -370,8 +356,8 @@ class Main {
 			wcpdf_safe_redirect_or_die( $redirect_url, $message );
 		}
 
-		// Check the nonce - guest access can use nonce if user is logged in
-		if ( is_user_logged_in() && in_array( $access_type, array( 'logged_in', 'guest' ) ) && ! $valid_nonce ) {
+		// Check the nonce for logged in users
+		if ( is_user_logged_in() && 'logged_in' === $access_type && ! $valid_nonce ) {
 			$message = esc_attr__( 'You do not have sufficient permissions to access this page. Reason: invalid nonce', 'woocommerce-pdf-invoices-packing-slips' );
 			wcpdf_safe_redirect_or_die( $redirect_url, $message );
 		}
@@ -439,11 +425,6 @@ class Main {
 		// multi-order only allowed with full permissions
 		if ( ! $full_permission && ( count( $order_ids ) > 1 || isset( $request['bulk'] ) ) ) {
 			$allowed = false;
-		}
-
-		// 'guest' is hybrid, it can behave as 'logged_in' if the user is logged in, but if not, behaves as 'full'
-		if ( 'guest' === $access_type ) {
-			$access_type = is_user_logged_in() ? 'logged_in' : 'full';
 		}
 
 		switch ( $access_type ) {
@@ -569,7 +550,7 @@ class Main {
 	 */
 	private function load_template_functions() {
 		$file = trailingslashit( WPO_WCPDF()->settings->get_template_path() ) . 'template-functions.php';
-		if ( file_exists( $file ) ) {
+		if ( WPO_WCPDF()->file_system->exists( $file ) ) {
 			$loaded = @include_once( $file );
 			if ( $loaded === false ) {
 				wcpdf_log_error( sprintf( 'Failed to load template functions: %s', $file ), 'critical' );
@@ -589,7 +570,7 @@ class Main {
 		}
 
 		// check if tmp folder exists => if not, initialize
-		if ( ! @is_dir( $tmp_base ) || ! wp_is_writable( $tmp_base ) ) {
+		if ( ! WPO_WCPDF()->file_system->is_dir( $tmp_base ) || ! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ) {
 			$this->init_tmp();
 		}
 
@@ -616,18 +597,16 @@ class Main {
 				break;
 		}
 
-		$wp_filesystem = wpo_wcpdf_get_wp_filesystem();
-
 		// double check for existence, in case tmp_base was installed, but subfolder not created
-		if ( ! $wp_filesystem->is_dir( $tmp_path ) ) {
-			$dir = $wp_filesystem->mkdir( $tmp_path );
+		if ( ! WPO_WCPDF()->file_system->is_dir( $tmp_path ) ) {
+			$dir = WPO_WCPDF()->file_system->mkdir( $tmp_path );
 
 			if ( ! $dir ) {
 				update_option( 'wpo_wcpdf_no_dir_error', $tmp_path );
 				wcpdf_log_error( "Unable to create folder {$tmp_path}", 'critical' );
 				return false;
 			}
-		} elseif( ! wp_is_writable( $tmp_path ) ) {
+		} elseif( ! WPO_WCPDF()->file_system->is_writable( $tmp_path ) ) {
 			update_option( 'wpo_wcpdf_no_dir_error', $tmp_path );
 			wcpdf_log_error( "Temp folder {$tmp_path} not writable", 'critical' );
 			return false;
@@ -685,52 +664,57 @@ class Main {
 	/**
 	 * Checks if the tmp subfolder has files
 	 *
-	 * @param string $subfolder  can be 'attachments', 'fonts' or 'dompdf'
-	 *
+	 * @param string $subfolder Can be 'attachments', 'fonts', or 'dompdf'.
 	 * @return bool
 	 */
-	public function tmp_subfolder_has_files( $subfolder ) {
-		$has_files = false;
-
-		if ( empty( $subfolder ) || ! in_array( $subfolder, $this->subfolders ) ) {
+	public function tmp_subfolder_has_files( string $subfolder ): bool {
+		if ( empty( $subfolder ) || ! in_array( $subfolder, $this->subfolders, true ) ) {
 			wcpdf_log_error( sprintf( 'The directory %s is not a default tmp subfolder from this plugin.', $subfolder ), 'critical' );
-			return $has_files;
+			return false;
 		}
 
-		// we have a cached value
-		if ( get_transient( "wpo_wcpdf_subfolder_{$subfolder}_has_files" ) !== false ) {
-			return wc_string_to_bool( get_transient( "wpo_wcpdf_subfolder_{$subfolder}_has_files" ) );
-		}
+		$cache_key = "wpo_wcpdf_subfolder_{$subfolder}_has_files";
 
-		if ( ! function_exists( 'glob' ) ) {
-			wcpdf_log_error( 'PHP glob function not found.', 'critical' );
-			return $has_files;
+		// Check cached value
+		$cached_value = get_transient( $cache_key );
+		if ( ! empty( $cached_value ) ) {
+			return wc_string_to_bool( $cached_value );
 		}
 
 		$tmp_path = untrailingslashit( $this->get_tmp_path( $subfolder ) );
 
-		switch ( $subfolder ) {
-			case 'attachments':
-				if ( ! empty( glob( $tmp_path.'/*.pdf' ) ) ) {
-					$has_files = true;
+		// Define allowed extensions per subfolder
+		$allowed_extensions = array(
+			'attachments' => array( 'pdf' ),
+			'fonts'       => array( 'ttf' ),
+			'dompdf'      => array(), // All files
+		);
+
+		try {
+			$iterator = new \FilesystemIterator( $tmp_path, \FilesystemIterator::SKIP_DOTS );
+
+			foreach ( $iterator as $file ) {
+				// If we don't have a file extension restriction, return true immediately
+				if ( empty( $allowed_extensions[ $subfolder ] ) ) {
+					set_transient( $cache_key, 'yes', DAY_IN_SECONDS );
+					return true;
 				}
-				break;
-			case 'fonts':
-				if ( ! empty( glob( $tmp_path.'/*.ttf' ) ) ) {
-					$has_files = true;
+
+				// Check if file extension matches the allowed list
+				$extension = strtolower( pathinfo( $file->getFilename(), PATHINFO_EXTENSION ) );
+				if ( in_array( $extension, $allowed_extensions[ $subfolder ], true ) ) {
+					set_transient( $cache_key, 'yes', DAY_IN_SECONDS );
+					return true;
 				}
-				break;
-			case 'dompdf':
-				if ( ! empty( glob( $tmp_path.'/*.*' ) ) ) {
-					$has_files = true;
-				}
-				break;
+			}
+		} catch ( \Exception $e ) {
+			wcpdf_log_error( 'Error reading directory: ' . $e->getMessage(), 'critical' );
+			return false;
 		}
 
-		// save value to cache
-		set_transient( "wpo_wcpdf_subfolder_{$subfolder}_has_files", ( true === $has_files ) ? 'yes' : 'no' , DAY_IN_SECONDS );
-
-		return $has_files;
+		// If no files found, cache the result
+		set_transient( $cache_key, 'no', DAY_IN_SECONDS );
+		return false;
 	}
 
 	/**
@@ -740,8 +724,10 @@ class Main {
 	 *
 	 * @return void
 	 */
-	public function maybe_reinstall_fonts( $force = false ) {
-		if ( false === $this->tmp_subfolder_has_files( 'fonts' ) || true === $force ) {
+	public function maybe_reinstall_fonts( bool $force = false ): void {
+		$has_font_files = $this->tmp_subfolder_has_files( 'fonts' );
+
+		if ( ! $has_font_files || $force ) {
 			$fonts_path = untrailingslashit( $this->get_tmp_path( 'fonts' ) );
 
 			// clear folder first
@@ -798,12 +784,11 @@ class Main {
 			$this->generate_random_string();
 		}
 
-		$tmp_base      = $this->get_tmp_base(); // get tmp base
-		$wp_filesystem = wpo_wcpdf_get_wp_filesystem();
+		$tmp_base = $this->get_tmp_base(); // get tmp base
 
 		// create plugin base temp folder
-		if ( ! $wp_filesystem->is_dir( $tmp_base ) ) {
-			$dir = $wp_filesystem->mkdir( $tmp_base );
+		if ( ! WPO_WCPDF()->file_system->is_dir( $tmp_base ) ) {
+			$dir = WPO_WCPDF()->file_system->mkdir( $tmp_base );
 
 			// don't continue if we don't have an upload dir
 			if ( ! $dir ) {
@@ -811,7 +796,7 @@ class Main {
 				wcpdf_log_error( "Unable to create temp folder {$tmp_base}", 'critical' );
 				return false;
 			}
-		} elseif( ! wp_is_writable( $tmp_base ) ) {
+		} elseif( ! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ) {
 			update_option( 'wpo_wcpdf_no_dir_error', $tmp_base );
 			wcpdf_log_error( "Temp folder {$tmp_base} not writable", 'critical' );
 			return false;
@@ -820,8 +805,8 @@ class Main {
 		// create subfolders & protect
 		foreach ( $this->subfolders as $subfolder ) {
 			$path = $tmp_base . $subfolder . '/';
-			if ( ! $wp_filesystem->is_dir( $path ) ) {
-				$dir = $wp_filesystem->mkdir( $path );
+			if ( ! WPO_WCPDF()->file_system->is_dir( $path ) ) {
+				$dir = WPO_WCPDF()->file_system->mkdir( $path );
 
 				// check if we have dir
 				if ( ! $dir ) {
@@ -829,20 +814,20 @@ class Main {
 					wcpdf_log_error( "Unable to create folder {$path}", 'critical' );
 					return false;
 				}
-			} elseif( ! wp_is_writable( $path ) ) {
+			} elseif( ! WPO_WCPDF()->file_system->is_writable( $path ) ) {
 				update_option( 'wpo_wcpdf_no_dir_error', $path );
 				wcpdf_log_error( "Temp folder {$path} not writable", 'critical' );
 				return false;
 			}
 
 			// copy font files
-			if ( $subfolder == 'fonts' ) {
+			if ( 'fonts' === $subfolder ) {
 				$this->copy_fonts( $path, false );
 			}
 
 			// create .htaccess file and empty index.php to protect in case an open webfolder is used!
-			$wp_filesystem->put_contents( $path . '.htaccess', 'deny from all', FS_CHMOD_FILE );
-			$wp_filesystem->put_contents( $path . 'index.php', '', FS_CHMOD_FILE );
+			WPO_WCPDF()->file_system->put_contents( $path . '.htaccess', 'deny from all', FS_CHMOD_FILE );
+			WPO_WCPDF()->file_system->put_contents( $path . 'index.php', '', FS_CHMOD_FILE );
 		}
 	}
 
@@ -899,14 +884,12 @@ class Main {
 			return;
 		}
 
-		if ( ! is_dir( $old_path ) ) {
+		if ( ! WPO_WCPDF()->file_system->is_dir( $old_path ) ) {
 			return;
 		}
 
-		$wp_filesystem = wpo_wcpdf_get_wp_filesystem();
-
-		if ( ! $wp_filesystem->is_dir( $new_path ) ) {
-			$dir = $wp_filesystem->mkdir( $new_path );
+		if ( ! WPO_WCPDF()->file_system->is_dir( $new_path ) ) {
+			$dir = WPO_WCPDF()->file_system->mkdir( $new_path );
 
 			// check if we have dir
 			if ( ! $dir ) {
@@ -914,7 +897,7 @@ class Main {
 				wcpdf_log_error( "Unable to create folder {$new_path}", 'critical' );
 				return false;
 			}
-		} elseif ( ! wp_is_writable( $new_path ) ) {
+		} elseif ( ! WPO_WCPDF()->file_system->is_writable( $new_path ) ) {
 			update_option( 'wpo_wcpdf_no_dir_error', $new_path );
 			wcpdf_log_error( "Temp folder {$new_path} not writable", 'critical' );
 			return false;
@@ -924,8 +907,8 @@ class Main {
 		try {
 			$result = copy_dir( $old_path, $new_path );
 			// delete old directory with contents
-			if( $result ) {
-				$wp_filesystem->delete( $old_path, true );
+			if ( $result ) {
+				WPO_WCPDF()->file_system->delete( $old_path, true );
 			}
 		} catch ( \Error $e ) {
 			wcpdf_log_error( "Unable to copy directory contents: ".$e->getMessage(), 'critical', $e );
@@ -940,14 +923,14 @@ class Main {
 	{
 		// tmp base
 		$tmp_base = $this->get_tmp_base();
-		if( ! @is_dir( $tmp_base ) || ! wp_is_writable( $tmp_base ) ) {
+		if( ! WPO_WCPDF()->file_system->is_dir( $tmp_base ) || ! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ) {
 			return false;
 		}
 
 		// subfolders
 		foreach( $this->subfolders as $type ) {
 			$tmp_path = $this->get_tmp_path( $type );
-			if( ! @is_dir( $tmp_path ) || ! wp_is_writable( $tmp_base ) ) {
+			if( ! WPO_WCPDF()->file_system->is_dir( $tmp_path ) || ! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ) {
 				return false;
 			}
 		}
@@ -1068,8 +1051,13 @@ class Main {
 	}
 
 	public function html_currency_filters( $filters ) {
-		// only apply these fixes if the bundled dompdf version is used!
-		if ( wcpdf_pdf_maker_is_default() ) {
+		// Apply currency font when Extended currency symbol support is enabled
+		if ( isset( WPO_WCPDF()->settings->general_settings['currency_font'] ) ) {
+			$filters[] = array( 'woocommerce_currency_symbol', array( $this, 'use_currency_font' ), 10001, 2 );
+			// 'wpo_wcpdf_custom_styles' is actually an action, but WP handles them with the same functions
+			$filters[] = array( 'wpo_wcpdf_custom_styles', array( $this, 'currency_symbol_font_styles' ) );
+		} elseif ( wcpdf_pdf_maker_is_default() ) {
+			// only apply these fixes if the bundled dompdf version is used and currency font is not enabled
 			$filters[] = array( 'woocommerce_currency_symbol', array( $this, 'use_currency_code' ), 10001, 2 );
 		}
 		return $filters;
@@ -1152,7 +1140,6 @@ class Main {
 	 * @return array  Output message
 	 */
 	public function temporary_files_cleanup( int $delete_timestamp = 0 ): array {
-		$wp_filesystem    = wpo_wcpdf_get_wp_filesystem();
 		$delete_before    = ! empty( $delete_timestamp ) ? intval( $delete_timestamp ) : time();
 		$paths_to_cleanup = apply_filters( 'wpo_wcpdf_cleanup_tmp_paths', array(
 			$this->get_tmp_path( 'attachments' ),
@@ -1171,16 +1158,17 @@ class Main {
 
 		// Gather all files from the paths
 		foreach ( $paths_to_cleanup as $path ) {
-			if ( $wp_filesystem->is_dir( $path ) ) {
-				$listed_files = $wp_filesystem->dirlist( $path, true, true );
+			if ( WPO_WCPDF()->file_system->is_dir( $path ) ) {
+				$listed_files = WPO_WCPDF()->file_system->dirlist( $path, true, true );
 
 				if ( $listed_files ) {
 					foreach ( $listed_files as $fileinfo ) {
-						$file_path = trailingslashit( $path ) . $fileinfo['name'];
+						$name      = is_array( $fileinfo ) ? $fileinfo['name'] : $fileinfo;
+						$file_path = trailingslashit( $path ) . $name;
 						$basename  = wp_basename( $file_path );
 
 						// Exclude specific files before adding to list
-						if ( ! in_array( $basename, $excluded_files ) && $wp_filesystem->exists( $file_path ) && ! $wp_filesystem->is_dir( $file_path ) ) {
+						if ( ! in_array( $basename, $excluded_files ) && WPO_WCPDF()->file_system->exists( $file_path ) && ! WPO_WCPDF()->file_system->is_dir( $file_path ) ) {
 							$files[] = $file_path;
 						}
 					}
@@ -1196,11 +1184,11 @@ class Main {
 
 		// Process and delete files
 		foreach ( $files as $file ) {
-			$file_timestamp = $wp_filesystem->mtime( $file );
+			$file_timestamp = WPO_WCPDF()->file_system->mtime( $file );
 
 			// Delete file if it's older than the specified timestamp
 			if ( $file_timestamp < $delete_before ) {
-				if ( $wp_filesystem->delete( $file ) ) {
+				if ( WPO_WCPDF()->file_system->delete( $file ) ) {
 					$success++;
 				} else {
 					$error++;
@@ -1253,22 +1241,27 @@ class Main {
 
 	/**
 	 * Remove references to order in number store tables when removing WC data
+	 *
+	 * @param \WC_Abstract_Order $order
+	 * @return void
 	 */
-	public function remove_order_personal_data( $order ) {
+	public function remove_order_personal_data( \WC_Abstract_Order $order ): void {
 		global $wpdb;
-		// remove order ID from number stores
-		$number_stores = apply_filters( "wpo_wcpdf_privacy_number_stores", array( 'invoice_number' ) );
+
+		// Remove order ID from number stores
+		$number_stores = apply_filters( 'wpo_wcpdf_privacy_number_stores', array( 'invoice_number' ) );
 
 		foreach ( $number_stores as $store_name ) {
 			$order_id   = $order->get_id();
-			$table_name = apply_filters( "wpo_wcpdf_number_store_table_name", "{$wpdb->prefix}wcpdf_{$store_name}", $store_name, 'auto_increment' ); // i.e. wp_wcpdf_invoice_number
+			$table_name = apply_filters( 'wpo_wcpdf_number_store_table_name', "{$wpdb->prefix}wcpdf_{$store_name}", $store_name, 'auto_increment' ); // i.e. wp_wcpdf_invoice_number
 
-			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$wpdb->prepare(
-					"UPDATE " . esc_sql( $table_name ) . " SET order_id = 0 WHERE order_id = %s",
-					$order_id
-				)
+			$query = wpo_wcpdf_prepare_identifier_query(
+				"UPDATE %i SET order_id = 0 WHERE order_id = %d",
+				array( $table_name ),
+				array( $order_id )
 			);
+
+			$wpdb->query( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
 
@@ -1694,11 +1687,20 @@ class Main {
 		return $topic_hooks;
 	}
 
-	public function wc_webhook_topic_events( $topic_events ) {
+	/**
+	 * Adds custom webhook topic events.
+	 *
+	 * @param array $topic_events
+	 *
+	 * @return array
+	 */
+	public function wc_webhook_topic_events( array $topic_events = array() ): array {
 		$documents = WPO_WCPDF()->documents->get_documents();
-		foreach ($documents as $document) {
+
+		foreach ( $documents as $document ) {
 			$topic_events[] = "{$document->type}-saved";
 		}
+
 		return $topic_events;
 	}
 
@@ -1712,7 +1714,61 @@ class Main {
 	}
 
 	public function wc_webhook_trigger( $document, $order ) {
+		$this->reload_wpo_custom_webhooks();
 		do_action( "wpo_wcpdf_webhook_order_{$document->slug}_saved", $order->get_id() );
+	}
+
+	/**
+	 * Reloads WooCommerce PDF Invoices webhooks to ensure custom hooks are processed.
+	 *
+	 * This function introduced to resolve an issue where WooCommerce
+	 * webhooks were not enqueuing our plugin's custom hooks.
+	 * The root cause is that the `wc_webhook_topic_hooks()` function, responsible
+	 * for modifying hooks, is not executed in time. The `add_filter()` call that
+	 * registers `wc_webhook_topic_hooks()` is executed after `apply_filters()`,
+	 * preventing the `wpo_wcpdf_webhook_order_{$document->slug}_saved` action hook
+	 * from being included in the list of webhook topics.
+	 *
+	 * https://github.com/wpovernight/woocommerce-pdf-invoices-packing-slips/issues/1083
+	 *
+	 * @return void
+	 */
+	private function reload_wpo_custom_webhooks() {
+		if (
+			! apply_filters( 'wpo_wcpdf_reload_wpo_custom_webhooks', true ) ||
+			! class_exists( 'WC_Data_Store' ) ||
+			! class_exists( 'WC_Webhook' )
+		) {
+			return;
+		}
+
+		$wpo_topic_hooks = $this->wc_webhook_topic_events();
+		$data_store      = \WC_Data_Store::load( 'webhook' );
+		$webhooks        = $data_store->get_webhooks_ids( 'active' );
+
+		if ( empty( $webhooks ) ) {
+			return;
+		}
+
+		foreach ( $webhooks as $webhook_id ) {
+			$webhook = new \WC_Webhook( $webhook_id );
+
+			if ( $webhook->get_pending_delivery() ) {
+				continue;
+			}
+
+			$webhook_topic = $webhook->get_topic();
+
+			if ( empty( $webhook_topic ) || ! is_string( $webhook_topic ) ) {
+				continue;
+			}
+
+			$topic = str_replace( 'order.', '', $webhook_topic );
+
+			if ( in_array( $topic, $wpo_topic_hooks, true ) ) {
+				$webhook->enqueue();
+			}
+		}
 	}
 
 	/**
@@ -1793,11 +1849,31 @@ class Main {
 			}
 		}
 
-		$email_hooks = apply_filters( 'wpo_wcpdf_add_document_link_to_email_hooks', $email_hooks );
+		$email_hooks = array_unique( apply_filters( 'wpo_wcpdf_add_document_link_to_email_hooks', $email_hooks ) );
 
 		foreach ( $email_hooks as $email_hook ) {
-			add_action( $email_hook, array( $this, 'add_document_link_to_email' ), 10, 4 );
+			if ( 'woocommerce_email_customer_address_section' === $email_hook ) {
+				add_action( $email_hook, array( $this, 'add_document_link_to_address_section' ), 10, 4 );
+			} else {
+				add_action( $email_hook, array( $this, 'add_document_link_to_email' ), 10, 4 );
+			}
 		}
+	}
+
+	/**
+	 * Wrapper for woocommerce_email_customer_address_section hook.
+	 * Since different parameters sent to this hook, we use a wrapper for it.
+	 *
+	 * @param string $type
+	 * @param \WC_Abstract_Order $order
+	 * @param bool $sent_to_admin
+	 * @param bool $plain_text
+	 *
+	 * @return void
+	 */
+	public function add_document_link_to_address_section( string $type, \WC_Abstract_Order $order, bool $sent_to_admin, bool $plain_text ): void {
+		// Since this hook doesn’t pass the $email object, we pass null (or create a dummy if needed).
+		$this->add_document_link_to_email( $order, $sent_to_admin, $plain_text, null );
 	}
 
 	/**
@@ -1806,17 +1882,16 @@ class Main {
 	 * @param \WC_Abstract_Order $order
 	 * @param bool $sent_to_admin
 	 * @param bool $plain_text
-	 * @param \WC_Email $email
+	 * @param mixed|\WC_Email $email Some third-parties might send different values.
 	 *
 	 * @return void
 	 */
-	public function add_document_link_to_email( \WC_Abstract_Order $order, bool $sent_to_admin, bool $plain_text, \WC_Email $email ): void {
-		// Check if document access type is 'guest' and customer is a guest.
-		$is_guest_access_type = 'guest' === WPO_WCPDF()->endpoint->get_document_link_access_type();
-		$is_customer_guest    = 0 === $order->get_customer_id();
+	public function add_document_link_to_email( \WC_Abstract_Order $order, bool $sent_to_admin, bool $plain_text, $email ): void {
+		// Check if document access type is 'full'.
+		$is_full_access_type = 'full' === WPO_WCPDF()->endpoint->get_document_link_access_type();
 
 		// Early exit if the requirements are not met
-		if ( ! apply_filters( 'wpo_wcpdf_add_document_link_to_email_requirements_met', $is_guest_access_type && $is_customer_guest, $order, $sent_to_admin, $plain_text, $email ) ) {
+		if ( ! apply_filters( 'wpo_wcpdf_add_document_link_to_email_requirements_met', $is_full_access_type, $order, $sent_to_admin, $plain_text, $email ) ) {
 			return;
 		}
 
@@ -1826,8 +1901,18 @@ class Main {
 		foreach ( $documents as $document ) {
 			$document_settings = WPO_WCPDF()->settings->get_document_settings( $document->get_type(), 'pdf' );
 			$selected_emails   = $document_settings['include_email_link'] ?? array();
+			$email_placement   = $document_settings['include_email_link_placement'] ?? '';
 
-			$is_allowed = in_array( $document->get_type(), $allowed_document_types, true ) && in_array( $email->id, $selected_emails, true );
+			// Skip if no email placement is set.
+			if ( empty( $email_placement ) ) {
+				continue;
+			}
+
+			$email_id   = ( $email instanceof \WC_Email ) ? $email->id : '';
+			$is_allowed =
+				in_array( $document->get_type(), $allowed_document_types, true ) &&
+				in_array( $email_id, $selected_emails, true ) &&
+				( 'woocommerce_email_' . $email_placement ) === current_filter();
 
 			if ( ! apply_filters( 'wpo_wcpdf_add_document_link_to_email_is_allowed', $is_allowed, $order, $sent_to_admin, $plain_text, $email ) ) {
 				continue;

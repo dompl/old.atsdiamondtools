@@ -16,14 +16,14 @@ class FontSynchronizer {
 	 *
 	 * @var string
 	 */
-	public $font_cache_filename = "installed-fonts.json";
+	public string $font_cache_filename = 'installed-fonts.json';
 
 	/**
 	 * Vanilla instance of dompdf
 	 *
 	 * @var Dompdf
 	 */
-	public $dompdf;
+	public Dompdf $dompdf;
 
 	protected static $_instance = null;
 
@@ -45,14 +45,14 @@ class FontSynchronizer {
 	 * Synchronize/update local fonts with plugin fonts, removing duplicates of the dompdf fonts
 	 *
 	 * @param string $destination path to the local fonts
+	 * @param bool   $merge_with_local if true, merge with existing local fonts
 	 * @return void
 	 */
-	public function sync( $destination, $merge_with_local = true ) {
-		$wp_filesystem = wpo_wcpdf_get_wp_filesystem();
-		$destination   = trailingslashit( wp_normalize_path( $destination ) );
-		$plugin_fonts  = $this->get_plugin_fonts();
-		$dompdf_fonts  = $this->get_dompdf_fonts();
-		
+	public function sync( string $destination, bool $merge_with_local = true ): void {
+		$destination  = trailingslashit( wp_normalize_path( $destination ) );
+		$plugin_fonts = $this->get_plugin_fonts();
+		$dompdf_fonts = $this->get_dompdf_fonts();
+
 		if ( $merge_with_local ) {
 			$local_fonts = $this->get_local_fonts( $destination );
 		} else {
@@ -62,18 +62,18 @@ class FontSynchronizer {
 		// we always load dompdf fonts directly from the vendor folder, so delete local copies
 		foreach( $dompdf_fonts as $font_name => $filenames ) {
 			if ( array_key_exists( $font_name, $local_fonts ) ) {
-				$this->delete_font_files( $local_fonts[$font_name] );
-				unset( $local_fonts[$font_name] );
+				$this->delete_font_files( $local_fonts[ $font_name ] );
+				unset( $local_fonts[ $font_name ] );
 			}
 		}
 
 		// update / add plugin fonts in local folder
 		foreach( $plugin_fonts as $font_name => $filenames ) {
-			$plugin_filenames = array_map( function( $file ){
+			$plugin_filenames = array_map( function( $file ) {
 				return WPO_WCPDF()->plugin_path() . '/assets/fonts/' . $file;
-			},  $filenames );
-			$local_filenames = $this->copy_font_files( $plugin_filenames, $destination );
-			$local_fonts[$font_name] = $local_filenames;
+			}, $filenames );
+			$local_filenames           = $this->copy_font_files( $plugin_filenames, $destination );
+			$local_fonts[ $font_name ] = $local_filenames;
 		}
 
 		// normalize one last time
@@ -81,7 +81,7 @@ class FontSynchronizer {
 		// rebuild font cache file
 		$cacheData   = wp_json_encode( $local_fonts, JSON_PRETTY_PRINT );
 		// write file with merged cache data
-		$wp_filesystem->put_contents( $destination . $this->font_cache_filename, $cacheData, FS_CHMOD_FILE );
+		WPO_WCPDF()->file_system->put_contents( $destination . $this->font_cache_filename, $cacheData, FS_CHMOD_FILE );
 	}
 
 	/**
@@ -90,18 +90,24 @@ class FontSynchronizer {
 	 * @param array $filenames array of filenames without the extension
 	 * @return void
 	 */
-	public function delete_font_files( $filenames ) {
+	public function delete_font_files( array $filenames ): void {
 		$plugin_folder = wp_normalize_path( WPO_WCPDF()->plugin_path() );
-		$extensions = array( '.ttf', '.ufm', '.ufm.php', '.afm', '.afm.php' );
+		$extensions    = array( '.ttf', '.ufm', '.ufm.php', '.afm', '.afm.php' );
+
 		foreach ( $filenames as $filename ) {
 			// never delete files in our own plugin folder
 			if ( ! empty( $filename ) && false !== strpos( $filename, $plugin_folder ) ) {
 				continue;
 			}
+
 			foreach ( $extensions as $extension ) {
 				$file = $filename . $extension;
-				if ( file_exists( $file ) ) {
+
+				if ( WPO_WCPDF()->file_system->exists( $file ) ) {
 					wp_delete_file( $file );
+				} else {
+					wcpdf_log_error( sprintf( "Could not delete font file (%s)", $file ), 'critical' );
+					continue;
 				}
 			}
 		}
@@ -114,20 +120,29 @@ class FontSynchronizer {
 	 * @param  string $destination path to the local fonts
 	 * @return array
 	 */
-	public function copy_font_files( $filenames, $destination ) {
-		$destination = trailingslashit( $destination );
-		$extensions = array( '.ttf', '.ufm', '.afm' );
+	public function copy_font_files( array $filenames, string $destination ): array {
+		$destination     = trailingslashit( $destination );
+		$extensions      = array( '.ttf', '.ufm', '.afm' );
 		$local_filenames = array();
+
 		foreach ( $filenames as $variant => $filename ) {
 			foreach ( $extensions as $extension ) {
 				$file = $filename . $extension;
-				if ( is_readable( $file ) ) {
+
+				if ( WPO_WCPDF()->file_system->is_readable( $file ) ) {
 					$local_filename = $destination . basename( $file );
-					copy( $file, $local_filename );
+					
+					if ( ! copy( $file, $local_filename ) ) {
+						wcpdf_log_error( sprintf( 'Failed to copy font file: %s to %s', $file, $local_filename ) );
+					}
+				} else {
+					continue;
 				}
 			}
-			$local_filenames[$variant] = $destination . basename( $filename );
+
+			$local_filenames[ $variant ] = $destination . basename( $filename );
 		}
+
 		return $local_filenames;
 	}
 
@@ -137,18 +152,17 @@ class FontSynchronizer {
 	 * @param string $path path to the local fonts
 	 * @return array
 	 */
-	public function get_local_fonts( $path ) {
+	public function get_local_fonts( string $path ): array {
 		// prepare variables used in the cache list
 		$fontDir           = $path;
 		$rootDir           = $this->dompdf->getOptions()->getRootDir();
 		$cache_file        = trailingslashit( $path ) . $this->font_cache_filename;
 		$legacy_cache_file = trailingslashit( $path ) . 'dompdf_font_family_cache.php'; // Dompdf <2.0
-		$wp_filesystem     = wpo_wcpdf_get_wp_filesystem();
 
-		if ( $wp_filesystem->is_readable( $cache_file ) ) {
-			$json_data = $wp_filesystem->get_contents( $cache_file );
+		if ( WPO_WCPDF()->file_system->is_readable( $cache_file ) ) {
+			$json_data = WPO_WCPDF()->file_system->get_contents( $cache_file );
 			$font_data = json_decode( $json_data, true );
-		} elseif ( $wp_filesystem->is_readable( $legacy_cache_file ) ) {
+		} elseif ( WPO_WCPDF()->file_system->is_readable( $legacy_cache_file ) ) {
 			$font_data = include $legacy_cache_file;
 			wp_delete_file( $legacy_cache_file );
 		} else {
@@ -173,7 +187,7 @@ class FontSynchronizer {
 	 *
 	 * @return array
 	 */
-	public function get_dompdf_fonts() {
+	public function get_dompdf_fonts(): array {
 		$fonts = $this->dompdf->getFontMetrics()->getFontFamilies();
 		return $this->normalize_font_paths( $fonts );
 	}
@@ -183,7 +197,7 @@ class FontSynchronizer {
 	 *
 	 * @return array
 	 */
-	public function get_plugin_fonts() {
+	public function get_plugin_fonts(): array {
 		return array (
 			'open sans'   => array (
 				'normal'      => 'OpenSans-Normal',
@@ -218,15 +232,17 @@ class FontSynchronizer {
 	 * @param  array  $fonts array of font entries
 	 * @return array  Normalized array of font entries
 	 */
-	public function normalize_font_paths( $fonts ) {
-		foreach( $fonts as $font_name => $filenames ) {
+	public function normalize_font_paths( array $fonts ): array {
+		foreach ( $fonts as $font_name => $filenames ) {
 			if ( ! is_array( $filenames ) ) {
 				continue;
 			}
+
 			foreach ( $filenames as $variant => $filename ) {
-				$fonts[$font_name][$variant] = wp_normalize_path( $filename );
+				$fonts[ $font_name ][ $variant ] = wp_normalize_path( $filename );
 			}
 		}
+
 		return $fonts;
 	}
 }

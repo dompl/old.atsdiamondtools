@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ignitewoo-updater 3.0.2\n"
+"Project-Id-Version: ignitewoo-updater 3.1.1\n"
 "Report-Msgid-Bugs-To: team@ignitewoo.com\n"
-"POT-Creation-Date: 2020-09-08 11:21-0600\n"
+"POT-Creation-Date: 2025-09-06 10:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,112 +18,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:54
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:55
-msgid "IgniteWoo Licenses"
-msgstr ""
-
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:123
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:130
 #, php-format
 msgid ""
 "%sYour IgniteWoo products are almost ready.%s To get started, %sactivate "
 "your product licenses%s."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:149
-#, php-format
-msgid ""
-"Your license for <strong>%s</strong> expires on %s, %sRenew now%s to avoid "
-"losing access to important updates and support."
-msgstr ""
-
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:151
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:162
 #, php-format
 msgid ""
 "Your license for <strong>%s</strong> has expired. Please %srenew%s to "
 "receive important updates and support."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:157
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:168
 msgid "a license is about to expire"
 msgid_plural "several licenses are about to expire"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:158
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:169
 msgid "Warning:"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:180
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:191
 msgid ""
 "Any customizations you have made to theme files will be lost. Are you sure "
 "you would like to update?"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:215
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:226
 msgid "IgniteWoo Key Manager"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:219
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:230
 msgid "This is where you activate your IgniteWoo license keys."
 msgstr ""
 
 #. /a>', '<a href="' . esc_url( $this->my_subscriptions_url ) . '">' ) );
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:224
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:235
 msgid ""
 "Make certain that you activate your licenses otherwise you cannot receive "
 "important software updates and support."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:304
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:315
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:305
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:316
 msgid "Documentation"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:306
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:317
 msgid "Contact IgniteWoo"
 msgstr ""
 
 #. /woocommerce.png' ) . '" alt="' . __( 'Getting Started', 'ignition-updater' ) . '" />' . "\n";
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:309
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:320
 msgid "For help please review our FAQ, our documentation, or contact us."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:498
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:610
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:509
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:621
 msgid "Products activated successfully."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:498
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:509
 msgid "Refreshing the products list..."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:505
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:612
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:516
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:623
 msgid "There was an error and not all products were activated."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:525
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:536
 msgid "Oops. Something went wrong with key activation."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:533
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:596
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:544
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:607
 msgid "No license keys were specified for activation."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:601
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:612
 msgid "Product deactivated successfully."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:603
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:614
 msgid "There was an error while deactivating the product."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:708
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-admin.php:719
 msgid "Not activated"
 msgstr ""
 
@@ -176,45 +164,55 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-update-checker.php:537
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-update-checker.php:538
 msgid ""
 "An unexpected error occurred. Something may be wrong with IgniteWoo.com or "
 "this server&#8217;s configuration. If you continue to have problems, please "
 "try the <a href=\"https://ignitewoo.com/\">contact page</a>."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-update-checker.php:537
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater-update-checker.php:538
 msgid ""
 "(WordPress could not establish a secure connection to IgniteWoo.com. Please "
 "contact your server administrator.)"
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:320
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:315
 msgid "Theme Information File Not Found."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:336
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:331
 msgid "Theme Information File is Inaccurate. Please try again."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:410
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:405
 msgid ""
 "IgniteWoo Updater must be network activated when in multisite environment."
 msgstr ""
 
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:441
-#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:465
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:436
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/classes/class-ignition-updater.php:460
 msgid ""
 "To enable this update please activate your IgniteWoo license by visiting the "
 "Dashboard > IgniteWoo Licenses screen."
+msgstr ""
+
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/ignitewoo_updater/ignitewoo_update_api.php:120
+msgid "Updates are not available for this plugin."
+msgstr ""
+
+#: /var/www/wp38/wp-content/plugins/ignitewoo-updater/ignitewoo_updater/ignitewoo_update_api.php:165
+msgid ""
+"There may be a new version of this plugin, but plugin updates and support "
+"are unavailable."
 msgstr ""
 
 #: /var/www/wp38/wp-content/plugins/ignitewoo-updater/screens/ignition-api-unreachable.php:4
 #, php-format
 msgid ""
 "There seems to be an error reaching the IgniteWoo API at this time. Please "
-"try again later. Should this error persist, please %submit a support request"
-"%s on our web site."
+"try again later. Should this error persist, please %submit a support "
+"request%s on our web site."
 msgstr ""
 
 #: /var/www/wp38/wp-content/plugins/ignitewoo-updater/screens/screen-manage.php:19

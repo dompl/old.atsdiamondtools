@@ -209,6 +209,12 @@ class AG_ePDQ_Settings {
 				'description' => __( 'Want to store your API details in a more secure way, read through our doc <a href="https://weareag.co.uk/docs/barclays-epdq-payment-gateway/setup-barclays-epdq-payment-gateway/storing-strong-api-credentials/" target="_blank">here</a>', 'ag_epdq_server' ),
 			),
 
+			'store_id'   => array(
+				'title'       => __( 'Website ID Name', 'ag_epdq_direct', 'ag_epdq_server' ),
+				'type'        => 'text',
+				'description' => __( 'This is used if you are using our Router plugin to send webhook data to multiple website via your main router website.', 'ag_epdq_server' ),
+			),
+
 		);
 	}
 

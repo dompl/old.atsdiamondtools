@@ -66,6 +66,10 @@ class epdq_checkout extends WC_Payment_Gateway {
 	public $cancelblock;
 	public $cancel_interval;
 
+    public $encryption;
+	public $store_id;
+
+
 
 	public function __construct() {
 
@@ -140,6 +144,10 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 	}
 
+	public function is_test_mode() {
+
+		return 'test' === $this->get_option( 'status' );
+	}
 	
 	public function display_token_to_customer( $description, $payment_id ) {
 		// Check if the payment ID is 'ag_fd_checkout' and the token is set to 'yes'
@@ -414,6 +422,11 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$order_received_url = WC()->api_request_url( 'epdq_checkout' ) . '?idOrder=' . $order->get_id();
 		$cancel_order_url = $order->get_cancel_order_url_raw();
 
+		if ( $order->is_paid() ) {
+			AG_ePDQ_Helpers::ag_log( 'Skipping creation of order #' . $order_id .', because it is already paid.', 'debug', $this->debug );
+			return;
+		}
+
 		$hash_fields = array(
 			$settings['pspid'],
 			date( 'Y:m:d' ),
@@ -497,10 +510,10 @@ class epdq_checkout extends WC_Payment_Gateway {
 			'COM'                                    => $com,
 			'EMAIL'                                  => $order->get_billing_email(),
 			'OWNERZIP'                               => preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_postcode() ),
-			'OWNERADDRESS'                           => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_1() ), 0, 34 ),
-			'OWNERADDRESS2'                          => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_address_2() ), 0, 34 ),
-			'OWNERCTY'                               => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_country() ), 0, 34 ),
-			'OWNERTOWN'                              => substr( preg_replace( '/[^A-Za-z0-9\. -]/', '', $order->get_billing_city() ), 0, 34 ),
+			'OWNERADDRESS'							 => substr( preg_replace( '/[^A-Za-z0-9\. -\,]/', '', $order->get_billing_address_1() ), 0, 34 ),
+			'OWNERADDRESS2'                          => substr( preg_replace( '/[^A-Za-z0-9\. -\,]/', '', $order->get_billing_address_2() ), 0, 34 ),
+			'OWNERCTY'                               => substr( preg_replace( '/[^A-Za-z0-9\. -\,]/', '', $order->get_billing_country() ), 0, 34 ),
+			'OWNERTOWN'                              => substr( preg_replace( '/[^A-Za-z0-9\. -\,]/', '', $order->get_billing_city() ), 0, 34 ),
 			'OWNERTELNO'                             => $order->get_billing_phone(),
 			'ACCEPTURL'                              => $order_received_url,
 			'DECLINEURL'                             => $cancel_order_url,
@@ -551,6 +564,13 @@ class epdq_checkout extends WC_Payment_Gateway {
 			$fields['BRAND'] = $customerToken['brand'] ?? '';
 			$fields['PM'] = $customerToken['brand'] = 'CreditCard' ?? '';
 
+		}
+
+		$storeID = $this->store_id;
+		if( isset( $storeID ) ) {
+			$fields['COMPLUS'] = $encrypted_string . '+' . $this->store_id . '+' . $order->get_id();
+		} else {
+			$fields['COMPLUS'] = $encrypted_string;
 		}
 
 		//Server-to-server parameter
@@ -629,7 +649,8 @@ class epdq_checkout extends WC_Payment_Gateway {
 		}
 
 		// Check if the nonce is valid
-		$nonce = AG_ePDQ_Helpers::AG_escape( $_REQUEST['COMPLUS'] );
+		$data_parts = explode( '+', $_REQUEST['COMPLUS'] );
+		$nonce = AG_ePDQ_Helpers::AG_escape( $data_parts[0] );
 		$encrypted_string = ePDQ_crypt::complus_decrypt();
 		if( ! hash_equals( $encrypted_string, $nonce ) ) {
 			// Nonce check fail
@@ -717,7 +738,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 		// Save payment token to user
 		if( isset( $this->token ) && $this->token === 'yes' || ( class_exists( 'WC_Subscriptions_Order' ) && wcs_order_contains_subscription( $order ) ) ) {  // @phpstan-ignore-line
-			AG_ePDQ_Token::save( $args, get_current_user_id(), is_user_logged_in() );
+			AG_ePDQ_Token::save( $args, $order, is_user_logged_in() );
 			// Drop BIN
 			unset( $args['BIN'] );
 			$order->update_meta_data( 'use_saved_card', '' );
@@ -783,6 +804,8 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$settings = ePDQ_crypt::key_settings();
 		$refund_settings = ePDQ_crypt::refund_settings();
 		$environment_url = AG_ePDQ_Helpers::get_enviroment_url( 'maintenancedirect' );
+		$orderID = AG_ePDQ_Helpers::ag_get_order_id( $order );
+
 
 		$refund_amount = $amount * 100;
 		$transaction_id = $order->get_meta( 'PAYID' );
@@ -828,7 +851,7 @@ class epdq_checkout extends WC_Payment_Gateway {
 		$data_post['AMOUNT'] = $refund_amount;
 		$data_post['PAYID'] = $transaction_id;
 		$data_post['OPERATION'] = 'RFD';
-		$data_post['ORDERID'] = $order_id;
+		$data_post['ORDERID'] = $orderID;
 		$data_post['PSPID'] = $PSPID;
 		$data_post['PSWD'] = $refund_settings['PSWD'];
 		$data_post['REFID'] = $refund_settings['REFID'];
@@ -854,20 +877,50 @@ class epdq_checkout extends WC_Payment_Gateway {
 
 		// Post
 		$result = AG_ePDQ_Helpers::remote_post( $environment_url, $data_post );
+		$status = isset( $result['STATUS'] ) ? (string) $result['STATUS'] : '';
 
-		$accepted = array( 8, 81, 85 ); // OK
-		$string = implode( '|', $result );
-		if( in_array( $result['STATUS'], $accepted ) ) {
+		if( $result['STATUS'] === '8' ) {
 			/* @phpstan-ignore-next-line */
-			$order->add_order_note( __( 'Refund request successful', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
+			$order->add_order_note( __( 'Refund Completed.', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
 
 			return TRUE;
 		}
-		/* @phpstan-ignore-next-line */
-		$order->add_order_note( __( 'Refund failed', 'ag_epdq_server' ) . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . '<br />' );
-		$order->add_order_note( __( 'Refund Note', 'ag_epdq_server' ) . '<br /><strong>' . __( 'Error: ', 'ag_epdq_server' ) . $result['NCERRORPLUS'] . '</strong><br />' );
-		// Log refund error
-		AG_ePDQ_Helpers::ag_log( $string, 'debug', $this->debug );
+		if( $result['STATUS'] === '81' ) {
+			/* @phpstan-ignore-next-line */
+			$order->add_order_note( __( 'Refund requested (now pending confirmation by the gateway).', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
+			$order->add_order_note( __( 'Status will update via webhook or a manual status check. Please make sure one of these are set up.', 'ag_epdq_server' )  );
+
+			$order->update_meta_data( '_ag_epdq_refund_pending', array(
+				'amount'     => (float) $amount,
+				'reason'     => (string) $reason,
+				'epdq_state' => $status,
+				'timestamp'  => time(),
+			) );
+			$order->save();
+
+			return TRUE;
+		}
+		if( $result['STATUS'] === '82' ) {
+			/* @phpstan-ignore-next-line */
+			$order->add_order_note( __( 'Refund requested (transaction is pending).', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
+
+			$order->update_meta_data( '_ag_epdq_refund_pending', array(
+				'amount'     => (float) $amount,
+				'reason'     => (string) $reason,
+				'epdq_state' => $status,
+				'timestamp'  => time(),
+			) );
+			$order->save();
+
+			return TRUE;
+		}
+		if( $result['STATUS'] === '83' ) {
+			/* @phpstan-ignore-next-line */
+			$order->add_order_note( __( 'Refund rejected by the gateway.', 'ag_epdq_server' ) . '<br />' . __( 'Refund Amount: ', 'ag_epdq_server' ) . $amount . '<br />' . __( 'Refund Reason: ', 'ag_epdq_server' ) . $reason . '<br />' . __( 'ePDQ Status: ', 'ag_epdq_server' ) . AG_errors::get_epdq_status_code( $result['STATUS'] ) . ' ' );
+
+			return false;
+		}
+
 
 		return new WP_Error( 'error', __( 'Refund failed: Please refresh this page and check the order notes, or the debug log.', 'ag_epdq_server' ) );
 	}

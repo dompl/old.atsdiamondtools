@@ -22,7 +22,9 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 '@<style[^>]*?>.*?</style>@siU',
                 '@<![\s\S]*?--[ \t\n\r]*>@'
             );
-            $str = preg_replace( $search, '', $str );
+            $str = preg_replace( $search, ' ', $str );
+
+            $str = preg_replace('/\s+/', ' ', $str);
 
             $str = esc_attr( $str );
             $str = stripslashes( $str );
@@ -244,7 +246,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 }
 
             }
-
+            
             return $str_new_array;
 
         }
@@ -1161,23 +1163,34 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $do_shortcodes = apply_filters( 'aws_index_do_shortcodes', $index_shortcodes );
 
             $index_variations = $index_variations_option && $index_variations_option === 'false' ? false : true;
-            $index_title = is_array( $index_sources_option ) && isset( $index_sources_option['title'] ) && ! $index_sources_option['title']  ? false : true;
-            $index_content = is_array( $index_sources_option ) && isset( $index_sources_option['content'] ) && ! $index_sources_option['content']  ? false : true;
-            $index_sku = is_array( $index_sources_option ) && isset( $index_sources_option['sku'] ) && ! $index_sources_option['sku']  ? false : true;
-            $index_excerpt = is_array( $index_sources_option ) && isset( $index_sources_option['excerpt'] ) && ! $index_sources_option['excerpt']  ? false : true;
-            $index_category = is_array( $index_sources_option ) && isset( $index_sources_option['category'] ) && ! $index_sources_option['category']  ? false : true;
-            $index_tag = is_array( $index_sources_option ) && isset( $index_sources_option['tag'] ) && ! $index_sources_option['tag']  ? false : true;
-            $index_id = is_array( $index_sources_option ) && isset( $index_sources_option['id'] ) && ! $index_sources_option['id']  ? false : true;
+
+            // check all index fields - are they enabled
+            $index_fields_vals = array();
+            $all_avaialble_index_fields = array( 'title', 'content', 'sku',  'excerpt', 'category', 'tag', 'id' );
+            foreach ( $all_avaialble_index_fields as $index_field_name ) {
+                $enabled = false;
+                if ( is_array( $index_sources_option ) && isset( $index_sources_option[$index_field_name] ) ) {
+                    if ( is_array( $index_sources_option[$index_field_name] ) ) {
+                        if ( isset( $index_sources_option[$index_field_name]['value'] ) && $index_sources_option[$index_field_name]['value'] === '1' ) {
+                            $enabled = true;
+                        }
+                    } else {
+                        // depricated
+                        $enabled = $index_sources_option[$index_field_name];
+                    }
+                }
+                $index_fields_vals[$index_field_name] = $enabled;
+            }
 
             $index_vars = array(
                 'variations' => $index_variations,
-                'title' => $index_title,
-                'content' => $index_content,
-                'sku' => $index_sku,
-                'excerpt' => $index_excerpt,
-                'category' => $index_category,
-                'tag' => $index_tag,
-                'id' => $index_id,
+                'title' => $index_fields_vals['title'],
+                'content' => $index_fields_vals['content'],
+                'sku' => $index_fields_vals['sku'],
+                'excerpt' => $index_fields_vals['excerpt'],
+                'category' => $index_fields_vals['category'],
+                'tag' => $index_fields_vals['tag'],
+                'id' => $index_fields_vals['id'],
             );
 
             $options = array(
@@ -1201,7 +1214,9 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 'content' => 100,
                 'id'      => 300,
                 'sku'     => 300,
-                'other'   => 35
+                'other'   => 35,
+                'tax_name'  => 350,
+                'tax_desc'  => 100,
             );
 
             /**
@@ -1358,6 +1373,69 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             return $terms_suggestions;
 
+        }
+
+        /**
+         * Highlight text words
+         * @param string $text Text string
+         * @param array $data Search related data
+         * @param string $highlight_tag Html tag for highlight
+         * @return string
+         */
+        static public function highlight_words( $text, $data = array(), $highlight_tag = 'strong' ) {
+
+            $pattern = array();
+            $search_terms = array();
+
+            if ( ! empty( $data ) ) {
+                if ( isset( $data['s_nonormalize'] ) && is_string( $data['s_nonormalize'] ) && $data['s_nonormalize'] ) {
+                    $search_terms_dirty = array_unique( explode( ' ', $data['s_nonormalize'] ) );
+                    $search_terms = array_merge( $search_terms, $search_terms_dirty );
+                }
+                if ( isset( $data['search_terms'] ) && ! empty( $data['search_terms'] ) ) {
+                    $search_terms = array_merge( $search_terms, $data['search_terms'] );
+                }
+            }
+
+            if ( $search_terms ) {
+                $search_terms = array_fill_keys( $search_terms, 1 );
+                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
+                $search_terms = array_keys( $search_terms );
+            }
+
+            foreach( $search_terms as $search_in ) {
+
+                $search_in = preg_quote( $search_in, '/' );
+
+                if ( strlen( $search_in ) > 1 ) {
+                    $pattern[] = '(' . $search_in . ')+';
+                } else {
+                    $pattern[] = '\b[' . $search_in . ']{1}\b';
+                }
+
+            }
+
+            if ( ! empty( $pattern ) ) {
+
+                usort( $pattern, array( 'AWS_Helpers', 'sort_by_length' ) );
+                $pattern = implode( '|', $pattern );
+                $pattern = sprintf( '/%s/i', $pattern );
+
+                $highlight_tag_pattern = '<' . $highlight_tag . '>$0</' . $highlight_tag . '>';
+
+                $text = preg_replace($pattern, $highlight_tag_pattern, $text );
+
+            }
+
+            return $text;
+
+        }
+
+        /*
+         * Sort array by its values length
+         */
+        static public function sort_by_length( $a, $b ) {
+            return strlen( $b ) - strlen( $a );
         }
 
     }

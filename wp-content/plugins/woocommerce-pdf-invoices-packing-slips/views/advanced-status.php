@@ -9,32 +9,74 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<thead>
 		<tr>
 			<th align="left"><?php esc_html_e( 'Plugin Name', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
-			<th align="left"><?php esc_html_e( 'Version', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
+			<th align="left"><?php esc_html_e( 'Current', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
+			<th align="left"><?php esc_html_e( 'Last stable', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
+			<?php if ( isset( $debug_settings['check_unstable_versions'] ) ) : ?>
+				<th align="left"><?php esc_html_e( 'Last unstable', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
+			<?php endif; ?>
 			<th align="left"><?php esc_html_e( 'Status', 'woocommerce-pdf-invoices-packing-slips' ); ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td class="title">PDF Invoices & Packing Slips for WooCommerce</td>
-			<td><?php esc_html_e( WPO_WCPDF()->version ); ?></td>
-			<td class="valid-status"><?php esc_html_e( 'Active', 'woocommerce-pdf-invoices-packing-slips' ); ?></td>
+			<td><?php echo esc_attr( WPO_WCPDF()->version ); ?></td>
+			<td>
+				<?php if ( ! empty( $latest_github_releases['stable'] ) && WPO_WCPDF()->version !== $latest_github_releases['stable']['name'] ) : ?>
+					<a href="<?php echo esc_url( $latest_github_releases['stable']['download'] ); ?>" target="_blank"><?php echo esc_attr( $latest_github_releases['stable']['name'] ); ?></a>
+				<?php elseif ( ! empty( $latest_github_releases['stable']['name'] ) ) : ?>
+					<?php echo esc_attr( $latest_github_releases['stable']['name'] ); ?>
+				<?php else : ?>
+					-
+				<?php endif; ?>
+			</td>
+			<?php if ( isset( $debug_settings['check_unstable_versions'] ) ) : ?>
+				<td>
+					<?php if ( ! empty( $latest_github_releases['unstable'] ) && version_compare( WPO_WCPDF()->version, $latest_github_releases['unstable']['name'], '<' ) ) : ?>
+						<a href="<?php echo esc_url( $latest_github_releases['unstable']['download'] ); ?>" target="_blank"><?php echo esc_attr( $latest_github_releases['unstable']['name'] ); ?></a>
+					<?php else : ?>
+						-
+					<?php endif; ?>
+				</td>
+			<?php endif; ?>
+			<td class="status-cell valid-status"><?php esc_html_e( 'Active', 'woocommerce-pdf-invoices-packing-slips' ); ?></td>
 		</tr>
 		<?php
 		if ( ! empty( $premium_plugins ) ) {
-			foreach ( $premium_plugins as $premium_plugin ) {
-				$class = $premium_plugin['is_active'] ? 'valid-status' : 'invalid-status';
-				$status = $premium_plugin['is_active'] ? esc_html__( 'Active', 'woocommerce-pdf-invoices-packing-slips' ) : esc_html__( 'Inactive', 'woocommerce-pdf-invoices-packing-slips' );
+			foreach ( $premium_plugins as $plugin_slug => $premium_plugin ) {
+				$last_stable = wpo_wcpdf_get_latest_plugin_version( $plugin_slug );
+				$class       = $premium_plugin['is_active'] ? 'valid-status' : 'invalid-status';
+				$status      = $premium_plugin['is_active'] ? esc_html__( 'Active', 'woocommerce-pdf-invoices-packing-slips' ) : esc_html__( 'Inactive', 'woocommerce-pdf-invoices-packing-slips' );
 				?>
 				<tr>
 					<td class="title"><?php echo esc_html( $premium_plugin['name'] ); ?></td>
-					<td><?php echo esc_html( $premium_plugin['version'] ); ?></td>
-					<td class="<?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( $status ); ?></td>
+					<td><?php echo esc_attr( $premium_plugin['version'] ); ?></td>
+					<td>
+						<?php if ( ! empty( $last_stable ) ) : ?>
+							<a href="<?php echo esc_url( network_admin_url( 'plugins.php?s=' . urlencode( html_entity_decode( $premium_plugin['name'], ENT_QUOTES, 'UTF-8' ) ) ) ); ?>"><?php echo esc_attr( $last_stable ); ?></a>
+						<?php else : ?>
+							<?php echo esc_attr( $premium_plugin['version'] ); ?>
+						<?php endif; ?>
+					</td>
+					<?php if ( isset( $debug_settings['check_unstable_versions'] ) ) : ?>
+						<td>-</td>
+					<?php endif; ?>
+					<td class="status-cell <?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( $status ); ?></td>
 				</tr>
 				<?php
 			}
 		}
 		?>
 	</tbody>
+	<?php if ( isset( $debug_settings['check_unstable_versions'] ) ) : ?>
+		<tfoot>
+			<tr>
+				<td colspan="5">
+					<?php esc_html_e( 'If you choose to test an unstable version, we recommend using a staging environment before deploying it to a live site. Early testing helps us identify potential issues faster and contributes to a more stable final release.', 'woocommerce-pdf-invoices-packing-slips' ); ?>
+				</td>
+			</tr>
+		</tfoot>
+	<?php endif; ?>
 </table>
 
 <table class="widefat system-status-table" cellspacing="1px" cellpadding="4px" style="width:100%;">
@@ -66,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<tr>
 					<td class="title"><?php echo esc_html( $label ); ?></td>
 					<td><?php echo wp_kses_post( $server_config['required'] === true ? esc_html__( 'Yes', 'woocommerce-pdf-invoices-packing-slips' ) : $server_config['required'] ); ?></td>
-					<td class="<?php echo esc_attr( $class ); ?>">
+					<td class="status-cell <?php echo esc_attr( $class ); ?>">
 						<?php
 						if ( ! empty( $server_config['value'] ) ) {
 							echo wp_kses_post( $server_config['value'] );
@@ -108,14 +150,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$is_enabled_class = $is_enabled ? 'valid-status' : 'invalid-status';
 				$is_enabled_text  = $is_enabled ? esc_html__( 'Yes', 'woocommerce-pdf-invoices-packing-slips' ) : esc_html__( 'No', 'woocommerce-pdf-invoices-packing-slips' );
 
-				$is_reset_enabled       = isset( $document->settings['reset_number_yearly'] );
-				$is_reset_enabled_class = $is_reset_enabled ? 'valid-status' : 'invalid-status';
-				$is_reset_enabled_text  = $is_reset_enabled ? esc_html__( 'Yes', 'woocommerce-pdf-invoices-packing-slips' ) : esc_html__( 'No', 'woocommerce-pdf-invoices-packing-slips' );
+				$is_pro_installed_and_active = false;
+
+				if ( ! empty( $premium_plugins ) ) {
+					foreach ( $premium_plugins as $slug => $premium_plugin ) {
+						if ( 'woocommerce-pdf-ips-pro/woocommerce-pdf-ips-pro.php' === $slug && $premium_plugin['is_active'] ) {
+							$is_pro_installed_and_active = true;
+							break;
+						}
+					}
+				}
+
+				// Only invoice has a sequential number on the core plugin.
+				if ( ! $is_pro_installed_and_active && 'packing-slip' === $document->get_type() ) {
+					$is_yearly_reset_enabled_class = 'inactive-status';
+					$is_yearly_reset_enabled_text  = sprintf(
+						/* translators: 1. Opening anchor tag, 2. Closing anchor tag */
+						esc_html__( '%1$sUpgrade to our Professional extension.%2$s', 'woocommerce-pdf-invoices-packing-slips' ),
+						'<a target="_blank" href="' . esc_url( admin_url( 'admin.php?page=wpo_wcpdf_options_page&tab=upgrade' ) ) . '">',
+						'</a>'
+					);
+				} else {
+					$is_yearly_reset_enabled       = isset( $document->settings['reset_number_yearly'] );
+					$is_yearly_reset_enabled_class = $is_yearly_reset_enabled ? 'valid-status' : 'invalid-status';
+					$is_yearly_reset_enabled_text  = $is_yearly_reset_enabled ? esc_html__( 'Yes', 'woocommerce-pdf-invoices-packing-slips' ) : esc_html__( 'No', 'woocommerce-pdf-invoices-packing-slips' );
+				}
 				?>
 		<tr>
 			<td class="title"><?php echo esc_html( $document->get_title() ); ?></td>
-			<td class="<?php echo esc_attr( $is_enabled_class ); ?>"><?php echo wp_kses_post( $is_enabled_text ); ?></td>
-			<td class="<?php echo esc_attr( $is_reset_enabled_class ); ?>"><?php echo wp_kses_post( $is_reset_enabled_text ); ?></td>
+			<td class="status-cell <?php echo esc_attr( $is_enabled_class ); ?>"><?php echo wp_kses_post( $is_enabled_text ); ?></td>
+			<td class="status-cell <?php echo esc_attr( $is_yearly_reset_enabled_class ); ?>"><?php echo wp_kses_post( $is_yearly_reset_enabled_text ); ?></td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>
@@ -125,8 +189,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 		<tfoot>
 			<tr>
-				<td class="title"><strong><?php esc_html_e( __( 'Yearly reset', 'woocommerce-pdf-invoices-packing-slips' ) ); ?></strong></td>
-				<td colspan="2" class="<?php echo esc_attr( $class ); ?>">
+				<td class="title"><strong><?php esc_html_e( 'Yearly reset', 'woocommerce-pdf-invoices-packing-slips' ); ?></strong></td>
+				<td colspan="2" class="status-cell <?php echo esc_attr( $class ); ?>">
 					<?php
 						echo wp_kses_post( $yearly_reset_schedule['value'] );
 						if ( $yearly_reset_schedule['result'] && ! $yearly_reset_schedule['value'] ) {
@@ -155,7 +219,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<tr>
 			<td><?php echo wp_kses_post( $directory_permission['description'] ); ?></td>
 			<td><?php echo ! empty( $directory_permission['value'] ) ? wp_kses_post( str_replace( array( '/', '\\' ), array( '/<wbr>', '\\<wbr>' ), $directory_permission['value'] ) ) : ''; ?></td>
-			<td class="<?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( $directory_permission['status_message'] ); ?></td>
+			<td class="status-cell <?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( $directory_permission['status_message'] ); ?></td>
 		</tr>
 		<?php } ?>
 	</tbody>
@@ -183,7 +247,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					printf(
 						/* translators: directory path */
 						esc_html__( 'If the temporary folders were not automatically created by the plugin, verify that all the font files (from %s) are copied to the fonts folder. Normally, this is fully automated, but if your server has strict security settings, this automated copying may have been prohibited. In that case, you also need to make sure these folders get synchronized on plugin updates!', 'woocommerce-pdf-invoices-packing-slips' ),
-						'<code>' . wpo_wcpdf_escape_url_path_or_base64( WPO_WCPDF()->plugin_path() . '/vendor/dompdf/dompdf/lib/fonts/' ) . '</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'<code>' . wpo_wcpdf_escape_url_path_or_base64( WPO_WCPDF()->plugin_path() . '/vendor/strauss/dompdf/dompdf/lib/fonts/' ) . '</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					);
 				?>
 			</td>

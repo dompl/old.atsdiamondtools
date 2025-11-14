@@ -21,7 +21,7 @@ class Install {
 	public function __construct() {
 		// run lifecycle methods
 		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-			add_action( 'wp_loaded', array( $this, 'do_install' ) );
+			add_action( 'admin_init', array( $this, 'do_install' ) );
 		}
 	}
 
@@ -96,7 +96,7 @@ class Install {
 		$tmp_base = WPO_WCPDF()->main->get_tmp_base();
 
 		// check if tmp folder exists => if not, initialize
-		if ( ! @is_dir( $tmp_base ) || ! wp_is_writable( $tmp_base ) ) {
+		if ( ! WPO_WCPDF()->file_system->is_dir( $tmp_base ) || ! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ) {
 			WPO_WCPDF()->main->init_tmp();
 		}
 
@@ -211,60 +211,60 @@ class Install {
 	 * @param string $installed_version the currently installed ('old') version
 	 */
 	protected function upgrade( $installed_version ) {
-		// only upgrade when php version or higher
+		// Only upgrade when php version or higher
 		if ( ! WPO_WCPDF()->is_dependency_version_supported( 'php' ) ) {
 			return;
 		}
 
-		// sync fonts on every upgrade!
+		// Sync fonts on every upgrade!
 		$tmp_base = WPO_WCPDF()->main->get_tmp_base();
 
-		// get fonts folder path
+		// Get fonts folder path
 		$font_path = WPO_WCPDF()->main->get_tmp_path( 'fonts' );
 
-		// check if tmp folder exists => if not, initialize
-		if ( ! @is_dir( $tmp_base ) || ! wp_is_writable( $tmp_base ) || ! @is_dir( $font_path ) || ! wp_is_writable( $font_path ) ) {
+		// Check if tmp folder exists => if not, initialize
+		if (
+			! WPO_WCPDF()->file_system->is_dir( $tmp_base ) ||
+			! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ||
+			! WPO_WCPDF()->file_system->is_dir( $font_path ) ||
+			! WPO_WCPDF()->file_system->is_writable( $font_path )
+		) {
 			WPO_WCPDF()->main->init_tmp();
-		} else {
-			// don't try merging fonts with local when updating pre 2.0
-			$pre_2 = ( $installed_version == 'versionless' || version_compare( $installed_version, '2.0-dev', '<' ) );
-			$merge_with_local = !$pre_2;
-			WPO_WCPDF()->main->copy_fonts( $font_path, $merge_with_local );
 		}
 
-		// to ensure fonts will be copied to the upload directory
+		// To ensure fonts will be copied to the upload directory
 		delete_transient( 'wpo_wcpdf_subfolder_fonts_has_files' );
 
 		// 1.5.28 update: copy next invoice number to separate setting
 		if ( $installed_version == 'versionless' || version_compare( $installed_version, '1.5.28', '<' ) ) {
-			$template_settings = get_option( 'wpo_wcpdf_template_settings' );
-			$next_invoice_number = isset($template_settings['next_invoice_number'])?$template_settings['next_invoice_number']:'';
+			$template_settings   = get_option( 'wpo_wcpdf_template_settings' );
+			$next_invoice_number = isset( $template_settings['next_invoice_number'] ) ? $template_settings['next_invoice_number'] : '';
 			update_option( 'wpo_wcpdf_next_invoice_number', $next_invoice_number );
 		}
 
 		// 2.0-dev update: reorganize settings
 		if ( $installed_version == 'versionless' || version_compare( $installed_version, '2.0-dev', '<' ) ) {
 			$old_settings = array(
-				'wpo_wcpdf_general_settings'	=> get_option( 'wpo_wcpdf_general_settings' ),
-				'wpo_wcpdf_template_settings'	=> get_option( 'wpo_wcpdf_template_settings' ),
-				'wpo_wcpdf_debug_settings'		=> get_option( 'wpo_wcpdf_debug_settings' ),
+				'wpo_wcpdf_general_settings'  => get_option( 'wpo_wcpdf_general_settings' ),
+				'wpo_wcpdf_template_settings' => get_option( 'wpo_wcpdf_template_settings' ),
+				'wpo_wcpdf_debug_settings'    => get_option( 'wpo_wcpdf_debug_settings' ),
 			);
 
 			// combine invoice number formatting in array
 			$old_settings['wpo_wcpdf_template_settings']['invoice_number_formatting'] = array();
-			$format_option_keys = array('padding','suffix','prefix');
-			foreach ($format_option_keys as $format_option_key) {
-				if (isset($old_settings['wpo_wcpdf_template_settings']["invoice_number_formatting_{$format_option_key}"])) {
-					$old_settings['wpo_wcpdf_template_settings']['invoice_number_formatting'][$format_option_key] = $old_settings['wpo_wcpdf_template_settings']["invoice_number_formatting_{$format_option_key}"];
+			$format_option_keys = array( 'padding', 'suffix', 'prefix' );
+			foreach ( $format_option_keys as $format_option_key ) {
+				if ( isset( $old_settings['wpo_wcpdf_template_settings']["invoice_number_formatting_{$format_option_key}"] ) ) {
+					$old_settings['wpo_wcpdf_template_settings']['invoice_number_formatting'][ $format_option_key ] = $old_settings['wpo_wcpdf_template_settings']["invoice_number_formatting_{$format_option_key}"];
 				}
 			}
 
 			// convert abbreviated email_ids
-			if (isset($old_settings['wpo_wcpdf_general_settings']['email_pdf'])) {
-				foreach ($old_settings['wpo_wcpdf_general_settings']['email_pdf'] as $email_id => $value) {
-					if ($email_id == 'completed' || $email_id == 'processing') {
-						$old_settings['wpo_wcpdf_general_settings']['email_pdf']["customer_{$email_id}_order"] = $value;
-						unset($old_settings['wpo_wcpdf_general_settings']['email_pdf'][$email_id]);
+			if ( isset( $old_settings['wpo_wcpdf_general_settings']['email_pdf'] ) ) {
+				foreach ( $old_settings['wpo_wcpdf_general_settings']['email_pdf'] as $email_id => $value ) {
+					if ( $email_id == 'completed' || $email_id == 'processing' ) {
+						$old_settings['wpo_wcpdf_general_settings']['email_pdf'][ "customer_{$email_id}_order" ] = $value;
+						unset( $old_settings['wpo_wcpdf_general_settings']['email_pdf'][ $email_id ] );
 					}
 				}
 			}
@@ -283,56 +283,56 @@ class Install {
 			// map new settings to old
 			$settings_map = array(
 				'wpo_wcpdf_settings_general' => array(
-					'download_display'			=> array( 'wpo_wcpdf_general_settings' => 'download_display' ),
-					'template_path'				=> array( 'wpo_wcpdf_template_settings' => 'template_path' ),
-					'currency_font'				=> array( 'wpo_wcpdf_template_settings' => 'currency_font' ),
-					'paper_size'				=> array( 'wpo_wcpdf_template_settings' => 'paper_size' ),
-					'header_logo'				=> array( 'wpo_wcpdf_template_settings' => 'header_logo' ),
-					'shop_name'					=> array( 'wpo_wcpdf_template_settings' => 'shop_name' ),
-					'shop_address'				=> array( 'wpo_wcpdf_template_settings' => 'shop_address' ),
-					'footer'					=> array( 'wpo_wcpdf_template_settings' => 'footer' ),
-					'extra_1'					=> array( 'wpo_wcpdf_template_settings' => 'extra_1' ),
-					'extra_2'					=> array( 'wpo_wcpdf_template_settings' => 'extra_2' ),
-					'extra_3'					=> array( 'wpo_wcpdf_template_settings' => 'extra_3' ),
+					'download_display' => array( 'wpo_wcpdf_general_settings' => 'download_display' ),
+					'template_path'    => array( 'wpo_wcpdf_template_settings' => 'template_path' ),
+					'currency_font'    => array( 'wpo_wcpdf_template_settings' => 'currency_font' ),
+					'paper_size'       => array( 'wpo_wcpdf_template_settings' => 'paper_size' ),
+					'header_logo'      => array( 'wpo_wcpdf_template_settings' => 'header_logo' ),
+					'shop_name'        => array( 'wpo_wcpdf_template_settings' => 'shop_name' ),
+					'shop_address'     => array( 'wpo_wcpdf_template_settings' => 'shop_address' ),
+					'footer'           => array( 'wpo_wcpdf_template_settings' => 'footer' ),
+					'extra_1'          => array( 'wpo_wcpdf_template_settings' => 'extra_1' ),
+					'extra_2'          => array( 'wpo_wcpdf_template_settings' => 'extra_2' ),
+					'extra_3'          => array( 'wpo_wcpdf_template_settings' => 'extra_3' ),
 				),
 				'wpo_wcpdf_documents_settings_invoice' => array(
-					'attach_to_email_ids'		=> array( 'wpo_wcpdf_general_settings' => 'email_pdf' ),
-					'display_shipping_address'	=> array( 'wpo_wcpdf_template_settings' => 'invoice_shipping_address' ),
-					'display_email'				=> array( 'wpo_wcpdf_template_settings' => 'invoice_email' ),
-					'display_phone'				=> array( 'wpo_wcpdf_template_settings' => 'invoice_phone' ),
-					'display_date'				=> array( 'wpo_wcpdf_template_settings' => 'display_date' ),
-					'display_number'			=> array( 'wpo_wcpdf_template_settings' => 'display_number' ),
-					'number_format'				=> array( 'wpo_wcpdf_template_settings' => 'invoice_number_formatting' ),
-					'reset_number_yearly'		=> array( 'wpo_wcpdf_template_settings' => 'yearly_reset_invoice_number' ),
-					'my_account_buttons'		=> array( 'wpo_wcpdf_general_settings' => 'my_account_buttons' ),
-					'invoice_number_column'		=> array( 'wpo_wcpdf_general_settings' => 'invoice_number_column' ),
-					'invoice_date_column'		=> array( 'wpo_wcpdf_general_settings' => 'invoice_date_column' ),
-					'disable_free'				=> array( 'wpo_wcpdf_general_settings' => 'disable_free' ),
+					'attach_to_email_ids'      => array( 'wpo_wcpdf_general_settings' => 'email_pdf' ),
+					'display_shipping_address' => array( 'wpo_wcpdf_template_settings' => 'invoice_shipping_address' ),
+					'display_email'            => array( 'wpo_wcpdf_template_settings' => 'invoice_email' ),
+					'display_phone'            => array( 'wpo_wcpdf_template_settings' => 'invoice_phone' ),
+					'display_date'             => array( 'wpo_wcpdf_template_settings' => 'display_date' ),
+					'display_number'           => array( 'wpo_wcpdf_template_settings' => 'display_number' ),
+					'number_format'            => array( 'wpo_wcpdf_template_settings' => 'invoice_number_formatting' ),
+					'reset_number_yearly'      => array( 'wpo_wcpdf_template_settings' => 'yearly_reset_invoice_number' ),
+					'my_account_buttons'       => array( 'wpo_wcpdf_general_settings' => 'my_account_buttons' ),
+					'invoice_number_column'    => array( 'wpo_wcpdf_general_settings' => 'invoice_number_column' ),
+					'invoice_date_column'      => array( 'wpo_wcpdf_general_settings' => 'invoice_date_column' ),
+					'disable_free'             => array( 'wpo_wcpdf_general_settings' => 'disable_free' ),
 				),
 				'wpo_wcpdf_documents_settings_packing-slip' => array(
-					'display_billing_address'	=> array( 'wpo_wcpdf_template_settings' => 'packing_slip_billing_address' ),
-					'display_email'				=> array( 'wpo_wcpdf_template_settings' => 'packing_slip_email' ),
-					'display_phone'				=> array( 'wpo_wcpdf_template_settings' => 'packing_slip_phone' ),
+					'display_billing_address' => array( 'wpo_wcpdf_template_settings' => 'packing_slip_billing_address' ),
+					'display_email'           => array( 'wpo_wcpdf_template_settings' => 'packing_slip_email' ),
+					'display_phone'           => array( 'wpo_wcpdf_template_settings' => 'packing_slip_phone' ),
 				),
 				'wpo_wcpdf_settings_debug' => array(
-					'enable_debug'				=> array( 'wpo_wcpdf_debug_settings' => 'enable_debug' ),
-					'html_output'				=> array( 'wpo_wcpdf_debug_settings' => 'html_output' ),
+					'enable_debug' => array( 'wpo_wcpdf_debug_settings' => 'enable_debug' ),
+					'html_output'  => array( 'wpo_wcpdf_debug_settings' => 'html_output' ),
 				),
 			);
 
 			// walk through map
-			foreach ($settings_map as $new_option => $new_settings_keys) {
+			foreach ( $settings_map as $new_option => $new_settings_keys ) {
 				${$new_option} = array();
-				foreach ($new_settings_keys as $new_key => $old_setting ) {
-					$old_key = reset($old_setting);
-					$old_option = key($old_setting);
-					if (!empty($old_settings[$old_option][$old_key])) {
+				foreach ( $new_settings_keys as $new_key => $old_setting ) {
+					$old_key    = reset( $old_setting );
+					$old_option = key( $old_setting );
+					if ( ! empty( $old_settings[ $old_option ][ $old_key ] ) ) {
 						// turn translatable fields into array
-						$translatable_fields = array('shop_name','shop_address','footer','extra_1','extra_2','extra_3');
-						if (in_array($new_key, $translatable_fields)) {
-							${$new_option}[$new_key] = array( 'default' => $old_settings[$old_option][$old_key] );
+						$translatable_fields = array( 'shop_name','shop_address','footer','extra_1','extra_2','extra_3' );
+						if ( in_array( $new_key, $translatable_fields ) ) {
+							${$new_option}[ $new_key ] = array( 'default' => $old_settings[ $old_option ][ $old_key ] );
 						} else {
-							${$new_option}[$new_key] = $old_settings[$old_option][$old_key];
+							${$new_option}[ $new_key ] = $old_settings[ $old_option ][ $old_key ];
 						}
 					}
 				}
@@ -392,9 +392,9 @@ class Install {
 			foreach ( $documents as $document ) {
 				$store_name        = "{$document->slug}_number";
 				$method            = WPO_WCPDF()->settings->get_sequential_number_store_method();
-				$table_name        = apply_filters( 'wpo_wcpdf_number_store_table_name', sanitize_key( "{$wpdb->prefix}wcpdf_{$store_name}" ), $store_name, $method );
+				$table_name        = apply_filters( 'wpo_wcpdf_number_store_table_name', wpo_wcpdf_sanitize_identifier( "{$wpdb->prefix}wcpdf_{$store_name}" ), $store_name, $method );
 				$table_name_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-					$wpdb->prepare( "SHOW TABLES LIKE %s", esc_sql( $table_name ) )
+					$wpdb->prepare( "SHOW TABLES LIKE %s", $table_name )
 				) === $table_name;
 
 				if ( ! $table_name_exists ) {
@@ -405,24 +405,25 @@ class Install {
 					$number_store = $document->get_sequential_number_store();
 
 					if ( ! empty( $number_store ) ) {
-						$column_name      = 'date';
-						$table_name_safe  = sanitize_key( $number_store->table_name );
-						$column_name_safe = sanitize_key( $column_name );
-						$query_result     = $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-							$wpdb->prepare(
-								"ALTER TABLE `" . esc_sql( $table_name_safe ) . "` ALTER `" . esc_sql( $column_name_safe ) . "` SET DEFAULT %s", // phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange
-								'1000-01-01 00:00:00'
-							)
+						$column_name = 'date';
+						$table_name  = $number_store->table_name;
+
+						$query = wpo_wcpdf_prepare_identifier_query(
+							"ALTER TABLE %i ALTER %i SET DEFAULT %s",
+							array( $table_name, $column_name ),
+							array( '1000-01-01 00:00:00' )
 						);
+
+						$query_result = $wpdb->query( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 						if ( $query_result ) {
 							wcpdf_log_error(
-								"Default value changed for 'date' column to '1000-01-01 00:00:00' on database table: {$table_name_safe}",
+								"Default value changed for '{$column_name}' column to '1000-01-01 00:00:00' on database table: {$table_name}",
 								'info'
 							);
 						} else {
 							wcpdf_log_error(
-								"An error occurred! The default value for 'date' column couldn't be changed to '1000-01-01 00:00:00' on database table: {$table_name_safe}",
+								"An error occurred! The default value for '{$column_name}' column couldn't be changed to '1000-01-01 00:00:00' on database table: {$table_name}",
 								'critical'
 							);
 						}
@@ -495,7 +496,7 @@ class Install {
 			];
 
 			foreach ( $settings_to_migrate as $setting => $type ) {
-				$update = [];
+				$update = array();
 
 				switch ( $type ) {
 					case 'general':
@@ -504,15 +505,15 @@ class Install {
 							$setting                  = ( 'company_name' === $setting && ! isset( $general_settings['shop_name'] ) ) ? 'shop_name' : $setting;
 
 							if ( 'company_name' !== $setting ) {
-								$general_settings[$setting] = $legacy_ubl_setting_value;
-								$update[]                   = $type;
+								$general_settings[ $setting ] = $legacy_ubl_setting_value;
+								$update[]                     = $type;
 							}
 						}
 						break;
 					case 'invoice_ubl':
-						if ( isset( $legacy_ubl_general_settings[$setting] ) ) {
-							$invoice_ubl_settings[$setting] = $legacy_ubl_general_settings[$setting];
-							$update[]                       = $type;
+						if ( isset( $legacy_ubl_general_settings[ $setting ] ) ) {
+							$invoice_ubl_settings[ $setting ] = $legacy_ubl_general_settings[ $setting ];
+							$update[]                         = $type;
 						}
 						break;
 				}
@@ -575,6 +576,94 @@ class Install {
 
 			update_option( 'wpo_wcpdf_settings_general', $general_settings );
 		}
+
+		// 4.2.0-beta.3: migrate 'guest' access type to 'full'
+		if ( version_compare( $installed_version, '4.2.0-beta.3', '<' ) ) {
+			$debug_settings = get_option( 'wpo_wcpdf_settings_debug', array() );
+
+			if ( ! empty( $debug_settings['document_link_access_type'] ) && 'guest' === $debug_settings['document_link_access_type'] ) {
+				$debug_settings['document_link_access_type'] = 'full';
+				update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
+			}
+		}
+
+		// 4.3.0-rc.2: reload attachment translations
+		if ( version_compare( $installed_version, '4.3.0-rc.2', '<' ) ) {
+			$debug_settings                                   = get_option( 'wpo_wcpdf_settings_debug', array() );
+			$debug_settings['reload_attachment_translations'] = '1';
+			update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
+		}
+
+		// 4.5.0-beta.2: set default filesystem method to php
+		if ( version_compare( $installed_version, '4.5.0-beta.2', '<' ) ) {
+			$debug_settings = get_option( 'wpo_wcpdf_settings_debug', array() );
+
+			if ( ! empty( $debug_settings['file_system_method'] ) && 'wp' === $debug_settings['file_system_method'] ) {
+				$debug_settings['file_system_method'] = 'php';
+				update_option( 'wpo_wcpdf_settings_debug', $debug_settings );
+			}
+		}
+
+		// 4.5.0-beta.3: set shop address value for the new shop additional info field.
+		if ( version_compare( $installed_version, '4.5.0-beta.3', '<' ) ) {
+			$general_settings = get_option( 'wpo_wcpdf_settings_general', array() );
+
+			if ( ! empty( $general_settings['shop_address'] ) ) {
+				$general_settings['shop_address_additional'] = $general_settings['shop_address'];
+				unset( $general_settings['shop_address'] );
+				update_option( 'wpo_wcpdf_settings_general', $general_settings );
+			}
+		}
+
+		// 4.5.3-pr1195.1: migrate shop address state value.
+		if ( version_compare( $installed_version, '4.5.3-pr1195.1', '<' ) ) {
+			$general_settings  = get_option( 'wpo_wcpdf_settings_general', array() );
+			$states_setting    = $general_settings['shop_address_state'] ?? null;
+			$countries_setting = $general_settings['shop_address_country'] ?? null;
+
+			if ( ! empty( $states_setting ) && ! empty( $countries_setting ) ) {
+				// Normalize both settings into arrays with locale keys
+				$states_by_locale    = is_array( $states_setting )    ? $states_setting    : array( 'default' => $states_setting );
+				$countries_by_locale = is_array( $countries_setting ) ? $countries_setting : array( 'default' => $countries_setting );
+
+				// Loop through states and try to match them with the country codes
+				$new_states_by_locale = array();
+				foreach ( $states_by_locale as $locale => $state_name ) {
+					$country_code = $countries_by_locale[ $locale ] ?? $countries_by_locale['default'] ?? '';
+					$country_code = strtoupper( sanitize_text_field( trim( $country_code ) ) );
+					$state_name   = sanitize_text_field( trim( $state_name ) );
+
+					if ( empty( $country_code ) || empty( $state_name ) ) {
+						continue;
+					}
+
+					$states = \WC()->countries->get_states( $country_code );
+
+					if ( is_array( $states ) ) {
+						$state_code = array_search( $state_name, $states, true );
+
+						// If no match found, keep original value
+						$new_states_by_locale[ $locale ] = strtoupper(
+							$state_code !== false ? $state_code : ''
+						);
+					} else {
+						$new_states_by_locale[ $locale ] = '';
+					}
+				}
+
+				// Save only if we updated something
+				if ( ! empty( $new_states_by_locale ) ) {
+					$general_settings['shop_address_state'] = $new_states_by_locale;
+					update_option( 'wpo_wcpdf_settings_general', $general_settings );
+				}
+				
+				// reset shop address notice option
+				delete_option( 'wpo_wcpdf_dismiss_shop_address_notice' );
+			}
+		}
+
+		// Maybe reinstall fonts
+		WPO_WCPDF()->main->maybe_reinstall_fonts( true );
 	}
 
 	/**
@@ -584,23 +673,32 @@ class Install {
 	 * @param string $installed_version the currently installed ('old') version (actually higher since this is a downgrade)
 	 */
 	protected function downgrade( $installed_version ) {
-		// make sure fonts match with version: copy from plugin folder
+		// Make sure fonts match with version: copy from plugin folder
 		$tmp_base = WPO_WCPDF()->main->get_tmp_base();
 
-		// make sure we have the fonts directory
+		// Make sure we have the fonts directory
 		$font_path = WPO_WCPDF()->main->get_tmp_path( 'fonts' );
 
-		// don't continue if we don't have an upload dir
-		if ($tmp_base === false) {
-			return false;
+		// Don't continue if we don't have an upload dir
+		if ( false === $tmp_base ) {
+			return $tmp_base;
 		}
 
-		// check if tmp folder exists => if not, initialize
-		if ( ! @is_dir( $tmp_base ) || ! wp_is_writable( $tmp_base ) || ! @is_dir( $font_path ) || ! wp_is_writable( $font_path ) ) {
+		// Check if tmp folder exists => if not, initialize
+		if (
+			! WPO_WCPDF()->file_system->is_dir( $tmp_base ) ||
+			! WPO_WCPDF()->file_system->is_writable( $tmp_base ) ||
+			! WPO_WCPDF()->file_system->is_dir( $font_path ) ||
+			! WPO_WCPDF()->file_system->is_writable( $font_path )
+		) {
 			WPO_WCPDF()->main->init_tmp();
-		} else {
-			WPO_WCPDF()->main->copy_fonts( $font_path );
 		}
+
+		// To ensure fonts will be copied to the upload directory
+		delete_transient( 'wpo_wcpdf_subfolder_fonts_has_files' );
+
+		// Maybe reinstall fonts
+		WPO_WCPDF()->main->maybe_reinstall_fonts();
 	}
 
 }

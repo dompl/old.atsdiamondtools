@@ -1,4 +1,7 @@
 <?php
+
+use Automattic\WooCommerce\Enums\OrderStatus;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,6 +19,20 @@ class WC_Stripe_Helper {
 	const META_NAME_NET                = '_stripe_net';
 	const META_NAME_STRIPE_CURRENCY    = '_stripe_currency';
 	const PAYMENT_AWAITING_ACTION_META = '_stripe_payment_awaiting_action';
+
+	/**
+	 * The identifier for the official Affirm gateway plugin.
+	 *
+	 * @var string
+	 */
+	const OFFICIAL_PLUGIN_ID_AFFIRM = 'affirm';
+
+	/**
+	 * The identifier for the official Klarna gateway plugin.
+	 *
+	 * @var string
+	 */
+	const OFFICIAL_PLUGIN_ID_KLARNA = 'klarna_payments';
 
 	/**
 	 * List of legacy Stripe gateways.
@@ -63,6 +80,8 @@ class WC_Stripe_Helper {
 	 * @since 4.1.0
 	 * @param object $order
 	 * @return string $currency
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::get_stripe_currency()` instead.
 	 */
 	public static function get_stripe_currency( $order = null ) {
 		if ( is_null( $order ) ) {
@@ -78,6 +97,8 @@ class WC_Stripe_Helper {
 	 * @since 4.1.0
 	 * @param object $order
 	 * @param string $currency
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::update_stripe_currency()` instead.
 	 */
 	public static function update_stripe_currency( $order, $currency ) {
 		if ( is_null( $order ) ) {
@@ -91,8 +112,10 @@ class WC_Stripe_Helper {
 	 * Gets the Stripe fee for order. With legacy check.
 	 *
 	 * @since 4.1.0
-	 * @param object $order
+	 * @param WC_Order $order
 	 * @return string $amount
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::get_stripe_fee()` instead.
 	 */
 	public static function get_stripe_fee( $order = null ) {
 		if ( is_null( $order ) ) {
@@ -107,7 +130,7 @@ class WC_Stripe_Helper {
 
 			// If found update to new name.
 			if ( $amount ) {
-				self::update_stripe_fee( $order, $amount );
+				WC_Stripe_Order_Helper::get_instance()->update_stripe_fee( $order, $amount );
 			}
 		}
 
@@ -120,6 +143,8 @@ class WC_Stripe_Helper {
 	 * @since 4.1.0
 	 * @param object $order
 	 * @param float  $amount
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::update_stripe_fee()` instead.
 	 */
 	public static function update_stripe_fee( $order = null, $amount = 0.0 ) {
 		if ( is_null( $order ) ) {
@@ -134,6 +159,8 @@ class WC_Stripe_Helper {
 	 *
 	 * @since 4.1.0
 	 * @param object $order
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::delete_stripe_fee()` instead.
 	 */
 	public static function delete_stripe_fee( $order = null ) {
 		if ( is_null( $order ) ) {
@@ -148,8 +175,10 @@ class WC_Stripe_Helper {
 	 * Gets the Stripe net for order. With legacy check.
 	 *
 	 * @since 4.1.0
-	 * @param object $order
+	 * @param WC_Order $order
 	 * @return string $amount
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::get_stripe_net()` instead.
 	 */
 	public static function get_stripe_net( $order = null ) {
 		if ( is_null( $order ) ) {
@@ -164,7 +193,7 @@ class WC_Stripe_Helper {
 
 			// If found update to new name.
 			if ( $amount ) {
-				self::update_stripe_net( $order, $amount );
+				WC_Stripe_Order_Helper::get_instance()->update_stripe_net( $order, $amount );
 			}
 		}
 
@@ -177,6 +206,8 @@ class WC_Stripe_Helper {
 	 * @since 4.1.0
 	 * @param object $order
 	 * @param float  $amount
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::update_stripe_net()` instead.
 	 */
 	public static function update_stripe_net( $order = null, $amount = 0.0 ) {
 		if ( is_null( $order ) ) {
@@ -191,6 +222,8 @@ class WC_Stripe_Helper {
 	 *
 	 * @since 4.1.0
 	 * @param object $order
+	 *
+	 * @deprecated 10.0.0 Use `WC_Stripe_Order_Helper::delete_stripe_net()` instead.
 	 */
 	public static function delete_stripe_net( $order = null ) {
 		if ( is_null( $order ) ) {
@@ -303,7 +336,7 @@ class WC_Stripe_Helper {
 	 *
 	 * @return array $currencies
 	 */
-	private static function three_decimal_currencies() {
+	public static function three_decimal_currencies() {
 		return [
 			'bhd', // Bahraini Dinar
 			'jod', // Jordanian Dinar
@@ -579,6 +612,8 @@ class WC_Stripe_Helper {
 	 * Get settings of individual legacy payment methods.
 	 *
 	 * @return array
+	 *
+	 * @deprecated 9.6.0 The customization of individual payment methods is now deprecated.
 	 */
 	public static function get_legacy_individual_payment_method_settings() {
 		$stripe_settings = self::get_stripe_settings();
@@ -615,10 +650,12 @@ class WC_Stripe_Helper {
 	 *
 	 * @param WC_Stripe_Payment_Gateway $gateway Stripe payment gateway.
 	 * @return array
+	 *
+	 * @deprecated 9.6.0 The customization of individual payment methods is now deprecated.
 	 */
 	public static function get_upe_individual_payment_method_settings( $gateway ) {
 		$payment_method_settings = [];
-		$available_gateways = $gateway->get_upe_available_payment_methods();
+		$available_gateways      = $gateway->get_upe_available_payment_methods();
 
 		foreach ( $available_gateways as $gateway ) {
 			$individual_gateway_settings = get_option( 'woocommerce_stripe_' . $gateway . '_settings', [] );
@@ -737,7 +774,7 @@ class WC_Stripe_Helper {
 		$payment_method_ids_with_capability = [];
 
 		foreach ( $payment_method_ids as $payment_method_id ) {
-			$key            = $payment_method_id . '_payments';
+			$key = self::get_payment_method_capability_id( $payment_method_id );
 			// Check if the payment method has capabilities set in the account data.
 			// Generally the key is the payment method id appended with '_payments' (i.e. 'card_payments', 'sepa_debit_payments', 'klarna_payments').
 			// In some cases, the Stripe account might have the legacy key set. For example, for Klarna, the legacy key is 'klarna'.
@@ -989,7 +1026,7 @@ class WC_Stripe_Helper {
 			$order = wc_get_order( $order_id );
 		}
 
-		if ( ! empty( $order ) && $order->get_status() !== 'trash' ) {
+		if ( ! empty( $order ) && $order->get_status() !== OrderStatus::TRASH ) {
 			return $order;
 		}
 
@@ -1263,11 +1300,12 @@ class WC_Stripe_Helper {
 	 *
 	 * @param $payment_intent_id
 	 * @param $order
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::add_payment_intent_to_order() instead.
 	 */
 	public static function add_payment_intent_to_order( $payment_intent_id, $order ) {
-
-		$old_intent_id = $order->get_meta( '_stripe_intent_id' );
-
+		$order_helper  = WC_Stripe_Order_Helper::get_instance();
+		$old_intent_id = $order_helper->get_stripe_intent( $order );
 		if ( $old_intent_id === $payment_intent_id ) {
 			return;
 		}
@@ -1280,7 +1318,7 @@ class WC_Stripe_Helper {
 			)
 		);
 
-		$order->update_meta_data( '_stripe_intent_id', $payment_intent_id );
+		$order_helper->update_stripe_intent( $order, $payment_intent_id );
 		$order->save();
 	}
 
@@ -1378,12 +1416,14 @@ class WC_Stripe_Helper {
 	 * @param WC_Order $order The order to fetch the Stripe intent from.
 	 *
 	 * @return string|bool  The intent ID if found, false otherwise.
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::get_intent_id_from_order() instead.
 	 */
 	public static function get_intent_id_from_order( $order ) {
-		$intent_id = $order->get_meta( '_stripe_intent_id' );
-
+		$order_helper = WC_Stripe_Order_Helper::get_instance();
+		$intent_id    = $order_helper->get_stripe_intent( $order );
 		if ( ! $intent_id ) {
-			$intent_id = $order->get_meta( '_stripe_setup_intent' );
+			$intent_id = $order_helper->get_stripe_setup_intent( $order );
 		}
 
 		return $intent_id ?? false;
@@ -1416,6 +1456,8 @@ class WC_Stripe_Helper {
 	 * @param bool     $save  Whether to save the order after adding the metadata.
 	 *
 	 * @return void
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::set_payment_awaiting_action() instead.
 	 */
 	public static function set_payment_awaiting_action( $order, $save = true ) {
 		$order->update_meta_data( self::PAYMENT_AWAITING_ACTION_META, wc_bool_to_string( true ) );
@@ -1432,6 +1474,8 @@ class WC_Stripe_Helper {
 	 * @param bool     $save  Whether to save the order after removing the metadata.
 	 *
 	 * @return void
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::remove_payment_awaiting_action() instead.
 	 */
 	public static function remove_payment_awaiting_action( $order, $save = true ) {
 		$order->delete_meta_data( self::PAYMENT_AWAITING_ACTION_META );
@@ -1490,7 +1534,17 @@ class WC_Stripe_Helper {
 	 * @return bool Whether the payment method allows manual capture.
 	 */
 	public static function payment_method_allows_manual_capture( string $payment_method_id ) {
-		return in_array( $payment_method_id, [ 'stripe', 'stripe_affirm', 'stripe_klarna', 'stripe_afterpay_clearpay' ], true );
+		return in_array(
+			$payment_method_id,
+			[
+				'stripe',
+				'stripe_affirm',
+				'stripe_klarna',
+				'stripe_afterpay_clearpay',
+				'stripe_amazon_pay',
+			],
+			true
+		);
 	}
 
 	/**
@@ -1510,35 +1564,83 @@ class WC_Stripe_Helper {
 	 * Checks if a given URL matches the current site's Webhook URL.
 	 *
 	 * This function ignores trailing slashes and compares the host and path of the URLs.
-	 * The protocol is not compared.
+	 * The protocol is ignored. It also requires that any query parameters in the
+	 * webhook URL are present in the supplied URL, though extra query parameters in the
+	 * supplied URL are ignored.
+	 * There is one special case: when the supplied URL has the same host and path,
+	 * but an empty query string, it is treated as a match. This is to allow for cleanup
+	 * of webhook URLs that don't have identifying URL parameters.
 	 *
 	 * @param string $url         The URL to check.
 	 * @param string $webhook_url The webhook URL to compare against.
 	 *
-	 * @return bool Whether the URL is a webhook URL.
+	 * @return bool Whether the URL is a matching webhook URL.
 	 */
 	public static function is_webhook_url( $url, $webhook_url = '' ) {
 		if ( empty( $webhook_url ) ) {
 			$webhook_url = self::get_webhook_url();
 		}
 
-		$url         = untrailingslashit( trim( strtolower( $url ) ) );
-		$webhook_url = untrailingslashit( trim( strtolower( $webhook_url ) ) );
+		$url         = trim( strtolower( $url ) );
+		$webhook_url = trim( strtolower( $webhook_url ) );
 
 		// If the URLs are the exact same, no need to compare further.
 		if ( $url === $webhook_url ) {
 			return true;
 		}
 
-		$webhook_url_parts = wp_parse_url( $url );
-		$url_parts         = wp_parse_url( $webhook_url );
+		$url_parts         = wp_parse_url( $url );
+		$webhook_url_parts = wp_parse_url( $webhook_url );
 
-		$url_host     = $url_parts['host'] ?? '';
-		$url_path     = $url_parts['path'] ?? '';
-		$webhook_host = $webhook_url_parts['host'] ?? '';
-		$webhook_path = $webhook_url_parts['path'] ?? '';
+		$url_host      = $url_parts['host'] ?? '';
+		$url_path      = $url_parts['path'] ?? '';
+		$url_query     = $url_parts['query'] ?? '';
+		$webhook_host  = $webhook_url_parts['host'] ?? '';
+		$webhook_path  = $webhook_url_parts['path'] ?? '';
+		$webhook_query = $webhook_url_parts['query'] ?? '';
 
-		return $url_host === $webhook_host && $url_path === $webhook_path;
+		if ( $url_host !== $webhook_host || $url_path !== $webhook_path ) {
+			return false;
+		}
+
+		// If the supplied URL has an empty query string, we will treat it as a webhook URL for the plugin,
+		// as we're guessing that it was created manually in the long-distant past when webhook
+		// management was all manual.
+		if ( '' === $url_query ) {
+			return true;
+		}
+
+		// For our standard webhook URL, we should never hit this condition, but we'll treat them as
+		// a mismatch, as we already know the supplied URL has a non-empty query.
+		if ( '' === $webhook_query ) {
+			return false;
+		}
+
+		$url_query_parts     = [];
+		$webhook_query_parts = [];
+
+		parse_str( $url_query, $url_query_parts );
+		parse_str( $webhook_query, $webhook_query_parts );
+
+		if ( [] === $url_query_parts && [] === $webhook_query_parts ) {
+			return true;
+		}
+
+		// We ignore extra URL parameters in the supplied URL,
+		// but we require all query parameters from the webhook URL to
+		// be present in the supplied URL.
+		foreach ( $webhook_query_parts as $webhook_query_key => $webhook_query_value ) {
+			if ( ! isset( $url_query_parts[ $webhook_query_key ] ) ) {
+				return false;
+			}
+
+			if ( $url_query_parts[ $webhook_query_key ] !== $webhook_query_value ) {
+				return false;
+			}
+		}
+
+		// If we get here, the supplied URL has all the query parameters from the webhook URL.
+		return true;
 	}
 
 	public static function get_transaction_url( $is_test_mode = false ) {
@@ -1606,5 +1708,340 @@ class WC_Stripe_Helper {
 		}
 
 		return $target_locale;
+	}
+
+	/**
+	 * Adds mandate data to the request.
+	 *
+	 * @param array $request The request to add mandate data to.
+	 *
+	 * @return array The request with mandate data added.
+	 */
+	public static function add_mandate_data( $request ) {
+		$ip_address = WC_Geolocation::get_ip_address();
+
+		// Handle cases where WC_Geolocation::get_ip_address() returns multiple, comma-separated IP addresses.
+		// This will be addressed upstream in WooCommerce 9.9.0 as of (https://github.com/woocommerce/woocommerce/pull/57284).
+		// TODO: Remove this block when WooCommerce 9.9.0 is released.
+		if ( str_contains( $ip_address, ',' ) ) {
+			$ip_address = trim( current( preg_split( '/,/', $ip_address ) ) );
+		}
+
+		self::maybe_log_ip_issues( $ip_address );
+
+		$request['mandate_data'] = [
+			'customer_acceptance' => [
+				'type'   => 'online',
+				'online' => [
+					'ip_address' => $ip_address,
+					'user_agent' => 'WooCommerce Stripe Gateway' . WC_STRIPE_VERSION . '; ' . get_bloginfo( 'url' ),
+				],
+			],
+		];
+
+		return $request;
+	}
+
+	/**
+	 * Logs an invalid IP address.
+	 *
+	 * @param string $ip_address The IP address to log.
+	 * @return void
+	 */
+	public static function maybe_log_ip_issues( $ip_address ) {
+		if ( rest_is_ip_address( $ip_address ) === false ) {
+			$log_data = [ 'WC_Geolocation::get_ip_address()' => $ip_address ];
+			$headers  = [
+				'HTTP_X_REAL_IP',
+				'HTTP_X_FORWARDED_FOR',
+				'REMOTE_ADDR',
+			];
+			foreach ( $headers as $header ) {
+				$log_data[ $header ] = isset( $_SERVER[ $header ] ) ? sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) ) : 'not set';
+			}
+
+			WC_Stripe_Logger::log( 'Invalid IP address detected. Data: ' . wp_json_encode( $log_data ) );
+		}
+	}
+
+	/**
+	 * Return capability ID based on payment method ID.
+	 *
+	 * @param string $payment_method_id The payment method ID.
+	 * @return string The capability ID.
+	 */
+	public static function get_payment_method_capability_id( $payment_method_id ) {
+		// "_payments" is a suffix that comes from Stripe API, except when it is "transfers" or ACH.
+		if ( WC_Stripe_UPE_Payment_Method_ACH::STRIPE_ID === $payment_method_id ) {
+			return $payment_method_id . '_ach_payments';
+		}
+
+		return $payment_method_id . '_payments';
+	}
+
+	/**
+	 * Renders the admin header with back link consistently across admin pages.
+	 *
+	 * @param string $header_text The text to display in the header.
+	 * @param string $return_text The text for the return link.
+	 * @param string $return_url  The URL for the return link.
+	 * @return void
+	 */
+	public static function render_admin_header( $header_text, $return_text, $return_url ) {
+		if ( function_exists( 'wc_back_header' ) ) {
+			wc_back_header( $header_text, $return_text, $return_url );
+		} else {
+			// Until the wc_back_header function is available (WC Core 9.9) use the current available version.
+			echo '<h2>' . esc_html( $header_text );
+			wc_back_link( $return_text, $return_url );
+			echo '</h2>';
+		}
+	}
+
+	/**
+	 * Checks if a given currency is supported for Indian recurring payment mandates.
+	 *
+	 * @since 9.4.0
+	 * @param string $currency The currency code to check (e.g., 'usd', 'eur').
+	 * @return bool True if the currency is supported, false otherwise.
+	 */
+	public static function is_currency_supported_for_indian_recurring_payment_mandate( $currency ) {
+		// India recurring payment mandates can only be requested for the following currencies.
+		$supported_currencies = [
+			'inr', // Indian Rupee
+			'usd', // US Dollar
+			'eur', // Euro
+			'gbp', // British Pound
+			'sgd', // Singapore Dollar
+			'cad', // Canadian Dollar
+			'chf', // Swiss Franc
+			'sek', // Swedish Krona
+			'aed', // UAE Dirham
+			'jpy', // Japanese Yen
+			'nok', // Norwegian Krone
+			'myr', // Malaysian Ringgit
+			'hkd', // Hong Kong Dollar
+		];
+
+		return in_array( strtolower( $currency ), $supported_currencies, true );
+	}
+
+	/**
+	 * Checks if the payment method should be saved.
+	 *
+	 * @since 9.6.0
+	 * @param bool $force_save Whether the payment method should be saved.
+	 * @param string $order_id Order ID.
+	 * @return bool
+	 */
+	public static function should_force_save_payment_method( $force_save = false, $order_id = null ) {
+		// Do not save the payment method if the user is not logged in.
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// Backward compatibility for deprecated 'wc_stripe_force_save_source' filter.
+		$force_save_payment_method = apply_filters_deprecated(
+			'wc_stripe_force_save_source',
+			[ $force_save, $order_id ],
+			'9.6.0',
+			'wc_stripe_force_save_payment_method',
+			'The wc_stripe_force_save_source filter is deprecated since WooCommerce Stripe Gateway 9.6.0. Use wc_stripe_force_save_payment_method instead.'
+		);
+
+		/**
+		 * Filters the flag that decides if the payment method must be saved in all possible situations.
+		 *
+		 * @since 9.6.0
+		 *
+		 * @param bool   $force_save Whether the payment method must be saved.
+		 * @param string $order_id   Order ID.
+		 *
+		 * @return bool Whether the payment method must be saved in all situations.
+		*/
+		$force_save_payment_method = apply_filters( 'wc_stripe_force_save_payment_method', $force_save_payment_method, $order_id );
+
+		return $force_save_payment_method;
+	}
+
+	/**
+	 * Returns the description for a refund reason.
+	 *
+	 * @return string
+	 */
+	public static function get_refund_reason_description( $refund_reason_key ) {
+		switch ( $refund_reason_key ) {
+			case 'charge_for_pending_refund_disputed':
+				return __( 'The charge has been disputed', 'woocommerce-gateway-stripe' );
+			case 'declined':
+				return __( 'The refund was declined', 'woocommerce-gateway-stripe' );
+			case 'expired_or_canceled_card':
+				return __( 'The original payment method has expired or was canceled', 'woocommerce-gateway-stripe' );
+			case 'insufficient_funds':
+				return __( 'We could not process the refund at this time', 'woocommerce-gateway-stripe' );
+			case 'lost_or_stolen_card':
+				return __( 'The original payment method was lost or stolen', 'woocommerce-gateway-stripe' );
+			case 'merchant_request':
+				return __( 'We stopped processing the refund', 'woocommerce-gateway-stripe' );
+			case 'unknown':
+			default:
+				return __( 'Unknown reason', 'woocommerce-gateway-stripe' );
+		}
+	}
+
+	/**
+	 * Checks if there are other Buy Now Pay Later plugins active.
+	 *
+	 * @return bool
+	 */
+	public static function has_other_bnpl_plugins_active() {
+		$other_bnpl_gateway_ids = [ self::OFFICIAL_PLUGIN_ID_AFFIRM, self::OFFICIAL_PLUGIN_ID_KLARNA ];
+		foreach ( $other_bnpl_gateway_ids as $bnpl_gateway_id ) {
+			if ( self::has_gateway_plugin_active( $bnpl_gateway_id ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if a given payment gateway plugin is active.
+	 *
+	 * @param string $plugin_id The plugin ID to check.
+	 * @param array $available_payment_gateways Optional. The available payment gateways. If not provided, the available payment gateways will be fetched using WC()->payment_gateways->payment_gateways.
+	 *
+	 * @return bool
+	 */
+	public static function has_gateway_plugin_active( $plugin_id, $available_payment_gateways = null ) {
+		$available_payment_gateways = $available_payment_gateways ?? WC()->payment_gateways->payment_gateways ?? [];
+		foreach ( $available_payment_gateways as $available_payment_gateway ) {
+			if ( $plugin_id === $available_payment_gateway->id && 'yes' === $available_payment_gateway->enabled ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the given payment intent is valid for the order.
+	 * This checks the currency, amount, and payment method types.
+	 * The function will log a critical error if there is a mismatch.
+	 *
+	 * @param WC_Order      $order                 The order to check.
+	 * @param object|string $intent                The payment intent to check, can either be an object or an intent ID.
+	 * @param string|null   $selected_payment_type The selected payment type, which is generally applicable for updates. If null, we will use the stored payment type for the order.
+	 *
+	 * @throws Exception Throws an exception if the intent is not valid for the order.
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::validate_intent_for_order() instead.
+	 */
+	public static function validate_intent_for_order( $order, $intent, ?string $selected_payment_type = null ): void {
+		$intent_id = null;
+		if ( is_string( $intent ) ) {
+			$intent_id = $intent;
+			$is_setup_intent = substr( $intent_id, 0, 4 ) === 'seti';
+			if ( $is_setup_intent ) {
+				$intent = WC_Stripe_API::retrieve( 'setup_intents/' . $intent_id . '?expand[]=payment_method' );
+			} else {
+				$intent = WC_Stripe_API::retrieve( 'payment_intents/' . $intent_id . '?expand[]=payment_method' );
+			}
+		}
+
+		if ( ! is_object( $intent ) ) {
+			throw new Exception( __( "We're not able to process this request. Please try again later.", 'woocommerce-gateway-stripe' ) );
+		}
+
+		if ( null === $intent_id ) {
+			$intent_id = $intent->id ?? null;
+		}
+
+		// Make sure we actually fetched the intent.
+		if ( ! empty( $intent->error ) ) {
+			WC_Stripe_Logger::error(
+				'Error: failed to fetch requested Stripe intent',
+				[
+					'intent_id' => $intent_id,
+					'error'     => $intent->error,
+				]
+			);
+			throw new Exception( __( "We're not able to process this request. Please try again later.", 'woocommerce-gateway-stripe' ) );
+		}
+
+		if ( null === $selected_payment_type ) {
+			$selected_payment_type = $order->get_meta( '_stripe_upe_payment_type', true );
+		}
+
+		// If we don't have a selected payment type, that implies we have no stored value and a new payment type is permitted.
+		$is_valid_payment_type = empty( $selected_payment_type ) || ( ! empty( $intent->payment_method_types ) && in_array( $selected_payment_type, $intent->payment_method_types, true ) );
+		$order_currency        = strtolower( $order->get_currency() );
+		$order_amount          = WC_Stripe_Helper::get_stripe_amount( $order->get_total(), $order->get_currency() );
+		$order_intent_id       = self::get_intent_id_from_order( $order );
+		$intent_currency       = isset( $intent->currency ) ? strtolower( $intent->currency ) : null;
+		$intent_amount         = isset( $intent->amount ) ? (int) $intent->amount : null;
+
+		if ( 'payment_intent' === $intent->object ) {
+			$is_valid = $order_currency === $intent_currency
+				&& $is_valid_payment_type
+				&& $order_amount === $intent_amount
+				&& ( ! $order_intent_id || $order_intent_id === $intent->id );
+		} else {
+			// Setup intents don't have an amount or currency.
+			$is_valid = $is_valid_payment_type
+				&& ( ! $order_intent_id || $order_intent_id === $intent->id );
+		}
+
+		// Return early if we have a valid intent.
+		if ( $is_valid ) {
+			return;
+		}
+
+		$permitted_payment_types = implode( '/', $intent->payment_method_types );
+		WC_Stripe_Logger::critical(
+			"Error: Invalid payment intent for order. Intent: {$intent_currency} {$intent_amount} via {$permitted_payment_types}, Order: {$order_currency} {$order_amount} {$selected_payment_type}",
+			[
+				'order_id'                    => $order->get_id(),
+				'intent_id'                   => $intent->id,
+				'intent_currency'             => $intent_currency,
+				'intent_amount'               => $intent_amount,
+				'intent_payment_method_types' => $intent->payment_method_types,
+				'selected_payment_type'       => $selected_payment_type,
+				'order_currency'              => $order->get_currency(),
+				'order_total'                 => $order->get_total(),
+			]
+		);
+
+		throw new Exception( __( "We're not able to process this request. Please try again later.", 'woocommerce-gateway-stripe' ) );
+	}
+
+	/**
+	 * Determines if the store is connected to Stripe.
+	 *
+	 * @param string $mode Optional. The mode to check. 'live' or 'test' - if not provided, the currently enabled mode will be checked.
+	 * @return bool True if connected, false otherwise.
+	 */
+	public static function is_connected( $mode = null ) {
+		// If the mode is not provided, we'll check the current mode.
+		if ( null === $mode ) {
+			$mode = WC_Stripe_Mode::is_test() ? 'test' : 'live';
+		}
+
+		$options = self::get_stripe_settings();
+		if ( 'test' === $mode ) {
+			return isset( $options['test_publishable_key'], $options['test_secret_key'] ) && trim( $options['test_publishable_key'] ) && trim( $options['test_secret_key'] );
+		} else {
+			return isset( $options['publishable_key'], $options['secret_key'] ) && trim( $options['publishable_key'] ) && trim( $options['secret_key'] );
+		}
+	}
+
+	/**
+	 * Checks if the order is using a Stripe payment method.
+	 *
+	 * @param $order WC_Order The order to check.
+	 * @return bool
+	 *
+	 * @deprecated 10.0.0 Use WC_Stripe_Order_Helper::is_stripe_gateway_order() instead.
+	 */
+	public static function is_stripe_gateway_order( $order ) {
+		return WC_Gateway_Stripe::ID === substr( (string) $order->get_payment_method(), 0, 6 );
 	}
 }

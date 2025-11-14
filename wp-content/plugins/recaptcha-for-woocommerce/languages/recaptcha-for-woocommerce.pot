@@ -1,0 +1,390 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: reCAPTCHA for WooCommerce\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-30 10:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.8; wp-5.9\n"
+"X-Domain: recaptcha-for-woocommerce"
+
+#. Description of the plugin
+msgid ""
+"Add Google reCAPTCHA to WooCommerce Login, registration, lost password form "
+"and Checkout page."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:192
+msgid "After Checkout Form"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:33
+msgid "Arabic"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:32
+msgid "Auto Detect"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:193
+msgid "Before Checkout Form"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:34
+msgid "Bulgarian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:217
+msgid ""
+"By default, reCAPTCHA will only work on WooCommerce pages. Check this box, "
+"If your theme using custom popup/page for WooCommerce login/registration and "
+"reCAPTCHA is not working."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:185
+msgid "Captcha position"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:35
+msgid "Catalan"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:179
+msgid "Check this box to enable reCAPTCHA in WooCommerce checkout page."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:158
+msgid "Check this box to enable reCAPTCHA in WooCommerce login form."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:172
+msgid "Check this box to enable reCAPTCHA in WooCommerce lost password form."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:165
+msgid "Check this box to enable reCAPTCHA in WooCommerce registration form."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:178
+msgid "Checkout Page"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:36
+msgid "Chinese (Simplified)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:37
+msgid "Chinese (Traditional)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:135
+msgid "Compact"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:38
+msgid "Croatian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:39
+msgid "Czech"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:40
+msgid "Danish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:114
+msgid "Dark"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:200
+msgid "Display After Failed Attempts"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:151
+msgid "Display Settings"
+msgstr ""
+
+#: recaptcha-for-woocommerce.php:96
+msgid "Docs"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:41
+msgid "Dutch"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:42
+msgid "English (UK)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:43
+msgid "English (US)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:140
+msgid ""
+"Enter the Error Message to display when reCAPTCHA is ignored or it is "
+"invalid."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:139
+msgid "Error Message"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:44
+msgid "Filipino"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:45
+msgid "Finnish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:46
+msgid "French"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:47
+msgid "French (Canadian)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:48
+msgid "German"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:49
+msgid "German (Austria)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:50
+msgid "German (Switzerland)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:86
+msgid "Google reCAPTCHA Settings"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:51
+msgid "Greek"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:52
+msgid "Hebrew"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:53
+msgid "Hindi"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://wpeliteplugins.com"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:54
+msgid "Hungarain"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:55
+msgid "Indonesian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:56
+msgid "Italian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:57
+msgid "Japanese"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:58
+msgid "Korean"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:118
+msgid "Language"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:59
+msgid "Latvian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:113
+msgid "Light"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:60
+msgid "Lithuanian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:157
+msgid "Login Form"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:171
+msgid "Lost Password Form"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:210
+msgid "Misc Settings"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:134
+msgid "Normal"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:61
+msgid "Norwegian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:62
+msgid "Persian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:143
+msgid "Please retry CAPTCHA"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:63
+msgid "Polish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:64
+msgid "Portuguese"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:65
+msgid "Portuguese (Brazil)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:66
+msgid "Portuguese (Portugal)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:241
+msgid "reCAPTCHA"
+msgstr ""
+
+#. Name of the plugin
+msgid "reCAPTCHA for WooCommerce"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:216
+msgid "reCAPTCHA Not Working?"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:201
+msgid ""
+"Recaptcha will only display after defined failed attempts. Leave it empty to "
+"display always. This will only work for Captcha position Before Place Order "
+"Button."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:164
+msgid "Registration Form"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:67
+msgid "Romanian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:68
+msgid "Russian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:99
+msgid "Secret Key"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:186
+msgid "Select reCAPTCHA  position on checkout page"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:119
+msgid "Select reCAPTCHA language"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:128
+msgid "Select reCAPTCHA size"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:107
+msgid "Select reCAPTCHA theme"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:69
+msgid "Serbian"
+msgstr ""
+
+#: recaptcha-for-woocommerce.php:95
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:92
+msgid "Site Key"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:127
+msgid "Size"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:70
+msgid "Slovak"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:71
+msgid "Slovenian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:72
+msgid "Spanish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:73
+msgid "Spanish (Latin America)"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:74
+msgid "Swedish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:75
+msgid "Thai"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:106
+msgid "Theme"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:76
+msgid "Turkish"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:77
+msgid "Ukrainian"
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:100
+#, php-format
+msgid "Used for communication between your site and Google. Grab it %sHere%s."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:93
+#, php-format
+msgid "Used for displaying the reCAPTCHA. Grab it %sHere%s."
+msgstr ""
+
+#: includes/admin/class-woo-recaptcha-admin-settings-tabs.php:78
+msgid "Vietnamese"
+msgstr ""
+
+#. Author of the plugin
+msgid "WPElitePlugins"
+msgstr ""
