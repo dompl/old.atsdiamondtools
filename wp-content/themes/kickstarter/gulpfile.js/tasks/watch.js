@@ -14,7 +14,7 @@ gulp.task('watch-browsersync', ['browsersync'], function() {
   gulp.watch(config.src.theme, ['theme']);
   gulp.watch(config.src.theme, ['fonts']);
   gulp.watch(config.src.icons, ['icons']);
-  gulp.watch(config.src.gfonts, ['gfonts']);
+  // gulp.watch(config.src.gfonts, ['gfonts']); // Disabled - using Google Fonts CDN
 });
 
 // Watch (Livereload version): build stuff when source files are modified, inform livereload when anything in the `build` or `dist` folders change
@@ -27,7 +27,7 @@ gulp.task('watch-livereload', ['livereload'], function() {
   gulp.watch(config.src.theme, ['theme']);
   gulp.watch(config.src.theme, ['fonts']);
   gulp.watch(config.src.icons, ['icons']);
-  gulp.watch(config.src.gfonts, ['gfonts']);
+  // gulp.watch(config.src.gfonts, ['gfonts']); // Disabled - using Google Fonts CDN
   gulp.watch(config.src.livereload).on('change', function(file) {
     plugins.livereload.changed(file.path);
   });

@@ -3,9 +3,9 @@
  *  ********************************************************
  */
 
- $general-height: 50px;
- $label-width: 100px;
- @mixin buy-button() {
+$general-height: 50px;
+$label-width: 100px;
+@mixin buy-button() {
   border: none;
   background: color(gray);
   color: white;
@@ -18,7 +18,7 @@
   @include border-radius(0);
   font-size: 16px;
   float: right;
-  cursor: pointer!important;
+  cursor: pointer !important;
   font-weight: bold;
   @include hover() {
     background: color(brand);
@@ -35,12 +35,12 @@
 /* Add to cart labes settings */
 
 @mixin q-label() {
-  @include em('font-size', 12px);
+  @include em("font-size", 12px);
   line-height: $general-height;
   height: $general-height;
   float: left;
   width: $label-width;
-  outline: none!important;
+  outline: none !important;
 }
 
 @mixin q-input() {
@@ -51,19 +51,16 @@
   line-height: $general-height - 2px;
   float: right;
   display: block;
-  width: calc(100% - #{$label-width + 22px });
+  width: calc(100% - #{$label-width + 22px});
   padding: 0 10px;
   margin: 0;
-  outline: none!important;
+  outline: none !important;
   color: color(text);
-  @include em('font-size', 14px);
+  @include em("font-size", 14px);
   display: block;
   background: transparent;
   @content;
 }
-
-
-
 
 /* Variations */
 
@@ -91,7 +88,7 @@ ul.variations {
         @include icon(caret-down) {
           right: 10px;
           @include scut-center-transform(y);
-          color:color(brand);
+          color: color(brand);
           z-index: -1;
         }
         select {
@@ -113,7 +110,7 @@ ul.variations {
     left: -23px;
     color: lighten(color(text), 10%);
     &:hover {
-      color: color(danger)!important;
+      color: color(danger) !important;
     }
   }
 }
@@ -125,14 +122,13 @@ ul.variations {
     display: none;
   }
   .single_variation_wrap {
-
   }
 
   .quantity {
     float: left;
     width: 30%;
     &.hidden {
-      display:none;
+      display: none;
     }
     @include to(3) {
       float: none;
@@ -144,7 +140,7 @@ ul.variations {
       @include scut-center-transform(y);
       @extend %transition;
       position: absolute;
-      cursor: pointer!important;
+      cursor: pointer !important;
       color: color(brand);
       height: $general-height - 2px;
       line-height: $general-height - 2px;
@@ -155,7 +151,7 @@ ul.variations {
       @include hover() {
         background: color(border);
         color: color(text);
-        border-color: color(border)
+        border-color: color(border);
       }
       &.plus {
         right: 1px;
@@ -180,5 +176,21 @@ ul.variations {
   button {
     float: left;
     @include buy-button();
+  }
+}
+
+.tiered-pricing-wrapper {
+  //
+  //   padding: 4px;
+  //   border-radius: 15px;
+  margin-top: 2rem;
+  ul {
+    &.tiered-pricing-plain-texts {
+      li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: color(gray-lightest);
+      }
+    }
   }
 }

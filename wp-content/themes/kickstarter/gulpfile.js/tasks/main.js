@@ -6,7 +6,8 @@ var gulp = require('gulp');
 gulp.task('default', ['watch']);
 
 // Build a working copy of the theme
-gulp.task('build', ['images', 'scripts', 'icons', 'styles', 'gfonts', 'fonts', 'theme']);
+// Note: 'gfonts' removed - using Google Fonts CDN in _google-fonts.scss instead
+gulp.task('build', ['images', 'scripts', 'icons', 'styles', 'fonts', 'theme']);
 
 // Dist task chain: wipe -> build -> clean -> copy -> compress images
 // NOTE: this is a resource-intensive task!
