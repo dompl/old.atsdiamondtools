@@ -1,32 +1,4 @@
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 300;
-	src: url(fonts/google/Lato-normal-300.woff) format('woff');
-	unicode-range: U+0-10FFFF;
-}
-
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 400;
-	src: url(fonts/google/Lato-normal-400.woff) format('woff');
-	unicode-range: U+0-10FFFF;
-}
-
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 700;
-	src: url(fonts/google/Lato-normal-700.woff) format('woff');
-	unicode-range: U+0-10FFFF;
-}
-
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 900;
-	src: url(fonts/google/Lato-normal-900.woff) format('woff');
-	unicode-range: U+0-10FFFF;
-}
+// Google Fonts - Lato
+// Using Google Fonts CDN instead of local files
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
 
