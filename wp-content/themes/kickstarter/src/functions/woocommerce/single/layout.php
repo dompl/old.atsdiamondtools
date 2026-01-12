@@ -5,58 +5,65 @@
  */
 
 /* Redirects */
-add_action('template_redirect', 'ats_setup_single_single');
+add_action( 'template_redirect', 'ats_setup_single_single' );
 
-function ats_setup_single_single()
-{
-  add_action('ats_single_add_to_cart', 'woocommerce_template_single_add_to_cart');
-  add_action('ats_single_product_price', 'custom_wc_template_single_price');
-  // removing the price of variable products
-  remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
+function ats_setup_single_single() {
+    add_action( 'ats_single_add_to_cart', 'woocommerce_template_single_add_to_cart' );
+    add_action( 'ats_single_product_price', 'custom_wc_template_single_price' );
+    // removing the price of variable products
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
 }
 
 /* Main product function */
-function ats_single_product_layout()
-{
-  global $product, $post;
+function ats_single_product_layout() {
+    global $product, $post;
 
-  wp_register_script('single-product', get_template_directory_uri() . '/js/x-singleproduct.js', array('jquery'), false, true);
-  wp_enqueue_script('single-product');
-  ?>
+    wp_register_script( 'single-product', get_template_directory_uri() . '/js/x-singleproduct.js', array( 'jquery' ), false, true );
+    wp_enqueue_script( 'single-product' );
+
+    // Enqueue Tiered Pricing integration script (direct inclusion from src folder)
+    // Depends on both jQuery and the tiered pricing plugin script
+    $tiered_pricing_deps = array( 'jquery' );
+    if ( wp_script_is( 'tiered-pricing-table-front-js', 'registered' ) ) {
+        $tiered_pricing_deps[] = 'tiered-pricing-table-front-js';
+    }
+    wp_register_script( 'tiered-pricing-integration', get_template_directory_uri() . '/src/js/woocommerce/single/tiered-pricing.js', $tiered_pricing_deps, '1.0.6', true );
+    wp_enqueue_script( 'tiered-pricing-integration' );
+    ?>
 
 <div class="main-right">
     <?php echo ats_single_product_image_gallery() ?>
   </div>
   <div class="main-left">
     <div class="product-header top">
-      <h2><span class="prod_Name"><?php echo esc_attr($product->get_name()) ?></span><span id="product-option"></span></h2>
-      <div class="product-price"><?php do_action('ats_single_product_price')?></div>
+      <h2><span class="prod_Name"><?php echo esc_attr( $product->get_name() ) ?></span><span id="product-option"></span></h2>
+      <div class="product-price"><?php do_action( 'ats_single_product_price' )?></div>
     </div>
     <div class="product-top-colleterals clx top">
       <div class="category">
-        <?php echo wc_get_product_category_list($post->ID, ',', '<span class="category-in">' . _n('Category:', 'Categories:', sizeof(get_the_terms($post->ID, 'product_cat')), 'woocommerce') . ' ', '.</span>'); ?>
+        <?php echo wc_get_product_category_list( $post->ID, ',', '<span class="category-in">' . _n( 'Category:', 'Categories:', sizeof( get_the_terms( $post->ID, 'product_cat' ) ), 'woocommerce' ) . ' ', '.</span>' ); ?>
       </div>
       <div class="sku">
-        <span class="name sku-name"><?php _e('SKU', 'TEXT_DOMAIN')?>: </span><?php echo ats_single_sku($post->ID); ?>
+        <span class="name sku-name"><?php _e( 'SKU', 'TEXT_DOMAIN' )?>: </span><?php echo ats_single_sku( $post->ID ); ?>
       </div>
     </div>
     <div class="product-short">
       <?php echo $product->get_short_description() ?>
-      <?php if ($product->get_description() != ''): ?>
+      <?php if ( $product->get_description() != '' ): ?>
         <div class="mobile" id="mobile_full"></div>
-      <?php endif;?>
+      <?php endif; ?>
     </div>
     <div id="variation-wrapper" class="clx"></div>
     <div class="product-header bottom">
-      <div class="product-price"><?php do_action('ats_single_product_price')?></div>
+      <div class="product-price"><?php do_action( 'ats_single_product_price' )?></div>
     </div>
     <div id="variation_stock"></div>
-    <div class="ats-add-to-cart"><?php do_action('ats_single_add_to_cart')?></div>
-    <div class="social-shares clx"><?php do_action('social_shares')?></div>
+    <div class="ats-add-to-cart"><?php do_action( 'ats_single_add_to_cart' )?></div>
+    <div class="social-shares clx"><?php do_action( 'social_shares' )?></div>
   </div>
-  <?php if ($product->get_description() != ''): ?>
+  <?php if ( $product->get_description() != '' ): ?>
     <div class="product-description clx">
-      <h3 class="title"><?php esc_html_e('Product Description', 'TEXT_DOMAIN')?></h3>
+      <h3 class="title"><?php esc_html_e( 'Product Description', 'TEXT_DOMAIN' )?></h3>
       <div class="product-description-content first-last"><?php the_content()?></div>
     </div>
   <?php endif?>

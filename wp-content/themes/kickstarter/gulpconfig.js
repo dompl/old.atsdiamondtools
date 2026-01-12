@@ -128,6 +128,7 @@ module.exports = {
 				woojs + "single/gallery.js",
 				woojs + "single/socials.js",
 				woojs + "single/lightbox.js",
+				woojs + "single/tiered-pricing.js", // Tiered Pricing Table integration
 			],
 		},
 		dest: build + "js/", // Where the scripts end up in your theme

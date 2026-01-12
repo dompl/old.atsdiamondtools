@@ -194,3 +194,45 @@ ul.variations {
     }
   }
 }
+.tier-pricing-summary-table {
+  color: white;
+  border-radius: 5px;
+  background-color: #4d3847;
+  padding: 5px 10px 10px;
+  .tier-pricing-summary-table__top {
+    border: none !important;
+  }
+  .tier-pricing-summary-table__total {
+    font-size: inherit;
+  }
+}
+
+/* Tiered Pricing Table Integration Styles */
+.tiered-pricing-blocks,
+.tiered-pricing-options,
+.tiered-pricing-dropdown,
+[data-tiered-pricing-table] {
+  tr,
+  .tiered-pricing-block,
+  .tiered-pricing-option,
+  .tiered-pricing-dropdown-option {
+    cursor: pointer !important;
+    @extend %transition;
+
+    &:hover {
+      background-color: rgba(color(brand), 0.1);
+    }
+
+    &.tiered-pricing--active {
+      background-color: rgba(color(brand), 0.2);
+      font-weight: bold;
+    }
+  }
+}
+
+/* Make sure quantity input is visible and accessible */
+input[name="quantity"],
+.quantity input[type="number"] {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
